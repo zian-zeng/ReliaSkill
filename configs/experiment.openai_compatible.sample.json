@@ -1,0 +1,19 @@
+{
+  "tools_path": "data/raw/public_mcp_filesystem_subset.json",
+  "tasks_path": "data/eval/public_mcp_filesystem_benchmark.jsonl",
+  "output_root": "outputs/experiment_openai_compatible",
+  "generator": {
+    "type": "openai_compatible",
+    "api_url": "http://localhost:8000/v1",
+    "model": "your-generator-model",
+    "api_key_env": "AUTOSKILL_API_KEY",
+    "timeout_seconds": 60
+  },
+  "predictor": {
+    "type": "openai_compatible",
+    "api_url": "http://localhost:8000/v1",
+    "model": "your-predictor-model",
+    "api_key_env": "AUTOSKILL_API_KEY",
+    "timeout_seconds": 60
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "read_text_file": {
+    "raw_mcp": {
+      "num_tasks": 5,
+      "exact_match_rate": 0.6,
+      "avg_argument_validity": 0.8,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "schema_only": {
+      "num_tasks": 5,
+      "exact_match_rate": 0.6,
+      "avg_argument_validity": 0.8,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "autoskill_base": {
+      "num_tasks": 5,
+      "exact_match_rate": 1.0,
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    }
+  },
+  "write_file": {
+    "raw_mcp": {
+      "num_tasks": 2,
+      "exact_match_rate": 1.0,
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "schema_only": {
+      "num_tasks": 2,
+      "exact_match_rate": 1.0,
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "autoskill_base": {
+      "num_tasks": 2,
+      "exact_match_rate": 1.0,
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    }
+  },
+  "create_directory": {
+    "raw_mcp": {
+      "num_tasks": 2,
+      "exact_match_rate": 1.0,
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "schema_only": {
+      "num_tasks": 2,
+      "exact_match_rate": 1.0,
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "autoskill_base": {
+      "num_tasks": 2,
+      "exact_match_rate": 1.0,
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    }
+  },
+  "list_directory": {
+    "raw_mcp": {
+      "num_tasks": 1,
+      "exact_match_rate": 1.0,
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "schema_only": {
+      "num_tasks": 1,
+      "exact_match_rate": 1.0,
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "autoskill_base": {
+      "num_tasks": 1,
+      "exact_match_rate": 1.0,
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    }
+  },
+  "search_files": {
+    "raw_mcp": {
+      "num_tasks": 5,
+      "exact_match_rate": 0.4,
+      "avg_argument_validity": 0.8,
+      "avg_required_argument_recall": 0.7,
+      "hallucinated_argument_count": 0
+    },
+    "schema_only": {
+      "num_tasks": 5,
+      "exact_match_rate": 0.4,
+      "avg_argument_validity": 0.8,
+      "avg_required_argument_recall": 0.7,
+      "hallucinated_argument_count": 0
+    },
+    "autoskill_base": {
+      "num_tasks": 5,
+      "exact_match_rate": 1.0,
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    }
+  }
+}

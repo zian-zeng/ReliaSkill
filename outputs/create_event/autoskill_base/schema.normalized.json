@@ -1,0 +1,167 @@
+{
+  "tool_name": "create_event",
+  "server_name": "calendar_server",
+  "tool_purpose": "Create a calendar event with a structured time range and optional attendees.",
+  "input_schema_raw": {
+    "type": "object",
+    "required": [
+      "title",
+      "time_range"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "title": {
+        "type": "string",
+        "description": "Short event title."
+      },
+      "time_range": {
+        "type": "object",
+        "description": "When the event starts and ends.",
+        "required": [
+          "start",
+          "end"
+        ],
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Event start time."
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Event end time."
+          }
+        }
+      },
+      "visibility": {
+        "type": "string",
+        "enum": [
+          "private",
+          "team",
+          "public"
+        ],
+        "default": "team",
+        "description": "Who can view the event."
+      },
+      "attendees": {
+        "type": "array",
+        "description": "Optional attendee email addresses.",
+        "items": {
+          "type": "string",
+          "format": "email"
+        }
+      },
+      "notes": {
+        "anyOf": [
+          {
+            "type": "string",
+            "description": "Optional meeting notes."
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "arguments": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Short event title.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.title"
+    },
+    {
+      "name": "time_range",
+      "type": "object",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "When the event starts and ends.",
+      "items_type": null,
+      "properties": {
+        "start": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Event start time."
+        },
+        "end": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Event end time."
+        }
+      },
+      "required_properties": [
+        "start",
+        "end"
+      ],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.time_range"
+    },
+    {
+      "name": "visibility",
+      "type": "string",
+      "required": false,
+      "default": "team",
+      "enum": [
+        "private",
+        "team",
+        "public"
+      ],
+      "description": "Who can view the event.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.visibility"
+    },
+    {
+      "name": "attendees",
+      "type": "array",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Optional attendee email addresses.",
+      "items_type": "string",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.attendees"
+    },
+    {
+      "name": "notes",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Optional meeting notes.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": true,
+      "format": null,
+      "schema_path": "$.properties.notes"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [
+    "Schema forbids unknown top-level arguments."
+  ],
+  "doc_snippets": [
+    "Create a calendar event with a structured time range and optional attendees."
+  ],
+  "source_pointer": "data\\raw\\sample_tools.json#2"
+}

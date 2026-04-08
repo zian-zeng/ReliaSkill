@@ -1,0 +1,2 @@
+{"id":"raw_possible_1","function":"get_weather","question":"Get the weather for New York in Fahrenheit.","ground_truth":[{"get_weather":{"city":["New York"],"unit":["F","fahrenheit"]}}]}
+{"id":"raw_possible_2","function":"search_docs","question":"Search documents for agent skills and return three results.","ground_truth":[{"search_docs":{"query":["agent skills"],"top_k":[3,"3"]}}]}

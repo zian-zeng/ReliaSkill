@@ -1,0 +1,7 @@
+{
+  "tool_name": "write_file",
+  "baseline_name": "autoskill_base",
+  "source_pointer": "data\\raw\\public_mcp_filesystem_subset.json#1",
+  "valid": true,
+  "issues": []
+}

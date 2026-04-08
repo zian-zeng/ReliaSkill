@@ -1,0 +1,69 @@
+{
+  "tools_path": "data/raw/public_mcp_filesystem_subset.json",
+  "tasks_path": "data/eval/public_mcp_filesystem_benchmark.jsonl",
+  "package_summary": {
+    "raw_mcp": {
+      "total_tools": 5,
+      "valid_packages": 5,
+      "valid_rate": 1.0,
+      "avg_examples": 0.0,
+      "avg_template_fields": 0.0,
+      "issue_breakdown": {}
+    },
+    "schema_only": {
+      "total_tools": 5,
+      "valid_packages": 5,
+      "valid_rate": 1.0,
+      "avg_examples": 1.6,
+      "avg_template_fields": 2.0,
+      "issue_breakdown": {}
+    },
+    "autoskill_base": {
+      "total_tools": 5,
+      "valid_packages": 5,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 2.0,
+      "issue_breakdown": {}
+    }
+  },
+  "benchmark_summary": {
+    "raw_mcp": {
+      "num_tasks": 7,
+      "exact_match_rate": 1.0,
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "schema_only": {
+      "num_tasks": 7,
+      "exact_match_rate": 1.0,
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "autoskill_base": {
+      "num_tasks": 7,
+      "exact_match_rate": 1.0,
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    }
+  },
+  "predictor_backend": "openai_compatible",
+  "generator_backend": "openai_compatible",
+  "generator_config": {
+    "type": "openai_compatible",
+    "api_url": "http://localhost:8000/v1",
+    "model": "your-generator-model",
+    "api_key_env": "AUTOSKILL_API_KEY",
+    "timeout_seconds": 60
+  },
+  "predictor_config": {
+    "type": "openai_compatible",
+    "api_url": "http://localhost:8000/v1",
+    "model": "your-predictor-model",
+    "api_key_env": "AUTOSKILL_API_KEY",
+    "timeout_seconds": 60
+  }
+}

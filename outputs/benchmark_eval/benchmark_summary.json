@@ -1,0 +1,23 @@
+{
+  "raw_mcp": {
+    "num_tasks": 3,
+    "exact_match_rate": 0.6667,
+    "avg_argument_validity": 0.8333,
+    "avg_required_argument_recall": 1.0,
+    "hallucinated_argument_count": 0
+  },
+  "schema_only": {
+    "num_tasks": 3,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_required_argument_recall": 1.0,
+    "hallucinated_argument_count": 0
+  },
+  "autoskill_base": {
+    "num_tasks": 3,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_required_argument_recall": 1.0,
+    "hallucinated_argument_count": 0
+  }
+}

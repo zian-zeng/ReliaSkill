@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for create_event", "arguments": {"title": "Sample Title", "time_range": {"start": "2026-01-01T09:00:00Z", "end": "2026-01-01T09:00:00Z"}}}
+{"scenario": "Richer invocation that uses optional controls for create_event", "arguments": {"title": "Sample Title", "time_range": {"start": "2026-01-01T09:00:00Z", "end": "2026-01-01T09:00:00Z"}, "visibility": "team", "attendees": ["sample_attendees_item_2"], "notes": "sample_notes_2"}}

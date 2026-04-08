@@ -1,0 +1,25 @@
+Tool: search_docs
+Server: search_server
+Condition: raw_mcp
+
+Description:
+Search documents using a keyword query.
+
+Input schema:
+{
+  "type": "object",
+  "required": [
+    "query"
+  ],
+  "properties": {
+    "query": {
+      "type": "string",
+      "description": "Search query."
+    },
+    "top_k": {
+      "type": "integer",
+      "default": 5,
+      "description": "Maximum number of results."
+    }
+  }
+}

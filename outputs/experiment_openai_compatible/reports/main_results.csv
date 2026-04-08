@@ -1,0 +1,4 @@
+condition,valid_rate,avg_examples,avg_template_fields,exact_match_rate,avg_argument_validity,avg_required_argument_recall,hallucinated_argument_count
+raw_mcp,1.0,0.0,0.0,1.0,1.0,1.0,0
+schema_only,1.0,1.6,2.0,1.0,1.0,1.0,0
+autoskill_base,1.0,2.0,2.0,1.0,1.0,1.0,0

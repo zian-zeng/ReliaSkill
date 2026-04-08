@@ -1,0 +1,26 @@
+{
+  "raw_mcp": {
+    "total_tools": 5,
+    "valid_packages": 5,
+    "valid_rate": 1.0,
+    "avg_examples": 0.0,
+    "avg_template_fields": 0.0,
+    "issue_breakdown": {}
+  },
+  "schema_only": {
+    "total_tools": 5,
+    "valid_packages": 5,
+    "valid_rate": 1.0,
+    "avg_examples": 1.6,
+    "avg_template_fields": 2.0,
+    "issue_breakdown": {}
+  },
+  "autoskill_base": {
+    "total_tools": 5,
+    "valid_packages": 5,
+    "valid_rate": 1.0,
+    "avg_examples": 2.0,
+    "avg_template_fields": 2.0,
+    "issue_breakdown": {}
+  }
+}

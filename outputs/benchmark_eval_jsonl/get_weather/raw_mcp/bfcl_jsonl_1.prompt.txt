@@ -1,0 +1,34 @@
+Tool: get_weather
+Server: weather_server
+Condition: raw_mcp
+
+Description:
+Fetch the current weather for a given city.
+
+Input schema:
+{
+  "type": "object",
+  "required": [
+    "city",
+    "unit"
+  ],
+  "properties": {
+    "city": {
+      "type": "string",
+      "description": "City name to query."
+    },
+    "unit": {
+      "type": "string",
+      "enum": [
+        "C",
+        "F"
+      ],
+      "description": "Temperature unit."
+    },
+    "include_forecast": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to include a short forecast."
+    }
+  }
+}

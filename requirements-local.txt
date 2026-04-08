@@ -1,0 +1,9 @@
+transformers>=4.40
+torch>=2.2
+accelerate>=0.28
+
+# Optional but often useful for tokenizer/model support
+sentencepiece>=0.2
+
+# Optional for 4-bit / 8-bit quantized loading on supported systems
+# bitsandbytes>=0.43

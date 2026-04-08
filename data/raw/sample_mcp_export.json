@@ -1,0 +1,42 @@
+{
+  "tools": [
+    {
+      "server": "exported_filesystem",
+      "name": "read_text_file",
+      "description": "Read a text file from an allowed directory.",
+      "input_schema": {
+        "type": "object",
+        "required": ["path"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Path to the file."
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "server": "exported_filesystem",
+      "name": "list_directory",
+      "description": "List a directory.",
+      "inputSchema": {
+        "type": "object",
+        "required": ["path"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Directory path."
+          }
+        }
+      }
+    }
+  ]
+}

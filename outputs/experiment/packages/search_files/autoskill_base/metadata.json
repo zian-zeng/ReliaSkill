@@ -1,0 +1,7 @@
+{
+  "tool_name": "search_files",
+  "baseline_name": "autoskill_base",
+  "source_pointer": "data\\raw\\public_mcp_filesystem_subset.json#4",
+  "valid": true,
+  "issues": []
+}

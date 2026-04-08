@@ -1,0 +1,40 @@
+[
+  {
+    "task_id": "weather_fahrenheit_forecast",
+    "tool_name": "get_weather",
+    "user_request": "What's the weather in New York in Fahrenheit with a short forecast?",
+    "expected_arguments": {
+      "city": "New York",
+      "unit": "F",
+      "include_forecast": true
+    }
+  },
+  {
+    "task_id": "weather_celsius_now",
+    "tool_name": "get_weather",
+    "user_request": "Get the weather for New York in Celsius.",
+    "expected_arguments": {
+      "city": "New York",
+      "unit": "C",
+      "include_forecast": false
+    }
+  },
+  {
+    "task_id": "search_top3",
+    "tool_name": "search_docs",
+    "user_request": "Search documents for \"function calling\" and return top 3 results.",
+    "expected_arguments": {
+      "query": "function calling",
+      "top_k": 3
+    }
+  },
+  {
+    "task_id": "search_default",
+    "tool_name": "search_docs",
+    "user_request": "Search documents for retrieval augmented generation.",
+    "expected_arguments": {
+      "query": "retrieval augmented generation",
+      "top_k": 5
+    }
+  }
+]

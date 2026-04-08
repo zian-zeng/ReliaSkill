@@ -1,0 +1,105 @@
+[
+  {
+    "server_name": "weather_server",
+    "name": "get_weather",
+    "description": "Fetch the current weather for a given city.",
+    "inputSchema": {
+      "type": "object",
+      "required": ["city", "unit"],
+      "properties": {
+        "city": {
+          "type": "string",
+          "description": "City name to query."
+        },
+        "unit": {
+          "type": "string",
+          "enum": ["C", "F"],
+          "description": "Temperature unit."
+        },
+        "include_forecast": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to include a short forecast."
+        }
+      }
+    }
+  },
+  {
+    "server_name": "search_server",
+    "name": "search_docs",
+    "description": "Search documents using a keyword query.",
+    "inputSchema": {
+      "type": "object",
+      "required": ["query"],
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Search query."
+        },
+        "top_k": {
+          "type": "integer",
+          "default": 5,
+          "description": "Maximum number of results."
+        }
+      }
+    }
+  },
+  {
+    "server_name": "calendar_server",
+    "name": "create_event",
+    "description": "Create a calendar event with a structured time range and optional attendees.",
+    "inputSchema": {
+      "type": "object",
+      "required": ["title", "time_range"],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Short event title."
+        },
+        "time_range": {
+          "type": "object",
+          "description": "When the event starts and ends.",
+          "required": ["start", "end"],
+          "properties": {
+            "start": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Event start time."
+            },
+            "end": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Event end time."
+            }
+          }
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["private", "team", "public"],
+          "default": "team",
+          "description": "Who can view the event."
+        },
+        "attendees": {
+          "type": "array",
+          "description": "Optional attendee email addresses.",
+          "items": {
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "notes": {
+          "anyOf": [
+            {
+              "type": "string",
+              "description": "Optional meeting notes."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

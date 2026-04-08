@@ -1,0 +1,7 @@
+{
+  "tool_name": "create_event",
+  "baseline_name": "schema_only",
+  "source_pointer": "data\\raw\\sample_tools.json#2",
+  "valid": true,
+  "issues": []
+}

@@ -1,0 +1,7 @@
+{
+  "tool_name": "create_directory",
+  "baseline_name": "autoskill_base",
+  "source_pointer": "data\\raw\\public_mcp_filesystem_subset.json#2",
+  "valid": true,
+  "issues": []
+}

@@ -1,0 +1,2 @@
+{"id":"bfcl_jsonl_1","function":"get_weather","question":"Get the weather in New York in Celsius.","ground_truth":{"arguments":{"city":"New York","unit":"C","include_forecast":false}}}
+{"id":"bfcl_jsonl_2","tool_name":"search_docs","instruction":"Search documents for tool use and return top 3 results.","expected":{"query":"tool use","top_k":3}}

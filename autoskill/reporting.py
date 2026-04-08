@@ -1,0 +1,256 @@
+from __future__ import annotations
+
+import csv
+import json
+from io import StringIO
+from pathlib import Path
+from typing import Any, Dict, Iterable, List
+
+
+BASELINE_ORDER = ["raw_mcp", "schema_only", "autoskill_base"]
+
+
+def _ordered_baselines(summary: Dict[str, Any]) -> list[str]:
+    known = [name for name in BASELINE_ORDER if name in summary]
+    extras = sorted(name for name in summary if name not in BASELINE_ORDER)
+    return known + extras
+
+
+def _ordered_tools(summary_by_tool: Dict[str, Any]) -> list[str]:
+    return sorted(summary_by_tool)
+
+
+def _compact_json(value: Any) -> str:
+    return json.dumps(value, ensure_ascii=False, sort_keys=True)
+
+
+def collect_failure_highlights(scores: Iterable[Dict[str, Any]], limit_per_baseline: int = 3) -> Dict[str, List[Dict[str, Any]]]:
+    grouped: Dict[str, List[Dict[str, Any]]] = {}
+    for score in scores:
+        if score.get("exact_match"):
+            continue
+        grouped.setdefault(str(score["baseline_name"]), []).append(score)
+
+    highlights: Dict[str, List[Dict[str, Any]]] = {}
+    for baseline_name, items in grouped.items():
+        ranked = sorted(
+            items,
+            key=lambda item: (
+                item.get("argument_validity", 0.0),
+                item.get("required_argument_recall", 0.0),
+                -len(item.get("hallucinated_args", [])),
+            ),
+        )
+        highlights[baseline_name] = ranked[:limit_per_baseline]
+    return highlights
+
+
+def build_results_markdown(
+    package_summary: Dict[str, Any],
+    benchmark_summary: Dict[str, Any],
+    tools_path: str,
+    tasks_path: str,
+    package_summary_by_tool: Dict[str, Dict[str, Any]] | None = None,
+    benchmark_summary_by_tool: Dict[str, Dict[str, Any]] | None = None,
+    benchmark_failures: Dict[str, List[Dict[str, Any]]] | None = None,
+) -> str:
+    lines = [
+        "# AutoSkill Experiment Report",
+        "",
+        f"- Tools source: `{tools_path}`",
+        f"- Benchmark source: `{tasks_path}`",
+        "",
+        "## Packaging Summary",
+        "",
+        "| Condition | Valid Rate | Avg Examples | Avg Template Fields |",
+        "| --- | ---: | ---: | ---: |",
+    ]
+    for baseline in _ordered_baselines(package_summary):
+        row = package_summary[baseline]
+        lines.append(
+            f"| {baseline} | {row.get('valid_rate', 0.0):.4f} | {row.get('avg_examples', 0.0):.2f} | {row.get('avg_template_fields', 0.0):.2f} |"
+        )
+
+    lines.extend(
+        [
+            "",
+            "## Benchmark Summary",
+            "",
+            "| Condition | Exact Match | Argument Validity | Required Arg Recall | Hallucinated Args |",
+            "| --- | ---: | ---: | ---: | ---: |",
+        ]
+    )
+    for baseline in _ordered_baselines(benchmark_summary):
+        row = benchmark_summary[baseline]
+        lines.append(
+            f"| {baseline} | {row.get('exact_match_rate', 0.0):.4f} | {row.get('avg_argument_validity', 0.0):.4f} | {row.get('avg_required_argument_recall', 0.0):.4f} | {row.get('hallucinated_argument_count', 0)} |"
+        )
+
+    if benchmark_summary_by_tool:
+        lines.extend(
+            [
+                "",
+                "## Benchmark By Tool",
+                "",
+                "| Tool | Condition | Tasks | Exact Match | Argument Validity | Required Arg Recall |",
+                "| --- | --- | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for tool_name in _ordered_tools(benchmark_summary_by_tool):
+            for baseline in _ordered_baselines(benchmark_summary_by_tool[tool_name]):
+                row = benchmark_summary_by_tool[tool_name][baseline]
+                lines.append(
+                    f"| {tool_name} | {baseline} | {row.get('num_tasks', 0)} | {row.get('exact_match_rate', 0.0):.4f} | {row.get('avg_argument_validity', 0.0):.4f} | {row.get('avg_required_argument_recall', 0.0):.4f} |"
+                )
+
+    if package_summary_by_tool:
+        lines.extend(
+            [
+                "",
+                "## Packaging By Tool",
+                "",
+                "| Tool | Condition | Valid Rate | Avg Examples | Avg Template Fields |",
+                "| --- | --- | ---: | ---: | ---: |",
+            ]
+        )
+        for tool_name in _ordered_tools(package_summary_by_tool):
+            for baseline in _ordered_baselines(package_summary_by_tool[tool_name]):
+                row = package_summary_by_tool[tool_name][baseline]
+                lines.append(
+                    f"| {tool_name} | {baseline} | {row.get('valid_rate', 0.0):.4f} | {row.get('avg_examples', 0.0):.2f} | {row.get('avg_template_fields', 0.0):.2f} |"
+                )
+
+    if benchmark_failures:
+        lines.extend(["", "## Failure Highlights", ""])
+        for baseline in _ordered_baselines(benchmark_failures):
+            failures = benchmark_failures[baseline]
+            if not failures:
+                continue
+            lines.append(f"### {baseline}")
+            lines.append("")
+            for failure in failures:
+                lines.append(f"- `{failure.get('task_id', 'unknown')}` on `{failure.get('tool_name', 'unknown')}`: {failure.get('user_request', '')}")
+                lines.append(f"  expected `{_compact_json(failure.get('expected_arguments', {}))}`")
+                lines.append(f"  predicted `{_compact_json(failure.get('predicted_arguments', {}))}`")
+            lines.append("")
+
+    lines.extend(
+        [
+            "",
+            "## Headline",
+            "",
+            "The main comparison to track is whether `autoskill_base` improves exact-match and argument-validity metrics over `raw_mcp`, and whether that gain shows up consistently on individual tools instead of only in the aggregate.",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def build_results_csv(package_summary: Dict[str, Any], benchmark_summary: Dict[str, Any]) -> str:
+    buffer = StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(
+        [
+            "condition",
+            "valid_rate",
+            "avg_examples",
+            "avg_template_fields",
+            "exact_match_rate",
+            "avg_argument_validity",
+            "avg_required_argument_recall",
+            "hallucinated_argument_count",
+        ]
+    )
+    baseline_names = _ordered_baselines({**package_summary, **benchmark_summary})
+    for baseline in baseline_names:
+        package_row = package_summary.get(baseline, {})
+        benchmark_row = benchmark_summary.get(baseline, {})
+        writer.writerow(
+            [
+                baseline,
+                package_row.get("valid_rate", ""),
+                package_row.get("avg_examples", ""),
+                package_row.get("avg_template_fields", ""),
+                benchmark_row.get("exact_match_rate", ""),
+                benchmark_row.get("avg_argument_validity", ""),
+                benchmark_row.get("avg_required_argument_recall", ""),
+                benchmark_row.get("hallucinated_argument_count", ""),
+            ]
+        )
+    return buffer.getvalue()
+
+
+def build_benchmark_by_tool_csv(benchmark_summary_by_tool: Dict[str, Dict[str, Any]]) -> str:
+    buffer = StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(
+        [
+            "tool_name",
+            "condition",
+            "num_tasks",
+            "exact_match_rate",
+            "avg_argument_validity",
+            "avg_required_argument_recall",
+            "hallucinated_argument_count",
+        ]
+    )
+    for tool_name in _ordered_tools(benchmark_summary_by_tool):
+        for baseline in _ordered_baselines(benchmark_summary_by_tool[tool_name]):
+            row = benchmark_summary_by_tool[tool_name][baseline]
+            writer.writerow(
+                [
+                    tool_name,
+                    baseline,
+                    row.get("num_tasks", ""),
+                    row.get("exact_match_rate", ""),
+                    row.get("avg_argument_validity", ""),
+                    row.get("avg_required_argument_recall", ""),
+                    row.get("hallucinated_argument_count", ""),
+                ]
+            )
+    return buffer.getvalue()
+
+
+def build_package_by_tool_csv(package_summary_by_tool: Dict[str, Dict[str, Any]]) -> str:
+    buffer = StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(
+        [
+            "tool_name",
+            "condition",
+            "total_tools",
+            "valid_packages",
+            "valid_rate",
+            "avg_examples",
+            "avg_template_fields",
+        ]
+    )
+    for tool_name in _ordered_tools(package_summary_by_tool):
+        for baseline in _ordered_baselines(package_summary_by_tool[tool_name]):
+            row = package_summary_by_tool[tool_name][baseline]
+            writer.writerow(
+                [
+                    tool_name,
+                    baseline,
+                    row.get("total_tools", ""),
+                    row.get("valid_packages", ""),
+                    row.get("valid_rate", ""),
+                    row.get("avg_examples", ""),
+                    row.get("avg_template_fields", ""),
+                ]
+            )
+    return buffer.getvalue()
+
+
+def write_report(
+    output_dir: str | Path,
+    markdown_text: str,
+    csv_text: str,
+    extra_files: Dict[str, str] | None = None,
+) -> None:
+    out_dir = Path(output_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "main_results.md").write_text(markdown_text, encoding="utf-8")
+    (out_dir / "main_results.csv").write_text(csv_text, encoding="utf-8")
+    for name, text in (extra_files or {}).items():
+        (out_dir / name).write_text(text, encoding="utf-8")

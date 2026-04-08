@@ -1,0 +1,228 @@
+[
+  {
+    "task_id": "weather_fahrenheit_forecast",
+    "tool_name": "get_weather",
+    "baseline_name": "raw_mcp",
+    "exact_match": true,
+    "argument_validity": 1.0,
+    "required_argument_recall": 1.0,
+    "hallucinated_args": [],
+    "predicted_arguments": {
+      "city": "New York",
+      "unit": "F",
+      "include_forecast": true
+    },
+    "expected_arguments": {
+      "city": "New York",
+      "unit": "F",
+      "include_forecast": true
+    },
+    "predictor_backend": "heuristic"
+  },
+  {
+    "task_id": "weather_fahrenheit_forecast",
+    "tool_name": "get_weather",
+    "baseline_name": "schema_only",
+    "exact_match": true,
+    "argument_validity": 1.0,
+    "required_argument_recall": 1.0,
+    "hallucinated_args": [],
+    "predicted_arguments": {
+      "city": "New York",
+      "unit": "F",
+      "include_forecast": true
+    },
+    "expected_arguments": {
+      "city": "New York",
+      "unit": "F",
+      "include_forecast": true
+    },
+    "predictor_backend": "heuristic"
+  },
+  {
+    "task_id": "weather_fahrenheit_forecast",
+    "tool_name": "get_weather",
+    "baseline_name": "autoskill_base",
+    "exact_match": true,
+    "argument_validity": 1.0,
+    "required_argument_recall": 1.0,
+    "hallucinated_args": [],
+    "predicted_arguments": {
+      "city": "New York",
+      "unit": "F",
+      "include_forecast": true
+    },
+    "expected_arguments": {
+      "city": "New York",
+      "unit": "F",
+      "include_forecast": true
+    },
+    "predictor_backend": "heuristic"
+  },
+  {
+    "task_id": "weather_celsius_now",
+    "tool_name": "get_weather",
+    "baseline_name": "raw_mcp",
+    "exact_match": false,
+    "argument_validity": 0.6667,
+    "required_argument_recall": 1.0,
+    "hallucinated_args": [],
+    "predicted_arguments": {
+      "city": "New York",
+      "unit": "C"
+    },
+    "expected_arguments": {
+      "city": "New York",
+      "unit": "C",
+      "include_forecast": false
+    },
+    "predictor_backend": "heuristic"
+  },
+  {
+    "task_id": "weather_celsius_now",
+    "tool_name": "get_weather",
+    "baseline_name": "schema_only",
+    "exact_match": true,
+    "argument_validity": 1.0,
+    "required_argument_recall": 1.0,
+    "hallucinated_args": [],
+    "predicted_arguments": {
+      "city": "New York",
+      "unit": "C",
+      "include_forecast": false
+    },
+    "expected_arguments": {
+      "city": "New York",
+      "unit": "C",
+      "include_forecast": false
+    },
+    "predictor_backend": "heuristic"
+  },
+  {
+    "task_id": "weather_celsius_now",
+    "tool_name": "get_weather",
+    "baseline_name": "autoskill_base",
+    "exact_match": true,
+    "argument_validity": 1.0,
+    "required_argument_recall": 1.0,
+    "hallucinated_args": [],
+    "predicted_arguments": {
+      "city": "New York",
+      "unit": "C",
+      "include_forecast": false
+    },
+    "expected_arguments": {
+      "city": "New York",
+      "unit": "C",
+      "include_forecast": false
+    },
+    "predictor_backend": "heuristic"
+  },
+  {
+    "task_id": "search_top3",
+    "tool_name": "search_docs",
+    "baseline_name": "raw_mcp",
+    "exact_match": true,
+    "argument_validity": 1.0,
+    "required_argument_recall": 1.0,
+    "hallucinated_args": [],
+    "predicted_arguments": {
+      "query": "function calling",
+      "top_k": 3
+    },
+    "expected_arguments": {
+      "query": "function calling",
+      "top_k": 3
+    },
+    "predictor_backend": "heuristic"
+  },
+  {
+    "task_id": "search_top3",
+    "tool_name": "search_docs",
+    "baseline_name": "schema_only",
+    "exact_match": true,
+    "argument_validity": 1.0,
+    "required_argument_recall": 1.0,
+    "hallucinated_args": [],
+    "predicted_arguments": {
+      "query": "function calling",
+      "top_k": 3
+    },
+    "expected_arguments": {
+      "query": "function calling",
+      "top_k": 3
+    },
+    "predictor_backend": "heuristic"
+  },
+  {
+    "task_id": "search_top3",
+    "tool_name": "search_docs",
+    "baseline_name": "autoskill_base",
+    "exact_match": true,
+    "argument_validity": 1.0,
+    "required_argument_recall": 1.0,
+    "hallucinated_args": [],
+    "predicted_arguments": {
+      "query": "function calling",
+      "top_k": 3
+    },
+    "expected_arguments": {
+      "query": "function calling",
+      "top_k": 3
+    },
+    "predictor_backend": "heuristic"
+  },
+  {
+    "task_id": "search_default",
+    "tool_name": "search_docs",
+    "baseline_name": "raw_mcp",
+    "exact_match": false,
+    "argument_validity": 0.5,
+    "required_argument_recall": 1.0,
+    "hallucinated_args": [],
+    "predicted_arguments": {
+      "query": "retrieval augmented generation"
+    },
+    "expected_arguments": {
+      "query": "retrieval augmented generation",
+      "top_k": 5
+    },
+    "predictor_backend": "heuristic"
+  },
+  {
+    "task_id": "search_default",
+    "tool_name": "search_docs",
+    "baseline_name": "schema_only",
+    "exact_match": true,
+    "argument_validity": 1.0,
+    "required_argument_recall": 1.0,
+    "hallucinated_args": [],
+    "predicted_arguments": {
+      "query": "retrieval augmented generation",
+      "top_k": 5
+    },
+    "expected_arguments": {
+      "query": "retrieval augmented generation",
+      "top_k": 5
+    },
+    "predictor_backend": "heuristic"
+  },
+  {
+    "task_id": "search_default",
+    "tool_name": "search_docs",
+    "baseline_name": "autoskill_base",
+    "exact_match": true,
+    "argument_validity": 1.0,
+    "required_argument_recall": 1.0,
+    "hallucinated_args": [],
+    "predicted_arguments": {
+      "query": "retrieval augmented generation",
+      "top_k": 5
+    },
+    "expected_arguments": {
+      "query": "retrieval augmented generation",
+      "top_k": 5
+    },
+    "predictor_backend": "heuristic"
+  }
+]
