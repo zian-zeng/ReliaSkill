@@ -19,6 +19,9 @@ from autoskill.reporting import (
     build_method_wins_csv,
     build_package_by_tool_csv,
     build_pairwise_comparison_csv,
+    build_routing_by_split_csv,
+    build_routing_by_tool_csv,
+    build_routing_results_csv,
     build_results_csv,
     build_results_markdown,
 )
@@ -26,9 +29,15 @@ from autoskill.generator import SkillGenerator
 from autoskill.experiment import run_full_experiment_from_config
 from autoskill.packaging import write_skill_package
 from autoskill.parser import parse_mcp_tool
-from autoskill.backends import build_backend_from_config
-from autoskill.predictor import HeuristicPredictorBackend, build_predictor_from_config
+from autoskill.backends import GenerationBackend, build_backend_from_config, safe_generate_skill
+from autoskill.predictor import HeuristicPredictorBackend, PredictorBackend, build_predictor_from_config, safe_predict
 from autoskill.raw_mcp import build_raw_mcp_skill
+from autoskill.retrieval_runtime import contextualize_skill_for_task, retrieve_candidate_tools
+from autoskill.retrieval_baselines import (
+    build_retrieved_candidates_skill,
+    build_retrieved_docs_skill,
+    build_retrieved_memory_skill,
+)
 from autoskill.schema_only import build_schema_only_skill
 from autoskill.sweep import aggregate_experiment_manifests, run_experiment_sweep
 from autoskill.task_eval import (
@@ -57,6 +66,44 @@ def _load_public_tools():
 
 
 class ParserValidatorTests(unittest.TestCase):
+    def test_safe_generate_skill_records_backend_fallback(self) -> None:
+        class FailingGenerationBackend(GenerationBackend):
+            backend_name = "failing_backend"
+
+            def generate_skill(self, tool):
+                raise RuntimeError("generation failed")
+
+        tool = _load_public_tools()[0]
+        skill = safe_generate_skill(tool, FailingGenerationBackend())
+
+        backend_entries = [entry for entry in skill.method_trace if entry.get("trace_type") == "generation_backend"]
+        self.assertTrue(backend_entries)
+        self.assertEqual(backend_entries[-1]["configured_generation_backend"], "failing_backend")
+        self.assertEqual(backend_entries[-1]["actual_generation_backend"], "heuristic")
+        self.assertTrue(backend_entries[-1]["generation_fallback_used"])
+
+    def test_safe_predict_records_backend_fallback(self) -> None:
+        class FailingPredictorBackend(PredictorBackend):
+            backend_name = "failing_predictor"
+
+            def predict(self, tool, skill, task):
+                raise RuntimeError("prediction failed")
+
+        tools = {tool.tool_name: tool for tool in _load_public_tools()}
+        read_tool = tools["read_text_file"]
+        task = EvalTask(
+            task_id="predict_fallback",
+            tool_name="read_text_file",
+            user_request="Read the first 5 lines of src/app.py.",
+            expected_arguments={"path": "src/app.py", "head": 5},
+        )
+        skill = build_schema_only_skill(read_tool)
+        prediction = safe_predict(read_tool, skill, task, FailingPredictorBackend())
+
+        self.assertEqual(prediction.metadata["configured_predictor_backend"], "failing_predictor")
+        self.assertEqual(prediction.metadata["actual_predictor_backend"], "heuristic")
+        self.assertTrue(prediction.metadata["predictor_fallback_used"])
+
     def test_parser_handles_nested_and_nullable_fields(self) -> None:
         tools = {tool.tool_name: tool for tool in _load_tools()}
         event_tool = tools["create_event"]
@@ -182,6 +229,58 @@ class ParserValidatorTests(unittest.TestCase):
 
         self.assertIn("pattern", skill.semantic_hints)
         self.assertTrue(any("selected_label" in entry for entry in skill.method_trace))
+
+    def test_autoskill_semantic_head_request_does_not_hallucinate_tail(self) -> None:
+        tools = {tool.tool_name: tool for tool in _load_public_tools()}
+        read_tool = tools["read_text_file"]
+        task = EvalTask(
+            task_id="semantic_head_no_tail",
+            tool_name="read_text_file",
+            user_request="Show the top 8 lines of src/main.py.",
+            expected_arguments={"path": "src/main.py", "head": 8},
+        )
+        backend = HeuristicPredictorBackend()
+
+        prediction = backend.predict(read_tool, SkillGenerator().generate(read_tool), task)
+
+        self.assertEqual(prediction.predicted_arguments.get("head"), 8)
+        self.assertNotIn("tail", prediction.predicted_arguments)
+
+    def test_retrieval_baselines_build_expected_fields(self) -> None:
+        tools = {tool.tool_name: tool for tool in _load_public_tools()}
+        search_tool = tools["search_files"]
+        docs_skill = build_retrieved_docs_skill(search_tool)
+        candidate_skill = build_retrieved_candidates_skill(search_tool, tools=tools)
+        memory_skill = build_retrieved_memory_skill(search_tool, tools=tools)
+
+        self.assertEqual(docs_skill.baseline_name, "retrieved_docs")
+        self.assertTrue(docs_skill.argument_template)
+        self.assertEqual(candidate_skill.baseline_name, "retrieved_candidates")
+        self.assertTrue(any("shortlist" in line.lower() for line in candidate_skill.when_to_use))
+        self.assertEqual(memory_skill.baseline_name, "retrieved_memory")
+        self.assertTrue(any("python files" in example["scenario"].lower() for example in memory_skill.examples))
+
+    def test_runtime_retrieval_ranks_search_tool_for_search_request(self) -> None:
+        tools = {tool.tool_name: tool for tool in _load_public_tools()}
+        ranking = retrieve_candidate_tools("Find markdown files under docs.", tools, top_k=3)
+
+        self.assertEqual(ranking["candidates"][0]["tool_name"], "search_files")
+
+    def test_runtime_contextualization_adds_retrieval_metadata(self) -> None:
+        tools = {tool.tool_name: tool for tool in _load_public_tools()}
+        search_tool = tools["search_files"]
+        task = EvalTask(
+            task_id="runtime_docs_context",
+            tool_name="search_files",
+            user_request="Find markdown files under docs.",
+            expected_arguments={"path": "docs", "pattern": "**/*.md"},
+        )
+        runtime_skill, retrieval_context = contextualize_skill_for_task(task, search_tool, build_retrieved_docs_skill(search_tool), tools)
+
+        self.assertEqual(retrieval_context["retrieval_type"], "docs")
+        self.assertTrue(retrieval_context["candidate_tools"])
+        self.assertEqual(runtime_skill.method_trace[-1]["retrieval_type"], "docs")
+        self.assertTrue(any("markdown" in line.lower() for line in runtime_skill.when_to_use))
 
     def test_conversion_to_canonical_benchmark_records(self) -> None:
         records = convert_benchmark_file_to_canonical_records("data/eval/sample_bfcl_raw_possible_answer.jsonl")
@@ -339,11 +438,17 @@ class ParserValidatorTests(unittest.TestCase):
             self.assertTrue((output_root / "reports" / "method_wins.csv").exists())
             self.assertTrue((output_root / "reports" / "pairwise_comparisons.csv").exists())
             self.assertTrue((output_root / "reports" / "package_by_tool.csv").exists())
+            self.assertTrue((output_root / "reports" / "routing_summary.csv").exists())
+            self.assertTrue((output_root / "reports" / "routing_by_tool.csv").exists())
+            self.assertTrue((output_root / "reports" / "routing_by_split.csv").exists())
             self.assertTrue((output_root / "benchmark" / "benchmark_summary_by_tool.json").exists())
             self.assertTrue((output_root / "benchmark" / "benchmark_summary_by_split.json").exists())
             self.assertTrue((output_root / "benchmark" / "error_taxonomy.json").exists())
             self.assertTrue((output_root / "benchmark" / "method_win_analysis.json").exists())
             self.assertTrue((output_root / "benchmark" / "pairwise_comparisons.json").exists())
+            self.assertTrue((output_root / "routing_benchmark" / "routing_summary.json").exists())
+            self.assertTrue((output_root / "routing_benchmark" / "routing_summary_by_tool.json").exists())
+            self.assertTrue((output_root / "routing_benchmark" / "routing_summary_by_split.json").exists())
 
     def test_sweep_aggregation_and_preflight_only(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -422,6 +527,9 @@ class ParserValidatorTests(unittest.TestCase):
         package_summary = {
             "raw_mcp": {"valid_rate": 1.0, "avg_examples": 0.0, "avg_template_fields": 0.0, "avg_semantic_hint_entries": 0.0},
             "schema_only": {"valid_rate": 1.0, "avg_examples": 2.0, "avg_template_fields": 3.0, "avg_semantic_hint_entries": 1.0},
+            "retrieved_docs": {"valid_rate": 1.0, "avg_examples": 2.0, "avg_template_fields": 3.0, "avg_semantic_hint_entries": 0.0},
+            "retrieved_candidates": {"valid_rate": 1.0, "avg_examples": 3.0, "avg_template_fields": 3.0, "avg_semantic_hint_entries": 0.0},
+            "retrieved_memory": {"valid_rate": 1.0, "avg_examples": 3.0, "avg_template_fields": 3.0, "avg_semantic_hint_entries": 0.0},
         }
         benchmark_summary = {
             "raw_mcp": {
@@ -433,6 +541,18 @@ class ParserValidatorTests(unittest.TestCase):
             "schema_only": {
                 "exact_match_rate": 1.0,
                 "avg_argument_validity": 1.0,
+                "avg_required_argument_recall": 1.0,
+                "hallucinated_argument_count": 0,
+            },
+            "retrieved_docs": {
+                "exact_match_rate": 0.75,
+                "avg_argument_validity": 0.9,
+                "avg_required_argument_recall": 1.0,
+                "hallucinated_argument_count": 0,
+            },
+            "retrieved_candidates": {
+                "exact_match_rate": 0.8,
+                "avg_argument_validity": 0.95,
                 "avg_required_argument_recall": 1.0,
                 "hallucinated_argument_count": 0,
             },
@@ -489,34 +609,84 @@ class ParserValidatorTests(unittest.TestCase):
                 "avg_argument_validity_delta": 0.25,
             }
         }
+        routing_summary = {
+            "raw_mcp": {
+                "num_tasks": 2,
+                "tool_selection_accuracy": 0.5,
+                "tool_selection_accuracy_ci": {"low": 0.0, "high": 1.0},
+                "joint_exact_match_rate": 0.5,
+                "joint_exact_match_ci": {"low": 0.0, "high": 1.0},
+                "avg_argument_validity": 0.5,
+                "avg_required_argument_recall": 0.5,
+                "gold_tool_hit_rate": 1.0,
+                "avg_gold_tool_rank": 1.0,
+            }
+        }
+        routing_by_tool = {
+            "search_files": {
+                "raw_mcp": {
+                    "num_tasks": 2,
+                    "tool_selection_accuracy": 0.5,
+                    "joint_exact_match_rate": 0.5,
+                    "avg_argument_validity": 0.5,
+                    "avg_required_argument_recall": 0.5,
+                    "gold_tool_hit_rate": 1.0,
+                    "avg_gold_tool_rank": 1.0,
+                }
+            }
+        }
+        routing_by_split = {
+            "test": {
+                "raw_mcp": {
+                    "num_tasks": 2,
+                    "tool_selection_accuracy": 0.5,
+                    "joint_exact_match_rate": 0.5,
+                    "avg_argument_validity": 0.5,
+                    "avg_required_argument_recall": 0.5,
+                    "gold_tool_hit_rate": 1.0,
+                    "avg_gold_tool_rank": 1.0,
+                }
+            }
+        }
         markdown_text = build_results_markdown(
             package_summary,
             benchmark_summary,
             "tools.json",
             "tasks.jsonl",
+            routing_summary=routing_summary,
             package_summary_by_tool=package_by_tool,
             benchmark_summary_by_tool=benchmark_by_tool,
             benchmark_summary_by_split=benchmark_by_split,
+            routing_summary_by_tool=routing_by_tool,
+            routing_summary_by_split=routing_by_split,
             pairwise_comparisons=pairwise,
         )
-        csv_text = build_results_csv(package_summary, benchmark_summary)
+        csv_text = build_results_csv(package_summary, benchmark_summary, routing_summary=routing_summary)
         benchmark_by_tool_csv = build_benchmark_by_tool_csv(benchmark_by_tool)
         benchmark_by_split_csv = build_benchmark_by_split_csv(benchmark_by_split)
         pairwise_csv = build_pairwise_comparison_csv(pairwise)
         package_by_tool_csv = build_package_by_tool_csv(package_by_tool)
+        routing_csv = build_routing_results_csv(routing_summary)
+        routing_by_tool_csv = build_routing_by_tool_csv(routing_by_tool)
+        routing_by_split_csv = build_routing_by_split_csv(routing_by_split)
 
         self.assertIn("| raw_mcp |", markdown_text)
         self.assertIn("Avg Semantic Hints", markdown_text)
         self.assertIn("tools.json", markdown_text)
+        self.assertIn("## Hidden-Tool Routing Summary", markdown_text)
         self.assertIn("## Benchmark By Split", markdown_text)
         self.assertIn("## Benchmark By Tool", markdown_text)
         self.assertIn("## Pairwise Comparisons", markdown_text)
         self.assertIn("condition,valid_rate,avg_examples,avg_template_fields,avg_semantic_hint_entries", csv_text)
         self.assertIn("schema_only", csv_text)
+        self.assertIn("routing_tool_selection_accuracy", csv_text)
         self.assertIn("split,condition,num_tasks", benchmark_by_split_csv)
         self.assertIn("tool_name,condition,num_tasks", benchmark_by_tool_csv)
         self.assertIn("anchor_baseline,comparison_baseline,num_paired_tasks", pairwise_csv)
         self.assertIn("tool_name,condition,total_tools", package_by_tool_csv)
+        self.assertIn("condition,num_tasks,tool_selection_accuracy", routing_csv)
+        self.assertIn("gold_tool_name,condition,num_tasks", routing_by_tool_csv)
+        self.assertIn("split,condition,num_tasks,tool_selection_accuracy", routing_by_split_csv)
 
     def test_split_and_pairwise_summaries(self) -> None:
         scores = [

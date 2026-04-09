@@ -1,0 +1,17 @@
+{
+  "tools_path": "data/raw/public_mcp_filesystem_subset.json",
+  "tasks_path": "data/eval/public_mcp_filesystem_benchmark.jsonl",
+  "output_root": "outputs/experiment_qwen25_32b_endpoint",
+  "generator": {
+    "type": "openai_compatible",
+    "api_url": "http://localhost:8000/v1",
+    "model": "Qwen/Qwen2.5-32B-Instruct",
+    "timeout_seconds": 180
+  },
+  "predictor": {
+    "type": "openai_compatible",
+    "api_url": "http://localhost:8000/v1",
+    "model": "Qwen/Qwen2.5-32B-Instruct",
+    "timeout_seconds": 180
+  }
+}

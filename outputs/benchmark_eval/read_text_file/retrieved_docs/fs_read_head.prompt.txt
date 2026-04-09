@@ -1,0 +1,59 @@
+Tool: read_text_file
+Server: mcp_reference_filesystem
+Condition: retrieved_docs
+
+Description:
+Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "Path to the file within an allowed directory."
+    },
+    "tail": {
+      "type": "number",
+      "description": "If provided, returns only the last N lines of the file."
+    },
+    "head": {
+      "type": "number",
+      "description": "If provided, returns only the first N lines of the file."
+    }
+  },
+  "required": [
+    "path"
+  ]
+}
+
+Skill summary:
+Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories. head optional If provided, returns only the first N lines of the file.
+
+When to use:
+- Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.
+- head optional If provided, returns only the first N lines of the file.
+- tail optional If provided, returns only the last N lines of the file.
+- path required Path to the file within an allowed directory.
+
+When not to use:
+- Do not assume capabilities beyond the retrieved tool documentation.
+
+Argument template:
+{
+  "path": "data/sample.txt",
+  "tail": 1.0,
+  "head": 1.0
+}
+
+Examples:
+- Scenario: Retrieved-docs minimal call for read_text_file
+{
+  "path": "data/sample.txt"
+}
+- Scenario: Retrieved-docs fuller call for read_text_file
+{
+  "path": "data/sample.txt",
+  "tail": 2.0,
+  "head": 2.0
+}

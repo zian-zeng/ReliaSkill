@@ -21,15 +21,37 @@
     "avg_required_argument_recall": 0.9,
     "hallucinated_argument_count": 0
   },
+  "retrieved_docs": {
+    "num_tasks": 15,
+    "exact_match_rate": 0.6667,
+    "exact_match_ci": {
+      "low": 0.4,
+      "high": 0.8667
+    },
+    "avg_argument_validity": 0.8667,
+    "avg_required_argument_recall": 0.9,
+    "hallucinated_argument_count": 0
+  },
+  "retrieved_memory": {
+    "num_tasks": 15,
+    "exact_match_rate": 0.8667,
+    "exact_match_ci": {
+      "low": 0.6667,
+      "high": 1.0
+    },
+    "avg_argument_validity": 0.9667,
+    "avg_required_argument_recall": 1.0,
+    "hallucinated_argument_count": 2
+  },
   "autoskill_base": {
     "num_tasks": 15,
-    "exact_match_rate": 1.0,
+    "exact_match_rate": 0.8667,
     "exact_match_ci": {
-      "low": 1.0,
+      "low": 0.6667,
       "high": 1.0
     },
     "avg_argument_validity": 1.0,
     "avg_required_argument_recall": 1.0,
-    "hallucinated_argument_count": 0
+    "hallucinated_argument_count": 2
   }
 }

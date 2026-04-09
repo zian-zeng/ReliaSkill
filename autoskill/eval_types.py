@@ -22,3 +22,4 @@ class EvalPrediction:
     baseline_name: str
     predicted_arguments: Dict[str, Any] = field(default_factory=dict)
     exposure_text: str = ""
+    metadata: Dict[str, Any] = field(default_factory=dict)

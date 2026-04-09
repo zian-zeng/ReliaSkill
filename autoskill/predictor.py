@@ -78,6 +78,43 @@ def _extract_exclude_patterns(text: str) -> list[str]:
     return [part.strip(" .") for part in parts if part.strip(" .")]
 
 
+def _example_overlap_score(request: str, scenario: str, arguments: Dict[str, Any]) -> int:
+    request_tokens = set(re.findall(r"[a-z0-9_./*?-]+", request.lower()))
+    scenario_tokens = set(re.findall(r"[a-z0-9_./*?-]+", scenario.lower()))
+    argument_tokens = set(re.findall(r"[a-z0-9_./*?-]+", json.dumps(arguments, ensure_ascii=False).lower()))
+    return len(request_tokens.intersection(scenario_tokens.union(argument_tokens)))
+
+
+def _infer_from_examples(arg_name: str, request: str, skill: GeneratedSkill) -> Any:
+    best_score = 0
+    best_value = None
+    for example in skill.examples:
+        scenario = str(example.get("scenario", ""))
+        arguments = example.get("arguments", {})
+        if not isinstance(arguments, dict) or arg_name not in arguments:
+            continue
+        score = _example_overlap_score(request, scenario, arguments)
+        if score > best_score:
+            best_score = score
+            best_value = arguments[arg_name]
+    return best_value if best_score > 1 else None
+
+
+def _request_has_directional_cue(request: str, cues: tuple[str, ...]) -> bool:
+    lowered = request.lower()
+    return any(cue in lowered for cue in cues)
+
+
+def _should_skip_example_inference(arg_name: str, request: str, skill: GeneratedSkill) -> bool:
+    if not skill.semantic_hints:
+        return False
+    if arg_name == "tail":
+        return _request_has_directional_cue(request, ("top", "first", "beginning", "opening", "start of"))
+    if arg_name == "head":
+        return _request_has_directional_cue(request, ("bottom", "last", "trailing", "ending", "end of"))
+    return False
+
+
 def _infer_semantic_hint_value(tool: ToolIR, arg_name: str, request: str, skill: GeneratedSkill) -> Any:
     lowered = request.lower()
     semantic_spec = skill.semantic_hints.get(arg_name)
@@ -147,6 +184,24 @@ def _infer_argument_value(arg_name: str, request: str, skill: GeneratedSkill) ->
     return skill.argument_template.get(arg_name)
 
 
+def _collect_prediction_metadata(skill: GeneratedSkill) -> Dict[str, Any]:
+    metadata: Dict[str, Any] = {}
+    for entry in skill.method_trace:
+        if not isinstance(entry, dict):
+            continue
+        if entry.get("retrieval_type"):
+            metadata.setdefault("retrieval_events", []).append(entry)
+            if "candidate_tools" in entry:
+                metadata["retrieved_tool_candidates"] = list(entry.get("candidate_tools", []))
+            if "target_tool_rank" in entry:
+                metadata["retrieval_target_rank"] = entry.get("target_tool_rank")
+            if "selected_tool_name" in entry:
+                metadata["selected_tool_name"] = entry.get("selected_tool_name")
+            if "retrieved_memory_names" in entry:
+                metadata["retrieved_memory_names"] = list(entry.get("retrieved_memory_names", []))
+    return metadata
+
+
 class PredictorBackend(ABC):
     backend_name = "base"
 
@@ -168,6 +223,11 @@ class HeuristicPredictorBackend(PredictorBackend):
             value = _infer_argument_value(arg.name, task.user_request, skill)
             if value is None and skill.semantic_hints:
                 value = _infer_semantic_hint_value(tool, arg.name, task.user_request, skill)
+            if value is None:
+                if not _should_skip_example_inference(arg.name, task.user_request, skill) and not (
+                    (arg.name == "head" and "tail" in predicted) or (arg.name == "tail" and "head" in predicted)
+                ):
+                    value = _infer_from_examples(arg.name, task.user_request, skill)
             if value is None:
                 if arg.required and arg.name not in predicted:
                     fallback = skill.argument_template.get(arg.name)
@@ -194,6 +254,7 @@ class HeuristicPredictorBackend(PredictorBackend):
             baseline_name=skill.baseline_name,
             predicted_arguments=predicted,
             exposure_text=render_exposure(tool, skill),
+            metadata=_collect_prediction_metadata(skill),
         )
 
 
@@ -246,6 +307,7 @@ class OpenAICompatiblePredictorBackend(PredictorBackend):
             baseline_name=skill.baseline_name,
             predicted_arguments=predicted_arguments,
             exposure_text=render_exposure(tool, skill),
+            metadata=_collect_prediction_metadata(skill),
         )
 
 
@@ -295,6 +357,7 @@ class LocalHFPredictorBackend(PredictorBackend):
             baseline_name=skill.baseline_name,
             predicted_arguments=predicted_arguments,
             exposure_text=render_exposure(tool, skill),
+            metadata=_collect_prediction_metadata(skill),
         )
 
 
@@ -343,6 +406,31 @@ def build_predictor_from_config(config: Dict[str, Any] | None) -> PredictorBacke
 
 def safe_predict(tool: ToolIR, skill: GeneratedSkill, task: EvalTask, backend: PredictorBackend) -> EvalPrediction:
     try:
-        return backend.predict(tool, skill, task)
-    except (ImportError, KeyError, RuntimeError, ValueError, TypeError, urllib.error.URLError, urllib.error.HTTPError, TimeoutError):
-        return HeuristicPredictorBackend().predict(tool, skill, task)
+        prediction = backend.predict(tool, skill, task)
+        prediction.metadata = {
+            **prediction.metadata,
+            "configured_predictor_backend": backend.backend_name,
+            "actual_predictor_backend": backend.backend_name,
+            "predictor_fallback_used": False,
+            "predictor_fallback_reason": None,
+        }
+        return prediction
+    except (
+        ImportError,
+        KeyError,
+        RuntimeError,
+        ValueError,
+        TypeError,
+        urllib.error.URLError,
+        urllib.error.HTTPError,
+        TimeoutError,
+    ) as exc:
+        prediction = HeuristicPredictorBackend().predict(tool, skill, task)
+        prediction.metadata = {
+            **prediction.metadata,
+            "configured_predictor_backend": backend.backend_name,
+            "actual_predictor_backend": HeuristicPredictorBackend.backend_name,
+            "predictor_fallback_used": True,
+            "predictor_fallback_reason": f"{type(exc).__name__}: {exc}",
+        }
+        return prediction

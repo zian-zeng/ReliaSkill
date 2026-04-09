@@ -1,0 +1,9 @@
+{
+  "tool_name": "create_directory",
+  "baseline_name": "retrieved_docs",
+  "source_pointer": "data\\raw\\public_mcp_filesystem_subset.json#2",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": []
+}

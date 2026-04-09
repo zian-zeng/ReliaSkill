@@ -232,6 +232,25 @@ class LocalHFBackend(GenerationBackend):
         )
 
 
+def _append_generation_backend_trace(
+    skill: GeneratedSkill,
+    configured_backend: str,
+    actual_backend: str,
+    used_fallback: bool,
+    fallback_reason: str | None = None,
+) -> GeneratedSkill:
+    skill.method_trace.append(
+        {
+            "trace_type": "generation_backend",
+            "configured_generation_backend": configured_backend,
+            "actual_generation_backend": actual_backend,
+            "generation_fallback_used": used_fallback,
+            "generation_fallback_reason": fallback_reason,
+        }
+    )
+    return skill
+
+
 def build_backend_from_env() -> GenerationBackend:
     api_url = os.getenv("AUTOSKILL_API_URL")
     model = os.getenv("AUTOSKILL_MODEL")
@@ -278,6 +297,27 @@ def build_backend_from_config(config: Dict[str, Any] | None) -> GenerationBacken
 def safe_generate_skill(tool: ToolIR, backend: GenerationBackend) -> GeneratedSkill:
     try:
         skill = backend.generate_skill(tool)
-        return skill
-    except (ImportError, KeyError, RuntimeError, ValueError, TypeError, urllib.error.URLError, urllib.error.HTTPError, TimeoutError):
-        return HeuristicBackend().generate_skill(tool)
+        return _append_generation_backend_trace(
+            skill,
+            configured_backend=backend.backend_name,
+            actual_backend=backend.backend_name,
+            used_fallback=False,
+        )
+    except (
+        ImportError,
+        KeyError,
+        RuntimeError,
+        ValueError,
+        TypeError,
+        urllib.error.URLError,
+        urllib.error.HTTPError,
+        TimeoutError,
+    ) as exc:
+        fallback_skill = HeuristicBackend().generate_skill(tool)
+        return _append_generation_backend_trace(
+            fallback_skill,
+            configured_backend=backend.backend_name,
+            actual_backend=HeuristicBackend.backend_name,
+            used_fallback=True,
+            fallback_reason=f"{type(exc).__name__}: {exc}",
+        )

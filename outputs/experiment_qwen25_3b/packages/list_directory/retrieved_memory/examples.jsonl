@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid memory-backed call for list_directory", "arguments": {"path": "data/sample.txt"}}
+{"scenario": "Inspect the contents of a target directory such as docs.", "arguments": {"path": "docs"}}

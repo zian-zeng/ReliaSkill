@@ -1,0 +1,71 @@
+Tool: read_text_file
+Server: mcp_reference_filesystem
+Condition: retrieved_candidates
+
+Description:
+Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "Path to the file within an allowed directory."
+    },
+    "tail": {
+      "type": "number",
+      "description": "If provided, returns only the last N lines of the file."
+    },
+    "head": {
+      "type": "number",
+      "description": "If provided, returns only the first N lines of the file."
+    }
+  },
+  "required": [
+    "path"
+  ]
+}
+
+Skill summary:
+Retrieve candidate tools first, then route to `read_text_file` only if it remains the best match.
+
+When to use:
+- Rank candidate tools for the request before argument filling: Show the top 8 lines of src/main.py.
+- Shortlist: read_text_file, create_directory, list_directory.
+- [read_text_file] Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.
+- [create_directory] Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.
+- [list_directory] Get a detailed listing of all files and directories in a specified path. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is essential for understanding directory structure and finding specific files within a directory. Only works within allowed directories.
+
+When not to use:
+- Do not copy arguments from neighboring candidate tools into the selected tool call.
+- Do not assume the target tool is rank-1 when retrieval evidence favors another tool.
+
+Argument template:
+{
+  "path": "data/sample.txt",
+  "tail": 1.0,
+  "head": 1.0
+}
+
+Examples:
+- Scenario: Minimal routed call for read_text_file
+{
+  "path": "data/sample.txt"
+}
+- Scenario: Full routed call for read_text_file
+{
+  "path": "data/sample.txt",
+  "tail": 2.0,
+  "head": 2.0
+}
+- Scenario: Read the first lines of a file after routing to the file reader.
+{
+  "path": "src/app.py",
+  "head": 8
+}
+- Scenario: Read the last lines of a file after routing to the file reader.
+{
+  "path": "logs/output.txt",
+  "tail": 12
+}

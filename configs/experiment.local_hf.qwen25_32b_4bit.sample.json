@@ -1,0 +1,35 @@
+{
+  "tools_path": "data/raw/public_mcp_filesystem_subset.json",
+  "tasks_path": "data/eval/public_mcp_filesystem_benchmark.jsonl",
+  "output_root": "outputs/experiment_qwen25_32b_4bit",
+  "generator": {
+    "type": "local_hf",
+    "model_name_or_path": "Qwen/Qwen2.5-32B-Instruct",
+    "device": "auto",
+    "device_map": "auto",
+    "torch_dtype": "bfloat16",
+    "max_new_tokens": 768,
+    "trust_remote_code": false,
+    "attn_implementation": null,
+    "load_in_4bit": true,
+    "load_in_8bit": false,
+    "generation_kwargs": {
+      "repetition_penalty": 1.05
+    }
+  },
+  "predictor": {
+    "type": "local_hf",
+    "model_name_or_path": "Qwen/Qwen2.5-32B-Instruct",
+    "device": "auto",
+    "device_map": "auto",
+    "torch_dtype": "bfloat16",
+    "max_new_tokens": 512,
+    "trust_remote_code": false,
+    "attn_implementation": null,
+    "load_in_4bit": true,
+    "load_in_8bit": false,
+    "generation_kwargs": {
+      "repetition_penalty": 1.02
+    }
+  }
+}

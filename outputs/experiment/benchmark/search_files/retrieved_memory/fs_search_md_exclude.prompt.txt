@@ -1,0 +1,74 @@
+Tool: search_files
+Server: mcp_reference_filesystem
+Condition: retrieved_memory
+
+Description:
+Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "Base directory to search within an allowed directory."
+    },
+    "pattern": {
+      "type": "string",
+      "description": "Glob-style pattern to match."
+    },
+    "excludePatterns": {
+      "type": "array",
+      "description": "Optional glob patterns to exclude.",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "path",
+    "pattern"
+  ]
+}
+
+Skill summary:
+Retrieve nearest memory examples for the current request and reuse them without semantic hint rewriting.
+
+When to use:
+- Retrieve example memories for the request: Find Markdown files under docs using the pattern **/*.md, but exclude docs/archive/**.
+- Find markdown files under a docs directory.
+- Find python files under a directory.
+
+When not to use:
+- Do not assume retrieved memories are perfect; keep field names schema-faithful.
+- Do not invent unsupported arguments when no compatible memory matches the tool.
+
+Argument template:
+{
+  "path": "data/sample.txt",
+  "pattern": "sample_pattern_1",
+  "excludePatterns": []
+}
+
+Examples:
+- Scenario: Find markdown files under a docs directory.
+{
+  "path": "docs",
+  "pattern": "**/*.md",
+  "excludePatterns": []
+}
+- Scenario: Find python files under a directory.
+{
+  "path": "src",
+  "pattern": "**/*.py",
+  "excludePatterns": []
+}
+- Scenario: Search text files and ignore an archive subtree.
+{
+  "path": "logs",
+  "pattern": "**/*.txt",
+  "excludePatterns": [
+    "logs/archive/**"
+  ]
+}

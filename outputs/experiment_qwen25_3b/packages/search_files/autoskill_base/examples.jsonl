@@ -1,0 +1,4 @@
+{"scenario": "Minimal valid request that satisfies the required fields for search_files", "arguments": {"path": "data/sample.txt", "pattern": "sample_pattern_1"}}
+{"scenario": "Richer invocation that uses optional controls for search_files", "arguments": {"path": "data/sample.txt", "pattern": "sample_pattern_2", "excludePatterns": []}}
+{"scenario": "Semantic cue for Python files", "arguments": {"path": "src", "pattern": "**/*.py", "excludePatterns": []}}
+{"scenario": "Semantic cue for Markdown files", "arguments": {"path": "docs", "pattern": "**/*.md", "excludePatterns": []}}

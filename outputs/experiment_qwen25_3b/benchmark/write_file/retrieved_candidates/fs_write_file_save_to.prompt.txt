@@ -1,0 +1,62 @@
+Tool: write_file
+Server: mcp_reference_filesystem
+Condition: retrieved_candidates
+
+Description:
+Create a new file or completely overwrite an existing file with new content. Use with caution as it will overwrite existing files without warning. Handles text content with proper encoding. Only works within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "Destination file path within an allowed directory."
+    },
+    "content": {
+      "type": "string",
+      "description": "Full file contents to write."
+    }
+  },
+  "required": [
+    "path",
+    "content"
+  ]
+}
+
+Skill summary:
+Retrieve candidate tools first, then route to `write_file` only if it remains the best match.
+
+When to use:
+- Rank candidate tools for the request before argument filling: Save "Deployment checklist" to docs/deploy.txt.
+- Shortlist: search_files, read_text_file, create_directory.
+- [search_files] Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.
+- [read_text_file] Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.
+- [create_directory] Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.
+
+When not to use:
+- Do not copy arguments from neighboring candidate tools into the selected tool call.
+- Do not assume the target tool is rank-1 when retrieval evidence favors another tool.
+
+Argument template:
+{
+  "path": "data/sample.txt",
+  "content": "sample_content_1"
+}
+
+Examples:
+- Scenario: Minimal routed call for write_file
+{
+  "path": "data/sample.txt",
+  "content": "sample_content_1"
+}
+- Scenario: Full routed call for write_file
+{
+  "path": "data/sample.txt",
+  "content": "sample_content_2"
+}
+- Scenario: Route write-content requests to this file writer.
+{
+  "path": "docs/notes.txt",
+  "content": "Release checklist"
+}

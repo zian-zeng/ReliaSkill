@@ -16,6 +16,7 @@ from .experiment import (
     run_full_experiment,
     run_full_experiment_from_config,
     run_packaging_pipeline,
+    run_routing_benchmark_pipeline,
 )
 from .exposure import render_exposure
 from .generator import SkillGenerator
@@ -30,6 +31,15 @@ from .packaging import write_skill_package
 from .parser import parse_mcp_tool
 from .predictor import build_predictor_from_config, build_predictor_from_env, safe_predict
 from .raw_mcp import build_raw_mcp_skill
+from .retrieval_baselines import build_retrieved_candidates_skill, build_retrieved_docs_skill, build_retrieved_memory_skill
+from .retrieval_runtime import (
+    contextualize_skill_for_task,
+    retrieve_candidate_tools,
+    retrieve_doc_context,
+    retrieve_doc_tool_rankings,
+    retrieve_memory_context,
+    retrieve_memory_tool_rankings,
+)
 from .reporting import build_results_csv, build_results_markdown, write_report
 from .schema_only import build_schema_only_skill
 from .sweep import aggregate_experiment_manifests, run_experiment_sweep
@@ -54,9 +64,13 @@ __all__ = [
     "build_schema_only_skill",
     "build_predictor_from_config",
     "build_predictor_from_env",
+    "build_retrieved_candidates_skill",
+    "build_retrieved_docs_skill",
+    "build_retrieved_memory_skill",
     "build_results_csv",
     "build_results_markdown",
     "classify_score_error",
+    "contextualize_skill_for_task",
     "canonicalize_mcp_tool_records",
     "convert_benchmark_file_to_canonical_records",
     "demo_predict_call",
@@ -68,11 +82,17 @@ __all__ = [
     "merge_experiment_config",
     "parse_mcp_tool",
     "render_exposure",
+    "retrieve_candidate_tools",
+    "retrieve_doc_context",
+    "retrieve_doc_tool_rankings",
+    "retrieve_memory_context",
+    "retrieve_memory_tool_rankings",
     "run_benchmark_pipeline",
     "run_experiment_sweep",
     "run_full_experiment",
     "run_full_experiment_from_config",
     "run_packaging_pipeline",
+    "run_routing_benchmark_pipeline",
     "safe_predict",
     "score_prediction",
     "summarize_records",

@@ -42,6 +42,8 @@ Recommended ready-made presets:
 
 - [experiment.local_hf.qwen25_3b.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.local_hf.qwen25_3b.sample.json)
 - [experiment.local_hf.qwen25_7b.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.local_hf.qwen25_7b.sample.json)
+- [experiment.local_hf.qwen25_14b_4bit.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.local_hf.qwen25_14b_4bit.sample.json)
+- [experiment.local_hf.qwen25_32b_4bit.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.local_hf.qwen25_32b_4bit.sample.json)
 
 Example:
 
@@ -87,6 +89,7 @@ python scripts\run_experiment.py --config configs\experiment.local_hf.sample.jso
 
 - If you are starting from scratch, try the Qwen 3B preset first. It is usually a much easier first local run than 7B.
 - Move to the Qwen 7B preset when the 3B setup is stable and you have enough VRAM or are comfortable with quantized loading.
+- On a GPU server or cluster, the recommended next presets are the Qwen 14B 4-bit and Qwen 32B 4-bit configs.
 - Smaller models are easier to bring up first.
 - If a local model returns extra commentary around JSON, the project now tries to recover the JSON object automatically.
 - If a local model call fails, the current code falls back to the heuristic backend instead of crashing the whole experiment.
@@ -98,3 +101,15 @@ python scripts\run_experiment.py --config configs\experiment.local_hf.sample.jso
 - `load_in_4bit` or `load_in_8bit` can reduce memory usage, but typically require extra packages and compatible hardware.
 - Do not enable both `load_in_4bit` and `load_in_8bit` at the same time.
 - `generation_kwargs` lets you pass through extra `model.generate(...)` options without editing code.
+
+## Cluster-ready presets
+
+If your cluster serves the model behind an OpenAI-style endpoint, use:
+
+- [experiment.openai_compatible.qwen25_14b.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.openai_compatible.qwen25_14b.sample.json)
+- [experiment.openai_compatible.qwen25_32b.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.openai_compatible.qwen25_32b.sample.json)
+
+If your cluster runs direct `transformers` inference, use:
+
+- [experiment.local_hf.qwen25_14b_4bit.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.local_hf.qwen25_14b_4bit.sample.json)
+- [experiment.local_hf.qwen25_32b_4bit.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.local_hf.qwen25_32b_4bit.sample.json)

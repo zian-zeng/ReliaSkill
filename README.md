@@ -6,6 +6,9 @@ The current comparison ladder is:
 
 - `raw_mcp`: raw schema and docs only
 - `schema_only`: deterministic cleaned schema package
+- `retrieved_docs`: Gorilla-style retrieved documentation snippets
+- `retrieved_candidates`: ToolLLM-style candidate-tool retrieval baseline
+- `retrieved_memory`: skill-memory retrieval baseline inspired by HELPER/Voyager
 - `autoskill_base`: generated skill package with validation-aware candidate selection and semantic hints
 
 ## What The Repo Does
@@ -13,11 +16,13 @@ The current comparison ladder is:
 Given a set of MCP tool definitions, the pipeline:
 
 1. parses each tool into a normalized `ToolIR`
-2. builds the three comparison conditions
-3. validates generated packages against the schema
-4. writes packaged artifacts to `outputs/`
-5. evaluates tool-call predictions on benchmark-style tasks
-6. writes summary tables and experiment reports
+2. builds raw, schema-only, retrieval, and full-method comparison conditions
+3. builds retrieval-based comparison baselines
+4. validates generated packages against the schema
+5. writes packaged artifacts to `outputs/`
+6. evaluates tool-call predictions on benchmark-style tasks
+7. evaluates hidden-tool routing where the tool identity is not given to the baseline
+8. writes summary tables and experiment reports
 
 ## Current Status
 
@@ -25,11 +30,13 @@ What is implemented now:
 
 - deterministic MCP parsing and normalization
 - schema validation and package writing
-- `raw_mcp`, `schema_only`, and `autoskill_base`
+- `raw_mcp`, `schema_only`, `retrieved_docs`, `retrieved_candidates`, `retrieved_memory`, and `autoskill_base`
 - validation-aware method-side candidate scoring / reranking for `autoskill_base`
 - semantic-hint generation for paraphrase-aware tool use
 - benchmark ingestion for simplified and BFCL-style JSON/JSONL
 - split-aware benchmark evaluation with pairwise baseline comparisons
+- runtime retrieval for docs, candidate tools, and memory examples during benchmark inference
+- hidden-tool routing evaluation with tool-selection accuracy and joint route-plus-arguments metrics
 - error taxonomy and method-win analysis for benchmark failures
 - conversion utilities for BFCL-style answer files and MCP tool exports
 - three backend modes:
@@ -39,7 +46,7 @@ What is implemented now:
 
 What is not implemented yet:
 
-- retrieval-augmented generation
+- end-to-end retrieval-augmented generation with a real model in the loop
 - quality scorer / reranker
 - large real harvested MCP dataset pipeline
 - meaningful paper-quality model results
@@ -69,6 +76,15 @@ Additional fixtures:
 - [sample_bfcl_style.jsonl](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\data\eval\sample_bfcl_style.jsonl)
 - [sample_bfcl_raw_possible_answer.jsonl](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\data\eval\sample_bfcl_raw_possible_answer.jsonl)
 
+Downloaded external corpora currently present on disk:
+
+- [data/external/bfcl](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\data\external\bfcl)
+- [data/external/modelcontextprotocol-servers](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\data\external\modelcontextprotocol-servers)
+
+Status note:
+
+- those external corpora are present locally, but the default experiment still uses the curated filesystem subset until we finish fuller ingestion for the downloaded corpora
+
 ## Core Commands
 
 Run the packaging pipeline:
@@ -81,6 +97,12 @@ Run a benchmark evaluation:
 
 ```powershell
 python scripts\run_benchmark_eval.py
+```
+
+Run hidden-tool routing evaluation:
+
+```powershell
+python scripts\run_routing_eval.py
 ```
 
 Run the full package + benchmark experiment:
@@ -172,6 +194,14 @@ Current config files:
 - [experiment.local_hf.sample.json](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.local_hf.sample.json)
 - [experiment.local_hf.qwen25_3b.sample.json](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.local_hf.qwen25_3b.sample.json)
 - [experiment.local_hf.qwen25_7b.sample.json](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.local_hf.qwen25_7b.sample.json)
+- [experiment.local_hf.qwen25_14b_4bit.sample.json](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.local_hf.qwen25_14b_4bit.sample.json)
+- [experiment.local_hf.qwen25_32b_4bit.sample.json](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.local_hf.qwen25_32b_4bit.sample.json)
+- [experiment.openai_compatible.qwen25_14b.sample.json](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.openai_compatible.qwen25_14b.sample.json)
+- [experiment.openai_compatible.qwen25_32b.sample.json](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.openai_compatible.qwen25_32b.sample.json)
+
+Dataset/model inventory:
+
+- [DATASETS_AND_MODELS.md](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\docs\DATASETS_AND_MODELS.md)
 
 ## Outputs
 
@@ -181,11 +211,13 @@ The most important experiment artifacts are:
 
 - packaged skills under `outputs/<tool_name>/<condition>/`
 - benchmark predictions under `outputs/experiment/benchmark/`
+- hidden-tool routing records under `outputs/experiment/routing_benchmark/`
 - package logs in `outputs/experiment/packages/generation_records.jsonl`
 - prediction logs in `outputs/experiment/benchmark/prediction_records.jsonl`
 - report tables in `outputs/experiment/reports/`
 - experiment metadata in `outputs/experiment/experiment_manifest.json`
 - split summaries in `outputs/experiment/benchmark/benchmark_summary_by_split.json`
+- routing summaries in `outputs/experiment/routing_benchmark/routing_summary.json`
 - pairwise comparisons in `outputs/experiment/benchmark/pairwise_comparisons.json`
 - error taxonomy in `outputs/experiment/benchmark/error_taxonomy.json`
 - method-win analysis in `outputs/experiment/benchmark/method_win_analysis.json`
@@ -195,7 +227,19 @@ Current heuristic default experiment signal:
 
 - `raw_mcp`: exact match `0.6667`
 - `schema_only`: exact match `0.6667`
+- `retrieved_docs`: exact match `0.6667`
+- `retrieved_candidates`: exact match `0.6667`
+- `retrieved_memory`: exact match `0.8667`
 - `autoskill_base`: exact match `1.0000`
+
+The benchmark reports now also expose retrieval diagnostics for retrieval-driven baselines, including:
+
+- `tool_retrieval_hit_rate`
+- `avg_target_tool_rank`
+
+Related-work baseline notes:
+
+- [RELATED_WORK_BASELINES.md](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\docs\RELATED_WORK_BASELINES.md)
 
 ## Important Caveat
 

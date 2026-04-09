@@ -1,0 +1,9 @@
+{
+  "tool_name": "read_text_file",
+  "baseline_name": "schema_only",
+  "source_pointer": "data\\raw\\public_mcp_filesystem_subset.json#0",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": []
+}

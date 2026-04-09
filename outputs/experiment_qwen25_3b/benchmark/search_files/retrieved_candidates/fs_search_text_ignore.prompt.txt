@@ -1,0 +1,73 @@
+Tool: search_files
+Server: mcp_reference_filesystem
+Condition: retrieved_candidates
+
+Description:
+Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "Base directory to search within an allowed directory."
+    },
+    "pattern": {
+      "type": "string",
+      "description": "Glob-style pattern to match."
+    },
+    "excludePatterns": {
+      "type": "array",
+      "description": "Optional glob patterns to exclude.",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "path",
+    "pattern"
+  ]
+}
+
+Skill summary:
+Retrieve candidate tools first, then route to `search_files` only if it remains the best match.
+
+When to use:
+- Rank candidate tools for the request before argument filling: Search under logs for text files and ignore logs/archive/**.
+- Shortlist: search_files, list_directory, read_text_file.
+- [search_files] Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.
+- [list_directory] Get a detailed listing of all files and directories in a specified path. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is essential for understanding directory structure and finding specific files within a directory. Only works within allowed directories.
+- [read_text_file] Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.
+
+When not to use:
+- Do not copy arguments from neighboring candidate tools into the selected tool call.
+- Do not assume the target tool is rank-1 when retrieval evidence favors another tool.
+
+Argument template:
+{
+  "path": "data/sample.txt",
+  "pattern": "sample_pattern_1",
+  "excludePatterns": []
+}
+
+Examples:
+- Scenario: Minimal routed call for search_files
+{
+  "path": "data/sample.txt",
+  "pattern": "sample_pattern_1"
+}
+- Scenario: Full routed call for search_files
+{
+  "path": "data/sample.txt",
+  "pattern": "sample_pattern_2",
+  "excludePatterns": []
+}
+- Scenario: Route file discovery requests with recursive glob patterns to this tool.
+{
+  "path": "docs",
+  "pattern": "**/*.md",
+  "excludePatterns": []
+}

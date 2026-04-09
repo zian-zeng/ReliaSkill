@@ -1,0 +1,24 @@
+{
+  "tool_name": "list_directory",
+  "baseline_name": "retrieved_candidates",
+  "source_pointer": "data\\raw\\public_mcp_filesystem_subset.json#3",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "selection_strategy": "candidate_retrieval_shortlist",
+      "shortlist": [
+        "list_directory",
+        "search_files",
+        "read_text_file"
+      ],
+      "distinctive_terms": [
+        "list_directory",
+        "listing",
+        "specified",
+        "path."
+      ]
+    }
+  ]
+}

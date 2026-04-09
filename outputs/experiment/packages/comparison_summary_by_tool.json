@@ -18,6 +18,33 @@
       "avg_semantic_hint_entries": 0.0,
       "issue_breakdown": {}
     },
+    "retrieved_docs": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 3.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "retrieved_candidates": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 4.0,
+      "avg_template_fields": 3.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "retrieved_memory": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 3.0,
+      "avg_template_fields": 3.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
     "autoskill_base": {
       "total_tools": 1,
       "valid_packages": 1,
@@ -39,6 +66,33 @@
       "issue_breakdown": {}
     },
     "schema_only": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 2.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "retrieved_docs": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 2.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "retrieved_candidates": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 3.0,
+      "avg_template_fields": 2.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "retrieved_memory": {
       "total_tools": 1,
       "valid_packages": 1,
       "valid_rate": 1.0,
@@ -76,6 +130,33 @@
       "avg_semantic_hint_entries": 0.0,
       "issue_breakdown": {}
     },
+    "retrieved_docs": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 1.0,
+      "avg_template_fields": 1.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "retrieved_candidates": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 1.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "retrieved_memory": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 1.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
     "autoskill_base": {
       "total_tools": 1,
       "valid_packages": 1,
@@ -105,6 +186,33 @@
       "avg_semantic_hint_entries": 0.0,
       "issue_breakdown": {}
     },
+    "retrieved_docs": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 1.0,
+      "avg_template_fields": 1.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "retrieved_candidates": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 1.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "retrieved_memory": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 1.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
     "autoskill_base": {
       "total_tools": 1,
       "valid_packages": 1,
@@ -130,6 +238,33 @@
       "valid_packages": 1,
       "valid_rate": 1.0,
       "avg_examples": 2.0,
+      "avg_template_fields": 3.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "retrieved_docs": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 3.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "retrieved_candidates": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 3.0,
+      "avg_template_fields": 3.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "retrieved_memory": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 4.0,
       "avg_template_fields": 3.0,
       "avg_semantic_hint_entries": 0.0,
       "issue_breakdown": {}

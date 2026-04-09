@@ -1,0 +1,42 @@
+Tool: create_directory
+Server: mcp_reference_filesystem
+Condition: retrieved_docs
+
+Description:
+Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "Directory path to create within an allowed directory."
+    }
+  },
+  "required": [
+    "path"
+  ]
+}
+
+Skill summary:
+Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories. path required Directory path to create within an allowed directory.
+
+When to use:
+- Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.
+- path required Directory path to create within an allowed directory.
+- Create Directory
+
+When not to use:
+- Do not assume capabilities beyond the retrieved tool documentation.
+
+Argument template:
+{
+  "path": "data/sample.txt"
+}
+
+Examples:
+- Scenario: Retrieved-docs minimal call for create_directory
+{
+  "path": "data/sample.txt"
+}

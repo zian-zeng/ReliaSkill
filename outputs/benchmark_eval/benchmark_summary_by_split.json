@@ -22,7 +22,7 @@
       "avg_required_argument_recall": 1.0,
       "hallucinated_argument_count": 0
     },
-    "autoskill_base": {
+    "retrieved_docs": {
       "num_tasks": 6,
       "exact_match_rate": 1.0,
       "exact_match_ci": {
@@ -32,6 +32,28 @@
       "avg_argument_validity": 1.0,
       "avg_required_argument_recall": 1.0,
       "hallucinated_argument_count": 0
+    },
+    "retrieved_memory": {
+      "num_tasks": 6,
+      "exact_match_rate": 0.8333,
+      "exact_match_ci": {
+        "low": 0.5,
+        "high": 1.0
+      },
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 1
+    },
+    "autoskill_base": {
+      "num_tasks": 6,
+      "exact_match_rate": 0.8333,
+      "exact_match_ci": {
+        "low": 0.5,
+        "high": 1.0
+      },
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 1
     }
   },
   "test": {
@@ -57,16 +79,38 @@
       "avg_required_argument_recall": 0.8333,
       "hallucinated_argument_count": 0
     },
+    "retrieved_docs": {
+      "num_tasks": 9,
+      "exact_match_rate": 0.4444,
+      "exact_match_ci": {
+        "low": 0.1111,
+        "high": 0.7778
+      },
+      "avg_argument_validity": 0.7778,
+      "avg_required_argument_recall": 0.8333,
+      "hallucinated_argument_count": 0
+    },
+    "retrieved_memory": {
+      "num_tasks": 9,
+      "exact_match_rate": 0.8889,
+      "exact_match_ci": {
+        "low": 0.6667,
+        "high": 1.0
+      },
+      "avg_argument_validity": 0.9444,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 1
+    },
     "autoskill_base": {
       "num_tasks": 9,
-      "exact_match_rate": 1.0,
+      "exact_match_rate": 0.8889,
       "exact_match_ci": {
-        "low": 1.0,
+        "low": 0.6667,
         "high": 1.0
       },
       "avg_argument_validity": 1.0,
       "avg_required_argument_recall": 1.0,
-      "hallucinated_argument_count": 0
+      "hallucinated_argument_count": 1
     }
   }
 }

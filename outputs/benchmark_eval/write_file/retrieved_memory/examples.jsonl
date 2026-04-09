@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid memory-backed call for write_file", "arguments": {"path": "data/sample.txt", "content": "sample_content_1"}}
+{"scenario": "Save quoted text to a destination file path.", "arguments": {"path": "docs/notes.txt", "content": "Release checklist"}}

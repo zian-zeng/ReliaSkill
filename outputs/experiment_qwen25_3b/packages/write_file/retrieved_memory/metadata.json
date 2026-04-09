@@ -1,0 +1,9 @@
+{
+  "tool_name": "write_file",
+  "baseline_name": "retrieved_memory",
+  "source_pointer": "data\\raw\\public_mcp_filesystem_subset.json#1",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": []
+}

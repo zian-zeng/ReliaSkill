@@ -1,0 +1,2 @@
+{"scenario": "Minimal routed call for list_directory", "arguments": {"path": "data/sample.txt"}}
+{"scenario": "Route inspect-directory requests here.", "arguments": {"path": "docs"}}

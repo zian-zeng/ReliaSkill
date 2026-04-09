@@ -43,12 +43,34 @@ def main() -> None:
         manifest = run_full_experiment(tools_path=args.tools, tasks_path=args.tasks, output_root=args.out)
     print(f"generator_backend={manifest['generator_backend']}")
     print(f"predictor_backend={manifest['predictor_backend']}")
+    if "generation_backend_usage" in manifest:
+        usage = manifest["generation_backend_usage"]
+        print(
+            "generation_usage: "
+            f"actual={usage['actual_backend_counts']}, "
+            f"fallbacks={usage['fallback_count']}/{usage['num_records']}"
+        )
+    if "predictor_backend_usage" in manifest:
+        usage = manifest["predictor_backend_usage"]
+        print(
+            "prediction_usage: "
+            f"actual={usage['actual_backend_counts']}, "
+            f"fallbacks={usage['fallback_count']}/{usage['num_records']}"
+        )
     for baseline_name, row in manifest["benchmark_summary"].items():
         print(
             f"{baseline_name}: "
             f"exact_match={row['exact_match_rate']:.4f}, "
             f"arg_validity={row['avg_argument_validity']:.4f}"
         )
+    if "routing_summary" in manifest:
+        print("hidden_tool_routing:")
+        for baseline_name, row in manifest["routing_summary"].items():
+            print(
+                f"{baseline_name}: "
+                f"tool_acc={row['tool_selection_accuracy']:.4f}, "
+                f"joint_exact={row['joint_exact_match_rate']:.4f}"
+            )
 
 
 if __name__ == "__main__":

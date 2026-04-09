@@ -22,16 +22,38 @@
       "avg_required_argument_recall": 1.0,
       "hallucinated_argument_count": 0
     },
+    "retrieved_docs": {
+      "num_tasks": 5,
+      "exact_match_rate": 0.6,
+      "exact_match_ci": {
+        "low": 0.2,
+        "high": 1.0
+      },
+      "avg_argument_validity": 0.8,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "retrieved_memory": {
+      "num_tasks": 5,
+      "exact_match_rate": 0.6,
+      "exact_match_ci": {
+        "low": 0.2,
+        "high": 1.0
+      },
+      "avg_argument_validity": 0.9,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 2
+    },
     "autoskill_base": {
       "num_tasks": 5,
-      "exact_match_rate": 1.0,
+      "exact_match_rate": 0.6,
       "exact_match_ci": {
-        "low": 1.0,
+        "low": 0.2,
         "high": 1.0
       },
       "avg_argument_validity": 1.0,
       "avg_required_argument_recall": 1.0,
-      "hallucinated_argument_count": 0
+      "hallucinated_argument_count": 2
     }
   },
   "write_file": {
@@ -47,6 +69,28 @@
       "hallucinated_argument_count": 0
     },
     "schema_only": {
+      "num_tasks": 2,
+      "exact_match_rate": 1.0,
+      "exact_match_ci": {
+        "low": 1.0,
+        "high": 1.0
+      },
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "retrieved_docs": {
+      "num_tasks": 2,
+      "exact_match_rate": 1.0,
+      "exact_match_ci": {
+        "low": 1.0,
+        "high": 1.0
+      },
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "retrieved_memory": {
       "num_tasks": 2,
       "exact_match_rate": 1.0,
       "exact_match_ci": {
@@ -92,6 +136,28 @@
       "avg_required_argument_recall": 1.0,
       "hallucinated_argument_count": 0
     },
+    "retrieved_docs": {
+      "num_tasks": 2,
+      "exact_match_rate": 1.0,
+      "exact_match_ci": {
+        "low": 1.0,
+        "high": 1.0
+      },
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "retrieved_memory": {
+      "num_tasks": 2,
+      "exact_match_rate": 1.0,
+      "exact_match_ci": {
+        "low": 1.0,
+        "high": 1.0
+      },
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
     "autoskill_base": {
       "num_tasks": 2,
       "exact_match_rate": 1.0,
@@ -117,6 +183,28 @@
       "hallucinated_argument_count": 0
     },
     "schema_only": {
+      "num_tasks": 1,
+      "exact_match_rate": 1.0,
+      "exact_match_ci": {
+        "low": 1.0,
+        "high": 1.0
+      },
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "retrieved_docs": {
+      "num_tasks": 1,
+      "exact_match_rate": 1.0,
+      "exact_match_ci": {
+        "low": 1.0,
+        "high": 1.0
+      },
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
+      "hallucinated_argument_count": 0
+    },
+    "retrieved_memory": {
       "num_tasks": 1,
       "exact_match_rate": 1.0,
       "exact_match_ci": {
@@ -160,6 +248,28 @@
       },
       "avg_argument_validity": 0.8,
       "avg_required_argument_recall": 0.7,
+      "hallucinated_argument_count": 0
+    },
+    "retrieved_docs": {
+      "num_tasks": 5,
+      "exact_match_rate": 0.4,
+      "exact_match_ci": {
+        "low": 0.0,
+        "high": 0.8
+      },
+      "avg_argument_validity": 0.8,
+      "avg_required_argument_recall": 0.7,
+      "hallucinated_argument_count": 0
+    },
+    "retrieved_memory": {
+      "num_tasks": 5,
+      "exact_match_rate": 1.0,
+      "exact_match_ci": {
+        "low": 1.0,
+        "high": 1.0
+      },
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 1.0,
       "hallucinated_argument_count": 0
     },
     "autoskill_base": {

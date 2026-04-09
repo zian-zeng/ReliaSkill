@@ -1,0 +1,49 @@
+Tool: write_file
+Server: mcp_reference_filesystem
+Condition: retrieved_memory
+
+Description:
+Create a new file or completely overwrite an existing file with new content. Use with caution as it will overwrite existing files without warning. Handles text content with proper encoding. Only works within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "Destination file path within an allowed directory."
+    },
+    "content": {
+      "type": "string",
+      "description": "Full file contents to write."
+    }
+  },
+  "required": [
+    "path",
+    "content"
+  ]
+}
+
+Skill summary:
+Retrieve nearest memory examples for the current request and reuse them without semantic hint rewriting.
+
+When to use:
+- Retrieve example memories for the request: Save "Deployment checklist" to docs/deploy.txt.
+- Save quoted text to a destination file path.
+
+When not to use:
+- Do not assume retrieved memories are perfect; keep field names schema-faithful.
+- Do not invent unsupported arguments when no compatible memory matches the tool.
+
+Argument template:
+{
+  "path": "data/sample.txt",
+  "content": "sample_content_1"
+}
+
+Examples:
+- Scenario: Save quoted text to a destination file path.
+{
+  "path": "docs/notes.txt",
+  "content": "Release checklist"
+}

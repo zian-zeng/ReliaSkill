@@ -86,6 +86,13 @@ def score_prediction(task: EvalTask, tool: ToolIR, prediction: EvalPrediction) -
         ),
     )
 
+    retrieval_rank = prediction.metadata.get("retrieval_target_rank")
+    selected_tool_name = prediction.metadata.get("selected_tool_name")
+    retrieved_tool_candidates = list(prediction.metadata.get("retrieved_tool_candidates", []))
+    retrieval_hit = None
+    if isinstance(retrieval_rank, int):
+        retrieval_hit = retrieval_rank <= max(len(retrieved_tool_candidates), 1)
+
     return {
         "task_id": task.task_id,
         "tool_name": task.tool_name,
@@ -99,6 +106,11 @@ def score_prediction(task: EvalTask, tool: ToolIR, prediction: EvalPrediction) -
         "predicted_arguments": best["predicted_arguments"],
         "expected_arguments": best["expected_arguments"],
         "num_gold_candidates": len(candidates),
+        "selected_tool_name": selected_tool_name,
+        "retrieved_tool_candidates": retrieved_tool_candidates,
+        "retrieval_target_rank": retrieval_rank,
+        "retrieval_hit_at_k": retrieval_hit,
+        "prediction_metadata": dict(prediction.metadata),
     }
 
 
@@ -123,6 +135,8 @@ def _summarize_item_group(items: List[Dict[str, Any]]) -> Dict[str, Any]:
     total = len(items)
     exact_match_values = [1.0 if item["exact_match"] else 0.0 for item in items]
     exact_match_rate = round(sum(exact_match_values) / total, 4) if total else 0.0
+    retrieval_hits = [1.0 if item.get("retrieval_hit_at_k") else 0.0 for item in items if item.get("retrieval_hit_at_k") is not None]
+    retrieval_ranks = [float(item["retrieval_target_rank"]) for item in items if isinstance(item.get("retrieval_target_rank"), int)]
     return {
         "num_tasks": total,
         "exact_match_rate": exact_match_rate,
@@ -130,6 +144,8 @@ def _summarize_item_group(items: List[Dict[str, Any]]) -> Dict[str, Any]:
         "avg_argument_validity": round(sum(item["argument_validity"] for item in items) / total, 4) if total else 0.0,
         "avg_required_argument_recall": round(sum(item["required_argument_recall"] for item in items) / total, 4) if total else 0.0,
         "hallucinated_argument_count": sum(len(item["hallucinated_args"]) for item in items),
+        "tool_retrieval_hit_rate": round(sum(retrieval_hits) / len(retrieval_hits), 4) if retrieval_hits else None,
+        "avg_target_tool_rank": round(sum(retrieval_ranks) / len(retrieval_ranks), 4) if retrieval_ranks else None,
     }
 
 
@@ -175,7 +191,7 @@ def summarize_pairwise_comparisons(
     anchor_baseline: str = "autoskill_base",
     comparison_baselines: List[str] | None = None,
 ) -> Dict[str, Any]:
-    comparison_baselines = comparison_baselines or ["raw_mcp", "schema_only"]
+    comparison_baselines = comparison_baselines or ["raw_mcp", "schema_only", "retrieved_docs", "retrieved_candidates", "retrieved_memory"]
     by_task_and_baseline: Dict[str, Dict[str, Dict[str, Any]]] = {}
     for score in scores:
         by_task_and_baseline.setdefault(score["task_id"], {})[score["baseline_name"]] = score

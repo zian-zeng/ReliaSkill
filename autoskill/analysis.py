@@ -52,7 +52,7 @@ def summarize_method_wins(
     comparison_baselines: List[str] | None = None,
     max_examples: int = 5,
 ) -> Dict[str, Any]:
-    comparison_baselines = comparison_baselines or ["raw_mcp", "schema_only"]
+    comparison_baselines = comparison_baselines or ["raw_mcp", "schema_only", "retrieved_docs", "retrieved_candidates", "retrieved_memory"]
     by_task_and_baseline: Dict[str, Dict[str, Dict[str, Any]]] = {}
     for score in scores:
         by_task_and_baseline.setdefault(str(score["task_id"]), {})[str(score["baseline_name"])] = score

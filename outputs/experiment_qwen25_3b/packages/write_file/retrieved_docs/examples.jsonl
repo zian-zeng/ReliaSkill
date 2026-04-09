@@ -1,0 +1,2 @@
+{"scenario": "Retrieved-docs minimal call for write_file", "arguments": {"path": "data/sample.txt", "content": "sample_content_1"}}
+{"scenario": "Retrieved-docs fuller call for write_file", "arguments": {"path": "data/sample.txt", "content": "sample_content_2"}}

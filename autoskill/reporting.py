@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List
 
 
-BASELINE_ORDER = ["raw_mcp", "schema_only", "autoskill_base"]
+BASELINE_ORDER = ["raw_mcp", "schema_only", "retrieved_docs", "retrieved_candidates", "retrieved_memory", "autoskill_base"]
 
 
 def _ordered_baselines(summary: Dict[str, Any]) -> list[str]:
@@ -22,6 +22,12 @@ def _ordered_tools(summary_by_tool: Dict[str, Any]) -> list[str]:
 
 def _compact_json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True)
+
+
+def _format_optional_float(value: Any, digits: int = 4) -> str:
+    if value is None:
+        return ""
+    return f"{float(value):.{digits}f}"
 
 
 def collect_failure_highlights(scores: Iterable[Dict[str, Any]], limit_per_baseline: int = 3) -> Dict[str, List[Dict[str, Any]]]:
@@ -50,9 +56,12 @@ def build_results_markdown(
     benchmark_summary: Dict[str, Any],
     tools_path: str,
     tasks_path: str,
+    routing_summary: Dict[str, Any] | None = None,
     package_summary_by_tool: Dict[str, Dict[str, Any]] | None = None,
     benchmark_summary_by_tool: Dict[str, Dict[str, Any]] | None = None,
     benchmark_summary_by_split: Dict[str, Dict[str, Any]] | None = None,
+    routing_summary_by_tool: Dict[str, Dict[str, Any]] | None = None,
+    routing_summary_by_split: Dict[str, Dict[str, Any]] | None = None,
     pairwise_comparisons: Dict[str, Any] | None = None,
     error_taxonomy: Dict[str, Any] | None = None,
     method_win_analysis: Dict[str, Any] | None = None,
@@ -80,15 +89,31 @@ def build_results_markdown(
             "",
             "## Benchmark Summary",
             "",
-            "| Condition | Exact Match | Argument Validity | Required Arg Recall | Hallucinated Args |",
-            "| --- | ---: | ---: | ---: | ---: |",
+            "| Condition | Exact Match | Argument Validity | Required Arg Recall | Retrieval Hit@K | Avg Target Rank | Hallucinated Args |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
         ]
     )
     for baseline in _ordered_baselines(benchmark_summary):
         row = benchmark_summary[baseline]
         lines.append(
-            f"| {baseline} | {row.get('exact_match_rate', 0.0):.4f} | {row.get('avg_argument_validity', 0.0):.4f} | {row.get('avg_required_argument_recall', 0.0):.4f} | {row.get('hallucinated_argument_count', 0)} |"
+            f"| {baseline} | {row.get('exact_match_rate', 0.0):.4f} | {row.get('avg_argument_validity', 0.0):.4f} | {row.get('avg_required_argument_recall', 0.0):.4f} | {_format_optional_float(row.get('tool_retrieval_hit_rate'), 4)} | {_format_optional_float(row.get('avg_target_tool_rank'), 2)} | {row.get('hallucinated_argument_count', 0)} |"
         )
+
+    if routing_summary:
+        lines.extend(
+            [
+                "",
+                "## Hidden-Tool Routing Summary",
+                "",
+                "| Condition | Tool Accuracy | Joint Exact Match | Argument Validity | Gold Tool Hit@K | Avg Gold Tool Rank |",
+                "| --- | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for baseline in _ordered_baselines(routing_summary):
+            row = routing_summary[baseline]
+            lines.append(
+                f"| {baseline} | {row.get('tool_selection_accuracy', 0.0):.4f} | {row.get('joint_exact_match_rate', 0.0):.4f} | {row.get('avg_argument_validity', 0.0):.4f} | {_format_optional_float(row.get('gold_tool_hit_rate'), 4)} | {_format_optional_float(row.get('avg_gold_tool_rank'), 2)} |"
+            )
 
     if benchmark_summary_by_split:
         lines.extend(
@@ -96,8 +121,8 @@ def build_results_markdown(
                 "",
                 "## Benchmark By Split",
                 "",
-                "| Split | Condition | Tasks | Exact Match | 95% CI | Argument Validity |",
-                "| --- | --- | ---: | ---: | --- | ---: |",
+                "| Split | Condition | Tasks | Exact Match | 95% CI | Argument Validity | Retrieval Hit@K | Avg Target Rank |",
+                "| --- | --- | ---: | ---: | --- | ---: | ---: | ---: |",
             ]
         )
         for split_name in sorted(benchmark_summary_by_split):
@@ -105,7 +130,24 @@ def build_results_markdown(
                 row = benchmark_summary_by_split[split_name][baseline]
                 ci = row.get("exact_match_ci", {"low": 0.0, "high": 0.0})
                 lines.append(
-                    f"| {split_name} | {baseline} | {row.get('num_tasks', 0)} | {row.get('exact_match_rate', 0.0):.4f} | [{ci.get('low', 0.0):.4f}, {ci.get('high', 0.0):.4f}] | {row.get('avg_argument_validity', 0.0):.4f} |"
+                    f"| {split_name} | {baseline} | {row.get('num_tasks', 0)} | {row.get('exact_match_rate', 0.0):.4f} | [{ci.get('low', 0.0):.4f}, {ci.get('high', 0.0):.4f}] | {row.get('avg_argument_validity', 0.0):.4f} | {_format_optional_float(row.get('tool_retrieval_hit_rate'), 4)} | {_format_optional_float(row.get('avg_target_tool_rank'), 2)} |"
+                )
+
+    if routing_summary_by_split:
+        lines.extend(
+            [
+                "",
+                "## Hidden-Tool Routing By Split",
+                "",
+                "| Split | Condition | Tasks | Tool Accuracy | Joint Exact Match | Gold Tool Hit@K | Avg Gold Tool Rank |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for split_name in sorted(routing_summary_by_split):
+            for baseline in _ordered_baselines(routing_summary_by_split[split_name]):
+                row = routing_summary_by_split[split_name][baseline]
+                lines.append(
+                    f"| {split_name} | {baseline} | {row.get('num_tasks', 0)} | {row.get('tool_selection_accuracy', 0.0):.4f} | {row.get('joint_exact_match_rate', 0.0):.4f} | {_format_optional_float(row.get('gold_tool_hit_rate'), 4)} | {_format_optional_float(row.get('avg_gold_tool_rank'), 2)} |"
                 )
 
     if benchmark_summary_by_tool:
@@ -114,15 +156,32 @@ def build_results_markdown(
                 "",
                 "## Benchmark By Tool",
                 "",
-                "| Tool | Condition | Tasks | Exact Match | Argument Validity | Required Arg Recall |",
-                "| --- | --- | ---: | ---: | ---: | ---: |",
+                "| Tool | Condition | Tasks | Exact Match | Argument Validity | Required Arg Recall | Retrieval Hit@K | Avg Target Rank |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
             ]
         )
         for tool_name in _ordered_tools(benchmark_summary_by_tool):
             for baseline in _ordered_baselines(benchmark_summary_by_tool[tool_name]):
                 row = benchmark_summary_by_tool[tool_name][baseline]
                 lines.append(
-                    f"| {tool_name} | {baseline} | {row.get('num_tasks', 0)} | {row.get('exact_match_rate', 0.0):.4f} | {row.get('avg_argument_validity', 0.0):.4f} | {row.get('avg_required_argument_recall', 0.0):.4f} |"
+                    f"| {tool_name} | {baseline} | {row.get('num_tasks', 0)} | {row.get('exact_match_rate', 0.0):.4f} | {row.get('avg_argument_validity', 0.0):.4f} | {row.get('avg_required_argument_recall', 0.0):.4f} | {_format_optional_float(row.get('tool_retrieval_hit_rate'), 4)} | {_format_optional_float(row.get('avg_target_tool_rank'), 2)} |"
+                )
+
+    if routing_summary_by_tool:
+        lines.extend(
+            [
+                "",
+                "## Hidden-Tool Routing By Gold Tool",
+                "",
+                "| Gold Tool | Condition | Tasks | Tool Accuracy | Joint Exact Match | Gold Tool Hit@K | Avg Gold Tool Rank |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for tool_name in _ordered_tools(routing_summary_by_tool):
+            for baseline in _ordered_baselines(routing_summary_by_tool[tool_name]):
+                row = routing_summary_by_tool[tool_name][baseline]
+                lines.append(
+                    f"| {tool_name} | {baseline} | {row.get('num_tasks', 0)} | {row.get('tool_selection_accuracy', 0.0):.4f} | {row.get('joint_exact_match_rate', 0.0):.4f} | {_format_optional_float(row.get('gold_tool_hit_rate'), 4)} | {_format_optional_float(row.get('avg_gold_tool_rank'), 2)} |"
                 )
 
     if pairwise_comparisons:
@@ -216,7 +275,11 @@ def build_results_markdown(
     return "\n".join(lines)
 
 
-def build_results_csv(package_summary: Dict[str, Any], benchmark_summary: Dict[str, Any]) -> str:
+def build_results_csv(
+    package_summary: Dict[str, Any],
+    benchmark_summary: Dict[str, Any],
+    routing_summary: Dict[str, Any] | None = None,
+) -> str:
     buffer = StringIO()
     writer = csv.writer(buffer)
     writer.writerow(
@@ -229,13 +292,20 @@ def build_results_csv(package_summary: Dict[str, Any], benchmark_summary: Dict[s
             "exact_match_rate",
             "avg_argument_validity",
             "avg_required_argument_recall",
+            "tool_retrieval_hit_rate",
+            "avg_target_tool_rank",
             "hallucinated_argument_count",
+            "routing_tool_selection_accuracy",
+            "routing_joint_exact_match_rate",
+            "routing_gold_tool_hit_rate",
+            "routing_avg_gold_tool_rank",
         ]
     )
-    baseline_names = _ordered_baselines({**package_summary, **benchmark_summary})
+    baseline_names = _ordered_baselines({**package_summary, **benchmark_summary, **(routing_summary or {})})
     for baseline in baseline_names:
         package_row = package_summary.get(baseline, {})
         benchmark_row = benchmark_summary.get(baseline, {})
+        routing_row = (routing_summary or {}).get(baseline, {})
         writer.writerow(
             [
                 baseline,
@@ -246,7 +316,13 @@ def build_results_csv(package_summary: Dict[str, Any], benchmark_summary: Dict[s
                 benchmark_row.get("exact_match_rate", ""),
                 benchmark_row.get("avg_argument_validity", ""),
                 benchmark_row.get("avg_required_argument_recall", ""),
+                benchmark_row.get("tool_retrieval_hit_rate", ""),
+                benchmark_row.get("avg_target_tool_rank", ""),
                 benchmark_row.get("hallucinated_argument_count", ""),
+                routing_row.get("tool_selection_accuracy", ""),
+                routing_row.get("joint_exact_match_rate", ""),
+                routing_row.get("gold_tool_hit_rate", ""),
+                routing_row.get("avg_gold_tool_rank", ""),
             ]
         )
     return buffer.getvalue()
@@ -263,6 +339,8 @@ def build_benchmark_by_tool_csv(benchmark_summary_by_tool: Dict[str, Dict[str, A
             "exact_match_rate",
             "avg_argument_validity",
             "avg_required_argument_recall",
+            "tool_retrieval_hit_rate",
+            "avg_target_tool_rank",
             "hallucinated_argument_count",
         ]
     )
@@ -277,6 +355,8 @@ def build_benchmark_by_tool_csv(benchmark_summary_by_tool: Dict[str, Dict[str, A
                     row.get("exact_match_rate", ""),
                     row.get("avg_argument_validity", ""),
                     row.get("avg_required_argument_recall", ""),
+                    row.get("tool_retrieval_hit_rate", ""),
+                    row.get("avg_target_tool_rank", ""),
                     row.get("hallucinated_argument_count", ""),
                 ]
             )
@@ -296,6 +376,8 @@ def build_benchmark_by_split_csv(benchmark_summary_by_split: Dict[str, Dict[str,
             "exact_match_ci_high",
             "avg_argument_validity",
             "avg_required_argument_recall",
+            "tool_retrieval_hit_rate",
+            "avg_target_tool_rank",
             "hallucinated_argument_count",
         ]
     )
@@ -313,6 +395,8 @@ def build_benchmark_by_split_csv(benchmark_summary_by_split: Dict[str, Dict[str,
                     ci.get("high", ""),
                     row.get("avg_argument_validity", ""),
                     row.get("avg_required_argument_recall", ""),
+                    row.get("tool_retrieval_hit_rate", ""),
+                    row.get("avg_target_tool_rank", ""),
                     row.get("hallucinated_argument_count", ""),
                 ]
             )
@@ -433,6 +517,114 @@ def build_package_by_tool_csv(package_summary_by_tool: Dict[str, Dict[str, Any]]
                     row.get("avg_examples", ""),
                     row.get("avg_template_fields", ""),
                     row.get("avg_semantic_hint_entries", ""),
+                ]
+            )
+    return buffer.getvalue()
+
+
+def build_routing_results_csv(routing_summary: Dict[str, Any]) -> str:
+    buffer = StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(
+        [
+            "condition",
+            "num_tasks",
+            "tool_selection_accuracy",
+            "tool_selection_accuracy_ci_low",
+            "tool_selection_accuracy_ci_high",
+            "joint_exact_match_rate",
+            "joint_exact_match_ci_low",
+            "joint_exact_match_ci_high",
+            "avg_argument_validity",
+            "avg_required_argument_recall",
+            "gold_tool_hit_rate",
+            "avg_gold_tool_rank",
+        ]
+    )
+    for baseline in _ordered_baselines(routing_summary):
+        row = routing_summary[baseline]
+        tool_ci = row.get("tool_selection_accuracy_ci", {"low": "", "high": ""})
+        joint_ci = row.get("joint_exact_match_ci", {"low": "", "high": ""})
+        writer.writerow(
+            [
+                baseline,
+                row.get("num_tasks", ""),
+                row.get("tool_selection_accuracy", ""),
+                tool_ci.get("low", ""),
+                tool_ci.get("high", ""),
+                row.get("joint_exact_match_rate", ""),
+                joint_ci.get("low", ""),
+                joint_ci.get("high", ""),
+                row.get("avg_argument_validity", ""),
+                row.get("avg_required_argument_recall", ""),
+                row.get("gold_tool_hit_rate", ""),
+                row.get("avg_gold_tool_rank", ""),
+            ]
+        )
+    return buffer.getvalue()
+
+
+def build_routing_by_tool_csv(routing_summary_by_tool: Dict[str, Dict[str, Any]]) -> str:
+    buffer = StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(
+        [
+            "gold_tool_name",
+            "condition",
+            "num_tasks",
+            "tool_selection_accuracy",
+            "joint_exact_match_rate",
+            "avg_argument_validity",
+            "gold_tool_hit_rate",
+            "avg_gold_tool_rank",
+        ]
+    )
+    for tool_name in _ordered_tools(routing_summary_by_tool):
+        for baseline in _ordered_baselines(routing_summary_by_tool[tool_name]):
+            row = routing_summary_by_tool[tool_name][baseline]
+            writer.writerow(
+                [
+                    tool_name,
+                    baseline,
+                    row.get("num_tasks", ""),
+                    row.get("tool_selection_accuracy", ""),
+                    row.get("joint_exact_match_rate", ""),
+                    row.get("avg_argument_validity", ""),
+                    row.get("gold_tool_hit_rate", ""),
+                    row.get("avg_gold_tool_rank", ""),
+                ]
+            )
+    return buffer.getvalue()
+
+
+def build_routing_by_split_csv(routing_summary_by_split: Dict[str, Dict[str, Any]]) -> str:
+    buffer = StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(
+        [
+            "split",
+            "condition",
+            "num_tasks",
+            "tool_selection_accuracy",
+            "joint_exact_match_rate",
+            "avg_argument_validity",
+            "gold_tool_hit_rate",
+            "avg_gold_tool_rank",
+        ]
+    )
+    for split_name in sorted(routing_summary_by_split):
+        for baseline in _ordered_baselines(routing_summary_by_split[split_name]):
+            row = routing_summary_by_split[split_name][baseline]
+            writer.writerow(
+                [
+                    split_name,
+                    baseline,
+                    row.get("num_tasks", ""),
+                    row.get("tool_selection_accuracy", ""),
+                    row.get("joint_exact_match_rate", ""),
+                    row.get("avg_argument_validity", ""),
+                    row.get("gold_tool_hit_rate", ""),
+                    row.get("avg_gold_tool_rank", ""),
                 ]
             )
     return buffer.getvalue()
