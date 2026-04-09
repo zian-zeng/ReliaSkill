@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 from autoskill.benchmark import load_benchmark_tasks
+from autoskill.analysis import summarize_error_taxonomy, summarize_method_wins
 from autoskill.config import load_json_config, merge_experiment_config
 from autoskill.evaluation import summarize_records, summarize_records_by_tool, write_summary
 from autoskill.generator import SkillGenerator
@@ -13,15 +14,25 @@ from autoskill.parser import parse_mcp_tool
 from autoskill.predictor import PredictorBackend, build_predictor_from_config, build_predictor_from_env, safe_predict
 from autoskill.raw_mcp import build_raw_mcp_skill
 from autoskill.reporting import (
+    build_benchmark_by_split_csv,
     build_benchmark_by_tool_csv,
+    build_error_taxonomy_csv,
+    build_method_wins_csv,
     build_package_by_tool_csv,
+    build_pairwise_comparison_csv,
     build_results_csv,
     build_results_markdown,
     collect_failure_highlights,
     write_report,
 )
 from autoskill.schema_only import build_schema_only_skill
-from autoskill.task_eval import score_prediction, summarize_task_scores, summarize_task_scores_by_tool
+from autoskill.task_eval import (
+    score_prediction,
+    summarize_pairwise_comparisons,
+    summarize_task_scores,
+    summarize_task_scores_by_split,
+    summarize_task_scores_by_tool,
+)
 from autoskill.validator import validate_skill
 
 
@@ -100,7 +111,7 @@ def run_benchmark_pipeline(
     output_dir: str | Path,
     generator: SkillGenerator | None = None,
     predictor: PredictorBackend | None = None,
-) -> Tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, Dict[str, Any]]]:
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, Any]]:
     out_dir = Path(output_dir)
     generator = generator or SkillGenerator()
     predictor = predictor or build_predictor_from_env()
@@ -127,12 +138,26 @@ def run_benchmark_pipeline(
 
     summary = summarize_task_scores(all_scores)
     summary_by_tool = summarize_task_scores_by_tool(all_scores)
+    summary_by_split = summarize_task_scores_by_split(all_scores)
+    pairwise_comparisons = summarize_pairwise_comparisons(all_scores)
+    error_taxonomy = summarize_error_taxonomy(all_scores)
+    method_win_analysis = summarize_method_wins(all_scores)
     write_summary(out_dir / "benchmark_summary.json", summary)
     write_summary(out_dir / "benchmark_summary_by_tool.json", summary_by_tool)
+    write_summary(out_dir / "benchmark_summary_by_split.json", summary_by_split)
+    write_summary(out_dir / "pairwise_comparisons.json", pairwise_comparisons)
+    write_summary(out_dir / "error_taxonomy.json", error_taxonomy)
+    write_summary(out_dir / "method_win_analysis.json", method_win_analysis)
     with (out_dir / "benchmark_details.json").open("w", encoding="utf-8") as f:
         json.dump(all_scores, f, indent=2, ensure_ascii=False)
     _write_jsonl(out_dir / "prediction_records.jsonl", all_scores)
-    return all_scores, summary, summary_by_tool
+    return all_scores, summary, {
+        "by_tool": summary_by_tool,
+        "by_split": summary_by_split,
+        "pairwise": pairwise_comparisons,
+        "error_taxonomy": error_taxonomy,
+        "method_wins": method_win_analysis,
+    }
 
 
 def run_full_experiment(
@@ -152,13 +177,18 @@ def run_full_experiment(
         output_dir=output_root / "packages",
         generator=generator,
     )
-    benchmark_scores, benchmark_summary, benchmark_summary_by_tool = run_benchmark_pipeline(
+    benchmark_scores, benchmark_summary, benchmark_detail_summaries = run_benchmark_pipeline(
         tools=tools,
         tasks_path=tasks_path,
         output_dir=output_root / "benchmark",
         generator=generator,
         predictor=predictor,
     )
+    benchmark_summary_by_tool = benchmark_detail_summaries["by_tool"]
+    benchmark_summary_by_split = benchmark_detail_summaries["by_split"]
+    pairwise_comparisons = benchmark_detail_summaries["pairwise"]
+    error_taxonomy = benchmark_detail_summaries["error_taxonomy"]
+    method_win_analysis = benchmark_detail_summaries["method_wins"]
 
     markdown_text = build_results_markdown(
         package_summary=package_summary,
@@ -167,6 +197,10 @@ def run_full_experiment(
         tasks_path=str(tasks_path),
         package_summary_by_tool=package_summary_by_tool,
         benchmark_summary_by_tool=benchmark_summary_by_tool,
+        benchmark_summary_by_split=benchmark_summary_by_split,
+        pairwise_comparisons=pairwise_comparisons,
+        error_taxonomy=error_taxonomy,
+        method_win_analysis=method_win_analysis,
         benchmark_failures=collect_failure_highlights(benchmark_scores),
     )
     csv_text = build_results_csv(package_summary=package_summary, benchmark_summary=benchmark_summary)
@@ -176,6 +210,10 @@ def run_full_experiment(
         csv_text,
         extra_files={
             "benchmark_by_tool.csv": build_benchmark_by_tool_csv(benchmark_summary_by_tool),
+            "benchmark_by_split.csv": build_benchmark_by_split_csv(benchmark_summary_by_split),
+            "pairwise_comparisons.csv": build_pairwise_comparison_csv(pairwise_comparisons),
+            "error_taxonomy.csv": build_error_taxonomy_csv(error_taxonomy),
+            "method_wins.csv": build_method_wins_csv(method_win_analysis),
             "package_by_tool.csv": build_package_by_tool_csv(package_summary_by_tool),
         },
     )
@@ -183,10 +221,15 @@ def run_full_experiment(
     manifest = {
         "tools_path": str(tools_path),
         "tasks_path": str(tasks_path),
+        "output_root": str(output_root),
         "package_summary": package_summary,
         "package_summary_by_tool": package_summary_by_tool,
         "benchmark_summary": benchmark_summary,
         "benchmark_summary_by_tool": benchmark_summary_by_tool,
+        "benchmark_summary_by_split": benchmark_summary_by_split,
+        "pairwise_comparisons": pairwise_comparisons,
+        "error_taxonomy": error_taxonomy,
+        "method_win_analysis": method_win_analysis,
         "predictor_backend": predictor.backend_name,
         "generator_backend": getattr(generator.backend, "backend_name", "unknown"),
         "generator_config": generator_config or {},

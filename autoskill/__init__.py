@@ -1,5 +1,6 @@
+from .analysis import classify_score_error, summarize_error_taxonomy, summarize_method_wins
 from .benchmark import load_benchmark_tasks
-from .config import load_json_config, merge_experiment_config
+from .config import load_json_config, merge_experiment_config, validate_experiment_config
 from .conversion import (
     canonicalize_mcp_tool_records,
     convert_benchmark_file_to_canonical_records,
@@ -31,6 +32,7 @@ from .predictor import build_predictor_from_config, build_predictor_from_env, sa
 from .raw_mcp import build_raw_mcp_skill
 from .reporting import build_results_csv, build_results_markdown, write_report
 from .schema_only import build_schema_only_skill
+from .sweep import aggregate_experiment_manifests, run_experiment_sweep
 from .task_eval import (
     demo_predict_call,
     load_eval_tasks,
@@ -54,6 +56,7 @@ __all__ = [
     "build_predictor_from_env",
     "build_results_csv",
     "build_results_markdown",
+    "classify_score_error",
     "canonicalize_mcp_tool_records",
     "convert_benchmark_file_to_canonical_records",
     "demo_predict_call",
@@ -66,14 +69,19 @@ __all__ = [
     "parse_mcp_tool",
     "render_exposure",
     "run_benchmark_pipeline",
+    "run_experiment_sweep",
     "run_full_experiment",
     "run_full_experiment_from_config",
     "run_packaging_pipeline",
     "safe_predict",
     "score_prediction",
     "summarize_records",
+    "aggregate_experiment_manifests",
+    "summarize_error_taxonomy",
+    "summarize_method_wins",
     "summarize_task_scores",
     "validate_skill",
+    "validate_experiment_config",
     "write_json",
     "write_jsonl",
     "write_report",

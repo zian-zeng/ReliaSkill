@@ -1,0 +1,5 @@
+condition,error_type,count,rate
+raw_mcp,semantic_mapping_failure,2,0.4
+raw_mcp,semantic_missing_required_argument,3,0.6
+schema_only,semantic_mapping_failure,2,0.4
+schema_only,semantic_missing_required_argument,3,0.6

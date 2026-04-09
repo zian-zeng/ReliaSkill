@@ -22,6 +22,9 @@ Create a new directory or ensure a directory exists. Can create multiple nested 
 }
 ```
 
+## Semantic hints
+No explicit semantic hints for this condition.
+
 ## Examples
 - Minimal valid call for create_directory
 ```json

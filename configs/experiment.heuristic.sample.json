@@ -1,0 +1,11 @@
+{
+  "tools_path": "data/raw/public_mcp_filesystem_subset.json",
+  "tasks_path": "data/eval/public_mcp_filesystem_benchmark.jsonl",
+  "output_root": "outputs/experiment_heuristic_sample",
+  "generator": {
+    "type": "heuristic"
+  },
+  "predictor": {
+    "type": "heuristic"
+  }
+}

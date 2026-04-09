@@ -1,2 +1,3 @@
 {"scenario": "Minimal valid request that satisfies the required fields for create_directory", "arguments": {"path": "data/sample.txt"}}
 {"scenario": "Richer invocation that uses optional controls for create_directory", "arguments": {"path": "data/sample.txt"}}
+{"scenario": "Ensure-style request for directory creation", "arguments": {"path": "reports/weekly"}}

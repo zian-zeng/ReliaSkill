@@ -24,6 +24,9 @@ Search documents using a keyword query.
 }
 ```
 
+## Semantic hints
+No explicit semantic hints for this condition.
+
 ## Examples
 - Minimal valid call for search_docs
 ```json

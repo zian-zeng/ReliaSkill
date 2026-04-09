@@ -1,0 +1,18 @@
+{
+  "runs": [
+    {
+      "run_name": "experiment.heuristic.sample",
+      "config_path": "C:\\Users\\zianz\\OneDrive\\Documents\\GitHub\\AutoSkill\\configs\\experiment.heuristic.sample.json",
+      "status": "completed",
+      "valid_config": true,
+      "generator_backend": "heuristic",
+      "predictor_backend": "heuristic",
+      "autoskill_exact_match": 1.0,
+      "raw_mcp_exact_match": 0.6667,
+      "schema_only_exact_match": 0.6667,
+      "autoskill_vs_raw_delta": 0.3333,
+      "autoskill_vs_schema_delta": 0.3333,
+      "output_root": "outputs\\experiment_heuristic_sample"
+    }
+  ]
+}

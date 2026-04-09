@@ -8,6 +8,18 @@ from typing import Any, Dict, Iterable
 from autoskill.ir import GeneratedSkill, ValidationReport
 
 
+def _count_semantic_entries(skill: GeneratedSkill) -> int:
+    total = 0
+    for value in skill.semantic_hints.values():
+        if isinstance(value, dict):
+            total += len(value)
+        elif isinstance(value, list):
+            total += len(value)
+        else:
+            total += 1
+    return total
+
+
 def summarize_records(records: Iterable[Dict[str, Any]]) -> Dict[str, Any]:
     summary: Dict[str, Any] = {}
     grouped: Dict[str, list[Dict[str, Any]]] = defaultdict(list)
@@ -20,6 +32,7 @@ def summarize_records(records: Iterable[Dict[str, Any]]) -> Dict[str, Any]:
         valid_count = 0
         total_examples = 0
         total_template_fields = 0
+        total_semantic_entries = 0
 
         for item in items:
             skill: GeneratedSkill = item["skill"]
@@ -29,6 +42,7 @@ def summarize_records(records: Iterable[Dict[str, Any]]) -> Dict[str, Any]:
             issue_counter.update(issue.code for issue in report.issues)
             total_examples += len(skill.examples)
             total_template_fields += len(skill.argument_template)
+            total_semantic_entries += _count_semantic_entries(skill)
 
         total = len(items)
         summary[baseline_name] = {
@@ -37,6 +51,7 @@ def summarize_records(records: Iterable[Dict[str, Any]]) -> Dict[str, Any]:
             "valid_rate": round(valid_count / total, 4) if total else 0.0,
             "avg_examples": round(total_examples / total, 2) if total else 0.0,
             "avg_template_fields": round(total_template_fields / total, 2) if total else 0.0,
+            "avg_semantic_hint_entries": round(total_semantic_entries / total, 2) if total else 0.0,
             "issue_breakdown": dict(sorted(issue_counter.items())),
         }
 
@@ -57,6 +72,7 @@ def summarize_records_by_tool(records: Iterable[Dict[str, Any]]) -> Dict[str, Di
             valid_count = 0
             total_examples = 0
             total_template_fields = 0
+            total_semantic_entries = 0
 
             for item in items:
                 skill: GeneratedSkill = item["skill"]
@@ -66,6 +82,7 @@ def summarize_records_by_tool(records: Iterable[Dict[str, Any]]) -> Dict[str, Di
                 issue_counter.update(issue.code for issue in report.issues)
                 total_examples += len(skill.examples)
                 total_template_fields += len(skill.argument_template)
+                total_semantic_entries += _count_semantic_entries(skill)
 
             total = len(items)
             summary[tool_name][baseline_name] = {
@@ -74,6 +91,7 @@ def summarize_records_by_tool(records: Iterable[Dict[str, Any]]) -> Dict[str, Di
                 "valid_rate": round(valid_count / total, 4) if total else 0.0,
                 "avg_examples": round(total_examples / total, 2) if total else 0.0,
                 "avg_template_fields": round(total_template_fields / total, 2) if total else 0.0,
+                "avg_semantic_hint_entries": round(total_semantic_entries / total, 2) if total else 0.0,
                 "issue_breakdown": dict(sorted(issue_counter.items())),
             }
 

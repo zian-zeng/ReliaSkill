@@ -78,30 +78,31 @@ def _extract_exclude_patterns(text: str) -> list[str]:
     return [part.strip(" .") for part in parts if part.strip(" .")]
 
 
-def _infer_autoskill_semantic_value(tool: ToolIR, arg_name: str, request: str) -> Any:
+def _infer_semantic_hint_value(tool: ToolIR, arg_name: str, request: str, skill: GeneratedSkill) -> Any:
     lowered = request.lower()
+    semantic_spec = skill.semantic_hints.get(arg_name)
 
-    if tool.tool_name == "read_text_file":
-        count = _extract_number(lowered)
-        if arg_name == "head" and count is not None:
-            if any(token in lowered for token in ("top ", "beginning", "opening", "start of")):
-                return count
-        if arg_name == "tail" and count is not None:
-            if any(token in lowered for token in ("bottom ", "ending", "trailing", "end of")):
-                return count
-
-    if tool.tool_name == "search_files" and arg_name == "pattern":
-        semantic_globs = [
-            ("python", "**/*.py"),
-            ("markdown", "**/*.md"),
-            ("json", "**/*.json"),
-            ("text", "**/*.txt"),
-            ("yaml", "**/*.yaml"),
-            ("yml", "**/*.yml"),
-        ]
-        for token, glob in semantic_globs:
-            if token in lowered:
-                return glob
+    if isinstance(semantic_spec, dict):
+        number = _extract_number(lowered)
+        for cue, mapped_value in semantic_spec.items():
+            if cue not in lowered:
+                continue
+            if mapped_value == "__number__" and number is not None:
+                return number
+            if mapped_value == "__paths__":
+                extracted = _extract_exclude_patterns(request)
+                if extracted:
+                    return extracted
+            if mapped_value == "__tail_text__":
+                extracted = _extract_content_from_request(request)
+                if extracted is not None:
+                    return extracted
+            if mapped_value == "__quoted_text_to_path__":
+                extracted = _extract_content_from_request(request)
+                if extracted is not None:
+                    return extracted
+            if mapped_value not in {"__number__", "__paths__", "__tail_text__", "__quoted_text_to_path__"}:
+                return mapped_value
 
     return None
 
@@ -165,8 +166,8 @@ class HeuristicPredictorBackend(PredictorBackend):
 
         for arg in tool.arguments:
             value = _infer_argument_value(arg.name, task.user_request, skill)
-            if value is None and skill.baseline_name == "autoskill_base":
-                value = _infer_autoskill_semantic_value(tool, arg.name, task.user_request)
+            if value is None and skill.semantic_hints:
+                value = _infer_semantic_hint_value(tool, arg.name, task.user_request, skill)
             if value is None:
                 if arg.required and arg.name not in predicted:
                     fallback = skill.argument_template.get(arg.name)

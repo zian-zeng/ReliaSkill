@@ -26,6 +26,9 @@ Fetch the current weather for a given city.
 }
 ```
 
+## Semantic hints
+No explicit semantic hints for this condition.
+
 ## Examples
 - Minimal valid call for get_weather
 ```json

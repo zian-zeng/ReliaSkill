@@ -17,7 +17,7 @@ OUT_ROOT = Path("outputs/task_eval")
 
 def main() -> None:
     tools = load_tools(RAW_PATH)
-    _, summary = run_benchmark_pipeline(tools=tools, tasks_path=TASK_PATH, output_dir=OUT_ROOT)
+    _, summary, _ = run_benchmark_pipeline(tools=tools, tasks_path=TASK_PATH, output_dir=OUT_ROOT)
     for baseline_name, row in summary.items():
         print(
             f"{baseline_name}: "

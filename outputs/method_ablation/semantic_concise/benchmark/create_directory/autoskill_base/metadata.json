@@ -1,0 +1,14 @@
+{
+  "tool_name": "create_directory",
+  "baseline_name": "autoskill_base",
+  "source_pointer": "data\\raw\\public_mcp_filesystem_subset.json#2",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "selected_label": "semantic_concise",
+      "selection_strategy": "forced_ablation_mode"
+    }
+  ]
+}

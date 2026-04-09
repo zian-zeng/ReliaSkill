@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from autoskill.config import load_json_config, validate_experiment_config
 from autoskill.experiment import run_full_experiment, run_full_experiment_from_config
 
 
@@ -22,12 +23,21 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--tools", type=Path, default=DEFAULT_TOOLS, help="Path to the raw MCP tool JSON file.")
     parser.add_argument("--tasks", type=Path, default=DEFAULT_TASKS, help="Path to the benchmark JSON or JSONL file.")
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT, help="Output directory for the full experiment.")
+    parser.add_argument("--preflight", action="store_true", help="Validate the config and print readiness details without running the experiment.")
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
     if args.config is not None:
+        if args.preflight:
+            report = validate_experiment_config(load_json_config(args.config), config_path=args.config)
+            print(f"valid={report['valid']}")
+            for error in report["errors"]:
+                print(f"error: {error}")
+            for warning in report["warnings"]:
+                print(f"warning: {warning}")
+            return
         manifest = run_full_experiment_from_config(args.config)
     else:
         manifest = run_full_experiment(tools_path=args.tools, tasks_path=args.tasks, output_root=args.out)

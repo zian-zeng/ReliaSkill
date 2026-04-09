@@ -48,6 +48,8 @@ class GeneratedSkill:
     when_not_to_use: List[str] = field(default_factory=list)
     argument_template: Dict[str, Any] = field(default_factory=dict)
     examples: List[Dict[str, Any]] = field(default_factory=list)
+    semantic_hints: Dict[str, Any] = field(default_factory=dict)
+    method_trace: List[Dict[str, Any]] = field(default_factory=list)
 
     def model_dump(self) -> Dict[str, Any]:
         return asdict(self)

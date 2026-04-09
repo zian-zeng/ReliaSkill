@@ -1,0 +1,28 @@
+{
+  "tool_name": "search_files",
+  "baseline_name": "autoskill_base",
+  "source_pointer": "data\\raw\\public_mcp_filesystem_subset.json#4",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {
+    "pattern": {
+      "python": "**/*.py",
+      "markdown": "**/*.md",
+      "text": "**/*.txt",
+      "json": "**/*.json",
+      "yaml": "**/*.yaml",
+      "yml": "**/*.yml"
+    },
+    "excludePatterns": {
+      "exclude": "__paths__",
+      "ignore": "__paths__",
+      "skip": "__paths__"
+    }
+  },
+  "method_trace": [
+    {
+      "selected_label": "semantic_dense",
+      "selection_strategy": "forced_ablation_mode"
+    }
+  ]
+}

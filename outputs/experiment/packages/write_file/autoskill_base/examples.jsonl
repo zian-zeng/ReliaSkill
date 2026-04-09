@@ -1,2 +1,3 @@
 {"scenario": "Minimal valid request that satisfies the required fields for write_file", "arguments": {"path": "data/sample.txt", "content": "sample_content_1"}}
 {"scenario": "Richer invocation that uses optional controls for write_file", "arguments": {"path": "data/sample.txt", "content": "sample_content_2"}}
+{"scenario": "Quoted text can be written directly to a destination path", "arguments": {"path": "docs/notes.txt", "content": "Release checklist"}}

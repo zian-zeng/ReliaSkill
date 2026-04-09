@@ -20,5 +20,8 @@ Read the complete contents of a file from the file system as text. Handles vario
 ## Argument template
 This condition does not add a normalized argument template beyond the raw schema.
 
+## Semantic hints
+No explicit semantic hints for this condition.
+
 ## Examples
 No synthesized examples for this condition.

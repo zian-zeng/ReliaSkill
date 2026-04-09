@@ -26,6 +26,9 @@ Read the complete contents of a file from the file system as text. Handles vario
 }
 ```
 
+## Semantic hints
+No explicit semantic hints for this condition.
+
 ## Examples
 - Minimal valid call for read_text_file
 ```json

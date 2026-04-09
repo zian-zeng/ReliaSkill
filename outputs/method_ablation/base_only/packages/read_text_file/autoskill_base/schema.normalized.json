@@ -1,0 +1,77 @@
+{
+  "tool_name": "read_text_file",
+  "server_name": "mcp_reference_filesystem",
+  "tool_purpose": "Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "type": "string",
+        "description": "Path to the file within an allowed directory."
+      },
+      "tail": {
+        "type": "number",
+        "description": "If provided, returns only the last N lines of the file."
+      },
+      "head": {
+        "type": "number",
+        "description": "If provided, returns only the first N lines of the file."
+      }
+    },
+    "required": [
+      "path"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "path",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Path to the file within an allowed directory.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.path"
+    },
+    {
+      "name": "tail",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "If provided, returns only the last N lines of the file.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.tail"
+    },
+    {
+      "name": "head",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "If provided, returns only the first N lines of the file.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.head"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.",
+    "Read Text File"
+  ],
+  "source_pointer": "data\\raw\\public_mcp_filesystem_subset.json#0"
+}

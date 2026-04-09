@@ -1,2 +1,4 @@
 {"scenario": "Minimal valid request that satisfies the required fields for read_text_file", "arguments": {"path": "data/sample.txt"}}
 {"scenario": "Richer invocation that uses optional controls for read_text_file", "arguments": {"path": "data/sample.txt", "tail": 2.0, "head": 2.0}}
+{"scenario": "Semantic cue for reading the beginning of a file", "arguments": {"path": "src/app.py", "head": 8}}
+{"scenario": "Semantic cue for reading the end of a file", "arguments": {"path": "logs/output.txt", "tail": 12}}

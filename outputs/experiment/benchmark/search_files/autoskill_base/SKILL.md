@@ -9,10 +9,13 @@ Recursively search for files and directories matching a pattern. The patterns sh
 - Use `search_files` when the user's request directly matches this tool's purpose.
 - Provide all required fields: `path`, and `pattern`.
 - Optional control is available through `excludePatterns` when the request needs extra specificity.
+- Map common request paraphrases to schema-faithful arguments using the semantic hints and examples.
+- Prefer the smallest valid call that still captures file type, directionality, or enum intent from the request.
 
 ## When not to use
 - Do not call this tool when required inputs are missing or ambiguous.
 - Do not invent unsupported parameters or unsupported enum values.
+- Do not let semantic cues override explicit user-provided field values.
 
 ## Arguments
 - `path`, string, required: Base directory to search within an allowed directory.
@@ -25,6 +28,25 @@ Recursively search for files and directories matching a pattern. The patterns sh
   "path": "data/sample.txt",
   "pattern": "sample_pattern_1",
   "excludePatterns": []
+}
+```
+
+## Semantic hints
+```json
+{
+  "pattern": {
+    "python": "**/*.py",
+    "markdown": "**/*.md",
+    "text": "**/*.txt",
+    "json": "**/*.json",
+    "yaml": "**/*.yaml",
+    "yml": "**/*.yml"
+  },
+  "excludePatterns": {
+    "exclude": "__paths__",
+    "ignore": "__paths__",
+    "skip": "__paths__"
+  }
 }
 ```
 
@@ -41,6 +63,22 @@ Recursively search for files and directories matching a pattern. The patterns sh
 {
   "path": "data/sample.txt",
   "pattern": "sample_pattern_2",
+  "excludePatterns": []
+}
+```
+- Semantic cue for Python files
+```json
+{
+  "path": "src",
+  "pattern": "**/*.py",
+  "excludePatterns": []
+}
+```
+- Semantic cue for Markdown files
+```json
+{
+  "path": "docs",
+  "pattern": "**/*.md",
   "excludePatterns": []
 }
 ```

@@ -1,0 +1,113 @@
+[
+  {
+    "run_name": "experiment.heuristic.sample",
+    "config_path": "C:\\Users\\zianz\\OneDrive\\Documents\\GitHub\\AutoSkill\\configs\\experiment.heuristic.sample.json",
+    "preflight": {
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "resolved_paths": {
+        "tools_path": "C:\\Users\\zianz\\OneDrive\\Documents\\GitHub\\AutoSkill\\data\\raw\\public_mcp_filesystem_subset.json",
+        "tasks_path": "C:\\Users\\zianz\\OneDrive\\Documents\\GitHub\\AutoSkill\\data\\eval\\public_mcp_filesystem_benchmark.jsonl",
+        "output_root": "C:\\Users\\zianz\\OneDrive\\Documents\\GitHub\\AutoSkill\\outputs\\experiment_heuristic_sample"
+      },
+      "backend_preflight": {
+        "generator": {
+          "backend_name": "generator",
+          "backend_type": "heuristic",
+          "ready": true,
+          "errors": [],
+          "warnings": []
+        },
+        "predictor": {
+          "backend_name": "predictor",
+          "backend_type": "heuristic",
+          "ready": true,
+          "errors": [],
+          "warnings": []
+        }
+      }
+    },
+    "status": "preflight_only"
+  },
+  {
+    "run_name": "experiment.openai_compatible.sample",
+    "config_path": "C:\\Users\\zianz\\OneDrive\\Documents\\GitHub\\AutoSkill\\configs\\experiment.openai_compatible.sample.json",
+    "preflight": {
+      "valid": true,
+      "errors": [],
+      "warnings": [
+        "generator: environment variable `AUTOSKILL_API_KEY` is not set.",
+        "predictor: environment variable `AUTOSKILL_API_KEY` is not set."
+      ],
+      "resolved_paths": {
+        "tools_path": "C:\\Users\\zianz\\OneDrive\\Documents\\GitHub\\AutoSkill\\data\\raw\\public_mcp_filesystem_subset.json",
+        "tasks_path": "C:\\Users\\zianz\\OneDrive\\Documents\\GitHub\\AutoSkill\\data\\eval\\public_mcp_filesystem_benchmark.jsonl",
+        "output_root": "C:\\Users\\zianz\\OneDrive\\Documents\\GitHub\\AutoSkill\\outputs\\experiment_openai_compatible"
+      },
+      "backend_preflight": {
+        "generator": {
+          "backend_name": "generator",
+          "backend_type": "openai_compatible",
+          "ready": true,
+          "errors": [],
+          "warnings": [
+            "generator: environment variable `AUTOSKILL_API_KEY` is not set."
+          ]
+        },
+        "predictor": {
+          "backend_name": "predictor",
+          "backend_type": "openai_compatible",
+          "ready": true,
+          "errors": [],
+          "warnings": [
+            "predictor: environment variable `AUTOSKILL_API_KEY` is not set."
+          ]
+        }
+      }
+    },
+    "status": "preflight_only"
+  },
+  {
+    "run_name": "experiment.local_hf.qwen25_3b.sample",
+    "config_path": "C:\\Users\\zianz\\OneDrive\\Documents\\GitHub\\AutoSkill\\configs\\experiment.local_hf.qwen25_3b.sample.json",
+    "preflight": {
+      "valid": true,
+      "errors": [],
+      "warnings": [
+        "generator: `transformers` is not installed in the current environment.",
+        "generator: `torch` is not installed in the current environment.",
+        "predictor: `transformers` is not installed in the current environment.",
+        "predictor: `torch` is not installed in the current environment."
+      ],
+      "resolved_paths": {
+        "tools_path": "C:\\Users\\zianz\\OneDrive\\Documents\\GitHub\\AutoSkill\\data\\raw\\public_mcp_filesystem_subset.json",
+        "tasks_path": "C:\\Users\\zianz\\OneDrive\\Documents\\GitHub\\AutoSkill\\data\\eval\\public_mcp_filesystem_benchmark.jsonl",
+        "output_root": "C:\\Users\\zianz\\OneDrive\\Documents\\GitHub\\AutoSkill\\outputs\\experiment_qwen25_3b"
+      },
+      "backend_preflight": {
+        "generator": {
+          "backend_name": "generator",
+          "backend_type": "local_hf",
+          "ready": true,
+          "errors": [],
+          "warnings": [
+            "generator: `transformers` is not installed in the current environment.",
+            "generator: `torch` is not installed in the current environment."
+          ]
+        },
+        "predictor": {
+          "backend_name": "predictor",
+          "backend_type": "local_hf",
+          "ready": true,
+          "errors": [],
+          "warnings": [
+            "predictor: `transformers` is not installed in the current environment.",
+            "predictor: `torch` is not installed in the current environment."
+          ]
+        }
+      }
+    },
+    "status": "preflight_only"
+  }
+]

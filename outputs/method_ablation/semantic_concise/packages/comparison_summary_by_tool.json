@@ -1,0 +1,147 @@
+{
+  "read_text_file": {
+    "raw_mcp": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 0.0,
+      "avg_template_fields": 0.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "schema_only": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 3.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "autoskill_base": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 3.0,
+      "avg_semantic_hint_entries": 8.0,
+      "issue_breakdown": {}
+    }
+  },
+  "write_file": {
+    "raw_mcp": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 0.0,
+      "avg_template_fields": 0.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "schema_only": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 2.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "autoskill_base": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 2.0,
+      "avg_semantic_hint_entries": 4.0,
+      "issue_breakdown": {}
+    }
+  },
+  "create_directory": {
+    "raw_mcp": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 0.0,
+      "avg_template_fields": 0.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "schema_only": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 1.0,
+      "avg_template_fields": 1.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "autoskill_base": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 1.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    }
+  },
+  "list_directory": {
+    "raw_mcp": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 0.0,
+      "avg_template_fields": 0.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "schema_only": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 1.0,
+      "avg_template_fields": 1.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "autoskill_base": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 1.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    }
+  },
+  "search_files": {
+    "raw_mcp": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 0.0,
+      "avg_template_fields": 0.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "schema_only": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 3.0,
+      "avg_semantic_hint_entries": 0.0,
+      "issue_breakdown": {}
+    },
+    "autoskill_base": {
+      "total_tools": 1,
+      "valid_packages": 1,
+      "valid_rate": 1.0,
+      "avg_examples": 2.0,
+      "avg_template_fields": 3.0,
+      "avg_semantic_hint_entries": 9.0,
+      "issue_breakdown": {}
+    }
+  }
+}

@@ -24,6 +24,9 @@ Create a new file or completely overwrite an existing file with new content. Use
 }
 ```
 
+## Semantic hints
+No explicit semantic hints for this condition.
+
 ## Examples
 - Minimal valid call for write_file
 ```json

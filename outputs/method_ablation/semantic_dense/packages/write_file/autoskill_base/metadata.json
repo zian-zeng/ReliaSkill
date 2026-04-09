@@ -1,0 +1,21 @@
+{
+  "tool_name": "write_file",
+  "baseline_name": "autoskill_base",
+  "source_pointer": "data\\raw\\public_mcp_filesystem_subset.json#1",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {
+    "content": {
+      "containing the text": "__tail_text__",
+      "with content": "__tail_text__",
+      "save": "__quoted_text_to_path__",
+      "write": "__quoted_text_to_path__"
+    }
+  },
+  "method_trace": [
+    {
+      "selected_label": "semantic_dense",
+      "selection_strategy": "forced_ablation_mode"
+    }
+  ]
+}

@@ -22,6 +22,9 @@ Get a detailed listing of all files and directories in a specified path. Results
 }
 ```
 
+## Semantic hints
+No explicit semantic hints for this condition.
+
 ## Examples
 - Minimal valid call for list_directory
 ```json

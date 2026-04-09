@@ -26,6 +26,9 @@ Recursively search for files and directories matching a pattern. The patterns sh
 }
 ```
 
+## Semantic hints
+No explicit semantic hints for this condition.
+
 ## Examples
 - Minimal valid call for search_files
 ```json

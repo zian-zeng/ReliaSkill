@@ -8,12 +8,17 @@ import unittest
 from pathlib import Path
 
 from autoskill.benchmark import load_benchmark_tasks
-from autoskill.config import load_json_config, merge_experiment_config
+from autoskill.analysis import classify_score_error, summarize_error_taxonomy, summarize_method_wins
+from autoskill.config import load_json_config, merge_experiment_config, validate_experiment_config
 from autoskill.conversion import canonicalize_mcp_tool_records, convert_benchmark_file_to_canonical_records, load_json_or_jsonl
 from autoskill.json_output import parse_json_object_output
 from autoskill.reporting import (
+    build_benchmark_by_split_csv,
     build_benchmark_by_tool_csv,
+    build_error_taxonomy_csv,
+    build_method_wins_csv,
     build_package_by_tool_csv,
+    build_pairwise_comparison_csv,
     build_results_csv,
     build_results_markdown,
 )
@@ -25,7 +30,12 @@ from autoskill.backends import build_backend_from_config
 from autoskill.predictor import HeuristicPredictorBackend, build_predictor_from_config
 from autoskill.raw_mcp import build_raw_mcp_skill
 from autoskill.schema_only import build_schema_only_skill
-from autoskill.task_eval import score_prediction
+from autoskill.sweep import aggregate_experiment_manifests, run_experiment_sweep
+from autoskill.task_eval import (
+    score_prediction,
+    summarize_pairwise_comparisons,
+    summarize_task_scores_by_split,
+)
 from autoskill.eval_types import EvalPrediction, EvalTask
 from autoskill.validator import validate_skill
 
@@ -127,6 +137,8 @@ class ParserValidatorTests(unittest.TestCase):
         self.assertGreaterEqual(len(tasks), 14)
         self.assertIn("fs_search_markdown_semantic", task_ids)
         self.assertIn("fs_read_top_synonym", task_ids)
+        self.assertEqual(tasks[0].split, "dev")
+        self.assertIn("head", tasks[0].tags)
 
     def test_score_prediction_matches_best_gold_candidate(self) -> None:
         tools = {tool.tool_name: tool for tool in _load_tools()}
@@ -162,6 +174,14 @@ class ParserValidatorTests(unittest.TestCase):
         self.assertNotEqual(raw_prediction.predicted_arguments.get("pattern"), "**/*.md")
         self.assertNotEqual(schema_prediction.predicted_arguments.get("pattern"), "**/*.md")
         self.assertEqual(autoskill_prediction.predicted_arguments.get("pattern"), "**/*.md")
+
+    def test_autoskill_generated_skill_contains_semantic_hints_and_trace(self) -> None:
+        tools = {tool.tool_name: tool for tool in _load_public_tools()}
+        search_tool = tools["search_files"]
+        skill = SkillGenerator().generate(search_tool)
+
+        self.assertIn("pattern", skill.semantic_hints)
+        self.assertTrue(any("selected_label" in entry for entry in skill.method_trace))
 
     def test_conversion_to_canonical_benchmark_records(self) -> None:
         records = convert_benchmark_file_to_canonical_records("data/eval/sample_bfcl_raw_possible_answer.jsonl")
@@ -215,9 +235,40 @@ class ParserValidatorTests(unittest.TestCase):
         self.assertEqual(config["generator"]["type"], "openai_compatible")
         self.assertEqual(merged["output_root"], "outputs/test_override")
 
+    def test_validate_experiment_config_for_heuristic_run(self) -> None:
+        report = validate_experiment_config(
+            {
+                "tools_path": "data/raw/public_mcp_filesystem_subset.json",
+                "tasks_path": "data/eval/public_mcp_filesystem_benchmark.jsonl",
+                "output_root": "outputs/test_validate",
+                "generator": {"type": "heuristic"},
+                "predictor": {"type": "heuristic"},
+            }
+        )
+        self.assertTrue(report["valid"])
+        self.assertEqual(report["backend_preflight"]["generator"]["backend_type"], "heuristic")
+
+    def test_validate_experiment_config_rejects_missing_paths(self) -> None:
+        report = validate_experiment_config(
+            {
+                "tools_path": "data/raw/does_not_exist.json",
+                "tasks_path": "data/eval/public_mcp_filesystem_benchmark.jsonl",
+                "output_root": "outputs/test_validate",
+                "generator": {"type": "heuristic"},
+                "predictor": {"type": "heuristic"},
+            }
+        )
+        self.assertFalse(report["valid"])
+        self.assertTrue(any("tools_path does not exist" in error for error in report["errors"]))
+
     def test_predictor_config_builds_heuristic_backend(self) -> None:
         backend = build_predictor_from_config({"type": "heuristic"})
         self.assertEqual(backend.backend_name, "heuristic")
+
+    def test_generator_config_supports_heuristic_ablation_mode(self) -> None:
+        backend = build_backend_from_config({"type": "heuristic", "ablation_mode": "semantic_dense"})
+        self.assertEqual(backend.backend_name, "heuristic")
+        self.assertEqual(backend.ablation_mode, "semantic_dense")
 
     def test_backend_config_builds_local_hf_backend_without_loading_model(self) -> None:
         backend = build_backend_from_config(
@@ -283,8 +334,72 @@ class ParserValidatorTests(unittest.TestCase):
             self.assertTrue(Path(manifest["tools_path"]).name.endswith(".json"))
             output_root = Path(tmpdir) / "experiment_outputs"
             self.assertTrue((output_root / "reports" / "benchmark_by_tool.csv").exists())
+            self.assertTrue((output_root / "reports" / "benchmark_by_split.csv").exists())
+            self.assertTrue((output_root / "reports" / "error_taxonomy.csv").exists())
+            self.assertTrue((output_root / "reports" / "method_wins.csv").exists())
+            self.assertTrue((output_root / "reports" / "pairwise_comparisons.csv").exists())
             self.assertTrue((output_root / "reports" / "package_by_tool.csv").exists())
             self.assertTrue((output_root / "benchmark" / "benchmark_summary_by_tool.json").exists())
+            self.assertTrue((output_root / "benchmark" / "benchmark_summary_by_split.json").exists())
+            self.assertTrue((output_root / "benchmark" / "error_taxonomy.json").exists())
+            self.assertTrue((output_root / "benchmark" / "method_win_analysis.json").exists())
+            self.assertTrue((output_root / "benchmark" / "pairwise_comparisons.json").exists())
+
+    def test_sweep_aggregation_and_preflight_only(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmpdir_path = Path(tmpdir)
+            config_a = tmpdir_path / "heuristic_a.json"
+            config_b = tmpdir_path / "heuristic_b.json"
+            config_a.write_text(
+                json.dumps(
+                    {
+                        "tools_path": "data/raw/public_mcp_filesystem_subset.json",
+                        "tasks_path": "data/eval/public_mcp_filesystem_benchmark.jsonl",
+                        "output_root": str(tmpdir_path / "run_a"),
+                        "generator": {"type": "heuristic"},
+                        "predictor": {"type": "heuristic"},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            config_b.write_text(
+                json.dumps(
+                    {
+                        "tools_path": "data/raw/public_mcp_filesystem_subset.json",
+                        "tasks_path": "data/eval/public_mcp_filesystem_benchmark.jsonl",
+                        "output_root": str(tmpdir_path / "run_b"),
+                        "generator": {"type": "heuristic", "ablation_mode": "base_only"},
+                        "predictor": {"type": "heuristic"},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            sweep = run_experiment_sweep([config_a, config_b], output_root=tmpdir_path / "sweep", preflight_only=True)
+            self.assertEqual(len(sweep["summary"]["runs"]), 2)
+            self.assertTrue((tmpdir_path / "sweep" / "sweep_summary.md").exists())
+            self.assertEqual(sweep["summary"]["runs"][0]["status"], "preflight_only")
+
+    def test_aggregate_experiment_manifests(self) -> None:
+        summary = aggregate_experiment_manifests(
+            [
+                {
+                    "run_name": "heuristic",
+                    "config_path": "configs/a.json",
+                    "status": "completed",
+                    "preflight": {"valid": True},
+                    "manifest": {
+                        "generator_backend": "heuristic",
+                        "predictor_backend": "heuristic",
+                        "benchmark_summary": {
+                            "autoskill_base": {"exact_match_rate": 1.0},
+                            "raw_mcp": {"exact_match_rate": 0.6},
+                            "schema_only": {"exact_match_rate": 0.7},
+                        },
+                    },
+                }
+            ]
+        )
+        self.assertEqual(summary["runs"][0]["autoskill_vs_raw_delta"], 0.4)
 
     def test_packaging_writes_expected_files(self) -> None:
         tools = _load_tools()
@@ -299,11 +414,14 @@ class ParserValidatorTests(unittest.TestCase):
             self.assertTrue((out_dir / "schema.normalized.json").exists())
             self.assertTrue((out_dir / "examples.jsonl").exists())
             self.assertTrue((out_dir / "metadata.json").exists())
+            metadata = json.loads((out_dir / "metadata.json").read_text(encoding="utf-8"))
+            self.assertIn("semantic_hints", metadata)
+            self.assertIn("method_trace", metadata)
 
     def test_reporting_generates_markdown_and_csv(self) -> None:
         package_summary = {
-            "raw_mcp": {"valid_rate": 1.0, "avg_examples": 0.0, "avg_template_fields": 0.0},
-            "schema_only": {"valid_rate": 1.0, "avg_examples": 2.0, "avg_template_fields": 3.0},
+            "raw_mcp": {"valid_rate": 1.0, "avg_examples": 0.0, "avg_template_fields": 0.0, "avg_semantic_hint_entries": 0.0},
+            "schema_only": {"valid_rate": 1.0, "avg_examples": 2.0, "avg_template_fields": 3.0, "avg_semantic_hint_entries": 1.0},
         }
         benchmark_summary = {
             "raw_mcp": {
@@ -321,8 +439,8 @@ class ParserValidatorTests(unittest.TestCase):
         }
         package_by_tool = {
             "search_files": {
-                "raw_mcp": {"valid_rate": 1.0, "avg_examples": 0.0, "avg_template_fields": 0.0},
-                "schema_only": {"valid_rate": 1.0, "avg_examples": 2.0, "avg_template_fields": 3.0},
+                "raw_mcp": {"valid_rate": 1.0, "avg_examples": 0.0, "avg_template_fields": 0.0, "avg_semantic_hint_entries": 0.0},
+                "schema_only": {"valid_rate": 1.0, "avg_examples": 2.0, "avg_template_fields": 3.0, "avg_semantic_hint_entries": 1.0},
             }
         }
         benchmark_by_tool = {
@@ -330,6 +448,7 @@ class ParserValidatorTests(unittest.TestCase):
                 "raw_mcp": {
                     "num_tasks": 2,
                     "exact_match_rate": 0.5,
+                    "exact_match_ci": {"low": 0.0, "high": 1.0},
                     "avg_argument_validity": 0.75,
                     "avg_required_argument_recall": 1.0,
                     "hallucinated_argument_count": 0,
@@ -337,10 +456,37 @@ class ParserValidatorTests(unittest.TestCase):
                 "schema_only": {
                     "num_tasks": 2,
                     "exact_match_rate": 1.0,
+                    "exact_match_ci": {"low": 1.0, "high": 1.0},
                     "avg_argument_validity": 1.0,
                     "avg_required_argument_recall": 1.0,
                     "hallucinated_argument_count": 0,
                 },
+            }
+        }
+        benchmark_by_split = {
+            "dev": {
+                "raw_mcp": {
+                    "num_tasks": 2,
+                    "exact_match_rate": 0.5,
+                    "exact_match_ci": {"low": 0.0, "high": 1.0},
+                    "avg_argument_validity": 0.75,
+                    "avg_required_argument_recall": 1.0,
+                    "hallucinated_argument_count": 0,
+                }
+            }
+        }
+        pairwise = {
+            "raw_mcp": {
+                "anchor_baseline": "autoskill_base",
+                "comparison_baseline": "raw_mcp",
+                "num_paired_tasks": 2,
+                "win_count": 1,
+                "tie_count": 1,
+                "loss_count": 0,
+                "win_rate": 0.5,
+                "exact_match_delta": 0.5,
+                "exact_match_delta_ci": {"low": 0.0, "high": 1.0},
+                "avg_argument_validity_delta": 0.25,
             }
         }
         markdown_text = build_results_markdown(
@@ -350,18 +496,122 @@ class ParserValidatorTests(unittest.TestCase):
             "tasks.jsonl",
             package_summary_by_tool=package_by_tool,
             benchmark_summary_by_tool=benchmark_by_tool,
+            benchmark_summary_by_split=benchmark_by_split,
+            pairwise_comparisons=pairwise,
         )
         csv_text = build_results_csv(package_summary, benchmark_summary)
         benchmark_by_tool_csv = build_benchmark_by_tool_csv(benchmark_by_tool)
+        benchmark_by_split_csv = build_benchmark_by_split_csv(benchmark_by_split)
+        pairwise_csv = build_pairwise_comparison_csv(pairwise)
         package_by_tool_csv = build_package_by_tool_csv(package_by_tool)
 
         self.assertIn("| raw_mcp |", markdown_text)
+        self.assertIn("Avg Semantic Hints", markdown_text)
         self.assertIn("tools.json", markdown_text)
+        self.assertIn("## Benchmark By Split", markdown_text)
         self.assertIn("## Benchmark By Tool", markdown_text)
-        self.assertIn("condition,valid_rate", csv_text)
+        self.assertIn("## Pairwise Comparisons", markdown_text)
+        self.assertIn("condition,valid_rate,avg_examples,avg_template_fields,avg_semantic_hint_entries", csv_text)
         self.assertIn("schema_only", csv_text)
+        self.assertIn("split,condition,num_tasks", benchmark_by_split_csv)
         self.assertIn("tool_name,condition,num_tasks", benchmark_by_tool_csv)
+        self.assertIn("anchor_baseline,comparison_baseline,num_paired_tasks", pairwise_csv)
         self.assertIn("tool_name,condition,total_tools", package_by_tool_csv)
+
+    def test_split_and_pairwise_summaries(self) -> None:
+        scores = [
+            {
+                "task_id": "t1",
+                "tool_name": "search_files",
+                "baseline_name": "raw_mcp",
+                "split": "dev",
+                "exact_match": False,
+                "argument_validity": 0.5,
+                "required_argument_recall": 0.5,
+                "hallucinated_args": [],
+            },
+            {
+                "task_id": "t1",
+                "tool_name": "search_files",
+                "baseline_name": "autoskill_base",
+                "split": "dev",
+                "exact_match": True,
+                "argument_validity": 1.0,
+                "required_argument_recall": 1.0,
+                "hallucinated_args": [],
+            },
+            {
+                "task_id": "t2",
+                "tool_name": "read_text_file",
+                "baseline_name": "raw_mcp",
+                "split": "test",
+                "exact_match": True,
+                "argument_validity": 1.0,
+                "required_argument_recall": 1.0,
+                "hallucinated_args": [],
+            },
+            {
+                "task_id": "t2",
+                "tool_name": "read_text_file",
+                "baseline_name": "autoskill_base",
+                "split": "test",
+                "exact_match": True,
+                "argument_validity": 1.0,
+                "required_argument_recall": 1.0,
+                "hallucinated_args": [],
+            },
+        ]
+        by_split = summarize_task_scores_by_split(scores)
+        pairwise = summarize_pairwise_comparisons(scores, comparison_baselines=["raw_mcp"])
+
+        self.assertIn("dev", by_split)
+        self.assertEqual(by_split["dev"]["autoskill_base"]["num_tasks"], 1)
+        self.assertEqual(pairwise["raw_mcp"]["win_count"], 1)
+        self.assertEqual(pairwise["raw_mcp"]["tie_count"], 1)
+
+    def test_error_taxonomy_and_method_win_analysis(self) -> None:
+        scores = [
+            {
+                "task_id": "t1",
+                "tool_name": "search_files",
+                "baseline_name": "raw_mcp",
+                "split": "test",
+                "tags": ["semantic", "search"],
+                "exact_match": False,
+                "argument_validity": 0.5,
+                "required_argument_recall": 0.5,
+                "hallucinated_args": [],
+                "predicted_arguments": {"path": "src"},
+                "expected_arguments": {"path": "src", "pattern": "**/*.py"},
+                "user_request": "Look under src for python files.",
+            },
+            {
+                "task_id": "t1",
+                "tool_name": "search_files",
+                "baseline_name": "autoskill_base",
+                "split": "test",
+                "tags": ["semantic", "search"],
+                "exact_match": True,
+                "argument_validity": 1.0,
+                "required_argument_recall": 1.0,
+                "hallucinated_args": [],
+                "predicted_arguments": {"path": "src", "pattern": "**/*.py"},
+                "expected_arguments": {"path": "src", "pattern": "**/*.py"},
+                "user_request": "Look under src for python files.",
+            },
+        ]
+        taxonomy = summarize_error_taxonomy(scores)
+        wins = summarize_method_wins(scores, comparison_baselines=["raw_mcp"])
+
+        self.assertEqual(classify_score_error(scores[0]), "semantic_missing_required_argument")
+        self.assertEqual(taxonomy["raw_mcp"]["error_type_counts"]["semantic_missing_required_argument"], 1)
+        self.assertEqual(wins["raw_mcp"]["num_anchor_wins"], 1)
+        self.assertEqual(wins["raw_mcp"]["wins_by_tag"]["semantic"], 1)
+
+        taxonomy_csv = build_error_taxonomy_csv(taxonomy)
+        wins_csv = build_method_wins_csv(wins)
+        self.assertIn("condition,error_type,count,rate", taxonomy_csv)
+        self.assertIn("anchor_baseline,comparison_baseline,num_anchor_wins", wins_csv)
 
 
 if __name__ == "__main__":

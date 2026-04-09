@@ -70,6 +70,14 @@ def write_skill_package(
         else:
             f.write("This condition does not add a normalized argument template beyond the raw schema.\n\n")
 
+        f.write("## Semantic hints\n")
+        if skill.semantic_hints:
+            f.write("```json\n")
+            f.write(json.dumps(skill.semantic_hints, indent=2, ensure_ascii=False))
+            f.write("\n```\n\n")
+        else:
+            f.write("No explicit semantic hints for this condition.\n\n")
+
         f.write("## Examples\n")
         if skill.examples:
             for example in skill.examples:
@@ -93,6 +101,8 @@ def write_skill_package(
         "source_pointer": tool.source_pointer,
         "valid": report.valid,
         "issues": [issue.model_dump() for issue in report.issues],
+        "semantic_hints": skill.semantic_hints,
+        "method_trace": skill.method_trace,
     }
     with metadata_json.open("w", encoding="utf-8") as f:
         json.dump(metadata, f, indent=2, ensure_ascii=False)

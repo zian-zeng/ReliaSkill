@@ -17,7 +17,7 @@ OUT_ROOT = Path("outputs")
 
 def main() -> None:
     tools = load_tools(RAW_PATH)
-    _, summary = run_packaging_pipeline(tools=tools, output_dir=OUT_ROOT)
+    _, summary, _ = run_packaging_pipeline(tools=tools, output_dir=OUT_ROOT)
     for tool_name in tools:
         condition_text = ", ".join(
             f"{baseline} valid={summary[baseline]['valid_rate'] > 0}"

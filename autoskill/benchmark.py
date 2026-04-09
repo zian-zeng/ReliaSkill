@@ -119,6 +119,8 @@ def load_benchmark_tasks(path: str | Path) -> List[EvalTask]:
         expected_candidates = _normalize_ground_truth_candidates(item)
         if not tool_name or not user_request:
             continue
+        raw_tags = _coalesce(item, ["tags", "labels"], [])
+        tags = [str(tag) for tag in raw_tags] if isinstance(raw_tags, list) else []
         tasks.append(
             EvalTask(
                 task_id=task_id,
@@ -126,6 +128,8 @@ def load_benchmark_tasks(path: str | Path) -> List[EvalTask]:
                 user_request=user_request,
                 expected_arguments=expected_candidates[0] if expected_candidates else {},
                 expected_argument_candidates=expected_candidates,
+                split=str(_coalesce(item, ["split", "partition"], "default")),
+                tags=tags,
             )
         )
     return tasks

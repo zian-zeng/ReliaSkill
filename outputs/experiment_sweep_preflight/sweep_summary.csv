@@ -1,0 +1,4 @@
+run_name,config_path,status,valid_config,generator_backend,predictor_backend,autoskill_exact_match,raw_mcp_exact_match,schema_only_exact_match,autoskill_vs_raw_delta,autoskill_vs_schema_delta,output_root
+experiment.heuristic.sample,C:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.heuristic.sample.json,preflight_only,True,,,,,,,,C:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\outputs\experiment_heuristic_sample
+experiment.openai_compatible.sample,C:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.openai_compatible.sample.json,preflight_only,True,,,,,,,,C:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\outputs\experiment_openai_compatible
+experiment.local_hf.qwen25_3b.sample,C:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.local_hf.qwen25_3b.sample.json,preflight_only,True,,,,,,,,C:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\outputs\experiment_qwen25_3b

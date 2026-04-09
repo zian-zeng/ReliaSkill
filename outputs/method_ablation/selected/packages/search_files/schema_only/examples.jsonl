@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid call for search_files", "arguments": {"path": "data/sample.txt", "pattern": "sample_pattern_1"}}
+{"scenario": "Schema-aligned full call for search_files", "arguments": {"path": "data/sample.txt", "pattern": "sample_pattern_2", "excludePatterns": []}}

@@ -1,0 +1,20 @@
+Tool: list_directory
+Server: mcp_reference_filesystem
+Condition: raw_mcp
+
+Description:
+Get a detailed listing of all files and directories in a specified path. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is essential for understanding directory structure and finding specific files within a directory. Only works within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "Directory path to inspect within an allowed directory."
+    }
+  },
+  "required": [
+    "path"
+  ]
+}

@@ -52,6 +52,10 @@ def build_results_markdown(
     tasks_path: str,
     package_summary_by_tool: Dict[str, Dict[str, Any]] | None = None,
     benchmark_summary_by_tool: Dict[str, Dict[str, Any]] | None = None,
+    benchmark_summary_by_split: Dict[str, Dict[str, Any]] | None = None,
+    pairwise_comparisons: Dict[str, Any] | None = None,
+    error_taxonomy: Dict[str, Any] | None = None,
+    method_win_analysis: Dict[str, Any] | None = None,
     benchmark_failures: Dict[str, List[Dict[str, Any]]] | None = None,
 ) -> str:
     lines = [
@@ -62,13 +66,13 @@ def build_results_markdown(
         "",
         "## Packaging Summary",
         "",
-        "| Condition | Valid Rate | Avg Examples | Avg Template Fields |",
-        "| --- | ---: | ---: | ---: |",
+        "| Condition | Valid Rate | Avg Examples | Avg Template Fields | Avg Semantic Hints |",
+        "| --- | ---: | ---: | ---: | ---: |",
     ]
     for baseline in _ordered_baselines(package_summary):
         row = package_summary[baseline]
         lines.append(
-            f"| {baseline} | {row.get('valid_rate', 0.0):.4f} | {row.get('avg_examples', 0.0):.2f} | {row.get('avg_template_fields', 0.0):.2f} |"
+            f"| {baseline} | {row.get('valid_rate', 0.0):.4f} | {row.get('avg_examples', 0.0):.2f} | {row.get('avg_template_fields', 0.0):.2f} | {row.get('avg_semantic_hint_entries', 0.0):.2f} |"
         )
 
     lines.extend(
@@ -85,6 +89,24 @@ def build_results_markdown(
         lines.append(
             f"| {baseline} | {row.get('exact_match_rate', 0.0):.4f} | {row.get('avg_argument_validity', 0.0):.4f} | {row.get('avg_required_argument_recall', 0.0):.4f} | {row.get('hallucinated_argument_count', 0)} |"
         )
+
+    if benchmark_summary_by_split:
+        lines.extend(
+            [
+                "",
+                "## Benchmark By Split",
+                "",
+                "| Split | Condition | Tasks | Exact Match | 95% CI | Argument Validity |",
+                "| --- | --- | ---: | ---: | --- | ---: |",
+            ]
+        )
+        for split_name in sorted(benchmark_summary_by_split):
+            for baseline in _ordered_baselines(benchmark_summary_by_split[split_name]):
+                row = benchmark_summary_by_split[split_name][baseline]
+                ci = row.get("exact_match_ci", {"low": 0.0, "high": 0.0})
+                lines.append(
+                    f"| {split_name} | {baseline} | {row.get('num_tasks', 0)} | {row.get('exact_match_rate', 0.0):.4f} | [{ci.get('low', 0.0):.4f}, {ci.get('high', 0.0):.4f}] | {row.get('avg_argument_validity', 0.0):.4f} |"
+                )
 
     if benchmark_summary_by_tool:
         lines.extend(
@@ -103,21 +125,69 @@ def build_results_markdown(
                     f"| {tool_name} | {baseline} | {row.get('num_tasks', 0)} | {row.get('exact_match_rate', 0.0):.4f} | {row.get('avg_argument_validity', 0.0):.4f} | {row.get('avg_required_argument_recall', 0.0):.4f} |"
                 )
 
+    if pairwise_comparisons:
+        lines.extend(
+            [
+                "",
+                "## Pairwise Comparisons",
+                "",
+                "| Anchor | Baseline | Paired Tasks | Win | Tie | Loss | Exact Match Delta | 95% CI | Avg Argument Validity Delta |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: | --- | ---: |",
+            ]
+        )
+        for baseline in _ordered_baselines(pairwise_comparisons):
+            row = pairwise_comparisons[baseline]
+            ci = row.get("exact_match_delta_ci", {"low": 0.0, "high": 0.0})
+            lines.append(
+                f"| {row.get('anchor_baseline', 'autoskill_base')} | {baseline} | {row.get('num_paired_tasks', 0)} | {row.get('win_count', 0)} | {row.get('tie_count', 0)} | {row.get('loss_count', 0)} | {row.get('exact_match_delta', 0.0):.4f} | [{ci.get('low', 0.0):.4f}, {ci.get('high', 0.0):.4f}] | {row.get('avg_argument_validity_delta', 0.0):.4f} |"
+            )
+
+    if error_taxonomy:
+        lines.extend(["", "## Error Taxonomy", ""])
+        for baseline in _ordered_baselines(error_taxonomy):
+            row = error_taxonomy[baseline]
+            lines.append(f"### {baseline}")
+            lines.append("")
+            lines.append(f"- failures: {row.get('num_failures', 0)}")
+            for error_type, count in row.get("error_type_counts", {}).items():
+                rate = row.get("error_type_rates", {}).get(error_type, 0.0)
+                lines.append(f"- {error_type}: {count} ({rate:.4f})")
+            lines.append("")
+
+    if method_win_analysis:
+        lines.extend(["", "## Method Wins", ""])
+        for baseline in _ordered_baselines(method_win_analysis):
+            row = method_win_analysis[baseline]
+            lines.append(f"### autoskill_base vs {baseline}")
+            lines.append("")
+            lines.append(f"- anchor wins: {row.get('num_anchor_wins', 0)}")
+            top_error_types = row.get("wins_by_error_type", {})
+            if top_error_types:
+                top_items = ", ".join(f"{key}={value}" for key, value in list(top_error_types.items())[:4])
+                lines.append(f"- recovered failure types: {top_items}")
+            top_tags = row.get("wins_by_tag", {})
+            if top_tags:
+                top_items = ", ".join(f"{key}={value}" for key, value in list(top_tags.items())[:4])
+                lines.append(f"- recovered tags: {top_items}")
+            for example in row.get("example_wins", [])[:3]:
+                lines.append(f"- `{example.get('task_id', 'unknown')}` on `{example.get('tool_name', 'unknown')}` [{example.get('baseline_error_type', 'unknown')}]")
+            lines.append("")
+
     if package_summary_by_tool:
         lines.extend(
             [
                 "",
                 "## Packaging By Tool",
                 "",
-                "| Tool | Condition | Valid Rate | Avg Examples | Avg Template Fields |",
-                "| --- | --- | ---: | ---: | ---: |",
+                "| Tool | Condition | Valid Rate | Avg Examples | Avg Template Fields | Avg Semantic Hints |",
+                "| --- | --- | ---: | ---: | ---: | ---: |",
             ]
         )
         for tool_name in _ordered_tools(package_summary_by_tool):
             for baseline in _ordered_baselines(package_summary_by_tool[tool_name]):
                 row = package_summary_by_tool[tool_name][baseline]
                 lines.append(
-                    f"| {tool_name} | {baseline} | {row.get('valid_rate', 0.0):.4f} | {row.get('avg_examples', 0.0):.2f} | {row.get('avg_template_fields', 0.0):.2f} |"
+                    f"| {tool_name} | {baseline} | {row.get('valid_rate', 0.0):.4f} | {row.get('avg_examples', 0.0):.2f} | {row.get('avg_template_fields', 0.0):.2f} | {row.get('avg_semantic_hint_entries', 0.0):.2f} |"
                 )
 
     if benchmark_failures:
@@ -155,6 +225,7 @@ def build_results_csv(package_summary: Dict[str, Any], benchmark_summary: Dict[s
             "valid_rate",
             "avg_examples",
             "avg_template_fields",
+            "avg_semantic_hint_entries",
             "exact_match_rate",
             "avg_argument_validity",
             "avg_required_argument_recall",
@@ -171,6 +242,7 @@ def build_results_csv(package_summary: Dict[str, Any], benchmark_summary: Dict[s
                 package_row.get("valid_rate", ""),
                 package_row.get("avg_examples", ""),
                 package_row.get("avg_template_fields", ""),
+                package_row.get("avg_semantic_hint_entries", ""),
                 benchmark_row.get("exact_match_rate", ""),
                 benchmark_row.get("avg_argument_validity", ""),
                 benchmark_row.get("avg_required_argument_recall", ""),
@@ -211,6 +283,128 @@ def build_benchmark_by_tool_csv(benchmark_summary_by_tool: Dict[str, Dict[str, A
     return buffer.getvalue()
 
 
+def build_benchmark_by_split_csv(benchmark_summary_by_split: Dict[str, Dict[str, Any]]) -> str:
+    buffer = StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(
+        [
+            "split",
+            "condition",
+            "num_tasks",
+            "exact_match_rate",
+            "exact_match_ci_low",
+            "exact_match_ci_high",
+            "avg_argument_validity",
+            "avg_required_argument_recall",
+            "hallucinated_argument_count",
+        ]
+    )
+    for split_name in sorted(benchmark_summary_by_split):
+        for baseline in _ordered_baselines(benchmark_summary_by_split[split_name]):
+            row = benchmark_summary_by_split[split_name][baseline]
+            ci = row.get("exact_match_ci", {"low": "", "high": ""})
+            writer.writerow(
+                [
+                    split_name,
+                    baseline,
+                    row.get("num_tasks", ""),
+                    row.get("exact_match_rate", ""),
+                    ci.get("low", ""),
+                    ci.get("high", ""),
+                    row.get("avg_argument_validity", ""),
+                    row.get("avg_required_argument_recall", ""),
+                    row.get("hallucinated_argument_count", ""),
+                ]
+            )
+    return buffer.getvalue()
+
+
+def build_pairwise_comparison_csv(pairwise_comparisons: Dict[str, Any]) -> str:
+    buffer = StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(
+        [
+            "anchor_baseline",
+            "comparison_baseline",
+            "num_paired_tasks",
+            "win_count",
+            "tie_count",
+            "loss_count",
+            "win_rate",
+            "exact_match_delta",
+            "exact_match_delta_ci_low",
+            "exact_match_delta_ci_high",
+            "avg_argument_validity_delta",
+        ]
+    )
+    for baseline in _ordered_baselines(pairwise_comparisons):
+        row = pairwise_comparisons[baseline]
+        ci = row.get("exact_match_delta_ci", {"low": "", "high": ""})
+        writer.writerow(
+            [
+                row.get("anchor_baseline", ""),
+                row.get("comparison_baseline", baseline),
+                row.get("num_paired_tasks", ""),
+                row.get("win_count", ""),
+                row.get("tie_count", ""),
+                row.get("loss_count", ""),
+                row.get("win_rate", ""),
+                row.get("exact_match_delta", ""),
+                ci.get("low", ""),
+                ci.get("high", ""),
+                row.get("avg_argument_validity_delta", ""),
+            ]
+        )
+    return buffer.getvalue()
+
+
+def build_error_taxonomy_csv(error_taxonomy: Dict[str, Any]) -> str:
+    buffer = StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(["condition", "error_type", "count", "rate"])
+    for baseline in _ordered_baselines(error_taxonomy):
+        row = error_taxonomy[baseline]
+        counts = row.get("error_type_counts", {})
+        rates = row.get("error_type_rates", {})
+        for error_type in sorted(counts):
+            writer.writerow([baseline, error_type, counts.get(error_type, ""), rates.get(error_type, "")])
+    return buffer.getvalue()
+
+
+def build_method_wins_csv(method_win_analysis: Dict[str, Any]) -> str:
+    buffer = StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(
+        [
+            "anchor_baseline",
+            "comparison_baseline",
+            "num_anchor_wins",
+            "top_error_type",
+            "top_error_type_count",
+            "top_tag",
+            "top_tag_count",
+        ]
+    )
+    for baseline in _ordered_baselines(method_win_analysis):
+        row = method_win_analysis[baseline]
+        top_error_items = list(row.get("wins_by_error_type", {}).items())
+        top_tag_items = list(row.get("wins_by_tag", {}).items())
+        top_error = top_error_items[0] if top_error_items else ("", "")
+        top_tag = top_tag_items[0] if top_tag_items else ("", "")
+        writer.writerow(
+            [
+                row.get("anchor_baseline", "autoskill_base"),
+                row.get("comparison_baseline", baseline),
+                row.get("num_anchor_wins", ""),
+                top_error[0],
+                top_error[1],
+                top_tag[0],
+                top_tag[1],
+            ]
+        )
+    return buffer.getvalue()
+
+
 def build_package_by_tool_csv(package_summary_by_tool: Dict[str, Dict[str, Any]]) -> str:
     buffer = StringIO()
     writer = csv.writer(buffer)
@@ -223,6 +417,7 @@ def build_package_by_tool_csv(package_summary_by_tool: Dict[str, Dict[str, Any]]
             "valid_rate",
             "avg_examples",
             "avg_template_fields",
+            "avg_semantic_hint_entries",
         ]
     )
     for tool_name in _ordered_tools(package_summary_by_tool):
@@ -237,6 +432,7 @@ def build_package_by_tool_csv(package_summary_by_tool: Dict[str, Dict[str, Any]]
                     row.get("valid_rate", ""),
                     row.get("avg_examples", ""),
                     row.get("avg_template_fields", ""),
+                    row.get("avg_semantic_hint_entries", ""),
                 ]
             )
     return buffer.getvalue()

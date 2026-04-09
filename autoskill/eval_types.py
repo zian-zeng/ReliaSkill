@@ -11,6 +11,8 @@ class EvalTask:
     user_request: str
     expected_arguments: Dict[str, Any] = field(default_factory=dict)
     expected_argument_candidates: List[Dict[str, Any]] = field(default_factory=list)
+    split: str = "default"
+    tags: List[str] = field(default_factory=list)
 
 
 @dataclass

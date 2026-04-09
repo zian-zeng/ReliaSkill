@@ -8,6 +8,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict
 
 from autoskill.ir import GeneratedSkill, ToolIR
+from autoskill.method import build_enhanced_skill_candidates, select_best_skill_candidate
 from autoskill.json_output import parse_json_object_output
 from autoskill.local_model import LocalHFChatRunner
 from autoskill.prompting import build_generation_prompt
@@ -53,6 +54,9 @@ class GenerationBackend(ABC):
 
 class HeuristicBackend(GenerationBackend):
     backend_name = "heuristic"
+
+    def __init__(self, ablation_mode: str = "selected") -> None:
+        self.ablation_mode = ablation_mode
 
     def generate_skill(self, tool: ToolIR) -> GeneratedSkill:
         purpose = tool.tool_purpose or f"{tool.tool_name} performs a tool action."
@@ -101,7 +105,7 @@ class HeuristicBackend(GenerationBackend):
                 }
             )
 
-        return GeneratedSkill(
+        base_skill = GeneratedSkill(
             baseline_name="autoskill_base",
             skill_summary=summary,
             when_to_use=when_to_use,
@@ -109,6 +113,19 @@ class HeuristicBackend(GenerationBackend):
             argument_template=argument_template,
             examples=examples,
         )
+        candidates = build_enhanced_skill_candidates(tool, base_skill)
+        if self.ablation_mode == "base_only":
+            return base_skill
+        if self.ablation_mode in {"semantic_concise", "semantic_dense"}:
+            selected = next(candidate["skill"] for candidate in candidates if candidate["label"] == self.ablation_mode)
+            selected.method_trace = [
+                {
+                    "selected_label": self.ablation_mode,
+                    "selection_strategy": "forced_ablation_mode",
+                }
+            ]
+            return selected
+        return select_best_skill_candidate(tool, candidates)
 
 
 class OpenAICompatibleBackend(GenerationBackend):
@@ -230,7 +247,7 @@ def build_backend_from_config(config: Dict[str, Any] | None) -> GenerationBacken
 
     backend_type = config.get("type", "heuristic")
     if backend_type == "heuristic":
-        return HeuristicBackend()
+        return HeuristicBackend(ablation_mode=str(config.get("ablation_mode", "selected")))
     if backend_type == "openai_compatible":
         api_key = config.get("api_key")
         api_key_env = config.get("api_key_env")

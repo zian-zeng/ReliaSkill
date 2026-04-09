@@ -27,7 +27,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     tools = load_tools(args.tools)
-    _, summary = run_benchmark_pipeline(tools=tools, tasks_path=args.tasks, output_dir=args.out)
+    _, summary, _ = run_benchmark_pipeline(tools=tools, tasks_path=args.tasks, output_dir=args.out)
     for baseline_name, row in summary.items():
         print(
             f"{baseline_name}: "

@@ -3,5 +3,42 @@
   "baseline_name": "autoskill_base",
   "source_pointer": "data\\raw\\sample_tools.json#1",
   "valid": true,
-  "issues": []
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "label": "base",
+      "score": 111.75,
+      "valid": true,
+      "num_examples": 2,
+      "required_argument_coverage": 1,
+      "semantic_hint_entries": 0,
+      "error_count": 0,
+      "warning_count": 0
+    },
+    {
+      "label": "semantic_concise",
+      "score": 112.5,
+      "valid": true,
+      "num_examples": 2,
+      "required_argument_coverage": 1,
+      "semantic_hint_entries": 0,
+      "error_count": 0,
+      "warning_count": 0
+    },
+    {
+      "label": "semantic_dense",
+      "score": 113.5,
+      "valid": true,
+      "num_examples": 2,
+      "required_argument_coverage": 1,
+      "semantic_hint_entries": 0,
+      "error_count": 0,
+      "warning_count": 0
+    },
+    {
+      "selected_label": "semantic_dense",
+      "selection_strategy": "validation_aware_richness_rerank"
+    }
+  ]
 }
