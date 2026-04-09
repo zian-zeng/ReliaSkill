@@ -1,0 +1,59 @@
+{
+  "tool_name": "create_relations",
+  "server_name": "memory",
+  "tool_purpose": "Create multiple new relations between entities in the knowledge graph. Relations should be in active voice",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "relations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string"
+            },
+            "to": {
+              "type": "string"
+            },
+            "relationType": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "from",
+            "to",
+            "relationType"
+          ]
+        }
+      }
+    },
+    "required": [
+      "relations"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "relations",
+      "type": "array",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": "object",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.relations"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Create multiple new relations between entities in the knowledge graph. Relations should be in active voice",
+    "Create Relations"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#15"
+}

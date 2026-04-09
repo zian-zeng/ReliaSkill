@@ -1,0 +1,23 @@
+{
+  "tool_name": "read_file",
+  "baseline_name": "retrieved_candidates",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#0",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "selection_strategy": "candidate_retrieval_shortlist",
+      "shortlist": [
+        "read_file",
+        "read_text_file",
+        "read_multiple_files"
+      ],
+      "distinctive_terms": [
+        "read_file",
+        "deprecated",
+        "instead."
+      ]
+    }
+  ]
+}

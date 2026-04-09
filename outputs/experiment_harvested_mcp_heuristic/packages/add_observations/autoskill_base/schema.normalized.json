@@ -1,0 +1,58 @@
+{
+  "tool_name": "add_observations",
+  "server_name": "memory",
+  "tool_purpose": "Add new observations to existing entities in the knowledge graph",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "observations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "entityName": {
+              "type": "string"
+            },
+            "contents": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "entityName",
+            "contents"
+          ]
+        }
+      }
+    },
+    "required": [
+      "observations"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "observations",
+      "type": "array",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": "object",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.observations"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Add new observations to existing entities in the knowledge graph",
+    "Add Observations"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#16"
+}

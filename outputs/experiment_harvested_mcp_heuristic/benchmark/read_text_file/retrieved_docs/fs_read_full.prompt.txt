@@ -1,0 +1,61 @@
+Tool: read_text_file
+Server: filesystem
+Condition: retrieved_docs
+
+Description:
+Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the 'head' parameter to read only the first N lines of a file, or the 'tail' parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string"
+    },
+    "tail": {
+      "type": "number"
+    },
+    "head": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "path",
+    "tail",
+    "head"
+  ]
+}
+
+Skill summary:
+Retrieved raw docs for this request. Candidate tools: read_file, read_graph, read_media_file.
+
+When to use:
+- Retrieve raw documentation snippets at inference time for the current request: Read config/settings.json.
+- [read_text_file/doc] Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the 'head' parameter to read only the first N lines of a file, or the 'tail' parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.
+- [read_text_file/doc] Read Text File
+- [read_file/doc] Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead.
+
+When not to use:
+- Do not convert raw retrieved docs into semantic hints or rewritten schema aliases.
+- Do not rely on snippets from other tools when filling target-tool field names.
+
+Argument template:
+{
+  "path": "data/sample.txt",
+  "tail": 1.0,
+  "head": 1.0
+}
+
+Examples:
+- Scenario: Retrieved-docs minimal call for read_text_file
+{
+  "path": "data/sample.txt",
+  "tail": 1.0,
+  "head": 1.0
+}
+- Scenario: Retrieved-docs fuller call for read_text_file
+{
+  "path": "data/sample.txt",
+  "tail": 2.0,
+  "head": 2.0
+}

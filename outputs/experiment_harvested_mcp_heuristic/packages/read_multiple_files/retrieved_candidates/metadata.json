@@ -1,0 +1,24 @@
+{
+  "tool_name": "read_multiple_files",
+  "baseline_name": "retrieved_candidates",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#3",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "selection_strategy": "candidate_retrieval_shortlist",
+      "shortlist": [
+        "read_multiple_files",
+        "read_text_file",
+        "create_directory"
+      ],
+      "distinctive_terms": [
+        "read_multiple_files",
+        "files",
+        "simultaneously.",
+        "more"
+      ]
+    }
+  ]
+}

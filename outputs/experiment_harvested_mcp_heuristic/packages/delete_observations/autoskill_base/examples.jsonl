@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for delete_observations", "arguments": {"deletions": [{}]}}
+{"scenario": "Richer invocation that uses optional controls for delete_observations", "arguments": {"deletions": [{}]}}

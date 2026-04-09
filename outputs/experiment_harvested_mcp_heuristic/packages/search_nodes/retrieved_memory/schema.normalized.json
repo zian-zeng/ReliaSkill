@@ -1,0 +1,40 @@
+{
+  "tool_name": "search_nodes",
+  "server_name": "memory",
+  "tool_purpose": "Search for nodes in the knowledge graph based on a query",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "query": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "query"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.query"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Search for nodes in the knowledge graph based on a query",
+    "Search Nodes"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#21"
+}

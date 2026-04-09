@@ -1,0 +1,9 @@
+{
+  "tool_name": "list_allowed_directories",
+  "baseline_name": "raw_mcp",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#13",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": []
+}

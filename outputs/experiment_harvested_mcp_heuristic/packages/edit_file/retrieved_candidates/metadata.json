@@ -1,0 +1,61 @@
+{
+  "tool_name": "edit_file",
+  "baseline_name": "retrieved_candidates",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#5",
+  "valid": false,
+  "issues": [
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "argument_template: missing required field `oldText` at $.edits[0]",
+      "location": "$.edits[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "argument_template: missing required field `newText` at $.edits[0]",
+      "location": "$.edits[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[0]: missing required field `oldText` at $.edits[0]",
+      "location": "$.edits[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[0]: missing required field `newText` at $.edits[0]",
+      "location": "$.edits[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[1]: missing required field `oldText` at $.edits[0]",
+      "location": "$.edits[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[1]: missing required field `newText` at $.edits[0]",
+      "location": "$.edits[0]"
+    }
+  ],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "selection_strategy": "candidate_retrieval_shortlist",
+      "shortlist": [
+        "edit_file",
+        "read_multiple_files",
+        "read_text_file"
+      ],
+      "distinctive_terms": [
+        "edit_file",
+        "make",
+        "line-based",
+        "edits"
+      ]
+    }
+  ]
+}

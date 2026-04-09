@@ -1,0 +1,41 @@
+Tool: create_directory
+Server: filesystem
+Condition: retrieved_memory
+
+Description:
+Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "path"
+  ]
+}
+
+Skill summary:
+Retrieve nearest memory examples for the current request and reuse them without semantic hint rewriting.
+
+When to use:
+- Retrieve example memories for the request: Create the directory reports/2026/april.
+- Ensure a directory exists for reports or generated outputs.
+
+When not to use:
+- Do not assume retrieved memories are perfect; keep field names schema-faithful.
+- Do not invent unsupported arguments when no compatible memory matches the tool.
+
+Argument template:
+{
+  "path": "data/sample.txt"
+}
+
+Examples:
+- Scenario: Ensure a directory exists for reports or generated outputs.
+{
+  "path": "reports/weekly"
+}

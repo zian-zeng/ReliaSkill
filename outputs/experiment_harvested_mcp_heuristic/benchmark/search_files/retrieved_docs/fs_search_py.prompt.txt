@@ -1,0 +1,70 @@
+Tool: search_files
+Server: filesystem
+Condition: retrieved_docs
+
+Description:
+Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you don't know their exact location. Only searches within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string"
+    },
+    "pattern": {
+      "type": "string"
+    },
+    "excludePatterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "path",
+    "pattern",
+    "excludePatterns"
+  ]
+}
+
+Skill summary:
+Retrieved raw docs for this request. Candidate tools: search_files, read_multiple_files, directory_tree.
+
+When to use:
+- Retrieve raw documentation snippets at inference time for the current request: Search within src for all Python files using the pattern **/*.py.
+- [search_files/doc] Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you don't know their exact location. Only searches within allowed directories.
+- [search_files/purpose] Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you don't know their exact location. Only searches within allowed directories.
+- [directory_tree/doc] Get a recursive tree view of files and directories as a JSON structure. Each entry includes 'name', 'type' (file/directory), and 'children' for directories. Files have no children array, while directories always have a children array (which may be empty). The output is formatted with 2-space indentation for readability. Only works within allowed directories.
+
+When not to use:
+- Do not convert raw retrieved docs into semantic hints or rewritten schema aliases.
+- Do not rely on snippets from other tools when filling target-tool field names.
+
+Argument template:
+{
+  "path": "data/sample.txt",
+  "pattern": "sample_pattern_1",
+  "excludePatterns": [
+    "sample_excludePatterns_item_1"
+  ]
+}
+
+Examples:
+- Scenario: Retrieved-docs minimal call for search_files
+{
+  "path": "data/sample.txt",
+  "pattern": "sample_pattern_1",
+  "excludePatterns": [
+    "sample_excludePatterns_item_1"
+  ]
+}
+- Scenario: Retrieved-docs fuller call for search_files
+{
+  "path": "data/sample.txt",
+  "pattern": "sample_pattern_2",
+  "excludePatterns": [
+    "sample_excludePatterns_item_2"
+  ]
+}

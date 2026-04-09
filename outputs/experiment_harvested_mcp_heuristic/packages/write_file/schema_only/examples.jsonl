@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid call for write_file", "arguments": {"path": "data/sample.txt", "content": "sample_content_1"}}
+{"scenario": "Schema-aligned full call for write_file", "arguments": {"path": "data/sample.txt", "content": "sample_content_2"}}

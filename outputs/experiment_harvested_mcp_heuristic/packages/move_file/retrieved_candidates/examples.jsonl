@@ -1,0 +1,2 @@
+{"scenario": "Minimal routed call for move_file", "arguments": {"source": "sample_source_1", "destination": "sample_destination_1"}}
+{"scenario": "Full routed call for move_file", "arguments": {"source": "sample_source_2", "destination": "sample_destination_2"}}

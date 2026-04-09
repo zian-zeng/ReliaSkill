@@ -1,0 +1,2 @@
+{"scenario": "Minimal routed call for git_show", "arguments": {"repo_path": "data/sample.txt", "revision": "sample_revision_1"}}
+{"scenario": "Full routed call for git_show", "arguments": {"repo_path": "data/sample.txt", "revision": "sample_revision_2"}}

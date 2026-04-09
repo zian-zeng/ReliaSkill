@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid call for get-resource-links", "arguments": {"count": "sample_count_1"}}
+{"scenario": "Schema-aligned full call for get-resource-links", "arguments": {"count": "sample_count_2"}}

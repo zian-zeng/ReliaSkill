@@ -1,0 +1,210 @@
+{
+  "dev": {
+    "raw_mcp": {
+      "num_tasks": 6,
+      "tool_selection_accuracy": 0.8333,
+      "tool_selection_accuracy_ci": {
+        "low": 0.5,
+        "high": 1.0
+      },
+      "joint_exact_match_rate": 0.6667,
+      "joint_exact_match_ci": {
+        "low": 0.3333,
+        "high": 1.0
+      },
+      "avg_argument_validity": 0.7778,
+      "avg_required_argument_recall": 0.7778,
+      "gold_tool_hit_rate": 0.8333,
+      "avg_gold_tool_rank": 1.0
+    },
+    "schema_only": {
+      "num_tasks": 6,
+      "tool_selection_accuracy": 0.8333,
+      "tool_selection_accuracy_ci": {
+        "low": 0.5,
+        "high": 1.0
+      },
+      "joint_exact_match_rate": 0.3333,
+      "joint_exact_match_ci": {
+        "low": 0.0,
+        "high": 0.6667
+      },
+      "avg_argument_validity": 0.7778,
+      "avg_required_argument_recall": 0.6667,
+      "gold_tool_hit_rate": 0.8333,
+      "avg_gold_tool_rank": 1.0
+    },
+    "retrieved_docs": {
+      "num_tasks": 6,
+      "tool_selection_accuracy": 0.6667,
+      "tool_selection_accuracy_ci": {
+        "low": 0.3333,
+        "high": 1.0
+      },
+      "joint_exact_match_rate": 0.1667,
+      "joint_exact_match_ci": {
+        "low": 0.0,
+        "high": 0.5
+      },
+      "avg_argument_validity": 0.6111,
+      "avg_required_argument_recall": 0.5,
+      "gold_tool_hit_rate": 0.6667,
+      "avg_gold_tool_rank": 1.0
+    },
+    "retrieved_candidates": {
+      "num_tasks": 6,
+      "tool_selection_accuracy": 1.0,
+      "tool_selection_accuracy_ci": {
+        "low": 1.0,
+        "high": 1.0
+      },
+      "joint_exact_match_rate": 0.5,
+      "joint_exact_match_ci": {
+        "low": 0.1667,
+        "high": 0.8333
+      },
+      "avg_argument_validity": 0.9444,
+      "avg_required_argument_recall": 0.8333,
+      "gold_tool_hit_rate": 1.0,
+      "avg_gold_tool_rank": 1.0
+    },
+    "retrieved_memory": {
+      "num_tasks": 6,
+      "tool_selection_accuracy": 0.6667,
+      "tool_selection_accuracy_ci": {
+        "low": 0.3333,
+        "high": 1.0
+      },
+      "joint_exact_match_rate": 0.3333,
+      "joint_exact_match_ci": {
+        "low": 0.0,
+        "high": 0.6667
+      },
+      "avg_argument_validity": 0.6667,
+      "avg_required_argument_recall": 0.5556,
+      "gold_tool_hit_rate": 0.8333,
+      "avg_gold_tool_rank": 1.2
+    },
+    "autoskill_base": {
+      "num_tasks": 6,
+      "tool_selection_accuracy": 1.0,
+      "tool_selection_accuracy_ci": {
+        "low": 1.0,
+        "high": 1.0
+      },
+      "joint_exact_match_rate": 0.6667,
+      "joint_exact_match_ci": {
+        "low": 0.3333,
+        "high": 1.0
+      },
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 0.8889,
+      "gold_tool_hit_rate": 1.0,
+      "avg_gold_tool_rank": 1.0
+    }
+  },
+  "test": {
+    "raw_mcp": {
+      "num_tasks": 9,
+      "tool_selection_accuracy": 0.5556,
+      "tool_selection_accuracy_ci": {
+        "low": 0.2222,
+        "high": 0.8889
+      },
+      "joint_exact_match_rate": 0.2222,
+      "joint_exact_match_ci": {
+        "low": 0.0,
+        "high": 0.4444
+      },
+      "avg_argument_validity": 0.4074,
+      "avg_required_argument_recall": 0.4445,
+      "gold_tool_hit_rate": 0.5556,
+      "avg_gold_tool_rank": 1.0
+    },
+    "schema_only": {
+      "num_tasks": 9,
+      "tool_selection_accuracy": 0.5556,
+      "tool_selection_accuracy_ci": {
+        "low": 0.2222,
+        "high": 0.8889
+      },
+      "joint_exact_match_rate": 0.2222,
+      "joint_exact_match_ci": {
+        "low": 0.0,
+        "high": 0.4444
+      },
+      "avg_argument_validity": 0.4074,
+      "avg_required_argument_recall": 0.3704,
+      "gold_tool_hit_rate": 0.5556,
+      "avg_gold_tool_rank": 1.0
+    },
+    "retrieved_docs": {
+      "num_tasks": 9,
+      "tool_selection_accuracy": 0.5556,
+      "tool_selection_accuracy_ci": {
+        "low": 0.2222,
+        "high": 0.8889
+      },
+      "joint_exact_match_rate": 0.2222,
+      "joint_exact_match_ci": {
+        "low": 0.0,
+        "high": 0.4444
+      },
+      "avg_argument_validity": 0.4074,
+      "avg_required_argument_recall": 0.3704,
+      "gold_tool_hit_rate": 0.6667,
+      "avg_gold_tool_rank": 1.1667
+    },
+    "retrieved_candidates": {
+      "num_tasks": 9,
+      "tool_selection_accuracy": 0.8889,
+      "tool_selection_accuracy_ci": {
+        "low": 0.6667,
+        "high": 1.0
+      },
+      "joint_exact_match_rate": 0.3333,
+      "joint_exact_match_ci": {
+        "low": 0.1111,
+        "high": 0.6667
+      },
+      "avg_argument_validity": 0.6852,
+      "avg_required_argument_recall": 0.5926,
+      "gold_tool_hit_rate": 1.0,
+      "avg_gold_tool_rank": 1.1111
+    },
+    "retrieved_memory": {
+      "num_tasks": 9,
+      "tool_selection_accuracy": 1.0,
+      "tool_selection_accuracy_ci": {
+        "low": 1.0,
+        "high": 1.0
+      },
+      "joint_exact_match_rate": 0.6667,
+      "joint_exact_match_ci": {
+        "low": 0.3333,
+        "high": 0.8889
+      },
+      "avg_argument_validity": 0.9444,
+      "avg_required_argument_recall": 0.8148,
+      "gold_tool_hit_rate": 1.0,
+      "avg_gold_tool_rank": 1.0
+    },
+    "autoskill_base": {
+      "num_tasks": 9,
+      "tool_selection_accuracy": 1.0,
+      "tool_selection_accuracy_ci": {
+        "low": 1.0,
+        "high": 1.0
+      },
+      "joint_exact_match_rate": 0.6667,
+      "joint_exact_match_ci": {
+        "low": 0.3333,
+        "high": 0.8889
+      },
+      "avg_argument_validity": 1.0,
+      "avg_required_argument_recall": 0.8519,
+      "gold_tool_hit_rate": 1.0,
+      "avg_gold_tool_rank": 1.0
+    }
+  }
+}

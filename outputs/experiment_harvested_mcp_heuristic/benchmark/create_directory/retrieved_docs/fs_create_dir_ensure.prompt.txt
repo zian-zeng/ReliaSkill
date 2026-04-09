@@ -1,0 +1,42 @@
+Tool: create_directory
+Server: filesystem
+Condition: retrieved_docs
+
+Description:
+Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "path"
+  ]
+}
+
+Skill summary:
+Retrieved raw docs for this request. Candidate tools: create_directory.
+
+When to use:
+- Retrieve raw documentation snippets at inference time for the current request: Ensure reports/weekly exists.
+- [create_directory/doc] Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.
+- [create_directory/purpose] Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.
+
+When not to use:
+- Do not convert raw retrieved docs into semantic hints or rewritten schema aliases.
+- Do not rely on snippets from other tools when filling target-tool field names.
+
+Argument template:
+{
+  "path": "data/sample.txt"
+}
+
+Examples:
+- Scenario: Retrieved-docs minimal call for create_directory
+{
+  "path": "data/sample.txt"
+}

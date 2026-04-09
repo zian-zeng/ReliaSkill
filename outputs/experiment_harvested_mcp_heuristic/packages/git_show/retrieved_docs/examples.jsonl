@@ -1,0 +1,2 @@
+{"scenario": "Retrieved-docs minimal call for git_show", "arguments": {"repo_path": "data/sample.txt", "revision": "sample_revision_1"}}
+{"scenario": "Retrieved-docs fuller call for git_show", "arguments": {"repo_path": "data/sample.txt", "revision": "sample_revision_2"}}

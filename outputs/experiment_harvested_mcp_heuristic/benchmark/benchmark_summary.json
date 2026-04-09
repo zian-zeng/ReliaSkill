@@ -1,0 +1,80 @@
+{
+  "raw_mcp": {
+    "num_tasks": 15,
+    "exact_match_rate": 0.6,
+    "exact_match_ci": {
+      "low": 0.4,
+      "high": 0.8
+    },
+    "avg_argument_validity": 0.8222,
+    "avg_required_argument_recall": 0.8667,
+    "hallucinated_argument_count": 0,
+    "tool_retrieval_hit_rate": null,
+    "avg_target_tool_rank": null
+  },
+  "schema_only": {
+    "num_tasks": 15,
+    "exact_match_rate": 0.4,
+    "exact_match_ci": {
+      "low": 0.2,
+      "high": 0.6667
+    },
+    "avg_argument_validity": 0.8222,
+    "avg_required_argument_recall": 0.6889,
+    "hallucinated_argument_count": 8,
+    "tool_retrieval_hit_rate": null,
+    "avg_target_tool_rank": null
+  },
+  "retrieved_docs": {
+    "num_tasks": 15,
+    "exact_match_rate": 0.4,
+    "exact_match_ci": {
+      "low": 0.2,
+      "high": 0.6667
+    },
+    "avg_argument_validity": 0.8222,
+    "avg_required_argument_recall": 0.6889,
+    "hallucinated_argument_count": 8,
+    "tool_retrieval_hit_rate": 1.0,
+    "avg_target_tool_rank": 1.1
+  },
+  "retrieved_candidates": {
+    "num_tasks": 15,
+    "exact_match_rate": 0.4,
+    "exact_match_ci": {
+      "low": 0.2,
+      "high": 0.6667
+    },
+    "avg_argument_validity": 0.8556,
+    "avg_required_argument_recall": 0.7111,
+    "hallucinated_argument_count": 8,
+    "tool_retrieval_hit_rate": 1.0,
+    "avg_target_tool_rank": 1.1
+  },
+  "retrieved_memory": {
+    "num_tasks": 15,
+    "exact_match_rate": 0.6667,
+    "exact_match_ci": {
+      "low": 0.4,
+      "high": 0.8667
+    },
+    "avg_argument_validity": 0.9667,
+    "avg_required_argument_recall": 0.8444,
+    "hallucinated_argument_count": 6,
+    "tool_retrieval_hit_rate": null,
+    "avg_target_tool_rank": null
+  },
+  "autoskill_base": {
+    "num_tasks": 15,
+    "exact_match_rate": 0.6667,
+    "exact_match_ci": {
+      "low": 0.4,
+      "high": 0.8667
+    },
+    "avg_argument_validity": 1.0,
+    "avg_required_argument_recall": 0.8667,
+    "hallucinated_argument_count": 6,
+    "tool_retrieval_hit_rate": null,
+    "avg_target_tool_rank": null
+  }
+}

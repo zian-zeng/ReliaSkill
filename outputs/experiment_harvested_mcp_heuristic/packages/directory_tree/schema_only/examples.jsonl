@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid call for directory_tree", "arguments": {"path": "data/sample.txt", "excludePatterns": ["sample_excludePatterns_item_1"]}}
+{"scenario": "Schema-aligned full call for directory_tree", "arguments": {"path": "data/sample.txt", "excludePatterns": ["sample_excludePatterns_item_2"]}}

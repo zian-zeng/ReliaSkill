@@ -1,0 +1,60 @@
+Tool: write_file
+Server: filesystem
+Condition: retrieved_candidates
+
+Description:
+Create a new file or completely overwrite an existing file with new content. Use with caution as it will overwrite existing files without warning. Handles text content with proper encoding. Only works within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "path",
+    "content"
+  ]
+}
+
+Skill summary:
+Retrieve candidate tools first, then route to `write_file` only if it remains the best match.
+
+When to use:
+- Rank candidate tools for the request before argument filling: Save "Deployment checklist" to docs/deploy.txt.
+- Shortlist: git_branch, add_observations, edit_file.
+- [git_branch] List Git branches
+- [add_observations] Add new observations to existing entities in the knowledge graph
+- [edit_file] Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories.
+
+When not to use:
+- Do not copy arguments from neighboring candidate tools into the selected tool call.
+- Do not assume the target tool is rank-1 when retrieval evidence favors another tool.
+
+Argument template:
+{
+  "path": "data/sample.txt",
+  "content": "sample_content_1"
+}
+
+Examples:
+- Scenario: Minimal routed call for write_file
+{
+  "path": "data/sample.txt",
+  "content": "sample_content_1"
+}
+- Scenario: Full routed call for write_file
+{
+  "path": "data/sample.txt",
+  "content": "sample_content_2"
+}
+- Scenario: Route write-content requests to this file writer.
+{
+  "path": "docs/notes.txt",
+  "content": "Release checklist"
+}

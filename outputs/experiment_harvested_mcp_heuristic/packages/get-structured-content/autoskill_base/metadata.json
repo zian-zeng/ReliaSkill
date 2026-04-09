@@ -1,0 +1,58 @@
+{
+  "tool_name": "get-structured-content",
+  "baseline_name": "autoskill_base",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#28",
+  "valid": false,
+  "issues": [
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "argument_template: expected string at $, got dict",
+      "location": "$"
+    }
+  ],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "label": "base",
+      "score": -107.75,
+      "valid": false,
+      "num_examples": 0,
+      "required_argument_coverage": 0,
+      "semantic_hint_entries": 0,
+      "error_count": 1,
+      "warning_count": 0
+    },
+    {
+      "label": "semantic_concise",
+      "score": -107.0,
+      "valid": false,
+      "num_examples": 0,
+      "required_argument_coverage": 0,
+      "semantic_hint_entries": 0,
+      "error_count": 1,
+      "warning_count": 0
+    },
+    {
+      "label": "semantic_dense",
+      "score": -106.0,
+      "valid": false,
+      "num_examples": 0,
+      "required_argument_coverage": 0,
+      "semantic_hint_entries": 0,
+      "error_count": 1,
+      "warning_count": 0
+    },
+    {
+      "selected_label": "semantic_dense",
+      "selection_strategy": "validation_aware_richness_rerank"
+    },
+    {
+      "trace_type": "generation_backend",
+      "configured_generation_backend": "heuristic",
+      "actual_generation_backend": "heuristic",
+      "generation_fallback_used": false,
+      "generation_fallback_reason": null
+    }
+  ]
+}

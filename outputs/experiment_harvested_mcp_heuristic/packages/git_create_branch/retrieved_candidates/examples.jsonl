@@ -1,0 +1,2 @@
+{"scenario": "Minimal routed call for git_create_branch", "arguments": {"repo_path": "data/sample.txt", "branch_name": "sample-name"}}
+{"scenario": "Full routed call for git_create_branch", "arguments": {"repo_path": "data/sample.txt", "branch_name": "sample-name", "base_branch": "sample_base_branch_2"}}

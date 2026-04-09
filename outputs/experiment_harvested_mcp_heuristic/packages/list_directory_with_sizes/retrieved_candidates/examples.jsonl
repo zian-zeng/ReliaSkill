@@ -1,0 +1,2 @@
+{"scenario": "Minimal routed call for list_directory_with_sizes", "arguments": {"path": "data/sample.txt", "sortBy": "name"}}
+{"scenario": "Full routed call for list_directory_with_sizes", "arguments": {"path": "data/sample.txt", "sortBy": "size"}}

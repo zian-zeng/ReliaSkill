@@ -51,6 +51,13 @@ Observed MCP server source trees present:
 - The downloaded BFCL corpus is on disk, but it is not yet the default benchmark because the external BFCL files are code-generation / API-call style data, not the same schema-faithful MCP argument format as the current evaluator.
 - The downloaded `modelcontextprotocol/servers` repo is on disk, but it is not yet auto-harvested into the default tool corpus. The current default tool file is still the curated filesystem subset.
 
+### External experiment artifacts now wired
+
+- Harvested MCP corpus: [harvested_mcp_reference_servers.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/raw/harvested_mcp_reference_servers.json)
+- BFCL Hugging Face pseudo-tool corpus: [bfcl_huggingface_tools.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/raw/bfcl_huggingface_tools.json)
+- BFCL Hugging Face train routing tasks: [bfcl_huggingface_train_routing.jsonl](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/eval/bfcl_huggingface_train_routing.jsonl)
+- BFCL Hugging Face eval routing tasks: [bfcl_huggingface_eval_routing.jsonl](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/eval/bfcl_huggingface_eval_routing.jsonl)
+
 ## Current model presets in code
 
 ### Local Hugging Face
@@ -65,6 +72,13 @@ Observed MCP server source trees present:
 - [experiment.openai_compatible.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.openai_compatible.sample.json)
 - [experiment.openai_compatible.qwen25_14b.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.openai_compatible.qwen25_14b.sample.json)
 - [experiment.openai_compatible.qwen25_32b.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.openai_compatible.qwen25_32b.sample.json)
+
+### External experiment configs
+
+- [experiment.harvested_mcp.heuristic.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.harvested_mcp.heuristic.sample.json)
+- [experiment.harvested_mcp.qwen25_14b_4bit.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.harvested_mcp.qwen25_14b_4bit.sample.json)
+- [experiment.bfcl_huggingface_routing.heuristic.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.bfcl_huggingface_routing.heuristic.sample.json)
+- [experiment.bfcl_huggingface_routing.qwen25_32b_endpoint.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.bfcl_huggingface_routing.qwen25_32b_endpoint.sample.json)
 
 ## Recommended cluster path
 

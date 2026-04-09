@@ -1,0 +1,7 @@
+condition,valid_rate,avg_examples,avg_template_fields,avg_semantic_hint_entries,exact_match_rate,avg_argument_validity,avg_required_argument_recall,tool_retrieval_hit_rate,avg_target_tool_rank,hallucinated_argument_count,routing_tool_selection_accuracy,routing_joint_exact_match_rate,routing_gold_tool_hit_rate,routing_avg_gold_tool_rank
+raw_mcp,1.0,0.0,0.0,0.0,0.6,0.8222,0.8667,,,0,0.6667,0.4,0.6667,1.0
+schema_only,0.8704,1.33,1.59,0.0,0.4,0.8222,0.6889,,,8,0.6667,0.2667,0.6667,1.0
+retrieved_docs,0.8704,1.33,1.59,0.0,0.4,0.8222,0.6889,1.0,1.1,8,0.6,0.2,0.6667,1.1
+retrieved_candidates,0.8519,1.48,1.59,0.0,0.4,0.8556,0.7111,1.0,1.1,8,0.9333,0.4,1.0,1.0667
+retrieved_memory,0.8519,0.98,1.59,0.0,0.6667,0.9667,0.8444,,,6,0.8667,0.5333,0.9333,1.0714
+autoskill_base,0.8704,1.76,1.59,0.63,0.6667,1.0,0.8667,,,6,1.0,0.6667,1.0,1.0

@@ -1,0 +1,46 @@
+{
+  "tool_name": "create_entities",
+  "baseline_name": "retrieved_docs",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#14",
+  "valid": false,
+  "issues": [
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "argument_template: missing required field `name` at $.entities[0]",
+      "location": "$.entities[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "argument_template: missing required field `entityType` at $.entities[0]",
+      "location": "$.entities[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "argument_template: missing required field `observations` at $.entities[0]",
+      "location": "$.entities[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[0]: missing required field `name` at $.entities[0]",
+      "location": "$.entities[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[0]: missing required field `entityType` at $.entities[0]",
+      "location": "$.entities[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[0]: missing required field `observations` at $.entities[0]",
+      "location": "$.entities[0]"
+    }
+  ],
+  "semantic_hints": {},
+  "method_trace": []
+}

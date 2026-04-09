@@ -1,0 +1,9 @@
+{
+  "tool_name": "toggle-subscriber-updates",
+  "baseline_name": "retrieved_memory",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#33",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": []
+}

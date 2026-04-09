@@ -1,0 +1,23 @@
+{
+  "tool_name": "git_status",
+  "baseline_name": "retrieved_candidates",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#40",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "selection_strategy": "candidate_retrieval_shortlist",
+      "shortlist": [
+        "git_status",
+        "git_diff_unstaged",
+        "git_log"
+      ],
+      "distinctive_terms": [
+        "git_status",
+        "tree",
+        "status"
+      ]
+    }
+  ]
+}

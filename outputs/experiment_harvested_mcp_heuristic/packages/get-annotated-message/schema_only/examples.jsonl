@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid call for get-annotated-message", "arguments": {"messageType": "sample_messageType_1", "includeImage": "sample_includeImage_1"}}
+{"scenario": "Schema-aligned full call for get-annotated-message", "arguments": {"messageType": "sample_messageType_2", "includeImage": "sample_includeImage_2"}}

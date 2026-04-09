@@ -1,0 +1,9 @@
+{
+  "tool_name": "get-sum",
+  "baseline_name": "retrieved_memory",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#29",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": []
+}

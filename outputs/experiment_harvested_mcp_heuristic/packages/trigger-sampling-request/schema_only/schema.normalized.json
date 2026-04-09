@@ -1,0 +1,58 @@
+{
+  "tool_name": "trigger-sampling-request",
+  "server_name": "tools",
+  "tool_purpose": "Trigger a Request from the Server for LLM Sampling",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "prompt": {
+        "type": "string"
+      },
+      "maxTokens": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "prompt",
+      "maxTokens"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "prompt",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.prompt"
+    },
+    {
+      "name": "maxTokens",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.maxTokens"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Trigger a Request from the Server for LLM Sampling",
+    "Trigger Sampling Request Tool"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#37"
+}

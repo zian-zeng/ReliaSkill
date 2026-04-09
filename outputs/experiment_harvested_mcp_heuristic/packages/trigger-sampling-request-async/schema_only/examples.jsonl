@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid call for trigger-sampling-request-async", "arguments": {"prompt": "Summarize the latest update.", "maxTokens": "sample_maxTokens_1"}}
+{"scenario": "Schema-aligned full call for trigger-sampling-request-async", "arguments": {"prompt": "Summarize the latest update.", "maxTokens": "sample_maxTokens_2"}}

@@ -1,0 +1,2 @@
+{"scenario": "Retrieved-docs minimal call for trigger-long-running-operation", "arguments": {"duration": "sample_duration_1", "steps": 1.0}}
+{"scenario": "Retrieved-docs fuller call for trigger-long-running-operation", "arguments": {"duration": "sample_duration_2", "steps": 2.0}}

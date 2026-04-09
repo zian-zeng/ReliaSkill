@@ -1,0 +1,77 @@
+Tool: search_files
+Server: filesystem
+Condition: retrieved_candidates
+
+Description:
+Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you don't know their exact location. Only searches within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string"
+    },
+    "pattern": {
+      "type": "string"
+    },
+    "excludePatterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "path",
+    "pattern",
+    "excludePatterns"
+  ]
+}
+
+Skill summary:
+Retrieve candidate tools first, then route to `search_files` only if it remains the best match.
+
+When to use:
+- Rank candidate tools for the request before argument filling: Search within src for all Python files using the pattern **/*.py.
+- Shortlist: search_files, read_multiple_files, directory_tree.
+- [search_files] Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you don't know their exact location. Only searches within allowed directories.
+- [read_multiple_files] Read the contents of multiple files simultaneously. This is more efficient than reading files one by one when you need to analyze or compare multiple files. Each file's content is returned with its path as a reference. Failed reads for individual files won't stop the entire operation. Only works within allowed directories.
+- [directory_tree] Get a recursive tree view of files and directories as a JSON structure. Each entry includes 'name', 'type' (file/directory), and 'children' for directories. Files have no children array, while directories always have a children array (which may be empty). The output is formatted with 2-space indentation for readability. Only works within allowed directories.
+
+When not to use:
+- Do not copy arguments from neighboring candidate tools into the selected tool call.
+- Do not assume the target tool is rank-1 when retrieval evidence favors another tool.
+
+Argument template:
+{
+  "path": "data/sample.txt",
+  "pattern": "sample_pattern_1",
+  "excludePatterns": [
+    "sample_excludePatterns_item_1"
+  ]
+}
+
+Examples:
+- Scenario: Minimal routed call for search_files
+{
+  "path": "data/sample.txt",
+  "pattern": "sample_pattern_1",
+  "excludePatterns": [
+    "sample_excludePatterns_item_1"
+  ]
+}
+- Scenario: Full routed call for search_files
+{
+  "path": "data/sample.txt",
+  "pattern": "sample_pattern_2",
+  "excludePatterns": [
+    "sample_excludePatterns_item_2"
+  ]
+}
+- Scenario: Route file discovery requests with recursive glob patterns to this tool.
+{
+  "path": "docs",
+  "pattern": "**/*.md",
+  "excludePatterns": []
+}

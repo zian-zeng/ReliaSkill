@@ -1,0 +1,94 @@
+{
+  "tool_name": "fetch",
+  "server_name": "src",
+  "tool_purpose": "Fetches a URL from the internet and optionally extracts its contents as markdown. Although originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that.",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "url": {
+        "type": "string"
+      },
+      "max_length": {
+        "type": "string"
+      },
+      "start_index": {
+        "type": "string"
+      },
+      "raw": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "url",
+      "max_length",
+      "start_index",
+      "raw"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "url",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.url"
+    },
+    {
+      "name": "max_length",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.max_length"
+    },
+    {
+      "name": "start_index",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.start_index"
+    },
+    {
+      "name": "raw",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.raw"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Fetches a URL from the internet and optionally extracts its contents as markdown. Although originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that.",
+    "fetch"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#39"
+}

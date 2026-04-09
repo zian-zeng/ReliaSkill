@@ -1,0 +1,43 @@
+{
+  "tool_name": "delete_entities",
+  "server_name": "memory",
+  "tool_purpose": "Delete multiple entities and their associated relations from the knowledge graph",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "entityNames": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "entityNames"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "entityNames",
+      "type": "array",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": "string",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.entityNames"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Delete multiple entities and their associated relations from the knowledge graph",
+    "Delete Entities"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#17"
+}

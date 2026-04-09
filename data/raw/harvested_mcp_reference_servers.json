@@ -1,0 +1,1246 @@
+[
+  {
+    "server_name": "filesystem",
+    "name": "read_file",
+    "title": "Read File (Deprecated)",
+    "summary": "Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead.",
+    "description": "Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "tail": {
+          "type": "number"
+        },
+        "head": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "path"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  {
+    "server_name": "filesystem",
+    "name": "read_text_file",
+    "title": "Read Text File",
+    "summary": "Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the 'head' parameter to read only the first N lines of a file, or the 'tail' parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.",
+    "description": "Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the 'head' parameter to read only the first N lines of a file, or the 'tail' parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "tail": {
+          "type": "number"
+        },
+        "head": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "path",
+        "tail",
+        "head"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  {
+    "server_name": "filesystem",
+    "name": "read_media_file",
+    "title": "Read Media File",
+    "summary": "Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories.",
+    "description": "Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  {
+    "server_name": "filesystem",
+    "name": "read_multiple_files",
+    "title": "Read Multiple Files",
+    "summary": "Read the contents of multiple files simultaneously. This is more efficient than reading files one by one when you need to analyze or compare multiple files. Each file's content is returned with its path as a reference. Failed reads for individual files won't stop the entire operation. Only works within allowed directories.",
+    "description": "Read the contents of multiple files simultaneously. This is more efficient than reading files one by one when you need to analyze or compare multiple files. Each file's content is returned with its path as a reference. Failed reads for individual files won't stop the entire operation. Only works within allowed directories.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "paths"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  {
+    "server_name": "filesystem",
+    "name": "write_file",
+    "title": "Write File",
+    "summary": "Create a new file or completely overwrite an existing file with new content. Use with caution as it will overwrite existing files without warning. Handles text content with proper encoding. Only works within allowed directories.",
+    "description": "Create a new file or completely overwrite an existing file with new content. Use with caution as it will overwrite existing files without warning. Handles text content with proper encoding. Only works within allowed directories.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "content"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  {
+    "server_name": "filesystem",
+    "name": "edit_file",
+    "title": "Edit File",
+    "summary": "Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories.",
+    "description": "Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "edits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "oldText": {
+                "type": "string"
+              },
+              "newText": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "oldText",
+              "newText"
+            ]
+          }
+        },
+        "dryRun": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "path",
+        "edits",
+        "dryRun"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  {
+    "server_name": "filesystem",
+    "name": "create_directory",
+    "title": "Create Directory",
+    "summary": "Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.",
+    "description": "Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  {
+    "server_name": "filesystem",
+    "name": "list_directory",
+    "title": "List Directory",
+    "summary": "Get a detailed listing of all files and directories in a specified path. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is essential for understanding directory structure and finding specific files within a directory. Only works within allowed directories.",
+    "description": "Get a detailed listing of all files and directories in a specified path. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is essential for understanding directory structure and finding specific files within a directory. Only works within allowed directories.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  {
+    "server_name": "filesystem",
+    "name": "list_directory_with_sizes",
+    "title": "List Directory with Sizes",
+    "summary": "Get a detailed listing of all files and directories in a specified path, including sizes. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is useful for understanding directory structure and finding specific files within a directory. Only works within allowed directories.",
+    "description": "Get a detailed listing of all files and directories in a specified path, including sizes. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is useful for understanding directory structure and finding specific files within a directory. Only works within allowed directories.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "sortBy": {
+          "type": "string",
+          "enum": [
+            "name",
+            "size"
+          ]
+        }
+      },
+      "required": [
+        "path",
+        "sortBy"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  {
+    "server_name": "filesystem",
+    "name": "directory_tree",
+    "title": "Directory Tree",
+    "summary": "Get a recursive tree view of files and directories as a JSON structure. Each entry includes 'name', 'type' (file/directory), and 'children' for directories. Files have no children array, while directories always have a children array (which may be empty). The output is formatted with 2-space indentation for readability. Only works within allowed directories.",
+    "description": "Get a recursive tree view of files and directories as a JSON structure. Each entry includes 'name', 'type' (file/directory), and 'children' for directories. Files have no children array, while directories always have a children array (which may be empty). The output is formatted with 2-space indentation for readability. Only works within allowed directories.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "excludePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "path",
+        "excludePatterns"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  {
+    "server_name": "filesystem",
+    "name": "move_file",
+    "title": "Move File",
+    "summary": "Move or rename files and directories. Can move files between directories and rename them in a single operation. If the destination exists, the operation will fail. Works across different directories and can be used for simple renaming within the same directory. Both source and destination must be within allowed directories.",
+    "description": "Move or rename files and directories. Can move files between directories and rename them in a single operation. If the destination exists, the operation will fail. Works across different directories and can be used for simple renaming within the same directory. Both source and destination must be within allowed directories.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "destination": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "destination"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  {
+    "server_name": "filesystem",
+    "name": "search_files",
+    "title": "Search Files",
+    "summary": "Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you don't know their exact location. Only searches within allowed directories.",
+    "description": "Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you don't know their exact location. Only searches within allowed directories.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "pattern": {
+          "type": "string"
+        },
+        "excludePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "path",
+        "pattern",
+        "excludePatterns"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  {
+    "server_name": "filesystem",
+    "name": "get_file_info",
+    "title": "Get File Info",
+    "summary": "Retrieve detailed metadata about a file or directory. Returns comprehensive information including size, creation time, last modified time, permissions, and type. This tool is perfect for understanding file characteristics without reading the actual content. Only works within allowed directories.",
+    "description": "Retrieve detailed metadata about a file or directory. Returns comprehensive information including size, creation time, last modified time, permissions, and type. This tool is perfect for understanding file characteristics without reading the actual content. Only works within allowed directories.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  {
+    "server_name": "filesystem",
+    "name": "list_allowed_directories",
+    "title": "List Allowed Directories",
+    "summary": "Returns the list of directories that this server is allowed to access. Subdirectories within these allowed directories are also accessible. Use this to understand which directories and their nested paths are available before trying to access files.",
+    "description": "Returns the list of directories that this server is allowed to access. Subdirectories within these allowed directories are also accessible. Use this to understand which directories and their nested paths are available before trying to access files.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  {
+    "server_name": "memory",
+    "name": "create_entities",
+    "title": "Create Entities",
+    "summary": "Create multiple new entities in the knowledge graph",
+    "description": "Create multiple new entities in the knowledge graph",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "entities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "entityType": {
+                "type": "string"
+              },
+              "observations": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "name",
+              "entityType",
+              "observations"
+            ]
+          }
+        }
+      },
+      "required": [
+        "entities"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\memory\\index.ts"
+  },
+  {
+    "server_name": "memory",
+    "name": "create_relations",
+    "title": "Create Relations",
+    "summary": "Create multiple new relations between entities in the knowledge graph. Relations should be in active voice",
+    "description": "Create multiple new relations between entities in the knowledge graph. Relations should be in active voice",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "relations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "from": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string"
+              },
+              "relationType": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "from",
+              "to",
+              "relationType"
+            ]
+          }
+        }
+      },
+      "required": [
+        "relations"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\memory\\index.ts"
+  },
+  {
+    "server_name": "memory",
+    "name": "add_observations",
+    "title": "Add Observations",
+    "summary": "Add new observations to existing entities in the knowledge graph",
+    "description": "Add new observations to existing entities in the knowledge graph",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "observations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "entityName": {
+                "type": "string"
+              },
+              "contents": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "entityName",
+              "contents"
+            ]
+          }
+        }
+      },
+      "required": [
+        "observations"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\memory\\index.ts"
+  },
+  {
+    "server_name": "memory",
+    "name": "delete_entities",
+    "title": "Delete Entities",
+    "summary": "Delete multiple entities and their associated relations from the knowledge graph",
+    "description": "Delete multiple entities and their associated relations from the knowledge graph",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "entityNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "entityNames"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\memory\\index.ts"
+  },
+  {
+    "server_name": "memory",
+    "name": "delete_observations",
+    "title": "Delete Observations",
+    "summary": "Delete specific observations from entities in the knowledge graph",
+    "description": "Delete specific observations from entities in the knowledge graph",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "deletions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "entityName": {
+                "type": "string"
+              },
+              "observations": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "entityName",
+              "observations"
+            ]
+          }
+        }
+      },
+      "required": [
+        "deletions"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\memory\\index.ts"
+  },
+  {
+    "server_name": "memory",
+    "name": "delete_relations",
+    "title": "Delete Relations",
+    "summary": "Delete multiple relations from the knowledge graph",
+    "description": "Delete multiple relations from the knowledge graph",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "relations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "from": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string"
+              },
+              "relationType": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "from",
+              "to",
+              "relationType"
+            ]
+          }
+        }
+      },
+      "required": [
+        "relations"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\memory\\index.ts"
+  },
+  {
+    "server_name": "memory",
+    "name": "read_graph",
+    "title": "Read Graph",
+    "summary": "Read the entire knowledge graph",
+    "description": "Read the entire knowledge graph",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\memory\\index.ts"
+  },
+  {
+    "server_name": "memory",
+    "name": "search_nodes",
+    "title": "Search Nodes",
+    "summary": "Search for nodes in the knowledge graph based on a query",
+    "description": "Search for nodes in the knowledge graph based on a query",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\memory\\index.ts"
+  },
+  {
+    "server_name": "memory",
+    "name": "open_nodes",
+    "title": "Open Nodes",
+    "summary": "Open specific nodes in the knowledge graph by their names",
+    "description": "Open specific nodes in the knowledge graph by their names",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "names"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\memory\\index.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "echo",
+    "title": "Echo Tool",
+    "summary": "Echoes back the input string",
+    "description": "Echoes back the input string",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "message"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\echo.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "get-annotated-message",
+    "title": "Get Annotated Message Tool",
+    "summary": "Demonstrates how annotations can be used to provide metadata about content.",
+    "description": "Demonstrates how annotations can be used to provide metadata about content.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "messageType": {
+          "type": "string"
+        },
+        "includeImage": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "messageType"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-annotated-message.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "get-env",
+    "title": "Print Environment Tool",
+    "summary": "Returns all environment variables, helpful for debugging MCP server configuration",
+    "description": "Returns all environment variables, helpful for debugging MCP server configuration",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-env.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "get-resource-links",
+    "title": "Get Resource Links Tool",
+    "summary": "Returns up to ten resource links that reference different types of resources",
+    "description": "Returns up to ten resource links that reference different types of resources",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "string"
+        }
+      }
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-resource-links.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "get-resource-reference",
+    "title": "Get Resource Reference Tool",
+    "summary": "Returns a resource reference that can be used by MCP clients",
+    "description": "Returns a resource reference that can be used by MCP clients",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "resourceType": {
+          "type": "string"
+        },
+        "resourceId": {
+          "type": "string"
+        }
+      }
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-resource-reference.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "get-structured-content",
+    "title": "Get Structured Content Tool",
+    "summary": "Returns structured content along with an output schema for client data validation",
+    "description": "Returns structured content along with an output schema for client data validation",
+    "inputSchema": {
+      "type": "string"
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-structured-content.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "get-sum",
+    "title": "Get Sum Tool",
+    "summary": "Returns the sum of two numbers",
+    "description": "Returns the sum of two numbers",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "a": {
+          "type": "number"
+        },
+        "b": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "a",
+        "b"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-sum.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "get-tiny-image",
+    "title": "Get Tiny Image Tool",
+    "summary": "Returns a tiny MCP logo image.",
+    "description": "Returns a tiny MCP logo image.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-tiny-image.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "gzip-file-as-resource",
+    "title": "GZip File as Resource Tool",
+    "summary": "Compresses a single file using gzip compression. Depending upon the selected output type, returns either the compressed data as a gzipped resource or a resource link, allowing it to be downloaded in a subsequent request during the current session.",
+    "description": "Compresses a single file using gzip compression. Depending upon the selected output type, returns either the compressed data as a gzipped resource or a resource link, allowing it to be downloaded in a subsequent request during the current session.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        },
+        "outputType": {
+          "type": "string"
+        }
+      }
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\gzip-file-as-resource.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "toggle-simulated-logging",
+    "title": "Toggle Simulated Logging",
+    "summary": "Toggles simulated, random-leveled logging on or off.",
+    "description": "Toggles simulated, random-leveled logging on or off.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\toggle-simulated-logging.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "toggle-subscriber-updates",
+    "title": "Toggle Subscriber Updates",
+    "summary": "Toggles simulated resource subscription updates on or off.",
+    "description": "Toggles simulated resource subscription updates on or off.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\toggle-subscriber-updates.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "trigger-elicitation-request",
+    "title": "Trigger Elicitation Request Tool",
+    "summary": "Trigger a Request from the Server for User Elicitation",
+    "description": "Trigger a Request from the Server for User Elicitation",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\trigger-elicitation-request.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "trigger-elicitation-request-async",
+    "title": "Trigger Async Elicitation Request Tool",
+    "summary": "Trigger an async elicitation request that the CLIENT executes as a background task. Demonstrates bidirectional MCP tasks where the server sends an elicitation request and the client handles user input asynchronously, allowing the server to poll for completion.",
+    "description": "Trigger an async elicitation request that the CLIENT executes as a background task. Demonstrates bidirectional MCP tasks where the server sends an elicitation request and the client handles user input asynchronously, allowing the server to poll for completion.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\trigger-elicitation-request-async.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "trigger-long-running-operation",
+    "title": "Trigger Long Running Operation Tool",
+    "summary": "Demonstrates a long running operation with progress updates.",
+    "description": "Demonstrates a long running operation with progress updates.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "duration": {
+          "type": "string"
+        },
+        "steps": {
+          "type": "number"
+        }
+      }
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\trigger-long-running-operation.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "trigger-sampling-request",
+    "title": "Trigger Sampling Request Tool",
+    "summary": "Trigger a Request from the Server for LLM Sampling",
+    "description": "Trigger a Request from the Server for LLM Sampling",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "prompt": {
+          "type": "string"
+        },
+        "maxTokens": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "prompt"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\trigger-sampling-request.ts"
+  },
+  {
+    "server_name": "tools",
+    "name": "trigger-sampling-request-async",
+    "title": "Trigger Async Sampling Request Tool",
+    "summary": "Trigger an async sampling request that the CLIENT executes as a background task. Demonstrates bidirectional MCP tasks where the server sends a request and the client executes it asynchronously, allowing the server to poll for progress and results.",
+    "description": "Trigger an async sampling request that the CLIENT executes as a background task. Demonstrates bidirectional MCP tasks where the server sends a request and the client executes it asynchronously, allowing the server to poll for progress and results.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "prompt": {
+          "type": "string"
+        },
+        "maxTokens": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "prompt"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\trigger-sampling-request-async.ts"
+  },
+  {
+    "server_name": "src",
+    "name": "fetch",
+    "title": "fetch",
+    "summary": "Fetches a URL from the internet and optionally extracts its contents as markdown.\n\nAlthough originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that.",
+    "description": "Fetches a URL from the internet and optionally extracts its contents as markdown.\n\nAlthough originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "max_length": {
+          "type": "string"
+        },
+        "start_index": {
+          "type": "string"
+        },
+        "raw": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "url",
+        "max_length",
+        "start_index",
+        "raw"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\fetch\\src\\mcp_server_fetch\\server.py"
+  },
+  {
+    "server_name": "src",
+    "name": "git_status",
+    "title": "git_status",
+    "summary": "Shows the working tree status",
+    "description": "Shows the working tree status",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "repo_path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "repo_path"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py"
+  },
+  {
+    "server_name": "src",
+    "name": "git_diff_unstaged",
+    "title": "git_diff_unstaged",
+    "summary": "Shows changes in the working directory that are not yet staged",
+    "description": "Shows changes in the working directory that are not yet staged",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "repo_path": {
+          "type": "string"
+        },
+        "context_lines": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "repo_path"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py"
+  },
+  {
+    "server_name": "src",
+    "name": "git_diff_staged",
+    "title": "git_diff_staged",
+    "summary": "Shows changes that are staged for commit",
+    "description": "Shows changes that are staged for commit",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "repo_path": {
+          "type": "string"
+        },
+        "context_lines": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "repo_path"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py"
+  },
+  {
+    "server_name": "src",
+    "name": "git_diff",
+    "title": "git_diff",
+    "summary": "Shows differences between branches or commits",
+    "description": "Shows differences between branches or commits",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "repo_path": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "context_lines": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "repo_path",
+        "target"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py"
+  },
+  {
+    "server_name": "src",
+    "name": "git_commit",
+    "title": "git_commit",
+    "summary": "Records changes to the repository",
+    "description": "Records changes to the repository",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "repo_path": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "repo_path",
+        "message"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py"
+  },
+  {
+    "server_name": "src",
+    "name": "git_add",
+    "title": "git_add",
+    "summary": "Adds file contents to the staging area",
+    "description": "Adds file contents to the staging area",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "repo_path": {
+          "type": "string"
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "repo_path",
+        "files"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py"
+  },
+  {
+    "server_name": "src",
+    "name": "git_reset",
+    "title": "git_reset",
+    "summary": "Unstages all staged changes",
+    "description": "Unstages all staged changes",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "repo_path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "repo_path"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py"
+  },
+  {
+    "server_name": "src",
+    "name": "git_log",
+    "title": "git_log",
+    "summary": "Shows the commit logs",
+    "description": "Shows the commit logs",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "repo_path": {
+          "type": "string"
+        },
+        "max_count": {
+          "type": "integer"
+        },
+        "start_timestamp": {
+          "type": "string",
+          "nullable": true,
+          "description": "Start timestamp for filtering commits. Accepts: ISO 8601 format (e.g., '2024-01-15T14:30:25'), relative dates (e.g., '2 weeks ago', 'yesterday'), or absolute dates (e.g., '2024-01-15', 'Jan 15 2024')"
+        },
+        "end_timestamp": {
+          "type": "string",
+          "nullable": true,
+          "description": "End timestamp for filtering commits. Accepts: ISO 8601 format (e.g., '2024-01-15T14:30:25'), relative dates (e.g., '2 weeks ago', 'yesterday'), or absolute dates (e.g., '2024-01-15', 'Jan 15 2024')"
+        }
+      },
+      "required": [
+        "repo_path"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py"
+  },
+  {
+    "server_name": "src",
+    "name": "git_create_branch",
+    "title": "git_create_branch",
+    "summary": "Creates a new branch from an optional base branch",
+    "description": "Creates a new branch from an optional base branch",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "repo_path": {
+          "type": "string"
+        },
+        "branch_name": {
+          "type": "string"
+        },
+        "base_branch": {
+          "type": "string",
+          "nullable": true
+        }
+      },
+      "required": [
+        "repo_path",
+        "branch_name"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py"
+  },
+  {
+    "server_name": "src",
+    "name": "git_checkout",
+    "title": "git_checkout",
+    "summary": "Switches branches",
+    "description": "Switches branches",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "repo_path": {
+          "type": "string"
+        },
+        "branch_name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "repo_path",
+        "branch_name"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py"
+  },
+  {
+    "server_name": "src",
+    "name": "git_show",
+    "title": "git_show",
+    "summary": "Shows the contents of a commit",
+    "description": "Shows the contents of a commit",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "repo_path": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "repo_path",
+        "revision"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py"
+  },
+  {
+    "server_name": "src",
+    "name": "git_branch",
+    "title": "git_branch",
+    "summary": "List Git branches",
+    "description": "List Git branches",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "repo_path": {
+          "type": "string",
+          "description": "The path to the Git repository."
+        },
+        "branch_type": {
+          "type": "string",
+          "description": "Whether to list local branches ('local'), remote branches ('remote') or all branches('all')."
+        },
+        "contains": {
+          "type": "string",
+          "nullable": true,
+          "description": "The commit sha that branch should contain. Do not pass anything to this param if no commit sha is specified"
+        },
+        "not_contains": {
+          "type": "string",
+          "nullable": true,
+          "description": "The commit sha that branch should NOT contain. Do not pass anything to this param if no commit sha is specified"
+        }
+      },
+      "required": [
+        "repo_path",
+        "branch_type"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py"
+  },
+  {
+    "server_name": "src",
+    "name": "get_current_time",
+    "title": "get_current_time",
+    "summary": "Get current time in a specific timezones",
+    "description": "Get current time in a specific timezones",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "timezone": {
+          "type": "string",
+          "description": "IANA timezone name (e.g., 'America/New_York', 'Europe/London'). Use '<local_tz>' as local timezone if no timezone provided by the user."
+        }
+      },
+      "required": [
+        "timezone"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\time\\src\\mcp_server_time\\server.py"
+  },
+  {
+    "server_name": "src",
+    "name": "convert_time",
+    "title": "convert_time",
+    "summary": "Convert time between timezones",
+    "description": "Convert time between timezones",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "source_timezone": {
+          "type": "string",
+          "description": "Source IANA timezone name (e.g., 'America/New_York', 'Europe/London'). Use '<local_tz>' as local timezone if no source timezone provided by the user."
+        },
+        "time": {
+          "type": "string",
+          "description": "Time to convert in 24-hour format (HH:MM)"
+        },
+        "target_timezone": {
+          "type": "string",
+          "description": "Target IANA timezone name (e.g., 'Asia/Tokyo', 'America/San_Francisco'). Use '<local_tz>' as local timezone if no target timezone provided by the user."
+        }
+      },
+      "required": [
+        "source_timezone",
+        "time",
+        "target_timezone"
+      ]
+    },
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\time\\src\\mcp_server_time\\server.py"
+  }
+]

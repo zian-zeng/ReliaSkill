@@ -1,0 +1,58 @@
+{
+  "tool_name": "get-resource-reference",
+  "server_name": "tools",
+  "tool_purpose": "Returns a resource reference that can be used by MCP clients",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "resourceType": {
+        "type": "string"
+      },
+      "resourceId": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "resourceType",
+      "resourceId"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "resourceType",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.resourceType"
+    },
+    {
+      "name": "resourceId",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.resourceId"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Returns a resource reference that can be used by MCP clients",
+    "Get Resource Reference Tool"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#27"
+}

@@ -1,0 +1,11 @@
+{
+  "tools_path": "data/raw/harvested_mcp_reference_servers.json",
+  "tasks_path": "data/eval/public_mcp_filesystem_benchmark.jsonl",
+  "output_root": "outputs/experiment_harvested_mcp_heuristic",
+  "generator": {
+    "type": "heuristic"
+  },
+  "predictor": {
+    "type": "heuristic"
+  }
+}

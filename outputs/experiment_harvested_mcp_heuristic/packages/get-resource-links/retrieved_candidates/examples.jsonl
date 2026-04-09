@@ -1,0 +1,2 @@
+{"scenario": "Minimal routed call for get-resource-links", "arguments": {"count": "sample_count_1"}}
+{"scenario": "Full routed call for get-resource-links", "arguments": {"count": "sample_count_2"}}

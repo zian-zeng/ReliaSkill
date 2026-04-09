@@ -1,0 +1,74 @@
+{
+  "tool_name": "read_file",
+  "server_name": "filesystem",
+  "tool_purpose": "Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead.",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "type": "string"
+      },
+      "tail": {
+        "type": "number"
+      },
+      "head": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "path"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "path",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.path"
+    },
+    {
+      "name": "tail",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.tail"
+    },
+    {
+      "name": "head",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.head"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead.",
+    "Read File (Deprecated)"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#0"
+}

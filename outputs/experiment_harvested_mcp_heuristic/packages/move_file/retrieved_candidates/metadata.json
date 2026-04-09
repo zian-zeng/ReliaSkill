@@ -1,0 +1,24 @@
+{
+  "tool_name": "move_file",
+  "baseline_name": "retrieved_candidates",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#10",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "selection_strategy": "candidate_retrieval_shortlist",
+      "shortlist": [
+        "move_file",
+        "create_directory",
+        "list_directory"
+      ],
+      "distinctive_terms": [
+        "move_file",
+        "move",
+        "rename",
+        "them"
+      ]
+    }
+  ]
+}

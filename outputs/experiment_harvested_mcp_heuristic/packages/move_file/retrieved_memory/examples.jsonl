@@ -1,0 +1,1 @@
+{"scenario": "Minimal valid memory-backed call for move_file", "arguments": {"source": "sample_source_1", "destination": "sample_destination_1"}}

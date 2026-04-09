@@ -1,0 +1,1 @@
+{"scenario": "Minimal valid memory-backed call for git_diff", "arguments": {"repo_path": "data/sample.txt", "target": "sample_target_1"}}

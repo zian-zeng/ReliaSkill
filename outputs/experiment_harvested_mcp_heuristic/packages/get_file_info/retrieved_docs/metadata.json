@@ -1,0 +1,9 @@
+{
+  "tool_name": "get_file_info",
+  "baseline_name": "retrieved_docs",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#12",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": []
+}

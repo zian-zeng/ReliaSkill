@@ -1,0 +1,9 @@
+{
+  "tool_name": "read_graph",
+  "baseline_name": "schema_only",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#20",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": []
+}

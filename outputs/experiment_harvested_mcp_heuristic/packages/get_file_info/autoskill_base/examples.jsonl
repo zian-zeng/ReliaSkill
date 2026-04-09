@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for get_file_info", "arguments": {"path": "data/sample.txt"}}
+{"scenario": "Richer invocation that uses optional controls for get_file_info", "arguments": {"path": "data/sample.txt"}}

@@ -1,0 +1,58 @@
+{
+  "tool_name": "delete_observations",
+  "server_name": "memory",
+  "tool_purpose": "Delete specific observations from entities in the knowledge graph",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "deletions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "entityName": {
+              "type": "string"
+            },
+            "observations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "entityName",
+            "observations"
+          ]
+        }
+      }
+    },
+    "required": [
+      "deletions"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "deletions",
+      "type": "array",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": "object",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.deletions"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Delete specific observations from entities in the knowledge graph",
+    "Delete Observations"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#18"
+}

@@ -1,0 +1,24 @@
+{
+  "tool_name": "read_graph",
+  "baseline_name": "retrieved_candidates",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#20",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "selection_strategy": "candidate_retrieval_shortlist",
+      "shortlist": [
+        "read_graph",
+        "list_allowed_directories",
+        "trigger-elicitation-request"
+      ],
+      "distinctive_terms": [
+        "read_graph",
+        "read",
+        "entire",
+        "knowledge"
+      ]
+    }
+  ]
+}

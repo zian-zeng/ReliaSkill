@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for get-resource-reference", "arguments": {"resourceType": "sample_resourceType_1", "resourceId": "sample_resourceId_1"}}
+{"scenario": "Richer invocation that uses optional controls for get-resource-reference", "arguments": {"resourceType": "sample_resourceType_2", "resourceId": "sample_resourceId_2"}}

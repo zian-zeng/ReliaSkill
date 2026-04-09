@@ -1,0 +1,24 @@
+{
+  "tool_name": "get-resource-links",
+  "baseline_name": "retrieved_candidates",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#26",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "selection_strategy": "candidate_retrieval_shortlist",
+      "shortlist": [
+        "get-resource-links",
+        "get-resource-reference",
+        "list_allowed_directories"
+      ],
+      "distinctive_terms": [
+        "get-resource-links",
+        "links",
+        "different",
+        "types"
+      ]
+    }
+  ]
+}

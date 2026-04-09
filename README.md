@@ -84,6 +84,7 @@ Downloaded external corpora currently present on disk:
 Status note:
 
 - those external corpora are present locally, but the default experiment still uses the curated filesystem subset until we finish fuller ingestion for the downloaded corpora
+- external experiment artifacts are now generated under `data/raw/harvested_mcp_reference_servers.json`, `data/raw/bfcl_huggingface_tools.json`, and `data/eval/bfcl_huggingface_*_routing.jsonl`
 
 ## Core Commands
 
@@ -198,6 +199,10 @@ Current config files:
 - [experiment.local_hf.qwen25_32b_4bit.sample.json](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.local_hf.qwen25_32b_4bit.sample.json)
 - [experiment.openai_compatible.qwen25_14b.sample.json](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.openai_compatible.qwen25_14b.sample.json)
 - [experiment.openai_compatible.qwen25_32b.sample.json](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.openai_compatible.qwen25_32b.sample.json)
+- [experiment.harvested_mcp.heuristic.sample.json](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.harvested_mcp.heuristic.sample.json)
+- [experiment.harvested_mcp.qwen25_14b_4bit.sample.json](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.harvested_mcp.qwen25_14b_4bit.sample.json)
+- [experiment.bfcl_huggingface_routing.heuristic.sample.json](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.bfcl_huggingface_routing.heuristic.sample.json)
+- [experiment.bfcl_huggingface_routing.qwen25_32b_endpoint.sample.json](c:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.bfcl_huggingface_routing.qwen25_32b_endpoint.sample.json)
 
 Dataset/model inventory:
 

@@ -1,0 +1,60 @@
+Tool: write_file
+Server: filesystem
+Condition: autoskill_base
+
+Description:
+Create a new file or completely overwrite an existing file with new content. Use with caution as it will overwrite existing files without warning. Handles text content with proper encoding. Only works within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "path",
+    "content"
+  ]
+}
+
+Skill summary:
+Create a new file or completely overwrite an existing file with new content. Use with caution as it will overwrite existing files without warning. Handles text content with proper encoding. Only works within allowed directories. Provide all required fields: `path`, and `content`.
+
+When to use:
+- Use `write_file` when the user's request directly matches this tool's purpose.
+- Provide all required fields: `path`, and `content`.
+- Map common request paraphrases to schema-faithful arguments using the semantic hints and examples.
+- Prefer the smallest valid call that still captures file type, directionality, or enum intent from the request.
+
+When not to use:
+- Do not call this tool when required inputs are missing or ambiguous.
+- Do not invent unsupported parameters or unsupported enum values.
+- Do not let semantic cues override explicit user-provided field values.
+
+Argument template:
+{
+  "path": "data/sample.txt",
+  "content": "sample_content_1"
+}
+
+Examples:
+- Scenario: Minimal valid request that satisfies the required fields for write_file
+{
+  "path": "data/sample.txt",
+  "content": "sample_content_1"
+}
+- Scenario: Richer invocation that uses optional controls for write_file
+{
+  "path": "data/sample.txt",
+  "content": "sample_content_2"
+}
+- Scenario: Quoted text can be written directly to a destination path
+{
+  "path": "docs/notes.txt",
+  "content": "Release checklist"
+}

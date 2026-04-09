@@ -1,0 +1,2 @@
+{"scenario": "Retrieved-docs minimal call for echo", "arguments": {"message": "sample_message_1"}}
+{"scenario": "Retrieved-docs fuller call for echo", "arguments": {"message": "sample_message_2"}}

@@ -1,0 +1,58 @@
+{
+  "tool_name": "get-sum",
+  "server_name": "tools",
+  "tool_purpose": "Returns the sum of two numbers",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "a": {
+        "type": "number"
+      },
+      "b": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "a",
+      "b"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "a",
+      "type": "number",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.a"
+    },
+    {
+      "name": "b",
+      "type": "number",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.b"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Returns the sum of two numbers",
+    "Get Sum Tool"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#29"
+}

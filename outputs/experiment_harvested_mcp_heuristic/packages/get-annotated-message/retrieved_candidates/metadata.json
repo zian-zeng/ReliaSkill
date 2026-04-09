@@ -1,0 +1,24 @@
+{
+  "tool_name": "get-annotated-message",
+  "baseline_name": "retrieved_candidates",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#24",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "selection_strategy": "candidate_retrieval_shortlist",
+      "shortlist": [
+        "get-annotated-message",
+        "get-resource-reference",
+        "get_file_info"
+      ],
+      "distinctive_terms": [
+        "get-annotated-message",
+        "demonstrates",
+        "annotations",
+        "provide"
+      ]
+    }
+  ]
+}

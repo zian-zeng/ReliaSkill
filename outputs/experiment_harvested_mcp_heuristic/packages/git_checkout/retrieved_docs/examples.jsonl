@@ -1,0 +1,1 @@
+{"scenario": "Retrieved-docs minimal call for git_checkout", "arguments": {"repo_path": "data/sample.txt", "branch_name": "sample-name"}}

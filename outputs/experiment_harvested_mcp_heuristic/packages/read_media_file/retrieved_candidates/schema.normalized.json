@@ -1,0 +1,40 @@
+{
+  "tool_name": "read_media_file",
+  "server_name": "filesystem",
+  "tool_purpose": "Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories.",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "path"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "path",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.path"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories.",
+    "Read Media File"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#2"
+}

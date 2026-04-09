@@ -1,0 +1,20 @@
+{
+  "tool_name": "trigger-elicitation-request",
+  "server_name": "tools",
+  "tool_purpose": "Trigger a Request from the Server for User Elicitation",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {}
+  },
+  "arguments": [],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ],
+  "doc_snippets": [
+    "Trigger a Request from the Server for User Elicitation",
+    "Trigger Elicitation Request Tool"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#34"
+}

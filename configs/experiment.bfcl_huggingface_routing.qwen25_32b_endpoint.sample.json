@@ -1,0 +1,17 @@
+{
+  "tools_path": "data/raw/bfcl_huggingface_tools.json",
+  "tasks_path": "data/eval/bfcl_huggingface_eval_routing.jsonl",
+  "output_root": "outputs/experiment_bfcl_huggingface_qwen25_32b_endpoint",
+  "generator": {
+    "type": "openai_compatible",
+    "api_url": "http://localhost:8000/v1",
+    "model": "Qwen/Qwen2.5-32B-Instruct",
+    "timeout_seconds": 180
+  },
+  "predictor": {
+    "type": "openai_compatible",
+    "api_url": "http://localhost:8000/v1",
+    "model": "Qwen/Qwen2.5-32B-Instruct",
+    "timeout_seconds": 180
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "tool_name": "toggle-subscriber-updates",
+  "server_name": "tools",
+  "tool_purpose": "Toggles simulated resource subscription updates on or off.",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {}
+  },
+  "arguments": [],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ],
+  "doc_snippets": [
+    "Toggles simulated resource subscription updates on or off.",
+    "Toggle Subscriber Updates"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#33"
+}

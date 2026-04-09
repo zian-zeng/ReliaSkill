@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for edit_file", "arguments": {"path": "data/sample.txt", "edits": [{}], "dryRun": false}}
+{"scenario": "Richer invocation that uses optional controls for edit_file", "arguments": {"path": "data/sample.txt", "edits": [{}], "dryRun": true}}

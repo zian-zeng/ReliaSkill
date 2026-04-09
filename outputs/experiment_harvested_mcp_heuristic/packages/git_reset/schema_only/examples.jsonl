@@ -1,0 +1,1 @@
+{"scenario": "Minimal valid call for git_reset", "arguments": {"repo_path": "data/sample.txt"}}

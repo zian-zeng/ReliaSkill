@@ -1,0 +1,1 @@
+{"scenario": "Minimal valid memory-backed call for trigger-sampling-request-async", "arguments": {"prompt": "Summarize the latest update.", "maxTokens": "sample_maxTokens_1"}}

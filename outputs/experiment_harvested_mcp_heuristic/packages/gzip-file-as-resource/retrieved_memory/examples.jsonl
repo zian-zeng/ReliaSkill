@@ -1,0 +1,1 @@
+{"scenario": "Minimal valid memory-backed call for gzip-file-as-resource", "arguments": {"name": "sample-name", "data": "sample_data_1", "outputType": "sample_outputType_1"}}

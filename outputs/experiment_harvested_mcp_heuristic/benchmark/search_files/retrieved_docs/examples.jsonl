@@ -1,0 +1,2 @@
+{"scenario": "Retrieved-docs minimal call for search_files", "arguments": {"path": "data/sample.txt", "pattern": "sample_pattern_1", "excludePatterns": ["sample_excludePatterns_item_1"]}}
+{"scenario": "Retrieved-docs fuller call for search_files", "arguments": {"path": "data/sample.txt", "pattern": "sample_pattern_2", "excludePatterns": ["sample_excludePatterns_item_2"]}}

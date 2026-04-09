@@ -1,0 +1,23 @@
+{
+  "tool_name": "trigger-sampling-request-async",
+  "baseline_name": "retrieved_candidates",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#38",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "selection_strategy": "candidate_retrieval_shortlist",
+      "shortlist": [
+        "trigger-sampling-request-async",
+        "trigger-elicitation-request-async",
+        "trigger-sampling-request"
+      ],
+      "distinctive_terms": [
+        "trigger-sampling-request-async",
+        "progress",
+        "results."
+      ]
+    }
+  ]
+}

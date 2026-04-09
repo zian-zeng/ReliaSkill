@@ -1,0 +1,14 @@
+condition,error_type,count,rate
+raw_mcp,missing_required_argument,1,0.1667
+raw_mcp,semantic_missing_required_argument,5,0.8333
+schema_only,hallucinated_argument,7,0.7778
+schema_only,missing_required_argument,1,0.1111
+schema_only,semantic_missing_required_argument,1,0.1111
+retrieved_docs,hallucinated_argument,7,0.7778
+retrieved_docs,missing_required_argument,1,0.1111
+retrieved_docs,semantic_missing_required_argument,1,0.1111
+retrieved_candidates,hallucinated_argument,7,0.7778
+retrieved_candidates,missing_required_argument,1,0.1111
+retrieved_candidates,semantic_missing_required_argument,1,0.1111
+retrieved_memory,hallucinated_argument,5,1.0
+autoskill_base,hallucinated_argument,5,1.0

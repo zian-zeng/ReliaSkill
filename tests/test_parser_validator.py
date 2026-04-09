@@ -11,6 +11,12 @@ from autoskill.benchmark import load_benchmark_tasks
 from autoskill.analysis import classify_score_error, summarize_error_taxonomy, summarize_method_wins
 from autoskill.config import load_json_config, merge_experiment_config, validate_experiment_config
 from autoskill.conversion import canonicalize_mcp_tool_records, convert_benchmark_file_to_canonical_records, load_json_or_jsonl
+from autoskill.external_ingest import (
+    build_bfcl_routing_tasks,
+    build_bfcl_tool_records,
+    extract_bfcl_instruction,
+    harvest_reference_mcp_servers,
+)
 from autoskill.json_output import parse_json_object_output
 from autoskill.reporting import (
     build_benchmark_by_split_csv,
@@ -51,6 +57,7 @@ from autoskill.validator import validate_skill
 
 FIXTURE_PATH = Path("data/raw/sample_tools.json")
 PUBLIC_FIXTURE_PATH = Path("data/raw/public_mcp_filesystem_subset.json")
+EXTERNAL_MCP_REPO_PATH = Path("data/external/modelcontextprotocol-servers")
 
 
 def _load_tools():
@@ -281,6 +288,44 @@ class ParserValidatorTests(unittest.TestCase):
         self.assertTrue(retrieval_context["candidate_tools"])
         self.assertEqual(runtime_skill.method_trace[-1]["retrieval_type"], "docs")
         self.assertTrue(any("markdown" in line.lower() for line in runtime_skill.when_to_use))
+
+    def test_harvest_reference_mcp_servers_includes_filesystem_tool(self) -> None:
+        if not EXTERNAL_MCP_REPO_PATH.exists():
+            self.skipTest("External MCP repo not available")
+        records = harvest_reference_mcp_servers(EXTERNAL_MCP_REPO_PATH)
+        by_name = {record["name"]: record for record in records}
+
+        self.assertIn("read_text_file", by_name)
+        self.assertEqual(by_name["read_text_file"]["server_name"], "filesystem")
+        self.assertIn("path", by_name["read_text_file"]["inputSchema"]["properties"])
+
+    def test_bfcl_routing_builders_extract_instruction_and_tool_ids(self) -> None:
+        record = {
+            "code": "###Instruction: Choose a sentence similarity model for article recommendations. ###Output: <<<api_call>>>: AutoModel.from_pretrained('demo/model')",
+            "api_call": "AutoModel.from_pretrained('demo/model')",
+            "provider": "Hugging Face Transformers",
+            "api_data": {
+                "api_name": "demo/model",
+                "framework": "Hugging Face Transformers",
+                "functionality": "Feature Extraction",
+                "description": "Demo model description.",
+                "api_call": "AutoModel.from_pretrained('demo/model')",
+                "domain": "Natural Language Processing Sentence Similarity",
+            },
+        }
+
+        self.assertEqual(
+            extract_bfcl_instruction(record["code"]),
+            "Choose a sentence similarity model for article recommendations.",
+        )
+
+        tools = build_bfcl_tool_records([record])
+        tasks = build_bfcl_routing_tasks([record], split="test")
+
+        self.assertEqual(len(tools), 1)
+        self.assertEqual(len(tasks), 1)
+        self.assertEqual(tasks[0]["tool_name"], tools[0]["name"])
+        self.assertEqual(tasks[0]["expected_arguments"], {})
 
     def test_conversion_to_canonical_benchmark_records(self) -> None:
         records = convert_benchmark_file_to_canonical_records("data/eval/sample_bfcl_raw_possible_answer.jsonl")

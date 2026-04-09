@@ -1,0 +1,75 @@
+{
+  "tool_name": "git_diff",
+  "server_name": "src",
+  "tool_purpose": "Shows differences between branches or commits",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "repo_path": {
+        "type": "string"
+      },
+      "target": {
+        "type": "string"
+      },
+      "context_lines": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "repo_path",
+      "target"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "repo_path",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.repo_path"
+    },
+    {
+      "name": "target",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.target"
+    },
+    {
+      "name": "context_lines",
+      "type": "integer",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.context_lines"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Shows differences between branches or commits",
+    "git_diff"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#43"
+}

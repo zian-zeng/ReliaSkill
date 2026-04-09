@@ -1,0 +1,71 @@
+{
+  "raw_mcp": {
+    "total_tools": 54,
+    "valid_packages": 54,
+    "valid_rate": 1.0,
+    "avg_examples": 0.0,
+    "avg_template_fields": 0.0,
+    "avg_semantic_hint_entries": 0.0,
+    "issue_breakdown": {}
+  },
+  "schema_only": {
+    "total_tools": 54,
+    "valid_packages": 47,
+    "valid_rate": 0.8704,
+    "avg_examples": 1.33,
+    "avg_template_fields": 1.59,
+    "avg_semantic_hint_entries": 0.0,
+    "issue_breakdown": {
+      "missing_required_argument": 32,
+      "type_mismatch": 1
+    }
+  },
+  "retrieved_docs": {
+    "total_tools": 54,
+    "valid_packages": 47,
+    "valid_rate": 0.8704,
+    "avg_examples": 1.33,
+    "avg_template_fields": 1.59,
+    "avg_semantic_hint_entries": 0.0,
+    "issue_breakdown": {
+      "missing_required_argument": 32,
+      "type_mismatch": 1
+    }
+  },
+  "retrieved_candidates": {
+    "total_tools": 54,
+    "valid_packages": 46,
+    "valid_rate": 0.8519,
+    "avg_examples": 1.48,
+    "avg_template_fields": 1.59,
+    "avg_semantic_hint_entries": 0.0,
+    "issue_breakdown": {
+      "missing_required_argument": 34,
+      "type_mismatch": 1
+    }
+  },
+  "retrieved_memory": {
+    "total_tools": 54,
+    "valid_packages": 46,
+    "valid_rate": 0.8519,
+    "avg_examples": 0.98,
+    "avg_template_fields": 1.59,
+    "avg_semantic_hint_entries": 0.0,
+    "issue_breakdown": {
+      "missing_required_argument": 32,
+      "type_mismatch": 1
+    }
+  },
+  "autoskill_base": {
+    "total_tools": 54,
+    "valid_packages": 47,
+    "valid_rate": 0.8704,
+    "avg_examples": 1.76,
+    "avg_template_fields": 1.59,
+    "avg_semantic_hint_entries": 0.63,
+    "issue_breakdown": {
+      "missing_required_argument": 45,
+      "type_mismatch": 1
+    }
+  }
+}

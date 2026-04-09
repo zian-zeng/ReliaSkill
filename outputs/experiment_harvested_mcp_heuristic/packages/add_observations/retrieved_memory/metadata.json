@@ -1,0 +1,34 @@
+{
+  "tool_name": "add_observations",
+  "baseline_name": "retrieved_memory",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#16",
+  "valid": false,
+  "issues": [
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "argument_template: missing required field `entityName` at $.observations[0]",
+      "location": "$.observations[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "argument_template: missing required field `contents` at $.observations[0]",
+      "location": "$.observations[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[0]: missing required field `entityName` at $.observations[0]",
+      "location": "$.observations[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[0]: missing required field `contents` at $.observations[0]",
+      "location": "$.observations[0]"
+    }
+  ],
+  "semantic_hints": {},
+  "method_trace": []
+}

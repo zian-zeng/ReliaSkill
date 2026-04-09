@@ -1,0 +1,20 @@
+{
+  "tool_name": "get-tiny-image",
+  "server_name": "tools",
+  "tool_purpose": "Returns a tiny MCP logo image.",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {}
+  },
+  "arguments": [],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ],
+  "doc_snippets": [
+    "Returns a tiny MCP logo image.",
+    "Get Tiny Image Tool"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#30"
+}

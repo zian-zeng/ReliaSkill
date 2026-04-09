@@ -1,0 +1,3 @@
+{"scenario": "Minimal valid request that satisfies the required fields for list_directory", "arguments": {"path": "data/sample.txt"}}
+{"scenario": "Richer invocation that uses optional controls for list_directory", "arguments": {"path": "data/sample.txt"}}
+{"scenario": "Inspect the contents of a specific folder", "arguments": {"path": "docs"}}

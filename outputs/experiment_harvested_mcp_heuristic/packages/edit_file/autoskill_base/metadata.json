@@ -1,0 +1,88 @@
+{
+  "tool_name": "edit_file",
+  "baseline_name": "autoskill_base",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#5",
+  "valid": false,
+  "issues": [
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "argument_template: missing required field `oldText` at $.edits[0]",
+      "location": "$.edits[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "argument_template: missing required field `newText` at $.edits[0]",
+      "location": "$.edits[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[0]: missing required field `oldText` at $.edits[0]",
+      "location": "$.edits[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[0]: missing required field `newText` at $.edits[0]",
+      "location": "$.edits[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[1]: missing required field `oldText` at $.edits[0]",
+      "location": "$.edits[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[1]: missing required field `newText` at $.edits[0]",
+      "location": "$.edits[0]"
+    }
+  ],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "label": "base",
+      "score": -137.0,
+      "valid": false,
+      "num_examples": 2,
+      "required_argument_coverage": 3,
+      "semantic_hint_entries": 0,
+      "error_count": 6,
+      "warning_count": 0
+    },
+    {
+      "label": "semantic_concise",
+      "score": -136.25,
+      "valid": false,
+      "num_examples": 2,
+      "required_argument_coverage": 3,
+      "semantic_hint_entries": 0,
+      "error_count": 6,
+      "warning_count": 0
+    },
+    {
+      "label": "semantic_dense",
+      "score": -135.25,
+      "valid": false,
+      "num_examples": 2,
+      "required_argument_coverage": 3,
+      "semantic_hint_entries": 0,
+      "error_count": 6,
+      "warning_count": 0
+    },
+    {
+      "selected_label": "semantic_dense",
+      "selection_strategy": "validation_aware_richness_rerank"
+    },
+    {
+      "trace_type": "generation_backend",
+      "configured_generation_backend": "heuristic",
+      "actual_generation_backend": "heuristic",
+      "generation_fallback_used": false,
+      "generation_fallback_reason": null
+    }
+  ]
+}

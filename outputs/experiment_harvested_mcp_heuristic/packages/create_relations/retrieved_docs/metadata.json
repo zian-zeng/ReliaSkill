@@ -1,0 +1,46 @@
+{
+  "tool_name": "create_relations",
+  "baseline_name": "retrieved_docs",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#15",
+  "valid": false,
+  "issues": [
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "argument_template: missing required field `from` at $.relations[0]",
+      "location": "$.relations[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "argument_template: missing required field `to` at $.relations[0]",
+      "location": "$.relations[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "argument_template: missing required field `relationType` at $.relations[0]",
+      "location": "$.relations[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[0]: missing required field `from` at $.relations[0]",
+      "location": "$.relations[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[0]: missing required field `to` at $.relations[0]",
+      "location": "$.relations[0]"
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[0]: missing required field `relationType` at $.relations[0]",
+      "location": "$.relations[0]"
+    }
+  ],
+  "semantic_hints": {},
+  "method_trace": []
+}

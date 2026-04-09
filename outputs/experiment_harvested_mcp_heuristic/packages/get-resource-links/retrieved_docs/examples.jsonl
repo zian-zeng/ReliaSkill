@@ -1,0 +1,2 @@
+{"scenario": "Retrieved-docs minimal call for get-resource-links", "arguments": {"count": "sample_count_1"}}
+{"scenario": "Retrieved-docs fuller call for get-resource-links", "arguments": {"count": "sample_count_2"}}

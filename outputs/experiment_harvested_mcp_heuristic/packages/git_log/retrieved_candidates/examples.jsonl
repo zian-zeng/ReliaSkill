@@ -1,0 +1,2 @@
+{"scenario": "Minimal routed call for git_log", "arguments": {"repo_path": "data/sample.txt"}}
+{"scenario": "Full routed call for git_log", "arguments": {"repo_path": "data/sample.txt", "max_count": 2, "start_timestamp": "sample_start_timestamp_2", "end_timestamp": "sample_end_timestamp_2"}}

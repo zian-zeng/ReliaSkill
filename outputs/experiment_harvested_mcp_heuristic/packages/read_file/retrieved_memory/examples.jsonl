@@ -1,0 +1,1 @@
+{"scenario": "Minimal valid memory-backed call for read_file", "arguments": {"path": "data/sample.txt"}}

@@ -1,0 +1,70 @@
+{
+  "raw_mcp": {
+    "num_failures": 6,
+    "error_type_counts": {
+      "missing_required_argument": 1,
+      "semantic_missing_required_argument": 5
+    },
+    "error_type_rates": {
+      "missing_required_argument": 0.1667,
+      "semantic_missing_required_argument": 0.8333
+    }
+  },
+  "schema_only": {
+    "num_failures": 9,
+    "error_type_counts": {
+      "hallucinated_argument": 7,
+      "missing_required_argument": 1,
+      "semantic_missing_required_argument": 1
+    },
+    "error_type_rates": {
+      "hallucinated_argument": 0.7778,
+      "missing_required_argument": 0.1111,
+      "semantic_missing_required_argument": 0.1111
+    }
+  },
+  "retrieved_docs": {
+    "num_failures": 9,
+    "error_type_counts": {
+      "hallucinated_argument": 7,
+      "missing_required_argument": 1,
+      "semantic_missing_required_argument": 1
+    },
+    "error_type_rates": {
+      "hallucinated_argument": 0.7778,
+      "missing_required_argument": 0.1111,
+      "semantic_missing_required_argument": 0.1111
+    }
+  },
+  "retrieved_candidates": {
+    "num_failures": 9,
+    "error_type_counts": {
+      "hallucinated_argument": 7,
+      "missing_required_argument": 1,
+      "semantic_missing_required_argument": 1
+    },
+    "error_type_rates": {
+      "hallucinated_argument": 0.7778,
+      "missing_required_argument": 0.1111,
+      "semantic_missing_required_argument": 0.1111
+    }
+  },
+  "retrieved_memory": {
+    "num_failures": 5,
+    "error_type_counts": {
+      "hallucinated_argument": 5
+    },
+    "error_type_rates": {
+      "hallucinated_argument": 1.0
+    }
+  },
+  "autoskill_base": {
+    "num_failures": 5,
+    "error_type_counts": {
+      "hallucinated_argument": 5
+    },
+    "error_type_rates": {
+      "hallucinated_argument": 1.0
+    }
+  }
+}

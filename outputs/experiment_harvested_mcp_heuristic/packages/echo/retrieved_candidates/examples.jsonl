@@ -1,0 +1,2 @@
+{"scenario": "Minimal routed call for echo", "arguments": {"message": "sample_message_1"}}
+{"scenario": "Full routed call for echo", "arguments": {"message": "sample_message_2"}}

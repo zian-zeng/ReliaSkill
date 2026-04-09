@@ -1,0 +1,24 @@
+{
+  "tool_name": "trigger-long-running-operation",
+  "baseline_name": "retrieved_candidates",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#36",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "selection_strategy": "candidate_retrieval_shortlist",
+      "shortlist": [
+        "trigger-long-running-operation",
+        "trigger-sampling-request-async",
+        "trigger-elicitation-request-async"
+      ],
+      "distinctive_terms": [
+        "trigger-long-running-operation",
+        "long",
+        "running",
+        "operation"
+      ]
+    }
+  ]
+}

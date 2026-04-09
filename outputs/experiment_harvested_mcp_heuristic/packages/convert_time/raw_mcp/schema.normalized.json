@@ -1,0 +1,79 @@
+{
+  "tool_name": "convert_time",
+  "server_name": "src",
+  "tool_purpose": "Convert time between timezones",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "source_timezone": {
+        "type": "string",
+        "description": "Source IANA timezone name (e.g., 'America/New_York', 'Europe/London'). Use '<local_tz>' as local timezone if no source timezone provided by the user."
+      },
+      "time": {
+        "type": "string",
+        "description": "Time to convert in 24-hour format (HH:MM)"
+      },
+      "target_timezone": {
+        "type": "string",
+        "description": "Target IANA timezone name (e.g., 'Asia/Tokyo', 'America/San_Francisco'). Use '<local_tz>' as local timezone if no target timezone provided by the user."
+      }
+    },
+    "required": [
+      "source_timezone",
+      "time",
+      "target_timezone"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "source_timezone",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Source IANA timezone name (e.g., 'America/New_York', 'Europe/London'). Use '<local_tz>' as local timezone if no source timezone provided by the user.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.source_timezone"
+    },
+    {
+      "name": "time",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Time to convert in 24-hour format (HH:MM)",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.time"
+    },
+    {
+      "name": "target_timezone",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Target IANA timezone name (e.g., 'Asia/Tokyo', 'America/San_Francisco'). Use '<local_tz>' as local timezone if no target timezone provided by the user.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.target_timezone"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Convert time between timezones",
+    "convert_time"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#53"
+}

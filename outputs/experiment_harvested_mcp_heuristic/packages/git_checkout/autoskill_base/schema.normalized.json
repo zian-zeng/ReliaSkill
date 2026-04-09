@@ -1,0 +1,58 @@
+{
+  "tool_name": "git_checkout",
+  "server_name": "src",
+  "tool_purpose": "Switches branches",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "repo_path": {
+        "type": "string"
+      },
+      "branch_name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "repo_path",
+      "branch_name"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "repo_path",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.repo_path"
+    },
+    {
+      "name": "branch_name",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.branch_name"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Switches branches",
+    "git_checkout"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#49"
+}

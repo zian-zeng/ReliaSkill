@@ -1,0 +1,16 @@
+{
+  "tool_name": "get-structured-content",
+  "baseline_name": "retrieved_memory",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#28",
+  "valid": false,
+  "issues": [
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "argument_template: expected string at $, got dict",
+      "location": "$"
+    }
+  ],
+  "semantic_hints": {},
+  "method_trace": []
+}

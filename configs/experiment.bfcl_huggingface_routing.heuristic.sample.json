@@ -1,0 +1,11 @@
+{
+  "tools_path": "data/raw/bfcl_huggingface_tools.json",
+  "tasks_path": "data/eval/bfcl_huggingface_eval_routing.jsonl",
+  "output_root": "outputs/experiment_bfcl_huggingface_heuristic",
+  "generator": {
+    "type": "heuristic"
+  },
+  "predictor": {
+    "type": "heuristic"
+  }
+}

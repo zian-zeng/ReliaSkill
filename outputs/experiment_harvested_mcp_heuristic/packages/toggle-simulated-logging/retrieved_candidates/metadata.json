@@ -1,0 +1,23 @@
+{
+  "tool_name": "toggle-simulated-logging",
+  "baseline_name": "retrieved_candidates",
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#32",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "selection_strategy": "candidate_retrieval_shortlist",
+      "shortlist": [
+        "toggle-simulated-logging",
+        "toggle-subscriber-updates",
+        "get-env"
+      ],
+      "distinctive_terms": [
+        "toggle-simulated-logging",
+        "random-leveled",
+        "logging"
+      ]
+    }
+  ]
+}

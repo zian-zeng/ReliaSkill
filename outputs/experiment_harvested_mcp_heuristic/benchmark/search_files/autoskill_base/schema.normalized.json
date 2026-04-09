@@ -1,0 +1,79 @@
+{
+  "tool_name": "search_files",
+  "server_name": "filesystem",
+  "tool_purpose": "Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you don't know their exact location. Only searches within allowed directories.",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "type": "string"
+      },
+      "pattern": {
+        "type": "string"
+      },
+      "excludePatterns": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "path",
+      "pattern",
+      "excludePatterns"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "path",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.path"
+    },
+    {
+      "name": "pattern",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.pattern"
+    },
+    {
+      "name": "excludePatterns",
+      "type": "array",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": "string",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.excludePatterns"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you don't know their exact location. Only searches within allowed directories.",
+    "Search Files"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#11"
+}

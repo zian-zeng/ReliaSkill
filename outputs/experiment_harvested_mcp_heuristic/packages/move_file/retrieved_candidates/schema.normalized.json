@@ -1,0 +1,58 @@
+{
+  "tool_name": "move_file",
+  "server_name": "filesystem",
+  "tool_purpose": "Move or rename files and directories. Can move files between directories and rename them in a single operation. If the destination exists, the operation will fail. Works across different directories and can be used for simple renaming within the same directory. Both source and destination must be within allowed directories.",
+  "input_schema_raw": {
+    "type": "object",
+    "properties": {
+      "source": {
+        "type": "string"
+      },
+      "destination": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "source",
+      "destination"
+    ]
+  },
+  "arguments": [
+    {
+      "name": "source",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.source"
+    },
+    {
+      "name": "destination",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.destination"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Move or rename files and directories. Can move files between directories and rename them in a single operation. If the destination exists, the operation will fail. Works across different directories and can be used for simple renaming within the same directory. Both source and destination must be within allowed directories.",
+    "Move File"
+  ],
+  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#10"
+}

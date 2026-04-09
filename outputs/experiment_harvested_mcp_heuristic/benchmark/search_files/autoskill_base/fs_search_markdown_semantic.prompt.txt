@@ -1,0 +1,83 @@
+Tool: search_files
+Server: filesystem
+Condition: autoskill_base
+
+Description:
+Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you don't know their exact location. Only searches within allowed directories.
+
+Input schema:
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string"
+    },
+    "pattern": {
+      "type": "string"
+    },
+    "excludePatterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "path",
+    "pattern",
+    "excludePatterns"
+  ]
+}
+
+Skill summary:
+Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you don't know their exact location. Only searches within allowed directories. Provide all required fields: `path`, `pattern`, and `excludePatterns`.
+
+When to use:
+- Use `search_files` when the user's request directly matches this tool's purpose.
+- Provide all required fields: `path`, `pattern`, and `excludePatterns`.
+- Map common request paraphrases to schema-faithful arguments using the semantic hints and examples.
+- Prefer the smallest valid call that still captures file type, directionality, or enum intent from the request.
+
+When not to use:
+- Do not call this tool when required inputs are missing or ambiguous.
+- Do not invent unsupported parameters or unsupported enum values.
+- Do not let semantic cues override explicit user-provided field values.
+
+Argument template:
+{
+  "path": "data/sample.txt",
+  "pattern": "sample_pattern_1",
+  "excludePatterns": [
+    "sample_excludePatterns_item_1"
+  ]
+}
+
+Examples:
+- Scenario: Minimal valid request that satisfies the required fields for search_files
+{
+  "path": "data/sample.txt",
+  "pattern": "sample_pattern_1",
+  "excludePatterns": [
+    "sample_excludePatterns_item_1"
+  ]
+}
+- Scenario: Richer invocation that uses optional controls for search_files
+{
+  "path": "data/sample.txt",
+  "pattern": "sample_pattern_2",
+  "excludePatterns": [
+    "sample_excludePatterns_item_2"
+  ]
+}
+- Scenario: Semantic cue for Python files
+{
+  "path": "src",
+  "pattern": "**/*.py",
+  "excludePatterns": []
+}
+- Scenario: Semantic cue for Markdown files
+{
+  "path": "docs",
+  "pattern": "**/*.md",
+  "excludePatterns": []
+}
