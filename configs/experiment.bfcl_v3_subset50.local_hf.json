@@ -1,0 +1,39 @@
+{
+  "tools_path": "data/raw/bfcl_v3_tools_subset50.json",
+  "tasks_path": "data/eval/bfcl_v3_benchmark_subset50.jsonl",
+  "output_root": "outputs/bfcl_v3_subset50",
+  "generator": {
+    "type": "local_hf",
+    "model_name_or_path": "Qwen/Qwen2.5-14B-Instruct",
+    "device": "cuda",
+    "device_map": "auto",
+    "torch_dtype": "float16",
+    "max_new_tokens": 256,
+    "trust_remote_code": false,
+    "attn_implementation": "sdpa",
+    "load_in_4bit": true,
+    "load_in_8bit": false,
+    "generation_kwargs": {
+      "repetition_penalty": 1.05,
+      "temperature": 0.1,
+      "top_p": 0.95
+    }
+  },
+  "predictor": {
+    "type": "local_hf",
+    "model_name_or_path": "Qwen/Qwen2.5-14B-Instruct",
+    "device": "cuda",
+    "device_map": "auto",
+    "torch_dtype": "float16",
+    "max_new_tokens": 256,
+    "trust_remote_code": false,
+    "attn_implementation": "sdpa",
+    "load_in_4bit": true,
+    "load_in_8bit": false,
+    "generation_kwargs": {
+        "repetition_penalty": 1.02,
+        "temperature": 0.1,
+        "top_p": 0.95
+    }
+  }
+}

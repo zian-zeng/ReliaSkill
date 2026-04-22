@@ -4,23 +4,23 @@
 
 ### Default experiment dataset
 
-- Tools: [public_mcp_filesystem_subset.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/raw/public_mcp_filesystem_subset.json)
-- Tasks: [public_mcp_filesystem_benchmark.jsonl](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/eval/public_mcp_filesystem_benchmark.jsonl)
+- Tools: [public_mcp_filesystem_subset.json](data/raw/public_mcp_filesystem_subset.json)
+- Tasks: [public_mcp_filesystem_benchmark.jsonl](data/eval/public_mcp_filesystem_benchmark.jsonl)
 - Status: fully wired into the default runners
 
 ### Sample / regression fixtures
 
-- [sample_tools.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/raw/sample_tools.json)
-- [sample_mcp_export.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/raw/sample_mcp_export.json)
-- [sample_bfcl_style.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/eval/sample_bfcl_style.json)
-- [sample_bfcl_style.jsonl](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/eval/sample_bfcl_style.jsonl)
-- [sample_bfcl_raw_possible_answer.jsonl](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/eval/sample_bfcl_raw_possible_answer.jsonl)
+- [sample_tools.json](data/raw/sample_tools.json)
+- [sample_mcp_export.json](data/raw/sample_mcp_export.json)
+- [sample_bfcl_style.json](data/eval/sample_bfcl_style.json)
+- [sample_bfcl_style.jsonl](data/eval/sample_bfcl_style.jsonl)
+- [sample_bfcl_raw_possible_answer.jsonl](data/eval/sample_bfcl_raw_possible_answer.jsonl)
 - Status: used for testing and format coverage
 
 ### Downloaded external corpora
 
-- BFCL data root: [data/external/bfcl](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/external/bfcl)
-- MCP servers repo: [data/external/modelcontextprotocol-servers](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/external/modelcontextprotocol-servers)
+- BFCL data root: [data/external/bfcl](data/external/bfcl)
+- MCP servers repo: [data/external/modelcontextprotocol-servers](data/external/modelcontextprotocol-servers)
 
 Observed BFCL slices present:
 
@@ -44,7 +44,7 @@ Observed MCP server source trees present:
 
 - The default experiment uses the curated MCP filesystem subset and its benchmark.
 - The repo supports BFCL-style JSON and JSONL fixtures that already match the current evaluator.
-- The repo supports external MCP tool JSON imports through [import_mcp_tools.py](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/scripts/import_mcp_tools.py).
+- The repo supports external MCP tool JSON imports through [import_mcp_tools.py](scripts/import_mcp_tools.py).
 
 ### What is present but not yet the default
 
@@ -53,32 +53,42 @@ Observed MCP server source trees present:
 
 ### External experiment artifacts now wired
 
-- Harvested MCP corpus: [harvested_mcp_reference_servers.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/raw/harvested_mcp_reference_servers.json)
-- BFCL Hugging Face pseudo-tool corpus: [bfcl_huggingface_tools.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/raw/bfcl_huggingface_tools.json)
-- BFCL Hugging Face train routing tasks: [bfcl_huggingface_train_routing.jsonl](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/eval/bfcl_huggingface_train_routing.jsonl)
-- BFCL Hugging Face eval routing tasks: [bfcl_huggingface_eval_routing.jsonl](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/data/eval/bfcl_huggingface_eval_routing.jsonl)
+- Harvested MCP corpus: [harvested_mcp_reference_servers.json](data/raw/harvested_mcp_reference_servers.json)
+- BFCL Hugging Face pseudo-tool corpus: [bfcl_huggingface_tools.json](data/raw/bfcl_huggingface_tools.json)
+- BFCL Hugging Face train routing tasks: [bfcl_huggingface_train_routing.jsonl](data/eval/bfcl_huggingface_train_routing.jsonl)
+- BFCL Hugging Face eval routing tasks: [bfcl_huggingface_eval_routing.jsonl](data/eval/bfcl_huggingface_eval_routing.jsonl)
+
+### BFCL v3 Benchmarks
+
+- BFCL v3 tools: `data/raw/bfcl_v3_tools.json`
+- BFCL v3 benchmark: `data/eval/bfcl_v3_benchmark.jsonl`
+- Subsets: `data/eval/bfcl_v3_benchmark_subset100.jsonl`, `...subset50.jsonl`, `...subset30.jsonl`
+
+### Unified Routing Benchmark
+
+- Unified routing tasks: [unified_routing_benchmark.jsonl](data/eval/unified_routing_benchmark.jsonl)
 
 ## Current model presets in code
 
 ### Local Hugging Face
 
-- [experiment.local_hf.qwen25_3b.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.local_hf.qwen25_3b.sample.json)
-- [experiment.local_hf.qwen25_7b.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.local_hf.qwen25_7b.sample.json)
-- [experiment.local_hf.qwen25_14b_4bit.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.local_hf.qwen25_14b_4bit.sample.json)
-- [experiment.local_hf.qwen25_32b_4bit.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.local_hf.qwen25_32b_4bit.sample.json)
+- [experiment.local_hf.qwen25_3b.sample.json](configs/experiment.local_hf.qwen25_3b.sample.json)
+- [experiment.local_hf.qwen25_7b.sample.json](configs/experiment.local_hf.qwen25_7b.sample.json)
+- [experiment.local_hf.qwen25_14b_4bit.sample.json](configs/experiment.local_hf.qwen25_14b_4bit.sample.json)
+- [experiment.local_hf.qwen25_32b_4bit.sample.json](configs/experiment.local_hf.qwen25_32b_4bit.sample.json)
 
 ### OpenAI-compatible endpoint
 
-- [experiment.openai_compatible.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.openai_compatible.sample.json)
-- [experiment.openai_compatible.qwen25_14b.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.openai_compatible.qwen25_14b.sample.json)
-- [experiment.openai_compatible.qwen25_32b.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.openai_compatible.qwen25_32b.sample.json)
+- [experiment.openai_compatible.sample.json](configs/experiment.openai_compatible.sample.json)
+- [experiment.openai_compatible.qwen25_14b.sample.json](configs/experiment.openai_compatible.qwen25_14b.sample.json)
+- [experiment.openai_compatible.qwen25_32b.sample.json](configs/experiment.openai_compatible.qwen25_32b.sample.json)
 
 ### External experiment configs
 
-- [experiment.harvested_mcp.heuristic.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.harvested_mcp.heuristic.sample.json)
-- [experiment.harvested_mcp.qwen25_14b_4bit.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.harvested_mcp.qwen25_14b_4bit.sample.json)
-- [experiment.bfcl_huggingface_routing.heuristic.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.bfcl_huggingface_routing.heuristic.sample.json)
-- [experiment.bfcl_huggingface_routing.qwen25_32b_endpoint.sample.json](/c:/Users/zianz/OneDrive/Documents/GitHub/AutoSkill/configs/experiment.bfcl_huggingface_routing.qwen25_32b_endpoint.sample.json)
+- [experiment.harvested_mcp.heuristic.sample.json](configs/experiment.harvested_mcp.heuristic.sample.json)
+- [experiment.harvested_mcp.qwen25_14b_4bit.sample.json](configs/experiment.harvested_mcp.qwen25_14b_4bit.sample.json)
+- [experiment.bfcl_huggingface_routing.heuristic.sample.json](configs/experiment.bfcl_huggingface_routing.heuristic.sample.json)
+- [experiment.bfcl_huggingface_routing.qwen25_32b_endpoint.sample.json](configs/experiment.bfcl_huggingface_routing.qwen25_32b_endpoint.sample.json)
 
 ## Recommended cluster path
 

@@ -1,0 +1,77 @@
+[
+  {
+    "task_id": "bfcl_huggingface_eval_0",
+    "tool_name": "hugging_face_transformers__princeton_nlp_unsup_simcse_roberta_base__au_ccf95072",
+    "user_request": "Design a feature for a social media website to recommend articles to users based on how similar the articles are to their previously liked articles.",
+    "expected_arguments": {},
+    "expected_argument_candidates": [
+      {}
+    ],
+    "split": "huggingface_eval",
+    "tags": [
+      "bfcl",
+      "hugging_face_transformers",
+      "natural_language_processing_sentence_similarity"
+    ]
+  },
+  {
+    "task_id": "bfcl_huggingface_eval_1",
+    "tool_name": "hugging_face_transformers__ganjinzero_umlsbert_eng__automodel_from_pre_81413d59",
+    "user_request": "The user is interested in a tool to find relationships between medical terms.",
+    "expected_arguments": {},
+    "expected_argument_candidates": [
+      {}
+    ],
+    "split": "huggingface_eval",
+    "tags": [
+      "bfcl",
+      "hugging_face_transformers",
+      "multimodal_feature_extraction"
+    ]
+  },
+  {
+    "task_id": "bfcl_huggingface_eval_2",
+    "tool_name": "hugging_face_transformers__hubert_large_ll60k__hubertmodel_from_pretra_57159276",
+    "user_request": "As a journalist, I am curious about speech sentiment analysis in a group of people in a crowd. I want to extract features from the audio to run sentiment analysis.",
+    "expected_arguments": {},
+    "expected_argument_candidates": [
+      {}
+    ],
+    "split": "huggingface_eval",
+    "tags": [
+      "bfcl",
+      "hugging_face_transformers",
+      "multimodal_feature_extraction"
+    ]
+  },
+  {
+    "task_id": "bfcl_huggingface_eval_3",
+    "tool_name": "hugging_face_transformers__rasa_labse__automodel_from_pretrained_rasa_labse",
+    "user_request": "A chat service needs a way to compare and cluster similar sentences from users in different languages. Find a suitable feature extraction method to achieve this.",
+    "expected_arguments": {},
+    "expected_argument_candidates": [
+      {}
+    ],
+    "split": "huggingface_eval",
+    "tags": [
+      "bfcl",
+      "hugging_face_transformers",
+      "multimodal_feature_extraction"
+    ]
+  },
+  {
+    "task_id": "bfcl_huggingface_eval_4",
+    "tool_name": "hugging_face__stabilityai_stable_diffusion_2_inpainting__stablediffusi_6bef15b5",
+    "user_request": "I am an interior designer and want to showcase a modern living room with a fireplace and a large window overlooking a forest. Create an image according to this description.",
+    "expected_arguments": {},
+    "expected_argument_candidates": [
+      {}
+    ],
+    "split": "huggingface_eval",
+    "tags": [
+      "bfcl",
+      "hugging_face",
+      "multimodal_text_to_image"
+    ]
+  }
+]

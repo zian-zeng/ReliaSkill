@@ -1,0 +1,1034 @@
+[
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2_100_224_feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4",
+    "title": "imagenet_mobilenet_v2_100_224_feature_vector",
+    "summary": "Feature extraction from images",
+    "description": "A pre-trained MobileNetV2 model for extracting feature vectors from images, using TensorFlow Hub. Framework: TensorFlow Hub. Functionality: Feature extraction from images. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_imagenet_inception_v3_classification_5",
+    "title": "model_id",
+    "summary": "Image classification using pre-trained models",
+    "description": "A pre-trained image classification model available on TensorFlow Hub that can be used to classify images into one of the 1000 ImageNet classes. The example provided shows how to load the Inception V3 model, preprocess an image, and obtain predictions. Framework: TensorFlow Hub. Functionality: Image classification using pre-trained models. API call: hub.load('https://tfhub.dev/google/imagenet/inception_v3/classification/5').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_tensorflow_ssd_mobilenet_v2_2",
+    "title": "model_id",
+    "summary": "Object detection",
+    "description": "A pre-trained object detection model that can detect multiple objects in an image. The model is based on the SSD Mobilenet V2 architecture and is trained on the COCO dataset. Framework: TensorFlow Hub. Functionality: Object detection. API call: hub.load('https://tfhub.dev/tensorflow/ssd_mobilenet_v2/2').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__universal_sentence_encoder__hub_load_https_tfhub_dev_google_universal_sentence_encoder_4",
+    "title": "universal-sentence-encoder",
+    "summary": "Embedding text into high-dimensional vectors",
+    "description": "The Universal Sentence Encoder encodes text into high-dimensional vectors that can be used for text classification, semantic similarity, clustering, and other natural language tasks. Framework: TensorFlow Hub. Functionality: Embedding text into high-dimensional vectors. API call: hub.load('https://tfhub.dev/google/universal-sentence-encoder/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2_100_224_feature_vector__hub_load_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4",
+    "title": "imagenet_mobilenet_v2_100_224_feature_vector",
+    "summary": "Extract feature vectors from images",
+    "description": "A pre-trained MobileNetV2 model that takes an input image and outputs a 1280-dimensional feature vector. Useful for transfer learning applications. Framework: TensorFlow Hub. Functionality: Extract feature vectors from images. API call: hub.load('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4",
+    "title": "imagenet_mobilenet_v2",
+    "summary": "Extract image features",
+    "description": "A pre-trained image feature vector model using MobileNet V2 architecture on ImageNet dataset. It can be used to extract features from an input image tensor. Framework: TensorFlow Hub. Functionality: Extract image features. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2_100_224_classification__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_classification_4",
+    "title": "imagenet_mobilenet_v2_100_224_classification",
+    "summary": "Image classification using pre-trained model",
+    "description": "A pre-trained image classification model using MobileNetV2 architecture on ImageNet dataset with 100% depth and 224x224 input size. Framework: TensorFlow Hub. Functionality: Image classification using pre-trained model. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_imagenet_inception_v3_classification_4",
+    "title": "model_id",
+    "summary": "Pre-trained image classification model",
+    "description": "This API provides a pre-trained image classification model using TensorFlow Hub, which can be used to classify images into various categories. The model is trained on the ImageNet dataset and can be loaded using the `hub.load()` function. Framework: TensorFlow Hub. Functionality: Pre-trained image classification model. API call: hub.load('https://tfhub.dev/google/imagenet/inception_v3/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__ssd_mobilenet_v2__hub_load_https_tfhub_dev_tensorflow_ssd_mobilenet_v2_2",
+    "title": "ssd_mobilenet_v2",
+    "summary": "Detect objects in images",
+    "description": "A pre-trained SSD MobileNet V2 model for object detection in images, capable of detecting multiple objects with bounding boxes and confidence scores. The model is trained on the COCO dataset and achieves a mean average precision (mAP) of 22. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/tensorflow/ssd_mobilenet_v2/2').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_classification_4",
+    "title": "model_id",
+    "summary": "Pre-trained image classification models",
+    "description": "A pre-trained image classification model using MobileNetV2 architecture, which can recognize 1000 different classes from the ImageNet dataset. Framework: TensorFlow Hub. Functionality: Pre-trained image classification models. API call: hub.load('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2_130_224_classification__hub_load_https_tfhub_dev_google_imagenet_mobilenet_v2_130_224_classification_5",
+    "title": "imagenet_mobilenet_v2_130_224_classification",
+    "summary": "Pre-trained models for image classification",
+    "description": "MobileNetV2 is a family of neural network architectures for efficient on-device image classification and related tasks, originally published by Mark Sandler, et al. This model is pre-trained on the ImageNet dataset and can be used for various image classification tasks. Framework: TensorFlow Hub. Functionality: Pre-trained models for image classification. API call: hub.load('https://tfhub.dev/google/imagenet/mobilenet_v2_130_224/classification/5').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__tensorflow_hub_keraslayer__hub_keraslayer_https_tfhub_dev_google_nnlm_en_dim128_2",
+    "title": "tensorflow_hub.KerasLayer",
+    "summary": "Loading",
+    "description": "Loads a TensorFlow Hub module as a Keras Layer, allowing users to incorporate pre-trained models into their own custom models. Framework: TensorFlow Hub. Functionality: Loading. API call: hub.KerasLayer('https://tfhub.dev/google/nnlm-en-dim128/2').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_tf2_preview_mobilenet_v2_classification_4",
+    "title": "model_id",
+    "summary": "Loading",
+    "description": "Load a pre-trained image classification model from TensorFlow Hub and use it to classify images. Framework: TensorFlow Hub. Functionality: Loading. API call: hub.load('https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_tf2_preview_nnlm_en_dim50_1",
+    "title": "model_id",
+    "summary": "Embed text data for machine learning models",
+    "description": "Load a pre-trained text embedding model from TensorFlow Hub, and use it to convert text data into fixed-size vectors that can be used as input for machine learning models. Framework: TensorFlow Hub. Functionality: Embed text data for machine learning models. API call: hub.load('https://tfhub.dev/google/tf2-preview/nnlm-en-dim50/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v1_100_224_feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v1_100_224_feature_vector_4",
+    "title": "imagenet_mobilenet_v1_100_224_feature_vector",
+    "summary": "Feature extraction from images",
+    "description": "A compact representation of the API for extracting image feature vectors using MobileNetV1 on TensorFlow Hub. Framework: TensorFlow Hub. Functionality: Feature extraction from images. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v1_100_224/feature_vector/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2_130_224_classification__hub_load_https_tfhub_dev_google_imagenet_mobilenet_v2_130_224_classification_4",
+    "title": "imagenet_mobilenet_v2_130_224_classification",
+    "summary": "Pre-trained model for image classification",
+    "description": "A pre-trained model for image classification using MobileNetV2 architecture with an input size of 224x224 pixels. Framework: TensorFlow Hub. Functionality: Pre-trained model for image classification. API call: hub.load('https://tfhub.dev/google/imagenet/mobilenet_v2_130_224/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_faster_rcnn_openimages_v4_inception_resnet_v2_1",
+    "title": "model_id",
+    "summary": "Detect objects in an image",
+    "description": "A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor on OpenImages V4 dataset for object detection. Framework: TensorFlow Hub. Functionality: Detect objects in an image. API call: hub.load('https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_classification_4",
+    "title": "imagenet_mobilenet_v2",
+    "summary": "Image classification using pre-trained models",
+    "description": "A pre-trained image classification model using MobileNetV2 architecture on ImageNet dataset. It can be used for classifying images into 1000 different categories. Framework: TensorFlow Hub. Functionality: Image classification using pre-trained models. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_tf2_preview_mobilenet_v2_classification_2",
+    "title": "model_id",
+    "summary": "Loading pre-trained models",
+    "description": "Load a pre-trained image classification model from TensorFlow Hub, providing a model_id for the desired model. Framework: TensorFlow Hub. Functionality: Loading pre-trained models. API call: hub.load('https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/2').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__mobilenet_v2_100_224__hub_load_https_tfhub_dev_google_tf2_preview_mobilenet_v2_classification_4",
+    "title": "mobilenet_v2_100_224",
+    "summary": "Loading",
+    "description": "Pre-trained image classification model using MobileNetV2 architecture with input size of 224x224 pixels. Framework: TensorFlow Hub. Functionality: Loading. API call: hub.load('https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__mobilenet_v2__hub_load_https_tfhub_dev_google_tf2_preview_mobilenet_v2_classification_4",
+    "title": "mobilenet_v2",
+    "summary": "Loading pre-trained models for image classification",
+    "description": "A pre-trained MobileNetV2 model for image classification using TensorFlow Hub Framework: TensorFlow Hub. Functionality: Loading pre-trained models for image classification. API call: hub.load('https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_openimages_v4_ssd_mobilenet_v2_1",
+    "title": "model_id",
+    "summary": "Detect objects in images",
+    "description": "A pre-trained image object detection model based on the SSD architecture with MobileNetV2 as the backbone. The model is capable of detecting objects in images and returning their class labels and bounding box coordinates. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__ssd_mobilenet_v2__hub_load_https_tfhub_dev_google_openimages_v4_ssd_mobilenet_v2_1",
+    "title": "ssd_mobilenet_v2",
+    "summary": "Detect objects in images",
+    "description": "A pre-trained SSD MobileNet V2 model for object detection in images, trained on the Open Images v4 dataset. Detects objects and outputs their bounding boxes and class labels with associated confidence scores. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/google/openimages_v4/ssd_mobilenet_v2/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__image_feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_inception_v3_feature_vector_5",
+    "title": "image_feature_vector",
+    "summary": "Feature extraction from images",
+    "description": "A pre-trained model that extracts feature vectors from images using Inception V3 architecture Framework: TensorFlow Hub. Functionality: Feature extraction from images. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/inception_v3/feature_vector/5').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2_050_224_feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_050_224_feature_vector_4",
+    "title": "imagenet_mobilenet_v2_050_224_feature_vector",
+    "summary": "Feature extraction from images",
+    "description": "A pre-trained image feature vector model that extracts useful features from input images using the MobileNetV2 architecture with a width multiplier of 0.5 and an input size of 224x224 pixels. Framework: TensorFlow Hub. Functionality: Feature extraction from images. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_050_224/feature_vector/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_classification_4",
+    "title": "model_id",
+    "summary": "Pre-trained models for image classification",
+    "description": "Pre-trained image classification models available on TensorFlow Hub for easy integration and usage. Framework: TensorFlow Hub. Functionality: Pre-trained models for image classification. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4",
+    "title": "model_id",
+    "summary": "Audio processing",
+    "description": "Load and use an audio embedding model from TensorFlow Hub to process audio data. Framework: TensorFlow Hub. Functionality: Audio processing. API call: hub.load('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_tensorflow_centernet_hourglass_1024x1024_1",
+    "title": "model_id",
+    "summary": "Detect objects in images",
+    "description": "A pre-trained TensorFlow Hub model for detecting objects in images using the CenterNet architecture with an Hourglass backbone. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/tensorflow/centernet/hourglass_1024x1024/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2_130_224_classification__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_130_224_classification_4",
+    "title": "imagenet-mobilenet_v2_130_224-classification",
+    "summary": "Image classification using pre-trained models",
+    "description": "A pre-trained image classification model using MobileNetV2 architecture with 130 depth multiplier and 224x224 input size. The model has been trained on the ImageNet dataset and can be used for classifying images into 1000 different categories. Framework: TensorFlow Hub. Functionality: Image classification using pre-trained models. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_130_224/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2_100_224__hub_load_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_classification_4",
+    "title": "imagenet_mobilenet_v2_100_224",
+    "summary": "Pre-trained model for image classification",
+    "description": "This model is a pre-trained image classifier using MobileNet V2 architecture on ImageNet dataset with 100% depth and 224x224 input size. It is optimized for performance on mobile and edge devices. Framework: TensorFlow Hub. Functionality: Pre-trained model for image classification. API call: hub.load('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_universal_sentence_encoder_4",
+    "title": "model_id",
+    "summary": "Classify audio events",
+    "description": "A TensorFlow Hub model for classifying audio events. Framework: TensorFlow Hub. Functionality: Classify audio events. API call: hub.load('https://tfhub.dev/google/universal-sentence-encoder/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_imagenet_mobilenet_v2_130_224_classification_4",
+    "title": "model_id",
+    "summary": "Pre-trained image classification model",
+    "description": "A pre-trained image classification model based on the MobileNetV2 architecture, fine-tuned on the ImageNet dataset. The model can be used to classify images into 1000 different categories. Framework: TensorFlow Hub. Functionality: Pre-trained image classification model. API call: hub.load('https://tfhub.dev/google/imagenet/mobilenet_v2_130_224/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2_feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4",
+    "title": "imagenet-mobilenet_v2-feature_vector",
+    "summary": "Feature extraction",
+    "description": "A pre-trained image feature vector model using MobileNetV2 architecture on ImageNet dataset. It can be used for feature extraction from images. Framework: TensorFlow Hub. Functionality: Feature extraction. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4",
+    "title": "feature_vector",
+    "summary": "Feature extraction",
+    "description": "This API allows you to extract image feature vectors using TensorFlow Hub's pre-trained models. The feature vectors can be used in various applications, such as image classification, object detection, and image similarity. Framework: TensorFlow Hub. Functionality: Feature extraction. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2_100_224_classification__hub_load_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_classification_4",
+    "title": "imagenet_mobilenet_v2_100_224_classification",
+    "summary": "Loading pre-trained models",
+    "description": "A pre-trained image classification model using MobileNetV2 architecture, trained on ImageNet dataset, with 100% depth and 224x224 input size. Framework: TensorFlow Hub. Functionality: Loading pre-trained models. API call: hub.load('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_classification_5",
+    "title": "model_id",
+    "summary": "Image classification using pre-trained models",
+    "description": "TensorFlow Hub provides a collection of pre-trained image classification models that can be easily loaded and used for various image classification tasks. These models are trained on the ImageNet dataset and can be fine-tuned for specific use cases. Framework: TensorFlow Hub. Functionality: Image classification using pre-trained models. API call: hub.load('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/classification/5').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__faster_rcnn_resnet50_v1_640x640__hub_load_https_tfhub_dev_tensorflow_faster_rcnn_resnet50_v1_640x640_1",
+    "title": "faster_rcnn_resnet50_v1_640x640",
+    "summary": "Detect objects in images",
+    "description": "A pre-trained Faster R-CNN model with ResNet-50 backbone for object detection in images Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/tensorflow/faster_rcnn/resnet50_v1_640x640/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_imagenet_mobilenet_v2_130_224_classification_5",
+    "title": "model_id",
+    "summary": "Pre-trained image classification models",
+    "description": "Load pre-trained image classification models from TensorFlow Hub for various tasks such as object recognition, fine-grained classification, and more. Framework: TensorFlow Hub. Functionality: Pre-trained image classification models. API call: hub.load('https://tfhub.dev/google/imagenet/mobilenet_v2_130_224/classification/5').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions",
+    "title": "deeplabv3",
+    "summary": "Semantic image segmentation",
+    "description": "DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on the DeepLabv3 architecture and trained on the PASCAL VOC 2012 dataset. Framework: TensorFlow Hub. Functionality: Semantic image segmentation. API call: hub.KerasLayer('https://tfhub.dev/tensorflow/deeplabv3/1', output_key='SemanticPredictions').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1",
+    "title": "faster_rcnn_inception_resnet_v2_atrous_oid_v4",
+    "summary": "Detect objects in images",
+    "description": "A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor for object detection on the Open Images Dataset v4. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/google/faster_rcnn/inception_resnet_v2/atrous/oid_v4/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__mobilenet_v2_100_224__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4",
+    "title": "mobilenet_v2_100_224",
+    "summary": "Feature extraction from images",
+    "description": "A pre-trained MobileNetV2 model that takes an input image of shape (224, 224, 3) and outputs a 1280-dimensional feature vector. Useful for image classification, object detection, and other computer vision tasks. Framework: TensorFlow Hub. Functionality: Feature extraction from images. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_tensorflow_lite_model_deeplabv3_1_default_1",
+    "title": "model_id",
+    "summary": "Load and use pre-trained image segmentation models",
+    "description": "TensorFlow Hub provides pre-trained image segmentation models that can be loaded and used for various tasks such as semantic segmentation. The example code demonstrates how to load a DeepLabV3 model and perform segmentation on an input image tensor. Framework: TensorFlow Hub. Functionality: Load and use pre-trained image segmentation models. API call: hub.load('https://tfhub.dev/tensorflow/lite-model/deeplabv3/1/default/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_feature_vector_1",
+    "title": "imagenet-feature-vector",
+    "summary": "Feature extraction",
+    "description": "This API provides a pre-trained image feature vector model for extracting features from images using TensorFlow Hub. The model is based on the ImageNet dataset and can be used for various image-related tasks such as classification, detection, and segmentation. Framework: TensorFlow Hub. Functionality: Feature extraction. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/feature_vector/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2_100_224_feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_5",
+    "title": "imagenet_mobilenet_v2_100_224_feature_vector",
+    "summary": "Extracting feature vector from images",
+    "description": "A pre-trained image feature vector model using MobileNetV2 architecture on ImageNet dataset. It can be used for various image classification tasks by adding a classification head on top of the feature vector. Framework: TensorFlow Hub. Functionality: Extracting feature vector from images. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/5').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__image_feature_vector__hub_keraslayer_https_tfhub_dev_google_tf2_preview_mobilenet_v2_feature_vector_4_output_shape_1280",
+    "title": "image_feature_vector",
+    "summary": "Extract feature vector from images",
+    "description": "This API allows you to extract a 1280-dimensional feature vector from an image using the MobileNetV2 architecture, which is pre-trained on the ImageNet dataset. The feature vector can be used for various tasks, such as image classification, object detection, and transfer learning. Framework: TensorFlow Hub. Functionality: Extract feature vector from images. API call: hub.KerasLayer('https://tfhub.dev/google/tf2-preview/mobilenet_v2/feature_vector/4', output_shape=[1280]).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__mobilenet_v2__hub_keraslayer_https_tfhub_dev_google_tf2_preview_mobilenet_v2_classification_4",
+    "title": "mobilenet_v2",
+    "summary": "Image classification using a pre-trained model",
+    "description": "MobileNetV2 is a pre-trained image classification model that can classify images into 1000 different categories. It is lightweight and optimized for mobile devices. Framework: TensorFlow Hub. Functionality: Image classification using a pre-trained model. API call: hub.KerasLayer('https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__audio_embedding_model__hub_load_https_tfhub_dev_google_yamnet_1",
+    "title": "audio_embedding_model",
+    "summary": "Generate embeddings for audio files",
+    "description": "This API allows you to generate embeddings for audio files using a pre-trained YAMNet model from TensorFlow Hub. The embeddings can be used for various tasks such as audio classification, similarity search, and more. Framework: TensorFlow Hub. Functionality: Generate embeddings for audio files. API call: hub.load('https://tfhub.dev/google/yamnet/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__inception_v3__hub_keraslayer_https_tfhub_dev_google_imagenet_inception_v3_feature_vector_5",
+    "title": "inception_v3",
+    "summary": "Feature extraction",
+    "description": "Feature extraction from images using Inception V3 model trained on ImageNet dataset Framework: TensorFlow Hub. Functionality: Feature extraction. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/inception_v3/feature_vector/5').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_tensorflow_centernet_resnet50v1_fpn_512x512_1",
+    "title": "model_id",
+    "summary": "Detect objects in images",
+    "description": "Detect objects in images using TensorFlow Hub and a pre-trained CenterNet model with ResNet50V1 FPN backbone Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/tensorflow/centernet/resnet50v1_fpn_512x512/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__deeplabv3__hub_load_https_tfhub_dev_tensorflow_deeplabv3_1",
+    "title": "deeplabv3",
+    "summary": "DeepLab v3",
+    "description": "DeepLab v3 is an image segmentation model for TensorFlow Hub that segments images into different classes. It is trained on the PASCAL VOC 2012 dataset and achieves an accuracy of 77.21% on the validation set. Framework: TensorFlow Hub. Functionality: DeepLab v3. API call: hub.load('https://tfhub.dev/tensorflow/deeplabv3/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__mobilenet_v2_100_224__tf_keras_sequential_hub_keraslayer_https_tfhub_dev_google_tf2_preview_mobilenet_v2_classification_4",
+    "title": "mobilenet_v2_100_224",
+    "summary": "Loading pre-trained models",
+    "description": "A pre-trained image classification model using MobileNet V2 architecture with 1001 output classes available on TensorFlow Hub. Framework: TensorFlow Hub. Functionality: Loading pre-trained models. API call: tf.keras.Sequential([hub.KerasLayer('https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/4')]).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__mobilenet_v2__tf_keras_sequential_hub_keraslayer_https_tfhub_dev_google_tf2_preview_mobilenet_v2_classification_4",
+    "title": "mobilenet_v2",
+    "summary": "Pre-trained Image Classifier",
+    "description": "A pre-trained image classification model using MobileNetV2 architecture on TensorFlow Hub. It can be used to classify images into 1000 different categories with high accuracy. Framework: TensorFlow Hub. Functionality: Pre-trained Image Classifier. API call: tf.keras.Sequential([hub.KerasLayer('https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/4')]).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_keraslayer_https_tfhub_dev_google_imagenet_inception_v3_feature_vector_4",
+    "title": "model_id",
+    "summary": "Feature extraction from images",
+    "description": "This API allows users to extract feature vectors from images using a pre-trained model from TensorFlow Hub. The feature vectors can then be used for various image recognition and classification tasks. Framework: TensorFlow Hub. Functionality: Feature extraction from images. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/inception_v3/feature_vector/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__deeplabv3_257_mv_gpu__hub_load_https_tfhub_dev_tensorflow_deeplabv3_257_mv_gpu_1",
+    "title": "deeplabv3_257_mv_gpu",
+    "summary": "Image segmentation model",
+    "description": "DeepLabv3 is a state-of-the-art deep learning model for image segmentation. It assigns a semantic label to each pixel in the input image, allowing for a more detailed understanding of the image content. This model is trained on the PASCAL VOC 2012 dataset and achieves a mean intersection-over-union (mIoU) score of 0.897. Framework: TensorFlow Hub. Functionality: Image segmentation model. API call: hub.load('https://tfhub.dev/tensorflow/deeplabv3_257_mv_gpu/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2_140_224_feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_140_224_feature_vector_4",
+    "title": "imagenet_mobilenet_v2_140_224_feature_vector",
+    "summary": "Extract image features",
+    "description": "This API provides a pre-trained MobileNetV2 model for extracting feature vectors from images. The model is trained on the ImageNet dataset and achieves 80.3% accuracy on the validation set. Framework: TensorFlow Hub. Functionality: Extract image features. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_140_224/feature_vector/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_keraslayer_https_tfhub_dev_google_tf2_preview_mobilenet_v2_classification_4",
+    "title": "model_id",
+    "summary": "Loading",
+    "description": "Load a pre-trained image classification model from TensorFlow Hub and use it for classifying images. Framework: TensorFlow Hub. Functionality: Loading. API call: hub.KerasLayer('https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__mobilenet_v2_100_224__hub_keraslayer_https_tfhub_dev_google_tf2_preview_mobilenet_v2_classification_4",
+    "title": "mobilenet_v2_100_224",
+    "summary": "Image classification model",
+    "description": "A pre-trained image classification model using MobileNetV2 architecture on ImageNet dataset. Framework: TensorFlow Hub. Functionality: Image classification model. API call: hub.KerasLayer('https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_tensorflow_efficientdet_lite0_detection_1",
+    "title": "model_id",
+    "summary": "Object detection in images",
+    "description": "A collection of TensorFlow Hub models for detecting objects in images using the EfficientDet architecture. These models can be used for various tasks such as object detection, instance segmentation, and more. Framework: TensorFlow Hub. Functionality: Object detection in images. API call: hub.load('https://tfhub.dev/tensorflow/efficientdet/lite0/detection/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__video_classification_model__hub_load_https_tfhub_dev_google_video_classification_model_1",
+    "title": "Video_Classification_Model",
+    "summary": "Video classification",
+    "description": "A pre-trained video classification model available on TensorFlow Hub, capable of classifying videos into one of 700 action classes. Framework: TensorFlow Hub. Functionality: Video classification. API call: hub.load('https://tfhub.dev/google/Video_Classification_Model/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_yamnet_1",
+    "title": "model_id",
+    "summary": "Audio embedding generation",
+    "description": "This API generates audio embeddings using a pre-trained model from TensorFlow Hub. The model can be loaded with a specified model_id, and embeddings can be extracted for input audio samples. Framework: TensorFlow Hub. Functionality: Audio embedding generation. API call: hub.load('https://tfhub.dev/google/yamnet/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__video_classification_model_id__hub_load_https_tfhub_dev_google_video_classification_model_id_1",
+    "title": "Video_classification_model_id",
+    "summary": "Video classification model",
+    "description": "A pre-trained video classification model available on TensorFlow Hub for classifying videos based on their content. Framework: TensorFlow Hub. Functionality: Video classification model. API call: hub.load('https://tfhub.dev/google/Video_classification_model_id/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_resnet_v2_50_feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_resnet_v2_50_feature_vector_5",
+    "title": "imagenet_resnet_v2_50_feature_vector",
+    "summary": "Feature extraction from images",
+    "description": "This model is trained on the ImageNet dataset and can be used to extract feature vectors from images using the ResNet-50 architecture. Framework: TensorFlow Hub. Functionality: Feature extraction from images. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/resnet_v2_50/feature_vector/5').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2_130_224_classification__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_130_224_classification_5",
+    "title": "imagenet-mobilenet_v2_130_224-classification",
+    "summary": "Pre-trained model for image classification",
+    "description": "A pre-trained model for image classification using MobileNetV2 architecture with 130 depth multiplier and 224x224 input size, trained on ImageNet dataset. Framework: TensorFlow Hub. Functionality: Pre-trained model for image classification. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_130_224/classification/5').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_tensorflow_efficientdet_d0_1",
+    "title": "model_id",
+    "summary": "Detect objects in images",
+    "description": "Load a pre-trained model from TensorFlow Hub for object detection in images. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/tensorflow/efficientdet/d0/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__ssd_mobilenet_v2_fpnlite_640x640__hub_load_https_tfhub_dev_tensorflow_ssd_mobilenet_v2_fpnlite_640x640_1",
+    "title": "ssd_mobilenet_v2_fpnlite_640x640",
+    "summary": "Detect objects in images",
+    "description": "A pre-trained object detection model that detects objects in images using the Single Shot MultiBox Detector (SSD) architecture with MobileNet V2 FPN-Lite feature extractor. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/tensorflow/ssd_mobilenet_v2_fpnlite_640x640/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__mobilenet_v2_100_224__hub_keraslayer_https_tfhub_dev_google_tf2_preview_mobilenet_v2_classification_2",
+    "title": "mobilenet_v2_100_224",
+    "summary": "Loading a pre-trained model for image classification",
+    "description": "A pre-trained image classification model using MobileNetV2 architecture, with 224x224 input size, and 100% depth multiplier. The model is trained on the ImageNet dataset and can be used for various image classification tasks. Framework: TensorFlow Hub. Functionality: Loading a pre-trained model for image classification. API call: hub.KerasLayer('https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/2').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v1_050_160_classification__hub_load_https_tfhub_dev_google_imagenet_mobilenet_v1_050_160_classification_4",
+    "title": "imagenet_mobilenet_v1_050_160_classification",
+    "summary": "Loading",
+    "description": "Loads a pre-trained MobileNet V1 model for image classification from TensorFlow Hub Framework: TensorFlow Hub. Functionality: Loading. API call: hub.load('https://tfhub.dev/google/imagenet/mobilenet_v1_050_160/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__movenet__hub_load_https_tfhub_dev_google_movenet_singlepose_lightning_4",
+    "title": "movenet",
+    "summary": "Detect human poses in images",
+    "description": "MoveNet is a model that detects human poses in images. It is trained on the COCO dataset and available on TensorFlow Hub. Framework: TensorFlow Hub. Functionality: Detect human poses in images. API call: hub.load('https://tfhub.dev/google/movenet/singlepose/lightning/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__universal_sentence_encoder__hub_keraslayer_https_tfhub_dev_google_universal_sentence_encoder_4",
+    "title": "universal-sentence-encoder",
+    "summary": "Embedding text into high-dimensional vectors",
+    "description": "The Universal Sentence Encoder encodes text into high-dimensional vectors that can be used for text classification, semantic similarity, clustering, and other natural language tasks. Framework: TensorFlow Hub. Functionality: Embedding text into high-dimensional vectors. API call: hub.KerasLayer('https://tfhub.dev/google/universal-sentence-encoder/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__inception_v3__hub_keraslayer_https_tfhub_dev_google_imagenet_inception_v3_classification_5",
+    "title": "inception_v3",
+    "summary": "Loading",
+    "description": "Inception V3 model for image classification, pretrained on ImageNet dataset. Framework: TensorFlow Hub. Functionality: Loading. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/inception_v3/classification/5').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__tf_keras_sequential_hub_keraslayer_https_tfhub_dev_google_imagenet_inception_v3_classification_5",
+    "title": "model_id",
+    "summary": "Loading pre-trained models",
+    "description": "Load a pre-trained Inception V3 model from TensorFlow Hub for image classification. Framework: TensorFlow Hub. Functionality: Loading pre-trained models. API call: tf.keras.Sequential([hub.KerasLayer('https://tfhub.dev/google/imagenet/inception_v3/classification/5')]).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__mobilenet_v2_140_224__hub_keraslayer_https_tfhub_dev_google_tf2_preview_mobilenet_v2_classification_4",
+    "title": "mobilenet_v2_140_224",
+    "summary": "Image classification model",
+    "description": "A pre-trained image classification model using MobileNetV2 architecture with input size of 224x224 pixels. Framework: TensorFlow Hub. Functionality: Image classification model. API call: hub.KerasLayer('https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2_100_224_classification__tf_keras_sequential_hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_classification_4",
+    "title": "imagenet_mobilenet_v2_100_224_classification",
+    "summary": "Loading",
+    "description": "A pre-trained image classification model using MobileNetV2 architecture on ImageNet dataset with 100% depth and 224x224 input size. Framework: TensorFlow Hub. Functionality: Loading. API call: tf.keras.Sequential([hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/classification/4')]).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__ssd_mobilenet_v2__hub_load_https_tfhub_dev_tensorflow_ssd_mobilenet_v2_fpnlite_640x640_1",
+    "title": "ssd_mobilenet_v2",
+    "summary": "Object detection in images",
+    "description": "A pre-trained object detection model based on the SSD Mobilenet V2 architecture, capable of detecting multiple objects in an image. The model is trained on the COCO dataset and achieves a mean Average Precision (mAP) of 0.32. Framework: TensorFlow Hub. Functionality: Object detection in images. API call: hub.load('https://tfhub.dev/tensorflow/ssd_mobilenet_v2/fpnlite_640x640/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v3_large_100_224_feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v3_large_100_224_feature_vector_5",
+    "title": "imagenet_mobilenet_v3_large_100_224_feature_vector",
+    "summary": "Generate feature vectors for images",
+    "description": "This API provides a pre-trained image feature vector model, MobileNetV3-Large, from TensorFlow Hub. The model is trained on the ImageNet dataset and can be used to generate feature vectors for images of size 224x224 with 3 channels. Framework: TensorFlow Hub. Functionality: Generate feature vectors for images. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v3_large_100_224/feature_vector/5').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_imagenet_inception_v3_feature_vector_1",
+    "title": "model_id",
+    "summary": "Extract image features",
+    "description": "Load a pre-trained image feature vector model from TensorFlow Hub and use it to extract features from an image. Framework: TensorFlow Hub. Functionality: Extract image features. API call: hub.load('https://tfhub.dev/google/imagenet/inception_v3/feature_vector/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__module_name__hub_load_https_tfhub_dev_google_imagenet_inception_v3_feature_vector_1",
+    "title": "module_name",
+    "summary": "Extract feature vector from images",
+    "description": "This API allows you to extract feature vectors from images using a pre-trained model from TensorFlow Hub. The model is based on the Inception V3 architecture and has been trained on the ImageNet dataset. Framework: TensorFlow Hub. Functionality: Extract feature vector from images. API call: hub.load('https://tfhub.dev/google/imagenet/inception_v3/feature_vector/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__image_feature_vector__hub_load_https_tfhub_dev_google_tf2_preview_mobilenet_v2_feature_vector_4",
+    "title": "image_feature_vector",
+    "summary": "Generate feature vectors from images",
+    "description": "A pre-trained image feature vector model using MobileNetV2 architecture on TensorFlow Hub. It generates feature vectors from input images for various applications like image classification, object detection, and image similarity. Framework: TensorFlow Hub. Functionality: Generate feature vectors from images. API call: hub.load('https://tfhub.dev/google/tf2-preview/mobilenet_v2/feature_vector/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__movenet__hub_load_https_tfhub_dev_google_movenet_singlepose_lightning_3",
+    "title": "movenet",
+    "summary": "Detect human poses in images",
+    "description": "MoveNet is a family of pose detection models designed for efficient and accurate detection of human poses in images. Framework: TensorFlow Hub. Functionality: Detect human poses in images. API call: hub.load('https://tfhub.dev/google/movenet/singlepose/lightning/3').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4",
+    "title": "model_id",
+    "summary": "Feature extraction",
+    "description": "A pre-trained image feature vector model for image classification and transfer learning, based on MobileNetV2 architecture. Framework: TensorFlow Hub. Functionality: Feature extraction. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__yamnet__hub_load_https_tfhub_dev_google_yamnet_1",
+    "title": "yamnet",
+    "summary": "Feature extraction from audio",
+    "description": "YAMNet is a deep net that predicts audio events from the AudioSet ontology. Framework: TensorFlow Hub. Functionality: Feature extraction from audio. API call: hub.load('https://tfhub.dev/google/yamnet/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__imagenet_mobilenet_v2_100_224__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_classification_4",
+    "title": "imagenet_mobilenet_v2_100_224",
+    "summary": "Pre-trained model for image classification",
+    "description": "A pre-trained model for image classification using MobileNetV2 architecture with 224x224 input size, trained on ImageNet dataset. Framework: TensorFlow Hub. Functionality: Pre-trained model for image classification. API call: hub.KerasLayer(\"https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/classification/4\").",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_imagenet_inception_v1_feature_vector_4",
+    "title": "model_id",
+    "summary": "Create image feature vector",
+    "description": "Load an image feature vector model from TensorFlow Hub and use it to create feature vectors for images. Framework: TensorFlow Hub. Functionality: Create image feature vector. API call: hub.load('https://tfhub.dev/google/imagenet/inception_v1/feature_vector/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_google_tf2_preview_gnews_swivel_20dim_1",
+    "title": "model_id",
+    "summary": "Loading",
+    "description": "A pre-trained text language model that generates embeddings for input text using TensorFlow Hub. Framework: TensorFlow Hub. Functionality: Loading. API call: hub.load('https://tfhub.dev/google/tf2-preview/gnews-swivel-20dim/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__image_feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_inception_v3_feature_vector_4",
+    "title": "image_feature_vector",
+    "summary": "Feature extraction from images",
+    "description": "This API allows you to extract feature vectors from images using the Inception V3 model pretrained on the ImageNet dataset. Framework: TensorFlow Hub. Functionality: Feature extraction from images. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/inception_v3/feature_vector/4').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_tensorflow_api",
+    "name": "tensorflow_hub__model_id__hub_load_https_tfhub_dev_tensorflow_centernet_hourglass_512x512_1",
+    "title": "model_id",
+    "summary": "Object detection in images",
+    "description": "A pre-trained model for object detection in images using TensorFlow Hub and the CenterNet Hourglass architecture. Framework: TensorFlow Hub. Functionality: Object detection in images. API call: hub.load('https://tfhub.dev/tensorflow/centernet/hourglass_512x512/1').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  }
+]

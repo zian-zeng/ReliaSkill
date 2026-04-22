@@ -105,8 +105,17 @@ def load_benchmark_tasks(path: str | Path) -> List[EvalTask]:
                     raw_items.append(json.loads(line))
     else:
         with task_path.open("r", encoding="utf-8") as f:
-            raw = json.load(f)
-        raw_items = raw["data"] if isinstance(raw, dict) and "data" in raw else raw
+            try:
+                raw = json.load(f)
+                raw_items = raw["data"] if isinstance(raw, dict) and "data" in raw else raw
+            except json.JSONDecodeError:
+                # Try fallback to JSONL if .json load fails
+                f.seek(0)
+                raw_items = []
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        raw_items.append(json.loads(line))
 
     tasks: List[EvalTask] = []
 

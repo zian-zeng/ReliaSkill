@@ -637,8 +637,12 @@ def extract_bfcl_instruction(code: str) -> str:
 
 def make_bfcl_tool_id(provider: str, api_call: str, api_name: str) -> str:
     pieces = [_slugify(provider), _slugify(api_name), _slugify(api_call)]
+    import hashlib
     compact = "__".join(piece for piece in pieces if piece)
-    return compact[:180]
+    if len(compact) > 80:
+        h = hashlib.md5(compact.encode()).hexdigest()[:8]
+        return f"{compact[:70]}_{h}"
+    return compact
 
 
 def build_bfcl_tool_records(records: Iterable[Dict[str, Any]], server_name: str = "bfcl_huggingface_api") -> List[Dict[str, Any]]:
