@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tqdm import tqdm
 
 import json
 from pathlib import Path
@@ -106,19 +107,74 @@ def load_tools(raw_path: str | Path) -> Dict[str, Any]:
     }
 
 
-def build_skill_variants(tool: Any, tools: Dict[str, Any], generator: SkillGenerator) -> List[Any]:
+def build_skill_variants(tool: Any, tools: Dict[str, Any], generator: SkillGenerator, package_manager_dir: Path | None = None) -> List[Any]:
+    llm_skill = None
+    if package_manager_dir:
+        # Check primary package dir
+        candidate_path = package_manager_dir / tool.tool_name / "autoskill_base"
+        # Fallback to benchmark dir if primary is missing
+        if not candidate_path.exists():
+            parent_root = package_manager_dir.parent
+            fallback_path = parent_root / "benchmark" / tool.tool_name / "autoskill_base"
+            if fallback_path.exists():
+                candidate_path = fallback_path
+
+        if candidate_path.exists():
+            try:
+                from autoskill.ir import GeneratedSkill
+                skill_json = candidate_path / "skill.json"
+                if skill_json.exists():
+                    with skill_json.open("r", encoding="utf-8") as f:
+                        llm_skill = GeneratedSkill(**json.load(f))
+                else:
+                    # RECONSTRUCT from metadata and SKILL.md
+                    metadata_path = candidate_path / "metadata.json"
+                    skill_md_path = candidate_path / "SKILL.md"
+                    if metadata_path.exists() and skill_md_path.exists():
+                        with metadata_path.open("r", encoding="utf-8") as f:
+                            meta = json.load(f)
+                        content = skill_md_path.read_text(encoding="utf-8")
+                        summary = ""
+                        if "## Summary\n" in content:
+                            summary = content.split("## Summary\n")[1].split("## When to use")[0].strip()
+                        
+                        llm_skill = GeneratedSkill(
+                            baseline_name=meta.get("baseline_name", "autoskill_llm"),
+                            skill_summary=summary,
+                            when_to_use=[], # Fallback
+                            when_not_to_use=[], # Fallback
+                            argument_template={},
+                            semantic_hints=meta.get("semantic_hints", {}),
+                            examples=[], # Loaded separately if needed
+                            method_trace=meta.get("method_trace", [])
+                        )
+            except:
+                pass
+    
+    if llm_skill is None:
+        llm_skill = generator.generate(tool)
+        if package_manager_dir:
+            # SAVE FOR FUTURE
+            save_path = package_manager_dir / tool.tool_name / "autoskill_base" / "skill.json"
+            save_path.parent.mkdir(parents=True, exist_ok=True)
+            with save_path.open("w", encoding="utf-8") as f:
+                json.dump(llm_skill.model_dump(), f, indent=2, ensure_ascii=False)
+    
+    if llm_skill is None:
+        llm_skill = generator.generate(tool)
+
     return [
         build_raw_mcp_skill(tool),
         build_schema_only_skill(tool),
         build_retrieved_docs_skill(tool),
         build_retrieved_candidates_skill(tool, tools=tools),
         build_retrieved_memory_skill(tool, tools=tools),
-        generator.generate(tool),
+        llm_skill,
     ]
 
 
-def build_skill_variant_map(tool: Any, tools: Dict[str, Any], generator: SkillGenerator) -> Dict[str, Any]:
-    return {skill.baseline_name: skill for skill in build_skill_variants(tool, tools, generator)}
+def build_skill_variant_map(tool: Any, tools: Dict[str, Any], generator: SkillGenerator, package_manager_dir: Path | None = None) -> Dict[str, Any]:
+    return {skill.baseline_name: skill for skill in build_skill_variants(tool, tools, generator, package_manager_dir=package_manager_dir)}
 
 
 def _write_jsonl(path: Path, records: List[Dict[str, Any]]) -> None:
@@ -137,8 +193,8 @@ def run_packaging_pipeline(
     generator = generator or SkillGenerator()
     records: List[Dict[str, Any]] = []
 
-    for tool in tools.values():
-        variants = build_skill_variant_map(tool, tools, generator)
+    for tool in tqdm(tools.values(), desc="[AutoSkill] Packaging tools"):
+        variants = build_skill_variant_map(tool, tools, generator, package_manager_dir=out_dir)
         for skill in variants.values():
             report = validate_skill(tool, skill)
             write_skill_package(out_dir / tool.tool_name / skill.baseline_name, tool, skill, report)
@@ -189,14 +245,27 @@ def run_benchmark_pipeline(
     tasks = load_benchmark_tasks(tasks_path)
     all_scores: List[Dict[str, Any]] = []
 
-    for task in tasks:
+    for task in tqdm(tasks, desc="[AutoSkill] Running benchmark"):
         if task.tool_name not in tools:
             continue
         tool = tools[task.tool_name]
-        variants = build_skill_variant_map(tool, tools, generator)
+        variants = build_skill_variant_map(tool, tools, generator, package_manager_dir=out_dir.parent / "packages")
         for skill in variants.values():
             report = validate_skill(tool, skill)
-            write_skill_package(out_dir / task.tool_name / skill.baseline_name, tool, skill, report)
+            target_dir = out_dir / task.tool_name / skill.baseline_name
+            target_dir.mkdir(parents=True, exist_ok=True)
+            
+            result_path = target_dir / f"{task.task_id}.result.json"
+            if result_path.exists():
+                try:
+                    with result_path.open("r", encoding="utf-8") as f:
+                        score = json.load(f)
+                        all_scores.append(score)
+                        continue
+                except:
+                    pass
+
+            write_skill_package(target_dir, tool, skill, report)
             runtime_skill, retrieval_context = contextualize_skill_for_task(task, tool, skill, tools)
             prediction = safe_predict(tool, runtime_skill, task, predictor)
             score = score_prediction(task, tool, prediction)
@@ -208,8 +277,10 @@ def run_benchmark_pipeline(
             score["retrieval_context"] = retrieval_context
             all_scores.append(score)
 
-            exposure_path = out_dir / task.tool_name / skill.baseline_name / f"{task.task_id}.prompt.txt"
-            exposure_path.parent.mkdir(parents=True, exist_ok=True)
+            with result_path.open("w", encoding="utf-8") as f:
+                json.dump(score, f, indent=2, ensure_ascii=False)
+
+            exposure_path = target_dir / f"{task.task_id}.prompt.txt"
             exposure_path.write_text(prediction.exposure_text, encoding="utf-8")
 
     summary = summarize_task_scores(all_scores)
@@ -249,10 +320,10 @@ def run_routing_benchmark_pipeline(
     tasks = load_benchmark_tasks(tasks_path)
 
     skill_variants_by_tool = {
-        tool_name: build_skill_variant_map(tool, tools, generator)
+        tool_name: build_skill_variant_map(tool, tools, generator, package_manager_dir=out_dir.parent / "packages")
         for tool_name, tool in tools.items()
     }
-    routing_scores = run_routing_pipeline(tasks, tools, skill_variants_by_tool, predictor)
+    routing_scores = run_routing_pipeline(tasks, tools, skill_variants_by_tool, predictor, output_dir=out_dir)
     summary = summarize_routing_scores(routing_scores)
     summary_by_tool = summarize_routing_scores_by_tool(routing_scores)
     summary_by_split = summarize_routing_scores_by_split(routing_scores)

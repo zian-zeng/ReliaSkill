@@ -60,7 +60,6 @@ This note maps the current AutoSkill comparison ladder to prior work that is clo
 
 ## What Is Still Missing For A Stronger Paper
 
-- A real model-backed run for all baselines instead of heuristic-only defaults.
-- A larger and more diverse MCP tool benchmark.
-- At least one stronger external baseline that uses a real retriever and model prompt instead of heuristic retrieval.
-- Clear held-out evaluation and significance-aware comparison on a larger test split.
+- A larger and more diverse MCP tool benchmark (in progress with external harvested corpus).
+- More exhaustive ablations across different model families (Llama 3, Mistral, etc.).
+- Significance-aware comparison on larger test splits.

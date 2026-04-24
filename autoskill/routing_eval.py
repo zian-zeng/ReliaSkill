@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tqdm import tqdm
 
 import random
 import re
@@ -175,35 +176,87 @@ def score_routed_prediction(
     }
 
 
+import json
+
 def run_routing_pipeline(
     tasks: List[EvalTask],
     tools: Dict[str, ToolIR],
     skill_variants_by_tool: Dict[str, Dict[str, GeneratedSkill]],
     predictor: PredictorBackend,
+    output_dir: Path | None = None,
 ) -> List[Dict[str, Any]]:
     records: List[Dict[str, Any]] = []
-    for task in tasks:
-        for baseline_name in next(iter(skill_variants_by_tool.values())).keys():
+    baseline_names = list(next(iter(skill_variants_by_tool.values())).keys())
+    
+    for task in tqdm(tasks, desc="[AutoSkill] Routing evaluation"):
+        # Quick skip if all results for this task exist
+        if output_dir:
+            task_dir = output_dir / task.task_id
+            if task_dir.exists():
+                existing = []
+                for b_name in baseline_names:
+                    p = task_dir / f"{b_name}.routing.json"
+                    if p.exists():
+                        try:
+                            with p.open("r", encoding="utf-8") as f:
+                                existing.append(json.load(f))
+                        except: pass
+                if len(existing) == len(baseline_names):
+                    records.extend(existing)
+                    continue
+
+        for baseline_name in baseline_names:
+            # Per-baseline resume
+            if output_dir:
+                p = output_dir / task.task_id / f"{baseline_name}.routing.json"
+                if p.exists():
+                    try:
+                        with p.open("r", encoding="utf-8") as f:
+                            records.append(json.load(f))
+                            continue
+                    except: pass
+
             skill_bank = {tool_name: variants[baseline_name] for tool_name, variants in skill_variants_by_tool.items()}
             routing = select_tool_for_task(task, baseline_name, tools, skill_bank)
             selected_tool_name = str(routing["selected_tool_name"])
-            selected_tool = tools[selected_tool_name]
-            selected_skill = skill_bank[selected_tool_name]
-            routed_task = EvalTask(
-                task_id=task.task_id,
-                tool_name=selected_tool_name,
-                user_request=task.user_request,
-                expected_arguments=task.expected_arguments,
-                expected_argument_candidates=task.expected_argument_candidates,
-                split=task.split,
-                tags=list(task.tags),
-            )
-            runtime_skill, retrieval_context = contextualize_skill_for_task(routed_task, selected_tool, selected_skill, tools)
-            prediction = safe_predict(selected_tool, runtime_skill, routed_task, predictor)
-            prediction.tool_name = selected_tool_name
-            argument_score = score_prediction(routed_task, selected_tool, prediction)
-            records.append(
-                score_routed_prediction(
+            
+            if selected_tool_name not in tools:
+                # Handle hallucination
+                record = {
+                    "task_id": task.task_id,
+                    "baseline_name": baseline_name,
+                    "selected_tool_name": selected_tool_name,
+                    "correct_tool": False,
+                    "exact_match": 0.0,
+                    "soft_match": 0.0,
+                    "error": "hallucinated_tool_name",
+                    "expected_tool_name": task.tool_name,
+                    "tool_selection_correct": False,
+                    "joint_exact_match": False,
+                    "argument_validity": 0.0,
+                    "required_argument_recall": 0.0,
+                    "split": task.split,
+                }
+            else:
+                selected_tool = tools[selected_tool_name]
+                selected_skill = skill_bank[selected_tool_name]
+                
+                # Full prediction logic for the selected tool
+                routed_task = EvalTask(
+                    task_id=task.task_id,
+                    tool_name=selected_tool_name,
+                    user_request=task.user_request,
+                    expected_arguments=task.expected_arguments,
+                    expected_argument_candidates=task.expected_argument_candidates,
+                    split=task.split,
+                    tags=list(task.tags),
+                )
+                runtime_skill, retrieval_context = contextualize_skill_for_task(routed_task, selected_tool, selected_skill, tools)
+                prediction = safe_predict(selected_tool, runtime_skill, routed_task, predictor)
+                prediction.tool_name = selected_tool_name
+                
+                argument_score = score_prediction(routed_task, selected_tool, prediction)
+                record = score_routed_prediction(
                     task,
                     selected_tool_name=selected_tool_name,
                     candidate_tools=list(routing["candidate_tools"]),
@@ -219,7 +272,15 @@ def run_routing_pipeline(
                         },
                     },
                 )
-            )
+                # Add split info for reporting
+                record["split"] = task.split
+            
+            records.append(record)
+            if output_dir:
+                task_dir = output_dir / task.task_id
+                task_dir.mkdir(parents=True, exist_ok=True)
+                with (task_dir / f"{baseline_name}.routing.json").open("w", encoding="utf-8") as f:
+                    json.dump(record, f, indent=2, ensure_ascii=False)
     return records
 
 

@@ -3,6 +3,8 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any, Dict, List
 
+_GLOBAL_MODEL_CACHE: Dict[str, Any] = {}
+
 
 class LocalHFChatRunner:
     def __init__(
@@ -43,6 +45,12 @@ class LocalHFChatRunner:
         if self._tokenizer is not None and self._model is not None:
             return
 
+        cache_key = f"{self.model_name_or_path}_{self.load_in_4bit}_{self.load_in_8bit}_{self.device}_{self.device_map}"
+        if cache_key in _GLOBAL_MODEL_CACHE:
+            self._tokenizer = _GLOBAL_MODEL_CACHE[cache_key]["tokenizer"]
+            self._model = _GLOBAL_MODEL_CACHE[cache_key]["model"]
+            return
+
         try:
             from transformers import AutoModelForCausalLM, AutoTokenizer
         except ImportError as exc:
@@ -61,20 +69,27 @@ class LocalHFChatRunner:
             self.model_name_or_path,
             trust_remote_code=self.trust_remote_code,
         )
+        from transformers import BitsAndBytesConfig
+        
         model_kwargs: Dict[str, Any] = {}
         resolved_dtype = self._resolve_torch_dtype(torch)
         if resolved_dtype is not None:
             model_kwargs["torch_dtype"] = resolved_dtype
         if self.attn_implementation:
             model_kwargs["attn_implementation"] = self.attn_implementation
-        if self.load_in_4bit:
-            model_kwargs["load_in_4bit"] = True
-        if self.load_in_8bit:
-            model_kwargs["load_in_8bit"] = True
+        
+        if self.load_in_4bit or self.load_in_8bit:
+            model_kwargs["quantization_config"] = BitsAndBytesConfig(
+                load_in_4bit=self.load_in_4bit,
+                load_in_8bit=self.load_in_8bit,
+                bnb_4bit_compute_dtype=resolved_dtype or torch.float16,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_use_double_quant=True,
+            )
 
         effective_device_map = self.device_map
         if effective_device_map is None and self.device in {"auto", "cuda"}:
-            effective_device_map = self.device
+            effective_device_map = "auto"
         if effective_device_map:
             model_kwargs["device_map"] = effective_device_map
 
@@ -85,6 +100,11 @@ class LocalHFChatRunner:
         )
         if self.device == "cpu":
             self._model.to("cpu")
+
+        _GLOBAL_MODEL_CACHE[cache_key] = {
+            "tokenizer": self._tokenizer,
+            "model": self._model,
+        }
 
     def _render_prompt(self, messages: List[Dict[str, str]]) -> str:
         self._load()
@@ -110,6 +130,14 @@ class LocalHFChatRunner:
         model = self._model
         prompt = self._render_prompt(messages)
         inputs = tokenizer(prompt, return_tensors="pt")
+        
+        # Memory optimization: Truncate input if it's too long
+        max_context = 2048
+        if inputs["input_ids"].shape[1] > max_context:
+            inputs["input_ids"] = inputs["input_ids"][:, -max_context:]
+            if "attention_mask" in inputs:
+                inputs["attention_mask"] = inputs["attention_mask"][:, -max_context:]
+
         if hasattr(model, "device"):
             inputs = {key: value.to(model.device) for key, value in inputs.items()}
 

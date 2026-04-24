@@ -1,0 +1,938 @@
+[
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__slow_r50__torch_hub_load_repo_or_dir_facebookresearch_pytorch_4389cd39",
+    "title": "slow_r50",
+    "summary": "3D ResNet",
+    "description": "The 3D ResNet model is a Resnet-style video classification network pretrained on the Kinetics 400 dataset. It is based on the architecture from the paper 'SlowFast Networks for Video Recognition' by Christoph Feichtenhofer et al. Framework: PyTorch. Functionality: 3D ResNet. API call: torch.hub.load(repo_or_dir='facebookresearch/pytorchvideo', model='slow_r50', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__silero_models__torch_hub_load_repo_or_dir_snakers4_silero_mod_1a0a503d",
+    "title": "Silero Models",
+    "summary": "Speech-To-Text",
+    "description": "Silero Speech-To-Text models provide enterprise grade STT in a compact form-factor for several commonly spoken languages. The models are robust to a variety of dialects, codecs, domains, noises, and lower sampling rates. They consume a normalized audio in the form of samples and output frames with token probabilities. A decoder utility is provided for simplicity. Framework: PyTorch. Functionality: Speech-To-Text. API call: torch.hub.load(repo_or_dir='snakers4/silero-models', model='silero_stt', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__torch_hub_load__torch_hub_load_repo_or_dir_pytorch_vision_mod_35b6e168",
+    "title": "torch.hub.load",
+    "summary": "DeepLabV3",
+    "description": "DeepLabV3 models with ResNet-50, ResNet-101 and MobileNet-V3 backbones for semantic segmentation. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: DeepLabV3. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='deeplabv3_resnet50', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__torch_hub_load__torch_hub_load_repo_or_dir_ultralytics_yolov5_a9441b23",
+    "title": "torch.hub.load",
+    "summary": "YOLOv5",
+    "description": "YOLOv5 is a family of compound-scaled object detection models trained on the COCO dataset, and includes simple functionality for Test Time Augmentation (TTA), model ensembling, hyperparameter evolution, and export to ONNX, CoreML and TFLite. Framework: PyTorch. Functionality: YOLOv5. API call: torch.hub.load(repo_or_dir='ultralytics/yolov5', model='yolov5s', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__resnext_wsl__torch_hub_load_repo_or_dir_facebookresearch_wsl__6fa74352",
+    "title": "ResNext WSL",
+    "summary": "Image Classification",
+    "description": "The provided ResNeXt models are pre-trained in weakly-supervised fashion on 940 million public images with 1.5K hashtags matching with 1000 ImageNet1K synsets, followed by fine-tuning on ImageNet1K dataset. The models significantly improve the training accuracy on ImageNet compared to training from scratch. They achieve state-of-the-art accuracy of 85.4% on ImageNet with the ResNext-101 32x48d model. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='facebookresearch/WSL-Images', model='resnext101_32x8d_wsl', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__pgan__torch_hub_load_repo_or_dir_facebookresearch_pytorch_gan_a16af892",
+    "title": "PGAN",
+    "summary": "Generative Adversarial Networks (GANs)",
+    "description": "Progressive Growing of GANs (PGAN) is a method for generating high-resolution images using generative adversarial networks. The model is trained progressively, starting with low-resolution images and gradually increasing the resolution until the desired output is achieved. This implementation is based on the paper by Tero Karras et al., 'Progressive Growing of GANs for Improved Quality, Stability, and Variation'. Framework: PyTorch. Functionality: Generative Adversarial Networks (GANs). API call: torch.hub.load(repo_or_dir='facebookresearch/pytorch_GAN_zoo:hub', model='PGAN', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__hardnet__torch_hub_load_repo_or_dir_pingolh_pytorch_hardnet_m_ef3c7a1a",
+    "title": "HarDNet",
+    "summary": "Image Classification",
+    "description": "Harmonic DenseNet (HarDNet) is a low memory traffic CNN model, which is fast and efficient. The basic concept is to minimize both computational cost and memory access cost at the same time, such that the HarDNet models are 35% faster than ResNet running on GPU comparing to models with the same accuracy (except the two DS models that were designed for comparing with MobileNet). Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='PingoLH/Pytorch-HarDNet', model='hardnet68ds', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__hardnet__torch_hub_load_repo_or_dir_pingolh_pytorch_hardnet_m_afd66d83",
+    "title": "HarDNet",
+    "summary": "Image Classification",
+    "description": "Harmonic DenseNet (HarDNet) is a low memory trafficCNN model, which is fast and efficient. The basic concept is to minimize both computational cost and memory access cost at the same time, such that the HarDNet models are 35% faster than ResNet running on GPU comparing to models with the same accuracy (except the two DS models that were designed for comparing with MobileNet). Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='PingoLH/Pytorch-HarDNet', model='hardnet68', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__resnet__torch_hub_load_repo_or_dir_pytorch_vision_model_resne_77f20790",
+    "title": "ResNet",
+    "summary": "Deep Residual Networks",
+    "description": "ResNet models are deep residual networks pre-trained on ImageNet. They were proposed in the paper 'Deep Residual Learning for Image Recognition'. Available model variants include ResNet18, ResNet34, ResNet50, ResNet101, and ResNet152. Framework: PyTorch. Functionality: Deep Residual Networks. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='resnet34', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__resnet__torch_hub_load_repo_or_dir_pytorch_vision_model_resne_febb193e",
+    "title": "ResNet",
+    "summary": "Deep Residual Networks",
+    "description": "ResNet models are deep residual networks pre-trained on ImageNet. They were proposed in the paper 'Deep Residual Learning for Image Recognition'. Available model variants include ResNet18, ResNet34, ResNet50, ResNet101, and ResNet152. Framework: PyTorch. Functionality: Deep Residual Networks. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='resnet152', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__snnmlp__torch_hub_load_repo_or_dir_huawei_noah_efficient_ai_b_fd625b00",
+    "title": "SNNMLP",
+    "summary": "Image Classification",
+    "description": "SNNMLP incorporates the mechanism of LIF neurons into the MLP models, to achieve better accuracy without extra FLOPs. We propose a full-precision LIF operation to communicate between patches, including horizontal LIF and vertical LIF in different directions. We also propose to use group LIF to extract better local features. With LIF modules, our SNNMLP model achieves 81.9%, 83.3% and 83.6% top-1 accuracy on ImageNet dataset with only 4.4G, 8.5G and 15.2G FLOPs, respectively. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='huawei-noah/Efficient-AI-Backbones', model='snnmlp_s', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__snnmlp__torch_hub_load_repo_or_dir_huawei_noah_efficient_ai_b_6632eda9",
+    "title": "SNNMLP",
+    "summary": "Image Classification",
+    "description": "SNNMLP incorporates the mechanism of LIF neurons into the MLP models, to achieve better accuracy without extra FLOPs. We propose a full-precision LIF operation to communicate between patches, including horizontal LIF and vertical LIF in different directions. We also propose to use group LIF to extract better local features. With LIF modules, our SNNMLP model achieves 81.9%, 83.3% and 83.6% top-1 accuracy on ImageNet dataset with only 4.4G, 8.5G and 15.2G FLOPs, respectively. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='huawei-noah/Efficient-AI-Backbones', model='snnmlp_b', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__vgg_nets__torch_hub_load_repo_or_dir_pytorch_vision_model_vgg_d80846a5",
+    "title": "vgg-nets",
+    "summary": "Image Recognition",
+    "description": "vgg-nets are award-winning ConvNets from the 2014 Imagenet ILSVRC challenge. They are used for large-scale image recognition tasks. The available models are vgg11, vgg11_bn, vgg13, vgg13_bn, vgg16, vgg16_bn, vgg19, and vgg19_bn. Framework: PyTorch. Functionality: Image Recognition. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='vgg11', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__vgg_nets__torch_hub_load_repo_or_dir_pytorch_vision_model_vgg_24f38414",
+    "title": "vgg-nets",
+    "summary": "Image Recognition",
+    "description": "vgg-nets are award-winning ConvNets from the 2014 Imagenet ILSVRC challenge. They are used for large-scale image recognition tasks. The available models are vgg11, vgg11_bn, vgg13, vgg13_bn, vgg16, vgg16_bn, vgg19, and vgg19_bn. Framework: PyTorch. Functionality: Image Recognition. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='vgg13_bn', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__vgg_nets__torch_hub_load_repo_or_dir_pytorch_vision_model_vgg_e8560fd8",
+    "title": "vgg-nets",
+    "summary": "Image Recognition",
+    "description": "vgg-nets are award-winning ConvNets from the 2014 Imagenet ILSVRC challenge. They are used for large-scale image recognition tasks. The available models are vgg11, vgg11_bn, vgg13, vgg13_bn, vgg16, vgg16_bn, vgg19, and vgg19_bn. Framework: PyTorch. Functionality: Image Recognition. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='vgg16', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__meal_v2__torch_hub_load_repo_or_dir_szq0214_meal_v2_meal_v2_m_28b1c07d",
+    "title": "MEAL_V2",
+    "summary": "Image Classification",
+    "description": "MEAL V2 models are from the MEAL V2: Boosting Vanilla ResNet-50 to 80%+ Top-1 Accuracy on ImageNet without Tricks paper. The method is based on ensemble knowledge distillation via discriminators, and it achieves state-of-the-art results without using common tricks such as architecture modification, outside training data, autoaug/randaug, cosine learning rate, mixup/cutmix training, or label smoothing. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='szq0214/MEAL-V2', 'meal_v2', model='mealv2_resnest50_380x380', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__meal_v2__torch_hub_load_repo_or_dir_szq0214_meal_v2_meal_v2_m_d0007f6f",
+    "title": "MEAL_V2",
+    "summary": "Image Classification",
+    "description": "MEAL V2 models are from the MEAL V2: Boosting Vanilla ResNet-50 to 80%+ Top-1 Accuracy on ImageNet without Tricks paper. The method is based on ensemble knowledge distillation via discriminators, and it achieves state-of-the-art results without using common tricks such as architecture modification, outside training data, autoaug/randaug, cosine learning rate, mixup/cutmix training, or label smoothing. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='szq0214/MEAL-V2', 'meal_v2', model='mealv2_mobilenetv3_small_100', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__yolop__torch_hub_load_repo_or_dir_hustvl_yolop_model_yolop_pr_7ee6c3e5",
+    "title": "YOLOP",
+    "summary": "Object Detection, Drivable Area Segmentation, Lane Detection",
+    "description": "YOLOP is an efficient multi-task network that can jointly handle three crucial tasks in autonomous driving: object detection, drivable area segmentation and lane detection. And it is also the first to reach real-time on embedded devices while maintaining state-of-the-art level performance on the BDD100K dataset. Framework: PyTorch. Functionality: Object Detection, Drivable Area Segmentation, Lane Detection. API call: torch.hub.load(repo_or_dir='hustvl/yolop', model='yolop', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__midas__torch_hub_load_repo_or_dir_intel_isl_midas_model_midas_a42089a9",
+    "title": "MiDaS",
+    "summary": "Computing relative depth from a single image",
+    "description": "MiDaS computes relative inverse depth from a single image. The repository provides multiple models that cover different use cases ranging from a small, high-speed model to a very large model that provide the highest accuracy. The models have been trained on 10 distinct datasets using multi-objective optimization to ensure high quality on a wide range of inputs. Framework: PyTorch. Functionality: Computing relative depth from a single image. API call: torch.hub.load(repo_or_dir='intel-isl/MiDaS', model='MiDaS_small', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__densenet__torch_hub_load_repo_or_dir_pytorch_vision_model_den_3dc7b9c1",
+    "title": "Densenet",
+    "summary": "Dense Convolutional Network",
+    "description": "Dense Convolutional Network (DenseNet) connects each layer to every other layer in a feed-forward fashion. It alleviates the vanishing-gradient problem, strengthens feature propagation, encourages feature reuse, and substantially reduces the number of parameters. Framework: PyTorch. Functionality: Dense Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='densenet161', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_8ed8e005",
+    "title": "fcn_resnet50",
+    "summary": "Fully-Convolutional Network",
+    "description": "FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: Fully-Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='fcn_resnet50', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__ghostnet__torch_hub_load_repo_or_dir_huawei_noah_ghostnet_mod_24cb9fa5",
+    "title": "GhostNet",
+    "summary": "Efficient networks by generating more features from cheap operations",
+    "description": "The GhostNet architecture is based on an Ghost module structure which generates more features from cheap operations. Based on a set of intrinsic feature maps, a series of cheap operations are applied to generate many ghost feature maps that could fully reveal information underlying intrinsic features. Experiments conducted on benchmarks demonstrate the superiority of GhostNet in terms of speed and accuracy tradeoff. Framework: PyTorch. Functionality: Efficient networks by generating more features from cheap operations. API call: torch.hub.load(repo_or_dir='huawei-noah/ghostnet', model='ghostnet_1x', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__torch_hub_load__torch_hub_load_repo_or_dir_xingangpan_ibn_net_a2fa1e63",
+    "title": "torch.hub.load",
+    "summary": "IBN-Net",
+    "description": "IBN-Net is a CNN model with domain/appearance invariance. Motivated by style transfer works, IBN-Net carefully unifies instance normalization and batch normalization in a single deep network. It provides a simple way to increase both modeling and generalization capacities without adding model complexity. IBN-Net is especially suitable for cross domain or person/vehicle re-identification tasks. Framework: PyTorch. Functionality: IBN-Net. API call: torch.hub.load(repo_or_dir='XingangPan/IBN-Net', model='resnext101_ibn_a', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__resnest__torch_hub_load_repo_or_dir_zhanghang1989_resnest_mod_0b801d9e",
+    "title": "ResNeSt",
+    "summary": "Image Classification",
+    "description": "ResNeSt models are from the ResNeSt: Split-Attention Networks paper. They are a new ResNet variant that enables attention across feature-map groups. By stacking Split-Attention blocks ResNet-style, ResNeSt models outperform other networks with similar model complexities, and also help downstream tasks including object detection, instance segmentation, and semantic segmentation. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='zhanghang1989/ResNeSt', model='resnest101', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__mit_han_lab_proxylessnas__torch_hub_load_repo_or_dir_mit_han__c52c2a7d",
+    "title": "mit-han-lab/ProxylessNAS",
+    "summary": "ProxylessNAS",
+    "description": "ProxylessNAS models are from the ProxylessNAS: Direct Neural Architecture Search on Target Task and Hardware paper. They specialize CNN architectures for different hardware platforms, offering free yet significant performance boost on all three platforms (CPU, GPU, and Mobile) with similar accuracy. Framework: PyTorch. Functionality: ProxylessNAS. API call: torch.hub.load(repo_or_dir='mit-han-lab/ProxylessNAS', model='proxylessnas_cpu', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__resnet__torch_hub_load_repo_or_dir_pytorch_vision_model_resne_a5562eca",
+    "title": "ResNet",
+    "summary": "Deep Residual Networks",
+    "description": "ResNet models are deep residual networks pre-trained on ImageNet. They were proposed in the paper 'Deep Residual Learning for Image Recognition'. Available model variants include ResNet18, ResNet34, ResNet50, ResNet101, and ResNet152. Framework: PyTorch. Functionality: Deep Residual Networks. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='resnet101', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__snnmlp__torch_hub_load_repo_or_dir_huawei_noah_efficient_ai_b_8d5a007c",
+    "title": "SNNMLP",
+    "summary": "Image Classification",
+    "description": "SNNMLP incorporates the mechanism of LIF neurons into the MLP models, to achieve better accuracy without extra FLOPs. We propose a full-precision LIF operation to communicate between patches, including horizontal LIF and vertical LIF in different directions. We also propose to use group LIF to extract better local features. With LIF modules, our SNNMLP model achieves 81.9%, 83.3% and 83.6% top-1 accuracy on ImageNet dataset with only 4.4G, 8.5G and 15.2G FLOPs, respectively. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='huawei-noah/Efficient-AI-Backbones', model='snnmlp_t', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__squeezenet__torch_hub_load_repo_or_dir_pytorch_vision_model_s_6285e752",
+    "title": "SqueezeNet",
+    "summary": "Image Classification",
+    "description": "SqueezeNet is an image classification model that achieves AlexNet-level accuracy with 50x fewer parameters. It has two versions: squeezenet1_0 and squeezenet1_1, with squeezenet1_1 having 2.4x less computation and slightly fewer parameters than squeezenet1_0, without sacrificing accuracy. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='squeezenet1_1', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__vgg_nets__torch_hub_load_repo_or_dir_pytorch_vision_model_vgg_09b656eb",
+    "title": "vgg-nets",
+    "summary": "Image Recognition",
+    "description": "vgg-nets are award-winning ConvNets from the 2014 Imagenet ILSVRC challenge. They are used for large-scale image recognition tasks. The available models are vgg11, vgg11_bn, vgg13, vgg13_bn, vgg16, vgg16_bn, vgg19, and vgg19_bn. Framework: PyTorch. Functionality: Image Recognition. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='vgg11_bn', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__vgg_nets__torch_hub_load_repo_or_dir_pytorch_vision_model_vgg_d60d8fc9",
+    "title": "vgg-nets",
+    "summary": "Image Recognition",
+    "description": "vgg-nets are award-winning ConvNets from the 2014 Imagenet ILSVRC challenge. They are used for large-scale image recognition tasks. The available models are vgg11, vgg11_bn, vgg13, vgg13_bn,vgg16, vgg16_bn, vgg19, and vgg19_bn. Framework: PyTorch. Functionality: Image Recognition. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='vgg13', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__wide_resnet101_2__torch_hub_load_repo_or_dir_pytorch_vision_m_e393ce76",
+    "title": "wide_resnet101_2",
+    "summary": "Wide Residual Networks",
+    "description": "Wide Residual networks simply have increased number of channels compared to ResNet. Otherwise the architecture is the same. Deeper ImageNet models with bottleneck block have increased number of channels in the inner 3x3 convolution. The wide_resnet50_2 and wide_resnet101_2 models were trained in FP16 with mixed precision training using SGD with warm restarts. Checkpoints have weights in half precision (except batch norm) for smaller size, and can be used in FP32 models too. Framework: PyTorch. Functionality: Wide Residual Networks. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='wide_resnet101_2', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__torch_hub_load__torch_hub_load_repo_or_dir_nvidia_deeplearnin_45635f66",
+    "title": "torch.hub.load",
+    "summary": "GPUNet Networks",
+    "description": "GPUNet is a family of Convolutional Neural Networks designed by NVIDIA using novel Neural Architecture Search (NAS) methods. They are optimized for NVIDIA GPU and TensorRT performance. GPUNet models are pretrained on the IMAGENET dataset and are capable of classifying images into different categories. The models are provided by the NVIDIA Deep Learning Examples library. Framework: PyTorch. Functionality: GPUNet Networks. API call: torch.hub.load(repo_or_dir='NVIDIA/DeepLearningExamples:torchhub', model='nvidia_gpunet', pretrained=True, model_type=model_type, model_math=precision).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__transformer_nmt__torch_hub_load_repo_or_dir_pytorch_fairseq",
+    "title": "Transformer (NMT)",
+    "summary": "Neural Machine Translation",
+    "description": "Transformer (NMT) is a powerful sequence-to-sequence modeling architecture that produces state-of-the-art neural machine translation systems. It is based on the paper 'Attention Is All You Need' and has been improved using techniques such as large-scale semi-supervised training, back-translation, and noisy-channel reranking. It supports English-French and English-German translation as well as round-trip translation for paraphrasing. Framework: PyTorch. Functionality: Neural Machine Translation. API call: torch.hub.load(repo_or_dir='pytorch/fairseq').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__ssd__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_t_5cbec79e",
+    "title": "SSD",
+    "summary": "Single Shot MultiBox Detector",
+    "description": "The SSD (Single Shot MultiBox Detector) model is an object detection model based on the paper 'SSD: Single Shot MultiBox Detector'. It uses a deep neural network for detecting objects in images. This implementation replaces the obsolete VGG model backbone with the more modern ResNet-50 model. The SSD model is trained on the COCO dataset and can be used to detect objects in images with high accuracy and efficiency. Framework: PyTorch. Functionality: Single Shot MultiBox Detector. API call: torch.hub.load(repo_or_dir='NVIDIA/DeepLearningExamples:torchhub', model='nvidia_ssd', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__tacotron_2__torch_hub_load_repo_or_dir_nvidia_deeplearningexa_47bd8c63",
+    "title": "Tacotron 2",
+    "summary": "Text-to-Speech",
+    "description": "The Tacotron 2 model generates mel spectrograms from input text using an encoder-decoder architecture, and it is designed for generating natural-sounding speech from raw transcripts without any additional prosody information. This implementation uses Dropout instead of Zoneout to regularize the LSTM layers. The WaveGlow model (also available via torch.hub) is a flow-based model that consumes the mel spectrograms to generate speech. Framework: PyTorch. Functionality: Text-to-Speech. API call: torch.hub.load(repo_or_dir='NVIDIA/DeepLearningExamples:torchhub', model='nvidia_tacotron2', model_math='fp16').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__meal_v2__torch_hub_load_repo_or_dir_szq0214_meal_v2_meal_v2_m_de6bfa17",
+    "title": "MEAL_V2",
+    "summary": "Image Classification",
+    "description": "MEAL V2 models are from the MEAL V2: Boosting Vanilla ResNet-50 to 80%+ Top-1 Accuracy on ImageNet without Tricks paper. The method is based on ensemble knowledge distillation via discriminators, and it achieves state-of-the-art results without using common tricks such as architecture modification, outside training data, autoaug/randaug, cosine learning rate, mixup/cutmix training, or label smoothing. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='szq0214/MEAL-V2', 'meal_v2', model='mealv2_mobilenetv3_small_075', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__meal_v2__torch_hub_load_repo_or_dir_szq0214_meal_v2_meal_v2_m_ce445cd1",
+    "title": "MEAL_V2",
+    "summary": "Image Classification",
+    "description": "MEAL V2 models are from the MEAL V2: Boosting Vanilla ResNet-50 to 80%+ Top-1 Accuracy on ImageNet without Tricks paper. The method is based on ensemble knowledge distillation via discriminators, and it achieves state-of-the-art results without using common tricks such as architecture modification, outside training data, autoaug/randaug, cosine learning rate, mixup/cutmix training, or label smoothing. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='szq0214/MEAL-V2', 'meal_v2', model='mealv2_efficientnet_b0', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__silero_voice_activity_detector__torch_hub_load_repo_or_dir_sn_a21e0526",
+    "title": "Silero Voice Activity Detector",
+    "summary": "Voice Activity Detection",
+    "description": "Silero VAD is a pre-trained enterprise-grade Voice Activity Detector (VAD) that aims to provide a high-quality and modern alternative to the WebRTC Voice Activity Detector. The model is optimized for performance on 1 CPU thread and is quantized. Framework: PyTorch. Functionality: Voice Activity Detection. API call: torch.hub.load(repo_or_dir='snakers4/silero-vad', model='silero_vad', force_reload=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__torch_hub_load__torch_hub_load_repo_or_dir_pytorch_vision_mod_a2002647",
+    "title": "torch.hub.load",
+    "summary": "DeepLabV3",
+    "description": "DeepLabV3 models with ResNet-50, ResNet-101 and MobileNet-V3 backbones for semantic segmentation. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: DeepLabV3. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='deeplabv3_mobilenet_v3_large', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__se_resnext101__torch_hub_load_repo_or_dir_nvidia_deeplearning_e2a81d69",
+    "title": "SE-ResNeXt101",
+    "summary": "Image Classification",
+    "description": "The SE-ResNeXt101-32x4d is a ResNeXt101-32x4d model with added Squeeze-and-Excitation module. This model is trained with mixed precision using Tensor Cores on Volta, Turing, and the NVIDIA Ampere GPU architectures, which allows researchers to get results 3x faster than training without Tensor Cores while experiencing the benefits of mixed precision training. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='NVIDIA/DeepLearningExamples:torchhub', model='nvidia_se_resnext101_32x4d', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__densenet__torch_hub_load_repo_or_dir_pytorch_vision_model_den_e9ca30e9",
+    "title": "Densenet",
+    "summary": "Dense Convolutional Network",
+    "description": "Dense Convolutional Network (DenseNet) connects each layer to every other layer in a feed-forward fashion. It alleviates the vanishing-gradient problem, strengthens feature propagation, encourages feature reuse, and substantially reduces the number of parameters. Framework: PyTorch. Functionality: Dense Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='densenet201', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__hardnet__torch_hub_load_repo_or_dir_pingolh_pytorch_hardnet_m_d3d25d62",
+    "title": "HarDNet",
+    "summary": "Image Classification",
+    "description": "Harmonic DenseNet (HarDNet) is a low memory traffic CNN model, which is fast and efficient. The basic concept is to minimize both computational cost and memory access cost at the same time, such that the HarDNet models are 35% faster than ResNet running on GPU comparing to models with the same accuracy (except the two DS models that were designed for comparing with MobileNet). Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='PingoLH/Pytorch-HarDNet', model='hardnet85', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__resnest__torch_hub_load_repo_or_dir_zhanghang1989_resnest_mod_145d1f0b",
+    "title": "ResNeSt",
+    "summary": "Image Classification",
+    "description": "ResNeSt models are from the ResNeSt: Split-Attention Networks paper. They are a new ResNet variant that enables attention across feature-map groups. By stacking Split-Attention blocks ResNet-style, ResNeSt models outperform other networks with similar model complexities, and also help downstream tasks including object detection, instance segmentation, and semantic segmentation. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='zhanghang1989/ResNeSt', model='resnest50', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__resnest__torch_hub_load_repo_or_dir_zhanghang1989_resnest_mod_e68f35e2",
+    "title": "ResNeSt",
+    "summary": "Image Classification",
+    "description": "ResNeSt models are from the ResNeSt: Split-Attention Networks paper. They are a new ResNet variant that enables attention across feature-map groups. By stacking Split-Attention blocks ResNet-style, ResNeSt models outperform other networks with similar model complexities, and also help downstream tasks including object detection, instance segmentation, and semantic segmentation. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='zhanghang1989/ResNeSt', model='resnest200', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__mit_han_lab_proxylessnas__torch_hub_load_repo_or_dir_mit_han__a8fd3549",
+    "title": "mit-han-lab/ProxylessNAS",
+    "summary": "ProxylessNAS",
+    "description": "ProxylessNAS models are from the ProxylessNAS: Direct Neural Architecture Search on Target Task and Hardware paper. They specialize CNN architectures for different hardware platforms, offering free yet significant performance boost on all three platforms (CPU, GPU, and Mobile) with similar accuracy. Framework: PyTorch. Functionality: ProxylessNAS. API call: torch.hub.load(repo_or_dir='mit-han-lab/ProxylessNAS', model='proxylessnas_gpu', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__vgg_nets__torch_hub_load_repo_or_dir_pytorch_vision_model_vgg_6e398082",
+    "title": "vgg-nets",
+    "summary": "Image Recognition",
+    "description": "vgg-nets are award-winning ConvNets from the 2014 Imagenet ILSVRC challenge. They are used for large-scale image recognition tasks. The available models are vgg11, vgg11_bn, vgg13, vgg13_bn, vgg16, vgg16_bn, vgg19, and vgg19_bn. Framework: PyTorch. Functionality: Image Recognition. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='vgg19_bn', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__wide_resnet50_2__torch_hub_load_repo_or_dir_pytorch_vision_mo_2e37f539",
+    "title": "wide_resnet50_2",
+    "summary": "Wide Residual Networks",
+    "description": "Wide Residual networks simply have increased number of channels compared to ResNet. Otherwise the architecture is the same. Deeper ImageNet models with bottleneck block have increased number of channels in the inner 3x3 convolution. The wide_resnet50_2 and wide_resnet101_2 models were trained in FP16 with mixed precision training using SGD with warm restarts. Checkpoints have weights in half precision (except batch norm) for smaller size, and can be used in FP32 models too. Framework: PyTorch. Functionality: Wide Residual Networks. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='wide_resnet50_2', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__midas__torch_hub_load_repo_or_dir_intel_isl_midas_model_dpt_h_c7d6eec8",
+    "title": "MiDaS",
+    "summary": "Computing relative depth from a single image",
+    "description": "MiDaS computes relative inverse depth from a single image. The repository provides multiple models that cover different use cases ranging from a small, high-speed model to a very large model that provide the highest accuracy. The models have been trained on 10 distinct datasets using multi-objective optimization to ensure high quality on a wide range of inputs. Framework: PyTorch. Functionality: Computing relative depth from a single image. API call: torch.hub.load(repo_or_dir='intel-isl/MiDaS', model='DPT_Hybrid', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__open_unmix__torch_hub_load_repo_or_dir_sigsep_open_unmix_pyto_a464ec00",
+    "title": "Open-Unmix",
+    "summary": "Music Source Separation",
+    "description": "Open-Unmix provides ready-to-use models that allow users to separate pop music into four stems: vocals, drums, bass and the remaining other instruments. The models were pre-trained on the freely available MUSDB18 dataset. Framework: PyTorch. Functionality: Music Source Separation. API call: torch.hub.load(repo_or_dir='sigsep/open-unmix-pytorch', model='umxhq', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__silero_text_to_speech_models__torch_hub_load_repo_or_dir_snak_24aeaa56",
+    "title": "Silero Text-To-Speech Models",
+    "summary": "Text-To-Speech",
+    "description": "Silero Text-To-Speech models provide enterprise grade TTS in a compact form-factor for several commonly spoken languages. They offer one-line usage, naturally sounding speech, no GPU or training required, minimalism and lack of dependencies, a library of voices in many languages, support for 16kHz and 8kHz out of the box. Framework: PyTorch. Functionality: Text-To-Speech. API call: torch.hub.load(repo_or_dir='snakers4/silero-models', model='silero_tts', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__torch_hub_load__torch_hub_load_repo_or_dir_pytorch_vision_mod_6e4bb5e9",
+    "title": "torch.hub.load",
+    "summary": "DeepLabV3",
+    "description": "DeepLabV3 models with ResNet-50, ResNet-101 and MobileNet-V3 backbones for semantic segmentation. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: DeepLabV3. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='deeplabv3_resnet101', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__dcgan__torch_hub_load_repo_or_dir_facebookresearch_pytorch_ga_9f8d7186",
+    "title": "DCGAN",
+    "summary": "Generative Adversarial Networks",
+    "description": "DCGAN is a model designed in 2015 by Radford et. al. in the paper Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks. It is a GAN architecture both very simple and efficient for low resolution image generation (up to 64x64). Framework: PyTorch. Functionality: Generative Adversarial Networks. API call: torch.hub.load(repo_or_dir='facebookresearch/pytorch_GAN_zoo:hub', model='DCGAN', pretrained=True, useGPU=use_gpu).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__waveglow__torch_hub_load_repo_or_dir_nvidia_deeplearningexamp_ae88d8d8",
+    "title": "WaveGlow",
+    "summary": "Speech Synthesis",
+    "description": "The Tacotron 2 and WaveGlow model form a text-to-speech system that enables users to synthesize natural-sounding speech from raw transcripts without any additional prosody information. The Tacotron 2 model produces mel spectrograms from input text using encoder-decoder architecture. WaveGlow is a flow-based model that consumes the mel spectrograms to generate speech. Framework: PyTorch. Functionality: Speech Synthesis. API call: torch.hub.load(repo_or_dir='NVIDIA/DeepLearningExamples:torchhub', model='nvidia_waveglow', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__torch_hub_load__torch_hub_load_repo_or_dir_xingangpan_ibn_net_bdb4581a",
+    "title": "torch.hub.load",
+    "summary": "IBN-Net",
+    "description": "IBN-Net is a CNN model with domain/appearance invariance. Motivated by style transfer works, IBN-Net carefully unifies instance normalization and batch normalization in a single deep network. It provides a simple way to increase both modeling and generalization capacities without adding model complexity. IBN-Net is especially suitable for cross domain or person/vehicle re-identification tasks. Framework: PyTorch. Functionality: IBN-Net. API call: torch.hub.load(repo_or_dir='XingangPan/IBN-Net', model='resnet50_ibn_a', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__torch_hub_load__torch_hub_load_repo_or_dir_xingangpan_ibn_net_8149c8e4",
+    "title": "torch.hub.load",
+    "summary": "IBN-Net",
+    "description": "IBN-Net is a CNN model with domain/appearance invariance. Motivated by style transfer works, IBN-Net carefully unifies instance normalization and batch normalization in a single deep network. It provides a simple way to increase both modeling and generalization capacities without adding model complexity. IBN-Net is especially suitable for cross domain or person/vehicle re-identification tasks. Framework: PyTorch. Functionality: IBN-Net. API call: torch.hub.load(repo_or_dir='XingangPan/IBN-Net', model='resnet101_ibn_a', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__torch_hub_load__torch_hub_load_repo_or_dir_mit_han_lab_once_f_571d929d",
+    "title": "torch.hub.load",
+    "summary": "Once-for-all (OFA) Networks",
+    "description": "Once-for-all (OFA) networks are a family of neural networks designed by MIT Han Lab. They decouple training and search, achieving efficient inference across various edge devices and resource constraints. OFA networks are pretrained on the IMAGENET dataset and are capable of classifying images into different categories. Framework: PyTorch. Functionality: Once-for-all (OFA) Networks. API call: torch.hub.load(repo_or_dir='mit-han-lab/once-for-all', model='ofa_supernet_mbv3_w10', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__meal_v2__torch_hub_load_repo_or_dir_szq0214_meal_v2_meal_v2_m_75d4703a",
+    "title": "MEAL_V2",
+    "summary": "Image Classification",
+    "description": "MEAL V2 models are from the MEAL V2: Boosting Vanilla ResNet-50 to 80%+ Top-1 Accuracy on ImageNet without Tricks paper. The method is based on ensemble knowledge distillation via discriminators, and it achieves state-of-the-art results without using common tricks such as architecture modification, outside training data, autoaug/randaug, cosine learning rate, mixup/cutmix training, or label smoothing. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='szq0214/MEAL-V2', 'meal_v2', model='mealv2_resnest50_cutmix', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__resnet50__torch_hub_load_repo_or_dir_nvidia_deeplearningexamp_f0c4d895",
+    "title": "ResNet50",
+    "summary": "Image Classification",
+    "description": "The ResNet50 v1.5 model is a modified version of the original ResNet50 v1 model. The difference between v1 and v1.5 is that, in the bottleneck blocks which requires downsampling, v1 has stride = 2 in the first 1x1 convolution, whereas v1.5 has stride = 2 in the 3x3 convolution. This difference makes ResNet50 v1.5 slightly more accurate (~0.5% top1) than v1, but comes with a small performance drawback (~5% imgs/sec). The model is initialized as described in Delving deep into rectifiers: Surpassing human-level performance on ImageNet classification. This model is trained with mixed precision using Tensor Cores on Volta, Turing, and the NVIDIA Ampere GPU architectures. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='NVIDIA/DeepLearningExamples:torchhub', model='nvidia_resnet50', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__densenet__torch_hub_load_repo_or_dir_pytorch_vision_model_den_8eedb228",
+    "title": "Densenet",
+    "summary": "Dense Convolutional Network",
+    "description": "Dense Convolutional Network (DenseNet) connects each layer to every other layer in a feed-forward fashion. It alleviates the vanishing-gradient problem, strengthens feature propagation, encourages feature reuse, and substantially reduces the number of parameters. Framework: PyTorch. Functionality: Dense Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='densenet121', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__ntsnet__torch_hub_load_repo_or_dir_nicolalandro_ntsnet_cub200_182e9aa8",
+    "title": "ntsnet",
+    "summary": "Fine-grained image classifier",
+    "description": "This is an nts-net pretrained with CUB200 2011 dataset, which is a fine-grained dataset of birds species. Framework: PyTorch. Functionality: Fine-grained image classifier. API call: torch.hub.load(repo_or_dir='nicolalandro/ntsnet-cub200', model='ntsnet', pretrained=True, **{'topN': 6, 'device':'cpu', 'num_classes': 200}).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__densenet__torch_hub_load_repo_or_dir_pytorch_vision_model_den_848d50b6",
+    "title": "Densenet",
+    "summary": "Dense Convolutional Network",
+    "description": "Dense Convolutional Network (DenseNet) connects each layer to every other layer in a feed-forward fashion. It alleviates the vanishing-gradient problem, strengthens feature propagation, encourages feature reuse, and substantially reduces the number of parameters. Framework: PyTorch. Functionality: Dense Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='densenet169', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__mit_han_lab_proxylessnas__torch_hub_load_repo_or_dir_mit_han__17d8b6ad",
+    "title": "mit-han-lab/ProxylessNAS",
+    "summary": "ProxylessNAS",
+    "description": "ProxylessNAS models are from the ProxylessNAS: Direct Neural Architecture Search on Target Task and Hardware paper. They specialize CNN architectures for different hardware platforms, offering free yet significant performance boost on all three platforms (CPU, GPU, and Mobile) with similar accuracy. Framework: PyTorch. Functionality: ProxylessNAS. API call: torch.hub.load(repo_or_dir='mit-han-lab/ProxylessNAS', model='proxylessnas_mobile', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__resnet__torch_hub_load_repo_or_dir_pytorch_vision_model_resne_3f69de29",
+    "title": "ResNet",
+    "summary": "Deep Residual Networks",
+    "description": "ResNet models are deep residual networks pre-trained on ImageNet. They were proposed in the paper 'Deep Residual Learning for Image Recognition'. Available model variants include ResNet18, ResNet34, ResNet50, ResNet101, and ResNet152. Framework: PyTorch. Functionality: Deep Residual Networks. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='resnet18', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__resnet__torch_hub_load_repo_or_dir_pytorch_vision_model_resne_f9a5dc2b",
+    "title": "ResNet",
+    "summary": "Deep Residual Networks",
+    "description": "ResNet models are deep residual networks pre-trained on ImageNet. They were proposed in the paper 'Deep Residual Learning for Image Recognition'. Available model variants include ResNet18, ResNet34, ResNet50, ResNet101, and ResNet152. Framework: PyTorch. Functionality: Deep Residual Networks. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='resnet50', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__resnext_wsl__torch_hub_load_repo_or_dir_facebookresearch_wsl__0cff2286",
+    "title": "ResNext WSL",
+    "summary": "Image Classification",
+    "description": "The provided ResNeXt models are pre-trained in weakly-supervised fashion on 940 million public images with 1.5K hashtags matching with 1000 ImageNet1K synsets, followed by fine-tuning on ImageNet1K dataset. The models significantly improve the training accuracy on ImageNet compared to training from scratch. They achieve state-of-the-art accuracy of 85.4% on ImageNet with the ResNext-101 32x48d model. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='facebookresearch/WSL-Images', model='resnext101_32x32d_wsl', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__fcn_resnet101__torch_hub_load_repo_or_dir_pytorch_vision_mode_15469b76",
+    "title": "fcn_resnet101",
+    "summary": "Fully-Convolutional Network",
+    "description": "FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: Fully-Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='fcn_resnet101', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__resnext__torch_hub_load_repo_or_dir_pytorch_vision_model_resn_7f05964e",
+    "title": "ResNext",
+    "summary": "Image Classification",
+    "description": "ResNext is a next-generation ResNet architecture for image classification. It is more efficient and accurate than the original ResNet. This implementation includes two versions of the model, resnext50_32x4d and resnext101_32x8d, with 50 and 101 layers respectively. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='resnext101_32x4d', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__shufflenet_v2__torch_hub_load_repo_or_dir_pytorch_vision_mode_08eb6d2a",
+    "title": "ShuffleNet v2",
+    "summary": "Image Classification",
+    "description": "ShuffleNet V2 is an efficient ConvNet optimized for speed and memory, pre-trained on Imagenet. It is designed based on practical guidelines for efficient network design, including speed and accuracy tradeoff. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='shufflenet_v2_x1_0', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__torch_hub_load__torch_hub_load_repo_or_dir_facebookresearch_s_b05ad9f6",
+    "title": "torch.hub.load",
+    "summary": "Semi-supervised and semi-weakly supervised ImageNet Models",
+    "description": "Semi-supervised and semi-weakly supervised ImageNet Models are introduced in the 'Billion scale semi-supervised learning for image classification' paper. These models are pretrained on a subset of unlabeled YFCC100M public image dataset and fine-tuned with the ImageNet1K training dataset. They are capable of classifying images into different categories and are provided by the Facebook Research library. Framework: PyTorch. Functionality: Semi-supervised and semi-weakly supervised ImageNet Models. API call: torch.hub.load(repo_or_dir='facebookresearch/semi-supervised-ImageNet1K-models', model='resnet18_swsl', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearninge_9c2bf43a",
+    "title": "EfficientNet",
+    "summary": "Image Classification",
+    "description": "EfficientNet is a family of image classification models that achieve state-of-the-art accuracy while being smaller and faster. The models are trained with mixed precision using Tensor Cores on the NVIDIA Volta and Ampere GPU architectures. The EfficientNet models include EfficientNet-B0, EfficientNet-B4, EfficientNet-WideSE-B0, and EfficientNet-WideSE-B4. The WideSE models use wider Squeeze-and-Excitation layers than the original EfficientNet models, resulting in slightly better accuracy. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='NVIDIA/DeepLearningExamples:torchhub', model='nvidia_efficientnet_b0', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets__9a5ba36f",
+    "title": "HybridNets",
+    "summary": "Traffic Object Detection, Drivable Area Segmentation, Lane Detection",
+    "description": "HybridNets is an end2end perception network for multi-tasks. Our work focused on traffic object detection, drivable area segmentation and lane detection. HybridNets can run real-time on embedded systems, and obtains SOTA Object Detection, Lane Detection on BDD100K Dataset. Framework: PyTorch. Functionality: Traffic Object Detection, Drivable Area Segmentation, Lane Detection. API call: torch.hub.load(repo_or_dir='datvuthanh/hybridnets', model='hybridnets', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__alexnet__torch_hub_load_repo_or_dir_pytorch_vision_model_alex_f665cec7",
+    "title": "AlexNet",
+    "summary": "Image Classification",
+    "description": "AlexNet is a deep convolutional neural network that achieved a top-5 error of 15.3% in the 2012 ImageNet Large Scale Visual Recognition Challenge. The main contribution of the original paper was the depth of the model, which was computationally expensive but made feasible through the use of GPUs during training. The pretrained AlexNet model in PyTorch can be used for image classification tasks. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='alexnet', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__hardnet__torch_hub_load_repo_or_dir_pingolh_pytorch_hardnet_m_5e24a694",
+    "title": "HarDNet",
+    "summary": "Image Classification",
+    "description": "Harmonic DenseNet (HarDNet) is a low memory traffic CNN model, which is fast and efficient. The basic concept is to minimize both computational cost and memory access cost at the same time, such that the HarDNet models are 35% faster than ResNet running on GPU comparing to models with the same accuracy (except the two DS models that were designed for comparing with MobileNet). Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='PingoLH/Pytorch-HarDNet', model='hardnet39ds', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__pytorch_transformers__torch_hub_load_repo_or_dir_huggingface__14b8c29c",
+    "title": "PyTorch-Transformers",
+    "summary": "Natural Language Processing",
+    "description": "PyTorch-Transformers is a library of state-of-the-art pre-trained models for Natural Language Processing (NLP) including BERT, GPT, GPT-2, Transformer-XL, XLNet, XLM, RoBERTa, and DistilBERT. The library provides functionality for tokenization, configuration, and various model architectures for different tasks such as causal language modeling, sequence classification, question answering, and masked language modeling. Framework: PyTorch. Functionality: Natural Language Processing. API call: torch.hub.load(repo_or_dir='huggingface/pytorch-transformers').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__mobilenet_v2__torch_hub_load_repo_or_dir_pytorch_vision_model_c214f0e0",
+    "title": "MobileNet v2",
+    "summary": "Image Classification",
+    "description": "The MobileNet v2 architecture is based on an inverted residual structure where the input and output of the residual block are thin bottleneck layers opposite to traditional residual models which use expanded representations in the input. MobileNet v2 uses lightweight depthwise convolutions to filter features in the intermediate expansion layer. Additionally, non-linearities in the narrow layers were removed in order to maintain representational power. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='mobilenet_v2', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__vgg_nets__torch_hub_load_repo_or_dir_pytorch_vision_model_vgg_00fc38cf",
+    "title": "vgg-nets",
+    "summary": "Image Recognition",
+    "description": "vgg-nets are award-winning ConvNets from the 2014 Imagenet ILSVRC challenge. They are used for large-scale image recognition tasks. The available models are vgg11, vgg11_bn, vgg13, vgg13_bn, vgg16, vgg16_bn, vgg19, and vgg19_bn. Framework: PyTorch. Functionality: Image Recognition. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='vgg19', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__meal_v2__torch_hub_load_repo_or_dir_szq0214_meal_v2_meal_v2_m_e4f76ea8",
+    "title": "MEAL_V2",
+    "summary": "Image Classification",
+    "description": "MEAL V2 models are from the MEAL V2: Boosting Vanilla ResNet-50 to 80%+ Top-1 Accuracy on ImageNet without Tricks paper. The method is based on ensemble knowledge distillation via discriminators, and it achieves state-of-the-art results without using common tricks such as architecture modification, outside training data, autoaug/randaug, cosine learning rate, mixup/cutmix training, or label smoothing. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='szq0214/MEAL-V2', 'meal_v2', model='mealv2_mobilenet_v3_large_100', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_torchhub_eval_api",
+    "name": "pytorch__midas__torch_hub_load_repo_or_dir_intel_isl_midas_model_dpt_l_38e27f5c",
+    "title": "MiDaS",
+    "summary": "Computing relative depth from a single image",
+    "description": "MiDaS computes relative inverse depth from a single image. The repository provides multiple models that cover different use cases ranging from a small, high-speed model to a very large model that provide the highest accuracy. The models have been trained on 10 distinct datasets using multi-objective optimization to ensure high quality on a wide range of inputs. Framework: PyTorch. Functionality: Computing relative depth from a single image. API call: torch.hub.load(repo_or_dir='intel-isl/MiDaS', model='DPT_Large', pretrained=True).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  }
+]

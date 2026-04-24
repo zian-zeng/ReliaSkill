@@ -1,0 +1,62 @@
+[
+  {
+    "server_name": "bfcl_huggingface_eval_api",
+    "name": "hugging_face_transformers__princeton_nlp_unsup_simcse_roberta_base__au_ccf95072",
+    "title": "princeton-nlp/unsup-simcse-roberta-base",
+    "summary": "Feature Extraction",
+    "description": "An unsupervised sentence embedding model trained using the SimCSE approach with a Roberta base architecture. Framework: Hugging Face Transformers. Functionality: Feature Extraction. API call: AutoModel.from_pretrained('princeton-nlp/unsup-simcse-roberta-base').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_huggingface_eval_api",
+    "name": "hugging_face_transformers__ganjinzero_umlsbert_eng__automodel_from_pre_81413d59",
+    "title": "GanjinZero/UMLSBert_ENG",
+    "summary": "Feature Extraction",
+    "description": "CODER: Knowledge infused cross-lingual medical term embedding for term normalization. English Version. Old name. This model is not UMLSBert! Github Link: https://github.com/GanjinZero/CODER Framework: Hugging Face Transformers. Functionality: Feature Extraction. API call: AutoModel.from_pretrained('GanjinZero/UMLSBert_ENG').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_huggingface_eval_api",
+    "name": "hugging_face_transformers__hubert_large_ll60k__hubertmodel_from_pretra_57159276",
+    "title": "hubert-large-ll60k",
+    "summary": "Feature Extraction",
+    "description": "Hubert-Large is a self-supervised speech representation learning model pretrained on 16kHz sampled speech audio. It is designed to deal with the unique problems in speech representation learning, such as multiple sound units in each input utterance, no lexicon of input sound units during the pre-training phase, and variable lengths of sound units with no explicit segmentation. The model relies on an offline clustering step to provide aligned target labels for a BERT-like prediction loss. Framework: Hugging Face Transformers. Functionality: Feature Extraction. API call: HubertModel.from_pretrained('facebook/hubert-large-ll60k').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_huggingface_eval_api",
+    "name": "hugging_face_transformers__rasa_labse__automodel_from_pretrained_rasa_labse",
+    "title": "rasa/LaBSE",
+    "summary": "Feature Extraction",
+    "description": "LaBSE (Language-agnostic BERT Sentence Embedding) model for extracting sentence embeddings in multiple languages. Framework: Hugging Face Transformers. Functionality: Feature Extraction. API call: AutoModel.from_pretrained('rasa/LaBSE').",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  },
+  {
+    "server_name": "bfcl_huggingface_eval_api",
+    "name": "hugging_face__stabilityai_stable_diffusion_2_inpainting__stablediffusi_6bef15b5",
+    "title": "stabilityai/stable-diffusion-2-inpainting",
+    "summary": "Image generation and modification based on text prompts",
+    "description": "A Latent Diffusion Model that uses a fixed, pretrained text encoder (OpenCLIP-ViT/H) to generate and modify images based on text prompts. Framework: Hugging Face. Functionality: Image generation and modification based on text prompts. API call: StableDiffusionInpaintPipeline.from_pretrained('stabilityai/stable-diffusion-2-inpainting', torch_dtype=torch.float16).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "source_pointer": "bfcl"
+  }
+]
