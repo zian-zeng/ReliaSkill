@@ -1,2 +1,0 @@
-{"scenario": "Retrieved-docs minimal call for gzip-file-as-resource", "arguments": {"name": "sample-name", "data": "sample_data_1", "outputType": "sample_outputType_1"}}
-{"scenario": "Retrieved-docs fuller call for gzip-file-as-resource", "arguments": {"name": "sample-name", "data": "sample_data_2", "outputType": "sample_outputType_2"}}

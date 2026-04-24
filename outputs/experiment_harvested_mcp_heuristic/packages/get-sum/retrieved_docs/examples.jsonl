@@ -1,2 +1,0 @@
-{"scenario": "Retrieved-docs minimal call for get-sum", "arguments": {"a": 1.0, "b": 1.0}}
-{"scenario": "Retrieved-docs fuller call for get-sum", "arguments": {"a": 2.0, "b": 2.0}}

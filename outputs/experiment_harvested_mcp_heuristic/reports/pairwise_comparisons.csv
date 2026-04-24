@@ -1,6 +1,0 @@
-anchor_baseline,comparison_baseline,num_paired_tasks,win_count,tie_count,loss_count,win_rate,exact_match_delta,exact_match_delta_ci_low,exact_match_delta_ci_high,avg_argument_validity_delta
-autoskill_base,raw_mcp,15,4,8,3,0.2667,0.0667,-0.2667,0.4,0.1778
-autoskill_base,schema_only,15,4,11,0,0.2667,0.2667,0.0667,0.4667,0.1778
-autoskill_base,retrieved_docs,15,4,11,0,0.2667,0.2667,0.0667,0.4667,0.1778
-autoskill_base,retrieved_candidates,15,4,11,0,0.2667,0.2667,0.0667,0.4667,0.1444
-autoskill_base,retrieved_memory,15,0,15,0,0.0,0.0,0.0,0.0,0.0333

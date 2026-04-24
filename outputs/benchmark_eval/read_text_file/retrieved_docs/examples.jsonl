@@ -1,2 +1,0 @@
-{"scenario": "Retrieved-docs minimal call for read_text_file", "arguments": {"path": "data/sample.txt"}}
-{"scenario": "Retrieved-docs fuller call for read_text_file", "arguments": {"path": "data/sample.txt", "tail": 2.0, "head": 2.0}}

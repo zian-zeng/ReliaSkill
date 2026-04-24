@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid memory-backed call for create_directory", "arguments": {"path": "data/sample.txt"}}
-{"scenario": "Ensure a directory exists for reports or generated outputs.", "arguments": {"path": "reports/weekly"}}

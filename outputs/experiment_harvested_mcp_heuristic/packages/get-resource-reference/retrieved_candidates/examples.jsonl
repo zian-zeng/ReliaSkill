@@ -1,2 +1,0 @@
-{"scenario": "Minimal routed call for get-resource-reference", "arguments": {"resourceType": "sample_resourceType_1", "resourceId": "sample_resourceId_1"}}
-{"scenario": "Full routed call for get-resource-reference", "arguments": {"resourceType": "sample_resourceType_2", "resourceId": "sample_resourceId_2"}}

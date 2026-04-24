@@ -1,1 +1,0 @@
-{"scenario": "Minimal valid call for read_multiple_files", "arguments": {"paths": ["data/sample.txt"]}}

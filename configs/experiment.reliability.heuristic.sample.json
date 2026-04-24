@@ -1,0 +1,16 @@
+{
+  "tools_path": "data/raw/public_mcp_filesystem_subset.json",
+  "behavior_path": "data/eval/public_mcp_filesystem_reliability.jsonl",
+  "output_root": "outputs/reliability_heuristic_sample",
+  "generator": {
+    "type": "heuristic"
+  },
+  "predictor": {
+    "type": "heuristic"
+  },
+  "reliability": {
+    "max_repair_rounds": 2,
+    "deploy_threshold": 70.0,
+    "ablation_mode": null
+  }
+}

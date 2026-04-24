@@ -1,2 +1,0 @@
-{"scenario": "Retrieved-docs minimal call for trigger-sampling-request-async", "arguments": {"prompt": "Summarize the latest update.", "maxTokens": "sample_maxTokens_1"}}
-{"scenario": "Retrieved-docs fuller call for trigger-sampling-request-async", "arguments": {"prompt": "Summarize the latest update.", "maxTokens": "sample_maxTokens_2"}}

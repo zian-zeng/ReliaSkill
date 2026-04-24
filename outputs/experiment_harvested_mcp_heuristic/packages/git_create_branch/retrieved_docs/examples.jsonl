@@ -1,2 +1,0 @@
-{"scenario": "Retrieved-docs minimal call for git_create_branch", "arguments": {"repo_path": "data/sample.txt", "branch_name": "sample-name"}}
-{"scenario": "Retrieved-docs fuller call for git_create_branch", "arguments": {"repo_path": "data/sample.txt", "branch_name": "sample-name", "base_branch": "sample_base_branch_2"}}

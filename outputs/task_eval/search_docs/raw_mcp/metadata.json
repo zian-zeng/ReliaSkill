@@ -1,9 +1,0 @@
-{
-  "tool_name": "search_docs",
-  "baseline_name": "raw_mcp",
-  "source_pointer": "data\\raw\\sample_tools.json#1",
-  "valid": true,
-  "issues": [],
-  "semantic_hints": {},
-  "method_trace": []
-}

@@ -1,2 +1,0 @@
-{"scenario": "Minimal routed call for git_diff_unstaged", "arguments": {"repo_path": "data/sample.txt"}}
-{"scenario": "Full routed call for git_diff_unstaged", "arguments": {"repo_path": "data/sample.txt", "context_lines": 2}}

@@ -1,2 +1,0 @@
-{"scenario": "Retrieved-docs minimal call for git_commit", "arguments": {"repo_path": "data/sample.txt", "message": "sample_message_1"}}
-{"scenario": "Retrieved-docs fuller call for git_commit", "arguments": {"repo_path": "data/sample.txt", "message": "sample_message_2"}}

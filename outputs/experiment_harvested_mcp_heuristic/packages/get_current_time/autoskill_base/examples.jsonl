@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid request that satisfies the required fields for get_current_time", "arguments": {"timezone": "America/New_York"}}
-{"scenario": "Richer invocation that uses optional controls for get_current_time", "arguments": {"timezone": "America/New_York"}}

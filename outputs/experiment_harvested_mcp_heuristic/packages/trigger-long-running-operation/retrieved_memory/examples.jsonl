@@ -1,1 +1,0 @@
-{"scenario": "Minimal valid memory-backed call for trigger-long-running-operation", "arguments": {"duration": "sample_duration_1", "steps": 1.0}}

@@ -1,2 +1,0 @@
-{"scenario": "Retrieved-docs minimal call for list_directory_with_sizes", "arguments": {"path": "data/sample.txt", "sortBy": "name"}}
-{"scenario": "Retrieved-docs fuller call for list_directory_with_sizes", "arguments": {"path": "data/sample.txt", "sortBy": "size"}}

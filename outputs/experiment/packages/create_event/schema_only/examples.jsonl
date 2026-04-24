@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid call for create_event", "arguments": {"title": "Sample Title", "time_range": {"start": "2026-01-01T09:00:00Z", "end": "2026-01-01T09:00:00Z"}}}
-{"scenario": "Schema-aligned full call for create_event", "arguments": {"title": "Sample Title", "time_range": {"start": "2026-01-01T09:00:00Z", "end": "2026-01-01T09:00:00Z"}, "visibility": "team", "attendees": ["sample_attendees_item_2"], "notes": "sample_notes_2"}}

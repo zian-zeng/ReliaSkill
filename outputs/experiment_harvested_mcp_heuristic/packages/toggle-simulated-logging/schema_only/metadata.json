@@ -1,9 +1,0 @@
-{
-  "tool_name": "toggle-simulated-logging",
-  "baseline_name": "schema_only",
-  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#32",
-  "valid": true,
-  "issues": [],
-  "semantic_hints": {},
-  "method_trace": []
-}

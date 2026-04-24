@@ -1,9 +1,0 @@
-{
-  "tool_name": "read_multiple_files",
-  "baseline_name": "retrieved_docs",
-  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#3",
-  "valid": true,
-  "issues": [],
-  "semantic_hints": {},
-  "method_trace": []
-}

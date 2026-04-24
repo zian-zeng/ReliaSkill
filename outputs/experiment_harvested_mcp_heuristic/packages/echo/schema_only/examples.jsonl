@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid call for echo", "arguments": {"message": "sample_message_1"}}
-{"scenario": "Schema-aligned full call for echo", "arguments": {"message": "sample_message_2"}}

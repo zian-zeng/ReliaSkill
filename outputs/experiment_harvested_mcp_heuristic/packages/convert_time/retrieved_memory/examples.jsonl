@@ -1,1 +1,0 @@
-{"scenario": "Minimal valid memory-backed call for convert_time", "arguments": {"source_timezone": "America/New_York", "time": "sample_time_1", "target_timezone": "America/New_York"}}

@@ -1,2 +1,0 @@
-{"scenario": "Retrieved-docs minimal call for fetch", "arguments": {"url": "https://example.com/resource", "max_length": "sample_max_length_1", "start_index": "sample_start_index_1", "raw": "sample_raw_1"}}
-{"scenario": "Retrieved-docs fuller call for fetch", "arguments": {"url": "https://example.com/resource", "max_length": "sample_max_length_2", "start_index": "sample_start_index_2", "raw": "sample_raw_2"}}

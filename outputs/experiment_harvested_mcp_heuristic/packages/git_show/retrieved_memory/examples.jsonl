@@ -1,1 +1,0 @@
-{"scenario": "Minimal valid memory-backed call for git_show", "arguments": {"repo_path": "data/sample.txt", "revision": "sample_revision_1"}}

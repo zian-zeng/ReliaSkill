@@ -1,9 +1,0 @@
-{
-  "tool_name": "git_create_branch",
-  "baseline_name": "raw_mcp",
-  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#48",
-  "valid": true,
-  "issues": [],
-  "semantic_hints": {},
-  "method_trace": []
-}

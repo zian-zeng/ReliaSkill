@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid request that satisfies the required fields for get_weather", "arguments": {"city": "New York", "unit": "C"}}
-{"scenario": "Richer invocation that uses optional controls for get_weather", "arguments": {"city": "New York", "unit": "F", "include_forecast": false}}

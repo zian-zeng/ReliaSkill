@@ -1,2 +1,0 @@
-{"scenario": "Minimal routed call for trigger-sampling-request", "arguments": {"prompt": "Summarize the latest update.", "maxTokens": "sample_maxTokens_1"}}
-{"scenario": "Full routed call for trigger-sampling-request", "arguments": {"prompt": "Summarize the latest update.", "maxTokens": "sample_maxTokens_2"}}

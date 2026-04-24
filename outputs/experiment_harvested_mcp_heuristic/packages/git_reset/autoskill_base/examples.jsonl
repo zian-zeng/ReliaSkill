@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid request that satisfies the required fields for git_reset", "arguments": {"repo_path": "data/sample.txt"}}
-{"scenario": "Richer invocation that uses optional controls for git_reset", "arguments": {"repo_path": "data/sample.txt"}}

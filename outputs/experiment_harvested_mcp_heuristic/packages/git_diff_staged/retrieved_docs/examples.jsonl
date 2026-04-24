@@ -1,2 +1,0 @@
-{"scenario": "Retrieved-docs minimal call for git_diff_staged", "arguments": {"repo_path": "data/sample.txt"}}
-{"scenario": "Retrieved-docs fuller call for git_diff_staged", "arguments": {"repo_path": "data/sample.txt", "context_lines": 2}}

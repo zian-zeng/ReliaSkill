@@ -1,1 +1,0 @@
-{"scenario": "Minimal valid memory-backed call for edit_file", "arguments": {"path": "data/sample.txt", "edits": [{}], "dryRun": false}}

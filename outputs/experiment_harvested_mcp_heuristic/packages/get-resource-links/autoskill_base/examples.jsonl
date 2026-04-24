@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid request that satisfies the required fields for get-resource-links", "arguments": {"count": "sample_count_1"}}
-{"scenario": "Richer invocation that uses optional controls for get-resource-links", "arguments": {"count": "sample_count_2"}}

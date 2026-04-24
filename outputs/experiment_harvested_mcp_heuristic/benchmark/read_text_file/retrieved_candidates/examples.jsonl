@@ -1,4 +1,0 @@
-{"scenario": "Minimal routed call for read_text_file", "arguments": {"path": "data/sample.txt", "tail": 1.0, "head": 1.0}}
-{"scenario": "Full routed call for read_text_file", "arguments": {"path": "data/sample.txt", "tail": 2.0, "head": 2.0}}
-{"scenario": "Read the first lines of a file after routing to the file reader.", "arguments": {"path": "src/app.py", "head": 8}}
-{"scenario": "Read the last lines of a file after routing to the file reader.", "arguments": {"path": "logs/output.txt", "tail": 12}}

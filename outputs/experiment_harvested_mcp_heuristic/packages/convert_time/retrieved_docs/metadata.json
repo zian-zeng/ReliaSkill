@@ -1,9 +1,0 @@
-{
-  "tool_name": "convert_time",
-  "baseline_name": "retrieved_docs",
-  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#53",
-  "valid": true,
-  "issues": [],
-  "semantic_hints": {},
-  "method_trace": []
-}

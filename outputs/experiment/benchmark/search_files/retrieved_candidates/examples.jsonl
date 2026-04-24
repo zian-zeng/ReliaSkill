@@ -1,3 +1,0 @@
-{"scenario": "Minimal routed call for search_files", "arguments": {"path": "data/sample.txt", "pattern": "sample_pattern_1"}}
-{"scenario": "Full routed call for search_files", "arguments": {"path": "data/sample.txt", "pattern": "sample_pattern_2", "excludePatterns": []}}
-{"scenario": "Route file discovery requests with recursive glob patterns to this tool.", "arguments": {"path": "docs", "pattern": "**/*.md", "excludePatterns": []}}

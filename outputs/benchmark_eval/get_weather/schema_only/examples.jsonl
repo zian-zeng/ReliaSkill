@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid call for get_weather", "arguments": {"city": "New York", "unit": "C"}}
-{"scenario": "Schema-aligned full call for get_weather", "arguments": {"city": "New York", "unit": "F", "include_forecast": false}}

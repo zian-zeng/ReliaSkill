@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid request that satisfies the required fields for fetch", "arguments": {"url": "https://example.com/resource", "max_length": "sample_max_length_1", "start_index": "sample_start_index_1", "raw": "sample_raw_1"}}
-{"scenario": "Richer invocation that uses optional controls for fetch", "arguments": {"url": "https://example.com/resource", "max_length": "sample_max_length_2", "start_index": "sample_start_index_2", "raw": "sample_raw_2"}}

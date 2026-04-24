@@ -1,0 +1,77 @@
+{
+  "output_root": "outputs/model_comparison_low_compute",
+  "hardware": "Single local workstation class GPUs: NVIDIA RTX A5000 and RTX 5070 Ti. Designed for 3B/7B models first; 14B 4-bit is optional only if memory permits.",
+  "compute_budget": "Low-compute: deterministic reliability checks, small task slices, no large trajectory collection, no co-evolutionary multi-agent search, no full-server execution by default.",
+  "runs": [
+    {
+      "name": "small_3b_reliable_skill",
+      "role": "small_model_reliable_skill",
+      "selected_condition": "gated_skill",
+      "tools_path": "data/raw/public_mcp_filesystem_subset.json",
+      "behavior_path": "data/eval/public_mcp_filesystem_reliability.jsonl",
+      "output_root": "outputs/model_comparison_low_compute/small_3b_reliable_skill",
+      "generator": {
+        "type": "heuristic"
+      },
+      "predictor": {
+        "type": "local_hf",
+        "model_name_or_path": "Qwen/Qwen2.5-3B-Instruct",
+        "device_map": "auto",
+        "torch_dtype": "auto",
+        "load_in_4bit": false,
+        "trust_remote_code": true,
+        "generation": {
+          "temperature": 0.0,
+          "max_new_tokens": 256,
+          "repetition_penalty": 1.02
+        }
+      },
+      "reliability": {
+        "max_repair_rounds": 2,
+        "deploy_threshold": 70.0
+      }
+    },
+    {
+      "name": "larger_7b_raw_mcp",
+      "role": "larger_model_raw_schema",
+      "selected_condition": "raw_mcp",
+      "tools_path": "data/raw/public_mcp_filesystem_subset.json",
+      "behavior_path": "data/eval/public_mcp_filesystem_reliability.jsonl",
+      "output_root": "outputs/model_comparison_low_compute/larger_7b_raw_mcp",
+      "generator": {
+        "type": "heuristic"
+      },
+      "predictor": {
+        "type": "local_hf",
+        "model_name_or_path": "Qwen/Qwen2.5-7B-Instruct",
+        "device_map": "auto",
+        "torch_dtype": "auto",
+        "load_in_4bit": true,
+        "trust_remote_code": true,
+        "generation": {
+          "temperature": 0.0,
+          "max_new_tokens": 256,
+          "repetition_penalty": 1.02
+        }
+      },
+      "reliability": {
+        "max_repair_rounds": 0,
+        "deploy_threshold": 70.0
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "name": "small reliable vs larger raw score",
+      "left": "small_3b_reliable_skill",
+      "right": "larger_7b_raw_mcp",
+      "metric": "avg_score"
+    },
+    {
+      "name": "small reliable vs larger raw harm",
+      "left": "larger_7b_raw_mcp",
+      "right": "small_3b_reliable_skill",
+      "metric": "harmful_skill_injection_rate"
+    }
+  ]
+}

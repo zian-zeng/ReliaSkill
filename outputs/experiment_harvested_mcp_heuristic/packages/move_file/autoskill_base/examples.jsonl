@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid request that satisfies the required fields for move_file", "arguments": {"source": "sample_source_1", "destination": "sample_destination_1"}}
-{"scenario": "Richer invocation that uses optional controls for move_file", "arguments": {"source": "sample_source_2", "destination": "sample_destination_2"}}

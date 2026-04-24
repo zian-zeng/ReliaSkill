@@ -7,7 +7,19 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List
 
 
-BASELINE_ORDER = ["raw_mcp", "schema_only", "retrieved_docs", "retrieved_candidates", "retrieved_memory", "autoskill_base"]
+BASELINE_ORDER = [
+    "raw_mcp",
+    "schema_only",
+    "docs_only",
+    "retrieved_docs",
+    "retrieved_candidates",
+    "retrieved_memory",
+    "naive_skill",
+    "validated_skill",
+    "repaired_skill",
+    "gated_skill",
+    "autoskill_base",
+]
 
 
 def _ordered_baselines(summary: Dict[str, Any]) -> list[str]:

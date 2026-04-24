@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid call for search_docs", "arguments": {"query": "sample query"}}
-{"scenario": "Schema-aligned full call for search_docs", "arguments": {"query": "sample query", "top_k": 5}}

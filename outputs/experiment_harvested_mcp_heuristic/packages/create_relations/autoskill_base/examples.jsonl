@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid request that satisfies the required fields for create_relations", "arguments": {"relations": [{}]}}
-{"scenario": "Richer invocation that uses optional controls for create_relations", "arguments": {"relations": [{}]}}

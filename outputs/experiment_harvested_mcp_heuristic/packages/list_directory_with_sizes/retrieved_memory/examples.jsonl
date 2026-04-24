@@ -1,1 +1,0 @@
-{"scenario": "Minimal valid memory-backed call for list_directory_with_sizes", "arguments": {"path": "data/sample.txt", "sortBy": "name"}}

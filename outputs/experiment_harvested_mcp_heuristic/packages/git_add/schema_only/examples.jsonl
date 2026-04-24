@@ -1,1 +1,0 @@
-{"scenario": "Minimal valid call for git_add", "arguments": {"repo_path": "data/sample.txt", "files": ["data/sample.txt"]}}

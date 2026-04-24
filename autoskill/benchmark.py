@@ -126,6 +126,11 @@ def load_benchmark_tasks(path: str | Path) -> List[EvalTask]:
         tool_name = _normalize_tool_name(item)
         user_request = _normalize_user_request(item)
         expected_candidates = _normalize_ground_truth_candidates(item)
+        should_trigger = bool(_coalesce(item, ["should_trigger", "trigger_expected"], True))
+        negative_target = _coalesce(item, ["negative_target", "negative_tool_name"], None)
+        if not tool_name and isinstance(negative_target, str):
+            tool_name = negative_target
+        expected_tool_name = _coalesce(item, ["expected_tool_name", "gold_tool_name"], None)
         if not tool_name or not user_request:
             continue
         raw_tags = _coalesce(item, ["tags", "labels"], [])
@@ -137,6 +142,10 @@ def load_benchmark_tasks(path: str | Path) -> List[EvalTask]:
                 user_request=user_request,
                 expected_arguments=expected_candidates[0] if expected_candidates else {},
                 expected_argument_candidates=expected_candidates,
+                should_trigger=should_trigger,
+                expected_tool_name=str(expected_tool_name) if expected_tool_name is not None else None,
+                negative_target=str(negative_target) if negative_target is not None else None,
+                harm_baseline=str(_coalesce(item, ["harm_baseline"], None)) if _coalesce(item, ["harm_baseline"], None) is not None else None,
                 split=str(_coalesce(item, ["split", "partition"], "default")),
                 tags=tags,
             )

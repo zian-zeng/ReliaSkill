@@ -1,7 +1,0 @@
-{
-  "tool_name": "get_weather",
-  "baseline_name": "raw_mcp",
-  "source_pointer": "data\\raw\\sample_tools.json#0",
-  "valid": true,
-  "issues": []
-}

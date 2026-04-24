@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid request that satisfies the required fields for trigger-sampling-request-async", "arguments": {"prompt": "Summarize the latest update.", "maxTokens": "sample_maxTokens_1"}}
-{"scenario": "Richer invocation that uses optional controls for trigger-sampling-request-async", "arguments": {"prompt": "Summarize the latest update.", "maxTokens": "sample_maxTokens_2"}}

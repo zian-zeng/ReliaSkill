@@ -1,3 +1,0 @@
-{"scenario": "Minimal routed call for write_file", "arguments": {"path": "data/sample.txt", "content": "sample_content_1"}}
-{"scenario": "Full routed call for write_file", "arguments": {"path": "data/sample.txt", "content": "sample_content_2"}}
-{"scenario": "Route write-content requests to this file writer.", "arguments": {"path": "docs/notes.txt", "content": "Release checklist"}}

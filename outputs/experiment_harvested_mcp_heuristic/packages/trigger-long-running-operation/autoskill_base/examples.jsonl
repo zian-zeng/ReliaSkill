@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid request that satisfies the required fields for trigger-long-running-operation", "arguments": {"duration": "sample_duration_1", "steps": 1.0}}
-{"scenario": "Richer invocation that uses optional controls for trigger-long-running-operation", "arguments": {"duration": "sample_duration_2", "steps": 2.0}}

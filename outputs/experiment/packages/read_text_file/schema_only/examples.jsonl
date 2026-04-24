@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid call for read_text_file", "arguments": {"path": "data/sample.txt"}}
-{"scenario": "Schema-aligned full call for read_text_file", "arguments": {"path": "data/sample.txt", "tail": 2.0, "head": 2.0}}

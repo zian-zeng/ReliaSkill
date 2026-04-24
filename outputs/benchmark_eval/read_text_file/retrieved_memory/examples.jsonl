@@ -1,3 +1,0 @@
-{"scenario": "Minimal valid memory-backed call for read_text_file", "arguments": {"path": "data/sample.txt"}}
-{"scenario": "Read the top lines of a file when the request asks for the first or opening lines.", "arguments": {"path": "src/app.py", "head": 8}}
-{"scenario": "Read the trailing lines of a file when the request asks for the last or ending lines.", "arguments": {"path": "logs/output.txt", "tail": 12}}

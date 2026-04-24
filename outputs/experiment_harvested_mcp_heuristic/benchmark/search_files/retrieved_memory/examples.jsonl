@@ -1,4 +1,0 @@
-{"scenario": "Minimal valid memory-backed call for search_files", "arguments": {"path": "data/sample.txt", "pattern": "sample_pattern_1", "excludePatterns": ["sample_excludePatterns_item_1"]}}
-{"scenario": "Search text files and ignore an archive subtree.", "arguments": {"path": "logs", "pattern": "**/*.txt", "excludePatterns": ["logs/archive/**"]}}
-{"scenario": "Find markdown files under a docs directory.", "arguments": {"path": "docs", "pattern": "**/*.md", "excludePatterns": []}}
-{"scenario": "Find python files under a directory.", "arguments": {"path": "src", "pattern": "**/*.py", "excludePatterns": []}}

@@ -1,9 +1,0 @@
-{
-  "tool_name": "trigger-elicitation-request-async",
-  "baseline_name": "retrieved_memory",
-  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#35",
-  "valid": true,
-  "issues": [],
-  "semantic_hints": {},
-  "method_trace": []
-}

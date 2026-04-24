@@ -1,2 +1,0 @@
-{"scenario": "Retrieved-docs minimal call for edit_file", "arguments": {"path": "data/sample.txt", "edits": [{}], "dryRun": false}}
-{"scenario": "Retrieved-docs fuller call for edit_file", "arguments": {"path": "data/sample.txt", "edits": [{}], "dryRun": true}}

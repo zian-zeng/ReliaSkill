@@ -1,2 +1,0 @@
-run_name,config_path,status,valid_config,generator_backend,predictor_backend,autoskill_exact_match,raw_mcp_exact_match,schema_only_exact_match,autoskill_vs_raw_delta,autoskill_vs_schema_delta,output_root
-experiment.heuristic.sample,C:\Users\zianz\OneDrive\Documents\GitHub\AutoSkill\configs\experiment.heuristic.sample.json,completed,True,heuristic,heuristic,1.0,0.6667,0.6667,0.3333,0.3333,outputs\experiment_heuristic_sample

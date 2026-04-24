@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Any, Dict, Iterable, List
 
 from autoskill.ir import GeneratedSkill, ToolIR, ValidationIssue, ValidationReport
@@ -167,8 +168,91 @@ def _check_text_contradictions(tool: ToolIR, skill: GeneratedSkill, issues: List
                     code="text_contradiction",
                     message=f"Skill text suggests `{arg.name}` is required, but the schema marks it optional.",
                     location=arg.schema_path,
+                    section="guidance",
+                    repairable=True,
+                    evidence={"argument_name": arg.name},
                 )
             )
+
+
+def _check_guidance_quality(tool: ToolIR, skill: GeneratedSkill, issues: List[ValidationIssue]) -> None:
+    if skill.baseline_name == "raw_mcp":
+        return
+
+    if not skill.when_not_to_use:
+        issues.append(
+            ValidationIssue(
+                severity="warning",
+                code="missing_non_usage_boundary",
+                message="Skill has no `when_not_to_use` guidance, which increases over-trigger risk.",
+                location="$.when_not_to_use",
+                section="when_not_to_use",
+                repairable=True,
+            )
+        )
+
+    valid_arg_names = {arg.name for arg in tool.arguments}
+    guidance_text = "\n".join([skill.skill_summary, *skill.when_to_use, *skill.when_not_to_use])
+    for token in sorted(set(re.findall(r"`([^`]+)`", guidance_text))):
+        if token == tool.tool_name or token in valid_arg_names:
+            continue
+        if token.replace("_", "").isalnum():
+            issues.append(
+                ValidationIssue(
+                    severity="warning",
+                    code="unsupported_option_in_text",
+                    message=f"Skill text mentions unsupported schema option `{token}`.",
+                    location="$.guidance",
+                    section="guidance",
+                    repairable=True,
+                    evidence={"unsupported_token": token},
+                )
+            )
+
+    word_count = len(guidance_text.split())
+    if word_count > 450:
+        issues.append(
+            ValidationIssue(
+                severity="warning",
+                code="excessive_verbosity",
+                message=f"Skill guidance is verbose ({word_count} words); compact skills are preferred.",
+                location="$.guidance",
+                section="guidance",
+                repairable=True,
+                evidence={"word_count": word_count},
+            )
+        )
+
+
+def _enrich_issues(issues: List[ValidationIssue]) -> None:
+    repairable_codes = {
+        "bad_argument_template",
+        "hallucinated_argument",
+        "missing_required_argument",
+        "invalid_enum",
+        "bad_example_json",
+        "bad_example_arguments",
+        "type_mismatch",
+        "text_contradiction",
+        "missing_non_usage_boundary",
+        "unsupported_option_in_text",
+        "excessive_verbosity",
+    }
+    for issue in issues:
+        if issue.section is None:
+            location = issue.location or ""
+            if ".examples" in location or "examples" in issue.message.lower():
+                issue.section = "examples"
+            elif issue.code == "bad_argument_template" or "argument_template" in issue.message:
+                issue.section = "argument_template"
+            elif issue.code == "text_contradiction":
+                issue.section = "guidance"
+            else:
+                issue.section = "schema"
+        if issue.code in repairable_codes:
+            issue.repairable = True
+        if not issue.evidence:
+            issue.evidence = {"code": issue.code, "location": issue.location}
 
 
 def validate_skill(tool: ToolIR, skill: GeneratedSkill) -> ValidationReport:
@@ -228,6 +312,8 @@ def validate_skill(tool: ToolIR, skill: GeneratedSkill) -> ValidationReport:
         _validate_payload(schema, example_args, f"example[{index}]", issues)
 
     _check_text_contradictions(tool, skill, issues)
+    _check_guidance_quality(tool, skill, issues)
+    _enrich_issues(issues)
 
     valid = not any(issue.severity == "error" for issue in issues)
     return ValidationReport(valid=valid, issues=issues)

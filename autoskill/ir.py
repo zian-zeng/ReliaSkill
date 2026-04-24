@@ -35,6 +35,12 @@ class ToolIR:
     usage_warnings: List[str] = field(default_factory=list)
     doc_snippets: List[str] = field(default_factory=list)
     source_pointer: Optional[str] = None
+    doc_completeness: float = 0.0
+    schema_complexity: Dict[str, Any] = field(default_factory=dict)
+    ambiguity_flags: List[str] = field(default_factory=list)
+    provenance: Dict[str, Any] = field(default_factory=dict)
+    side_effect_hints: List[str] = field(default_factory=list)
+    safety_hints: List[str] = field(default_factory=list)
 
     def model_dump(self) -> Dict[str, Any]:
         return asdict(self)
@@ -50,6 +56,7 @@ class GeneratedSkill:
     examples: List[Dict[str, Any]] = field(default_factory=list)
     semantic_hints: Dict[str, Any] = field(default_factory=dict)
     method_trace: List[Dict[str, Any]] = field(default_factory=list)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
     def model_dump(self) -> Dict[str, Any]:
         return asdict(self)
@@ -61,6 +68,9 @@ class ValidationIssue:
     code: str
     message: str
     location: Optional[str] = None
+    section: Optional[str] = None
+    repairable: bool = False
+    evidence: Dict[str, Any] = field(default_factory=dict)
 
     def model_dump(self) -> Dict[str, Any]:
         return asdict(self)
@@ -70,6 +80,88 @@ class ValidationIssue:
 class ValidationReport:
     valid: bool
     issues: List[ValidationIssue] = field(default_factory=list)
+
+    def model_dump(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class BehaviorCase:
+    case_id: str
+    tool_name: str
+    user_request: str
+    should_trigger: bool = True
+    expected_arguments: Dict[str, Any] = field(default_factory=dict)
+    expected_argument_candidates: List[Dict[str, Any]] = field(default_factory=list)
+    expected_tool_name: Optional[str] = None
+    negative_target: Optional[str] = None
+    harm_baseline: Optional[str] = None
+    split: str = "default"
+    tags: List[str] = field(default_factory=list)
+
+    def model_dump(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class BehaviorResult:
+    case_id: str
+    tool_name: str
+    should_trigger: bool
+    triggered: bool
+    user_request: str = ""
+    exact_match: bool = False
+    argument_validity: float = 0.0
+    harmful_injection: bool = False
+    predicted_arguments: Dict[str, Any] = field(default_factory=dict)
+    expected_arguments: Dict[str, Any] = field(default_factory=dict)
+    prediction_latency_ms: float = 0.0
+    notes: List[str] = field(default_factory=list)
+
+    def model_dump(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class BehaviorReport:
+    valid: bool
+    results: List[BehaviorResult] = field(default_factory=list)
+    metrics: Dict[str, Any] = field(default_factory=dict)
+
+    def model_dump(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class RepairAction:
+    action_type: str
+    section: str
+    issue_code: str
+    description: str
+
+    def model_dump(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class RepairReport:
+    attempted: bool
+    changed: bool
+    rounds: int = 0
+    actions: List[RepairAction] = field(default_factory=list)
+    remaining_issues: List[ValidationIssue] = field(default_factory=list)
+
+    def model_dump(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class ReliabilityScore:
+    score: float
+    decision: str
+    features: Dict[str, Any] = field(default_factory=dict)
+    rationale: List[str] = field(default_factory=list)
+    threshold: float = 70.0
 
     def model_dump(self) -> Dict[str, Any]:
         return asdict(self)

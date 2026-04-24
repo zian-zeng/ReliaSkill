@@ -1,9 +1,0 @@
-{
-  "tool_name": "git_reset",
-  "baseline_name": "retrieved_docs",
-  "source_pointer": "data\\raw\\harvested_mcp_reference_servers.json#46",
-  "valid": true,
-  "issues": [],
-  "semantic_hints": {},
-  "method_trace": []
-}

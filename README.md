@@ -1,36 +1,53 @@
-# AutoSkill
+# ReliaSkill
 
-AutoSkill is a Stage A prototype for converting raw MCP tool definitions into agent-ready skill packages and comparing them against simple baselines.
+ReliaSkill is a reliability-centered MCP skill cold-start research harness. It converts raw MCP schemas and sparse documentation into compact skill artifacts, validates them deterministically, tests them against positive and negative controls, repairs targeted failures, scores pre-deployment reliability, and gates artifacts before downstream agent exposure.
 
-The current comparison ladder is:
+The project is intentionally focused: it is not a generic agent platform, a trajectory-pool distillation system, or a multi-file skill ecosystem. The target contribution is **reliable MCP schema/doc -> compact skill construction under cold-start constraints, with validation, repair, scoring, and deploy/reject gating**.
+
+The current reliability ladder is:
 
 - `raw_mcp`: raw schema and docs only
 - `schema_only`: deterministic cleaned schema package
-- `retrieved_docs`: Gorilla-style retrieved documentation snippets
-- `retrieved_candidates`: ToolLLM-style candidate-tool retrieval baseline
-- `retrieved_memory`: skill-memory retrieval baseline inspired by HELPER/Voyager
-- `autoskill_base`: generated skill package with validation-aware candidate selection and semantic hints
+- `docs_only`: sparse documentation-only control
+- `naive_skill`: one-shot compact generated skill
+- `validated_skill`: generated skill plus deterministic structural validation
+- `repaired_skill`: validated skill after targeted section-level repair
+- `gated_skill`: repaired skill with reliability score and deploy/repair/reject decision
+
+Historical baselines remain available for comparison:
+
+- `retrieved_docs`: retrieved documentation snippets
+- `retrieved_candidates`: candidate-tool retrieval baseline
+- `retrieved_memory`: skill-memory retrieval baseline
+- `autoskill_base`: legacy validation-aware generated skill package
 
 ## What The Repo Does
 
 Given a set of MCP tool definitions, the pipeline:
 
-1. parses each tool into a normalized `ToolIR`
-2. builds raw, schema-only, retrieval, and full-method comparison conditions
-3. builds retrieval-based comparison baselines
-4. validates generated packages against the schema
-5. writes packaged artifacts to `outputs/`
-6. evaluates tool-call predictions on benchmark-style tasks
-7. evaluates hidden-tool routing where the tool identity is not given to the baseline
-8. writes summary tables and experiment reports
+1. parses each tool into a normalized `ToolIR` with doc-completeness, schema-complexity, ambiguity, provenance, and side-effect hints
+2. builds raw/schema/docs/naive/validated/repaired/gated skill conditions
+3. validates templates, examples, enums, required fields, unsupported arguments, contradictory guidance, non-use boundaries, and compactness
+4. runs behavior-grounded tests over positive controls and adjacent negative controls
+5. applies conservative targeted repair to failing sections
+6. scores likely reliability and gates deploy/repair/reject decisions
+7. writes standardized packages and experiment reports
+8. preserves the legacy benchmark and routing evaluators for comparison against earlier drafts
 
 ## Current Status
 
 What is implemented now:
 
 - deterministic MCP parsing and normalization
+- ToolIR reliability features for doc completeness, schema complexity, ambiguity, provenance, side effects, and safety hints
 - schema validation and package writing
+- structured validation reports with section, repairability, and evidence fields
+- behavior-grounded positive/negative-control harness
+- targeted repair for schema-inconsistent templates/examples and behavior failures from negative controls
+- rule-based reliability scoring and deploy/repair/reject gating
+- standardized reliability packaging with validation, behavior, repair, and score artifacts
 - `raw_mcp`, `schema_only`, `retrieved_docs`, `retrieved_candidates`, `retrieved_memory`, and `autoskill_base`
+- `docs_only`, `naive_skill`, `validated_skill`, `repaired_skill`, and `gated_skill`
 - validation-aware method-side candidate scoring / reranking for `autoskill_base`
 - semantic-hint generation for paraphrase-aware tool use
 - benchmark ingestion for simplified and BFCL-style JSON/JSONL
@@ -49,14 +66,13 @@ What is implemented now:
 
 What is not implemented yet:
 
-- automated quality scorer / reranker for generated skill packages
-- large real harvested MCP dataset pipeline (in progress)
-- large real harvested MCP dataset pipeline
-- meaningful paper-quality model results
+- full harvested-MCP dataset pipeline beyond the current converted MCPToolBench++ slice
+- learned/calibrated reliability classifier or AUROC reporting
+- paper-quality GPU multi-model results for the revised low-compute reliability framing
 
 ## Main Folders
 
-- [autoskill](autoskill): core package
+- [autoskill](autoskill): core Python package; kept under the historical import name for compatibility
 - [scripts](scripts): runnable CLIs
 - [data/raw](data/raw): MCP tool inputs
 - [data/eval](data/eval): benchmark inputs
@@ -83,11 +99,13 @@ Downloaded external corpora currently present on disk:
 
 - [data/external/bfcl](data/external/bfcl)
 - [data/external/modelcontextprotocol-servers](data/external/modelcontextprotocol-servers)
+- [data/external/mcptoolbenchpp](data/external/mcptoolbenchpp)
 
 Status note:
 
-- those external corpora are present locally, but the default experiment still uses the curated filesystem subset until we finish fuller ingestion for the downloaded corpora
+- those external corpora are present locally, but the default experiment still uses the curated filesystem subset for fast smoke tests
 - external experiment artifacts are now generated under `data/raw/harvested_mcp_reference_servers.json`, `data/raw/bfcl_huggingface_tools.json`, and `data/eval/bfcl_huggingface_*_routing.jsonl`
+- the larger reliability fixture is available as `data/raw/mcptoolbenchpp_tools.json` and `data/eval/mcptoolbenchpp_reliability.jsonl`
 
 ## Core Commands
 
@@ -96,6 +114,31 @@ Run the packaging pipeline:
 ```powershell
 python scripts\run_pipeline.py
 ```
+
+Run the revised reliability pipeline:
+
+```powershell
+python scripts\run_reliability_pipeline.py --config configs\experiment.reliability.heuristic.sample.json
+```
+
+This writes packages under `outputs/reliability_heuristic_sample/packages/<tool>/<condition>/` with:
+
+- `SKILL.md`
+- `schema.normalized.json`
+- `examples.jsonl`
+- `validation_report.json`
+- `behavior_report.json`
+- `repair_report.json`
+- `reliability_score.json`
+- `metadata.json`
+
+It also writes run-level artifacts:
+
+- `outputs/reliability_heuristic_sample/reliability_manifest.json`
+- `outputs/reliability_heuristic_sample/reliability_summary.json`
+- `outputs/reliability_heuristic_sample/reliability_records.jsonl`
+- `outputs/reliability_heuristic_sample/reports/reliability_report.md`
+- `outputs/reliability_heuristic_sample/reports/reliability_summary.csv`
 
 Run a benchmark evaluation:
 
@@ -194,6 +237,8 @@ python scripts\run_experiment_sweep.py configs\experiment.heuristic.sample.json 
 Current config files:
 
 - [experiment.heuristic.sample.json](configs/experiment.heuristic.sample.json)
+- [experiment.reliability.heuristic.sample.json](configs/experiment.reliability.heuristic.sample.json)
+- [model_comparison.low_compute.sample.json](configs/model_comparison.low_compute.sample.json)
 - [experiment.openai_compatible.sample.json](configs/experiment.openai_compatible.sample.json)
 - [experiment.local_hf.sample.json](configs/experiment.local_hf.sample.json)
 - [experiment.local_hf.qwen25_3b.sample.json](configs/experiment.local_hf.qwen25_3b.sample.json)
@@ -214,6 +259,22 @@ Current config files:
 Dataset/model inventory:
 
 - [DATASETS_AND_MODELS.md](docs/DATASETS_AND_MODELS.md)
+- [MCP_COLD_START_RELIABILITY.md](docs/MCP_COLD_START_RELIABILITY.md)
+- [LARGER_MCP_NEGATIVE_CONTROL_BENCHMARK.md](docs/LARGER_MCP_NEGATIVE_CONTROL_BENCHMARK.md)
+- [LOW_COMPUTE_EXPERIMENTS.md](docs/LOW_COMPUTE_EXPERIMENTS.md)
+
+Run the low-compute model comparison preflight:
+
+```powershell
+python scripts\run_model_comparison.py --config configs\model_comparison.low_compute.sample.json --preflight-only
+```
+
+Download and convert MCPToolBench++ when network access is available:
+
+```powershell
+python scripts\download_mcptoolbenchpp.py --out data\external\mcptoolbenchpp
+python scripts\convert_mcptoolbenchpp.py --input data\external\mcptoolbenchpp --category file_system --category search --category browser --limit 300
+```
 
 ## Outputs
 

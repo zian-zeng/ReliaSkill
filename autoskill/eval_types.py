@@ -11,6 +11,10 @@ class EvalTask:
     user_request: str
     expected_arguments: Dict[str, Any] = field(default_factory=dict)
     expected_argument_candidates: List[Dict[str, Any]] = field(default_factory=list)
+    should_trigger: bool = True
+    expected_tool_name: str | None = None
+    negative_target: str | None = None
+    harm_baseline: str | None = None
     split: str = "default"
     tags: List[str] = field(default_factory=list)
 

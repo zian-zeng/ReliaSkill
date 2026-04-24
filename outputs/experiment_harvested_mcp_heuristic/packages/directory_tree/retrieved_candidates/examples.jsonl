@@ -1,2 +1,0 @@
-{"scenario": "Minimal routed call for directory_tree", "arguments": {"path": "data/sample.txt", "excludePatterns": ["sample_excludePatterns_item_1"]}}
-{"scenario": "Full routed call for directory_tree", "arguments": {"path": "data/sample.txt", "excludePatterns": ["sample_excludePatterns_item_2"]}}

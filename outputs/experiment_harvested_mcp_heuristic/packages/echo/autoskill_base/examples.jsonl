@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid request that satisfies the required fields for echo", "arguments": {"message": "sample_message_1"}}
-{"scenario": "Richer invocation that uses optional controls for echo", "arguments": {"message": "sample_message_2"}}

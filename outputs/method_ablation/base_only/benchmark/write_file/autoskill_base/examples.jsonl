@@ -1,2 +1,0 @@
-{"scenario": "Minimal valid request that satisfies the required fields for write_file", "arguments": {"path": "data/sample.txt", "content": "sample_content_1"}}
-{"scenario": "Richer invocation that uses optional controls for write_file", "arguments": {"path": "data/sample.txt", "content": "sample_content_2"}}

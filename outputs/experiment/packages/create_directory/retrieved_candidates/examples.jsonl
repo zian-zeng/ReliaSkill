@@ -1,2 +1,0 @@
-{"scenario": "Minimal routed call for create_directory", "arguments": {"path": "data/sample.txt"}}
-{"scenario": "Route ensure-directory requests here.", "arguments": {"path": "reports/weekly"}}

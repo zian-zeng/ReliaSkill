@@ -1,1 +1,0 @@
-{"scenario": "Minimal valid memory-backed call for git_create_branch", "arguments": {"repo_path": "data/sample.txt", "branch_name": "sample-name"}}

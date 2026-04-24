@@ -1,6 +1,0 @@
-anchor_baseline,comparison_baseline,num_anchor_wins,top_error_type,top_error_type_count,top_tag,top_tag_count
-autoskill_base,raw_mcp,4,semantic_missing_required_argument,3,search,4
-autoskill_base,schema_only,4,hallucinated_argument,2,search,4
-autoskill_base,retrieved_docs,4,hallucinated_argument,2,search,4
-autoskill_base,retrieved_candidates,4,hallucinated_argument,2,search,4
-autoskill_base,retrieved_memory,0,,,,

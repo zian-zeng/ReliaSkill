@@ -1,5 +1,6 @@
 from .analysis import classify_score_error, summarize_error_taxonomy, summarize_method_wins
 from .benchmark import load_benchmark_tasks
+from .behavior import load_behavior_cases, run_behavior_tests, skill_should_trigger
 from .config import load_json_config, merge_experiment_config, validate_experiment_config
 from .conversion import (
     canonicalize_mcp_tool_records,
@@ -22,15 +23,26 @@ from .exposure import render_exposure
 from .generator import SkillGenerator
 from .ir import (
     ArgumentIR,
+    BehaviorCase,
+    BehaviorReport,
+    BehaviorResult,
     GeneratedSkill,
+    ReliabilityScore,
+    RepairAction,
+    RepairReport,
     ToolIR,
     ValidationIssue,
     ValidationReport,
 )
 from .packaging import write_skill_package
+from .mcptoolbench import convert_mcptoolbench_records, load_mcptoolbench_records
+from .model_compare import run_model_comparison_from_config
 from .parser import parse_mcp_tool
 from .predictor import build_predictor_from_config, build_predictor_from_env, safe_predict
+from .quality import score_reliability
 from .raw_mcp import build_raw_mcp_skill
+from .reliability import run_reliability_pipeline, run_reliability_pipeline_from_config
+from .repair import classify_failure, repair_skill
 from .retrieval_baselines import build_retrieved_candidates_skill, build_retrieved_docs_skill, build_retrieved_memory_skill
 from .retrieval_runtime import (
     contextualize_skill_for_task,
@@ -53,9 +65,15 @@ from .validator import validate_skill
 
 __all__ = [
     "ArgumentIR",
+    "BehaviorCase",
+    "BehaviorReport",
+    "BehaviorResult",
     "EvalPrediction",
     "EvalTask",
     "GeneratedSkill",
+    "ReliabilityScore",
+    "RepairAction",
+    "RepairReport",
     "SkillGenerator",
     "ToolIR",
     "ValidationIssue",
@@ -73,11 +91,14 @@ __all__ = [
     "contextualize_skill_for_task",
     "canonicalize_mcp_tool_records",
     "convert_benchmark_file_to_canonical_records",
+    "convert_mcptoolbench_records",
     "demo_predict_call",
     "load_benchmark_tasks",
+    "load_behavior_cases",
     "load_eval_tasks",
     "load_json_config",
     "load_json_or_jsonl",
+    "load_mcptoolbench_records",
     "load_tools",
     "merge_experiment_config",
     "parse_mcp_tool",
@@ -91,10 +112,18 @@ __all__ = [
     "run_experiment_sweep",
     "run_full_experiment",
     "run_full_experiment_from_config",
+    "run_model_comparison_from_config",
     "run_packaging_pipeline",
+    "run_behavior_tests",
+    "run_reliability_pipeline",
+    "run_reliability_pipeline_from_config",
     "run_routing_benchmark_pipeline",
     "safe_predict",
     "score_prediction",
+    "score_reliability",
+    "skill_should_trigger",
+    "repair_skill",
+    "classify_failure",
     "summarize_records",
     "aggregate_experiment_manifests",
     "summarize_error_taxonomy",
