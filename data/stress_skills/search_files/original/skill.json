@@ -1,0 +1,46 @@
+{
+  "baseline_name": "autoskill_base",
+  "skill_summary": "Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories. Provide all required fields: `path`, and `pattern`.",
+  "when_to_use": [
+    "Use `search_files` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `path`, and `pattern`.",
+    "Optional control is available through `excludePatterns` when the request needs extra specificity."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "argument_template": {
+    "path": "data/sample.txt",
+    "pattern": "sample_pattern_1",
+    "excludePatterns": []
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for search_files",
+      "arguments": {
+        "path": "data/sample.txt",
+        "pattern": "sample_pattern_1"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for search_files",
+      "arguments": {
+        "path": "data/sample.txt",
+        "pattern": "sample_pattern_2",
+        "excludePatterns": []
+      }
+    }
+  ],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "trace_type": "generation_backend",
+      "configured_generation_backend": "heuristic",
+      "actual_generation_backend": "heuristic",
+      "generation_fallback_used": false,
+      "generation_fallback_reason": null
+    }
+  ],
+  "metadata": {}
+}

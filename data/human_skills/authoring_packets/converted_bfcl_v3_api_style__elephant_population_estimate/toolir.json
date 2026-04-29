@@ -1,0 +1,143 @@
+{
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "arguments": [
+    {
+      "default": null,
+      "description": "The current number of elephants.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "current_population",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.current_population",
+      "type": "integer"
+    },
+    {
+      "default": null,
+      "description": "The annual population growth rate of elephants.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "growth_rate",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.growth_rate",
+      "type": "float"
+    },
+    {
+      "default": null,
+      "description": "The number of years to project the population.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "years",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.years",
+      "type": "integer"
+    }
+  ],
+  "auth_or_env_notes": null,
+  "difficulty_tier": "medium",
+  "doc_completeness": 1.0,
+  "doc_snippets": [
+    "Estimate future population of elephants given current population and growth rate.",
+    "elephant_population_estimate"
+  ],
+  "domain": "general",
+  "input_schema_raw": {
+    "properties": {
+      "current_population": {
+        "description": "The current number of elephants.",
+        "type": "integer"
+      },
+      "growth_rate": {
+        "description": "The annual population growth rate of elephants.",
+        "type": "float"
+      },
+      "years": {
+        "description": "The number of years to project the population.",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "current_population",
+      "growth_rate",
+      "years"
+    ],
+    "type": "object"
+  },
+  "output_hint": null,
+  "provenance": {
+    "raw_name": "elephant_population_estimate",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "safety_hints": [],
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.15,
+    "auth_required": false,
+    "documentation_length": 81,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 3,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "unknown"
+  },
+  "server_name": "bfcl_v3",
+  "side_effect_hints": [],
+  "source_metadata": {
+    "ambiguity_score_heuristic": 0.15,
+    "args_count": 3,
+    "auth_required": false,
+    "collection_seed": 42,
+    "difficulty_tier": "medium",
+    "documentation_length": 81,
+    "domain": "general",
+    "enum_count": 0,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "normalized_tool_name": "elephant_population_estimate",
+    "num_arguments": 3,
+    "num_enum_fields": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 3,
+    "record_order": 48,
+    "required_args_count": 3,
+    "schema_hash": "4c69e5cd27475e6b",
+    "server": "bfcl_v3",
+    "side_effect_type": "unknown",
+    "source_category": "converted_bfcl_api_style",
+    "source_file": "data/raw/bfcl_v3_tools_subset100.json",
+    "source_id": "converted_bfcl_v3_api_style",
+    "source_order": 5,
+    "source_pointer": "bfcl_v3",
+    "source_server": "bfcl_v3",
+    "source_type": "converted_bfcl",
+    "synthetic": false,
+    "tool_name": "elephant_population_estimate"
+  },
+  "source_pointer": "bfcl_v3",
+  "tool_name": "elephant_population_estimate",
+  "tool_purpose": "Estimate future population of elephants given current population and growth rate.",
+  "usage_warnings": []
+}

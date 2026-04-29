@@ -1,0 +1,123 @@
+{
+  "ambiguity_flags": [
+    "missing_argument_description:messageType",
+    "missing_argument_description:includeImage",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "arguments": [
+    {
+      "default": null,
+      "description": null,
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "messageType",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.messageType",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "description": null,
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "includeImage",
+      "nullable": false,
+      "properties": null,
+      "required": false,
+      "required_properties": [],
+      "schema_path": "$.properties.includeImage",
+      "type": "string"
+    }
+  ],
+  "auth_or_env_notes": null,
+  "difficulty_tier": "hard",
+  "doc_completeness": 0.6,
+  "doc_snippets": [
+    "Demonstrates how annotations can be used to provide metadata about content.",
+    "Get Annotated Message Tool"
+  ],
+  "domain": "messaging/email mock",
+  "input_schema_raw": {
+    "properties": {
+      "includeImage": {
+        "type": "string"
+      },
+      "messageType": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "messageType"
+    ],
+    "type": "object"
+  },
+  "output_hint": null,
+  "provenance": {
+    "raw_name": "get-annotated-message",
+    "server_name": "tools",
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-annotated-message.ts"
+  },
+  "safety_hints": [],
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.85,
+    "auth_required": false,
+    "documentation_length": 75,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": true,
+    "max_schema_depth": 2,
+    "num_arguments": 2,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 2,
+    "side_effect_type": "external_communication"
+  },
+  "server_name": "tools",
+  "side_effect_hints": [],
+  "source_metadata": {
+    "ambiguity_score_heuristic": 0.85,
+    "args_count": 2,
+    "auth_required": false,
+    "collection_seed": 42,
+    "difficulty_tier": "hard",
+    "documentation_length": 75,
+    "domain": "messaging/email mock",
+    "enum_count": 0,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": true,
+    "normalized_tool_name": "get_annotated_message",
+    "num_arguments": 2,
+    "num_enum_fields": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 1,
+    "record_order": 39,
+    "required_args_count": 1,
+    "schema_hash": "fb2f59b12943457c",
+    "server": "tools",
+    "side_effect_type": "external_communication",
+    "source_category": "real_public_mcp_schema_local",
+    "source_file": "data/raw/harvested_mcp_reference_servers.json",
+    "source_id": "public_mcp_reference_servers_local",
+    "source_order": 2,
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-annotated-message.ts",
+    "source_server": "tools",
+    "source_type": "real_public_mcp",
+    "synthetic": false,
+    "tool_name": "get-annotated-message"
+  },
+  "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-annotated-message.ts",
+  "tool_name": "get-annotated-message",
+  "tool_purpose": "Demonstrates how annotations can be used to provide metadata about content.",
+  "usage_warnings": []
+}

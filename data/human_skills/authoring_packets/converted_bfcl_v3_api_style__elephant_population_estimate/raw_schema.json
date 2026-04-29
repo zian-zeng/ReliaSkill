@@ -1,0 +1,22 @@
+{
+  "properties": {
+    "current_population": {
+      "description": "The current number of elephants.",
+      "type": "integer"
+    },
+    "growth_rate": {
+      "description": "The annual population growth rate of elephants.",
+      "type": "float"
+    },
+    "years": {
+      "description": "The number of years to project the population.",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "current_population",
+    "growth_rate",
+    "years"
+  ],
+  "type": "object"
+}

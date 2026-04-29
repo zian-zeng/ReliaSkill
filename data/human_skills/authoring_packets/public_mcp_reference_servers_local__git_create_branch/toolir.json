@@ -1,0 +1,147 @@
+{
+  "ambiguity_flags": [
+    "missing_argument_description:repo_path",
+    "missing_argument_description:branch_name",
+    "missing_argument_description:base_branch",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "arguments": [
+    {
+      "default": null,
+      "description": null,
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "repo_path",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.repo_path",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "description": null,
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "branch_name",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.branch_name",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "description": null,
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "base_branch",
+      "nullable": false,
+      "properties": null,
+      "required": false,
+      "required_properties": [],
+      "schema_path": "$.properties.base_branch",
+      "type": "string"
+    }
+  ],
+  "auth_or_env_notes": null,
+  "difficulty_tier": "hard",
+  "doc_completeness": 0.6,
+  "doc_snippets": [
+    "Creates a new branch from an optional base branch",
+    "git_create_branch"
+  ],
+  "domain": "git/version-control",
+  "input_schema_raw": {
+    "properties": {
+      "base_branch": {
+        "nullable": true,
+        "type": "string"
+      },
+      "branch_name": {
+        "type": "string"
+      },
+      "repo_path": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "repo_path",
+      "branch_name"
+    ],
+    "type": "object"
+  },
+  "output_hint": null,
+  "provenance": {
+    "raw_name": "git_create_branch",
+    "server_name": "src",
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py"
+  },
+  "safety_hints": [
+    "review_side_effects_before_deployment"
+  ],
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.85,
+    "auth_required": false,
+    "documentation_length": 49,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": true,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "write"
+  },
+  "server_name": "src",
+  "side_effect_hints": [
+    "creates_resource"
+  ],
+  "source_metadata": {
+    "ambiguity_score_heuristic": 0.85,
+    "args_count": 3,
+    "auth_required": false,
+    "collection_seed": 42,
+    "difficulty_tier": "hard",
+    "documentation_length": 49,
+    "domain": "git/version-control",
+    "enum_count": 0,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": true,
+    "normalized_tool_name": "git_create_branch",
+    "num_arguments": 3,
+    "num_enum_fields": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 2,
+    "record_order": 30,
+    "required_args_count": 2,
+    "schema_hash": "6932ab2f19d6441f",
+    "server": "src",
+    "side_effect_type": "write",
+    "source_category": "real_public_mcp_schema_local",
+    "source_file": "data/raw/harvested_mcp_reference_servers.json",
+    "source_id": "public_mcp_reference_servers_local",
+    "source_order": 2,
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py",
+    "source_server": "src",
+    "source_type": "real_public_mcp",
+    "synthetic": false,
+    "tool_name": "git_create_branch"
+  },
+  "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py",
+  "tool_name": "git_create_branch",
+  "tool_purpose": "Creates a new branch from an optional base branch",
+  "usage_warnings": []
+}

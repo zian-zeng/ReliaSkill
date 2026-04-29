@@ -1,0 +1,124 @@
+{
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "arguments": [
+    {
+      "default": null,
+      "description": "Unique & arbitrary identifier to be used for retrieving this response later with `Playwright_assert_response`.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "id",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.id",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "description": "URL pattern to match in the response.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "url",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.url",
+      "type": "string"
+    }
+  ],
+  "auth_or_env_notes": null,
+  "difficulty_tier": "easy",
+  "doc_completeness": 1.0,
+  "doc_snippets": [
+    "Ask Playwright to start waiting for a HTTP response. This tool initiates the wait operation but does not wait for its completion.",
+    "Playwright Expect Response"
+  ],
+  "domain": "web/fetch mock",
+  "input_schema_raw": {
+    "properties": {
+      "id": {
+        "description": "Unique & arbitrary identifier to be used for retrieving this response later with `Playwright_assert_response`.",
+        "type": "string"
+      },
+      "url": {
+        "description": "URL pattern to match in the response.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "url"
+    ],
+    "type": "object"
+  },
+  "output_hint": null,
+  "provenance": {
+    "raw_name": "playwright_expect_response",
+    "server_name": "browser",
+    "source_pointer": "data/raw/mcptoolbenchpp_tools.json"
+  },
+  "safety_hints": [],
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 129,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 2,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 2,
+    "side_effect_type": "read"
+  },
+  "server_name": "browser",
+  "side_effect_hints": [],
+  "source_metadata": {
+    "ambiguity_score_heuristic": 0.25,
+    "args_count": 2,
+    "auth_required": false,
+    "collection_seed": 42,
+    "difficulty_tier": "easy",
+    "documentation_length": 129,
+    "domain": "web/fetch mock",
+    "enum_count": 0,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "normalized_tool_name": "playwright_expect_response",
+    "num_arguments": 2,
+    "num_enum_fields": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 2,
+    "record_order": 12,
+    "required_args_count": 2,
+    "schema_hash": "1e0202f3113303d6",
+    "server": "browser",
+    "side_effect_type": "read",
+    "source_category": "converted_toolbench_style",
+    "source_file": "data/raw/mcptoolbenchpp_tools.json",
+    "source_id": "converted_toolbench_local",
+    "source_order": 3,
+    "source_pointer": "data/raw/mcptoolbenchpp_tools.json",
+    "source_server": "browser",
+    "source_type": "converted_toolbench",
+    "synthetic": false,
+    "tool_name": "playwright_expect_response"
+  },
+  "source_pointer": "data/raw/mcptoolbenchpp_tools.json",
+  "tool_name": "playwright_expect_response",
+  "tool_purpose": "Ask Playwright to start waiting for a HTTP response. This tool initiates the wait operation but does not wait for its completion.",
+  "usage_warnings": []
+}

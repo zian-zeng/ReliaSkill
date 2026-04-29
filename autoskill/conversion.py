@@ -75,6 +75,10 @@ def canonicalize_mcp_tool_records(
                     "description": item.get("description", ""),
                     "inputSchema": input_schema,
                     "outputSchema": item.get("outputSchema") or item.get("output_schema"),
+                    "domain": item.get("domain"),
+                    "source_pointer": item.get("source_pointer") or item.get("source_file"),
+                    "auth_required": item.get("auth_required"),
+                    "auth_or_env_notes": item.get("auth_or_env_notes") or item.get("auth_notes"),
                 }
             )
     return canonical

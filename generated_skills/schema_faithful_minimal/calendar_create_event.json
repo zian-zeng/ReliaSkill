@@ -1,0 +1,83 @@
+{
+  "tool_id": "calendar_create_event",
+  "template_id": "schema_faithful_minimal",
+  "template_metadata": {
+    "template_id": "schema_faithful_minimal",
+    "template_family": "minimal",
+    "allowed_sections": [
+      "skill_summary",
+      "when_to_use",
+      "when_not_to_use",
+      "argument_template",
+      "examples"
+    ],
+    "max_tokens": 180,
+    "uses_dev_controls": false,
+    "uses_negative_controls": false,
+    "instruction": "Use the fewest tokens possible while preserving required schema information."
+  },
+  "prompt": "You generate compact, deployable ReliaSkill artifacts from MCP-like ToolIR.\nTemplate id: schema_faithful_minimal\nTemplate family: minimal\nToken budget: 180\nTemplate instruction: Use the fewest tokens possible while preserving required schema information.\nRules:\n- Return exactly one JSON object.\n- Required keys: skill_summary, when_to_use, when_not_to_use, argument_template, examples.\n- Do not invent arguments, capabilities, outputs, enum values, authentication modes, or side effects.\n- Use only schema-supported parameter names in argument_template and examples.\n- Include when-to-use guidance and when-not-to-use guidance.\n- Include an argument_template object.\n- Include 1-3 examples unless the schema has no arguments.\n- Each example must be an object with scenario and arguments.\n- Preserve side-effect warnings and safety hints.\n- Do not use test controls or evaluation labels.\nAllowed sections:\n[\"skill_summary\", \"when_to_use\", \"when_not_to_use\", \"argument_template\", \"examples\"]\nGeneration payload:\n{\n  \"prompt_template_metadata\": {\n    \"template_id\": \"schema_faithful_minimal\",\n    \"template_family\": \"minimal\",\n    \"allowed_sections\": [\n      \"skill_summary\",\n      \"when_to_use\",\n      \"when_not_to_use\",\n      \"argument_template\",\n      \"examples\"\n    ],\n    \"max_tokens\": 180,\n    \"uses_dev_controls\": false,\n    \"uses_negative_controls\": false,\n    \"instruction\": \"Use the fewest tokens possible while preserving required schema information.\"\n  },\n  \"toolir\": {\n    \"tool_name\": \"calendar_create_event\",\n    \"server_name\": \"apibank_style_fixture\",\n    \"tool_purpose\": \"API-Bank-style local fixture tool that creates a mock calendar event with attendees and reminders.\",\n    \"input_schema_raw\": {\n      \"properties\": {\n        \"attendees\": {\n          \"description\": \"Attendee email addresses.\",\n          \"items\": {\n            \"type\": \"string\"\n          },\n          \"type\": \"array\"\n        },\n        \"calendar_id\": {\n          \"description\": \"Mock calendar identifier.\",\n          \"type\": \"string\"\n        },\n        \"end_time\": {\n          \"description\": \"Event end time.\",\n          \"format\": \"date-time\",\n          \"type\": \"string\"\n        },\n        \"start_time\": {\n          \"description\": \"Event start time.\",\n          \"format\": \"date-time\",\n          \"type\": \"string\"\n        },\n        \"title\": {\n          \"description\": \"Event title.\",\n          \"type\": \"string\"\n        },\n        \"visibility\": {\n          \"description\": \"Event visibility.\",\n          \"enum\": [\n            \"default\",\n            \"private\",\n            \"public\"\n          ],\n          \"type\": \"string\"\n        }\n      },\n      \"required\": [\n        \"calendar_id\",\n        \"title\",\n        \"start_time\",\n        \"end_time\"\n      ],\n      \"type\": \"object\"\n    },\n    \"arguments\": [\n      {\n        \"name\": \"calendar_id\",\n        \"type\": \"string\",\n        \"required\": true,\n        \"default\": null,\n        \"enum\": null,\n        \"description\": \"Mock calendar identifier.\",\n        \"items_type\": null,\n        \"properties\": null,\n        \"required_properties\": [],\n        \"nullable\": false,\n        \"format\": null,\n        \"schema_path\": \"$.properties.calendar_id\"\n      },\n      {\n        \"name\": \"title\",\n        \"type\": \"string\",\n        \"required\": true,\n        \"default\": null,\n        \"enum\": null,\n        \"description\": \"Event title.\",\n        \"items_type\": null,\n        \"properties\": null,\n        \"required_properties\": [],\n        \"nullable\": false,\n        \"format\": null,\n        \"schema_path\": \"$.properties.title\"\n      },\n      {\n        \"name\": \"start_time\",\n        \"type\": \"string\",\n        \"required\": true,\n        \"default\": null,\n        \"enum\": null,\n        \"description\": \"Event start time.\",\n        \"items_type\": null,\n        \"properties\": null,\n        \"required_properties\": [],\n        \"nullable\": false,\n        \"format\": \"date-time\",\n        \"schema_path\": \"$.properties.start_time\"\n      },\n      {\n        \"name\": \"end_time\",\n        \"type\": \"string\",\n        \"required\": true,\n        \"default\": null,\n        \"enum\": null,\n        \"description\": \"Event end time.\",\n        \"items_type\": null,\n        \"properties\": null,\n        \"required_properties\": [],\n        \"nullable\": false,\n        \"format\": \"date-time\",\n        \"schema_path\": \"$.properties.end_time\"\n      },\n      {\n        \"name\": \"attendees\",\n        \"type\": \"array\",\n        \"required\": false,\n        \"default\": null,\n        \"enum\": null,\n        \"description\": \"Attendee email addresses.\",\n        \"items_type\": \"string\",\n        \"properties\": null,\n        \"required_properties\": [],\n        \"nullable\": false,\n        \"format\": null,\n        \"schema_path\": \"$.properties.attendees\"\n      },\n      {\n        \"name\": \"visibility\",\n        \"type\": \"string\",\n        \"required\": false,\n        \"default\": null,\n        \"enum\": [\n          \"default\",\n          \"private\",\n          \"public\"\n        ],\n        \"description\": \"Event visibility.\",\n        \"items_type\": null,\n        \"properties\": null,\n        \"required_properties\": [],\n        \"nullable\": false,\n        \"format\": null,\n        \"schema_path\": \"$.properties.visibility\"\n      }\n    ],\n    \"output_hint\": null,\n    \"auth_or_env_notes\": null,\n    \"usage_warnings\": [],\n    \"doc_snippets\": [\n      \"API-Bank-style local fixture tool that creates a mock calendar event with attendees and reminders.\",\n      \"Create Calendar Event\",\n      \"Create an offline fixture calendar event.\"\n    ],\n    \"source_pointer\": \"data/raw/apibank_style_tools.json\",\n    \"doc_completeness\": 1.0,\n    \"schema_complexity\": {\n      \"ambiguity_score_heuristic\": 0.25,\n      \"auth_required\": false,\n      \"documentation_length\": 98,\n      \"has_array_argument\": true,\n      \"has_boolean_flag\": false,\n      \"has_nested_object\": false,\n      \"has_side_effect\": true,\n      \"max_schema_depth\": 3,\n      \"num_arguments\": 6,\n      \"num_enum_arguments\": 1,\n      \"num_enum_fields\": 1,\n      \"num_nested_object_arguments\": 0,\n      \"num_optional_arguments\": 2,\n      \"num_required_arguments\": 4,\n      \"num_top_level_arguments\": 6,\n      \"side_effect_type\": \"write\"\n    },\n    \"ambiguity_flags\": [\n      \"allows_or_omits_unknown_argument_policy\"\n    ],\n    \"provenance\": {\n      \"raw_name\": \"calendar_create_event\",\n      \"server_name\": \"apibank_style_fixture\",\n      \"source_pointer\": \"data/raw/apibank_style_tools.json\"\n    },\n    \"side_effect_hints\": [\n      \"creates_resource\"\n    ],\n    \"safety_hints\": [\n      \"review_side_effects_before_deployment\"\n    ]\n  }\n}",
+  "skill": {
+    "baseline_name": "autoskill_base",
+    "skill_summary": "API-Bank-style local fixture tool that creates a mock calendar event with attendees and reminders.",
+    "when_to_use": [
+      "Use `calendar_create_event` for direct requests matching its schema.",
+      "Required fields must be grounded in the user request: `calendar_id`, `title`, `start_time`, `end_time`."
+    ],
+    "when_not_to_use": [
+      "Do not use for missing required fields, unsupported arguments, adjacent tools, or unsafe side-effect mismatches."
+    ],
+    "argument_template": {
+      "calendar_id": "sample-calendar-id-001",
+      "title": "Sample Title",
+      "start_time": "2026-01-01T09:00:00Z",
+      "end_time": "2026-01-01T09:00:00Z"
+    },
+    "examples": [
+      {
+        "scenario": "Schema-faithful calendar_create_event invocation 1",
+        "arguments": {
+          "calendar_id": "sample-calendar-id-001",
+          "title": "Sample Title",
+          "start_time": "2026-01-01T09:00:00Z",
+          "end_time": "2026-01-01T09:00:00Z"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "prompt_template_generation",
+        "template_id": "schema_faithful_minimal",
+        "template_family": "minimal",
+        "uses_dev_controls": false,
+        "uses_negative_controls": false,
+        "test_controls_used": false
+      }
+    ],
+    "metadata": {
+      "template_id": "schema_faithful_minimal",
+      "template_family": "minimal",
+      "allowed_sections": [
+        "skill_summary",
+        "when_to_use",
+        "when_not_to_use",
+        "argument_template",
+        "examples"
+      ],
+      "max_tokens": 180,
+      "uses_dev_controls": false,
+      "uses_negative_controls": false,
+      "parse_ok": true,
+      "parse_error": null,
+      "heuristic_prompt_template_renderer": true,
+      "dev_control_categories_seen": []
+    }
+  },
+  "validation": {
+    "valid": true,
+    "issues": []
+  },
+  "raw_text": null,
+  "parse_error": null
+}

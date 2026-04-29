@@ -1,0 +1,40 @@
+{
+  "baseline_name": "autoskill_base",
+  "skill_summary": "Get a detailed listing of all files and directories in a specified path. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is essential for understanding directory structure and finding specific files within a directory. Only works within allowed directories. Provide the required field `path`.",
+  "when_to_use": [
+    "Use `list_directory` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `path`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "argument_template": {
+    "path": "data/sample.txt"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for list_directory",
+      "arguments": {
+        "path": "data/sample.txt"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for list_directory",
+      "arguments": {
+        "path": "data/sample.txt"
+      }
+    }
+  ],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "trace_type": "generation_backend",
+      "configured_generation_backend": "heuristic",
+      "actual_generation_backend": "heuristic",
+      "generation_fallback_used": false,
+      "generation_fallback_reason": null
+    }
+  ],
+  "metadata": {}
+}

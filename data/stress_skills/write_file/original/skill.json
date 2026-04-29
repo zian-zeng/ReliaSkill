@@ -1,0 +1,43 @@
+{
+  "baseline_name": "autoskill_base",
+  "skill_summary": "Create a new file or completely overwrite an existing file with new content. Use with caution as it will overwrite existing files without warning. Handles text content with proper encoding. Only works within allowed directories. Provide all required fields: `path`, and `content`.",
+  "when_to_use": [
+    "Use `write_file` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `path`, and `content`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "argument_template": {
+    "path": "data/sample.txt",
+    "content": "sample_content_1"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for write_file",
+      "arguments": {
+        "path": "data/sample.txt",
+        "content": "sample_content_1"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for write_file",
+      "arguments": {
+        "path": "data/sample.txt",
+        "content": "sample_content_2"
+      }
+    }
+  ],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "trace_type": "generation_backend",
+      "configured_generation_backend": "heuristic",
+      "actual_generation_backend": "heuristic",
+      "generation_fallback_used": false,
+      "generation_fallback_reason": null
+    }
+  ],
+  "metadata": {}
+}

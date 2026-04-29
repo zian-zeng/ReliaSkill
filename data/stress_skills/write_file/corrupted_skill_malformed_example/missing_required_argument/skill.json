@@ -1,0 +1,158 @@
+{
+  "stress_skill_id": "write_file__corrupted_skill_malformed_example__missing_required_argument",
+  "tool": {
+    "tool_name": "write_file",
+    "server_name": "mcp_reference_filesystem",
+    "tool_purpose": "Create a new file or completely overwrite an existing file with new content. Use with caution as it will overwrite existing files without warning. Handles text content with proper encoding. Only works within allowed directories.",
+    "input_schema_raw": {
+      "properties": {
+        "content": {
+          "description": "Full file contents to write.",
+          "type": "string"
+        },
+        "path": {
+          "description": "Destination file path within an allowed directory.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "content"
+      ],
+      "type": "object"
+    },
+    "arguments": [
+      {
+        "name": "path",
+        "type": "string",
+        "required": true,
+        "default": null,
+        "enum": null,
+        "description": "Destination file path within an allowed directory.",
+        "items_type": null,
+        "properties": null,
+        "required_properties": [],
+        "nullable": false,
+        "format": null,
+        "schema_path": "$.properties.path"
+      },
+      {
+        "name": "content",
+        "type": "string",
+        "required": true,
+        "default": null,
+        "enum": null,
+        "description": "Full file contents to write.",
+        "items_type": null,
+        "properties": null,
+        "required_properties": [],
+        "nullable": false,
+        "format": null,
+        "schema_path": "$.properties.content"
+      }
+    ],
+    "output_hint": null,
+    "auth_or_env_notes": null,
+    "usage_warnings": [],
+    "doc_snippets": [
+      "Create a new file or completely overwrite an existing file with new content. Use with caution as it will overwrite existing files without warning. Handles text content with proper encoding. Only works within allowed directories.",
+      "Write File",
+      "Create a new file or completely overwrite an existing file with new content. Use with caution as it will overwrite existing files without warning. Handles text content with proper"
+    ],
+    "source_pointer": "src/filesystem/index.ts",
+    "doc_completeness": 1.0,
+    "schema_complexity": {
+      "ambiguity_score_heuristic": 0.25,
+      "auth_required": false,
+      "documentation_length": 228,
+      "has_array_argument": false,
+      "has_boolean_flag": false,
+      "has_nested_object": false,
+      "has_side_effect": true,
+      "max_schema_depth": 2,
+      "num_arguments": 2,
+      "num_enum_arguments": 0,
+      "num_enum_fields": 0,
+      "num_nested_object_arguments": 0,
+      "num_optional_arguments": 0,
+      "num_required_arguments": 2,
+      "num_top_level_arguments": 2,
+      "side_effect_type": "write"
+    },
+    "ambiguity_flags": [
+      "allows_or_omits_unknown_argument_policy"
+    ],
+    "provenance": {
+      "raw_name": "write_file",
+      "server_name": "mcp_reference_filesystem",
+      "source_pointer": "src/filesystem/index.ts"
+    },
+    "side_effect_hints": [
+      "writes_data",
+      "creates_resource"
+    ],
+    "safety_hints": [
+      "review_side_effects_before_deployment"
+    ]
+  },
+  "skill": {
+    "baseline_name": "corrupted_skill_malformed_example",
+    "skill_summary": "Create a new file or completely overwrite an existing file with new content. Use with caution as it will overwrite existing files without warning. Handles text content with proper encoding. Only works within allowed directories. Provide all required fields: `path`, and `content`.",
+    "when_to_use": [
+      "Use `write_file` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `path`, and `content`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "content": "sample_content_1"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for write_file",
+        "arguments": {
+          "content": "sample_content_1"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for write_file",
+        "arguments": {
+          "content": "sample_content_2"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "stress_skill_corruption",
+        "corruption_type": "missing_required_argument",
+        "corruption_location": "argument_template.path",
+        "expected_detection_target": "structural_validator",
+        "diagnostic_only": true
+      }
+    ],
+    "metadata": {
+      "diagnostic_adversarial": true,
+      "corruption_type": "missing_required_argument",
+      "corruption_location": "argument_template.path",
+      "expected_detection_target": "structural_validator",
+      "source_skill_condition": "autoskill_base",
+      "stress_tests_not_main_benchmark": true
+    }
+  },
+  "corruption": {
+    "type": "missing_required_argument",
+    "location": "argument_template.path",
+    "expected_detection_target": "structural_validator",
+    "diagnostic_only": true
+  }
+}

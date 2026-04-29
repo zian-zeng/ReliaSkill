@@ -1,0 +1,33 @@
+{
+  "properties": {
+    "bucket": {
+      "description": "Mock bucket name.",
+      "type": "string"
+    },
+    "dry_run": {
+      "description": "When true, validate the request without changing the mock system.",
+      "type": "boolean"
+    },
+    "key": {
+      "description": "Object key.",
+      "type": "string"
+    },
+    "metadata": {
+      "description": "Object metadata.",
+      "properties": {
+        "cache_control": {
+          "type": "string"
+        },
+        "content_type": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "bucket",
+    "key"
+  ],
+  "type": "object"
+}

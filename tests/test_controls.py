@@ -113,6 +113,83 @@ class ControlGenerationTests(unittest.TestCase):
             self.assertIn("category", rows[0])
             self.assertIn("control_count", rows[0])
 
+    def test_tiered_controls_have_difficulty_and_failure_mode_labels(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmpdir_path = Path(tmpdir)
+            source_tools = Path("data/processed_toolir/tools.jsonl").read_text(encoding="utf-8").splitlines()[:4]
+            tools_path = tmpdir_path / "tools.jsonl"
+            tools_path.write_text("\n".join(source_tools) + "\n", encoding="utf-8")
+            config = load_control_config("configs/controls/emnlp_scale.yaml")
+            config["tools_path"] = str(tools_path)
+            config["outputs"] = {
+                "dev": str(tmpdir_path / "controls" / "dev.jsonl"),
+                "test": str(tmpdir_path / "controls" / "test.jsonl"),
+                "stats": str(tmpdir_path / "tables" / "control_stats.csv"),
+                "difficulty_stats": str(tmpdir_path / "tables" / "control_difficulty_stats.csv"),
+                "negative_category_stats": str(tmpdir_path / "tables" / "negative_category_stats.csv"),
+            }
+            controls = build_controls(config)
+            summary = summarize_controls(controls)
+
+            self.assertEqual(summary["tools"], 4)
+            self.assertEqual(summary["min_positive_per_tool"], 5)
+            self.assertEqual(summary["min_negative_per_tool"], 5)
+            self.assertEqual(set(summary["difficulties"]), {"easy", "medium", "hard"})
+            self.assertEqual(set(summary["families"]), {"positive", "negative"})
+
+            categories = set(summary["categories"])
+            for category in [
+                "positive_easy",
+                "positive_medium",
+                "positive_hard",
+                "negative_easy",
+                "negative_medium",
+                "negative_hard",
+            ]:
+                self.assertIn(category, categories)
+
+            required_new_fields = {
+                "control_id",
+                "difficulty",
+                "control_family",
+                "negative_category",
+                "expected_failure_mode",
+                "alternative_valid_tools",
+            }
+            for control in controls:
+                self.assertTrue(required_new_fields.issubset(control))
+                self.assertIn(control["difficulty"], {"easy", "medium", "hard"})
+                self.assertIn(control["control_family"], {"positive", "negative"})
+                self.assertIsInstance(control["alternative_valid_tools"], list)
+                if control["control_family"] == "positive":
+                    self.assertTrue(control["should_trigger"])
+                    self.assertIsNone(control["negative_category"])
+                else:
+                    self.assertFalse(control["should_trigger"])
+                    self.assertIsInstance(control["negative_category"], str)
+                    self.assertTrue(control["expected_failure_mode"])
+
+            dev_requests = {control["user_request"] for control in controls if control["split"] == "dev"}
+            test_requests = {control["user_request"] for control in controls if control["split"] == "test"}
+            self.assertFalse(dev_requests & test_requests)
+
+            from autoskill.control_generation import write_controls_outputs
+
+            outputs = write_controls_outputs(config, controls)
+            self.assertTrue(Path(outputs["difficulty_stats"]).exists())
+            self.assertTrue(Path(outputs["negative_category_stats"]).exists())
+
+            with Path(outputs["difficulty_stats"]).open("r", encoding="utf-8") as f:
+                difficulty_rows = list(csv.DictReader(f))
+            self.assertTrue(difficulty_rows)
+            self.assertIn("difficulty", difficulty_rows[0])
+
+            with Path(outputs["negative_category_stats"]).open("r", encoding="utf-8") as f:
+                negative_rows = list(csv.DictReader(f))
+            negative_categories = {row["negative_category"] for row in negative_rows}
+            self.assertIn("similar_tool_should_be_used", negative_categories)
+            self.assertIn("ambiguous_abstain_safer", negative_categories)
+
 
 if __name__ == "__main__":
     unittest.main()

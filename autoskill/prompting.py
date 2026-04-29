@@ -3,23 +3,11 @@ from __future__ import annotations
 import json
 
 from autoskill.ir import GeneratedSkill, ToolIR
+from autoskill.prompt_templates import build_generation_prompt_from_template
 
 
-def build_generation_prompt(tool: ToolIR) -> str:
-    tool_payload = tool.model_dump()
-    return (
-        "You are generating an agent-ready skill package from a normalized MCP tool schema.\n"
-        "Return valid JSON with keys: skill_summary, when_to_use, when_not_to_use, argument_template, examples.\n"
-        "Rules:\n"
-        "1. Use only argument names that appear in the provided schema.\n"
-        "2. Do not invent parameters, outputs, or enum values.\n"
-        "3. argument_template must be a JSON object.\n"
-        "4. examples must be a list of objects with scenario and arguments.\n"
-        "5. Each example.arguments must be valid JSON and include all required fields.\n"
-        "6. Keep the summary concise and concrete.\n\n"
-        "ToolIR:\n"
-        f"{json.dumps(tool_payload, indent=2, ensure_ascii=False)}"
-    )
+def build_generation_prompt(tool: ToolIR, template_id: str = "compact_default") -> str:
+    return build_generation_prompt_from_template(tool, template_id=template_id)
 
 
 def build_prediction_prompt(tool: ToolIR, skill: GeneratedSkill, user_request: str) -> str:

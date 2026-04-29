@@ -12,6 +12,7 @@ from autoskill.method import build_enhanced_skill_candidates, select_best_skill_
 from autoskill.json_output import parse_json_object_output
 from autoskill.local_model import LocalHFChatRunner
 from autoskill.prompting import build_generation_prompt
+from autoskill.prompt_templates import build_skill_from_prompt_template, parse_generated_skill_output
 from autoskill.templates import build_argument_template
 
 
@@ -55,10 +56,13 @@ class GenerationBackend(ABC):
 class HeuristicBackend(GenerationBackend):
     backend_name = "heuristic"
 
-    def __init__(self, ablation_mode: str = "selected") -> None:
+    def __init__(self, ablation_mode: str = "selected", prompt_template_id: str | None = None) -> None:
         self.ablation_mode = ablation_mode
+        self.prompt_template_id = prompt_template_id
 
     def generate_skill(self, tool: ToolIR) -> GeneratedSkill:
+        if self.prompt_template_id:
+            return build_skill_from_prompt_template(tool, self.prompt_template_id)
         purpose = tool.tool_purpose or f"{tool.tool_name} performs a tool action."
         summary_parts = [purpose.rstrip(".") + "."]
         summary_parts.append(_required_argument_line(tool))
@@ -137,11 +141,13 @@ class OpenAICompatibleBackend(GenerationBackend):
         model: str,
         api_key: str | None = None,
         timeout_seconds: int = 60,
+        prompt_template_id: str = "compact_default",
     ) -> None:
         self.api_url = api_url.rstrip("/")
         self.model = model
         self.api_key = api_key
         self.timeout_seconds = timeout_seconds
+        self.prompt_template_id = prompt_template_id
 
     def _post_json(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         request = urllib.request.Request(
@@ -157,7 +163,7 @@ class OpenAICompatibleBackend(GenerationBackend):
             return json.loads(response.read().decode("utf-8"))
 
     def generate_skill(self, tool: ToolIR) -> GeneratedSkill:
-        prompt = build_generation_prompt(tool)
+        prompt = build_generation_prompt(tool, template_id=self.prompt_template_id)
         payload = {
             "model": self.model,
             "messages": [
@@ -172,15 +178,10 @@ class OpenAICompatibleBackend(GenerationBackend):
         }
         response = self._post_json(payload)
         content = response["choices"][0]["message"]["content"]
-        data = parse_json_object_output(content)
-        return GeneratedSkill(
-            baseline_name="autoskill_base",
-            skill_summary=data.get("skill_summary", ""),
-            when_to_use=list(data.get("when_to_use", [])),
-            when_not_to_use=list(data.get("when_not_to_use", [])),
-            argument_template=dict(data.get("argument_template", {})),
-            examples=list(data.get("examples", [])),
-        )
+        skill = parse_generated_skill_output(content, template_id=self.prompt_template_id, tool=tool)
+        if not skill.metadata.get("parse_ok"):
+            raise ValueError(skill.metadata.get("parse_error") or "Malformed generated skill output")
+        return skill
 
 
 class LocalHFBackend(GenerationBackend):
@@ -198,7 +199,9 @@ class LocalHFBackend(GenerationBackend):
         load_in_4bit: bool = False,
         load_in_8bit: bool = False,
         generation_kwargs: Dict[str, Any] | None = None,
+        prompt_template_id: str = "compact_default",
     ) -> None:
+        self.prompt_template_id = prompt_template_id
         self.runner = LocalHFChatRunner(
             model_name_or_path=model_name_or_path,
             device=device,
@@ -213,7 +216,7 @@ class LocalHFBackend(GenerationBackend):
         )
 
     def generate_skill(self, tool: ToolIR) -> GeneratedSkill:
-        prompt = build_generation_prompt(tool)
+        prompt = build_generation_prompt(tool, template_id=self.prompt_template_id)
         content = self.runner.generate_chat(
             [
                 {"role": "system", "content": "You generate schema-faithful JSON skill packages for MCP tools."},
@@ -221,15 +224,10 @@ class LocalHFBackend(GenerationBackend):
             ],
             temperature=0.2,
         )
-        data = parse_json_object_output(content)
-        return GeneratedSkill(
-            baseline_name="autoskill_base",
-            skill_summary=data.get("skill_summary", ""),
-            when_to_use=list(data.get("when_to_use", [])),
-            when_not_to_use=list(data.get("when_not_to_use", [])),
-            argument_template=dict(data.get("argument_template", {})),
-            examples=list(data.get("examples", [])),
-        )
+        skill = parse_generated_skill_output(content, template_id=self.prompt_template_id, tool=tool)
+        if not skill.metadata.get("parse_ok"):
+            raise ValueError(skill.metadata.get("parse_error") or "Malformed generated skill output")
+        return skill
 
 
 def _append_generation_backend_trace(
@@ -265,8 +263,12 @@ def build_backend_from_config(config: Dict[str, Any] | None) -> GenerationBacken
         return build_backend_from_env()
 
     backend_type = config.get("type", "heuristic")
+    prompt_template_id = config.get("prompt_template_id") or config.get("template_id")
     if backend_type == "heuristic":
-        return HeuristicBackend(ablation_mode=str(config.get("ablation_mode", "selected")))
+        return HeuristicBackend(
+            ablation_mode=str(config.get("ablation_mode", "selected")),
+            prompt_template_id=str(prompt_template_id) if prompt_template_id else None,
+        )
     if backend_type == "openai_compatible":
         api_key = config.get("api_key")
         api_key_env = config.get("api_key_env")
@@ -277,6 +279,7 @@ def build_backend_from_config(config: Dict[str, Any] | None) -> GenerationBacken
             model=str(config["model"]),
             api_key=api_key,
             timeout_seconds=int(config.get("timeout_seconds", 60)),
+            prompt_template_id=str(prompt_template_id or "compact_default"),
         )
     if backend_type == "local_hf":
         return LocalHFBackend(
@@ -290,6 +293,7 @@ def build_backend_from_config(config: Dict[str, Any] | None) -> GenerationBacken
             load_in_4bit=bool(config.get("load_in_4bit", False)),
             load_in_8bit=bool(config.get("load_in_8bit", False)),
             generation_kwargs=config.get("generation_kwargs"),
+            prompt_template_id=str(prompt_template_id or "compact_default"),
         )
     raise ValueError(f"Unsupported generation backend type: {backend_type}")
 

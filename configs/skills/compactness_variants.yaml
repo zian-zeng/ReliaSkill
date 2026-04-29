@@ -1,0 +1,66 @@
+seed: 42
+tools_path: data/processed_toolir/tools.jsonl
+dev_controls_path: data/controls/dev.jsonl
+output_dir: skills
+candidate_k: 1
+generation_backend:
+  type: heuristic
+  ablation_mode: base_only
+candidate_strategies:
+  - concise_default
+selection_policy: best_validation_only
+compactness_variants:
+  enabled: true
+  conditions:
+    - skill_ultra_compact
+    - skill_compact
+    - skill_medium
+    - skill_verbose
+    - generated_docs_verbose
+    - raw_docs_full
+  records_path: outputs/skill_compactness_records.jsonl
+  stats_path: outputs/tables/skill_compactness_stats.csv
+  constraints_by_condition:
+    skill_ultra_compact:
+      max_skill_tokens: 150
+      max_examples: 0
+      include_when_not_to_use: true
+      include_failure_modes: false
+      include_argument_template: true
+    skill_compact:
+      max_skill_tokens: 300
+      max_examples: 1
+      include_when_not_to_use: true
+      include_failure_modes: true
+      include_argument_template: true
+    skill_medium:
+      max_skill_tokens: 600
+      max_examples: 2
+      include_when_not_to_use: true
+      include_failure_modes: true
+      include_argument_template: true
+    skill_verbose:
+      max_skill_tokens: 1200
+      max_examples: 5
+      include_when_not_to_use: true
+      include_failure_modes: true
+      include_argument_template: true
+    generated_docs_verbose:
+      max_skill_tokens: 1200
+      max_examples: 5
+      include_when_not_to_use: true
+      include_failure_modes: true
+      include_argument_template: true
+    raw_docs_full:
+      max_skill_tokens: null
+      max_examples: 0
+      include_when_not_to_use: false
+      include_failure_modes: false
+      include_argument_template: false
+conditions:
+  - skill_ultra_compact
+  - skill_compact
+  - skill_medium
+  - skill_verbose
+  - generated_docs_verbose
+  - raw_docs_full

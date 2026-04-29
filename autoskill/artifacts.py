@@ -5,6 +5,7 @@ from typing import Iterable
 
 from autoskill.ir import GeneratedSkill, ToolIR
 from autoskill.templates import build_argument_template
+from autoskill.token_accounting import skill_token_count as counted_skill_token_count
 
 
 RAW_MCP = "raw_mcp"
@@ -23,6 +24,26 @@ HUMAN_WRITTEN_SKILL_UPPER_BOUND = "human_written_skill_upper_bound"
 RETRIEVAL_TOOL_CARD = "retrieval_tool_card"
 LARGER_MODEL_NAIVE_SKILL = "larger_model_naive_skill"
 ADVERSARIAL_DISTRACTOR_INVENTORY = "adversarial_distractor_inventory"
+NAIVE_SKILL_K1 = "naive_skill_k1"
+MULTI_CANDIDATE_SKILL_K3_VALIDATION_SELECT = "multi_candidate_skill_k3_validation_select"
+MULTI_CANDIDATE_SKILL_K3_BEHAVIOR_SELECT = "multi_candidate_skill_k3_behavior_select"
+MULTI_CANDIDATE_REPAIRED_GATED = "multi_candidate_repaired_gated"
+REPAIRED_FULL_REGENERATION = "repaired_full_regeneration"
+REPAIRED_TARGETED_PATCH = "repaired_targeted_patch"
+REPAIRED_BOUNDARY_ONLY = "repaired_boundary_only"
+REPAIRED_EXAMPLE_ONLY = "repaired_example_only"
+REPAIRED_TAXONOMY_CONDITIONED = "repaired_taxonomy_conditioned"
+SKILL_ULTRA_COMPACT = "skill_ultra_compact"
+SKILL_COMPACT = "skill_compact"
+SKILL_MEDIUM = "skill_medium"
+SKILL_VERBOSE = "skill_verbose"
+GENERATED_DOCS_VERBOSE = "generated_docs_verbose"
+RAW_DOCS_FULL = "raw_docs_full"
+SKILL_PROMPT_COMPACT_DEFAULT = "skill_prompt_compact_default"
+SKILL_PROMPT_BOUNDARY_FIRST = "skill_prompt_boundary_first"
+SKILL_PROMPT_EXAMPLE_RICH = "skill_prompt_example_rich"
+SKILL_PROMPT_SAFETY_AWARE = "skill_prompt_safety_aware"
+SKILL_PROMPT_VERBOSE_DOCS = "skill_prompt_verbose_docs"
 
 RELIABILITY_CONDITIONS = [
     RAW_MCP,
@@ -54,6 +75,26 @@ CONDITION_ORDER = [
     RETRIEVAL_TOOL_CARD,
     LARGER_MODEL_NAIVE_SKILL,
     ADVERSARIAL_DISTRACTOR_INVENTORY,
+    NAIVE_SKILL_K1,
+    MULTI_CANDIDATE_SKILL_K3_VALIDATION_SELECT,
+    MULTI_CANDIDATE_SKILL_K3_BEHAVIOR_SELECT,
+    MULTI_CANDIDATE_REPAIRED_GATED,
+    REPAIRED_FULL_REGENERATION,
+    REPAIRED_TARGETED_PATCH,
+    REPAIRED_BOUNDARY_ONLY,
+    REPAIRED_EXAMPLE_ONLY,
+    REPAIRED_TAXONOMY_CONDITIONED,
+    SKILL_ULTRA_COMPACT,
+    SKILL_COMPACT,
+    SKILL_MEDIUM,
+    SKILL_VERBOSE,
+    GENERATED_DOCS_VERBOSE,
+    RAW_DOCS_FULL,
+    SKILL_PROMPT_COMPACT_DEFAULT,
+    SKILL_PROMPT_BOUNDARY_FIRST,
+    SKILL_PROMPT_EXAMPLE_RICH,
+    SKILL_PROMPT_SAFETY_AWARE,
+    SKILL_PROMPT_VERBOSE_DOCS,
     "retrieved_docs",
     "retrieved_candidates",
     "retrieved_memory",
@@ -81,11 +122,7 @@ def estimate_token_count(text_parts: Iterable[str]) -> int:
 
 
 def skill_token_count(skill: GeneratedSkill) -> int:
-    parts = [skill.skill_summary, *skill.when_to_use, *skill.when_not_to_use]
-    for example in skill.examples:
-        parts.append(str(example.get("scenario", "")))
-        parts.append(str(example.get("arguments", "")))
-    return estimate_token_count(parts)
+    return counted_skill_token_count(skill)
 
 
 def build_docs_only_skill(tool: ToolIR) -> GeneratedSkill:

@@ -1,0 +1,16 @@
+model_name: heuristic_mock_smoke
+model_path: heuristic
+model_name_or_path: heuristic
+tokenizer_path: heuristic
+backend: heuristic
+type: heuristic
+quantization: none
+load_in_4bit: false
+torch_dtype: none
+device_map: cpu
+max_new_tokens: 128
+temperature: 0.0
+batch_size: 8
+max_prompt_tokens: 2048
+estimated_vram_gb: 0.0
+examples_per_second: 5.0

@@ -1,0 +1,22 @@
+{
+  "properties": {
+    "allele_frequency": {
+      "description": "The frequency of the dominant allele in the population.",
+      "type": "float"
+    },
+    "genotype": {
+      "description": "The genotype which frequency is needed, default is homozygous dominant. ",
+      "enum": [
+        "AA",
+        "Aa",
+        "aa"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "allele_frequency",
+    "genotype"
+  ],
+  "type": "object"
+}

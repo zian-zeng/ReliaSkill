@@ -1,0 +1,143 @@
+{
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "arguments": [
+    {
+      "default": null,
+      "description": "The initial velocity of the object in m/s.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "initial_velocity",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.initial_velocity",
+      "type": "float"
+    },
+    {
+      "default": null,
+      "description": "The time in seconds that the object has been in motion.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "time",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.time",
+      "type": "float"
+    },
+    {
+      "default": 0,
+      "description": "The acceleration of the object in m/s^2.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "acceleration",
+      "nullable": false,
+      "properties": null,
+      "required": false,
+      "required_properties": [],
+      "schema_path": "$.properties.acceleration",
+      "type": "float"
+    }
+  ],
+  "auth_or_env_notes": null,
+  "difficulty_tier": "medium",
+  "doc_completeness": 1.0,
+  "doc_snippets": [
+    "Calculates the displacement of an object in motion given initial velocity, time, and acceleration.",
+    "calculate_displacement"
+  ],
+  "domain": "calendar/time",
+  "input_schema_raw": {
+    "properties": {
+      "acceleration": {
+        "default": 0,
+        "description": "The acceleration of the object in m/s^2.",
+        "type": "float"
+      },
+      "initial_velocity": {
+        "description": "The initial velocity of the object in m/s.",
+        "type": "float"
+      },
+      "time": {
+        "description": "The time in seconds that the object has been in motion.",
+        "type": "float"
+      }
+    },
+    "required": [
+      "initial_velocity",
+      "time"
+    ],
+    "type": "object"
+  },
+  "output_hint": null,
+  "provenance": {
+    "raw_name": "calculate_displacement",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "safety_hints": [],
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.15,
+    "auth_required": false,
+    "documentation_length": 98,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "unknown"
+  },
+  "server_name": "bfcl_v3",
+  "side_effect_hints": [],
+  "source_metadata": {
+    "ambiguity_score_heuristic": 0.15,
+    "args_count": 3,
+    "auth_required": false,
+    "collection_seed": 42,
+    "difficulty_tier": "medium",
+    "documentation_length": 98,
+    "domain": "calendar/time",
+    "enum_count": 0,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "normalized_tool_name": "calculate_displacement",
+    "num_arguments": 3,
+    "num_enum_fields": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 2,
+    "record_order": 19,
+    "required_args_count": 2,
+    "schema_hash": "0bd9a2fc21fc23c5",
+    "server": "bfcl_v3",
+    "side_effect_type": "unknown",
+    "source_category": "converted_bfcl_api_style",
+    "source_file": "data/raw/bfcl_v3_tools_subset100.json",
+    "source_id": "converted_bfcl_v3_api_style",
+    "source_order": 5,
+    "source_pointer": "bfcl_v3",
+    "source_server": "bfcl_v3",
+    "source_type": "converted_bfcl",
+    "synthetic": false,
+    "tool_name": "calculate_displacement"
+  },
+  "source_pointer": "bfcl_v3",
+  "tool_name": "calculate_displacement",
+  "tool_purpose": "Calculates the displacement of an object in motion given initial velocity, time, and acceleration.",
+  "usage_warnings": []
+}

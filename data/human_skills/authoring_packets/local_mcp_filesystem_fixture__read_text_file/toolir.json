@@ -1,0 +1,142 @@
+{
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "arguments": [
+    {
+      "default": null,
+      "description": "Path to the file within an allowed directory.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "path",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.path",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "description": "If provided, returns only the last N lines of the file.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "tail",
+      "nullable": false,
+      "properties": null,
+      "required": false,
+      "required_properties": [],
+      "schema_path": "$.properties.tail",
+      "type": "number"
+    },
+    {
+      "default": null,
+      "description": "If provided, returns only the first N lines of the file.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "head",
+      "nullable": false,
+      "properties": null,
+      "required": false,
+      "required_properties": [],
+      "schema_path": "$.properties.head",
+      "type": "number"
+    }
+  ],
+  "auth_or_env_notes": null,
+  "difficulty_tier": "medium",
+  "doc_completeness": 1.0,
+  "doc_snippets": [
+    "Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.",
+    "Read Text File",
+    "Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool whe"
+  ],
+  "domain": "filesystem",
+  "input_schema_raw": {
+    "properties": {
+      "head": {
+        "description": "If provided, returns only the first N lines of the file.",
+        "type": "number"
+      },
+      "path": {
+        "description": "Path to the file within an allowed directory.",
+        "type": "string"
+      },
+      "tail": {
+        "description": "If provided, returns only the last N lines of the file.",
+        "type": "number"
+      }
+    },
+    "required": [
+      "path"
+    ],
+    "type": "object"
+  },
+  "output_hint": null,
+  "provenance": {
+    "raw_name": "read_text_file",
+    "server_name": "mcp_reference_filesystem",
+    "source_pointer": "src/filesystem/index.ts"
+  },
+  "safety_hints": [],
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 453,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 2,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "read"
+  },
+  "server_name": "mcp_reference_filesystem",
+  "side_effect_hints": [],
+  "source_metadata": {
+    "ambiguity_score_heuristic": 0.25,
+    "args_count": 3,
+    "auth_required": false,
+    "collection_seed": 42,
+    "difficulty_tier": "medium",
+    "documentation_length": 453,
+    "domain": "filesystem",
+    "enum_count": 0,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "normalized_tool_name": "read_text_file",
+    "num_arguments": 3,
+    "num_enum_fields": 0,
+    "num_optional_arguments": 2,
+    "num_required_arguments": 1,
+    "record_order": 2,
+    "required_args_count": 1,
+    "schema_hash": "7f81db07914792d7",
+    "server": "mcp_reference_filesystem",
+    "side_effect_type": "read",
+    "source_category": "local_mcp_fixture_schema",
+    "source_file": "data/raw/public_mcp_filesystem_subset.json",
+    "source_id": "local_mcp_filesystem_fixture",
+    "source_order": 0,
+    "source_pointer": "src/filesystem/index.ts",
+    "source_server": "mcp_reference_filesystem",
+    "source_type": "mcp_fixture",
+    "synthetic": false,
+    "tool_name": "read_text_file"
+  },
+  "source_pointer": "src/filesystem/index.ts",
+  "tool_name": "read_text_file",
+  "tool_purpose": "Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.",
+  "usage_warnings": []
+}

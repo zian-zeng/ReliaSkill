@@ -1,0 +1,61 @@
+experiment_scale: minimum_credible
+description: Minimum credible EMNLP run for one RTX 5070 Ti.
+seed: 42
+tools_path: data/raw_mcp/tools.jsonl
+tasks_path: data/controls/test.jsonl
+output_root: outputs/minimum_credible
+
+target_tools: 100
+target_domains: 8
+positives_per_tool: 3
+negatives_per_tool: 3
+routing_candidate_sizes: [4]
+live_execution:
+  enabled: optional
+  subset_size: 50
+  domains: [filesystem, database/sql, git/version-control]
+
+models:
+  - configs/models/qwen2_5_3b_instruct_4bit.yaml
+  - configs/models/qwen2_5_7b_instruct_4bit.yaml
+
+conditions:
+  - raw_mcp
+  - schema_only
+  - raw_schema_plus_examples
+  - naive_skill
+  - repaired_skill
+  - gated_skill
+  - generated_docs_no_validation
+
+data:
+  config: configs/data/emnlp_scale.yaml
+  max_tools: 100
+  min_domains_required: 8
+controls:
+  config: configs/controls/emnlp_scale.yaml
+  positives_per_tool_total: 3
+  negatives_per_tool_total: 3
+routing:
+  config: configs/routing/distractor_inventory.yaml
+  candidate_set_sizes: [4]
+
+scheduler:
+  one_gpu: true
+  resume: true
+  group_by_model: true
+  run_all_conditions_before_unload: true
+  max_batch_size: 2
+  prompt_safety_margin_tokens: 256
+  include_routing: true
+  examples_per_second: 0.25
+  estimated_bytes_per_call: 4096
+  estimated_bytes_per_token: 1.25
+  condition_token_overheads:
+    raw_mcp: 900
+    schema_only: 450
+    raw_schema_plus_examples: 950
+    naive_skill: 300
+    repaired_skill: 450
+    gated_skill: 475
+    generated_docs_no_validation: 900

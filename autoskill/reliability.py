@@ -110,6 +110,8 @@ def build_reliability_variants(
             tool,
             repaired_skill,
             repaired_behavior,
+            behavior_cases=behavior_cases,
+            predictor=predictor,
         )
         if behavior_repair_report.changed:
             repaired_skill = behavior_repaired_skill

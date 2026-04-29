@@ -1,0 +1,17 @@
+{
+  "properties": {
+    "id": {
+      "description": "Unique & arbitrary identifier to be used for retrieving this response later with `Playwright_assert_response`.",
+      "type": "string"
+    },
+    "url": {
+      "description": "URL pattern to match in the response.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "url"
+  ],
+  "type": "object"
+}

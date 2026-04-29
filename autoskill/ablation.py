@@ -17,7 +17,15 @@ from autoskill.metrics import bootstrap_ci, wilson_interval
 from autoskill.predictor import build_predictor_from_config
 from autoskill.quality import score_reliability
 from autoskill.reliability_score import compute_reliability_score_value
-from autoskill.repair import repair_behavior_failures, repair_skill
+from autoskill.repair import (
+    EXAMPLE_REPAIR,
+    FAILURE_TAXONOMY_REPAIR,
+    FULL_REGENERATION,
+    NONUSE_BOUNDARY_PATCH,
+    TARGETED_SECTION_PATCH,
+    repair_behavior_failures,
+    repair_skill,
+)
 from autoskill.validator import validate_skill
 
 
@@ -28,6 +36,36 @@ DEFAULT_ABLATION_CONDITIONS: List[Dict[str, Any]] = [
     {"id": "without_positive_controls", "label": "w/o positive controls", "positive_controls": False},
     {"id": "without_negative_controls", "label": "w/o negative controls", "negative_controls": False},
     {"id": "without_repair", "label": "w/o repair", "targeted_repair": False, "behavior_repair": False},
+    {
+        "id": "repaired_full_regeneration",
+        "label": "repair: full regeneration",
+        "repair_strategy": FULL_REGENERATION,
+        "behavior_repair_strategy": FULL_REGENERATION,
+    },
+    {
+        "id": "repaired_targeted_patch",
+        "label": "repair: targeted patch",
+        "repair_strategy": TARGETED_SECTION_PATCH,
+        "behavior_repair_strategy": TARGETED_SECTION_PATCH,
+    },
+    {
+        "id": "repaired_boundary_only",
+        "label": "repair: boundary only",
+        "repair_strategy": NONUSE_BOUNDARY_PATCH,
+        "behavior_repair_strategy": NONUSE_BOUNDARY_PATCH,
+    },
+    {
+        "id": "repaired_example_only",
+        "label": "repair: example only",
+        "repair_strategy": EXAMPLE_REPAIR,
+        "behavior_repair_strategy": EXAMPLE_REPAIR,
+    },
+    {
+        "id": "repaired_taxonomy_conditioned",
+        "label": "repair: taxonomy conditioned",
+        "repair_strategy": FAILURE_TAXONOMY_REPAIR,
+        "behavior_repair_strategy": FAILURE_TAXONOMY_REPAIR,
+    },
     {
         "id": "full_regeneration_repair",
         "label": "full regeneration instead of targeted repair",
@@ -54,6 +92,8 @@ DEFAULTS: Dict[str, Any] = {
     "examples": True,
     "compactness_constraint": True,
     "leakage_check": False,
+    "repair_strategy": TARGETED_SECTION_PATCH,
+    "behavior_repair_strategy": NONUSE_BOUNDARY_PATCH,
 }
 
 ABLATED_RESULT_FIELDS = [
@@ -156,7 +196,7 @@ def _run_tool_condition(
 
     repair_rounds = 0
     if condition["validation"] and condition["targeted_repair"] and not condition["full_regeneration_repair"]:
-        skill, repair_report, validation_report = repair_skill(tool, skill)
+        skill, repair_report, validation_report = repair_skill(tool, skill, strategy=condition["repair_strategy"])
         repair_rounds += repair_report.rounds
     else:
         validation_report = validate_skill(tool, skill)
@@ -166,7 +206,14 @@ def _run_tool_condition(
         training_cases = _filter_cases_for_condition(dev_cases, condition)
         behavior_for_score = run_behavior_tests(tool, skill, training_cases, predictor=predictor)
         if condition["behavior_repair"] and condition["targeted_repair"] and not behavior_for_score.valid:
-            skill, behavior_repair_report, validation_report = repair_behavior_failures(tool, skill, behavior_for_score)
+            skill, behavior_repair_report, validation_report = repair_behavior_failures(
+                tool,
+                skill,
+                behavior_for_score,
+                strategy=condition["behavior_repair_strategy"],
+                behavior_cases=training_cases,
+                predictor=predictor,
+            )
             repair_rounds += behavior_repair_report.rounds
             behavior_for_score = run_behavior_tests(tool, skill, training_cases, predictor=predictor)
 

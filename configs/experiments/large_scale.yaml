@@ -1,0 +1,47 @@
+tools_path: data/raw_mcp/tools.jsonl
+tasks_path: data/controls/test.jsonl
+output_root: outputs/emnlp_scale
+seed: 42
+models:
+  - configs/models/qwen2_5_3b_instruct_4bit.yaml
+  - configs/models/qwen2_5_7b_instruct_4bit.yaml
+conditions:
+  - skill_ultra_compact
+  - skill_compact
+  - skill_medium
+  - skill_verbose
+  - generated_docs_verbose
+  - raw_docs_full
+  - multi_candidate_skill_k3_validation_select
+  - multi_candidate_skill_k3_behavior_select
+  - multi_candidate_repaired_gated
+generator:
+  type: heuristic
+predictor:
+  type: local_hf
+  model_name_or_path: Qwen/Qwen2.5-3B-Instruct
+  load_in_4bit: true
+  torch_dtype: float16
+  device_map: auto
+  max_new_tokens: 256
+  generation_kwargs:
+    temperature: 0.0
+scheduler:
+  one_gpu: true
+  resume: true
+  group_by_model: true
+  run_all_conditions_before_unload: true
+  max_batch_size: 2
+  prompt_safety_margin_tokens: 256
+  include_routing: false
+  examples_per_second: 0.25
+  condition_token_overheads:
+    skill_ultra_compact: 150
+    skill_compact: 300
+    skill_medium: 600
+    skill_verbose: 1200
+    generated_docs_verbose: 1200
+    raw_docs_full: 1600
+    multi_candidate_skill_k3_validation_select: 350
+    multi_candidate_skill_k3_behavior_select: 400
+    multi_candidate_repaired_gated: 450

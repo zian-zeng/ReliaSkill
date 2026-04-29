@@ -1,0 +1,16 @@
+model_name: Qwen/Qwen2.5-7B-Instruct
+model_path: Qwen/Qwen2.5-7B-Instruct
+model_name_or_path: Qwen/Qwen2.5-7B-Instruct
+tokenizer_path: Qwen/Qwen2.5-7B-Instruct
+backend: local_hf
+type: local_hf
+quantization: 4bit
+load_in_4bit: true
+torch_dtype: float16
+device_map: auto
+max_new_tokens: 256
+temperature: 0.0
+batch_size: 1
+max_prompt_tokens: 4096
+estimated_vram_gb: 9.5
+examples_per_second: 0.2

@@ -1,0 +1,12 @@
+seed: 42
+candidate_set_sizes: [8]
+distractor_levels:
+  - easy
+  - medium
+  - hard
+  - adversarial
+include_abstain_candidate: true
+use_sentence_transformer: false
+sentence_transformer_model: null
+outputs:
+  stats: outputs/tables/distractor_stats.csv

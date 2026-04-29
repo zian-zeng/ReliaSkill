@@ -183,4 +183,6 @@ cython_debug/
 # Project-specific ignores
 outputs/
 data/external/
+data/converted_external/bfcl_records.jsonl
+data/converted_external/conversion_records.jsonl
 *.log

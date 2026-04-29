@@ -1,0 +1,22 @@
+{
+  "properties": {
+    "location": {
+      "description": "The name of the location, e.g., 'Amazon rainforest'.",
+      "type": "string"
+    },
+    "time_frame": {
+      "description": "The time period for which data is required.",
+      "enum": [
+        "six_months",
+        "year",
+        "five_years"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "location",
+    "time_frame"
+  ],
+  "type": "object"
+}

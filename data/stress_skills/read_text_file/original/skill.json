@@ -1,0 +1,45 @@
+{
+  "baseline_name": "autoskill_base",
+  "skill_summary": "Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories. Provide the required field `path`.",
+  "when_to_use": [
+    "Use `read_text_file` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `path`.",
+    "Optional controls include `tail`, `head`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "argument_template": {
+    "path": "data/sample.txt",
+    "tail": 1.0,
+    "head": 1.0
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for read_text_file",
+      "arguments": {
+        "path": "data/sample.txt"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for read_text_file",
+      "arguments": {
+        "path": "data/sample.txt",
+        "tail": 2.0,
+        "head": 2.0
+      }
+    }
+  ],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "trace_type": "generation_backend",
+      "configured_generation_backend": "heuristic",
+      "actual_generation_backend": "heuristic",
+      "generation_fallback_used": false,
+      "generation_fallback_reason": null
+    }
+  ],
+  "metadata": {}
+}

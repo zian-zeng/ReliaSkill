@@ -1,0 +1,20 @@
+{
+  "properties": {
+    "head": {
+      "description": "If provided, returns only the first N lines of the file.",
+      "type": "number"
+    },
+    "path": {
+      "description": "Path to the file within an allowed directory.",
+      "type": "string"
+    },
+    "tail": {
+      "description": "If provided, returns only the last N lines of the file.",
+      "type": "number"
+    }
+  },
+  "required": [
+    "path"
+  ],
+  "type": "object"
+}

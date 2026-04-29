@@ -1,0 +1,106 @@
+{
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "arguments": [
+    {
+      "default": null,
+      "description": "Directory path to inspect within an allowed directory.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "path",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.path",
+      "type": "string"
+    }
+  ],
+  "auth_or_env_notes": null,
+  "difficulty_tier": "easy",
+  "doc_completeness": 1.0,
+  "doc_snippets": [
+    "Get a detailed listing of all files and directories in a specified path. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is essential for understanding directory structure and finding specific files within a directory. Only works within allowed directories.",
+    "List Directory",
+    "Get a detailed listing of all files and directories in a specified path. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is esse"
+  ],
+  "domain": "filesystem",
+  "input_schema_raw": {
+    "properties": {
+      "path": {
+        "description": "Directory path to inspect within an allowed directory.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "path"
+    ],
+    "type": "object"
+  },
+  "output_hint": null,
+  "provenance": {
+    "raw_name": "list_directory",
+    "server_name": "mcp_reference_filesystem",
+    "source_pointer": "src/filesystem/index.ts"
+  },
+  "safety_hints": [],
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 309,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 1,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 1,
+    "side_effect_type": "read"
+  },
+  "server_name": "mcp_reference_filesystem",
+  "side_effect_hints": [],
+  "source_metadata": {
+    "ambiguity_score_heuristic": 0.25,
+    "args_count": 1,
+    "auth_required": false,
+    "collection_seed": 42,
+    "difficulty_tier": "easy",
+    "documentation_length": 309,
+    "domain": "filesystem",
+    "enum_count": 0,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "normalized_tool_name": "list_directory",
+    "num_arguments": 1,
+    "num_enum_fields": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 1,
+    "record_order": 1,
+    "required_args_count": 1,
+    "schema_hash": "a8f580e542acaa9e",
+    "server": "mcp_reference_filesystem",
+    "side_effect_type": "read",
+    "source_category": "local_mcp_fixture_schema",
+    "source_file": "data/raw/public_mcp_filesystem_subset.json",
+    "source_id": "local_mcp_filesystem_fixture",
+    "source_order": 0,
+    "source_pointer": "src/filesystem/index.ts",
+    "source_server": "mcp_reference_filesystem",
+    "source_type": "mcp_fixture",
+    "synthetic": false,
+    "tool_name": "list_directory"
+  },
+  "source_pointer": "src/filesystem/index.ts",
+  "tool_name": "list_directory",
+  "tool_purpose": "Get a detailed listing of all files and directories in a specified path. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is essential for understanding directory structure and finding specific files within a directory. Only works within allowed directories.",
+  "usage_warnings": []
+}

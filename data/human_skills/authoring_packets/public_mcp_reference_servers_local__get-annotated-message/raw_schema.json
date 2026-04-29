@@ -1,0 +1,14 @@
+{
+  "properties": {
+    "includeImage": {
+      "type": "string"
+    },
+    "messageType": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "messageType"
+  ],
+  "type": "object"
+}

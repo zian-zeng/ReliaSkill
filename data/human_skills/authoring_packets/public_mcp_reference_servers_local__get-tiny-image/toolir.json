@@ -1,0 +1,86 @@
+{
+  "ambiguity_flags": [
+    "empty_input_schema",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "arguments": [],
+  "auth_or_env_notes": null,
+  "difficulty_tier": "hard",
+  "doc_completeness": 0.6,
+  "doc_snippets": [
+    "Returns a tiny MCP logo image.",
+    "Get Tiny Image Tool"
+  ],
+  "domain": "image",
+  "input_schema_raw": {
+    "properties": {},
+    "required": [],
+    "type": "object"
+  },
+  "output_hint": null,
+  "provenance": {
+    "raw_name": "get-tiny-image",
+    "server_name": "tools",
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-tiny-image.ts"
+  },
+  "safety_hints": [],
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.75,
+    "auth_required": false,
+    "documentation_length": 30,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 1,
+    "num_arguments": 0,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "num_top_level_arguments": 0,
+    "side_effect_type": "read"
+  },
+  "server_name": "tools",
+  "side_effect_hints": [],
+  "source_metadata": {
+    "ambiguity_score_heuristic": 0.75,
+    "args_count": 0,
+    "auth_required": false,
+    "collection_seed": 42,
+    "difficulty_tier": "hard",
+    "documentation_length": 30,
+    "domain": "image",
+    "enum_count": 0,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "normalized_tool_name": "get_tiny_image",
+    "num_arguments": 0,
+    "num_enum_fields": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "record_order": 45,
+    "required_args_count": 0,
+    "schema_hash": "c8a1ac469a826ea3",
+    "server": "tools",
+    "side_effect_type": "read",
+    "source_category": "real_public_mcp_schema_local",
+    "source_file": "data/raw/harvested_mcp_reference_servers.json",
+    "source_id": "public_mcp_reference_servers_local",
+    "source_order": 2,
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-tiny-image.ts",
+    "source_server": "tools",
+    "source_type": "real_public_mcp",
+    "synthetic": false,
+    "tool_name": "get-tiny-image"
+  },
+  "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-tiny-image.ts",
+  "tool_name": "get-tiny-image",
+  "tool_purpose": "Returns a tiny MCP logo image.",
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "properties": {
+    "gradeDict": {
+      "description": "A dictionary where keys represent subjects and values represent scores",
+      "type": "dict"
+    }
+  },
+  "required": [
+    "gradeDict"
+  ],
+  "type": "object"
+}

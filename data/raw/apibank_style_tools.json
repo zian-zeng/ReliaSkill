@@ -1,0 +1,235 @@
+[
+  {
+    "server_name": "apibank_style_fixture",
+    "name": "bank_get_account_balance",
+    "title": "Get Account Balance",
+    "summary": "Retrieve an offline fixture account balance.",
+    "description": "API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "account_id": {"type": "string", "description": "Mock account identifier."},
+        "include_pending": {"type": "boolean", "description": "Whether pending transactions should be included."}
+      },
+      "required": ["account_id"]
+    }
+  },
+  {
+    "server_name": "apibank_style_fixture",
+    "name": "bank_transfer_between_accounts",
+    "title": "Transfer Between Accounts",
+    "summary": "Create an offline fixture bank transfer.",
+    "description": "API-Bank-style local fixture tool that records a mock transfer between two fixture accounts.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "source_account_id": {"type": "string", "description": "Mock source account identifier."},
+        "destination_account_id": {"type": "string", "description": "Mock destination account identifier."},
+        "amount": {"type": "number", "description": "Transfer amount."},
+        "memo": {"type": "string", "description": "Optional transfer memo."},
+        "dry_run": {"type": "boolean", "description": "Validate without recording the transfer."}
+      },
+      "required": ["source_account_id", "destination_account_id", "amount"]
+    }
+  },
+  {
+    "server_name": "apibank_style_fixture",
+    "name": "bank_search_transactions",
+    "title": "Search Transactions",
+    "summary": "Search offline fixture transactions.",
+    "description": "API-Bank-style local fixture tool for searching transactions by date, category, and amount range.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "account_id": {"type": "string", "description": "Mock account identifier."},
+        "date_range": {
+          "type": "object",
+          "description": "Inclusive date range.",
+          "properties": {
+            "start": {"type": "string", "format": "date"},
+            "end": {"type": "string", "format": "date"}
+          },
+          "required": ["start", "end"]
+        },
+        "category": {"type": "string", "enum": ["food", "travel", "utilities", "income"], "description": "Transaction category."},
+        "limit": {"type": "integer", "description": "Maximum results."}
+      },
+      "required": ["account_id"]
+    }
+  },
+  {
+    "server_name": "apibank_style_fixture",
+    "name": "calendar_create_event",
+    "title": "Create Calendar Event",
+    "summary": "Create an offline fixture calendar event.",
+    "description": "API-Bank-style local fixture tool that creates a mock calendar event with attendees and reminders.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "calendar_id": {"type": "string", "description": "Mock calendar identifier."},
+        "title": {"type": "string", "description": "Event title."},
+        "start_time": {"type": "string", "format": "date-time", "description": "Event start time."},
+        "end_time": {"type": "string", "format": "date-time", "description": "Event end time."},
+        "attendees": {"type": "array", "items": {"type": "string"}, "description": "Attendee email addresses."},
+        "visibility": {"type": "string", "enum": ["default", "private", "public"], "description": "Event visibility."}
+      },
+      "required": ["calendar_id", "title", "start_time", "end_time"]
+    }
+  },
+  {
+    "server_name": "apibank_style_fixture",
+    "name": "calendar_find_free_slots",
+    "title": "Find Free Slots",
+    "summary": "Find mock calendar free time.",
+    "description": "API-Bank-style local fixture retrieval tool for finding free slots across calendars.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "calendar_ids": {"type": "array", "items": {"type": "string"}, "description": "Calendars to inspect."},
+        "duration_minutes": {"type": "integer", "description": "Required slot duration."},
+        "window": {
+          "type": "object",
+          "description": "Search window.",
+          "properties": {
+            "start": {"type": "string", "format": "date-time"},
+            "end": {"type": "string", "format": "date-time"}
+          },
+          "required": ["start", "end"]
+        }
+      },
+      "required": ["calendar_ids", "duration_minutes", "window"]
+    }
+  },
+  {
+    "server_name": "apibank_style_fixture",
+    "name": "email_draft_message",
+    "title": "Draft Email Message",
+    "summary": "Draft a mock email message.",
+    "description": "API-Bank-style local fixture tool that creates a draft email in an offline mailbox fixture.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "to": {"type": "array", "items": {"type": "string"}, "description": "Recipients."},
+        "subject": {"type": "string", "description": "Draft subject."},
+        "body": {"type": "string", "description": "Draft body."},
+        "cc": {"type": "array", "items": {"type": "string"}, "description": "Optional cc recipients."}
+      },
+      "required": ["to", "subject", "body"]
+    }
+  },
+  {
+    "server_name": "apibank_style_fixture",
+    "name": "email_send_draft",
+    "title": "Send Draft Email",
+    "summary": "Send an offline fixture draft.",
+    "description": "API-Bank-style local fixture tool that marks a mock email draft as sent without using a real network service.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "draft_id": {"type": "string", "description": "Mock draft identifier."},
+        "send_at": {"type": "string", "format": "date-time", "description": "Optional scheduled send time."},
+        "dry_run": {"type": "boolean", "description": "Validate without marking sent."}
+      },
+      "required": ["draft_id"]
+    }
+  },
+  {
+    "server_name": "apibank_style_fixture",
+    "name": "notes_create_memory",
+    "title": "Create Memory Note",
+    "summary": "Create a mock memory note.",
+    "description": "API-Bank-style local fixture tool for saving a note to an offline memory store.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "workspace": {"type": "string", "description": "Mock workspace."},
+        "title": {"type": "string", "description": "Note title."},
+        "content": {"type": "string", "description": "Note content."},
+        "tags": {"type": "array", "items": {"type": "string"}, "description": "Note tags."}
+      },
+      "required": ["workspace", "title", "content"]
+    }
+  },
+  {
+    "server_name": "apibank_style_fixture",
+    "name": "notes_semantic_search",
+    "title": "Semantic Search Notes",
+    "summary": "Search mock notes.",
+    "description": "API-Bank-style local fixture retrieval tool for searching notes by query and tag filters.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {"type": "string", "description": "Search query."},
+        "tags": {"type": "array", "items": {"type": "string"}, "description": "Tags to require."},
+        "limit": {"type": "integer", "description": "Maximum notes to return."}
+      },
+      "required": ["query"]
+    }
+  },
+  {
+    "server_name": "apibank_style_fixture",
+    "name": "storage_copy_object",
+    "title": "Copy Storage Object",
+    "summary": "Copy a mock storage object.",
+    "description": "API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "object",
+          "description": "Source object.",
+          "properties": {
+            "bucket": {"type": "string"},
+            "key": {"type": "string"}
+          },
+          "required": ["bucket", "key"]
+        },
+        "destination": {
+          "type": "object",
+          "description": "Destination object.",
+          "properties": {
+            "bucket": {"type": "string"},
+            "key": {"type": "string"}
+          },
+          "required": ["bucket", "key"]
+        },
+        "overwrite": {"type": "boolean", "description": "Whether to overwrite an existing mock object."}
+      },
+      "required": ["source", "destination"]
+    }
+  },
+  {
+    "server_name": "apibank_style_fixture",
+    "name": "sql_run_readonly_query",
+    "title": "Run Readonly SQL Query",
+    "summary": "Run a readonly query on a fixture database.",
+    "description": "API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "database": {"type": "string", "description": "Fixture database name."},
+        "query": {"type": "string", "description": "Readonly SQL query."},
+        "parameters": {"type": "object", "description": "Named query parameters."},
+        "limit": {"type": "integer", "description": "Maximum rows."}
+      },
+      "required": ["database", "query"]
+    }
+  },
+  {
+    "server_name": "apibank_style_fixture",
+    "name": "sql_insert_record",
+    "title": "Insert SQL Record",
+    "summary": "Insert a fixture database row.",
+    "description": "API-Bank-style local fixture database tool that inserts a structured record into a mock table.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "database": {"type": "string", "description": "Fixture database name."},
+        "table": {"type": "string", "description": "Mock table name."},
+        "record": {"type": "object", "description": "Record fields to insert."},
+        "conflict_policy": {"type": "string", "enum": ["error", "ignore", "update"], "description": "Conflict handling policy."}
+      },
+      "required": ["database", "table", "record"]
+    }
+  }
+]

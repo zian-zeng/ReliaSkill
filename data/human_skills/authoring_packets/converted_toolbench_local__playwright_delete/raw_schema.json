@@ -1,0 +1,12 @@
+{
+  "properties": {
+    "url": {
+      "description": "URL to perform DELETE operation",
+      "type": "string"
+    }
+  },
+  "required": [
+    "url"
+  ],
+  "type": "object"
+}

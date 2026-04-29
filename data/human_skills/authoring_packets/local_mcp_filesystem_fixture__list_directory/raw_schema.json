@@ -1,0 +1,12 @@
+{
+  "properties": {
+    "path": {
+      "description": "Directory path to inspect within an allowed directory.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "path"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,109 @@
+{
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "arguments": [
+    {
+      "default": null,
+      "description": "URL to perform DELETE operation",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "url",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.url",
+      "type": "string"
+    }
+  ],
+  "auth_or_env_notes": null,
+  "difficulty_tier": "hard",
+  "doc_completeness": 1.0,
+  "doc_snippets": [
+    "Perform an HTTP DELETE request",
+    "Playwright Delete"
+  ],
+  "domain": "web/fetch mock",
+  "input_schema_raw": {
+    "properties": {
+      "url": {
+        "description": "URL to perform DELETE operation",
+        "type": "string"
+      }
+    },
+    "required": [
+      "url"
+    ],
+    "type": "object"
+  },
+  "output_hint": null,
+  "provenance": {
+    "raw_name": "playwright_delete",
+    "server_name": "browser",
+    "source_pointer": "data/raw/mcptoolbenchpp_tools.json"
+  },
+  "safety_hints": [
+    "review_side_effects_before_deployment"
+  ],
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 30,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": true,
+    "max_schema_depth": 2,
+    "num_arguments": 1,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 1,
+    "side_effect_type": "delete"
+  },
+  "server_name": "browser",
+  "side_effect_hints": [
+    "deletes_resource"
+  ],
+  "source_metadata": {
+    "ambiguity_score_heuristic": 0.5,
+    "args_count": 1,
+    "auth_required": false,
+    "collection_seed": 42,
+    "difficulty_tier": "hard",
+    "documentation_length": 30,
+    "domain": "web/fetch mock",
+    "enum_count": 0,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": true,
+    "normalized_tool_name": "playwright_delete",
+    "num_arguments": 1,
+    "num_enum_fields": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 1,
+    "record_order": 9,
+    "required_args_count": 1,
+    "schema_hash": "58871f924b0f024b",
+    "server": "browser",
+    "side_effect_type": "delete",
+    "source_category": "converted_toolbench_style",
+    "source_file": "data/raw/mcptoolbenchpp_tools.json",
+    "source_id": "converted_toolbench_local",
+    "source_order": 3,
+    "source_pointer": "data/raw/mcptoolbenchpp_tools.json",
+    "source_server": "browser",
+    "source_type": "converted_toolbench",
+    "synthetic": false,
+    "tool_name": "playwright_delete"
+  },
+  "source_pointer": "data/raw/mcptoolbenchpp_tools.json",
+  "tool_name": "playwright_delete",
+  "tool_purpose": "Perform an HTTP DELETE request",
+  "usage_warnings": []
+}

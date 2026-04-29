@@ -1,0 +1,150 @@
+{
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "arguments": [
+    {
+      "default": null,
+      "description": "Search text.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "query",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.query",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "description": "Ticket status.",
+      "enum": [
+        "open",
+        "blocked",
+        "closed"
+      ],
+      "format": null,
+      "items_type": null,
+      "name": "status",
+      "nullable": false,
+      "properties": null,
+      "required": false,
+      "required_properties": [],
+      "schema_path": "$.properties.status",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "description": "Mock assignee username.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "assignee",
+      "nullable": false,
+      "properties": null,
+      "required": false,
+      "required_properties": [],
+      "schema_path": "$.properties.assignee",
+      "type": "string"
+    }
+  ],
+  "auth_or_env_notes": null,
+  "difficulty_tier": "hard",
+  "doc_completeness": 1.0,
+  "doc_snippets": [
+    "Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee.",
+    "Mock Issue Tracking Search Tickets 031"
+  ],
+  "domain": "issue-tracking",
+  "input_schema_raw": {
+    "properties": {
+      "assignee": {
+        "description": "Mock assignee username.",
+        "type": "string"
+      },
+      "query": {
+        "description": "Search text.",
+        "type": "string"
+      },
+      "status": {
+        "description": "Ticket status.",
+        "enum": [
+          "open",
+          "blocked",
+          "closed"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "query"
+    ],
+    "type": "object"
+  },
+  "output_hint": null,
+  "provenance": {
+    "raw_name": "mock_issue_tracking_search_tickets_031",
+    "server_name": "synthetic_issue_tracking",
+    "source_pointer": "synthetic_mock:issue-tracking:7"
+  },
+  "safety_hints": [],
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.15,
+    "auth_required": false,
+    "documentation_length": 103,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 1,
+    "num_enum_fields": 1,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 2,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "read"
+  },
+  "server_name": "synthetic_issue_tracking",
+  "side_effect_hints": [],
+  "source_metadata": {
+    "ambiguity_score_heuristic": 0.15,
+    "args_count": 3,
+    "auth_required": false,
+    "collection_seed": 42,
+    "difficulty_tier": "hard",
+    "documentation_length": 103,
+    "domain": "issue-tracking",
+    "enum_count": 1,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "normalized_tool_name": "mock_issue_tracking_search_tickets_031",
+    "num_arguments": 3,
+    "num_enum_fields": 1,
+    "num_optional_arguments": 2,
+    "num_required_arguments": 1,
+    "record_order": 21,
+    "required_args_count": 1,
+    "schema_hash": "c6a30fbf3412326e",
+    "server": "synthetic_issue_tracking",
+    "side_effect_type": "read",
+    "source_category": "safe_synthetic_mcp_like",
+    "source_file": "",
+    "source_id": "safe_synthetic_mcp_like_controls",
+    "source_order": 9,
+    "source_pointer": "synthetic_mock:issue-tracking:7",
+    "source_server": "synthetic_issue_tracking",
+    "source_type": "synthetic_mock",
+    "synthetic": true,
+    "tool_name": "mock_issue_tracking_search_tickets_031"
+  },
+  "source_pointer": "synthetic_mock:issue-tracking:7",
+  "tool_name": "mock_issue_tracking_search_tickets_031",
+  "tool_purpose": "Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee.",
+  "usage_warnings": []
+}

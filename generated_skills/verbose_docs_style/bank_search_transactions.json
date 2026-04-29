@@ -1,0 +1,115 @@
+{
+  "tool_id": "bank_search_transactions",
+  "template_id": "verbose_docs_style",
+  "template_metadata": {
+    "template_id": "verbose_docs_style",
+    "template_family": "verbose_docs",
+    "allowed_sections": [
+      "skill_summary",
+      "when_to_use",
+      "when_not_to_use",
+      "argument_template",
+      "examples",
+      "documentation_notes"
+    ],
+    "max_tokens": 1200,
+    "uses_dev_controls": false,
+    "uses_negative_controls": false,
+    "instruction": "Produce a verbose documentation-style baseline while remaining schema-faithful."
+  },
+  "prompt": "You generate compact, deployable ReliaSkill artifacts from MCP-like ToolIR.\nTemplate id: verbose_docs_style\nTemplate family: verbose_docs\nToken budget: 1200\nTemplate instruction: Produce a verbose documentation-style baseline while remaining schema-faithful.\nRules:\n- Return exactly one JSON object.\n- Required keys: skill_summary, when_to_use, when_not_to_use, argument_template, examples.\n- Do not invent arguments, capabilities, outputs, enum values, authentication modes, or side effects.\n- Use only schema-supported parameter names in argument_template and examples.\n- Include when-to-use guidance and when-not-to-use guidance.\n- Include an argument_template object.\n- Include 1-3 examples unless the schema has no arguments.\n- Each example must be an object with scenario and arguments.\n- Preserve side-effect warnings and safety hints.\n- Do not use test controls or evaluation labels.\nAllowed sections:\n[\"skill_summary\", \"when_to_use\", \"when_not_to_use\", \"argument_template\", \"examples\", \"documentation_notes\"]\nGeneration payload:\n{\n  \"prompt_template_metadata\": {\n    \"template_id\": \"verbose_docs_style\",\n    \"template_family\": \"verbose_docs\",\n    \"allowed_sections\": [\n      \"skill_summary\",\n      \"when_to_use\",\n      \"when_not_to_use\",\n      \"argument_template\",\n      \"examples\",\n      \"documentation_notes\"\n    ],\n    \"max_tokens\": 1200,\n    \"uses_dev_controls\": false,\n    \"uses_negative_controls\": false,\n    \"instruction\": \"Produce a verbose documentation-style baseline while remaining schema-faithful.\"\n  },\n  \"toolir\": {\n    \"tool_name\": \"bank_search_transactions\",\n    \"server_name\": \"apibank_style_fixture\",\n    \"tool_purpose\": \"API-Bank-style local fixture tool for searching transactions by date, category, and amount range.\",\n    \"input_schema_raw\": {\n      \"properties\": {\n        \"account_id\": {\n          \"description\": \"Mock account identifier.\",\n          \"type\": \"string\"\n        },\n        \"category\": {\n          \"description\": \"Transaction category.\",\n          \"enum\": [\n            \"food\",\n            \"travel\",\n            \"utilities\",\n            \"income\"\n          ],\n          \"type\": \"string\"\n        },\n        \"date_range\": {\n          \"description\": \"Inclusive date range.\",\n          \"properties\": {\n            \"end\": {\n              \"format\": \"date\",\n              \"type\": \"string\"\n            },\n            \"start\": {\n              \"format\": \"date\",\n              \"type\": \"string\"\n            }\n          },\n          \"required\": [\n            \"start\",\n            \"end\"\n          ],\n          \"type\": \"object\"\n        },\n        \"limit\": {\n          \"description\": \"Maximum results.\",\n          \"type\": \"integer\"\n        }\n      },\n      \"required\": [\n        \"account_id\"\n      ],\n      \"type\": \"object\"\n    },\n    \"arguments\": [\n      {\n        \"name\": \"account_id\",\n        \"type\": \"string\",\n        \"required\": true,\n        \"default\": null,\n        \"enum\": null,\n        \"description\": \"Mock account identifier.\",\n        \"items_type\": null,\n        \"properties\": null,\n        \"required_properties\": [],\n        \"nullable\": false,\n        \"format\": null,\n        \"schema_path\": \"$.properties.account_id\"\n      },\n      {\n        \"name\": \"date_range\",\n        \"type\": \"object\",\n        \"required\": false,\n        \"default\": null,\n        \"enum\": null,\n        \"description\": \"Inclusive date range.\",\n        \"items_type\": null,\n        \"properties\": {\n          \"end\": {\n            \"format\": \"date\",\n            \"type\": \"string\"\n          },\n          \"start\": {\n            \"format\": \"date\",\n            \"type\": \"string\"\n          }\n        },\n        \"required_properties\": [\n          \"start\",\n          \"end\"\n        ],\n        \"nullable\": false,\n        \"format\": null,\n        \"schema_path\": \"$.properties.date_range\"\n      },\n      {\n        \"name\": \"category\",\n        \"type\": \"string\",\n        \"required\": false,\n        \"default\": null,\n        \"enum\": [\n          \"food\",\n          \"travel\",\n          \"utilities\",\n          \"income\"\n        ],\n        \"description\": \"Transaction category.\",\n        \"items_type\": null,\n        \"properties\": null,\n        \"required_properties\": [],\n        \"nullable\": false,\n        \"format\": null,\n        \"schema_path\": \"$.properties.category\"\n      },\n      {\n        \"name\": \"limit\",\n        \"type\": \"integer\",\n        \"required\": false,\n        \"default\": null,\n        \"enum\": null,\n        \"description\": \"Maximum results.\",\n        \"items_type\": null,\n        \"properties\": null,\n        \"required_properties\": [],\n        \"nullable\": false,\n        \"format\": null,\n        \"schema_path\": \"$.properties.limit\"\n      }\n    ],\n    \"output_hint\": null,\n    \"auth_or_env_notes\": null,\n    \"usage_warnings\": [],\n    \"doc_snippets\": [\n      \"API-Bank-style local fixture tool for searching transactions by date, category, and amount range.\",\n      \"Search Transactions\",\n      \"Search offline fixture transactions.\"\n    ],\n    \"source_pointer\": \"data/raw/apibank_style_tools.json\",\n    \"doc_completeness\": 1.0,\n    \"schema_complexity\": {\n      \"ambiguity_score_heuristic\": 0.15,\n      \"auth_required\": false,\n      \"documentation_length\": 97,\n      \"has_array_argument\": false,\n      \"has_boolean_flag\": false,\n      \"has_nested_object\": true,\n      \"has_side_effect\": false,\n      \"max_schema_depth\": 3,\n      \"num_arguments\": 4,\n      \"num_enum_arguments\": 1,\n      \"num_enum_fields\": 1,\n      \"num_nested_object_arguments\": 1,\n      \"num_optional_arguments\": 3,\n      \"num_required_arguments\": 1,\n      \"num_top_level_arguments\": 4,\n      \"side_effect_type\": \"read\"\n    },\n    \"ambiguity_flags\": [\n      \"allows_or_omits_unknown_argument_policy\"\n    ],\n    \"provenance\": {\n      \"raw_name\": \"bank_search_transactions\",\n      \"server_name\": \"apibank_style_fixture\",\n      \"source_pointer\": \"data/raw/apibank_style_tools.json\"\n    },\n    \"side_effect_hints\": [],\n    \"safety_hints\": []\n  }\n}",
+  "skill": {
+    "baseline_name": "autoskill_base",
+    "skill_summary": "API-Bank-style local fixture tool for searching transactions by date, category, and amount range. API-Bank-style local fixture tool for searching transactions by date, category, and amount range. Search Transactions Search offline fixture transactions.",
+    "when_to_use": [
+      "Use `bank_search_transactions` only when the request directly matches this tool's documented purpose.",
+      "Required fields must be grounded in the user request: `account_id`.",
+      "Use optional fields only when the user provides or implies them clearly.",
+      "Documentation note: API-Bank-style local fixture tool for searching transactions by date, category, and amount range.",
+      "Documentation note: Search Transactions",
+      "Documentation note: Search offline fixture transactions."
+    ],
+    "when_not_to_use": [
+      "Do not invent missing required fields.",
+      "Do not pass unsupported arguments or enum values.",
+      "Do not use this tool for adjacent, merely keyword-overlapping requests."
+    ],
+    "argument_template": {
+      "account_id": "sample-account-id-001",
+      "date_range": {
+        "end": "2026-01-01",
+        "start": "2026-01-01"
+      },
+      "category": "food",
+      "limit": 1
+    },
+    "examples": [
+      {
+        "scenario": "Schema-faithful bank_search_transactions invocation 1",
+        "arguments": {
+          "account_id": "sample-account-id-001"
+        }
+      },
+      {
+        "scenario": "Schema-faithful bank_search_transactions invocation 2",
+        "arguments": {
+          "account_id": "sample-account-id-001",
+          "date_range": {
+            "end": "2026-01-01",
+            "start": "2026-01-01"
+          },
+          "category": "travel",
+          "limit": 2
+        }
+      },
+      {
+        "scenario": "Schema-faithful bank_search_transactions invocation 3",
+        "arguments": {
+          "account_id": "sample-account-id-001",
+          "date_range": {
+            "end": "2026-01-01",
+            "start": "2026-01-01"
+          },
+          "category": "utilities",
+          "limit": 3
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "prompt_template_generation",
+        "template_id": "verbose_docs_style",
+        "template_family": "verbose_docs",
+        "uses_dev_controls": false,
+        "uses_negative_controls": false,
+        "test_controls_used": false
+      }
+    ],
+    "metadata": {
+      "template_id": "verbose_docs_style",
+      "template_family": "verbose_docs",
+      "allowed_sections": [
+        "skill_summary",
+        "when_to_use",
+        "when_not_to_use",
+        "argument_template",
+        "examples",
+        "documentation_notes"
+      ],
+      "max_tokens": 1200,
+      "uses_dev_controls": false,
+      "uses_negative_controls": false,
+      "parse_ok": true,
+      "parse_error": null,
+      "heuristic_prompt_template_renderer": true,
+      "dev_control_categories_seen": []
+    }
+  },
+  "validation": {
+    "valid": true,
+    "issues": []
+  },
+  "raw_text": null,
+  "parse_error": null
+}

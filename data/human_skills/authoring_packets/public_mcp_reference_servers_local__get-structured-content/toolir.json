@@ -1,0 +1,86 @@
+{
+  "ambiguity_flags": [
+    "empty_input_schema",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "arguments": [],
+  "auth_or_env_notes": null,
+  "difficulty_tier": "hard",
+  "doc_completeness": 0.6,
+  "doc_snippets": [
+    "Returns structured content along with an output schema for client data validation",
+    "Get Structured Content Tool"
+  ],
+  "domain": "general",
+  "input_schema_raw": {
+    "properties": {},
+    "required": [],
+    "type": "string"
+  },
+  "output_hint": null,
+  "provenance": {
+    "raw_name": "get-structured-content",
+    "server_name": "tools",
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-structured-content.ts"
+  },
+  "safety_hints": [],
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 81,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 1,
+    "num_arguments": 0,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "num_top_level_arguments": 0,
+    "side_effect_type": "read"
+  },
+  "server_name": "tools",
+  "side_effect_hints": [],
+  "source_metadata": {
+    "ambiguity_score_heuristic": 0.5,
+    "args_count": 0,
+    "auth_required": false,
+    "collection_seed": 42,
+    "difficulty_tier": "hard",
+    "documentation_length": 81,
+    "domain": "general",
+    "enum_count": 0,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "normalized_tool_name": "get_structured_content",
+    "num_arguments": 0,
+    "num_enum_fields": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "record_order": 43,
+    "required_args_count": 0,
+    "schema_hash": "06d42570472dc0d9",
+    "server": "tools",
+    "side_effect_type": "read",
+    "source_category": "real_public_mcp_schema_local",
+    "source_file": "data/raw/harvested_mcp_reference_servers.json",
+    "source_id": "public_mcp_reference_servers_local",
+    "source_order": 2,
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-structured-content.ts",
+    "source_server": "tools",
+    "source_type": "real_public_mcp",
+    "synthetic": false,
+    "tool_name": "get-structured-content"
+  },
+  "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-structured-content.ts",
+  "tool_name": "get-structured-content",
+  "tool_purpose": "Returns structured content along with an output schema for client data validation",
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ]
+}

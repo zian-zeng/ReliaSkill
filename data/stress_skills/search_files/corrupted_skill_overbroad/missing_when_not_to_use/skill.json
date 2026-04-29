@@ -1,0 +1,178 @@
+{
+  "stress_skill_id": "search_files__corrupted_skill_overbroad__missing_when_not_to_use",
+  "tool": {
+    "tool_name": "search_files",
+    "server_name": "mcp_reference_filesystem",
+    "tool_purpose": "Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.",
+    "input_schema_raw": {
+      "properties": {
+        "excludePatterns": {
+          "default": [],
+          "description": "Optional glob patterns to exclude.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "path": {
+          "description": "Base directory to search within an allowed directory.",
+          "type": "string"
+        },
+        "pattern": {
+          "description": "Glob-style pattern to match.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "pattern"
+      ],
+      "type": "object"
+    },
+    "arguments": [
+      {
+        "name": "path",
+        "type": "string",
+        "required": true,
+        "default": null,
+        "enum": null,
+        "description": "Base directory to search within an allowed directory.",
+        "items_type": null,
+        "properties": null,
+        "required_properties": [],
+        "nullable": false,
+        "format": null,
+        "schema_path": "$.properties.path"
+      },
+      {
+        "name": "pattern",
+        "type": "string",
+        "required": true,
+        "default": null,
+        "enum": null,
+        "description": "Glob-style pattern to match.",
+        "items_type": null,
+        "properties": null,
+        "required_properties": [],
+        "nullable": false,
+        "format": null,
+        "schema_path": "$.properties.pattern"
+      },
+      {
+        "name": "excludePatterns",
+        "type": "array",
+        "required": false,
+        "default": [],
+        "enum": null,
+        "description": "Optional glob patterns to exclude.",
+        "items_type": "string",
+        "properties": null,
+        "required_properties": [],
+        "nullable": false,
+        "format": null,
+        "schema_path": "$.properties.excludePatterns"
+      }
+    ],
+    "output_hint": null,
+    "auth_or_env_notes": null,
+    "usage_warnings": [],
+    "doc_snippets": [
+      "Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.",
+      "Search Files",
+      "Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*."
+    ],
+    "source_pointer": "src/filesystem/index.ts",
+    "doc_completeness": 1.0,
+    "schema_complexity": {
+      "ambiguity_score_heuristic": 0.25,
+      "auth_required": false,
+      "documentation_length": 425,
+      "has_array_argument": true,
+      "has_boolean_flag": false,
+      "has_nested_object": false,
+      "has_side_effect": false,
+      "max_schema_depth": 3,
+      "num_arguments": 3,
+      "num_enum_arguments": 0,
+      "num_enum_fields": 0,
+      "num_nested_object_arguments": 0,
+      "num_optional_arguments": 1,
+      "num_required_arguments": 2,
+      "num_top_level_arguments": 3,
+      "side_effect_type": "read"
+    },
+    "ambiguity_flags": [
+      "allows_or_omits_unknown_argument_policy"
+    ],
+    "provenance": {
+      "raw_name": "search_files",
+      "server_name": "mcp_reference_filesystem",
+      "source_pointer": "src/filesystem/index.ts"
+    },
+    "side_effect_hints": [],
+    "safety_hints": []
+  },
+  "skill": {
+    "baseline_name": "corrupted_skill_overbroad",
+    "skill_summary": "Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories. Provide all required fields: `path`, and `pattern`.",
+    "when_to_use": [
+      "Use `search_files` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `path`, and `pattern`.",
+      "Optional control is available through `excludePatterns` when the request needs extra specificity."
+    ],
+    "when_not_to_use": [],
+    "argument_template": {
+      "path": "data/sample.txt",
+      "pattern": "sample_pattern_1",
+      "excludePatterns": []
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for search_files",
+        "arguments": {
+          "path": "data/sample.txt",
+          "pattern": "sample_pattern_1"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for search_files",
+        "arguments": {
+          "path": "data/sample.txt",
+          "pattern": "sample_pattern_2",
+          "excludePatterns": []
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "stress_skill_corruption",
+        "corruption_type": "missing_when_not_to_use",
+        "corruption_location": "when_not_to_use",
+        "expected_detection_target": "behavior_tests",
+        "diagnostic_only": true
+      }
+    ],
+    "metadata": {
+      "diagnostic_adversarial": true,
+      "corruption_type": "missing_when_not_to_use",
+      "corruption_location": "when_not_to_use",
+      "expected_detection_target": "behavior_tests",
+      "source_skill_condition": "autoskill_base",
+      "stress_tests_not_main_benchmark": true
+    }
+  },
+  "corruption": {
+    "type": "missing_when_not_to_use",
+    "location": "when_not_to_use",
+    "expected_detection_target": "behavior_tests",
+    "diagnostic_only": true
+  }
+}

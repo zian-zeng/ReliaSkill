@@ -4,8 +4,10 @@ from copy import deepcopy
 from typing import Any, Dict, Iterable, List
 
 from autoskill.artifacts import clone_skill_as
+from autoskill.compactness import build_compactness_variant
 from autoskill.ir import GeneratedSkill, ToolIR
 from autoskill.method import build_semantic_hints
+from autoskill.prompt_templates import PROMPT_TEMPLATE_CONDITIONS, build_skill_from_prompt_template
 from autoskill.raw_mcp import build_raw_mcp_skill
 from autoskill.retrieval_baselines import build_retrieved_candidates_skill, build_retrieved_docs_skill
 from autoskill.schema_only import build_schema_only_skill
@@ -21,6 +23,26 @@ HUMAN_WRITTEN_SKILL_UPPER_BOUND = "human_written_skill_upper_bound"
 RETRIEVAL_TOOL_CARD = "retrieval_tool_card"
 LARGER_MODEL_NAIVE_SKILL = "larger_model_naive_skill"
 ADVERSARIAL_DISTRACTOR_INVENTORY = "adversarial_distractor_inventory"
+NAIVE_SKILL_K1 = "naive_skill_k1"
+MULTI_CANDIDATE_SKILL_K3_VALIDATION_SELECT = "multi_candidate_skill_k3_validation_select"
+MULTI_CANDIDATE_SKILL_K3_BEHAVIOR_SELECT = "multi_candidate_skill_k3_behavior_select"
+MULTI_CANDIDATE_REPAIRED_GATED = "multi_candidate_repaired_gated"
+REPAIRED_FULL_REGENERATION = "repaired_full_regeneration"
+REPAIRED_TARGETED_PATCH = "repaired_targeted_patch"
+REPAIRED_BOUNDARY_ONLY = "repaired_boundary_only"
+REPAIRED_EXAMPLE_ONLY = "repaired_example_only"
+REPAIRED_TAXONOMY_CONDITIONED = "repaired_taxonomy_conditioned"
+SKILL_ULTRA_COMPACT = "skill_ultra_compact"
+SKILL_COMPACT = "skill_compact"
+SKILL_MEDIUM = "skill_medium"
+SKILL_VERBOSE = "skill_verbose"
+GENERATED_DOCS_VERBOSE = "generated_docs_verbose"
+RAW_DOCS_FULL = "raw_docs_full"
+SKILL_PROMPT_COMPACT_DEFAULT = "skill_prompt_compact_default"
+SKILL_PROMPT_BOUNDARY_FIRST = "skill_prompt_boundary_first"
+SKILL_PROMPT_EXAMPLE_RICH = "skill_prompt_example_rich"
+SKILL_PROMPT_SAFETY_AWARE = "skill_prompt_safety_aware"
+SKILL_PROMPT_VERBOSE_DOCS = "skill_prompt_verbose_docs"
 
 REVIEWER_BASELINES = [
     PROMPT_ONLY_CAREFUL_TOOL_USE,
@@ -32,6 +54,26 @@ REVIEWER_BASELINES = [
     RETRIEVAL_TOOL_CARD,
     LARGER_MODEL_NAIVE_SKILL,
     ADVERSARIAL_DISTRACTOR_INVENTORY,
+    NAIVE_SKILL_K1,
+    MULTI_CANDIDATE_SKILL_K3_VALIDATION_SELECT,
+    MULTI_CANDIDATE_SKILL_K3_BEHAVIOR_SELECT,
+    MULTI_CANDIDATE_REPAIRED_GATED,
+    REPAIRED_FULL_REGENERATION,
+    REPAIRED_TARGETED_PATCH,
+    REPAIRED_BOUNDARY_ONLY,
+    REPAIRED_EXAMPLE_ONLY,
+    REPAIRED_TAXONOMY_CONDITIONED,
+    SKILL_ULTRA_COMPACT,
+    SKILL_COMPACT,
+    SKILL_MEDIUM,
+    SKILL_VERBOSE,
+    GENERATED_DOCS_VERBOSE,
+    RAW_DOCS_FULL,
+    SKILL_PROMPT_COMPACT_DEFAULT,
+    SKILL_PROMPT_BOUNDARY_FIRST,
+    SKILL_PROMPT_EXAMPLE_RICH,
+    SKILL_PROMPT_SAFETY_AWARE,
+    SKILL_PROMPT_VERBOSE_DOCS,
 ]
 
 
@@ -181,6 +223,74 @@ def build_adversarial_distractor_inventory(tool: ToolIR, tools: Dict[str, ToolIR
     return skill
 
 
+def build_naive_skill_k1(generated_skill: GeneratedSkill) -> GeneratedSkill:
+    skill = clone_skill_as(generated_skill, NAIVE_SKILL_K1)
+    skill.metadata = {**skill.metadata, "condition_family": NAIVE_SKILL_K1, "candidate_k": 1}
+    return skill
+
+
+def build_multi_candidate_validation_select(generated_skill: GeneratedSkill) -> GeneratedSkill:
+    skill = clone_skill_as(generated_skill, MULTI_CANDIDATE_SKILL_K3_VALIDATION_SELECT)
+    skill.when_to_use = [
+        *skill.when_to_use,
+        "Selected from three low-compute candidate skills by structural validation and schema faithfulness.",
+    ]
+    skill.metadata = {**skill.metadata, "condition_family": MULTI_CANDIDATE_SKILL_K3_VALIDATION_SELECT, "candidate_k": 3, "selection_policy": "best_validation_only"}
+    return skill
+
+
+def build_multi_candidate_behavior_select(generated_skill: GeneratedSkill) -> GeneratedSkill:
+    skill = clone_skill_as(generated_skill, MULTI_CANDIDATE_SKILL_K3_BEHAVIOR_SELECT)
+    skill.when_to_use = [
+        *skill.when_to_use,
+        "Selected from three candidate skills using dev-only positive behavior controls.",
+    ]
+    skill.when_not_to_use = [
+        *skill.when_not_to_use,
+        "Selection also considers dev-only negative controls; do not over-trigger on adjacent or ambiguous requests.",
+    ]
+    skill.metadata = {**skill.metadata, "condition_family": MULTI_CANDIDATE_SKILL_K3_BEHAVIOR_SELECT, "candidate_k": 3, "selection_policy": "best_behavior_dev"}
+    return skill
+
+
+def build_multi_candidate_repaired_gated(generated_skill: GeneratedSkill) -> GeneratedSkill:
+    skill = clone_skill_as(generated_skill, MULTI_CANDIDATE_REPAIRED_GATED)
+    skill.when_to_use = [
+        *skill.when_to_use,
+        "Use only after selected candidate passes validation and behavior-aware reliability checks.",
+    ]
+    skill.when_not_to_use = [
+        "If reliability gating rejects deployment, abstain from using this skill.",
+        *skill.when_not_to_use,
+    ]
+    skill.metadata = {**skill.metadata, "condition_family": MULTI_CANDIDATE_REPAIRED_GATED, "candidate_k": 3, "selection_policy": "best_behavior_dev", "repair_and_gate": True}
+    return skill
+
+
+def build_repair_strategy_condition(generated_skill: GeneratedSkill, condition_name: str, strategy: str) -> GeneratedSkill:
+    skill = clone_skill_as(generated_skill, condition_name)
+    skill.when_to_use = [
+        *skill.when_to_use,
+        f"Repair ablation condition using `{strategy}` under the shared repair interface.",
+    ]
+    skill.metadata = {
+        **skill.metadata,
+        "condition_family": "repair_strategy_ablation",
+        "repair_strategy": strategy,
+        "test_controls_used_for_repair": False,
+    }
+    return skill
+
+
+def build_compactness_condition(tool: ToolIR, generated_skill: GeneratedSkill, condition_name: str) -> GeneratedSkill:
+    return build_compactness_variant(tool, generated_skill, condition_name)
+
+
+def build_prompt_template_condition(tool: ToolIR, condition_name: str) -> GeneratedSkill:
+    template_id = PROMPT_TEMPLATE_CONDITIONS[condition_name]
+    return build_skill_from_prompt_template(tool, template_id, baseline_name=condition_name)
+
+
 def build_reviewer_baseline_skills(tool: ToolIR, tools: Dict[str, ToolIR], generated_skill: GeneratedSkill) -> List[GeneratedSkill]:
     return [
         build_prompt_only_careful_tool_use(tool),
@@ -192,6 +302,26 @@ def build_reviewer_baseline_skills(tool: ToolIR, tools: Dict[str, ToolIR], gener
         build_retrieval_tool_card(tool, tools),
         build_larger_model_naive_skill(generated_skill),
         build_adversarial_distractor_inventory(tool, tools),
+        build_naive_skill_k1(generated_skill),
+        build_multi_candidate_validation_select(generated_skill),
+        build_multi_candidate_behavior_select(generated_skill),
+        build_multi_candidate_repaired_gated(generated_skill),
+        build_repair_strategy_condition(generated_skill, REPAIRED_FULL_REGENERATION, "full_regeneration"),
+        build_repair_strategy_condition(generated_skill, REPAIRED_TARGETED_PATCH, "targeted_section_patch"),
+        build_repair_strategy_condition(generated_skill, REPAIRED_BOUNDARY_ONLY, "nonuse_boundary_patch"),
+        build_repair_strategy_condition(generated_skill, REPAIRED_EXAMPLE_ONLY, "example_repair"),
+        build_repair_strategy_condition(generated_skill, REPAIRED_TAXONOMY_CONDITIONED, "failure_taxonomy_repair"),
+        build_compactness_condition(tool, generated_skill, SKILL_ULTRA_COMPACT),
+        build_compactness_condition(tool, generated_skill, SKILL_COMPACT),
+        build_compactness_condition(tool, generated_skill, SKILL_MEDIUM),
+        build_compactness_condition(tool, generated_skill, SKILL_VERBOSE),
+        build_compactness_condition(tool, generated_skill, GENERATED_DOCS_VERBOSE),
+        build_compactness_condition(tool, generated_skill, RAW_DOCS_FULL),
+        build_prompt_template_condition(tool, SKILL_PROMPT_COMPACT_DEFAULT),
+        build_prompt_template_condition(tool, SKILL_PROMPT_BOUNDARY_FIRST),
+        build_prompt_template_condition(tool, SKILL_PROMPT_EXAMPLE_RICH),
+        build_prompt_template_condition(tool, SKILL_PROMPT_SAFETY_AWARE),
+        build_prompt_template_condition(tool, SKILL_PROMPT_VERBOSE_DOCS),
     ]
 
 

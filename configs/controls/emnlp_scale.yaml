@@ -1,0 +1,22 @@
+seed: 42
+tools_path: data/processed_toolir/tools.jsonl
+positives_per_tool_easy: 1
+positives_per_tool_medium: 2
+positives_per_tool_hard: 2
+negatives_per_tool_easy: 1
+negatives_per_tool_medium: 2
+negatives_per_tool_hard: 2
+negative_categories:
+  - adjacent_intent
+  - known_path_no_search_needed
+  - wrong_tool_boundary
+  - missing_required_info
+  - destructive_action_mismatch
+  - read_vs_write_mismatch
+  - out_of_domain_request
+outputs:
+  dev: data/controls/dev.jsonl
+  test: data/controls/test.jsonl
+  stats: outputs/tables/control_stats.csv
+  difficulty_stats: outputs/tables/control_difficulty_stats.csv
+  negative_category_stats: outputs/tables/negative_category_stats.csv

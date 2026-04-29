@@ -1,0 +1,105 @@
+{
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "arguments": [
+    {
+      "default": null,
+      "description": "A dictionary where keys represent subjects and values represent scores",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "gradeDict",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.gradeDict",
+      "type": "dict"
+    }
+  ],
+  "auth_or_env_notes": null,
+  "difficulty_tier": "easy",
+  "doc_completeness": 1.0,
+  "doc_snippets": [
+    "This function calculates the average grade across different subjects for a specific student.",
+    "calculate_average"
+  ],
+  "domain": "math/data processing",
+  "input_schema_raw": {
+    "properties": {
+      "gradeDict": {
+        "description": "A dictionary where keys represent subjects and values represent scores",
+        "type": "dict"
+      }
+    },
+    "required": [
+      "gradeDict"
+    ],
+    "type": "object"
+  },
+  "output_hint": null,
+  "provenance": {
+    "raw_name": "calculate_average",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "safety_hints": [],
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.15,
+    "auth_required": false,
+    "documentation_length": 92,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 1,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 1,
+    "side_effect_type": "unknown"
+  },
+  "server_name": "bfcl_v3",
+  "side_effect_hints": [],
+  "source_metadata": {
+    "ambiguity_score_heuristic": 0.15,
+    "args_count": 1,
+    "auth_required": false,
+    "collection_seed": 42,
+    "difficulty_tier": "easy",
+    "documentation_length": 92,
+    "domain": "math/data processing",
+    "enum_count": 0,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "normalized_tool_name": "calculate_average",
+    "num_arguments": 1,
+    "num_enum_fields": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 1,
+    "record_order": 11,
+    "required_args_count": 1,
+    "schema_hash": "395a2d28393e1728",
+    "server": "bfcl_v3",
+    "side_effect_type": "unknown",
+    "source_category": "converted_bfcl_api_style",
+    "source_file": "data/raw/bfcl_v3_tools_subset100.json",
+    "source_id": "converted_bfcl_v3_api_style",
+    "source_order": 5,
+    "source_pointer": "bfcl_v3",
+    "source_server": "bfcl_v3",
+    "source_type": "converted_bfcl",
+    "synthetic": false,
+    "tool_name": "calculate_average"
+  },
+  "source_pointer": "bfcl_v3",
+  "tool_name": "calculate_average",
+  "tool_purpose": "This function calculates the average grade across different subjects for a specific student.",
+  "usage_warnings": []
+}

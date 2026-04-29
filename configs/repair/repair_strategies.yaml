@@ -1,0 +1,53 @@
+seed: 42
+max_repair_rounds: 2
+use_test_controls_for_repair: false
+llm_repair:
+  enabled: false
+  backend: null
+strategies:
+  - id: no_repair
+    label: no repair
+    repair_strategy: no_repair
+  - id: full_regeneration
+    label: full regeneration
+    repair_strategy: full_regeneration
+  - id: targeted_section_patch
+    label: targeted section patch
+    repair_strategy: targeted_section_patch
+  - id: nonuse_boundary_patch
+    label: boundary-only repair
+    repair_strategy: nonuse_boundary_patch
+  - id: example_repair
+    label: example-only repair
+    repair_strategy: example_repair
+  - id: argument_template_repair
+    label: argument-template repair
+    repair_strategy: argument_template_repair
+  - id: failure_taxonomy_repair
+    label: failure-taxonomy-conditioned repair
+    repair_strategy: failure_taxonomy_repair
+failure_taxonomy:
+  unsupported_argument:
+    sections: [argument_template, examples, guidance]
+  missing_required_field:
+    sections: [argument_template, examples]
+  invalid_enum:
+    sections: [argument_template, examples]
+  malformed_example:
+    sections: [examples]
+  over_triggering:
+    sections: [when_not_to_use]
+  under_triggering:
+    sections: [when_to_use]
+  contradictory_instruction:
+    sections: [guidance]
+  unsafe_side_effect_boundary:
+    sections: [when_not_to_use]
+  verbosity_or_context_bloat:
+    sections: [guidance, examples]
+ablation_conditions:
+  - repaired_full_regeneration
+  - repaired_targeted_patch
+  - repaired_boundary_only
+  - repaired_example_only
+  - repaired_taxonomy_conditioned

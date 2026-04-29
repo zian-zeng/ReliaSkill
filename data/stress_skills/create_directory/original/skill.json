@@ -1,0 +1,40 @@
+{
+  "baseline_name": "autoskill_base",
+  "skill_summary": "Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories. Provide the required field `path`.",
+  "when_to_use": [
+    "Use `create_directory` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `path`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "argument_template": {
+    "path": "data/sample.txt"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for create_directory",
+      "arguments": {
+        "path": "data/sample.txt"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for create_directory",
+      "arguments": {
+        "path": "data/sample.txt"
+      }
+    }
+  ],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "trace_type": "generation_backend",
+      "configured_generation_backend": "heuristic",
+      "actual_generation_backend": "heuristic",
+      "generation_fallback_used": false,
+      "generation_fallback_reason": null
+    }
+  ],
+  "metadata": {}
+}

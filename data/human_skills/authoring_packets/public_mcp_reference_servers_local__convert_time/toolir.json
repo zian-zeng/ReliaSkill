@@ -1,0 +1,143 @@
+{
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "arguments": [
+    {
+      "default": null,
+      "description": "Source IANA timezone name (e.g., 'America/New_York', 'Europe/London'). Use '<local_tz>' as local timezone if no source timezone provided by the user.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "source_timezone",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.source_timezone",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "description": "Time to convert in 24-hour format (HH:MM)",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "time",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.time",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "description": "Target IANA timezone name (e.g., 'Asia/Tokyo', 'America/San_Francisco'). Use '<local_tz>' as local timezone if no target timezone provided by the user.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "target_timezone",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.target_timezone",
+      "type": "string"
+    }
+  ],
+  "auth_or_env_notes": null,
+  "difficulty_tier": "hard",
+  "doc_completeness": 1.0,
+  "doc_snippets": [
+    "Convert time between timezones",
+    "convert_time"
+  ],
+  "domain": "calendar/time",
+  "input_schema_raw": {
+    "properties": {
+      "source_timezone": {
+        "description": "Source IANA timezone name (e.g., 'America/New_York', 'Europe/London'). Use '<local_tz>' as local timezone if no source timezone provided by the user.",
+        "type": "string"
+      },
+      "target_timezone": {
+        "description": "Target IANA timezone name (e.g., 'Asia/Tokyo', 'America/San_Francisco'). Use '<local_tz>' as local timezone if no target timezone provided by the user.",
+        "type": "string"
+      },
+      "time": {
+        "description": "Time to convert in 24-hour format (HH:MM)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "source_timezone",
+      "time",
+      "target_timezone"
+    ],
+    "type": "object"
+  },
+  "output_hint": null,
+  "provenance": {
+    "raw_name": "convert_time",
+    "server_name": "src",
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\time\\src\\mcp_server_time\\server.py"
+  },
+  "safety_hints": [],
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 30,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 3,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "unknown"
+  },
+  "server_name": "src",
+  "side_effect_hints": [],
+  "source_metadata": {
+    "ambiguity_score_heuristic": 0.5,
+    "args_count": 3,
+    "auth_required": false,
+    "collection_seed": 42,
+    "difficulty_tier": "hard",
+    "documentation_length": 30,
+    "domain": "calendar/time",
+    "enum_count": 0,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "normalized_tool_name": "convert_time",
+    "num_arguments": 3,
+    "num_enum_fields": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 3,
+    "record_order": 23,
+    "required_args_count": 3,
+    "schema_hash": "377b3135948360c4",
+    "server": "src",
+    "side_effect_type": "unknown",
+    "source_category": "real_public_mcp_schema_local",
+    "source_file": "data/raw/harvested_mcp_reference_servers.json",
+    "source_id": "public_mcp_reference_servers_local",
+    "source_order": 2,
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\time\\src\\mcp_server_time\\server.py",
+    "source_server": "src",
+    "source_type": "real_public_mcp",
+    "synthetic": false,
+    "tool_name": "convert_time"
+  },
+  "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\time\\src\\mcp_server_time\\server.py",
+  "tool_name": "convert_time",
+  "tool_purpose": "Convert time between timezones",
+  "usage_warnings": []
+}

@@ -1,0 +1,176 @@
+{
+  "stress_skill_id": "read_text_file__corrupted_skill_invented_arg__invented_argument",
+  "tool": {
+    "tool_name": "read_text_file",
+    "server_name": "mcp_reference_filesystem",
+    "tool_purpose": "Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.",
+    "input_schema_raw": {
+      "properties": {
+        "head": {
+          "description": "If provided, returns only the first N lines of the file.",
+          "type": "number"
+        },
+        "path": {
+          "description": "Path to the file within an allowed directory.",
+          "type": "string"
+        },
+        "tail": {
+          "description": "If provided, returns only the last N lines of the file.",
+          "type": "number"
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "type": "object"
+    },
+    "arguments": [
+      {
+        "name": "path",
+        "type": "string",
+        "required": true,
+        "default": null,
+        "enum": null,
+        "description": "Path to the file within an allowed directory.",
+        "items_type": null,
+        "properties": null,
+        "required_properties": [],
+        "nullable": false,
+        "format": null,
+        "schema_path": "$.properties.path"
+      },
+      {
+        "name": "tail",
+        "type": "number",
+        "required": false,
+        "default": null,
+        "enum": null,
+        "description": "If provided, returns only the last N lines of the file.",
+        "items_type": null,
+        "properties": null,
+        "required_properties": [],
+        "nullable": false,
+        "format": null,
+        "schema_path": "$.properties.tail"
+      },
+      {
+        "name": "head",
+        "type": "number",
+        "required": false,
+        "default": null,
+        "enum": null,
+        "description": "If provided, returns only the first N lines of the file.",
+        "items_type": null,
+        "properties": null,
+        "required_properties": [],
+        "nullable": false,
+        "format": null,
+        "schema_path": "$.properties.head"
+      }
+    ],
+    "output_hint": null,
+    "auth_or_env_notes": null,
+    "usage_warnings": [],
+    "doc_snippets": [
+      "Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.",
+      "Read Text File",
+      "Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool whe"
+    ],
+    "source_pointer": "src/filesystem/index.ts",
+    "doc_completeness": 1.0,
+    "schema_complexity": {
+      "ambiguity_score_heuristic": 0.25,
+      "auth_required": false,
+      "documentation_length": 453,
+      "has_array_argument": false,
+      "has_boolean_flag": false,
+      "has_nested_object": false,
+      "has_side_effect": false,
+      "max_schema_depth": 2,
+      "num_arguments": 3,
+      "num_enum_arguments": 0,
+      "num_enum_fields": 0,
+      "num_nested_object_arguments": 0,
+      "num_optional_arguments": 2,
+      "num_required_arguments": 1,
+      "num_top_level_arguments": 3,
+      "side_effect_type": "read"
+    },
+    "ambiguity_flags": [
+      "allows_or_omits_unknown_argument_policy"
+    ],
+    "provenance": {
+      "raw_name": "read_text_file",
+      "server_name": "mcp_reference_filesystem",
+      "source_pointer": "src/filesystem/index.ts"
+    },
+    "side_effect_hints": [],
+    "safety_hints": []
+  },
+  "skill": {
+    "baseline_name": "corrupted_skill_invented_arg",
+    "skill_summary": "Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories. Provide the required field `path`.",
+    "when_to_use": [
+      "Use `read_text_file` when the user's request directly matches this tool's purpose.",
+      "Provide the required field `path`.",
+      "Optional controls include `tail`, `head`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "path": "data/sample.txt",
+      "tail": 1.0,
+      "head": 1.0,
+      "invented_parameter": "unsupported"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for read_text_file",
+        "arguments": {
+          "path": "data/sample.txt"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for read_text_file",
+        "arguments": {
+          "path": "data/sample.txt",
+          "tail": 2.0,
+          "head": 2.0
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "stress_skill_corruption",
+        "corruption_type": "invented_argument",
+        "corruption_location": "argument_template.invented_parameter",
+        "expected_detection_target": "structural_validator",
+        "diagnostic_only": true
+      }
+    ],
+    "metadata": {
+      "diagnostic_adversarial": true,
+      "corruption_type": "invented_argument",
+      "corruption_location": "argument_template.invented_parameter",
+      "expected_detection_target": "structural_validator",
+      "source_skill_condition": "autoskill_base",
+      "stress_tests_not_main_benchmark": true
+    }
+  },
+  "corruption": {
+    "type": "invented_argument",
+    "location": "argument_template.invented_parameter",
+    "expected_detection_target": "structural_validator",
+    "diagnostic_only": true
+  }
+}

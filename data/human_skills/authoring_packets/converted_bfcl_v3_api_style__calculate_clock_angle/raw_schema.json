@@ -1,0 +1,21 @@
+{
+  "properties": {
+    "hours": {
+      "description": "The hour on the clock face.",
+      "type": "integer"
+    },
+    "minutes": {
+      "description": "The minutes on the clock face.",
+      "type": "integer"
+    },
+    "round_to": {
+      "description": "The number of decimal places to round the result to, default is 2.",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "hours",
+    "minutes"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,177 @@
+{
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "arguments": [
+    {
+      "default": null,
+      "description": "Name for the screenshot",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "name",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.name",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "description": "CSS selector for element to screenshot",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "selector",
+      "nullable": false,
+      "properties": null,
+      "required": false,
+      "required_properties": [],
+      "schema_path": "$.properties.selector",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "description": "Width in pixels (default: 800)",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "width",
+      "nullable": false,
+      "properties": null,
+      "required": false,
+      "required_properties": [],
+      "schema_path": "$.properties.width",
+      "type": "number"
+    },
+    {
+      "default": null,
+      "description": "Height in pixels (default: 600)",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "height",
+      "nullable": false,
+      "properties": null,
+      "required": false,
+      "required_properties": [],
+      "schema_path": "$.properties.height",
+      "type": "number"
+    },
+    {
+      "default": null,
+      "description": "If true, capture the screenshot as a base64-encoded data URI (as text) instead of binary image content. Default false.",
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "encoded",
+      "nullable": false,
+      "properties": null,
+      "required": false,
+      "required_properties": [],
+      "schema_path": "$.properties.encoded",
+      "type": "boolean"
+    }
+  ],
+  "auth_or_env_notes": null,
+  "difficulty_tier": "hard",
+  "doc_completeness": 1.0,
+  "doc_snippets": [
+    "Take a screenshot of the current page or a specific element",
+    "Puppeteer Screenshot"
+  ],
+  "domain": "web/fetch mock",
+  "input_schema_raw": {
+    "properties": {
+      "encoded": {
+        "description": "If true, capture the screenshot as a base64-encoded data URI (as text) instead of binary image content. Default false.",
+        "type": "boolean"
+      },
+      "height": {
+        "description": "Height in pixels (default: 600)",
+        "type": "number"
+      },
+      "name": {
+        "description": "Name for the screenshot",
+        "type": "string"
+      },
+      "selector": {
+        "description": "CSS selector for element to screenshot",
+        "type": "string"
+      },
+      "width": {
+        "description": "Width in pixels (default: 800)",
+        "type": "number"
+      }
+    },
+    "required": [
+      "name"
+    ],
+    "type": "object"
+  },
+  "output_hint": null,
+  "provenance": {
+    "raw_name": "puppeteer_screenshot",
+    "server_name": "browser",
+    "source_pointer": "data/raw/mcptoolbenchpp_tools.json"
+  },
+  "safety_hints": [],
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.6,
+    "auth_required": false,
+    "documentation_length": 59,
+    "has_array_argument": false,
+    "has_boolean_flag": true,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 5,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 4,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 5,
+    "side_effect_type": "read"
+  },
+  "server_name": "browser",
+  "side_effect_hints": [],
+  "source_metadata": {
+    "ambiguity_score_heuristic": 0.6,
+    "args_count": 5,
+    "auth_required": false,
+    "collection_seed": 42,
+    "difficulty_tier": "hard",
+    "documentation_length": 59,
+    "domain": "web/fetch mock",
+    "enum_count": 0,
+    "has_array_argument": false,
+    "has_boolean_flag": true,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "normalized_tool_name": "puppeteer_screenshot",
+    "num_arguments": 5,
+    "num_enum_fields": 0,
+    "num_optional_arguments": 4,
+    "num_required_arguments": 1,
+    "record_order": 35,
+    "required_args_count": 1,
+    "schema_hash": "0925c80afa7b3f8f",
+    "server": "browser",
+    "side_effect_type": "read",
+    "source_category": "converted_toolbench_style",
+    "source_file": "data/raw/mcptoolbenchpp_tools.json",
+    "source_id": "converted_toolbench_local",
+    "source_order": 3,
+    "source_pointer": "data/raw/mcptoolbenchpp_tools.json",
+    "source_server": "browser",
+    "source_type": "converted_toolbench",
+    "synthetic": false,
+    "tool_name": "puppeteer_screenshot"
+  },
+  "source_pointer": "data/raw/mcptoolbenchpp_tools.json",
+  "tool_name": "puppeteer_screenshot",
+  "tool_purpose": "Take a screenshot of the current page or a specific element",
+  "usage_warnings": []
+}

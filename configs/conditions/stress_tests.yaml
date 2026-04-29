@@ -1,0 +1,11 @@
+conditions:
+  - corrupted_skill_invented_arg
+  - corrupted_skill_overbroad
+  - corrupted_skill_unsafe_side_effect
+  - corrupted_skill_malformed_example
+  - corrupted_skill_mixed
+diagnostic_only: true
+adversarial: true
+normal_benchmark_condition: false
+requires_explicit_configuration: true
+stress_skill_root: data/stress_skills

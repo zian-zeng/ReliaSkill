@@ -1,0 +1,73 @@
+seed: 42
+max_tools: 295
+max_tools_per_source: 75
+max_synthetic_fraction: 0.28
+min_domains_required: 10
+min_hard_tools_required: 80
+min_side_effect_tools_required: 30
+outputs:
+  raw_tools: data/raw_mcp/tools.jsonl
+  toolir: data/processed_toolir/tools.jsonl
+  dataset_stats: outputs/tables/dataset_stats.csv
+  domain_complexity_stats: outputs/tables/domain_complexity_stats.csv
+  tool_difficulty_stats: outputs/tables/tool_difficulty_stats.csv
+  dataset_card: outputs/reports/dataset_card.md
+sources:
+  - id: local_mcp_filesystem_fixture
+    type: mcp_fixture
+    path: data/raw/public_mcp_filesystem_subset.json
+    domain: filesystem
+    limit: 20
+
+  - id: local_multidomain_mcp_fixture
+    type: mcp_fixture
+    path: data/raw/sample_tools.json
+    limit: 10
+
+  - id: public_mcp_reference_servers_local
+    type: real_public_mcp
+    path: data/raw/harvested_mcp_reference_servers.json
+    limit: 70
+
+  - id: converted_toolbench_local
+    type: converted_toolbench
+    path: data/raw/mcptoolbenchpp_tools.json
+    limit: 60
+
+  - id: converted_apibank_style_local
+    type: converted_apibank
+    path: data/raw/apibank_style_tools.json
+    limit: 30
+
+  - id: converted_bfcl_v3_api_style
+    type: converted_bfcl
+    path: data/raw/bfcl_v3_tools_subset100.json
+    limit: 50
+
+  - id: converted_bfcl_huggingface_api_style
+    type: converted_api_style
+    path: data/raw/bfcl_huggingface_eval_tools.json
+    domain: math/data processing
+    limit: 50
+
+  - id: converted_bfcl_tensorflow_api_style
+    type: converted_api_style
+    path: data/raw/bfcl_tensorflow_tools.json
+    domain: math/data processing
+    limit: 15
+
+  - id: converted_bfcl_torchhub_api_style
+    type: converted_api_style
+    path: data/raw/bfcl_torchhub_tools.json
+    domain: math/data processing
+    limit: 15
+
+  - id: safe_synthetic_mcp_like_controls
+    type: synthetic_mock
+    synthetic: true
+    count: 48
+    domains:
+      - issue-tracking
+      - messaging/email mock
+      - cloud/storage mock
+      - system/admin mock

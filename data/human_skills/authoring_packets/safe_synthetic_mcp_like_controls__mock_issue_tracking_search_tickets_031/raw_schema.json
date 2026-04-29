@@ -1,0 +1,25 @@
+{
+  "properties": {
+    "assignee": {
+      "description": "Mock assignee username.",
+      "type": "string"
+    },
+    "query": {
+      "description": "Search text.",
+      "type": "string"
+    },
+    "status": {
+      "description": "Ticket status.",
+      "enum": [
+        "open",
+        "blocked",
+        "closed"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "query"
+  ],
+  "type": "object"
+}

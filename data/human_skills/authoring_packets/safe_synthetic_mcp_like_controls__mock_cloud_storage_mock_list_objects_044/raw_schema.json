@@ -1,0 +1,20 @@
+{
+  "properties": {
+    "bucket": {
+      "description": "Mock bucket name.",
+      "type": "string"
+    },
+    "include_metadata": {
+      "description": "Whether to include metadata.",
+      "type": "boolean"
+    },
+    "prefix": {
+      "description": "Object key prefix.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "bucket"
+  ],
+  "type": "object"
+}

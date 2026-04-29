@@ -21,6 +21,11 @@ class AblationTableTests(unittest.TestCase):
                 "without_positive_controls",
                 "without_negative_controls",
                 "without_repair",
+                "repaired_full_regeneration",
+                "repaired_targeted_patch",
+                "repaired_boundary_only",
+                "repaired_example_only",
+                "repaired_taxonomy_conditioned",
                 "full_regeneration_repair",
                 "without_gating",
                 "without_non_use_boundaries",
@@ -47,7 +52,7 @@ class AblationTableTests(unittest.TestCase):
             }
         )
 
-        self.assertEqual(len(rows), 12)
+        self.assertEqual(len(rows), 17)
         self.assertTrue(output_path.exists())
         with output_path.open("r", encoding="utf-8", newline="") as f:
             reader = csv.DictReader(f)
@@ -57,7 +62,7 @@ class AblationTableTests(unittest.TestCase):
             self.assertIn("hsir", reader.fieldnames or [])
             self.assertIn("score", reader.fieldnames or [])
             self.assertIn("score_ci_low", reader.fieldnames or [])
-            self.assertEqual(len(list(reader)), 12)
+            self.assertEqual(len(list(reader)), 17)
 
     def test_ablation_script_smoke_config(self) -> None:
         config_path = Path("outputs/ablations/test_ablation_smoke.yaml")

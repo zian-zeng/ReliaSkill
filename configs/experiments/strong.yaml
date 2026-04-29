@@ -1,0 +1,110 @@
+experiment_scale: strong_emnlp
+description: Strong reviewer-facing ReliaSkill run under one RTX 5070 Ti.
+seed: 42
+tools_path: data/raw_mcp/tools.jsonl
+tasks_path: data/controls/test.jsonl
+output_root: outputs/strong_emnlp
+
+target_tools: 250
+target_tool_range: [200, 300]
+target_domains: 10
+positives_per_tool: 5
+negatives_per_tool: 5
+routing_candidate_sizes: [8, 16]
+live_execution:
+  enabled: true
+  subset_size: 100
+  domains: [filesystem, database/sql, git/version-control]
+
+models:
+  - configs/models/qwen2_5_3b_instruct_4bit.yaml
+  - configs/models/qwen2_5_7b_instruct_4bit.yaml
+
+conditions:
+  - raw_mcp
+  - schema_only
+  - docs_only
+  - raw_schema_plus_examples
+  - generated_docs_no_validation
+  - naive_skill
+  - validated_skill
+  - repaired_skill
+  - gated_skill
+  - multi_candidate_skill_k3_validation_select
+  - multi_candidate_skill_k3_behavior_select
+  - multi_candidate_repaired_gated
+  - repaired_full_regeneration
+  - repaired_targeted_patch
+  - repaired_boundary_only
+  - repaired_example_only
+  - repaired_taxonomy_conditioned
+  - skill_ultra_compact
+  - skill_compact
+  - skill_medium
+  - skill_verbose
+  - generated_docs_verbose
+  - raw_docs_full
+  - skill_prompt_compact_default
+  - skill_prompt_boundary_first
+  - skill_prompt_example_rich
+  - skill_prompt_safety_aware
+  - skill_prompt_verbose_docs
+
+data:
+  config: configs/data/emnlp_scale.yaml
+  max_tools: 250
+  min_domains_required: 10
+controls:
+  config: configs/controls/emnlp_scale.yaml
+  positives_per_tool_total: 5
+  negatives_per_tool_total: 5
+routing:
+  config: configs/routing/distractor_inventory.yaml
+  candidate_set_sizes: [8, 16]
+skills:
+  multi_candidate_config: configs/skills/multi_candidate.yaml
+  candidate_k: 3
+  compactness_config: configs/skills/compactness_variants.yaml
+repair:
+  config: configs/repair/repair_strategies.yaml
+
+scheduler:
+  one_gpu: true
+  resume: true
+  group_by_model: true
+  run_all_conditions_before_unload: true
+  max_batch_size: 2
+  prompt_safety_margin_tokens: 256
+  include_routing: true
+  examples_per_second: 0.25
+  estimated_bytes_per_call: 4096
+  estimated_bytes_per_token: 1.25
+  condition_token_overheads:
+    raw_mcp: 900
+    schema_only: 450
+    docs_only: 350
+    raw_schema_plus_examples: 950
+    generated_docs_no_validation: 900
+    naive_skill: 300
+    validated_skill: 350
+    repaired_skill: 450
+    gated_skill: 475
+    multi_candidate_skill_k3_validation_select: 350
+    multi_candidate_skill_k3_behavior_select: 400
+    multi_candidate_repaired_gated: 450
+    repaired_full_regeneration: 700
+    repaired_targeted_patch: 450
+    repaired_boundary_only: 425
+    repaired_example_only: 425
+    repaired_taxonomy_conditioned: 500
+    skill_ultra_compact: 150
+    skill_compact: 300
+    skill_medium: 600
+    skill_verbose: 1200
+    generated_docs_verbose: 1200
+    raw_docs_full: 1600
+    skill_prompt_compact_default: 300
+    skill_prompt_boundary_first: 350
+    skill_prompt_example_rich: 500
+    skill_prompt_safety_aware: 400
+    skill_prompt_verbose_docs: 1200

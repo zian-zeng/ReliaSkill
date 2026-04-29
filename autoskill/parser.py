@@ -167,10 +167,15 @@ def parse_mcp_tool(raw_tool: Dict[str, Any], source_pointer: str | None = None) 
 
     schema_complexity = {
         "num_top_level_arguments": len(arguments),
+        "num_arguments": len(arguments),
         "num_required_arguments": sum(1 for arg in arguments if arg.required),
         "num_optional_arguments": sum(1 for arg in arguments if not arg.required),
         "num_enum_arguments": sum(1 for arg in arguments if arg.enum),
+        "num_enum_fields": sum(1 for arg in arguments if arg.enum),
         "num_nested_object_arguments": sum(1 for arg in arguments if arg.type == "object"),
+        "has_nested_object": any(arg.type == "object" for arg in arguments),
+        "has_array_argument": any(arg.type == "array" for arg in arguments),
+        "has_boolean_flag": any(arg.type == "boolean" for arg in arguments),
         "max_schema_depth": _schema_depth(input_schema),
     }
     side_effect_hints = _extract_side_effect_hints(tool_name, description)

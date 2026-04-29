@@ -1,0 +1,21 @@
+{
+  "properties": {
+    "distance": {
+      "description": "The distance travelled by the object, typically in kilometers.",
+      "type": "integer"
+    },
+    "duration": {
+      "description": "The duration of the journey, typically in hours.",
+      "type": "integer"
+    },
+    "unit": {
+      "description": "Optional parameter. The unit to return the velocity in. If not provided, the default is km/h.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "distance",
+    "duration"
+  ],
+  "type": "object"
+}

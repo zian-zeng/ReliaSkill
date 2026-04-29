@@ -151,6 +151,19 @@ class RepairReport:
     rounds: int = 0
     actions: List[RepairAction] = field(default_factory=list)
     remaining_issues: List[ValidationIssue] = field(default_factory=list)
+    strategy: str = ""
+    original_skill_hash: str = ""
+    repaired_skill_hash: str = ""
+    failure_type: str = ""
+    modified_sections: List[str] = field(default_factory=list)
+    patch_text: str = ""
+    validation_before: Dict[str, Any] = field(default_factory=dict)
+    validation_after: Dict[str, Any] = field(default_factory=dict)
+    behavior_before_dev: Dict[str, Any] = field(default_factory=dict)
+    behavior_after_dev: Dict[str, Any] = field(default_factory=dict)
+    repair_round: int = 0
+    repair_success: bool = False
+    repair_trace: List[Dict[str, Any]] = field(default_factory=list)
 
     def model_dump(self) -> Dict[str, Any]:
         return asdict(self)

@@ -1,0 +1,31 @@
+{
+  "properties": {
+    "conflict_policy": {
+      "description": "Conflict handling policy.",
+      "enum": [
+        "error",
+        "ignore",
+        "update"
+      ],
+      "type": "string"
+    },
+    "database": {
+      "description": "Fixture database name.",
+      "type": "string"
+    },
+    "record": {
+      "description": "Record fields to insert.",
+      "type": "object"
+    },
+    "table": {
+      "description": "Mock table name.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "database",
+    "table",
+    "record"
+  ],
+  "type": "object"
+}

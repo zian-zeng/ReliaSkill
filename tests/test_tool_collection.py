@@ -64,6 +64,8 @@ class ToolCollectionTests(unittest.TestCase):
                 "raw_tools": str(tmpdir_path / "raw" / "tools.jsonl"),
                 "toolir": str(tmpdir_path / "toolir" / "tools.jsonl"),
                 "dataset_stats": str(tmpdir_path / "tables" / "dataset_stats.csv"),
+                "domain_complexity_stats": str(tmpdir_path / "tables" / "domain_complexity_stats.csv"),
+                "tool_difficulty_stats": str(tmpdir_path / "tables" / "tool_difficulty_stats.csv"),
                 "dataset_card": str(tmpdir_path / "reports" / "dataset_card.md"),
             }
             config["max_tools"] = 100
@@ -78,10 +80,14 @@ class ToolCollectionTests(unittest.TestCase):
             raw_path = Path(config["outputs"]["raw_tools"])
             toolir_path = Path(config["outputs"]["toolir"])
             stats_path = Path(config["outputs"]["dataset_stats"])
+            domain_stats_path = Path(config["outputs"]["domain_complexity_stats"])
+            difficulty_stats_path = Path(config["outputs"]["tool_difficulty_stats"])
             card_path = Path(config["outputs"]["dataset_card"])
             self.assertTrue(raw_path.exists())
             self.assertTrue(toolir_path.exists())
             self.assertTrue(stats_path.exists())
+            self.assertTrue(domain_stats_path.exists())
+            self.assertTrue(difficulty_stats_path.exists())
             self.assertTrue(card_path.exists())
 
             raw_records = [json.loads(line) for line in raw_path.read_text(encoding="utf-8").splitlines()]
@@ -93,6 +99,17 @@ class ToolCollectionTests(unittest.TestCase):
                 rows = list(csv.DictReader(f))
             self.assertTrue(rows)
             self.assertIn("source_id", rows[0])
+            self.assertIn("hard_count", rows[0])
+
+            with domain_stats_path.open("r", encoding="utf-8") as f:
+                domain_rows = list(csv.DictReader(f))
+            self.assertTrue(domain_rows)
+            self.assertIn("avg_ambiguity_score", domain_rows[0])
+
+            with difficulty_stats_path.open("r", encoding="utf-8") as f:
+                difficulty_rows = list(csv.DictReader(f))
+            self.assertTrue(difficulty_rows)
+            self.assertIn("difficulty_tier", difficulty_rows[0])
 
 
 if __name__ == "__main__":

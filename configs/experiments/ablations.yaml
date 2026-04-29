@@ -30,6 +30,26 @@ conditions:
     label: w/o repair
     targeted_repair: false
     behavior_repair: false
+  - id: repaired_full_regeneration
+    label: "repair: full regeneration"
+    repair_strategy: full_regeneration
+    behavior_repair_strategy: full_regeneration
+  - id: repaired_targeted_patch
+    label: "repair: targeted patch"
+    repair_strategy: targeted_section_patch
+    behavior_repair_strategy: targeted_section_patch
+  - id: repaired_boundary_only
+    label: "repair: boundary only"
+    repair_strategy: nonuse_boundary_patch
+    behavior_repair_strategy: nonuse_boundary_patch
+  - id: repaired_example_only
+    label: "repair: example only"
+    repair_strategy: example_repair
+    behavior_repair_strategy: example_repair
+  - id: repaired_taxonomy_conditioned
+    label: "repair: taxonomy conditioned"
+    repair_strategy: failure_taxonomy_repair
+    behavior_repair_strategy: failure_taxonomy_repair
   - id: full_regeneration_repair
     label: full regeneration instead of targeted repair
     full_regeneration_repair: true

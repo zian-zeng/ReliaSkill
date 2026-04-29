@@ -1,0 +1,131 @@
+{
+  "ambiguity_flags": [
+    "missing_argument_description:path",
+    "missing_argument_description:sortBy",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "arguments": [
+    {
+      "default": null,
+      "description": null,
+      "enum": null,
+      "format": null,
+      "items_type": null,
+      "name": "path",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.path",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "description": null,
+      "enum": [
+        "name",
+        "size"
+      ],
+      "format": null,
+      "items_type": null,
+      "name": "sortBy",
+      "nullable": false,
+      "properties": null,
+      "required": true,
+      "required_properties": [],
+      "schema_path": "$.properties.sortBy",
+      "type": "string"
+    }
+  ],
+  "auth_or_env_notes": null,
+  "difficulty_tier": "hard",
+  "doc_completeness": 0.6,
+  "doc_snippets": [
+    "Get a detailed listing of all files and directories in a specified path, including sizes. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is useful for understanding directory structure and finding specific files within a directory. Only works within allowed directories.",
+    "List Directory with Sizes"
+  ],
+  "domain": "filesystem",
+  "input_schema_raw": {
+    "properties": {
+      "path": {
+        "type": "string"
+      },
+      "sortBy": {
+        "enum": [
+          "name",
+          "size"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "path",
+      "sortBy"
+    ],
+    "type": "object"
+  },
+  "output_hint": null,
+  "provenance": {
+    "raw_name": "list_directory_with_sizes",
+    "server_name": "filesystem",
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  "safety_hints": [],
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 323,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 2,
+    "num_enum_arguments": 1,
+    "num_enum_fields": 1,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 2,
+    "side_effect_type": "read"
+  },
+  "server_name": "filesystem",
+  "side_effect_hints": [],
+  "source_metadata": {
+    "ambiguity_score_heuristic": 0.5,
+    "args_count": 2,
+    "auth_required": false,
+    "collection_seed": 42,
+    "difficulty_tier": "hard",
+    "documentation_length": 323,
+    "domain": "filesystem",
+    "enum_count": 1,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "normalized_tool_name": "list_directory_with_sizes",
+    "num_arguments": 2,
+    "num_enum_fields": 1,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 2,
+    "record_order": 6,
+    "required_args_count": 2,
+    "schema_hash": "99c41f1a85df9bfa",
+    "server": "filesystem",
+    "side_effect_type": "read",
+    "source_category": "real_public_mcp_schema_local",
+    "source_file": "data/raw/harvested_mcp_reference_servers.json",
+    "source_id": "public_mcp_reference_servers_local",
+    "source_order": 2,
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts",
+    "source_server": "filesystem",
+    "source_type": "real_public_mcp",
+    "synthetic": false,
+    "tool_name": "list_directory_with_sizes"
+  },
+  "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts",
+  "tool_name": "list_directory_with_sizes",
+  "tool_purpose": "Get a detailed listing of all files and directories in a specified path, including sizes. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is useful for understanding directory structure and finding specific files within a directory. Only works within allowed directories.",
+  "usage_warnings": []
+}

@@ -1,0 +1,25 @@
+seed: 42
+tools_path: data/processed_toolir/tools.jsonl
+dev_controls_path: data/controls/dev.jsonl
+output_dir: skills
+candidate_k: 3
+max_tools: null
+generation_backend:
+  type: heuristic
+  ablation_mode: base_only
+candidate_strategies:
+  - concise_default
+  - boundary_heavy
+  - example_heavy
+  - safety_first
+  - minimal_token
+selection_policy: best_behavior_dev
+allow_oracle_upper_bound_dev: false
+repair_selected: false
+gate_selected: false
+max_repair_rounds: 2
+conditions:
+  - naive_skill_k1
+  - multi_candidate_skill_k3_validation_select
+  - multi_candidate_skill_k3_behavior_select
+  - multi_candidate_repaired_gated

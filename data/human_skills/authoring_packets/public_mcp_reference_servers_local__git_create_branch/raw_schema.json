@@ -1,0 +1,19 @@
+{
+  "properties": {
+    "base_branch": {
+      "nullable": true,
+      "type": "string"
+    },
+    "branch_name": {
+      "type": "string"
+    },
+    "repo_path": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "repo_path",
+    "branch_name"
+  ],
+  "type": "object"
+}

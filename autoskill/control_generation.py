@@ -17,6 +17,12 @@ DEFAULT_CONFIG = {
     "seed": 42,
     "tools_path": "data/processed_toolir/tools.jsonl",
     "positive_controls_per_tool": 5,
+    "positives_per_tool_easy": None,
+    "positives_per_tool_medium": None,
+    "positives_per_tool_hard": None,
+    "negatives_per_tool_easy": None,
+    "negatives_per_tool_medium": None,
+    "negatives_per_tool_hard": None,
     "negative_categories": [
         "adjacent_intent",
         "known_path_no_search_needed",
@@ -30,6 +36,8 @@ DEFAULT_CONFIG = {
         "dev": "data/controls/dev.jsonl",
         "test": "data/controls/test.jsonl",
         "stats": "outputs/tables/control_stats.csv",
+        "difficulty_stats": "outputs/tables/control_difficulty_stats.csv",
+        "negative_category_stats": "outputs/tables/negative_category_stats.csv",
     },
 }
 
@@ -44,11 +52,42 @@ def load_control_config(path: str | Path) -> Dict[str, Any]:
     if not isinstance(loaded, dict):
         raise ValueError("Control config must be a mapping.")
     config = _merge_dicts(DEFAULT_CONFIG, loaded)
-    if int(config.get("positive_controls_per_tool", 0)) < 3:
+    _normalize_output_paths(config, loaded)
+    if _tiered_generation_enabled(config):
+        for key in TIERED_COUNT_KEYS:
+            if int(config.get(key) or 0) < 0:
+                raise ValueError(f"{key} must be non-negative.")
+        if sum(int(config.get(key) or 0) for key in TIERED_COUNT_KEYS) <= 0:
+            raise ValueError("At least one tiered control count must be positive.")
+    elif int(config.get("positive_controls_per_tool", 0)) < 3:
         raise ValueError("positive_controls_per_tool must be at least 3.")
     if len(config.get("negative_categories") or []) < 3:
         raise ValueError("At least 3 negative categories are required.")
     return config
+
+
+TIERED_COUNT_KEYS = (
+    "positives_per_tool_easy",
+    "positives_per_tool_medium",
+    "positives_per_tool_hard",
+    "negatives_per_tool_easy",
+    "negatives_per_tool_medium",
+    "negatives_per_tool_hard",
+)
+
+
+def _tiered_generation_enabled(config: Dict[str, Any]) -> bool:
+    return any(config.get(key) is not None for key in TIERED_COUNT_KEYS)
+
+
+def _normalize_output_paths(config: Dict[str, Any], loaded: Dict[str, Any]) -> None:
+    loaded_outputs = loaded.get("outputs") if isinstance(loaded.get("outputs"), dict) else {}
+    outputs = config["outputs"]
+    stats_path = Path(str(outputs.get("stats") or DEFAULT_CONFIG["outputs"]["stats"]))
+    if "difficulty_stats" not in loaded_outputs:
+        outputs["difficulty_stats"] = str(stats_path.parent / "control_difficulty_stats.csv")
+    if "negative_category_stats" not in loaded_outputs:
+        outputs["negative_category_stats"] = str(stats_path.parent / "negative_category_stats.csv")
 
 
 def _merge_dicts(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
@@ -96,13 +135,19 @@ def build_controls(config: Dict[str, Any]) -> List[Dict[str, Any]]:
     seed = int(config.get("seed", 42))
     random.seed(seed)
     tools = load_toolir_records(config["tools_path"])
-    positive_count = int(config["positive_controls_per_tool"])
-    negative_categories = [str(item) for item in config.get("negative_categories") or []]
     controls: List[Dict[str, Any]] = []
-    for tool_index, tool in enumerate(tools):
-        controls.extend(_positive_controls(tool, tool_index, positive_count, seed))
-        for category_index, category in enumerate(negative_categories):
-            controls.append(_negative_control(tool, tools, tool_index, category_index, category, seed))
+    if _tiered_generation_enabled(config):
+        for tool_index, tool in enumerate(tools):
+            controls.extend(_tiered_positive_controls(tool, tools, tool_index, config, seed))
+            controls.extend(_tiered_negative_controls(tool, tools, tool_index, config, seed))
+    else:
+        positive_count = int(config["positive_controls_per_tool"])
+        negative_categories = [str(item) for item in config.get("negative_categories") or []]
+        for tool_index, tool in enumerate(tools):
+            controls.extend(_positive_controls(tool, tool_index, positive_count, seed))
+            for category_index, category in enumerate(negative_categories):
+                controls.append(_negative_control(tool, tools, tool_index, category_index, category, seed))
+    controls = _avoid_cross_split_duplicate_requests(controls)
     return sorted(controls, key=lambda item: (item["split"], item["gold_tool"], item["category"], item["id"]))
 
 
@@ -132,6 +177,98 @@ def _positive_controls(tool: Dict[str, Any], tool_index: int, count: int, seed: 
             )
         )
     return controls
+
+
+def _tiered_positive_controls(
+    tool: Dict[str, Any],
+    tools: Sequence[Dict[str, Any]],
+    tool_index: int,
+    config: Dict[str, Any],
+    seed: int,
+) -> List[Dict[str, Any]]:
+    controls: List[Dict[str, Any]] = []
+    counts = {
+        "easy": int(config.get("positives_per_tool_easy") or 0),
+        "medium": int(config.get("positives_per_tool_medium") or 0),
+        "hard": int(config.get("positives_per_tool_hard") or 0),
+    }
+    for difficulty, count in counts.items():
+        for variant in range(count):
+            other = _select_adjacent_tool(tool, tools, "adjacent_intent")
+            include_optional = difficulty in {"medium", "hard"}
+            args = _sample_arguments(tool, variant + _difficulty_offset(difficulty), include_optional=include_optional)
+            if difficulty == "hard":
+                args = _ensure_complex_argument_use(tool, args, variant)
+            request, rationale, failure_mode = _positive_tier_request(tool, other, args, difficulty, variant)
+            split = _tiered_split("positive", difficulty, variant)
+            controls.append(
+                _control_record(
+                    control_id=f"ctrl_{tool_index:04d}_{_slug(tool['tool_name'])}_positive_{difficulty}_{variant}",
+                    tool=tool,
+                    user_request=request,
+                    category=f"positive_{difficulty}",
+                    gold_tool=tool["tool_name"],
+                    gold_args=args,
+                    should_trigger=True,
+                    split=split,
+                    rationale=rationale,
+                    seed=seed,
+                    tags=["positive", f"positive_{difficulty}", difficulty, "target_use"],
+                    difficulty=difficulty,
+                    control_family="positive",
+                    expected_failure_mode=failure_mode,
+                    alternative_valid_tools=[],
+                )
+            )
+    return controls
+
+
+def _positive_tier_request(
+    tool: Dict[str, Any],
+    other: Dict[str, Any] | None,
+    args: Dict[str, Any],
+    difficulty: str,
+    variant: int,
+) -> tuple[str, str, str]:
+    title = _tool_title(tool)
+    purpose = _purpose_fragment(tool)
+    arg_text = _format_args(args)
+    other_title = _tool_title(other) if other else "a nearby tool"
+    if difficulty == "easy":
+        return (
+            f"Use {title} to {purpose}. Set {arg_text}.",
+            "Easy positive: direct request, clear target intent, and all required arguments are explicit.",
+            "none_target_tool_should_trigger",
+        )
+    if difficulty == "medium":
+        templates = [
+            f"I need help with this task: {purpose}. The relevant details are {arg_text}.",
+            f"Please handle the request to {purpose}; include these details where applicable: {arg_text}.",
+        ]
+        return (
+            templates[variant % len(templates)],
+            "Medium positive: paraphrased intent with optional details and mild ambiguity, but enough information to invoke the target tool.",
+            "paraphrase_or_optional_arg_miss",
+        )
+    return (
+        f"I am trying to get this done without using {other_title}: {purpose}. Use the best matching tool and apply {arg_text}; leave any unspecified optional details at their defaults.",
+        "Hard positive: indirect request with distractor pressure and complex or optional argument use while preserving a valid target invocation.",
+        "distractor_confusion_or_complex_argument_miss",
+    )
+
+
+def _difficulty_offset(difficulty: str) -> int:
+    return {"easy": 0, "medium": 7, "hard": 17}.get(difficulty, 0)
+
+
+def _ensure_complex_argument_use(tool: Dict[str, Any], args: Dict[str, Any], variant: int) -> Dict[str, Any]:
+    enriched = dict(args)
+    for arg in tool.get("arguments", []) or []:
+        if arg.get("name") in enriched:
+            continue
+        if arg.get("enum") or arg.get("type") in {"object", "array", "boolean"}:
+            enriched[arg["name"]] = _sample_value(arg, variant + 17)
+    return enriched
 
 
 def _negative_control(
@@ -165,6 +302,185 @@ def _negative_control(
         expected_tool_name=gold_tool if gold_tool != "__abstain__" else None,
         tags=["negative", category],
     )
+
+
+def _tiered_negative_controls(
+    tool: Dict[str, Any],
+    tools: Sequence[Dict[str, Any]],
+    tool_index: int,
+    config: Dict[str, Any],
+    seed: int,
+) -> List[Dict[str, Any]]:
+    controls: List[Dict[str, Any]] = []
+    counts = {
+        "easy": int(config.get("negatives_per_tool_easy") or 0),
+        "medium": int(config.get("negatives_per_tool_medium") or 0),
+        "hard": int(config.get("negatives_per_tool_hard") or 0),
+    }
+    category_plan = {
+        "easy": ["out_of_domain_request"],
+        "medium": [
+            "adjacent_wrong_intent",
+            "explanation_instead_of_action",
+            "known_path_no_search_needed",
+            "read_vs_search_mismatch",
+        ],
+        "hard": [
+            "near_miss_intent",
+            "destructive_vs_readonly_mismatch",
+            "similar_tool_should_be_used",
+            "missing_required_info",
+            "ambiguous_abstain_safer",
+        ],
+    }
+    for difficulty, count in counts.items():
+        for variant in range(count):
+            category = category_plan[difficulty][(tool_index + variant) % len(category_plan[difficulty])]
+            other = _select_adjacent_tool(tool, tools, _legacy_negative_category(category))
+            request, rationale, expected_failure_mode = _negative_tier_request(category, difficulty, tool, other)
+            alternative_tools = _alternative_valid_tools(category, other)
+            if category == "similar_tool_should_be_used" and other:
+                gold_tool = other["tool_name"]
+                gold_args = _sample_arguments(other, variant + _difficulty_offset(difficulty), include_optional=False)
+                expected_tool_name = gold_tool
+            else:
+                gold_tool = "__abstain__"
+                gold_args = {}
+                expected_tool_name = None
+            split = _tiered_split("negative", difficulty, variant)
+            controls.append(
+                _control_record(
+                    control_id=f"ctrl_{tool_index:04d}_{_slug(tool['tool_name'])}_negative_{difficulty}_{variant}_{category}",
+                    tool=tool,
+                    user_request=request,
+                    category=f"negative_{difficulty}",
+                    gold_tool=gold_tool,
+                    gold_args=gold_args,
+                    should_trigger=False,
+                    split=split,
+                    rationale=rationale,
+                    seed=seed,
+                    negative_target=tool["tool_name"],
+                    expected_tool_name=expected_tool_name,
+                    tags=["negative", f"negative_{difficulty}", difficulty, category],
+                    difficulty=difficulty,
+                    control_family="negative",
+                    negative_category=category,
+                    expected_failure_mode=expected_failure_mode,
+                    alternative_valid_tools=alternative_tools,
+                )
+            )
+    return controls
+
+
+def _legacy_negative_category(category: str) -> str:
+    mapping = {
+        "adjacent_wrong_intent": "adjacent_intent",
+        "explanation_instead_of_action": "wrong_tool_boundary",
+        "read_vs_search_mismatch": "known_path_no_search_needed",
+        "near_miss_intent": "adjacent_intent",
+        "destructive_vs_readonly_mismatch": "destructive_action_mismatch",
+        "similar_tool_should_be_used": "wrong_tool_boundary",
+        "ambiguous_abstain_safer": "missing_required_info",
+    }
+    return mapping.get(category, category)
+
+
+def _alternative_valid_tools(category: str, other: Dict[str, Any] | None) -> List[str]:
+    if category == "similar_tool_should_be_used" and other:
+        return [str(other["tool_name"])]
+    return []
+
+
+def _negative_tier_request(
+    category: str,
+    difficulty: str,
+    tool: Dict[str, Any],
+    other: Dict[str, Any] | None,
+) -> tuple[str, str, str]:
+    target_title = _tool_title(tool)
+    target_purpose = _purpose_fragment(tool)
+    other_title = _tool_title(other) if other else "a different tool"
+    other_purpose = _purpose_fragment(other) if other else "handle the neighboring task"
+    required = [arg["name"] for arg in tool.get("arguments", []) if arg.get("required")]
+    missing_arg = required[0] if required else "the required input"
+    if category == "out_of_domain_request":
+        return (
+            f"Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to {target_title}.",
+            "Easy negative: clearly unrelated user request should abstain from the target tool.",
+            "out_of_domain_false_trigger",
+        )
+    if category == "adjacent_wrong_intent":
+        return (
+            f"I need to {other_purpose}. This is adjacent to {target_title}, but the intended capability is {other_title}.",
+            "Medium negative: neighboring intent belongs outside the target tool boundary.",
+            "adjacent_tool_confusion",
+        )
+    if category == "explanation_instead_of_action":
+        return (
+            f"Explain when someone should use {target_title}; do not actually call it or perform the action.",
+            "Medium negative: asks for explanation rather than tool execution.",
+            "explanation_triggered_as_action",
+        )
+    if category == "known_path_no_search_needed":
+        return (
+            f"I already know the exact path docs/known_file.md, so no search or discovery is needed with {target_title}.",
+            "Medium negative: known-path request should not trigger search-style behavior.",
+            "known_path_search_misfire",
+        )
+    if category == "read_vs_search_mismatch":
+        return (
+            f"Read the exact item I named directly; do not search, retrieve candidates, or browse with {target_title}.",
+            "Medium negative: direct read intent should not be treated as retrieval/search.",
+            "read_vs_search_boundary_error",
+        )
+    if category == "near_miss_intent":
+        return (
+            f"This sounds close to {target_title}, but I only want a checklist for how to {target_purpose}; no tool call yet.",
+            "Hard negative: near-miss wording resembles the target but explicitly requests planning only.",
+            "near_miss_false_trigger",
+        )
+    if category == "destructive_vs_readonly_mismatch":
+        if _side_effect(tool) in WRITE_EFFECTS:
+            request = f"Only inspect what would happen before using {target_title}; do not create, update, delete, send, execute, or mutate anything."
+        else:
+            request = f"I need a change made, not a read-only lookup with {target_title}; do not satisfy this with a read/search tool."
+        return (
+            request,
+            "Hard negative: request crosses destructive/read-only boundary and should not trigger the target.",
+            "side_effect_boundary_error",
+        )
+    if category == "similar_tool_should_be_used":
+        return (
+            f"Use {other_title} to {other_purpose}; {target_title} is a distractor and should not be called.",
+            "Hard negative: a similar valid tool should be selected instead of the target.",
+            "similar_tool_distractor_error",
+        )
+    if category == "missing_required_info":
+        return (
+            f"I may need {target_title} to {target_purpose}, but I do not know {missing_arg} yet.",
+            "Hard negative: required information is missing, so abstention is safer.",
+            "missing_required_argument_false_trigger",
+        )
+    return (
+        f"Maybe do something with {target_title}; actually, I am not sure what input or action is intended.",
+        "Hard negative: ambiguous request where abstention is safer than guessing.",
+        "ambiguous_request_should_abstain",
+    )
+
+
+def _tiered_split(control_family: str, difficulty: str, variant: int) -> str:
+    if control_family == "positive":
+        if difficulty == "easy":
+            return "dev"
+        if difficulty == "medium":
+            return "dev" if variant % 2 == 0 else "test"
+        return "test"
+    if difficulty == "easy":
+        return "dev"
+    if difficulty == "medium":
+        return "dev" if variant % 2 == 0 else "test"
+    return "test" if variant % 2 == 0 else "dev"
 
 
 def _negative_request_and_rationale(
@@ -238,19 +554,34 @@ def _control_record(
     tags: List[str],
     negative_target: str | None = None,
     expected_tool_name: str | None = None,
+    difficulty: str = "legacy",
+    control_family: str | None = None,
+    negative_category: str | None = None,
+    expected_failure_mode: str = "legacy_boundary",
+    alternative_valid_tools: List[str] | None = None,
 ) -> Dict[str, Any]:
+    family = control_family or ("positive" if should_trigger else "negative")
+    negative_label = negative_category if family == "negative" else None
+    alternatives = list(alternative_valid_tools or [])
     record = {
         "id": control_id,
+        "control_id": control_id,
         "task_id": control_id,
         "function": tool["tool_name"],
         "tool_name": tool["tool_name"],
         "question": user_request,
         "user_request": user_request,
         "category": category,
+        "difficulty": difficulty,
+        "control_family": family,
+        "negative_category": negative_label,
+        "expected_failure_mode": expected_failure_mode,
         "gold_tool": gold_tool,
         "gold_args": gold_args,
+        "alternative_valid_tools": alternatives,
         "ground_truth": {"arguments": gold_args},
         "expected_arguments": gold_args,
+        "expected_argument_candidates": [gold_args],
         "should_trigger": should_trigger,
         "split": split,
         "rationale": rationale,
@@ -287,6 +618,24 @@ def _select_adjacent_tool(tool: Dict[str, Any], tools: Sequence[Dict[str, Any]],
         if non_destructive:
             return non_destructive[0]
     return candidates[0] if candidates else None
+
+
+def _avoid_cross_split_duplicate_requests(controls: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    first_split_by_request: Dict[str, str] = {}
+    adjusted: List[Dict[str, Any]] = []
+    for control in controls:
+        record = dict(control)
+        request = str(record.get("user_request") or "")
+        split = str(record.get("split") or "")
+        previous_split = first_split_by_request.get(request)
+        if previous_split and previous_split != split:
+            suffix = f" Use trace id {record['control_id']} for this benchmark item."
+            request = f"{request}{suffix}"
+            record["user_request"] = request
+            record["question"] = request
+        first_split_by_request.setdefault(request, split)
+        adjusted.append(record)
+    return adjusted
 
 
 def _sample_arguments(tool: Dict[str, Any] | None, variant: int, *, include_optional: bool) -> Dict[str, Any]:
@@ -393,6 +742,8 @@ def write_controls_outputs(config: Dict[str, Any], controls: Sequence[Dict[str, 
     _write_jsonl(outputs["dev"], dev)
     _write_jsonl(outputs["test"], test)
     write_control_stats(outputs["stats"], controls)
+    write_control_difficulty_stats(outputs["difficulty_stats"], controls)
+    write_negative_category_stats(outputs["negative_category_stats"], controls)
     return {key: str(value) for key, value in outputs.items()}
 
 
@@ -418,6 +769,68 @@ def write_control_stats(path: str | Path, controls: Sequence[Dict[str, Any]]) ->
             )
 
 
+def write_control_difficulty_stats(path: str | Path, controls: Sequence[Dict[str, Any]]) -> None:
+    grouped: Dict[tuple[str, str, str, bool], List[Dict[str, Any]]] = defaultdict(list)
+    for control in controls:
+        grouped[
+            (
+                str(control.get("split") or "unknown"),
+                str(control.get("difficulty") or "unknown"),
+                str(control.get("control_family") or "unknown"),
+                bool(control.get("should_trigger")),
+            )
+        ].append(control)
+    output_path = Path(path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = ["split", "difficulty", "control_family", "should_trigger", "control_count", "tool_count"]
+    with output_path.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for (split, difficulty, family, should_trigger), items in sorted(grouped.items()):
+            writer.writerow(
+                {
+                    "split": split,
+                    "difficulty": difficulty,
+                    "control_family": family,
+                    "should_trigger": should_trigger,
+                    "control_count": len(items),
+                    "tool_count": len({item.get("tool_key") or item["tool_name"] for item in items}),
+                }
+            )
+
+
+def write_negative_category_stats(path: str | Path, controls: Sequence[Dict[str, Any]]) -> None:
+    negatives = [control for control in controls if not bool(control.get("should_trigger"))]
+    grouped: Dict[tuple[str, str, str, str], List[Dict[str, Any]]] = defaultdict(list)
+    for control in negatives:
+        grouped[
+            (
+                str(control.get("split") or "unknown"),
+                str(control.get("difficulty") or "unknown"),
+                str(control.get("negative_category") or control.get("category") or "unknown"),
+                str(control.get("expected_failure_mode") or "unknown"),
+            )
+        ].append(control)
+    output_path = Path(path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = ["split", "difficulty", "negative_category", "expected_failure_mode", "control_count", "tool_count", "alternative_tool_count"]
+    with output_path.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for (split, difficulty, category, failure_mode), items in sorted(grouped.items()):
+            writer.writerow(
+                {
+                    "split": split,
+                    "difficulty": difficulty,
+                    "negative_category": category,
+                    "expected_failure_mode": failure_mode,
+                    "control_count": len(items),
+                    "tool_count": len({item.get("tool_key") or item["tool_name"] for item in items}),
+                    "alternative_tool_count": sum(1 for item in items if item.get("alternative_valid_tools")),
+                }
+            )
+
+
 def summarize_controls(controls: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
     per_tool = defaultdict(lambda: Counter({"positive": 0, "negative": 0}))
     for control in controls:
@@ -433,6 +846,8 @@ def summarize_controls(controls: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
         "min_positive_per_tool": min_positive,
         "min_negative_per_tool": min_negative,
         "categories": dict(sorted(Counter(item["category"] for item in controls).items())),
+        "difficulties": dict(sorted(Counter(str(item.get("difficulty") or "unknown") for item in controls).items())),
+        "families": dict(sorted(Counter(str(item.get("control_family") or "unknown") for item in controls).items())),
     }
 
 

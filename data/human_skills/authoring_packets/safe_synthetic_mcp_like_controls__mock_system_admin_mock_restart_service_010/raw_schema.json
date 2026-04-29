@@ -1,0 +1,30 @@
+{
+  "properties": {
+    "dry_run": {
+      "description": "When true, validate the request without changing the mock system.",
+      "type": "boolean"
+    },
+    "environment": {
+      "description": "Allowed mock environment.",
+      "enum": [
+        "dev",
+        "staging"
+      ],
+      "type": "string"
+    },
+    "reason": {
+      "description": "Operational reason.",
+      "type": "string"
+    },
+    "service_name": {
+      "description": "Mock service name.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "service_name",
+    "environment",
+    "reason"
+  ],
+  "type": "object"
+}

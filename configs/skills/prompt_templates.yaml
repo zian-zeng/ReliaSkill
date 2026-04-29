@@ -1,0 +1,27 @@
+seed: 42
+tools_path: data/processed_toolir/tools.jsonl
+dev_controls_path: data/controls/dev.jsonl
+output_dir: skills
+max_tools: null
+generation_backend:
+  type: heuristic
+  ablation_mode: base_only
+prompt_templates:
+  enabled: true
+  output_root: generated_skills
+  stats_path: outputs/tables/prompt_template_generation_stats.csv
+  include_dev_controls: true
+  template_ids:
+    - compact_default
+    - boundary_first
+    - schema_faithful_minimal
+    - example_rich
+    - safety_side_effect_aware
+    - negative_control_aware_dev_only
+    - verbose_docs_style
+conditions:
+  - skill_prompt_compact_default
+  - skill_prompt_boundary_first
+  - skill_prompt_example_rich
+  - skill_prompt_safety_aware
+  - skill_prompt_verbose_docs
