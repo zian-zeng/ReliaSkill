@@ -14,6 +14,15 @@ NAIVE_SKILL = "naive_skill"
 VALIDATED_SKILL = "validated_skill"
 REPAIRED_SKILL = "repaired_skill"
 GATED_SKILL = "gated_skill"
+PROMPT_ONLY_CAREFUL_TOOL_USE = "prompt_only_careful_tool_use"
+RAW_SCHEMA_PLUS_EXAMPLES = "raw_schema_plus_examples"
+GENERATED_DOCS_NO_VALIDATION = "generated_docs_no_validation"
+GENERIC_VALIDATOR_NO_BEHAVIOR_TESTS = "generic_validator_no_behavior_tests"
+FULL_REGENERATION_REPAIR = "full_regeneration_repair"
+HUMAN_WRITTEN_SKILL_UPPER_BOUND = "human_written_skill_upper_bound"
+RETRIEVAL_TOOL_CARD = "retrieval_tool_card"
+LARGER_MODEL_NAIVE_SKILL = "larger_model_naive_skill"
+ADVERSARIAL_DISTRACTOR_INVENTORY = "adversarial_distractor_inventory"
 
 RELIABILITY_CONDITIONS = [
     RAW_MCP,
@@ -36,6 +45,15 @@ CONDITION_ORDER = [
     RAW_MCP,
     SCHEMA_ONLY,
     DOCS_ONLY,
+    PROMPT_ONLY_CAREFUL_TOOL_USE,
+    RAW_SCHEMA_PLUS_EXAMPLES,
+    GENERATED_DOCS_NO_VALIDATION,
+    GENERIC_VALIDATOR_NO_BEHAVIOR_TESTS,
+    FULL_REGENERATION_REPAIR,
+    HUMAN_WRITTEN_SKILL_UPPER_BOUND,
+    RETRIEVAL_TOOL_CARD,
+    LARGER_MODEL_NAIVE_SKILL,
+    ADVERSARIAL_DISTRACTOR_INVENTORY,
     "retrieved_docs",
     "retrieved_candidates",
     "retrieved_memory",

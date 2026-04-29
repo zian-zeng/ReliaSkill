@@ -1,0 +1,50 @@
+seed: 42
+max_tools: 360
+outputs:
+  raw_tools: data/raw_mcp/tools.jsonl
+  toolir: data/processed_toolir/tools.jsonl
+  dataset_stats: outputs/tables/dataset_stats.csv
+  dataset_card: outputs/reports/dataset_card.md
+sources:
+  - id: public_mcp_filesystem_fixture
+    type: mcp_fixture
+    path: data/raw/public_mcp_filesystem_subset.json
+    domain: filesystem
+    limit: 20
+
+  - id: sample_multidomain_fixture
+    type: mcp_fixture
+    path: data/raw/sample_tools.json
+    limit: 10
+
+  - id: harvested_mcp_reference_servers
+    type: mcp_fixture
+    path: data/raw/harvested_mcp_reference_servers.json
+    limit: 60
+
+  - id: mcptoolbenchpp_local
+    type: converted_toolbench
+    path: data/raw/mcptoolbenchpp_tools.json
+    limit: 80
+
+  - id: bfcl_v3_local
+    type: converted_bfcl
+    path: data/raw/bfcl_v3_tools_subset100.json
+    limit: 80
+
+  - id: bfcl_huggingface_eval_local
+    type: converted_bfcl
+    path: data/raw/bfcl_huggingface_eval_tools.json
+    limit: 80
+
+  - id: bfcl_tensorflow_local
+    type: converted_bfcl
+    path: data/raw/bfcl_tensorflow_tools.json
+    domain: data_science
+    limit: 30
+
+  - id: bfcl_torchhub_local
+    type: converted_bfcl
+    path: data/raw/bfcl_torchhub_tools.json
+    domain: data_science
+    limit: 30

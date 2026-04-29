@@ -202,6 +202,36 @@ def _collect_prediction_metadata(skill: GeneratedSkill) -> Dict[str, Any]:
     return metadata
 
 
+def _quantization_label(*, load_in_4bit: bool = False, load_in_8bit: bool = False, torch_dtype: str | None = None) -> str:
+    if load_in_4bit:
+        return "4bit"
+    if load_in_8bit:
+        return "8bit"
+    return str(torch_dtype or "none")
+
+
+def _prediction_audit_metadata(
+    *,
+    skill: GeneratedSkill,
+    prompt: str,
+    raw_model_output: str,
+    parsed_arguments: Dict[str, Any],
+    backend_name: str,
+    model_name: str,
+    quantization: str = "none",
+) -> Dict[str, Any]:
+    return {
+        **_collect_prediction_metadata(skill),
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": prompt,
+        "raw_model_output": raw_model_output,
+        "parsed_prediction": dict(parsed_arguments),
+        "model_name": model_name,
+        "quantization": quantization,
+        "predictor_backend": backend_name,
+    }
+
+
 class PredictorBackend(ABC):
     backend_name = "base"
 
@@ -214,6 +244,7 @@ class HeuristicPredictorBackend(PredictorBackend):
     backend_name = "heuristic"
 
     def predict(self, tool: ToolIR, skill: GeneratedSkill, task: EvalTask) -> EvalPrediction:
+        prompt = build_prediction_prompt(tool, skill, task.user_request)
         predicted = {}
         for arg in tool.arguments:
             if arg.default is not None:
@@ -254,7 +285,14 @@ class HeuristicPredictorBackend(PredictorBackend):
             baseline_name=skill.baseline_name,
             predicted_arguments=predicted,
             exposure_text=render_exposure(tool, skill),
-            metadata=_collect_prediction_metadata(skill),
+            metadata=_prediction_audit_metadata(
+                skill=skill,
+                prompt=prompt,
+                raw_model_output=json.dumps({"arguments": predicted}, ensure_ascii=False, sort_keys=True),
+                parsed_arguments=predicted,
+                backend_name=self.backend_name,
+                model_name="heuristic",
+            ),
         )
 
 
@@ -272,6 +310,7 @@ class OpenAICompatiblePredictorBackend(PredictorBackend):
         self.model = model
         self.api_key = api_key
         self.timeout_seconds = timeout_seconds
+        self.quantization = "none"
 
     def _post_json(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         request = urllib.request.Request(
@@ -307,7 +346,15 @@ class OpenAICompatiblePredictorBackend(PredictorBackend):
             baseline_name=skill.baseline_name,
             predicted_arguments=predicted_arguments,
             exposure_text=render_exposure(tool, skill),
-            metadata=_collect_prediction_metadata(skill),
+            metadata=_prediction_audit_metadata(
+                skill=skill,
+                prompt=prompt,
+                raw_model_output=content,
+                parsed_arguments=predicted_arguments,
+                backend_name=self.backend_name,
+                model_name=self.model,
+                quantization=self.quantization,
+            ),
         )
 
 
@@ -327,6 +374,8 @@ class LocalHFPredictorBackend(PredictorBackend):
         load_in_8bit: bool = False,
         generation_kwargs: Dict[str, Any] | None = None,
     ) -> None:
+        self.model_name_or_path = model_name_or_path
+        self.quantization = _quantization_label(load_in_4bit=load_in_4bit, load_in_8bit=load_in_8bit, torch_dtype=torch_dtype)
         self.runner = LocalHFChatRunner(
             model_name_or_path=model_name_or_path,
             device=device,
@@ -357,7 +406,15 @@ class LocalHFPredictorBackend(PredictorBackend):
             baseline_name=skill.baseline_name,
             predicted_arguments=predicted_arguments,
             exposure_text=render_exposure(tool, skill),
-            metadata=_collect_prediction_metadata(skill),
+            metadata=_prediction_audit_metadata(
+                skill=skill,
+                prompt=prompt,
+                raw_model_output=content,
+                parsed_arguments=predicted_arguments,
+                backend_name=self.backend_name,
+                model_name=self.model_name_or_path,
+                quantization=self.quantization,
+            ),
         )
 
 

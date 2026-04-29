@@ -117,6 +117,7 @@ class BehaviorResult:
     expected_arguments: Dict[str, Any] = field(default_factory=dict)
     prediction_latency_ms: float = 0.0
     notes: List[str] = field(default_factory=list)
+    prediction_metadata: Dict[str, Any] = field(default_factory=dict)
 
     def model_dump(self) -> Dict[str, Any]:
         return asdict(self)

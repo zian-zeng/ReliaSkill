@@ -8,8 +8,17 @@ from typing import Any, Dict, List, Tuple
 from autoskill.benchmark import load_benchmark_tasks
 from autoskill.analysis import summarize_error_taxonomy, summarize_method_wins
 from autoskill.config import load_json_config, merge_experiment_config
+from autoskill.conditions import build_reviewer_baseline_skills, condition_prompt_text
+from autoskill.conversion import load_json_or_jsonl
 from autoskill.evaluation import summarize_records, summarize_records_by_tool, write_summary
 from autoskill.generator import SkillGenerator
+from autoskill.logging_utils import (
+    build_run_manifest,
+    generation_audit_record,
+    prediction_audit_record,
+    write_jsonl as write_audit_jsonl,
+    write_manifest as write_audit_manifest,
+)
 from autoskill.packaging import write_skill_package
 from autoskill.parser import parse_mcp_tool
 from autoskill.predictor import PredictorBackend, build_predictor_from_config, build_predictor_from_env, safe_predict
@@ -98,8 +107,7 @@ def _summarize_backend_usage(records: List[Dict[str, Any]], configured_key: str,
 
 def load_tools(raw_path: str | Path) -> Dict[str, Any]:
     raw_path = Path(raw_path)
-    with raw_path.open("r", encoding="utf-8") as f:
-        raw_tools = json.load(f)
+    raw_tools = load_json_or_jsonl(raw_path)
     return {
         tool.tool_name: tool
         for idx, raw_tool in enumerate(raw_tools)
@@ -163,13 +171,17 @@ def build_skill_variants(tool: Any, tools: Dict[str, Any], generator: SkillGener
     if llm_skill is None:
         llm_skill = generator.generate(tool)
 
-    return [
+    historical = [
         build_raw_mcp_skill(tool),
         build_schema_only_skill(tool),
         build_retrieved_docs_skill(tool),
         build_retrieved_candidates_skill(tool, tools=tools),
         build_retrieved_memory_skill(tool, tools=tools),
         llm_skill,
+    ]
+    return [
+        *historical,
+        *build_reviewer_baseline_skills(tool, tools, llm_skill),
     ]
 
 
@@ -182,6 +194,21 @@ def _write_jsonl(path: Path, records: List[Dict[str, Any]]) -> None:
     with path.open("w", encoding="utf-8") as f:
         for record in records:
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+def _safe_filename(value: str) -> str:
+    return "".join(char if char.isalnum() or char in {"-", "_", "."} else "_" for char in value)[:160]
+
+
+def _write_condition_prompt(output_dir: Path, tool: Any, skill: Any) -> None:
+    prompt_name = f"{_safe_filename(tool.tool_name)}__{_safe_filename(skill.baseline_name)}.txt"
+    local_prompt_dir = output_dir.parent / "prompts"
+    local_prompt_dir.mkdir(parents=True, exist_ok=True)
+    prompt_text = condition_prompt_text(tool, skill)
+    (local_prompt_dir / prompt_name).write_text(prompt_text, encoding="utf-8")
+    global_prompt_dir = Path("outputs/prompts")
+    global_prompt_dir.mkdir(parents=True, exist_ok=True)
+    (global_prompt_dir / prompt_name).write_text(prompt_text, encoding="utf-8")
 
 
 def run_packaging_pipeline(
@@ -197,6 +224,7 @@ def run_packaging_pipeline(
         variants = build_skill_variant_map(tool, tools, generator, package_manager_dir=out_dir)
         for skill in variants.values():
             report = validate_skill(tool, skill)
+            _write_condition_prompt(out_dir, tool, skill)
             write_skill_package(out_dir / tool.tool_name / skill.baseline_name, tool, skill, report)
             records.append(
                 {
@@ -266,6 +294,7 @@ def run_benchmark_pipeline(
                     pass
 
             write_skill_package(target_dir, tool, skill, report)
+            _write_condition_prompt(out_dir.parent / "packages", tool, skill)
             runtime_skill, retrieval_context = contextualize_skill_for_task(task, tool, skill, tools)
             prediction = safe_predict(tool, runtime_skill, task, predictor)
             score = score_prediction(task, tool, prediction)
@@ -344,6 +373,23 @@ def run_full_experiment(
     predictor_config: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
     output_root = Path(output_root)
+    run_config = {
+        "tools_path": str(tools_path),
+        "tasks_path": str(tasks_path),
+        "output_root": str(output_root),
+        "generator": generator_config or {"type": "heuristic"},
+        "predictor": predictor_config or {"type": "heuristic"},
+        "seed": 42,
+    }
+    audit_manifest = build_run_manifest(
+        run_type="full_experiment",
+        output_root=output_root,
+        config=run_config,
+        seed=42,
+        generator_config=generator_config,
+        predictor_config=predictor_config,
+    )
+    write_audit_manifest(output_root, audit_manifest)
     tools = load_tools(tools_path)
     generator = SkillGenerator(backend_config=generator_config)
     predictor = build_predictor_from_config(predictor_config)
@@ -420,8 +466,41 @@ def run_full_experiment(
             "routing_by_split.csv": build_routing_by_split_csv(routing_summary_by_split),
         },
     )
+    package_record_map = {
+        (record["tool_name"], record["baseline_name"]): record
+        for record in package_records
+    }
+    audit_records: List[Dict[str, Any]] = []
+    for record in package_records:
+        tool = tools[record["tool_name"]]
+        artifact_path = output_root / "packages" / record["tool_name"] / record["baseline_name"]
+        audit_records.append(generation_audit_record(audit_manifest, tool, record["skill"], record["report"], artifact_path))
+    for score in benchmark_scores:
+        package_record = package_record_map.get((score.get("tool_name"), score.get("baseline_name")))
+        artifact_path = output_root / "benchmark" / str(score.get("tool_name", "")) / str(score.get("baseline_name", "")) / f"{score.get('task_id', '')}.result.json"
+        audit_records.append(
+            prediction_audit_record(
+                audit_manifest,
+                score,
+                validation_report=package_record["report"] if package_record else None,
+                artifact_path=artifact_path,
+            )
+        )
+    write_audit_jsonl(output_root / "audit_records.jsonl", audit_records)
+    baseline_results_path = Path("outputs/tables/baseline_results.csv")
+    baseline_results_path.parent.mkdir(parents=True, exist_ok=True)
+    baseline_results_path.write_text(csv_text, encoding="utf-8")
 
     manifest = {
+        "run_id": audit_manifest["run_id"],
+        "git_commit_hash": audit_manifest["git_commit_hash"],
+        "config_hash": audit_manifest["config_hash"],
+        "seed": audit_manifest["seed"],
+        "model_name": audit_manifest["model_name"],
+        "quantization": audit_manifest["quantization"],
+        "hardware": audit_manifest["hardware"],
+        "audit_jsonl": audit_manifest["audit_jsonl"],
+        "manifest_path": audit_manifest["manifest_path"],
         "tools_path": str(tools_path),
         "tasks_path": str(tasks_path),
         "output_root": str(output_root),
@@ -444,6 +523,7 @@ def run_full_experiment(
         "predictor_config": predictor_config or {},
     }
     write_summary(output_root / "experiment_manifest.json", manifest)
+    write_audit_manifest(output_root, {**audit_manifest, "experiment_manifest": manifest})
     return manifest
 
 

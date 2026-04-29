@@ -150,6 +150,7 @@ def run_behavior_tests(
                     expected_arguments=dict(score["expected_arguments"]),
                     prediction_latency_ms=round(latency_ms, 4),
                     notes=[] if triggered else ["positive_control_not_triggered"],
+                    prediction_metadata=dict(prediction.metadata),
                 )
             )
         else:
@@ -185,6 +186,7 @@ def run_behavior_tests(
                     expected_arguments={},
                     prediction_latency_ms=round(latency_ms, 4),
                     notes=["negative_control_triggered"] if triggered else [],
+                    prediction_metadata=dict(prediction.metadata) if triggered else {},
                 )
             )
 

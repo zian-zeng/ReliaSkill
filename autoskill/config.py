@@ -6,11 +6,16 @@ import os
 from pathlib import Path
 from typing import Any, Dict, List
 
+import yaml
+
 
 def load_json_config(path: str | Path) -> Dict[str, Any]:
     config_path = Path(path)
     with config_path.open("r", encoding="utf-8") as f:
-        data = json.load(f)
+        if config_path.suffix.lower() in {".yaml", ".yml"}:
+            data = yaml.safe_load(f)
+        else:
+            data = json.load(f)
     if not isinstance(data, dict):
         raise ValueError("Experiment config must be a JSON object.")
     return data

@@ -19,7 +19,7 @@ DEFAULT_OUT = Path("outputs/experiment")
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run the full AutoSkill package + benchmark experiment.")
-    parser.add_argument("--config", type=Path, default=None, help="Optional JSON config for tools/tasks/output and backend settings.")
+    parser.add_argument("--config", type=Path, default=None, help="Optional JSON/YAML config for tools/tasks/output and backend settings.")
     parser.add_argument("--tools", type=Path, default=DEFAULT_TOOLS, help="Path to the raw MCP tool JSON file.")
     parser.add_argument("--tasks", type=Path, default=DEFAULT_TASKS, help="Path to the benchmark JSON or JSONL file.")
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT, help="Output directory for the full experiment.")

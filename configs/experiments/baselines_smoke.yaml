@@ -1,0 +1,7 @@
+tools_path: data/raw/public_mcp_filesystem_subset.json
+tasks_path: data/eval/public_mcp_filesystem_benchmark.jsonl
+output_root: outputs/baselines_smoke
+generator:
+  type: heuristic
+predictor:
+  type: heuristic

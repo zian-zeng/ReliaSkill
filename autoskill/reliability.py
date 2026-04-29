@@ -21,6 +21,12 @@ from autoskill.evaluation import write_summary
 from autoskill.experiment import load_tools
 from autoskill.generator import SkillGenerator
 from autoskill.ir import BehaviorCase, BehaviorReport, GeneratedSkill, ReliabilityScore, RepairReport, ToolIR, ValidationReport
+from autoskill.logging_utils import (
+    build_run_manifest,
+    reliability_audit_records,
+    write_jsonl as write_audit_jsonl,
+    write_manifest as write_audit_manifest,
+)
 from autoskill.packaging import write_skill_package
 from autoskill.predictor import PredictorBackend, build_predictor_from_config
 from autoskill.quality import score_reliability
@@ -57,7 +63,7 @@ def build_reliability_variants(
     behavior_cases: Iterable[BehaviorCase],
     predictor: PredictorBackend,
     max_repair_rounds: int = 2,
-    deploy_threshold: float = 70.0,
+    deploy_threshold: float = 85.0,
     ablation_mode: str | None = None,
 ) -> Dict[str, Dict[str, Any]]:
     variants: Dict[str, Dict[str, Any]] = {}
@@ -236,9 +242,29 @@ def run_reliability_pipeline(
     generator_config: Dict[str, Any] | None = None,
     predictor_config: Dict[str, Any] | None = None,
     max_repair_rounds: int = 2,
-    deploy_threshold: float = 70.0,
+    deploy_threshold: float = 85.0,
     ablation_mode: str | None = None,
 ) -> Dict[str, Any]:
+    run_config = {
+        "tools_path": str(tools_path),
+        "behavior_path": str(behavior_path),
+        "output_root": str(output_root),
+        "generator": generator_config or {"type": "heuristic"},
+        "predictor": predictor_config or {"type": "heuristic"},
+        "max_repair_rounds": max_repair_rounds,
+        "deploy_threshold": deploy_threshold,
+        "ablation_mode": ablation_mode,
+        "seed": 42,
+    }
+    audit_manifest = build_run_manifest(
+        run_type="reliability",
+        output_root=output_root,
+        config=run_config,
+        seed=42,
+        generator_config=generator_config,
+        predictor_config=predictor_config,
+    )
+    write_audit_manifest(output_root, audit_manifest)
     tools = load_tools(tools_path)
     behavior_cases = load_behavior_cases(behavior_path)
     output_root = Path(output_root)
@@ -270,7 +296,32 @@ def run_reliability_pipeline(
             records.append({"tool_name": tool.tool_name, "condition": condition, **row})
 
     summary = summarize_reliability_records(records)
+    audit_records: List[Dict[str, Any]] = []
+    for record in records:
+        package_dir = output_root / "packages" / record["tool_name"] / record["condition"]
+        audit_records.extend(
+            reliability_audit_records(
+                audit_manifest,
+                tool_name=record["tool_name"],
+                condition=record["condition"],
+                validation_report=record["validation_report"],
+                behavior_report=record["behavior_report"],
+                repair_report=record["repair_report"],
+                reliability_score=record["reliability_score"],
+                artifact_path=package_dir,
+            )
+        )
+    write_audit_jsonl(output_root / "audit_records.jsonl", audit_records)
     manifest = {
+        "run_id": audit_manifest["run_id"],
+        "git_commit_hash": audit_manifest["git_commit_hash"],
+        "config_hash": audit_manifest["config_hash"],
+        "seed": audit_manifest["seed"],
+        "model_name": audit_manifest["model_name"],
+        "quantization": audit_manifest["quantization"],
+        "hardware": audit_manifest["hardware"],
+        "audit_jsonl": audit_manifest["audit_jsonl"],
+        "manifest_path": audit_manifest["manifest_path"],
         "tools_path": str(tools_path),
         "behavior_path": str(behavior_path),
         "output_root": str(output_root),
@@ -283,6 +334,7 @@ def run_reliability_pipeline(
     }
     write_summary(output_root / "reliability_summary.json", summary)
     write_summary(output_root / "reliability_manifest.json", manifest)
+    write_audit_manifest(output_root, {**audit_manifest, "reliability_manifest": manifest})
     reports_dir = output_root / "reports"
     reports_dir.mkdir(parents=True, exist_ok=True)
     (reports_dir / "reliability_report.md").write_text(build_reliability_report_markdown(summary, manifest), encoding="utf-8")
@@ -317,6 +369,6 @@ def run_reliability_pipeline_from_config(config_path: str | Path) -> Dict[str, A
         generator_config=config.get("generator"),
         predictor_config=config.get("predictor"),
         max_repair_rounds=int(reliability_config.get("max_repair_rounds", 2)),
-        deploy_threshold=float(reliability_config.get("deploy_threshold", 70.0)),
+        deploy_threshold=float(reliability_config.get("deploy_threshold", 85.0)),
         ablation_mode=reliability_config.get("ablation_mode"),
     )

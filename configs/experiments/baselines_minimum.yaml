@@ -1,0 +1,7 @@
+tools_path: data/raw_mcp/tools.jsonl
+tasks_path: data/controls/test.jsonl
+output_root: outputs/baselines_minimum
+generator:
+  type: heuristic
+predictor:
+  type: heuristic

@@ -1,4 +1,5 @@
 from .analysis import classify_score_error, summarize_error_taxonomy, summarize_method_wins
+from .ablation import run_ablation_table_from_config, write_ablation_results_csv
 from .benchmark import load_benchmark_tasks
 from .behavior import load_behavior_cases, run_behavior_tests, skill_should_trigger
 from .config import load_json_config, merge_experiment_config, validate_experiment_config
@@ -34,14 +35,17 @@ from .ir import (
     ValidationIssue,
     ValidationReport,
 )
+from .logging_utils import build_run_manifest, generation_audit_record, prediction_audit_record, reliability_audit_records
 from .packaging import write_skill_package
 from .mcptoolbench import convert_mcptoolbench_records, load_mcptoolbench_records
+from .metrics import build_metric_tables, write_metric_tables
 from .model_compare import run_model_comparison_from_config
 from .parser import parse_mcp_tool
 from .predictor import build_predictor_from_config, build_predictor_from_env, safe_predict
 from .quality import score_reliability
 from .raw_mcp import build_raw_mcp_skill
 from .reliability import run_reliability_pipeline, run_reliability_pipeline_from_config
+from .reliability_score import compute_reliability_components, compute_reliability_score_value, score_reliability_formula
 from .repair import classify_failure, repair_skill
 from .retrieval_baselines import build_retrieved_candidates_skill, build_retrieved_docs_skill, build_retrieved_memory_skill
 from .retrieval_runtime import (
@@ -80,6 +84,8 @@ __all__ = [
     "ValidationReport",
     "build_raw_mcp_skill",
     "build_schema_only_skill",
+    "build_metric_tables",
+    "build_run_manifest",
     "build_predictor_from_config",
     "build_predictor_from_env",
     "build_retrieved_candidates_skill",
@@ -88,6 +94,8 @@ __all__ = [
     "build_results_csv",
     "build_results_markdown",
     "classify_score_error",
+    "compute_reliability_components",
+    "compute_reliability_score_value",
     "contextualize_skill_for_task",
     "canonicalize_mcp_tool_records",
     "convert_benchmark_file_to_canonical_records",
@@ -102,6 +110,9 @@ __all__ = [
     "load_tools",
     "merge_experiment_config",
     "parse_mcp_tool",
+    "generation_audit_record",
+    "prediction_audit_record",
+    "reliability_audit_records",
     "render_exposure",
     "retrieve_candidate_tools",
     "retrieve_doc_context",
@@ -109,6 +120,7 @@ __all__ = [
     "retrieve_memory_context",
     "retrieve_memory_tool_rankings",
     "run_benchmark_pipeline",
+    "run_ablation_table_from_config",
     "run_experiment_sweep",
     "run_full_experiment",
     "run_full_experiment_from_config",
@@ -121,6 +133,7 @@ __all__ = [
     "safe_predict",
     "score_prediction",
     "score_reliability",
+    "score_reliability_formula",
     "skill_should_trigger",
     "repair_skill",
     "classify_failure",
@@ -133,6 +146,8 @@ __all__ = [
     "validate_experiment_config",
     "write_json",
     "write_jsonl",
+    "write_ablation_results_csv",
+    "write_metric_tables",
     "write_report",
     "write_skill_package",
     "write_summary",

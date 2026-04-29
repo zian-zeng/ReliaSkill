@@ -178,6 +178,94 @@ Normalize exported MCP tools:
 python scripts\import_mcp_tools.py --in data\raw\sample_mcp_export.json --out outputs\imported_tools.json
 ```
 
+## Dataset Construction And Statistics
+
+Build the paper-scale local tool-schema dataset:
+
+```powershell
+python scripts\collect_mcp_tools.py --config configs\data\minimum.yaml
+```
+
+This collector only reads local files and does not execute external MCP tools or require paid APIs. The default minimum config combines existing MCP fixtures, harvested reference-server schemas already stored on disk, MCPToolBench++ conversions, and BFCL-style converted schemas. Synthetic mock tools are supported by the collector only when a source is explicitly configured as `synthetic_mock`; the default config does not include synthetic tools.
+
+Generated artifacts:
+
+- [tools.jsonl](data/raw_mcp/tools.jsonl): normalized raw MCP/tool definitions with source/domain metadata
+- [tools.jsonl](data/processed_toolir/tools.jsonl): parsed ToolIR records
+- [dataset_stats.csv](outputs/tables/dataset_stats.csv): source/domain/side-effect statistics
+- [dataset_card.md](outputs/reports/dataset_card.md): reproducibility and coverage summary
+
+Regenerate only the dataset table and card from an existing raw JSONL:
+
+```powershell
+python scripts\make_dataset_table.py
+```
+
+Each raw record is validated to include `name`, `description`, `inputSchema`, and `source_metadata`. Metadata includes `server`, `domain`, `side_effect_type`, `auth_required`, `args_count`, `required_args_count`, and `enum_count`. Records are deduplicated by source server, tool name, and schema hash with deterministic ordering and seed 42.
+
+Build reproducible positive and adjacent negative controls from the processed ToolIR dataset:
+
+```powershell
+python scripts\build_controls.py --config configs\controls\minimum.yaml
+```
+
+This writes [dev.jsonl](data/controls/dev.jsonl), [test.jsonl](data/controls/test.jsonl), and [control_stats.csv](outputs/tables/control_stats.csv). Each control includes `category`, `gold_tool`, `gold_args`, `should_trigger`, `split`, and `rationale`, while preserving the existing behavior-evaluation fields such as `tool_name`, `expected_arguments`, and `negative_target`.
+
+Recompute utility, harm, confidence intervals, and paired significance tests from saved prediction JSONL:
+
+```powershell
+python scripts\make_tables.py --input outputs\sample_run
+```
+
+The table builder reads saved `prediction_records.jsonl`, `routing_records.jsonl`, and `reliability_records.jsonl` files under the input run directory. It writes [main_results.csv](outputs/tables/main_results.csv), [harm_utility.csv](outputs/tables/harm_utility.csv), and [stat_tests.csv](outputs/tables/stat_tests.csv) without rerunning inference.
+
+Generate all paper tables directly from saved logs:
+
+```powershell
+python scripts\make_tables.py --run outputs\final_run
+```
+
+This writes CSV and Overleaf-ready `.tex` files under `outputs/final_run/tables/` for dataset/tool statistics, main results, utility/harm, ablations, model scaling, error analysis, reliability threshold sensitivity, and cost/latency. The LaTeX files are generated from the same logged CSV/JSONL artifacts and include a provenance comment so table numbers are not edited by hand.
+
+Generate reliability score audit artifacts:
+
+```powershell
+python scripts\run_reliability_sensitivity.py
+```
+
+ReliaSkill scores use `R = 100*(0.20*V + 0.30*P + 0.30*N + 0.10*A + 0.05*C + 0.05*S) - 5*repair_rounds`, with `deploy >= 85`, `repair` from `60` to `85`, and `reject < 60` or any non-repairable critical failure. The script writes [reliability_threshold_sensitivity.csv](outputs/tables/reliability_threshold_sensitivity.csv), `outputs/tables/reliability_weight_sensitivity.csv`, [reliability_calibration.pdf](outputs/figures/reliability_calibration.pdf), and [reliability_score_definition.md](outputs/reports/reliability_score_definition.md).
+
+Run the reviewer-baseline smoke experiment:
+
+```powershell
+python scripts\run_experiment.py --config configs\experiments\baselines_smoke.yaml
+```
+
+This adds `prompt_only_careful_tool_use`, `raw_schema_plus_examples`, `generated_docs_no_validation`, `generic_validator_no_behavior_tests`, `full_regeneration_repair`, `human_written_skill_upper_bound`, `retrieval_tool_card`, `larger_model_naive_skill`, and `adversarial_distractor_inventory` as named conditions. Prompt slots for every tool/condition are logged under [outputs/prompts](outputs/prompts), and the comparable baseline table is written to [baseline_results.csv](outputs/tables/baseline_results.csv). A full-minimum config is available at [baselines_minimum.yaml](configs/experiments/baselines_minimum.yaml).
+
+Run the final component ablation table:
+
+```powershell
+python scripts\run_ablation_table.py --config configs\experiments\ablations.yaml
+```
+
+This writes [ablation_results.csv](outputs/tables/ablation_results.csv) with `full ReliaSkill`, validation/behavior/control/repair/gating/boundary/example/compactness ablations, full-regeneration repair, and a dev/test leakage check. The table reports joint EM, argument validity, trigger precision, harmful skill injection rate, reliability score, and deterministic confidence intervals. Per-tool details are written to `outputs/ablations/ablation_details.jsonl`.
+
+Extract qualitative cases without cherry-picking:
+
+```powershell
+python scripts\extract_qualitative_cases.py
+```
+
+The extractor uses deterministic rules for representative examples: category-first selection, highest-confidence failures where multiple candidates exist, and the first held-out failure for the final ReliaSkill case. It writes [qualitative_cases.md](outputs/reports/qualitative_cases.md) and [error_analysis.csv](outputs/tables/error_analysis.csv) with tool names, user requests, predictions, gold labels, failure types, repair diffs, and source artifact paths.
+
+Every experiment run also writes audit artifacts:
+
+- `manifest.json`: run id, git commit hash, config hash, seed, model names, quantization settings, hardware, config, and output paths
+- `audit_records.jsonl`: prompt template, raw prompt, raw model output, parsed prediction, validation report, behavior report, repair report, reliability score, and artifact pointer per generation/prediction/reliability event
+
+The regular saved `prediction_records.jsonl`, `routing_records.jsonl`, and `reliability_records.jsonl` remain sufficient for table regeneration without rerunning inference; the audit JSONL adds the raw provenance needed to inspect any row.
+
 ## Backend Modes
 
 ### 1. `heuristic`

@@ -10,7 +10,7 @@
   },
   "reliability": {
     "max_repair_rounds": 2,
-    "deploy_threshold": 70.0,
+    "deploy_threshold": 85.0,
     "ablation_mode": null
   }
 }

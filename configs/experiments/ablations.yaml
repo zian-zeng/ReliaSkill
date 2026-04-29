@@ -1,0 +1,51 @@
+tools_path: data/raw_mcp/tools.jsonl
+dev_controls_path: data/controls/dev.jsonl
+test_controls_path: data/controls/test.jsonl
+output_path: outputs/tables/ablation_results.csv
+details_path: outputs/ablations/ablation_details.jsonl
+seed: 42
+max_tools: 80
+generator:
+  type: heuristic
+predictor:
+  type: heuristic
+conditions:
+  - id: full_reliaskill
+    label: full ReliaSkill
+  - id: without_validation
+    label: w/o validation
+    validation: false
+    targeted_repair: false
+  - id: without_behavior_tests
+    label: w/o behavior tests
+    behavior_tests: false
+    behavior_repair: false
+  - id: without_positive_controls
+    label: w/o positive controls
+    positive_controls: false
+  - id: without_negative_controls
+    label: w/o negative controls
+    negative_controls: false
+  - id: without_repair
+    label: w/o repair
+    targeted_repair: false
+    behavior_repair: false
+  - id: full_regeneration_repair
+    label: full regeneration instead of targeted repair
+    full_regeneration_repair: true
+    targeted_repair: false
+  - id: without_gating
+    label: w/o gating
+    gating: false
+  - id: without_non_use_boundaries
+    label: w/o non-use boundaries
+    non_use_boundaries: false
+  - id: without_examples
+    label: w/o examples
+    examples: false
+  - id: without_compactness_constraint
+    label: w/o compactness constraint
+    compactness_constraint: false
+  - id: dev_test_leakage_check
+    label: dev/test leakage check
+    leakage_check: true
