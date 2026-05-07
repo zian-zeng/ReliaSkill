@@ -1,0 +1,16 @@
+model_name: google/gemma-2-9b-it
+model_path: google/gemma-2-9b-it
+model_name_or_path: google/gemma-2-9b-it
+tokenizer_path: google/gemma-2-9b-it
+backend: local_hf
+type: local_hf
+quantization: 4bit
+load_in_4bit: true
+torch_dtype: bfloat16
+device_map: auto
+max_new_tokens: 256
+temperature: 0.0
+batch_size: 2
+max_prompt_tokens: 4096
+estimated_vram_gb: 11.0
+examples_per_second: 0.20

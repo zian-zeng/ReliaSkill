@@ -365,7 +365,8 @@ def write_candidate_artifacts(
     candidates_dir.mkdir(parents=True, exist_ok=True)
     for candidate in candidates:
         payload = candidate["candidate"]
-        (candidates_dir / f"{candidate['candidate_id']}.json").write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+        candidate_filename = candidate['candidate_id'][:50]
+        (candidates_dir / f"{candidate_filename}.json").write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     score_payloads = [_json_score_row(row) for row in score_rows]
     write_jsonl(tool_dir / "candidate_scores.jsonl", score_payloads)
     selected_payload = candidate_payload(

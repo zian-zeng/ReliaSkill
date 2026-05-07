@@ -1,0 +1,82 @@
+experiment_scale: paper_final_comparison
+description: Focused Qwen-1.5B run matching the exact settings of the 7B results in the paper.
+seed: 42
+tools_path: data/raw_mcp/tools.jsonl
+tasks_path: data/controls/test.jsonl
+output_root: outputs/qwen_comparison_results
+
+# Generator set to heuristic to use the SAME skills as the previous 7B run
+generator:
+  type: heuristic
+  # This points to the pre-packaged skills from the medium_overnight run
+  package_root: outputs/medium_overnight/packages
+
+# Predictor set to the model we want to evaluate
+predictor:
+  type: local_hf
+  model_name_or_path: Qwen/Qwen2.5-1.5B-Instruct
+  load_in_4bit: true
+  device_map: auto
+
+# Only run Qwen-1.5B for now as requested
+models:
+  - configs/models/qwen2_5_1_5b_instruct_4bit.yaml
+
+# Full 35 conditions to match the paper
+conditions:
+  - raw_mcp
+  - schema_only
+  - raw_schema_plus_examples
+  - prompt_only_careful_tool_use
+  - raw_docs_full
+  - retrieved_docs
+  - retrieved_candidates
+  - retrieved_memory
+  - retrieval_tool_card
+  - generated_docs_no_validation
+  - generated_docs_verbose
+  - generic_validator_no_behavior_tests
+  - human_written_skill_upper_bound
+  - larger_model_naive_skill
+  - adversarial_distractor_inventory
+  - naive_skill_k1
+  - multi_candidate_skill_k3_validation_select
+  - multi_candidate_skill_k3_behavior_select
+  - multi_candidate_repaired_gated
+  - repaired_full_regeneration
+  - repaired_targeted_patch
+  - repaired_boundary_only
+  - repaired_example_only
+  - repaired_taxonomy_conditioned
+  - full_regeneration_repair
+  - autoskill_base
+  - skill_ultra_compact
+  - skill_compact
+  - skill_medium
+  - skill_verbose
+  - skill_prompt_compact_default
+  - skill_prompt_boundary_first
+  - skill_prompt_example_rich
+  - skill_prompt_safety_aware
+  - skill_prompt_verbose_docs
+
+# Data/Control alignment
+data:
+  config: configs/data/emnlp_scale.yaml
+  max_tools: 280
+controls:
+  config: configs/controls/emnlp_scale.yaml
+  positives_per_tool_total: 3
+  negatives_per_tool_total: 2
+routing:
+  config: configs/routing/distractor_inventory.yaml
+  candidate_set_sizes: [4]
+
+scheduler:
+  one_gpu: true
+  resume: true
+  group_by_model: true
+  run_all_conditions_before_unload: true
+  max_batch_size: 16 # Proven sweet spot for stability and speed
+  prompt_safety_margin_tokens: 256
+  include_routing: true

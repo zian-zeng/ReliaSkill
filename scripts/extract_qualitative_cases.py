@@ -123,7 +123,8 @@ def _select_naive_overtrigger(records: List[Dict[str, Any]], reliability_root: P
                 confidence = _behavior_failure_confidence(record, result)
                 candidates.append((confidence, record.get("tool_name", ""), result.get("case_id", ""), record, result))
     if not candidates:
-        return _missing_case("naive_skill_over_triggers", "No naive negative-control over-trigger was found.")
+        return _missing_case("naive_skill_over_triggers", "No naive negative-control over-trigger was found.",
+                             required_case="naive skill over-triggers")
     _, _, _, record, result = sorted(candidates, key=lambda item: (-item[0], item[1], item[2]))[0]
     return _case_from_behavior(
         case_id="case_01_naive_overtrigger",
@@ -203,7 +204,8 @@ def _select_repair_boundary_case(records: List[Dict[str, Any]], reliability_root
                 confidence = _behavior_failure_confidence(before, before_result)
                 candidates.append((confidence, tool_name, case_id, before, repaired, before_result, after_result))
     if not candidates:
-        return _missing_case("repaired_skill_fixes_boundary", "No repaired boundary fix was found.")
+        return _missing_case("repaired_skill_fixes_boundary", "No repaired boundary fix was found.",
+                             required_case="repaired skill fixes one boundary")
     _, _, _, before, repaired, before_result, after_result = sorted(candidates, key=lambda item: (-item[0], item[1], item[2]))[0]
     repair_diff = _repair_diff_text(repaired.get("repair_report", {}), before_result, after_result)
     return _case_from_behavior(
@@ -266,7 +268,8 @@ def _run_full_reliaskill_measurement(
 def _select_rejected_not_deployed(records: List[Dict[str, Any]]) -> Dict[str, Any]:
     candidates = [record for record in records if record.get("score", {}).get("decision") == "reject"]
     if not candidates:
-        return _missing_case("rejected_skill_not_deployed", "No rejected full ReliaSkill artifact was found.")
+        return _missing_case("rejected_skill_not_deployed", "No rejected full ReliaSkill artifact was found.",
+                             required_case="rejected skill not deployed")
     record = sorted(candidates, key=lambda item: (float(item["score"].get("score", 100.0)), item["tool_name"]))[0]
     result = _first_result(record) or {}
     return _case_from_full_record(
@@ -301,7 +304,8 @@ def _select_heldout_failure(records: List[Dict[str, Any]]) -> Dict[str, Any]:
                 confidence=_heldout_confidence(result),
                 repair_diff="Failure remains after validation, repair, scoring, and gating.",
             )
-    return _missing_case("reliaskill_heldout_failure", "No held-out full ReliaSkill failure was found.")
+    return _missing_case("reliaskill_heldout_failure", "No held-out full ReliaSkill failure was found.",
+                         required_case="ReliaSkill failure on held-out example")
 
 
 def _case_from_behavior(
@@ -465,10 +469,10 @@ def _build_gated_skill(skill: GeneratedSkill, score: Any) -> GeneratedSkill:
     return gated
 
 
-def _missing_case(case_id: str, message: str) -> Dict[str, Any]:
+def _missing_case(case_id: str, message: str, *, required_case: str = "") -> Dict[str, Any]:
     return {
         "case_id": case_id,
-        "required_case": case_id.replace("_", " "),
+        "required_case": required_case or case_id.replace("_", " "),
         "selection_rule": "deterministic selection found no matching candidate",
         "tool_name": "",
         "condition": "",

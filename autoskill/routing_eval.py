@@ -16,6 +16,10 @@ from autoskill.retrieval_runtime import (
 )
 from autoskill.task_eval import score_prediction
 
+def _safe_dir_name(value: str) -> str:
+    """Truncate a tool or condition name for use as a directory component on Windows."""
+    return "".join(char if char.isalnum() or char in {"-", "_", "."} else "_" for char in value)[:50]
+
 
 def _tokenize(text: str) -> List[str]:
     return re.findall(r"[a-z0-9_./*?-]+", text.lower())
@@ -191,7 +195,7 @@ def run_routing_pipeline(
     for task in tqdm(tasks, desc="[AutoSkill] Routing evaluation"):
         # Quick skip if all results for this task exist
         if output_dir:
-            task_dir = output_dir / task.task_id
+            task_dir = output_dir / _safe_dir_name(task.task_id)
             if task_dir.exists():
                 existing = []
                 for b_name in baseline_names:
@@ -208,7 +212,7 @@ def run_routing_pipeline(
         for baseline_name in baseline_names:
             # Per-baseline resume
             if output_dir:
-                p = output_dir / task.task_id / f"{baseline_name}.routing.json"
+                p = output_dir / _safe_dir_name(task.task_id) / f"{_safe_dir_name(baseline_name)}.routing.json"
                 if p.exists():
                     try:
                         with p.open("r", encoding="utf-8") as f:
@@ -277,9 +281,9 @@ def run_routing_pipeline(
             
             records.append(record)
             if output_dir:
-                task_dir = output_dir / task.task_id
+                task_dir = output_dir / _safe_dir_name(task.task_id)
                 task_dir.mkdir(parents=True, exist_ok=True)
-                with (task_dir / f"{baseline_name}.routing.json").open("w", encoding="utf-8") as f:
+                with (task_dir / f"{_safe_dir_name(baseline_name)}.routing.json").open("w", encoding="utf-8") as f:
                     json.dump(record, f, indent=2, ensure_ascii=False)
     return records
 

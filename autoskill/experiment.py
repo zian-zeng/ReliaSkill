@@ -119,11 +119,11 @@ def build_skill_variants(tool: Any, tools: Dict[str, Any], generator: SkillGener
     llm_skill = None
     if package_manager_dir:
         # Check primary package dir
-        candidate_path = package_manager_dir / tool.tool_name / "autoskill_base"
+        candidate_path = package_manager_dir / _safe_dir_name(tool.tool_name) / "autoskill_base"
         # Fallback to benchmark dir if primary is missing
         if not candidate_path.exists():
             parent_root = package_manager_dir.parent
-            fallback_path = parent_root / "benchmark" / tool.tool_name / "autoskill_base"
+            fallback_path = parent_root / "benchmark" / _safe_dir_name(tool.tool_name) / "autoskill_base"
             if fallback_path.exists():
                 candidate_path = fallback_path
 
@@ -163,7 +163,7 @@ def build_skill_variants(tool: Any, tools: Dict[str, Any], generator: SkillGener
         llm_skill = generator.generate(tool)
         if package_manager_dir:
             # SAVE FOR FUTURE
-            save_path = package_manager_dir / tool.tool_name / "autoskill_base" / "skill.json"
+            save_path = package_manager_dir / _safe_dir_name(tool.tool_name) / "autoskill_base" / "skill.json"
             save_path.parent.mkdir(parents=True, exist_ok=True)
             with save_path.open("w", encoding="utf-8") as f:
                 json.dump(llm_skill.model_dump(), f, indent=2, ensure_ascii=False)
@@ -185,8 +185,11 @@ def build_skill_variants(tool: Any, tools: Dict[str, Any], generator: SkillGener
     ]
 
 
-def build_skill_variant_map(tool: Any, tools: Dict[str, Any], generator: SkillGenerator, package_manager_dir: Path | None = None) -> Dict[str, Any]:
-    return {skill.baseline_name: skill for skill in build_skill_variants(tool, tools, generator, package_manager_dir=package_manager_dir)}
+def build_skill_variant_map(tool: Any, tools: Dict[str, Any], generator: SkillGenerator, allowed_conditions: List[str] | None = None, package_manager_dir: Path | None = None) -> Dict[str, Any]:
+    variants = {skill.baseline_name: skill for skill in build_skill_variants(tool, tools, generator, package_manager_dir=package_manager_dir)}
+    if allowed_conditions is not None:
+        variants = {k: v for k, v in variants.items() if k in allowed_conditions}
+    return variants
 
 
 def _write_jsonl(path: Path, records: List[Dict[str, Any]]) -> None:
@@ -200,8 +203,13 @@ def _safe_filename(value: str) -> str:
     return "".join(char if char.isalnum() or char in {"-", "_", "."} else "_" for char in value)[:160]
 
 
+def _safe_dir_name(value: str) -> str:
+    """Truncate a tool or condition name for use as a directory component on Windows."""
+    return "".join(char if char.isalnum() or char in {"-", "_", "."} else "_" for char in value)[:50]
+
+
 def _write_condition_prompt(output_dir: Path, tool: Any, skill: Any) -> None:
-    prompt_name = f"{_safe_filename(tool.tool_name)}__{_safe_filename(skill.baseline_name)}.txt"
+    prompt_name = f"{_safe_dir_name(tool.tool_name)}__{_safe_dir_name(skill.baseline_name)}.txt"
     local_prompt_dir = output_dir.parent / "prompts"
     local_prompt_dir.mkdir(parents=True, exist_ok=True)
     prompt_text = condition_prompt_text(tool, skill)
@@ -215,17 +223,18 @@ def run_packaging_pipeline(
     tools: Dict[str, Any],
     output_dir: str | Path,
     generator: SkillGenerator | None = None,
+    allowed_conditions: List[str] | None = None,
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, Dict[str, Any]]]:
     out_dir = Path(output_dir)
     generator = generator or SkillGenerator()
     records: List[Dict[str, Any]] = []
 
     for tool in tqdm(tools.values(), desc="[AutoSkill] Packaging tools"):
-        variants = build_skill_variant_map(tool, tools, generator, package_manager_dir=out_dir)
+        variants = build_skill_variant_map(tool, tools, generator, allowed_conditions=allowed_conditions, package_manager_dir=out_dir)
         for skill in variants.values():
             report = validate_skill(tool, skill)
             _write_condition_prompt(out_dir, tool, skill)
-            write_skill_package(out_dir / tool.tool_name / skill.baseline_name, tool, skill, report)
+            write_skill_package(out_dir / _safe_dir_name(tool.tool_name) / _safe_dir_name(skill.baseline_name), tool, skill, report)
             records.append(
                 {
                     "tool_name": tool.tool_name,
@@ -266,6 +275,7 @@ def run_benchmark_pipeline(
     output_dir: str | Path,
     generator: SkillGenerator | None = None,
     predictor: PredictorBackend | None = None,
+    allowed_conditions: List[str] | None = None,
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, Any]]:
     out_dir = Path(output_dir)
     generator = generator or SkillGenerator()
@@ -277,13 +287,13 @@ def run_benchmark_pipeline(
         if task.tool_name not in tools:
             continue
         tool = tools[task.tool_name]
-        variants = build_skill_variant_map(tool, tools, generator, package_manager_dir=out_dir.parent / "packages")
+        variants = build_skill_variant_map(tool, tools, generator, allowed_conditions=allowed_conditions, package_manager_dir=out_dir.parent / "packages")
         for skill in variants.values():
             report = validate_skill(tool, skill)
-            target_dir = out_dir / task.tool_name / skill.baseline_name
+            target_dir = out_dir / _safe_dir_name(task.tool_name) / _safe_dir_name(skill.baseline_name)
             target_dir.mkdir(parents=True, exist_ok=True)
             
-            result_path = target_dir / f"{task.task_id}.result.json"
+            result_path = target_dir / f"{_safe_dir_name(task.task_id)}.result.json"
             if result_path.exists():
                 try:
                     with result_path.open("r", encoding="utf-8") as f:
@@ -309,7 +319,7 @@ def run_benchmark_pipeline(
             with result_path.open("w", encoding="utf-8") as f:
                 json.dump(score, f, indent=2, ensure_ascii=False)
 
-            exposure_path = target_dir / f"{task.task_id}.prompt.txt"
+            exposure_path = target_dir / f"{_safe_dir_name(task.task_id)}.prompt.txt"
             exposure_path.write_text(prediction.exposure_text, encoding="utf-8")
 
     summary = summarize_task_scores(all_scores)
@@ -342,6 +352,7 @@ def run_routing_benchmark_pipeline(
     output_dir: str | Path,
     generator: SkillGenerator | None = None,
     predictor: PredictorBackend | None = None,
+    allowed_conditions: List[str] | None = None,
 ) -> tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, Any]]:
     out_dir = Path(output_dir)
     generator = generator or SkillGenerator()
@@ -349,7 +360,7 @@ def run_routing_benchmark_pipeline(
     tasks = load_benchmark_tasks(tasks_path)
 
     skill_variants_by_tool = {
-        tool_name: build_skill_variant_map(tool, tools, generator, package_manager_dir=out_dir.parent / "packages")
+        tool_name: build_skill_variant_map(tool, tools, generator, allowed_conditions=allowed_conditions, package_manager_dir=out_dir.parent / "packages")
         for tool_name, tool in tools.items()
     }
     routing_scores = run_routing_pipeline(tasks, tools, skill_variants_by_tool, predictor, output_dir=out_dir)
@@ -371,6 +382,7 @@ def run_full_experiment(
     output_root: str | Path,
     generator_config: Dict[str, Any] | None = None,
     predictor_config: Dict[str, Any] | None = None,
+    allowed_conditions: List[str] | None = None,
 ) -> Dict[str, Any]:
     output_root = Path(output_root)
     run_config = {
@@ -398,6 +410,7 @@ def run_full_experiment(
         tools=tools,
         output_dir=output_root / "packages",
         generator=generator,
+        allowed_conditions=allowed_conditions,
     )
     benchmark_scores, benchmark_summary, benchmark_detail_summaries = run_benchmark_pipeline(
         tools=tools,
@@ -405,6 +418,7 @@ def run_full_experiment(
         output_dir=output_root / "benchmark",
         generator=generator,
         predictor=predictor,
+        allowed_conditions=allowed_conditions,
     )
     routing_scores, routing_summary, routing_detail_summaries = run_routing_benchmark_pipeline(
         tools=tools,
@@ -412,6 +426,7 @@ def run_full_experiment(
         output_dir=output_root / "routing_benchmark",
         generator=generator,
         predictor=predictor,
+        allowed_conditions=allowed_conditions,
     )
     benchmark_summary_by_tool = benchmark_detail_summaries["by_tool"]
     benchmark_summary_by_split = benchmark_detail_summaries["by_split"]
@@ -473,11 +488,11 @@ def run_full_experiment(
     audit_records: List[Dict[str, Any]] = []
     for record in package_records:
         tool = tools[record["tool_name"]]
-        artifact_path = output_root / "packages" / record["tool_name"] / record["baseline_name"]
+        artifact_path = output_root / "packages" / _safe_dir_name(record["tool_name"]) / record["baseline_name"]
         audit_records.append(generation_audit_record(audit_manifest, tool, record["skill"], record["report"], artifact_path))
     for score in benchmark_scores:
         package_record = package_record_map.get((score.get("tool_name"), score.get("baseline_name")))
-        artifact_path = output_root / "benchmark" / str(score.get("tool_name", "")) / str(score.get("baseline_name", "")) / f"{score.get('task_id', '')}.result.json"
+        artifact_path = output_root / "benchmark" / _safe_dir_name(str(score.get("tool_name", ""))) / _safe_dir_name(str(score.get("baseline_name", ""))) / f"{_safe_dir_name(str(score.get('task_id', '')))}.result.json"
         audit_records.append(
             prediction_audit_record(
                 audit_manifest,
@@ -538,4 +553,5 @@ def run_full_experiment_from_config(config_path: str | Path, overrides: Dict[str
         output_root=config["output_root"],
         generator_config=config.get("generator"),
         predictor_config=config.get("predictor"),
+        allowed_conditions=config.get("conditions"),
     )

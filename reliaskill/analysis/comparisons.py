@@ -36,21 +36,21 @@ COMPARISON_TEMPLATES: List[ComparisonTemplate] = [
     ComparisonTemplate(
         "naive_skill_vs_raw_mcp",
         "raw_mcp",
-        "naive_skill",
+        "naive_skill_k1",
         [MetricSpec("joint_exact_match", primary=True), MetricSpec("argument_schema_validity"), MetricSpec("tool_selection_accuracy")],
         expected_claim="Generated skills improve structured tool-use accuracy over raw MCP schemas.",
     ),
     ComparisonTemplate(
         "repaired_vs_naive",
-        "naive_skill",
-        "repaired_skill",
+        "naive_skill_k1",
+        "full_regeneration_repair",
         [MetricSpec("joint_exact_match", primary=True), MetricSpec("argument_schema_validity"), MetricSpec("harmful_skill_injection_rate", "lower")],
         expected_claim="Repair improves or preserves utility while reducing harmful behavior.",
     ),
     ComparisonTemplate(
         "gated_vs_repaired",
-        "repaired_skill",
-        "gated_skill",
+        "full_regeneration_repair",
+        "autoskill_base",
         [MetricSpec("harmful_skill_injection_rate", "lower", primary=True), MetricSpec("joint_exact_match", "higher", min_effect=-0.03)],
         source="harm_utility",
         expected_claim="Gating trades little utility for lower harm.",
@@ -65,7 +65,7 @@ COMPARISON_TEMPLATES: List[ComparisonTemplate] = [
     ComparisonTemplate(
         "multi_candidate_vs_single_candidate",
         "naive_skill_k1",
-        "multi_candidate_skill_k3_behavior_select",
+        "multi_candidate_repaired_gated",
         [MetricSpec("joint_exact_match", primary=True), MetricSpec("argument_schema_validity"), MetricSpec("harmful_skill_injection_rate", "lower")],
         expected_claim="Multi-candidate selection improves over one-shot skill generation.",
     ),
@@ -86,7 +86,7 @@ COMPARISON_TEMPLATES: List[ComparisonTemplate] = [
     ComparisonTemplate(
         "hard_cases_only",
         "raw_mcp",
-        "naive_skill",
+        "naive_skill_k1",
         [MetricSpec("joint_exact_match", primary=True), MetricSpec("tool_accuracy")],
         source="slice",
         slice_file="slice_analysis_by_difficulty.csv",
@@ -98,7 +98,7 @@ COMPARISON_TEMPLATES: List[ComparisonTemplate] = [
     ComparisonTemplate(
         "negative_controls_only",
         "raw_mcp",
-        "gated_skill",
+        "autoskill_base",
         [MetricSpec("harmful_skill_injection_rate", "lower", primary=True), MetricSpec("trigger_precision")],
         source="harm_utility",
         expected_claim="Gated skills reduce false triggering on negative controls.",
@@ -107,7 +107,7 @@ COMPARISON_TEMPLATES: List[ComparisonTemplate] = [
     ComparisonTemplate(
         "side_effect_tools_only",
         "raw_mcp",
-        "gated_skill",
+        "autoskill_base",
         [MetricSpec("joint_exact_match", primary=True), MetricSpec("harmful_skill_injection_rate", "lower")],
         source="slice",
         slice_file="slice_analysis_by_tool_complexity.csv",
@@ -119,7 +119,7 @@ COMPARISON_TEMPLATES: List[ComparisonTemplate] = [
     ComparisonTemplate(
         "high_distractor_routing_only",
         "raw_mcp",
-        "gated_skill",
+        "autoskill_base",
         [MetricSpec("tool_accuracy", primary=True), MetricSpec("joint_exact_match")],
         source="slice",
         slice_file="slice_analysis_by_distractor_level.csv",
