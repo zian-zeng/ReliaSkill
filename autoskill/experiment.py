@@ -363,7 +363,7 @@ def run_routing_benchmark_pipeline(
         tool_name: build_skill_variant_map(tool, tools, generator, allowed_conditions=allowed_conditions, package_manager_dir=out_dir.parent / "packages")
         for tool_name, tool in tools.items()
     }
-    routing_scores = run_routing_pipeline(tasks, tools, skill_variants_by_tool, predictor, output_dir=out_dir)
+    routing_scores = run_routing_pipeline(tasks, tools, skill_variants_by_tool, predictor, output_dir=out_dir, benchmark_dir=out_dir.parent / "benchmark")
     summary = summarize_routing_scores(routing_scores)
     summary_by_tool = summarize_routing_scores_by_tool(routing_scores)
     summary_by_split = summarize_routing_scores_by_split(routing_scores)

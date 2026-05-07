@@ -188,6 +188,7 @@ def run_routing_pipeline(
     skill_variants_by_tool: Dict[str, Dict[str, GeneratedSkill]],
     predictor: PredictorBackend,
     output_dir: Path | None = None,
+    benchmark_dir: Path | None = None,
 ) -> List[Dict[str, Any]]:
     records: List[Dict[str, Any]] = []
     baseline_names = list(next(iter(skill_variants_by_tool.values())).keys())
@@ -256,26 +257,66 @@ def run_routing_pipeline(
                     tags=list(task.tags),
                 )
                 runtime_skill, retrieval_context = contextualize_skill_for_task(routed_task, selected_tool, selected_skill, tools)
-                prediction = safe_predict(selected_tool, runtime_skill, routed_task, predictor)
-                prediction.tool_name = selected_tool_name
                 
-                argument_score = score_prediction(routed_task, selected_tool, prediction)
-                record = score_routed_prediction(
-                    task,
-                    selected_tool_name=selected_tool_name,
-                    candidate_tools=list(routing["candidate_tools"]),
-                    predictor_record={
-                        "baseline_name": baseline_name,
-                        "predicted_arguments": dict(prediction.predicted_arguments),
-                        "argument_score": argument_score,
-                        "routing_strategy": routing["routing_strategy"],
-                        "prediction_metadata": {
-                            **prediction.metadata,
-                            "routing_candidate_rows": routing["candidate_rows"],
-                            "retrieval_context": retrieval_context,
+                prediction_dict = None
+                if benchmark_dir and selected_tool_name == task.tool_name:
+                    cached_result_path = benchmark_dir / _safe_dir_name(selected_tool_name) / _safe_dir_name(baseline_name) / f"{_safe_dir_name(task.task_id)}.result.json"
+                    if cached_result_path.exists():
+                        try:
+                            with cached_result_path.open("r", encoding="utf-8") as f:
+                                cached_score = json.load(f)
+                                prediction_dict = {
+                                    "predicted_arguments": cached_score.get("predicted_arguments", {}),
+                                    "argument_score": {
+                                        "exact_match": cached_score.get("exact_match", False),
+                                        "argument_validity": cached_score.get("argument_validity", 0.0),
+                                        "required_argument_recall": cached_score.get("required_argument_recall", 0.0),
+                                        "hallucinated_args": cached_score.get("hallucinated_args", []),
+                                    },
+                                    "prediction_metadata": cached_score.get("prediction_metadata", {})
+                                }
+                        except Exception:
+                            pass
+                
+                if prediction_dict is not None:
+                    argument_score = prediction_dict["argument_score"]
+                    record = score_routed_prediction(
+                        task,
+                        selected_tool_name=selected_tool_name,
+                        candidate_tools=list(routing["candidate_tools"]),
+                        predictor_record={
+                            "baseline_name": baseline_name,
+                            "predicted_arguments": prediction_dict["predicted_arguments"],
+                            "argument_score": argument_score,
+                            "routing_strategy": routing["routing_strategy"],
+                            "prediction_metadata": {
+                                **prediction_dict["prediction_metadata"],
+                                "routing_candidate_rows": routing["candidate_rows"],
+                                "retrieval_context": retrieval_context,
+                            },
                         },
-                    },
-                )
+                    )
+                else:
+                    prediction = safe_predict(selected_tool, runtime_skill, routed_task, predictor)
+                    prediction.tool_name = selected_tool_name
+                    
+                    argument_score = score_prediction(routed_task, selected_tool, prediction)
+                    record = score_routed_prediction(
+                        task,
+                        selected_tool_name=selected_tool_name,
+                        candidate_tools=list(routing["candidate_tools"]),
+                        predictor_record={
+                            "baseline_name": baseline_name,
+                            "predicted_arguments": dict(prediction.predicted_arguments),
+                            "argument_score": argument_score,
+                            "routing_strategy": routing["routing_strategy"],
+                            "prediction_metadata": {
+                                **prediction.metadata,
+                                "routing_candidate_rows": routing["candidate_rows"],
+                                "retrieval_context": retrieval_context,
+                            },
+                        },
+                    )
                 # Add split info for reporting
                 record["split"] = task.split
             
