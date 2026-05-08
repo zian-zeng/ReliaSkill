@@ -110,11 +110,30 @@ class LocalHFChatRunner:
         self._load()
         tokenizer = self._tokenizer
         if hasattr(tokenizer, "apply_chat_template"):
-            return tokenizer.apply_chat_template(
-                messages,
-                tokenize=False,
-                add_generation_prompt=True,
-            )
+            try:
+                return tokenizer.apply_chat_template(
+                    messages,
+                    tokenize=False,
+                    add_generation_prompt=True,
+                )
+            except Exception as e:
+                if "System role not supported" in str(e) or "system" in str(e).lower():
+                    new_messages = []
+                    system_content = ""
+                    for msg in messages:
+                        if msg["role"] == "system":
+                            system_content += msg["content"] + "\n\n"
+                        elif msg["role"] == "user":
+                            new_messages.append({"role": "user", "content": system_content + msg["content"]})
+                            system_content = ""
+                        else:
+                            new_messages.append(msg)
+                    return tokenizer.apply_chat_template(
+                        new_messages,
+                        tokenize=False,
+                        add_generation_prompt=True,
+                    )
+                raise e
         parts = []
         for message in messages:
             role = message.get("role", "user").upper()
