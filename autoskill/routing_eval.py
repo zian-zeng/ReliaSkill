@@ -297,21 +297,24 @@ def run_routing_pipeline(
                         },
                     )
                 else:
-                    prediction = safe_predict(selected_tool, runtime_skill, routed_task, predictor)
-                    prediction.tool_name = selected_tool_name
-                    
-                    argument_score = score_prediction(routed_task, selected_tool, prediction)
+                    # Extreme Fast Path: If the tool is wrong, the routing script forces all scores to 0 anyway.
+                    # We do not need to call the LLM to hallucinate arguments for a wrong tool.
+                    argument_score = {
+                        "exact_match": False,
+                        "argument_validity": 0.0,
+                        "required_argument_recall": 0.0,
+                        "hallucinated_args": [],
+                    }
                     record = score_routed_prediction(
                         task,
                         selected_tool_name=selected_tool_name,
                         candidate_tools=list(routing["candidate_tools"]),
                         predictor_record={
                             "baseline_name": baseline_name,
-                            "predicted_arguments": dict(prediction.predicted_arguments),
+                            "predicted_arguments": {},
                             "argument_score": argument_score,
                             "routing_strategy": routing["routing_strategy"],
                             "prediction_metadata": {
-                                **prediction.metadata,
                                 "routing_candidate_rows": routing["candidate_rows"],
                                 "retrieval_context": retrieval_context,
                             },
