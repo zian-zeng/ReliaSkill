@@ -22,7 +22,10 @@
             <img src="assets/reliaskill-shield-icon.png" alt="">
           </span>
           <span class="brand-copy">
-            <span class="brand-name">ReliaSkill</span>
+            <span class="brand-name wordmark wordmark-nav">
+              <span class="sr-only">ReliaSkill</span>
+              <span aria-hidden="true">Rel<span class="wordmark-i wordmark-i-blue"></span>aSk<span class="wordmark-i wordmark-i-green"></span>ll</span>
+            </span>
             <span class="brand-line">MCP skill reliability</span>
           </span>
         </a>
@@ -50,29 +53,53 @@
         <div class="hero-grid">
           <div class="hero-copy" data-reveal>
             <p class="eyebrow">Research system for MCP skill cold-start</p>
-            <h1>ReliaSkill</h1>
+            <h1>
+              <span class="wordmark wordmark-hero">
+                <span class="sr-only">ReliaSkill</span>
+                <span aria-hidden="true">Rel<span class="wordmark-i wordmark-i-blue"></span>aSk<span class="wordmark-i wordmark-i-green"></span>ll</span>
+              </span>
+            </h1>
             <p class="subtitle">Pre-deployment validation, repair, and gating for reliable MCP-style tool-use skills.</p>
             <p class="hero-text">
               ReliaSkill converts raw MCP-like schemas and sparse documentation into compact skill artifacts with explicit use boundaries, schema-faithful examples, validation reports, repair traces, reliability scores, and deployability decisions before downstream LLM agents see them.
             </p>
             <div class="hero-actions" aria-label="Primary actions">
-              <a class="button button-primary" href="https://github.com/zian-zeng/ReliaSkill#readme">Read the README</a>
+              <a class="button button-primary button-paper" href="https://github.com/zian-zeng/ReliaSkill" aria-label="Read the paper placeholder, currently routes to the repository">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 3.75h7.25L18 7.5v12.75H7V3.75Z"></path>
+                  <path d="M14 3.75V8h4"></path>
+                  <path d="M9.75 11.25h5.5M9.75 14.25h5.5M9.75 17.25h3.75"></path>
+                </svg>
+                <span>Read the Paper</span>
+              </a>
               <a class="button button-ghost" href="#pipeline">View Pipeline</a>
               <a class="button button-ghost" href="#results">See Results</a>
             </div>
             <div class="signal-row" aria-label="Prepared dataset and evaluation signals">
-              <div>
+              <div class="signal-card">
                 <strong>295</strong>
                 <span>MCP-like tools</span>
               </div>
-              <div>
+              <div class="signal-card">
                 <strong>2,950</strong>
                 <span>controls</span>
               </div>
-              <div>
+              <div class="signal-card">
                 <strong>5,900</strong>
                 <span>routing examples</span>
               </div>
+            </div>
+            <div class="repo-action-row">
+              <a class="github-repo-button" href="https://github.com/zian-zeng/ReliaSkill" aria-label="Open the ReliaSkill GitHub repository">
+                <span class="repo-button-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M8.25 8.5 4.75 12l3.5 3.5"></path>
+                    <path d="m15.75 8.5 3.5 3.5-3.5 3.5"></path>
+                    <path d="m13.25 6.75-2.5 10.5"></path>
+                  </svg>
+                </span>
+                <span>GITHUB REPOSITORY</span>
+              </a>
             </div>
           </div>
 
