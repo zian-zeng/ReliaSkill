@@ -1,6 +1,12 @@
 # ReliaSkill
 
+<p align="center">
+  <img src="docs/assets/reliaskill-shield-icon.png" alt="ReliaSkill shield logo" width="180">
+</p>
+
 Pre-deployment validation, repair, and gating for reliable MCP-style tool-use skills.
+
+Project showcase site: [docs/index.html](docs/index.html), ready for GitHub Pages after enabling Pages from `main / docs`.
 
 ReliaSkill is a research pipeline for MCP skill cold-start. Raw MCP schemas expose tool interfaces, but they often leave the agent-facing usage policy implicit: when to call the tool, when to abstain, and how to assemble valid arguments from a natural-language request.
 
@@ -10,14 +16,22 @@ The central claim is that reliable tool use is partly a representation problem. 
 
 ReliaSkill is intentionally scoped. It is not a generic agent framework, an experience-rich skill-learning system, a GUI-agent skill ecosystem, or a trajectory distillation system.
 
-<!-- Poster-derived figure assets are not currently checked in as repo image files. Add exported poster figures here only after committing the actual image files. -->
-
 ## Why This Matters
 
 - Raw schemas are too thin: they specify accepted arguments, but not reliable use boundaries.
 - Naive skill generation can be fluent but unfaithful: it may invent arguments, omit required fields, or broaden the tool's intended scope.
 - Tool onboarding should happen before deployment: generated tool representations should be treated as candidates, not trusted artifacts.
 - ReliaSkill validates, behavior-tests, repairs, and gates skill artifacts before they are exposed to downstream tool-using agents.
+
+## Visual Overview
+
+| Why Raw Schemas Fail | ReliaSkill Pipeline |
+| --- | --- |
+| <img src="docs/assets/reliaskill-schema-failure.png" alt="Diagram showing missing use boundaries, sparse documentation, over-triggering, and invented arguments in raw schemas."> | <img src="docs/assets/reliaskill-pipeline.png" alt="Six-stage ReliaSkill pipeline from ToolIR++ normalization through deployment gating."> |
+
+| Artifact Anatomy | Selected Result Highlights |
+| --- | --- |
+| <img src="docs/assets/reliaskill-artifact-anatomy.png" alt="Anatomy of a ReliaSkill artifact with use boundaries, argument template, examples, reports, repair trace, score, and deployment decision."> | <img src="docs/assets/reliaskill-results-highlights.png" alt="Selected result highlights comparing raw MCP, boundary-first, and verbose-doc conditions."> |
 
 ## Pipeline
 
