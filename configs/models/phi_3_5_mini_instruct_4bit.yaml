@@ -1,0 +1,16 @@
+model_name: microsoft/Phi-3.5-mini-instruct
+model_path: microsoft/Phi-3.5-mini-instruct
+model_name_or_path: microsoft/Phi-3.5-mini-instruct
+tokenizer_path: microsoft/Phi-3.5-mini-instruct
+backend: local_hf
+type: local_hf
+quantization: 4bit
+load_in_4bit: true
+torch_dtype: bfloat16
+device_map: auto
+trust_remote_code: true
+max_new_tokens: 256
+temperature: 0.0
+batch_size: 32
+max_prompt_tokens: 4096
+estimated_vram_gb: 4.5

@@ -1,0 +1,46 @@
+experiment_scale: paper_llama3_1b_fast
+description: Fast Llama-3.2-1B-Instruct run with only the 5 most critical conditions.
+seed: 42
+tools_path: data/raw_mcp/tools.jsonl
+tasks_path: data/controls/test.jsonl
+output_root: outputs/llama3_1b_fast_results
+
+generator:
+  type: heuristic
+  package_root: outputs/medium_overnight/packages
+
+predictor:
+  type: local_hf
+  model_name_or_path: meta-llama/Llama-3.2-1B-Instruct
+  load_in_4bit: true
+  device_map: auto
+
+models:
+  - configs/models/llama_3_2_1b_instruct_4bit.yaml
+
+conditions:
+  - raw_mcp
+  - autoskill_base
+  - human_written_skill_upper_bound
+  - skill_prompt_boundary_first
+  - skill_prompt_verbose_docs
+
+data:
+  config: configs/data/emnlp_scale.yaml
+  max_tools: 280
+controls:
+  config: configs/controls/emnlp_scale.yaml
+  positives_per_tool_total: 3
+  negatives_per_tool_total: 2
+routing:
+  config: configs/routing/distractor_inventory.yaml
+  candidate_set_sizes: [4]
+
+scheduler:
+  one_gpu: true
+  resume: true
+  group_by_model: true
+  run_all_conditions_before_unload: true
+  max_batch_size: 16
+  prompt_safety_margin_tokens: 256
+  include_routing: true

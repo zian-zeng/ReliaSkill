@@ -1,0 +1,90 @@
+experiment_scale: medium_overnight
+description: Real GPU run (Qwen2.5-7B-4bit) for ReliaSkill paper results.
+seed: 42
+tools_path: data/raw_mcp/tools.jsonl
+tasks_path: data/controls/test.jsonl
+output_root: outputs/medium_overnight_real_gpu
+
+generator:
+  type: local_hf
+  model_name_or_path: Qwen/Qwen2.5-7B-Instruct
+  load_in_4bit: true
+  device_map: auto
+
+predictor:
+  type: local_hf
+  model_name_or_path: Qwen/Qwen2.5-7B-Instruct
+  load_in_4bit: true
+  device_map: auto
+
+target_tools: 100
+target_domains: 10
+positives_per_tool: 3
+negatives_per_tool: 3
+routing_candidate_sizes: [4]
+live_execution:
+  enabled: optional
+  subset_size: 50
+  domains: [filesystem, database/sql, git/version-control]
+
+models:
+  - configs/models/qwen2_5_3b_instruct_4bit.yaml
+  - configs/models/qwen2_5_7b_instruct_4bit.yaml
+
+# 12 core conditions — covers the full reliability ladder + key ablations
+# Skips: 7 prompt template ablations + 4 compactness variants = saves ~55% calls
+conditions:
+  # --- Completed conditions from the first run ---
+  - raw_mcp
+  - schema_only
+  - raw_schema_plus_examples
+  - generated_docs_no_validation
+  - multi_candidate_repaired_gated
+  # --- Missing Reliability Ladder conditions ---
+  - naive_skill_k1
+  - generic_validator_no_behavior_tests
+  - full_regeneration_repair
+  - autoskill_base
+
+data:
+  config: configs/data/emnlp_scale.yaml
+  max_tools: 100
+  min_domains_required: 10
+controls:
+  config: configs/controls/emnlp_scale.yaml
+  positives_per_tool_total: 3
+  negatives_per_tool_total: 3
+routing:
+  config: configs/routing/distractor_inventory.yaml
+  candidate_set_sizes: [4]
+skills:
+  multi_candidate_config: configs/skills/multi_candidate.yaml
+  candidate_k: 3
+  compactness_config: configs/skills/compactness_variants.yaml
+repair:
+  config: configs/repair/repair_strategies.yaml
+
+scheduler:
+  one_gpu: true
+  resume: true
+  group_by_model: true
+  run_all_conditions_before_unload: true
+  max_batch_size: 2
+  prompt_safety_margin_tokens: 256
+  include_routing: true
+  examples_per_second: 0.25
+  estimated_bytes_per_call: 4096
+  estimated_bytes_per_token: 1.25
+  condition_token_overheads:
+    raw_mcp: 900
+    schema_only: 450
+    raw_schema_plus_examples: 950
+    naive_skill: 300
+    validated_skill: 350
+    repaired_skill: 450
+    gated_skill: 475
+    generated_docs_no_validation: 900
+    multi_candidate_skill_k3_behavior_select: 400
+    multi_candidate_repaired_gated: 450
+    repaired_targeted_patch: 450
+    repaired_full_regeneration: 700
