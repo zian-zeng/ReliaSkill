@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="ReliaSkill is a pre-deployment reliability pipeline for MCP-style tool-use skills, with validation, behavior testing, repair, scoring, and deployment gating."
+    >
+    <title>ReliaSkill | Reliable MCP-Style Tool-Use Skills</title>
+    <link rel="icon" href="assets/reliaskill-shield-icon.png">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <canvas id="field-canvas" class="field-canvas" aria-hidden="true"></canvas>
+
+    <header class="site-header" data-reveal>
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="#top" aria-label="ReliaSkill home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="assets/reliaskill-shield-icon.png" alt="">
+          </span>
+          <span class="brand-copy">
+            <span class="brand-name wordmark wordmark-nav">
+              <span class="sr-only">ReliaSkill</span>
+              <span aria-hidden="true">Rel<span class="wordmark-i wordmark-i-blue"></span>aSk<span class="wordmark-i wordmark-i-green"></span>ll</span>
+            </span>
+            <span class="brand-line">MCP skill reliability</span>
+          </span>
+        </a>
+
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span class="sr-only">Toggle navigation</span>
+        </button>
+
+        <div class="nav-links" id="site-nav">
+          <a href="#problem">Problem</a>
+          <a href="#pipeline">Pipeline</a>
+          <a href="#artifact">Artifact</a>
+          <a href="#evaluation">Evaluation</a>
+          <a href="#results">Results</a>
+          <a href="#quick-start">Quick start</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top">
+        <div class="hero-grid">
+          <div class="hero-copy" data-reveal>
+            <p class="eyebrow">Research system for MCP skill cold-start</p>
+            <h1>
+              <span class="wordmark wordmark-hero">
+                <span class="sr-only">ReliaSkill</span>
+                <span aria-hidden="true">Rel<span class="wordmark-i wordmark-i-blue"></span>aSk<span class="wordmark-i wordmark-i-green"></span>ll</span>
+              </span>
+            </h1>
+            <p class="subtitle">Pre-deployment validation, repair, and gating for reliable MCP-style tool-use skills.</p>
+            <p class="hero-text">
+              ReliaSkill converts raw MCP-like schemas and sparse documentation into compact skill artifacts with explicit use boundaries, schema-faithful examples, validation reports, repair traces, reliability scores, and deployability decisions before downstream LLM agents see them.
+            </p>
+            <div class="hero-actions" aria-label="Primary actions">
+              <a class="button button-primary button-paper" href="https://github.com/zian-zeng/ReliaSkill" aria-label="Read the paper placeholder, currently routes to the repository">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 3.75h7.25L18 7.5v12.75H7V3.75Z"></path>
+                  <path d="M14 3.75V8h4"></path>
+                  <path d="M9.75 11.25h5.5M9.75 14.25h5.5M9.75 17.25h3.75"></path>
+                </svg>
+                <span>Read the Paper</span>
+              </a>
+              <a class="button button-ghost" href="#pipeline">View Pipeline</a>
+              <a class="button button-ghost" href="#results">See Results</a>
+            </div>
+            <div class="signal-row" aria-label="Prepared dataset and evaluation signals">
+              <div class="signal-card">
+                <strong>295</strong>
+                <span>MCP-like tools</span>
+              </div>
+              <div class="signal-card">
+                <strong>2,950</strong>
+                <span>controls</span>
+              </div>
+              <div class="signal-card">
+                <strong>5,900</strong>
+                <span>routing examples</span>
+              </div>
+            </div>
+            <div class="repo-action-row">
+              <a class="github-repo-button" href="https://github.com/zian-zeng/ReliaSkill" aria-label="Open the ReliaSkill GitHub repository">
+                <span class="repo-button-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M8.25 8.5 4.75 12l3.5 3.5"></path>
+                    <path d="m15.75 8.5 3.5 3.5-3.5 3.5"></path>
+                    <path d="m13.25 6.75-2.5 10.5"></path>
+                  </svg>
+                </span>
+                <span>GITHUB REPOSITORY</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="hero-visual" aria-label="Raw schema to governed skill artifact reliability flow" data-reveal>
+            <figure class="hero-image-card" aria-hidden="true">
+              <img src="assets/reliaskill-hero-guardian.png" alt="">
+            </figure>
+            <div class="visual-flow">
+              <div class="flow-card schema-card">
+                <div class="card-kicker">raw_mcp</div>
+                <pre>{
+  "tool": "write_file",
+  "args": {
+    "path": "string",
+    "content": "string"
+  }
+}</pre>
+                <div class="thin-warning">usage boundary missing</div>
+              </div>
+
+              <div class="flow-core" aria-label="ReliaSkill governed representation layer">
+                <div class="core-ring">
+                  <span>ToolIR++</span>
+                  <span>Validate</span>
+                  <span>Repair</span>
+                  <span>Gate</span>
+                </div>
+                <div class="core-label">governed reliability layer</div>
+              </div>
+
+              <div class="flow-card artifact-card">
+                <div class="card-kicker">skill artifact</div>
+                <div class="artifact-lines">
+                  <span class="ok">purpose summary</span>
+                  <span class="ok">when to use</span>
+                  <span class="ok">when not to use</span>
+                  <span class="ok">argument template</span>
+                  <span class="ok">schema-faithful examples</span>
+                </div>
+                <div class="score-strip">
+                  <span>score</span>
+                  <strong>auditable</strong>
+                </div>
+              </div>
+
+              <div class="gate-stack" aria-label="Deployment decisions">
+                <span class="gate deploy">DEPLOY</span>
+                <span class="gate repair">REPAIR</span>
+                <span class="gate reject">REJECT</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section problem-section" id="problem">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Problem</p>
+          <h2>Raw schemas are interfaces, not reliable agent skills</h2>
+          <p>
+            MCP schemas tell a model what arguments exist. They usually do not specify when the tool should fire, when it should abstain, or how an agent should interpret adjacent requests that look plausible but are out of scope.
+          </p>
+        </div>
+
+        <div class="issue-grid">
+          <article class="issue-card" data-reveal>
+            <span class="issue-icon">01</span>
+            <h3>Missing use boundary</h3>
+            <p>Sparse docs leave trigger conditions implicit, so a model has to infer the policy from a thin interface.</p>
+          </article>
+          <article class="issue-card" data-reveal>
+            <span class="issue-icon">02</span>
+            <h3>Unsupported argument</h3>
+            <p>Fluent generated skills may introduce fields that the underlying schema never accepted.</p>
+          </article>
+          <article class="issue-card" data-reveal>
+            <span class="issue-icon">03</span>
+            <h3>Over-triggering</h3>
+            <p>Agents can call a tool for adjacent requests where explanation, search, or abstention is the safer behavior.</p>
+          </article>
+          <article class="issue-card issue-card-alert" data-reveal>
+            <span class="issue-icon">04</span>
+            <h3>Invalid activation</h3>
+            <p>Side-effect tools need explicit boundaries before deployment, not trust after one generated prompt.</p>
+          </article>
+        </div>
+
+        <figure class="showcase-figure light-figure" data-reveal>
+          <img src="assets/reliaskill-schema-failure.png" alt="Diagram explaining why raw MCP schemas fail: missing use boundaries, sparse documentation, over-triggering, and invented arguments.">
+          <figcaption>Raw schemas list arguments, but not the conditions for safe and correct tool use.</figcaption>
+        </figure>
+      </section>
+
+      <section class="section pipeline-section" id="pipeline">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Pipeline</p>
+          <h2>A governed representation layer before tool exposure</h2>
+          <p>
+            ReliaSkill treats generated skills as candidates. Each candidate moves through normalization, generation, validation, behavior tests, targeted repair, and a final deployment gate.
+          </p>
+        </div>
+
+        <div class="pipeline-rail" aria-label="Six-stage ReliaSkill pipeline">
+          <article class="stage-card" data-reveal>
+            <span class="stage-index">01</span>
+            <div class="stage-icon">IR</div>
+            <h3>ToolIR++ Normalization</h3>
+            <p>Preserves the original schema and adds provenance, complexity, ambiguity, side-effect, and safety metadata.</p>
+            <span class="stage-status">normalized</span>
+          </article>
+          <article class="stage-card" data-reveal>
+            <span class="stage-index">02</span>
+            <div class="stage-icon">SK</div>
+            <h3>Compact Skill Generation</h3>
+            <p>Creates purpose, use boundaries, non-use boundaries, argument templates, and examples.</p>
+            <span class="stage-status">candidate</span>
+          </article>
+          <article class="stage-card" data-reveal>
+            <span class="stage-index">03</span>
+            <div class="stage-icon">VA</div>
+            <h3>Structural Validation</h3>
+            <p>Checks unsupported arguments, required fields, enum values, examples, contradictions, and compactness.</p>
+            <span class="stage-status">inspected</span>
+          </article>
+          <article class="stage-card" data-reveal>
+            <span class="stage-index">04</span>
+            <div class="stage-icon">BE</div>
+            <h3>Behavior-Grounded Evaluation</h3>
+            <p>Runs positive controls and adjacent negative controls to measure utility and over-triggering risk.</p>
+            <span class="stage-status">tested</span>
+          </article>
+          <article class="stage-card" data-reveal>
+            <span class="stage-index">05</span>
+            <div class="stage-icon">RP</div>
+            <h3>Targeted Repair</h3>
+            <p>Patches localized failing sections instead of defaulting to full skill regeneration.</p>
+            <span class="stage-status">patched</span>
+          </article>
+          <article class="stage-card" data-reveal>
+            <span class="stage-index">06</span>
+            <div class="stage-icon">GT</div>
+            <h3>Deployment Gating</h3>
+            <p>Outputs DEPLOY, REPAIR, or REJECT using explicit reliability evidence and repair traces.</p>
+            <span class="stage-status">gated</span>
+          </article>
+        </div>
+
+        <figure class="showcase-figure light-figure" data-reveal>
+          <img src="assets/reliaskill-pipeline.png" alt="Six-stage ReliaSkill pipeline: ToolIR++ normalization, compact skill generation, structural validation, behavior-grounded evaluation, targeted repair, and deployment gating.">
+          <figcaption>Generated skills are candidates, not trusted artifacts by default.</figcaption>
+        </figure>
+      </section>
+
+      <section class="section artifact-section" id="artifact">
+        <div class="artifact-layout">
+          <div class="section-head section-head-left" data-reveal>
+            <p class="eyebrow">Artifact</p>
+            <h2>The generated skill is an inspected package, not a trusted prompt</h2>
+            <p>
+              ReliaSkill packages a compact agent-facing representation with machine-checkable evidence about schema faithfulness, behavior controls, repair history, and deployability.
+            </p>
+          </div>
+
+          <article class="inspection-card" data-reveal>
+            <div class="inspection-top">
+              <span>SKILL.md</span>
+              <span class="inspection-state">candidate under review</span>
+            </div>
+            <div class="inspection-body">
+              <div class="inspection-block">
+                <h3>Agent-facing content</h3>
+                <ul>
+                  <li>Purpose summary</li>
+                  <li>When-to-use guidance</li>
+                  <li>When-not-to-use guidance</li>
+                  <li>Canonical argument template</li>
+                  <li>Schema-faithful examples</li>
+                </ul>
+              </div>
+              <div class="inspection-block">
+                <h3>Reliability evidence</h3>
+                <ul>
+                  <li>Validation report</li>
+                  <li>Behavior report</li>
+                  <li>Repair trace</li>
+                  <li>Reliability score</li>
+                  <li>Deployment decision</li>
+                </ul>
+              </div>
+            </div>
+            <div class="decision-bar">
+              <span class="decision deploy">DEPLOY</span>
+              <span class="decision repair">REPAIR</span>
+              <span class="decision reject">REJECT</span>
+            </div>
+          </article>
+        </div>
+
+        <figure class="showcase-figure light-figure artifact-figure" data-reveal>
+          <img src="assets/reliaskill-artifact-anatomy.png" alt="Anatomy of a ReliaSkill artifact with purpose summary, use boundaries, argument template, examples, validation report, behavior report, repair trace, reliability score, and deployment decision.">
+          <figcaption>A ReliaSkill artifact packages agent-facing guidance with inspection evidence.</figcaption>
+        </figure>
+      </section>
+
+      <section class="section evaluation-section" id="evaluation">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Evaluation</p>
+          <h2>Utility and risk are measured together</h2>
+          <p>
+            ReliaSkill evaluates whether a representation helps models produce the correct call, select the right hidden tool, and abstain on adjacent negative controls.
+          </p>
+        </div>
+
+        <div class="eval-grid">
+          <article class="eval-card" data-reveal>
+            <h3>Structured-call prediction</h3>
+            <p>Checks whether the predicted tool call matches the gold call and whether arguments are parseable and schema-faithful.</p>
+          </article>
+          <article class="eval-card" data-reveal>
+            <h3>Positive controls</h3>
+            <p>Exercise intended use cases with gold tools and gold arguments across difficulty tiers.</p>
+          </article>
+          <article class="eval-card eval-card-negative" data-reveal>
+            <h3>Adjacent negative controls</h3>
+            <p>Test abstention on near-miss, explanation-versus-action, read-versus-write, and missing-information cases.</p>
+          </article>
+          <article class="eval-card" data-reveal>
+            <h3>Hidden-tool routing</h3>
+            <p>Measures tool selection and joint route-plus-argument correctness among candidate tools with hard distractors.</p>
+          </article>
+        </div>
+
+        <div class="balance-panel" data-reveal>
+          <div>
+            <span class="balance-label">Utility</span>
+            <strong>Exact call match</strong>
+            <p>Does the representation help the model assemble the right call?</p>
+          </div>
+          <div class="balance-axis" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div>
+            <span class="balance-label risk">Risk</span>
+            <strong>Negative-control abstention</strong>
+            <p>Does the representation avoid activating on adjacent out-of-scope requests?</p>
+          </div>
+        </div>
+
+        <figure class="showcase-figure light-figure" data-reveal>
+          <img src="assets/reliaskill-evaluation-protocol.png" alt="Evaluation protocol diagram covering structured-call prediction, hidden-tool routing, and positive plus adjacent negative controls.">
+          <figcaption>The evaluation protocol treats tool-use utility and abstention reliability as coupled requirements.</figcaption>
+        </figure>
+      </section>
+
+      <section class="section results-section" id="results">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Results</p>
+          <h2>Paper results and latest saved-log results are reported separately</h2>
+          <p>
+            The README separates the paper's main ReliaSkill ladder from newer multi-model saved-log experiments with additional prompt-template and baseline conditions. This site keeps the same boundary.
+          </p>
+        </div>
+
+        <div class="tabs" data-reveal>
+          <div class="tab-list" role="tablist" aria-label="Result tables">
+            <button class="tab-button is-active" id="tab-paper" type="button" role="tab" aria-selected="true" aria-controls="panel-paper" data-tab="paper">Paper ladder</button>
+            <button class="tab-button" id="tab-structured" type="button" role="tab" aria-selected="false" aria-controls="panel-structured" data-tab="structured">Latest structured</button>
+            <button class="tab-button" id="tab-routing" type="button" role="tab" aria-selected="false" aria-controls="panel-routing" data-tab="routing">Latest routing</button>
+            <button class="tab-button" id="tab-read" type="button" role="tab" aria-selected="false" aria-controls="panel-read" data-tab="read">How to read</button>
+          </div>
+
+          <div class="tab-panel is-active" id="panel-paper" role="tabpanel" aria-labelledby="tab-paper" data-panel="paper">
+            <h3>Paper main ladder: Qwen2.5-7B</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Condition</th>
+                    <th>Joint EM</th>
+                    <th>Selection Accuracy</th>
+                    <th>Argument Validity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>raw_mcp</code></td><td>17.15%</td><td>26.07%</td><td>43.66%</td></tr>
+                  <tr><td><code>schema_only</code></td><td>15.73%</td><td>25.80%</td><td>41.22%</td></tr>
+                  <tr><td><code>naive_skill</code></td><td>18.85%</td><td>27.36%</td><td>50.07%</td></tr>
+                  <tr><td><code>gated_skill</code></td><td>21.12%</td><td>31.39%</td><td>52.78%</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="result-note">
+              Argument Validity is not strictly monotonic in the ablation table: w/o Repair has slightly higher Argument Validity than Full ReliaSkill, while Full ReliaSkill has higher Joint EM and Selection Accuracy.
+            </p>
+          </div>
+
+          <div class="tab-panel" id="panel-structured" role="tabpanel" aria-labelledby="tab-structured" data-panel="structured" hidden>
+            <h3>Latest saved-log structured-call highlights</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Model</th>
+                    <th>Condition</th>
+                    <th>Exact Match</th>
+                    <th>Argument Validity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>gemma2-2B</td><td><code>raw_mcp</code></td><td>0.4380</td><td>0.8108</td></tr>
+                  <tr><td>gemma2-2B</td><td><code>skill_prompt_boundary_first</code></td><td>0.5207</td><td>0.7840</td></tr>
+                  <tr><td>gemma2-2B</td><td><code>skill_prompt_verbose_docs</code></td><td>0.5254</td><td>0.7985</td></tr>
+                  <tr><td>Qwen2.5-1.5B-Instruct</td><td><code>raw_mcp</code></td><td>0.3858</td><td>0.7540</td></tr>
+                  <tr><td>Qwen2.5-1.5B-Instruct</td><td><code>skill_prompt_boundary_first</code></td><td>0.6163</td><td>0.7531</td></tr>
+                  <tr><td>Qwen2.5-1.5B-Instruct</td><td><code>skill_prompt_verbose_docs</code></td><td>0.5614</td><td>0.7841</td></tr>
+                  <tr><td>Qwen2.5-7B</td><td><code>raw_mcp</code></td><td>0.5302</td><td>0.9663</td></tr>
+                  <tr><td>Qwen2.5-7B</td><td><code>generic_validator_no_behavior_tests</code></td><td>0.6529</td><td>0.9172</td></tr>
+                  <tr><td>Qwen2.5-7B</td><td><code>multi_candidate_repaired_gated</code></td><td>0.6183</td><td>0.8331</td></tr>
+                  <tr><td>phi 3.5-mini</td><td><code>raw_mcp</code></td><td>0.3397</td><td>0.9697</td></tr>
+                  <tr><td>phi 3.5-mini</td><td><code>skill_prompt_boundary_first</code></td><td>0.6373</td><td>0.9693</td></tr>
+                  <tr><td>llama3.2 1B</td><td><code>raw_mcp</code></td><td>0.3342</td><td>0.8685</td></tr>
+                  <tr><td>llama3.2 1B</td><td><code>skill_prompt_boundary_first</code></td><td>0.5281</td><td>0.9322</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="panel-routing" role="tabpanel" aria-labelledby="tab-routing" data-panel="routing" hidden>
+            <h3>Latest saved-log hidden-tool routing highlights</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Model</th>
+                    <th>Condition</th>
+                    <th>Tool Accuracy</th>
+                    <th>Joint Exact</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>gemma2-2B</td><td><code>raw_mcp</code></td><td>0.5214</td><td>0.2102</td></tr>
+                  <tr><td>gemma2-2B</td><td><code>skill_prompt_verbose_docs</code></td><td>0.6373</td><td>0.3403</td></tr>
+                  <tr><td>Qwen2.5-1.5B-Instruct</td><td><code>raw_mcp</code></td><td>0.5214</td><td>0.1444</td></tr>
+                  <tr><td>Qwen2.5-1.5B-Instruct</td><td><code>skill_prompt_boundary_first</code></td><td>0.5647</td><td>0.3153</td></tr>
+                  <tr><td>Qwen2.5-1.5B-Instruct</td><td><code>skill_prompt_verbose_docs</code></td><td>0.6373</td><td>0.3302</td></tr>
+                  <tr><td>Qwen2.5-7B</td><td><code>raw_mcp</code></td><td>0.5214</td><td>0.3431</td></tr>
+                  <tr><td>Qwen2.5-7B</td><td><code>autoskill_base</code></td><td>0.6278</td><td>0.4224</td></tr>
+                  <tr><td>Qwen2.5-7B</td><td><code>multi_candidate_repaired_gated</code></td><td>0.5485</td><td>0.3580</td></tr>
+                  <tr><td>phi 3.5-mini</td><td><code>raw_mcp</code></td><td>0.5214</td><td>0.2522</td></tr>
+                  <tr><td>phi 3.5-mini</td><td><code>skill_prompt_boundary_first</code></td><td>0.5647</td><td>0.4529</td></tr>
+                  <tr><td>llama3.2 1B</td><td><code>raw_mcp</code></td><td>0.5214</td><td>0.2224</td></tr>
+                  <tr><td>llama3.2 1B</td><td><code>skill_prompt_boundary_first</code></td><td>0.5647</td><td>0.3776</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="panel-read" role="tabpanel" aria-labelledby="tab-read" data-panel="read" hidden>
+            <div class="takeaway-grid">
+              <article>
+                <h3>Supported takeaways</h3>
+                <p>Boundary-first and verbose-doc skill prompts often improve smaller-model structured-call Exact Match over <code>raw_mcp</code>.</p>
+              </article>
+              <article>
+                <h3>Representation matters</h3>
+                <p>Hidden-tool routing results show that agent-facing representations affect both tool selection and joint route-plus-argument correctness.</p>
+              </article>
+              <article>
+                <h3>Do not overclaim</h3>
+                <p>Some latest saved-log baselines outperform the current <code>multi_candidate_repaired_gated</code> condition, so universal dominance is not supported.</p>
+              </article>
+              <article>
+                <h3>Separate framings</h3>
+                <p>The paper ladder and latest saved-log multi-model tables use different condition sets and should be cited separately.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <figure class="showcase-figure light-figure" data-reveal>
+          <img src="assets/reliaskill-results-highlights.png" alt="Selected results highlights comparing Raw MCP, boundary-first, and verbose-doc skill prompts, plus a Qwen2.5-7B spotlight.">
+          <figcaption>Selected saved-log highlights; paper ladder and latest saved-log tables remain separate experimental framings.</figcaption>
+        </figure>
+      </section>
+
+      <section class="section repo-section" id="repository">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Implementation</p>
+          <h2>Research code for reliable tool representation experiments</h2>
+          <p>
+            The repository includes parsing, generation, validation, controls, repair, gating, routing, conversion, live sandbox, and analysis components.
+          </p>
+        </div>
+
+        <div class="module-grid">
+          <article class="module-card" data-reveal><strong>Parsing</strong><span>MCP/tool schema parsing and normalization</span></article>
+          <article class="module-card" data-reveal><strong>ToolIR++</strong><span>Reliability metadata and schema-complexity features</span></article>
+          <article class="module-card" data-reveal><strong>Generation</strong><span>Prompt-template and compactness variants</span></article>
+          <article class="module-card" data-reveal><strong>Validation</strong><span>Structural artifact checks</span></article>
+          <article class="module-card" data-reveal><strong>Controls</strong><span>Positive and adjacent negative controls</span></article>
+          <article class="module-card" data-reveal><strong>Repair</strong><span>Targeted patching and regeneration baselines</span></article>
+          <article class="module-card" data-reveal><strong>Gating</strong><span>Rule-based reliability scoring and decisions</span></article>
+          <article class="module-card" data-reveal><strong>Routing</strong><span>Hidden-tool candidate evaluation</span></article>
+          <article class="module-card" data-reveal><strong>Converters</strong><span>BFCL/API-style and ToolBench-style utilities</span></article>
+          <article class="module-card" data-reveal><strong>Sandbox</strong><span>Filesystem, SQLite, and git-like live subset</span></article>
+          <article class="module-card" data-reveal><strong>Analysis</strong><span>Slice analysis and scientific comparison extraction</span></article>
+          <article class="module-card" data-reveal><strong>Scheduling</strong><span>Low-compute model run planning</span></article>
+        </div>
+      </section>
+
+      <section class="section quick-section" id="quick-start">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Quick start</p>
+          <h2>Run the static research harness locally</h2>
+          <p>The commands below are copied from the README and use the repository's existing scripts.</p>
+        </div>
+
+        <div class="command-grid">
+          <article class="command-card" data-reveal>
+            <div class="command-top"><h3>Install</h3><button class="copy-btn" type="button">Copy</button></div>
+            <pre><code>python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt</code></pre>
+          </article>
+          <article class="command-card" data-reveal>
+            <div class="command-top"><h3>Reliability pipeline</h3><button class="copy-btn" type="button">Copy</button></div>
+            <pre><code>python scripts\run_reliability_pipeline.py --config configs\experiment.reliability.heuristic.sample.json</code></pre>
+          </article>
+          <article class="command-card" data-reveal>
+            <div class="command-top"><h3>Benchmark evaluation</h3><button class="copy-btn" type="button">Copy</button></div>
+            <pre><code>python scripts\run_benchmark_eval.py
+python scripts\run_routing_eval.py</code></pre>
+          </article>
+          <article class="command-card" data-reveal>
+            <div class="command-top"><h3>Tests</h3><button class="copy-btn" type="button">Copy</button></div>
+            <pre><code>python -m unittest discover -s tests -v</code></pre>
+          </article>
+        </div>
+      </section>
+
+      <section class="section pages-section" id="pages">
+        <div class="pages-panel" data-reveal>
+          <div>
+            <p class="eyebrow">GitHub Pages</p>
+            <h2>Static by design</h2>
+            <p>
+              This showcase lives in <code>docs/</code> and can be served by GitHub Pages from the <code>main / docs</code> source. It uses plain HTML, CSS, and JavaScript, with no backend and no build step.
+            </p>
+          </div>
+          <div class="pages-files" aria-label="Static site files">
+            <span>docs/index.html</span>
+            <span>docs/styles.css</span>
+            <span>docs/script.js</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div>
+          <strong>ReliaSkill</strong>
+          <p>Pre-deployment validation, repair, and gating for reliable MCP-style tool-use skills.</p>
+        </div>
+        <div class="citation-block">
+          <div class="command-top">
+            <h2>Citation</h2>
+            <button class="copy-btn" type="button">Copy</button>
+          </div>
+          <pre><code>@misc{zeng2026reliaskill,
+  title={ReliaSkill: From Raw MCP Schemas to Reliable Skills for Tool-Using LLM Agents},
+  author={Zeng, Zian and Yuan, Mu},
+  year={2026},
+  note={Manuscript}
+}</code></pre>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
