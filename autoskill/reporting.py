@@ -18,7 +18,7 @@ BASELINE_ORDER = [
     "validated_skill",
     "repaired_skill",
     "gated_skill",
-    "autoskill_base",
+    "generated_skill_base",
 ]
 
 
@@ -210,7 +210,7 @@ def build_results_markdown(
             row = pairwise_comparisons[baseline]
             ci = row.get("exact_match_delta_ci", {"low": 0.0, "high": 0.0})
             lines.append(
-                f"| {row.get('anchor_baseline', 'autoskill_base')} | {baseline} | {row.get('num_paired_tasks', 0)} | {row.get('win_count', 0)} | {row.get('tie_count', 0)} | {row.get('loss_count', 0)} | {row.get('exact_match_delta', 0.0):.4f} | [{ci.get('low', 0.0):.4f}, {ci.get('high', 0.0):.4f}] | {row.get('avg_argument_validity_delta', 0.0):.4f} |"
+                f"| {row.get('anchor_baseline', 'generated_skill_base')} | {baseline} | {row.get('num_paired_tasks', 0)} | {row.get('win_count', 0)} | {row.get('tie_count', 0)} | {row.get('loss_count', 0)} | {row.get('exact_match_delta', 0.0):.4f} | [{ci.get('low', 0.0):.4f}, {ci.get('high', 0.0):.4f}] | {row.get('avg_argument_validity_delta', 0.0):.4f} |"
             )
 
     if error_taxonomy:
@@ -229,7 +229,7 @@ def build_results_markdown(
         lines.extend(["", "## Method Wins", ""])
         for baseline in _ordered_baselines(method_win_analysis):
             row = method_win_analysis[baseline]
-            lines.append(f"### autoskill_base vs {baseline}")
+            lines.append(f"### generated_skill_base vs {baseline}")
             lines.append("")
             lines.append(f"- anchor wins: {row.get('num_anchor_wins', 0)}")
             top_error_types = row.get("wins_by_error_type", {})
@@ -280,7 +280,7 @@ def build_results_markdown(
             "",
             "## Headline",
             "",
-            "The main comparison to track is whether `autoskill_base` improves exact-match and argument-validity metrics over `raw_mcp`, and whether that gain shows up consistently on individual tools instead of only in the aggregate.",
+            "The main comparison to track is whether `generated_skill_base` improves exact-match and argument-validity metrics over `raw_mcp`, and whether that gain shows up consistently on individual tools instead of only in the aggregate.",
             "",
         ]
     )
@@ -489,7 +489,7 @@ def build_method_wins_csv(method_win_analysis: Dict[str, Any]) -> str:
         top_tag = top_tag_items[0] if top_tag_items else ("", "")
         writer.writerow(
             [
-                row.get("anchor_baseline", "autoskill_base"),
+                row.get("anchor_baseline", "generated_skill_base"),
                 row.get("comparison_baseline", baseline),
                 row.get("num_anchor_wins", ""),
                 top_error[0],

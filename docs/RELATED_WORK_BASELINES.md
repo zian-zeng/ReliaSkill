@@ -1,6 +1,6 @@
 # Related Work And Baseline Mapping
 
-This note maps the current AutoSkill comparison ladder to prior work that is closest in spirit.
+This note maps the current ReliaSkill comparison ladder to prior work that is closest in spirit.
 
 ## Current Ladder
 
@@ -14,8 +14,8 @@ This note maps the current AutoSkill comparison ladder to prior work that is clo
   Candidate-tool retrieval baseline, closest to ToolLLM-style shortlist-and-route retrieval.
 - `retrieved_memory`
   Skill-memory retrieval baseline inspired by HELPER and Voyager style example reuse.
-- `autoskill_base`
-  Full current method with semantic hints, richer examples, and validation-aware candidate selection.
+- `generated_skill_base`
+  Base generated skill package with semantic hints, richer examples, and validation-aware candidate selection. This is a comparison condition, not the full ReliaSkill method.
 
 ## Closest Papers
 

@@ -4,7 +4,7 @@ conditions:
   - generated_docs_no_validation
   - generic_validator_no_behavior_tests
   - full_regeneration_repair
-  - human_written_skill_upper_bound
+  - curated_schema_reference
   - retrieval_tool_card
   - larger_model_naive_skill
   - adversarial_distractor_inventory

@@ -32,21 +32,21 @@ def aggregate_experiment_manifests(results: Iterable[Dict[str, Any]]) -> Dict[st
                     "valid_config": preflight.get("valid", False),
                     "generator_backend": "",
                     "predictor_backend": "",
-                    "autoskill_exact_match": None,
+                    "generated_skill_exact_match": None,
                     "raw_mcp_exact_match": None,
                     "schema_only_exact_match": None,
-                    "autoskill_vs_raw_delta": None,
-                    "autoskill_vs_schema_delta": None,
+                    "generated_skill_vs_raw_delta": None,
+                    "generated_skill_vs_schema_delta": None,
                     "output_root": preflight.get("resolved_paths", {}).get("output_root", ""),
                 }
             )
             continue
 
         benchmark_summary = manifest.get("benchmark_summary", {})
-        autoskill = benchmark_summary.get("autoskill_base", {})
+        generated_skill = benchmark_summary.get("generated_skill_base", {})
         raw_mcp = benchmark_summary.get("raw_mcp", {})
         schema_only = benchmark_summary.get("schema_only", {})
-        autoskill_exact = autoskill.get("exact_match_rate")
+        generated_skill_exact = generated_skill.get("exact_match_rate")
         raw_exact = raw_mcp.get("exact_match_rate")
         schema_exact = schema_only.get("exact_match_rate")
         runs.append(
@@ -57,11 +57,11 @@ def aggregate_experiment_manifests(results: Iterable[Dict[str, Any]]) -> Dict[st
                 "valid_config": preflight.get("valid", False),
                 "generator_backend": manifest.get("generator_backend", ""),
                 "predictor_backend": manifest.get("predictor_backend", ""),
-                "autoskill_exact_match": autoskill_exact,
+                "generated_skill_exact_match": generated_skill_exact,
                 "raw_mcp_exact_match": raw_exact,
                 "schema_only_exact_match": schema_exact,
-                "autoskill_vs_raw_delta": round(float(autoskill_exact) - float(raw_exact), 4) if autoskill_exact is not None and raw_exact is not None else None,
-                "autoskill_vs_schema_delta": round(float(autoskill_exact) - float(schema_exact), 4) if autoskill_exact is not None and schema_exact is not None else None,
+                "generated_skill_vs_raw_delta": round(float(generated_skill_exact) - float(raw_exact), 4) if generated_skill_exact is not None and raw_exact is not None else None,
+                "generated_skill_vs_schema_delta": round(float(generated_skill_exact) - float(schema_exact), 4) if generated_skill_exact is not None and schema_exact is not None else None,
                 "output_root": manifest.get("generator_config", {}).get("output_root", "") or manifest.get("output_root", ""),
             }
         )
@@ -72,17 +72,17 @@ def build_sweep_markdown(summary: Dict[str, Any]) -> str:
     lines = [
         "# AutoSkill Experiment Sweep",
         "",
-        "| Run | Status | Valid Config | Generator | Predictor | AutoSkill EM | Raw MCP EM | Schema Only EM | Delta vs Raw | Delta vs Schema |",
+        "| Run | Status | Valid Config | Generator | Predictor | Generated Skill EM | Raw MCP EM | Schema Only EM | Delta vs Raw | Delta vs Schema |",
         "| --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |",
     ]
     for row in summary.get("runs", []):
         lines.append(
             f"| {row.get('run_name', '')} | {row.get('status', '')} | {row.get('valid_config', False)} | {row.get('generator_backend', '')} | {row.get('predictor_backend', '')} | "
-            f"{_fmt_metric(row.get('autoskill_exact_match'))} | "
+            f"{_fmt_metric(row.get('generated_skill_exact_match'))} | "
             f"{_fmt_metric(row.get('raw_mcp_exact_match'))} | "
             f"{_fmt_metric(row.get('schema_only_exact_match'))} | "
-            f"{_fmt_metric(row.get('autoskill_vs_raw_delta'))} | "
-            f"{_fmt_metric(row.get('autoskill_vs_schema_delta'))} |"
+            f"{_fmt_metric(row.get('generated_skill_vs_raw_delta'))} | "
+            f"{_fmt_metric(row.get('generated_skill_vs_schema_delta'))} |"
         )
     lines.append("")
     return "\n".join(lines)
@@ -96,11 +96,11 @@ def build_sweep_csv(summary: Dict[str, Any]) -> str:
         "valid_config",
         "generator_backend",
         "predictor_backend",
-        "autoskill_exact_match",
+        "generated_skill_exact_match",
         "raw_mcp_exact_match",
         "schema_only_exact_match",
-        "autoskill_vs_raw_delta",
-        "autoskill_vs_schema_delta",
+        "generated_skill_vs_raw_delta",
+        "generated_skill_vs_schema_delta",
         "output_root",
     ]
     lines = [",".join(header)]
@@ -114,11 +114,11 @@ def build_sweep_csv(summary: Dict[str, Any]) -> str:
                     str(row.get("valid_config", "")),
                     str(row.get("generator_backend", "")),
                     str(row.get("predictor_backend", "")),
-                    "" if row.get("autoskill_exact_match") is None else str(row["autoskill_exact_match"]),
+                    "" if row.get("generated_skill_exact_match") is None else str(row["generated_skill_exact_match"]),
                     "" if row.get("raw_mcp_exact_match") is None else str(row["raw_mcp_exact_match"]),
                     "" if row.get("schema_only_exact_match") is None else str(row["schema_only_exact_match"]),
-                    "" if row.get("autoskill_vs_raw_delta") is None else str(row["autoskill_vs_raw_delta"]),
-                    "" if row.get("autoskill_vs_schema_delta") is None else str(row["autoskill_vs_schema_delta"]),
+                    "" if row.get("generated_skill_vs_raw_delta") is None else str(row["generated_skill_vs_raw_delta"]),
+                    "" if row.get("generated_skill_vs_schema_delta") is None else str(row["generated_skill_vs_schema_delta"]),
                     str(row.get("output_root", "")),
                 ]
             )

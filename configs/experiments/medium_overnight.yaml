@@ -44,7 +44,7 @@ conditions:
   - naive_skill_k1
   - generic_validator_no_behavior_tests
   - full_regeneration_repair
-  - autoskill_base
+  - generated_skill_base
 
 data:
   config: configs/data/emnlp_scale.yaml

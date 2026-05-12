@@ -48,7 +48,7 @@ def summarize_error_taxonomy(scores: Iterable[Dict[str, Any]]) -> Dict[str, Any]
 
 def summarize_method_wins(
     scores: Iterable[Dict[str, Any]],
-    anchor_baseline: str = "autoskill_base",
+    anchor_baseline: str = "generated_skill_base",
     comparison_baselines: List[str] | None = None,
     max_examples: int = 5,
 ) -> Dict[str, Any]:

@@ -20,7 +20,10 @@ RAW_SCHEMA_PLUS_EXAMPLES = "raw_schema_plus_examples"
 GENERATED_DOCS_NO_VALIDATION = "generated_docs_no_validation"
 GENERIC_VALIDATOR_NO_BEHAVIOR_TESTS = "generic_validator_no_behavior_tests"
 FULL_REGENERATION_REPAIR = "full_regeneration_repair"
+CURATED_SCHEMA_REFERENCE = "curated_schema_reference"
 HUMAN_WRITTEN_SKILL_UPPER_BOUND = "human_written_skill_upper_bound"
+GENERATED_SKILL_BASE = "generated_skill_base"
+AUTOSKILL_BASE = "autoskill_base"
 RETRIEVAL_TOOL_CARD = "retrieval_tool_card"
 LARGER_MODEL_NAIVE_SKILL = "larger_model_naive_skill"
 ADVERSARIAL_DISTRACTOR_INVENTORY = "adversarial_distractor_inventory"
@@ -59,7 +62,8 @@ HISTORICAL_CONDITIONS = [
     "retrieved_docs",
     "retrieved_candidates",
     "retrieved_memory",
-    "autoskill_base",
+    GENERATED_SKILL_BASE,
+    AUTOSKILL_BASE,
 ]
 
 CONDITION_ORDER = [
@@ -71,6 +75,7 @@ CONDITION_ORDER = [
     GENERATED_DOCS_NO_VALIDATION,
     GENERIC_VALIDATOR_NO_BEHAVIOR_TESTS,
     FULL_REGENERATION_REPAIR,
+    CURATED_SCHEMA_REFERENCE,
     HUMAN_WRITTEN_SKILL_UPPER_BOUND,
     RETRIEVAL_TOOL_CARD,
     LARGER_MODEL_NAIVE_SKILL,
@@ -102,7 +107,8 @@ CONDITION_ORDER = [
     VALIDATED_SKILL,
     REPAIRED_SKILL,
     GATED_SKILL,
-    "autoskill_base",
+    GENERATED_SKILL_BASE,
+    AUTOSKILL_BASE,
 ]
 
 

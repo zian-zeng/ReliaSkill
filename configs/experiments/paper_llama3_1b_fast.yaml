@@ -20,8 +20,8 @@ models:
 
 conditions:
   - raw_mcp
-  - autoskill_base
-  - human_written_skill_upper_bound
+  - generated_skill_base
+  - curated_schema_reference
   - skill_prompt_boundary_first
   - skill_prompt_verbose_docs
 

@@ -188,7 +188,7 @@ def summarize_task_scores_by_split(scores: Iterable[Dict[str, Any]]) -> Dict[str
 
 def summarize_pairwise_comparisons(
     scores: Iterable[Dict[str, Any]],
-    anchor_baseline: str = "autoskill_base",
+    anchor_baseline: str = "generated_skill_base",
     comparison_baselines: List[str] | None = None,
 ) -> Dict[str, Any]:
     comparison_baselines = comparison_baselines or ["raw_mcp", "schema_only", "retrieved_docs", "retrieved_candidates", "retrieved_memory"]

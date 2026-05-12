@@ -21,8 +21,8 @@ models:
 # Only running the 5 most important conditions for the paper
 conditions:
   - raw_mcp                           # Baseline 1: No docs
-  - autoskill_base                    # Baseline 2: AutoSkill standard
-  - human_written_skill_upper_bound   # Upper Bound
+  - generated_skill_base             # Baseline 2: generated skill base
+  - curated_schema_reference         # Curated schema reference
   - skill_prompt_boundary_first       # Our Best for Execution
   - skill_prompt_verbose_docs         # Our Best for Routing
 

@@ -50,7 +50,7 @@ COMPARISON_TEMPLATES: List[ComparisonTemplate] = [
     ComparisonTemplate(
         "gated_vs_repaired",
         "full_regeneration_repair",
-        "autoskill_base",
+        "generated_skill_base",
         [MetricSpec("harmful_skill_injection_rate", "lower", primary=True), MetricSpec("joint_exact_match", "higher", min_effect=-0.03)],
         source="harm_utility",
         expected_claim="Gating trades little utility for lower harm.",
@@ -98,7 +98,7 @@ COMPARISON_TEMPLATES: List[ComparisonTemplate] = [
     ComparisonTemplate(
         "negative_controls_only",
         "raw_mcp",
-        "autoskill_base",
+        "generated_skill_base",
         [MetricSpec("harmful_skill_injection_rate", "lower", primary=True), MetricSpec("trigger_precision")],
         source="harm_utility",
         expected_claim="Gated skills reduce false triggering on negative controls.",
@@ -107,7 +107,7 @@ COMPARISON_TEMPLATES: List[ComparisonTemplate] = [
     ComparisonTemplate(
         "side_effect_tools_only",
         "raw_mcp",
-        "autoskill_base",
+        "generated_skill_base",
         [MetricSpec("joint_exact_match", primary=True), MetricSpec("harmful_skill_injection_rate", "lower")],
         source="slice",
         slice_file="slice_analysis_by_tool_complexity.csv",
@@ -119,7 +119,7 @@ COMPARISON_TEMPLATES: List[ComparisonTemplate] = [
     ComparisonTemplate(
         "high_distractor_routing_only",
         "raw_mcp",
-        "autoskill_base",
+        "generated_skill_base",
         [MetricSpec("tool_accuracy", primary=True), MetricSpec("joint_exact_match")],
         source="slice",
         slice_file="slice_analysis_by_distractor_level.csv",

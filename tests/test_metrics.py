@@ -54,16 +54,16 @@ class MetricsTests(unittest.TestCase):
 
     def test_paired_tests_use_discordant_pairs(self) -> None:
         records = [
-            {"task_id": "a", "baseline_name": "autoskill_base", "joint_exact_match": True},
+            {"task_id": "a", "baseline_name": "generated_skill_base", "joint_exact_match": True},
             {"task_id": "a", "baseline_name": "raw_mcp", "joint_exact_match": False},
-            {"task_id": "b", "baseline_name": "autoskill_base", "joint_exact_match": True},
+            {"task_id": "b", "baseline_name": "generated_skill_base", "joint_exact_match": True},
             {"task_id": "b", "baseline_name": "raw_mcp", "joint_exact_match": True},
-            {"task_id": "c", "baseline_name": "autoskill_base", "joint_exact_match": False},
+            {"task_id": "c", "baseline_name": "generated_skill_base", "joint_exact_match": False},
             {"task_id": "c", "baseline_name": "raw_mcp", "joint_exact_match": True},
         ]
 
-        mcnemar = mcnemar_test(records, "autoskill_base", "raw_mcp")
-        approx = approximate_randomization_test(records, "autoskill_base", "raw_mcp", iterations=100)
+        mcnemar = mcnemar_test(records, "generated_skill_base", "raw_mcp")
+        approx = approximate_randomization_test(records, "generated_skill_base", "raw_mcp", iterations=100)
 
         self.assertEqual(mcnemar["paired_examples"], 3)
         self.assertEqual(mcnemar["a_only_correct"], 1)
@@ -76,11 +76,11 @@ class MetricsTests(unittest.TestCase):
         main_by_baseline = {row["baseline_name"]: row for row in tables["main_results"]}
         harm_by_baseline = {row["baseline_name"]: row for row in tables["harm_utility"]}
 
-        self.assertIn("autoskill_base", main_by_baseline)
+        self.assertIn("generated_skill_base", main_by_baseline)
         self.assertIn("raw_mcp", main_by_baseline)
-        # autoskill_base should outperform raw_mcp on joint_exact_match
+        # generated_skill_base should outperform raw_mcp on joint_exact_match
         self.assertGreater(
-            main_by_baseline["autoskill_base"]["joint_exact_match"],
+            main_by_baseline["generated_skill_base"]["joint_exact_match"],
             main_by_baseline["raw_mcp"]["joint_exact_match"],
         )
         self.assertGreater(main_by_baseline["raw_mcp"]["argument_exact_match"], 0.0)
@@ -103,7 +103,7 @@ class MetricsTests(unittest.TestCase):
             with (out_dir / "main_results.csv").open("r", encoding="utf-8") as f:
                 rows = list(csv.DictReader(f))
             baseline_names = {row["baseline_name"] for row in rows}
-            self.assertTrue({"autoskill_base", "raw_mcp"}.issubset(baseline_names))
+            self.assertTrue({"generated_skill_base", "raw_mcp"}.issubset(baseline_names))
             self.assertIn("tool_selection_accuracy_wilson_low", rows[0])
 
 

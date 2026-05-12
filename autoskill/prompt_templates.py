@@ -144,7 +144,7 @@ def parse_generated_skill_output(
     *,
     template_id: str,
     tool: ToolIR,
-    baseline_name: str = "autoskill_base",
+    baseline_name: str = "generated_skill_base",
 ) -> GeneratedSkill:
     metadata = _base_metadata(template_id)
     metadata["raw_generation_text"] = raw_text
@@ -191,7 +191,7 @@ def build_skill_from_prompt_template(
     template_id: str,
     *,
     dev_controls: Sequence[Dict[str, Any]] | None = None,
-    baseline_name: str = "autoskill_base",
+    baseline_name: str = "generated_skill_base",
 ) -> GeneratedSkill:
     spec = get_prompt_template(template_id)
     skill = _heuristic_skill_for_template(tool, spec, baseline_name=baseline_name)

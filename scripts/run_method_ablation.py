@@ -48,8 +48,8 @@ def main() -> None:
             generator_config={"type": "heuristic", "ablation_mode": mode},
             predictor_config={"type": "heuristic"},
         )
-        package_row = manifest["package_summary"]["autoskill_base"]
-        benchmark_row = manifest["benchmark_summary"]["autoskill_base"]
+        package_row = manifest["package_summary"]["generated_skill_base"]
+        benchmark_row = manifest["benchmark_summary"]["generated_skill_base"]
         summary[mode] = {
             "avg_examples": package_row.get("avg_examples", 0.0),
             "avg_semantic_hint_entries": package_row.get("avg_semantic_hint_entries", 0.0),

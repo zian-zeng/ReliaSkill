@@ -110,7 +110,7 @@ class HeuristicBackend(GenerationBackend):
             )
 
         base_skill = GeneratedSkill(
-            baseline_name="autoskill_base",
+            baseline_name="generated_skill_base",
             skill_summary=summary,
             when_to_use=when_to_use,
             when_not_to_use=when_not_to_use,
