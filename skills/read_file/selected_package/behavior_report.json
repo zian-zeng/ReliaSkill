@@ -1,0 +1,188 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0189_read_file_negative_easy_0_out_of_domain_request",
+      "tool_name": "read_file",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to read file.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1287,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_file\nTool description: Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead.\nSkill condition: multi_candidate_skill\nSkill summary: Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead. Provide the required field `path`.\nWhen to use: [\"Use `read_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"tail\": 1.0, \"head\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0, \"head\": 2.0}}]\nSchema: {\"properties\": {\"head\": {\"type\": \"number\"}, \"path\": {\"type\": \"string\"}, \"tail\": {\"type\": \"number\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to read file.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0189_read_file_negative_hard_1_near_miss_intent",
+      "tool_name": "read_file",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to read file, but I only want a checklist for how to Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.2089,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_file\nTool description: Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead.\nSkill condition: multi_candidate_skill\nSkill summary: Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead. Provide the required field `path`.\nWhen to use: [\"Use `read_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"tail\": 1.0, \"head\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0, \"head\": 2.0}}]\nSchema: {\"properties\": {\"head\": {\"type\": \"number\"}, \"path\": {\"type\": \"string\"}, \"tail\": {\"type\": \"number\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: This sounds close to read file, but I only want a checklist for how to Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0189_read_file_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "read_file",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use read file; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1113,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_file\nTool description: Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead.\nSkill condition: multi_candidate_skill\nSkill summary: Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead. Provide the required field `path`.\nWhen to use: [\"Use `read_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"tail\": 1.0, \"head\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0, \"head\": 2.0}}]\nSchema: {\"properties\": {\"head\": {\"type\": \"number\"}, \"path\": {\"type\": \"string\"}, \"tail\": {\"type\": \"number\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Explain when someone should use read file; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0189_read_file_positive_easy_0",
+      "tool_name": "read_file",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use read file to Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead. Set path=\"docs/control_0.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {
+        "path": "docs/control_0.md"
+      },
+      "prediction_latency_ms": 0.1183,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_file\nTool description: Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead.\nSkill condition: multi_candidate_skill\nSkill summary: Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead. Provide the required field `path`.\nWhen to use: [\"Use `read_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"tail\": 1.0, \"head\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0, \"head\": 2.0}}]\nSchema: {\"properties\": {\"head\": {\"type\": \"number\"}, \"path\": {\"type\": \"string\"}, \"tail\": {\"type\": \"number\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Use read file to Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead. Set path=\"docs/control_0.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0189_read_file_positive_medium_0",
+      "tool_name": "read_file",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead. The relevant details are path=\"docs/control_7.md\", tail=10.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "data/sample.txt",
+        "tail": 2.0
+      },
+      "expected_arguments": {
+        "path": "docs/control_7.md",
+        "tail": 10
+      },
+      "prediction_latency_ms": 0.1155,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_file\nTool description: Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead.\nSkill condition: multi_candidate_skill\nSkill summary: Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead. Provide the required field `path`.\nWhen to use: [\"Use `read_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"tail\": 1.0, \"head\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0, \"head\": 2.0}}]\nSchema: {\"properties\": {\"head\": {\"type\": \"number\"}, \"path\": {\"type\": \"string\"}, \"tail\": {\"type\": \"number\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: I need help with this task: Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead. The relevant details are path=\"docs/control_7.md\", tail=10.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt",
+          "tail": 2.0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.1365
+  }
+}

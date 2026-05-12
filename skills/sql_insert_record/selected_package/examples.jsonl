@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for sql_insert_record", "arguments": {"database": "sample_database_1", "table": "sample_table_1", "record": {}}}
+{"scenario": "Richer invocation that uses optional controls for sql_insert_record", "arguments": {"database": "sample_database_2", "table": "sample_table_2", "record": {}, "conflict_policy": "ignore"}}

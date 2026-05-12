@@ -1,0 +1,77 @@
+{
+  "valid": false,
+  "issues": [
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "argument_template: null is not allowed at $.inductance",
+      "location": "$.inductance",
+      "section": "argument_template",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.inductance"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "argument_template: null is not allowed at $.capacitance",
+      "location": "$.capacitance",
+      "section": "argument_template",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.capacitance"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "example[0]: null is not allowed at $.inductance",
+      "location": "$.inductance",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.inductance"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "example[0]: null is not allowed at $.capacitance",
+      "location": "$.capacitance",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.capacitance"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "example[1]: null is not allowed at $.inductance",
+      "location": "$.inductance",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.inductance"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "example[1]: null is not allowed at $.capacitance",
+      "location": "$.capacitance",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.capacitance"
+      }
+    }
+  ]
+}

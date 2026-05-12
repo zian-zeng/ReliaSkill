@@ -1,0 +1,209 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0204_delete_observations_negative_easy_0_out_of_domain_request",
+      "tool_name": "delete_observations",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to delete observations.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "deletions": [
+          {}
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0812,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: delete_observations\nTool description: Delete specific observations from entities in the knowledge graph\nSkill condition: multi_candidate_skill\nSkill summary: Delete specific observations from entities in the knowledge graph. Provide the required field `deletions`.\nWhen to use: [\"Use `delete_observations` when the user's request directly matches this tool's purpose.\", \"Provide the required field `deletions`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"deletions\": [{}]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for delete_observations\", \"arguments\": {\"deletions\": [{}]}}, {\"scenario\": \"Richer invocation that uses optional controls for delete_observations\", \"arguments\": {\"deletions\": [{}]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"deletions\": [{}]}}]\nSchema: {\"properties\": {\"deletions\": {\"items\": {\"properties\": {\"entityName\": {\"type\": \"string\"}, \"observations\": {\"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"entityName\", \"observations\"], \"type\": \"object\"}, \"type\": \"array\"}}, \"required\": [\"deletions\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to delete observations.\n",
+        "raw_model_output": "{\"arguments\": {\"deletions\": [{}]}}",
+        "parsed_prediction": {
+          "deletions": [
+            {}
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0204_delete_observations_negative_hard_1_near_miss_intent",
+      "tool_name": "delete_observations",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to delete observations, but I only want a checklist for how to Delete specific observations from entities in the knowledge graph; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "deletions": [
+          {}
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0842,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: delete_observations\nTool description: Delete specific observations from entities in the knowledge graph\nSkill condition: multi_candidate_skill\nSkill summary: Delete specific observations from entities in the knowledge graph. Provide the required field `deletions`.\nWhen to use: [\"Use `delete_observations` when the user's request directly matches this tool's purpose.\", \"Provide the required field `deletions`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"deletions\": [{}]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for delete_observations\", \"arguments\": {\"deletions\": [{}]}}, {\"scenario\": \"Richer invocation that uses optional controls for delete_observations\", \"arguments\": {\"deletions\": [{}]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"deletions\": [{}]}}]\nSchema: {\"properties\": {\"deletions\": {\"items\": {\"properties\": {\"entityName\": {\"type\": \"string\"}, \"observations\": {\"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"entityName\", \"observations\"], \"type\": \"object\"}, \"type\": \"array\"}}, \"required\": [\"deletions\"], \"type\": \"object\"}\nUser request: This sounds close to delete observations, but I only want a checklist for how to Delete specific observations from entities in the knowledge graph; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {\"deletions\": [{}]}}",
+        "parsed_prediction": {
+          "deletions": [
+            {}
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0204_delete_observations_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "delete_observations",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to API-Bank-style local fixture tool for saving a note to an offline memory store. This is adjacent to delete observations, but the intended capability is notes create memory.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "deletions": [
+          {}
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0735,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: delete_observations\nTool description: Delete specific observations from entities in the knowledge graph\nSkill condition: multi_candidate_skill\nSkill summary: Delete specific observations from entities in the knowledge graph. Provide the required field `deletions`.\nWhen to use: [\"Use `delete_observations` when the user's request directly matches this tool's purpose.\", \"Provide the required field `deletions`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"deletions\": [{}]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for delete_observations\", \"arguments\": {\"deletions\": [{}]}}, {\"scenario\": \"Richer invocation that uses optional controls for delete_observations\", \"arguments\": {\"deletions\": [{}]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"deletions\": [{}]}}]\nSchema: {\"properties\": {\"deletions\": {\"items\": {\"properties\": {\"entityName\": {\"type\": \"string\"}, \"observations\": {\"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"entityName\", \"observations\"], \"type\": \"object\"}, \"type\": \"array\"}}, \"required\": [\"deletions\"], \"type\": \"object\"}\nUser request: I need to API-Bank-style local fixture tool for saving a note to an offline memory store. This is adjacent to delete observations, but the intended capability is notes create memory.\n",
+        "raw_model_output": "{\"arguments\": {\"deletions\": [{}]}}",
+        "parsed_prediction": {
+          "deletions": [
+            {}
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0204_delete_observations_positive_easy_0",
+      "tool_name": "delete_observations",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use delete observations to Delete specific observations from entities in the knowledge graph. Set deletions=[\"item_0\"].",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "deletions": [
+          {}
+        ]
+      },
+      "expected_arguments": {
+        "deletions": [
+          "item_0"
+        ]
+      },
+      "prediction_latency_ms": 0.0709,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: delete_observations\nTool description: Delete specific observations from entities in the knowledge graph\nSkill condition: multi_candidate_skill\nSkill summary: Delete specific observations from entities in the knowledge graph. Provide the required field `deletions`.\nWhen to use: [\"Use `delete_observations` when the user's request directly matches this tool's purpose.\", \"Provide the required field `deletions`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"deletions\": [{}]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for delete_observations\", \"arguments\": {\"deletions\": [{}]}}, {\"scenario\": \"Richer invocation that uses optional controls for delete_observations\", \"arguments\": {\"deletions\": [{}]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"deletions\": [{}]}}]\nSchema: {\"properties\": {\"deletions\": {\"items\": {\"properties\": {\"entityName\": {\"type\": \"string\"}, \"observations\": {\"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"entityName\", \"observations\"], \"type\": \"object\"}, \"type\": \"array\"}}, \"required\": [\"deletions\"], \"type\": \"object\"}\nUser request: Use delete observations to Delete specific observations from entities in the knowledge graph. Set deletions=[\"item_0\"].\n",
+        "raw_model_output": "{\"arguments\": {\"deletions\": [{}]}}",
+        "parsed_prediction": {
+          "deletions": [
+            {}
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0204_delete_observations_positive_medium_0",
+      "tool_name": "delete_observations",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Delete specific observations from entities in the knowledge graph. The relevant details are deletions=[\"item_7\"].",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "deletions": [
+          {}
+        ]
+      },
+      "expected_arguments": {
+        "deletions": [
+          "item_7"
+        ]
+      },
+      "prediction_latency_ms": 0.1223,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: delete_observations\nTool description: Delete specific observations from entities in the knowledge graph\nSkill condition: multi_candidate_skill\nSkill summary: Delete specific observations from entities in the knowledge graph. Provide the required field `deletions`.\nWhen to use: [\"Use `delete_observations` when the user's request directly matches this tool's purpose.\", \"Provide the required field `deletions`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"deletions\": [{}]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for delete_observations\", \"arguments\": {\"deletions\": [{}]}}, {\"scenario\": \"Richer invocation that uses optional controls for delete_observations\", \"arguments\": {\"deletions\": [{}]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"deletions\": [{}]}}]\nSchema: {\"properties\": {\"deletions\": {\"items\": {\"properties\": {\"entityName\": {\"type\": \"string\"}, \"observations\": {\"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"entityName\", \"observations\"], \"type\": \"object\"}, \"type\": \"array\"}}, \"required\": [\"deletions\"], \"type\": \"object\"}\nUser request: I need help with this task: Delete specific observations from entities in the knowledge graph. The relevant details are deletions=[\"item_7\"].\n",
+        "raw_model_output": "{\"arguments\": {\"deletions\": [{}]}}",
+        "parsed_prediction": {
+          "deletions": [
+            {}
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0864
+  }
+}

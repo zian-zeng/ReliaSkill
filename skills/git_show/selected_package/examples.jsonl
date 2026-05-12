@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for git_show", "arguments": {"repo_path": "data/sample.txt", "revision": "sample_revision_1"}}
+{"scenario": "Richer invocation that uses optional controls for git_show", "arguments": {"repo_path": "data/sample.txt", "revision": "sample_revision_2"}}

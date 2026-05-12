@@ -1,0 +1,2 @@
+{"scenario": "Richer invocation that uses optional controls for get-resource-reference", "arguments": {"resourceType": "sample_resourceType_2", "resourceId": "sample_resourceId_2"}}
+{"scenario": "Optional, enum, nested, or array argument example.", "arguments": {"resourceType": "sample_resourceType_4", "resourceId": "sample_resourceId_4"}}

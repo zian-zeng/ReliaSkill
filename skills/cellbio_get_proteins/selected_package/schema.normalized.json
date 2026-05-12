@@ -1,0 +1,89 @@
+{
+  "tool_name": "cellbio.get_proteins",
+  "server_name": "bfcl_v3",
+  "tool_purpose": "Get the list of proteins in a specific cell compartment.",
+  "input_schema_raw": {
+    "properties": {
+      "cell_compartment": {
+        "description": "The specific cell compartment.",
+        "type": "string"
+      },
+      "include_description": {
+        "default": "false",
+        "description": "Set true if you want a brief description of each protein.",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "cell_compartment"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "cell_compartment",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The specific cell compartment.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.cell_compartment"
+    },
+    {
+      "name": "include_description",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "enum": null,
+      "description": "Set true if you want a brief description of each protein.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.include_description"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Get the list of proteins in a specific cell compartment.",
+    "cellbio.get_proteins"
+  ],
+  "source_pointer": "bfcl_v3",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 56,
+    "has_array_argument": false,
+    "has_boolean_flag": true,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 2,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 2,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "cellbio.get_proteins",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

@@ -1,0 +1,114 @@
+{
+  "candidate_id": "fetch__cand_01_boundary_heavy",
+  "generation_strategy": "boundary_heavy",
+  "prompt_template_id": "heuristic_boundary_heavy_v1",
+  "skill_text": "Fetches a URL from the internet and optionally extracts its contents as markdown. Although originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that. Provide all required fields: `url`, `max_length`, `start_index`, and `raw`.\nWhen to use:\n- Use `fetch` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `url`, `max_length`, `start_index`, and `raw`.\n- Use only when the request clearly needs `fetch`.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Do not use for adjacent tools with similar names, descriptions, or arguments.\n- Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.\n- If the request lacks required fields, abstain or ask for clarification.\nArgument template:\n{\"max_length\": \"sample_max_length_1\", \"raw\": \"sample_raw_1\", \"start_index\": \"sample_start_index_1\", \"url\": \"https://example.com/resource\"}\nExamples:\nMinimal valid request that satisfies the required fields for fetch\n{\"max_length\": \"sample_max_length_1\", \"raw\": \"sample_raw_1\", \"start_index\": \"sample_start_index_1\", \"url\": \"https://example.com/resource\"}\nRicher invocation that uses optional controls for fetch\n{\"max_length\": \"sample_max_length_2\", \"raw\": \"sample_raw_2\", \"start_index\": \"sample_start_index_2\", \"url\": \"https://example.com/resource\"}",
+  "argument_template": {
+    "url": "https://example.com/resource",
+    "max_length": "sample_max_length_1",
+    "start_index": "sample_start_index_1",
+    "raw": "sample_raw_1"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for fetch",
+      "arguments": {
+        "url": "https://example.com/resource",
+        "max_length": "sample_max_length_1",
+        "start_index": "sample_start_index_1",
+        "raw": "sample_raw_1"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for fetch",
+      "arguments": {
+        "url": "https://example.com/resource",
+        "max_length": "sample_max_length_2",
+        "start_index": "sample_start_index_2",
+        "raw": "sample_raw_2"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `fetch` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `url`, `max_length`, `start_index`, and `raw`.",
+    "Use only when the request clearly needs `fetch`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Do not use for adjacent tools with similar names, descriptions, or arguments.",
+    "Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.",
+    "If the request lacks required fields, abstain or ask for clarification."
+  ],
+  "token_count": 379,
+  "skill_token_count": 379,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 2,
+  "nonuse_boundary_count": 5,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Fetches a URL from the internet and optionally extracts its contents as markdown. Although originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that. Provide all required fields: `url`, `max_length`, `start_index`, and `raw`.",
+    "when_to_use": [
+      "Use `fetch` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `url`, `max_length`, `start_index`, and `raw`.",
+      "Use only when the request clearly needs `fetch`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Do not use for adjacent tools with similar names, descriptions, or arguments.",
+      "Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.",
+      "If the request lacks required fields, abstain or ask for clarification."
+    ],
+    "argument_template": {
+      "url": "https://example.com/resource",
+      "max_length": "sample_max_length_1",
+      "start_index": "sample_start_index_1",
+      "raw": "sample_raw_1"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for fetch",
+        "arguments": {
+          "url": "https://example.com/resource",
+          "max_length": "sample_max_length_1",
+          "start_index": "sample_start_index_1",
+          "raw": "sample_raw_1"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for fetch",
+        "arguments": {
+          "url": "https://example.com/resource",
+          "max_length": "sample_max_length_2",
+          "start_index": "sample_start_index_2",
+          "raw": "sample_raw_2"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "fetch__cand_01_boundary_heavy",
+        "generation_strategy": "boundary_heavy",
+        "prompt_template_id": "heuristic_boundary_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "fetch__cand_01_boundary_heavy",
+      "generation_strategy": "boundary_heavy",
+      "prompt_template_id": "heuristic_boundary_heavy_v1"
+    }
+  }
+}

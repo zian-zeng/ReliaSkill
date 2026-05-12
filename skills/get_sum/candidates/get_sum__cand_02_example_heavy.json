@@ -1,0 +1,124 @@
+{
+  "candidate_id": "get_sum__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Returns the sum of two numbers. Provide all required fields: `a`, and `b`.\nWhen to use:\n- Use `get-sum` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `a`, and `b`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"a\": 4.0, \"b\": 4.0}\nExamples:\nMinimal valid request that satisfies the required fields for get-sum\n{\"a\": 1.0, \"b\": 1.0}\nRicher invocation that uses optional controls for get-sum\n{\"a\": 2.0, \"b\": 2.0}\nRequired-argument dev behavior example.\n{\"a\": 3.0, \"b\": 3.0}\nOptional, enum, nested, or array argument example.\n{\"a\": 4.0, \"b\": 4.0}",
+  "argument_template": {
+    "a": 4.0,
+    "b": 4.0
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for get-sum",
+      "arguments": {
+        "a": 1.0,
+        "b": 1.0
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for get-sum",
+      "arguments": {
+        "a": 2.0,
+        "b": 2.0
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "a": 3.0,
+        "b": 3.0
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "a": 4.0,
+        "b": 4.0
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `get-sum` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `a`, and `b`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 253,
+  "skill_token_count": 253,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Returns the sum of two numbers. Provide all required fields: `a`, and `b`.",
+    "when_to_use": [
+      "Use `get-sum` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `a`, and `b`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "a": 4.0,
+      "b": 4.0
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for get-sum",
+        "arguments": {
+          "a": 1.0,
+          "b": 1.0
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for get-sum",
+        "arguments": {
+          "a": 2.0,
+          "b": 2.0
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "a": 3.0,
+          "b": 3.0
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "a": 4.0,
+          "b": 4.0
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "get_sum__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "get_sum__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

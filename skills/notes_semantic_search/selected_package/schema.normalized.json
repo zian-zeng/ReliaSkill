@@ -1,0 +1,110 @@
+{
+  "tool_name": "notes_semantic_search",
+  "server_name": "apibank_style_fixture",
+  "tool_purpose": "API-Bank-style local fixture retrieval tool for searching notes by query and tag filters.",
+  "input_schema_raw": {
+    "properties": {
+      "limit": {
+        "description": "Maximum notes to return.",
+        "type": "integer"
+      },
+      "query": {
+        "description": "Search query.",
+        "type": "string"
+      },
+      "tags": {
+        "description": "Tags to require.",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      }
+    },
+    "required": [
+      "query"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Search query.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.query"
+    },
+    {
+      "name": "tags",
+      "type": "array",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Tags to require.",
+      "items_type": "string",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.tags"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Maximum notes to return.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.limit"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "API-Bank-style local fixture retrieval tool for searching notes by query and tag filters.",
+    "Semantic Search Notes",
+    "Search mock notes."
+  ],
+  "source_pointer": "data/raw/apibank_style_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 89,
+    "has_array_argument": true,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 3,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 2,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "notes_semantic_search",
+    "server_name": "apibank_style_fixture",
+    "source_pointer": "data/raw/apibank_style_tools.json"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

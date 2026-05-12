@@ -1,0 +1,138 @@
+{
+  "tool_name": "calendar_find_free_slots",
+  "server_name": "apibank_style_fixture",
+  "tool_purpose": "API-Bank-style local fixture retrieval tool for finding free slots across calendars.",
+  "input_schema_raw": {
+    "properties": {
+      "calendar_ids": {
+        "description": "Calendars to inspect.",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "duration_minutes": {
+        "description": "Required slot duration.",
+        "type": "integer"
+      },
+      "window": {
+        "description": "Search window.",
+        "properties": {
+          "end": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "start": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start",
+          "end"
+        ],
+        "type": "object"
+      }
+    },
+    "required": [
+      "calendar_ids",
+      "duration_minutes",
+      "window"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "calendar_ids",
+      "type": "array",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Calendars to inspect.",
+      "items_type": "string",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.calendar_ids"
+    },
+    {
+      "name": "duration_minutes",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Required slot duration.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.duration_minutes"
+    },
+    {
+      "name": "window",
+      "type": "object",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Search window.",
+      "items_type": null,
+      "properties": {
+        "end": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "start": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required_properties": [
+        "start",
+        "end"
+      ],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.window"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "API-Bank-style local fixture retrieval tool for finding free slots across calendars.",
+    "Find Free Slots",
+    "Find mock calendar free time."
+  ],
+  "source_pointer": "data/raw/apibank_style_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 84,
+    "has_array_argument": true,
+    "has_boolean_flag": false,
+    "has_nested_object": true,
+    "has_side_effect": false,
+    "max_schema_depth": 3,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 1,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 3,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "calendar_find_free_slots",
+    "server_name": "apibank_style_fixture",
+    "source_pointer": "data/raw/apibank_style_tools.json"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

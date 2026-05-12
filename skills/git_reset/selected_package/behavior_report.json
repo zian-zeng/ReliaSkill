@@ -1,0 +1,185 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0227_git_reset_negative_easy_0_out_of_domain_request",
+      "tool_name": "git_reset",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to git reset.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1256,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_reset\nTool description: Unstages all staged changes\nSkill condition: multi_candidate_skill\nSkill summary: Unstages all staged changes. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_reset` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_reset\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_reset\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to git reset.\n",
+        "raw_model_output": "{\"arguments\": {\"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0227_git_reset_negative_hard_1_missing_required_info",
+      "tool_name": "git_reset",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I may need git reset to Unstages all staged changes, but I do not know repo_path yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0506,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_reset\nTool description: Unstages all staged changes\nSkill condition: multi_candidate_skill\nSkill summary: Unstages all staged changes. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_reset` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_reset\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_reset\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: I may need git reset to Unstages all staged changes, but I do not know repo_path yet.\n",
+        "raw_model_output": "{\"arguments\": {\"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0227_git_reset_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "git_reset",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with git reset.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0485,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_reset\nTool description: Unstages all staged changes\nSkill condition: multi_candidate_skill\nSkill summary: Unstages all staged changes. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_reset` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_reset\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_reset\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with git reset.\n",
+        "raw_model_output": "{\"arguments\": {\"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0227_git_reset_positive_easy_0",
+      "tool_name": "git_reset",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use git reset to Unstages all staged changes. Set repo_path=\"docs/control_0.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt"
+      },
+      "expected_arguments": {
+        "repo_path": "docs/control_0.md"
+      },
+      "prediction_latency_ms": 0.0494,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_reset\nTool description: Unstages all staged changes\nSkill condition: multi_candidate_skill\nSkill summary: Unstages all staged changes. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_reset` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_reset\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_reset\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: Use git reset to Unstages all staged changes. Set repo_path=\"docs/control_0.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0227_git_reset_positive_medium_0",
+      "tool_name": "git_reset",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Unstages all staged changes. The relevant details are repo_path=\"docs/control_7.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt"
+      },
+      "expected_arguments": {
+        "repo_path": "docs/control_7.md"
+      },
+      "prediction_latency_ms": 0.0975,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_reset\nTool description: Unstages all staged changes\nSkill condition: multi_candidate_skill\nSkill summary: Unstages all staged changes. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_reset` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_reset\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_reset\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: I need help with this task: Unstages all staged changes. The relevant details are repo_path=\"docs/control_7.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0743
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "tool_name": "hugging_face__harithapliyal_autotrain_tatanic_survival_51030121311__au_fb4e8944",
+  "server_name": "bfcl_huggingface_eval_api",
+  "tool_purpose": "A tabular classification model trained on the Titanic survival dataset using Hugging Face AutoTrain. The model predicts whether a passenger survived or not based on features such as age, gender, and passenger class. Framework: Hugging Face. Functionality: Binary Classification. API call: AutoModel.from_pretrained('harithapliyal/autotrain-tatanic-survival-51030121311').",
+  "input_schema_raw": {
+    "properties": {},
+    "required": [],
+    "type": "object"
+  },
+  "arguments": [],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ],
+  "doc_snippets": [
+    "A tabular classification model trained on the Titanic survival dataset using Hugging Face AutoTrain. The model predicts whether a passenger survived or not based on features such as age, gender, and passenger class. Framework: Hugging Face. Functionality: Binary Classification. API call: AutoModel.from_pretrained('harithapliyal/autotrain-tatanic-survival-51030121311').",
+    "harithapliyal/autotrain-tatanic-survival-51030121311",
+    "Binary Classification"
+  ],
+  "source_pointer": "bfcl",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 371,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 1,
+    "num_arguments": 0,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "num_top_level_arguments": 0,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "empty_input_schema",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "hugging_face__harithapliyal_autotrain_tatanic_survival_51030121311__au_fb4e8944",
+    "server_name": "bfcl_huggingface_eval_api",
+    "source_pointer": "bfcl"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

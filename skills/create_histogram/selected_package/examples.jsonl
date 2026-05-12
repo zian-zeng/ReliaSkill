@@ -1,0 +1,4 @@
+{"scenario": "Minimal valid request that satisfies the required fields for create_histogram", "arguments": {"data": [null], "bins": 1}}
+{"scenario": "Richer invocation that uses optional controls for create_histogram", "arguments": {"data": [null], "bins": 2}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"data": [null], "bins": 3}}
+{"scenario": "Optional, enum, nested, or array argument example.", "arguments": {"data": [null], "bins": 4}}

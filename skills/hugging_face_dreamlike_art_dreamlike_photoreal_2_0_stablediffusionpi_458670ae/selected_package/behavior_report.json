@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0047_hugging_face_dreamlike_art_dreamlike_photoreal_2_0_stablediffusionpi_458670ae_negative_easy_0_out_of_domain_request",
+      "tool_name": "hugging_face__dreamlike_art_dreamlike_photoreal_2_0__stablediffusionpi_458670ae",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  dreamlike art dreamlike photoreal 2 0  stablediffusionpi 458670ae.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0385,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__dreamlike_art_dreamlike_photoreal_2_0__stablediffusionpi_458670ae\nTool description: Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photorealistic images from text prompts. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-photoreal-2.0', torch_dtype=torch.float16)(prompt).images[0].\nSkill condition: multi_candidate_skill\nSkill summary: Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photorealistic images from text prompts. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-photoreal-2.0', torch_dtype=torch.float16)(prompt).images[0]. This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__dreamlike_art_dreamlike_photoreal_2_0__stablediffusionpi_458670ae` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  dreamlike art dreamlike photoreal 2 0  stablediffusionpi 458670ae.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0047_hugging_face_dreamlike_art_dreamlike_photoreal_2_0_stablediffusionpi_458670ae_negative_hard_1_missing_required_info",
+      "tool_name": "hugging_face__dreamlike_art_dreamlike_photoreal_2_0__stablediffusionpi_458670ae",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I may need hugging face  dreamlike art dreamlike photoreal 2 0  stablediffusionpi 458670ae to Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photoreal, but I do not know the required input yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0318,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__dreamlike_art_dreamlike_photoreal_2_0__stablediffusionpi_458670ae\nTool description: Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photorealistic images from text prompts. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-photoreal-2.0', torch_dtype=torch.float16)(prompt).images[0].\nSkill condition: multi_candidate_skill\nSkill summary: Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photorealistic images from text prompts. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-photoreal-2.0', torch_dtype=torch.float16)(prompt).images[0]. This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__dreamlike_art_dreamlike_photoreal_2_0__stablediffusionpi_458670ae` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I may need hugging face  dreamlike art dreamlike photoreal 2 0  stablediffusionpi 458670ae to Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photoreal, but I do not know the required input yet.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0047_hugging_face_dreamlike_art_dreamlike_photoreal_2_0_stablediffusionpi_458670ae_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "hugging_face__dreamlike_art_dreamlike_photoreal_2_0__stablediffusionpi_458670ae",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with hugging face  dreamlike art dreamlike photoreal 2 0  stablediffusionpi 458670ae.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0303,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__dreamlike_art_dreamlike_photoreal_2_0__stablediffusionpi_458670ae\nTool description: Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photorealistic images from text prompts. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-photoreal-2.0', torch_dtype=torch.float16)(prompt).images[0].\nSkill condition: multi_candidate_skill\nSkill summary: Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photorealistic images from text prompts. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-photoreal-2.0', torch_dtype=torch.float16)(prompt).images[0]. This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__dreamlike_art_dreamlike_photoreal_2_0__stablediffusionpi_458670ae` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with hugging face  dreamlike art dreamlike photoreal 2 0  stablediffusionpi 458670ae.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0047_hugging_face_dreamlike_art_dreamlike_photoreal_2_0_stablediffusionpi_458670ae_positive_easy_0",
+      "tool_name": "hugging_face__dreamlike_art_dreamlike_photoreal_2_0__stablediffusionpi_458670ae",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use hugging face  dreamlike art dreamlike photoreal 2 0  stablediffusionpi 458670ae to Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photoreal. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0306,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__dreamlike_art_dreamlike_photoreal_2_0__stablediffusionpi_458670ae\nTool description: Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photorealistic images from text prompts. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-photoreal-2.0', torch_dtype=torch.float16)(prompt).images[0].\nSkill condition: multi_candidate_skill\nSkill summary: Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photorealistic images from text prompts. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-photoreal-2.0', torch_dtype=torch.float16)(prompt).images[0]. This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__dreamlike_art_dreamlike_photoreal_2_0__stablediffusionpi_458670ae` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use hugging face  dreamlike art dreamlike photoreal 2 0  stablediffusionpi 458670ae to Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photoreal. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0047_hugging_face_dreamlike_art_dreamlike_photoreal_2_0_stablediffusionpi_458670ae_positive_medium_0",
+      "tool_name": "hugging_face__dreamlike_art_dreamlike_photoreal_2_0__stablediffusionpi_458670ae",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photoreal. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0301,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__dreamlike_art_dreamlike_photoreal_2_0__stablediffusionpi_458670ae\nTool description: Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photorealistic images from text prompts. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-photoreal-2.0', torch_dtype=torch.float16)(prompt).images[0].\nSkill condition: multi_candidate_skill\nSkill summary: Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photorealistic images from text prompts. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-photoreal-2.0', torch_dtype=torch.float16)(prompt).images[0]. This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__dreamlike_art_dreamlike_photoreal_2_0__stablediffusionpi_458670ae` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: Dreamlike Photoreal 2.0 is a photorealistic model based on Stable Diffusion 1.5, made by dreamlike.art. It can be used to generate photoreal. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0323
+  }
+}

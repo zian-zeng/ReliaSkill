@@ -1,0 +1,223 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0009_sql_insert_record_negative_easy_0_out_of_domain_request",
+      "tool_name": "sql_insert_record",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to sql insert record.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "database": "sample_database_1",
+        "table": "sample_table_1",
+        "record": {},
+        "conflict_policy": "error"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0845,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: sql_insert_record\nTool description: API-Bank-style local fixture database tool that inserts a structured record into a mock table.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture database tool that inserts a structured record into a mock table. Provide all required fields: `database`, `table`, and `record`.\nWhen to use: [\"Use `sql_insert_record` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `database`, `table`, and `record`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `conflict_policy`: 'error', 'ignore', 'update'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"database\": \"sample_database_1\", \"table\": \"sample_table_1\", \"record\": {}, \"conflict_policy\": \"error\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for sql_insert_record\", \"arguments\": {\"database\": \"sample_database_1\", \"table\": \"sample_table_1\", \"record\": {}}}, {\"scenario\": \"Richer invocation that uses optional controls for sql_insert_record\", \"arguments\": {\"database\": \"sample_database_2\", \"table\": \"sample_table_2\", \"record\": {}, \"conflict_policy\": \"ignore\"}}]\nSchema: {\"properties\": {\"conflict_policy\": {\"description\": \"Conflict handling policy.\", \"enum\": [\"error\", \"ignore\", \"update\"], \"type\": \"string\"}, \"database\": {\"description\": \"Fixture database name.\", \"type\": \"string\"}, \"record\": {\"description\": \"Record fields to insert.\", \"type\": \"object\"}, \"table\": {\"description\": \"Mock table name.\", \"type\": \"string\"}}, \"required\": [\"database\", \"table\", \"record\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to sql insert record.\n",
+        "raw_model_output": "{\"arguments\": {\"conflict_policy\": \"error\", \"database\": \"sample_database_1\", \"record\": {}, \"table\": \"sample_table_1\"}}",
+        "parsed_prediction": {
+          "database": "sample_database_1",
+          "table": "sample_table_1",
+          "record": {},
+          "conflict_policy": "error"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0009_sql_insert_record_negative_hard_1_near_miss_intent",
+      "tool_name": "sql_insert_record",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to sql insert record, but I only want a checklist for how to API-Bank-style local fixture database tool that inserts a structured record into a mock table; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "database": "sample_database_1",
+        "table": "sample_table_1",
+        "record": {},
+        "conflict_policy": "error"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0704,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: sql_insert_record\nTool description: API-Bank-style local fixture database tool that inserts a structured record into a mock table.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture database tool that inserts a structured record into a mock table. Provide all required fields: `database`, `table`, and `record`.\nWhen to use: [\"Use `sql_insert_record` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `database`, `table`, and `record`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `conflict_policy`: 'error', 'ignore', 'update'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"database\": \"sample_database_1\", \"table\": \"sample_table_1\", \"record\": {}, \"conflict_policy\": \"error\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for sql_insert_record\", \"arguments\": {\"database\": \"sample_database_1\", \"table\": \"sample_table_1\", \"record\": {}}}, {\"scenario\": \"Richer invocation that uses optional controls for sql_insert_record\", \"arguments\": {\"database\": \"sample_database_2\", \"table\": \"sample_table_2\", \"record\": {}, \"conflict_policy\": \"ignore\"}}]\nSchema: {\"properties\": {\"conflict_policy\": {\"description\": \"Conflict handling policy.\", \"enum\": [\"error\", \"ignore\", \"update\"], \"type\": \"string\"}, \"database\": {\"description\": \"Fixture database name.\", \"type\": \"string\"}, \"record\": {\"description\": \"Record fields to insert.\", \"type\": \"object\"}, \"table\": {\"description\": \"Mock table name.\", \"type\": \"string\"}}, \"required\": [\"database\", \"table\", \"record\"], \"type\": \"object\"}\nUser request: This sounds close to sql insert record, but I only want a checklist for how to API-Bank-style local fixture database tool that inserts a structured record into a mock table; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {\"conflict_policy\": \"error\", \"database\": \"sample_database_1\", \"record\": {}, \"table\": \"sample_table_1\"}}",
+        "parsed_prediction": {
+          "database": "sample_database_1",
+          "table": "sample_table_1",
+          "record": {},
+          "conflict_policy": "error"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0009_sql_insert_record_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "sql_insert_record",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use sql insert record; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "database": "sample_database_1",
+        "table": "sample_table_1",
+        "record": {},
+        "conflict_policy": "error"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0676,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: sql_insert_record\nTool description: API-Bank-style local fixture database tool that inserts a structured record into a mock table.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture database tool that inserts a structured record into a mock table. Provide all required fields: `database`, `table`, and `record`.\nWhen to use: [\"Use `sql_insert_record` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `database`, `table`, and `record`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `conflict_policy`: 'error', 'ignore', 'update'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"database\": \"sample_database_1\", \"table\": \"sample_table_1\", \"record\": {}, \"conflict_policy\": \"error\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for sql_insert_record\", \"arguments\": {\"database\": \"sample_database_1\", \"table\": \"sample_table_1\", \"record\": {}}}, {\"scenario\": \"Richer invocation that uses optional controls for sql_insert_record\", \"arguments\": {\"database\": \"sample_database_2\", \"table\": \"sample_table_2\", \"record\": {}, \"conflict_policy\": \"ignore\"}}]\nSchema: {\"properties\": {\"conflict_policy\": {\"description\": \"Conflict handling policy.\", \"enum\": [\"error\", \"ignore\", \"update\"], \"type\": \"string\"}, \"database\": {\"description\": \"Fixture database name.\", \"type\": \"string\"}, \"record\": {\"description\": \"Record fields to insert.\", \"type\": \"object\"}, \"table\": {\"description\": \"Mock table name.\", \"type\": \"string\"}}, \"required\": [\"database\", \"table\", \"record\"], \"type\": \"object\"}\nUser request: Explain when someone should use sql insert record; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"conflict_policy\": \"error\", \"database\": \"sample_database_1\", \"record\": {}, \"table\": \"sample_table_1\"}}",
+        "parsed_prediction": {
+          "database": "sample_database_1",
+          "table": "sample_table_1",
+          "record": {},
+          "conflict_policy": "error"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0009_sql_insert_record_positive_easy_0",
+      "tool_name": "sql_insert_record",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use sql insert record to API-Bank-style local fixture database tool that inserts a structured record into a mock table. Set database=\"database_0\", record={\"value\": \"object_0\"}, table=\"table_0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "database": "sample_database_1",
+        "table": "sample_table_1",
+        "record": {},
+        "conflict_policy": "error"
+      },
+      "expected_arguments": {
+        "database": "database_0",
+        "record": {
+          "value": "object_0"
+        },
+        "table": "table_0"
+      },
+      "prediction_latency_ms": 0.0679,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: sql_insert_record\nTool description: API-Bank-style local fixture database tool that inserts a structured record into a mock table.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture database tool that inserts a structured record into a mock table. Provide all required fields: `database`, `table`, and `record`.\nWhen to use: [\"Use `sql_insert_record` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `database`, `table`, and `record`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `conflict_policy`: 'error', 'ignore', 'update'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"database\": \"sample_database_1\", \"table\": \"sample_table_1\", \"record\": {}, \"conflict_policy\": \"error\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for sql_insert_record\", \"arguments\": {\"database\": \"sample_database_1\", \"table\": \"sample_table_1\", \"record\": {}}}, {\"scenario\": \"Richer invocation that uses optional controls for sql_insert_record\", \"arguments\": {\"database\": \"sample_database_2\", \"table\": \"sample_table_2\", \"record\": {}, \"conflict_policy\": \"ignore\"}}]\nSchema: {\"properties\": {\"conflict_policy\": {\"description\": \"Conflict handling policy.\", \"enum\": [\"error\", \"ignore\", \"update\"], \"type\": \"string\"}, \"database\": {\"description\": \"Fixture database name.\", \"type\": \"string\"}, \"record\": {\"description\": \"Record fields to insert.\", \"type\": \"object\"}, \"table\": {\"description\": \"Mock table name.\", \"type\": \"string\"}}, \"required\": [\"database\", \"table\", \"record\"], \"type\": \"object\"}\nUser request: Use sql insert record to API-Bank-style local fixture database tool that inserts a structured record into a mock table. Set database=\"database_0\", record={\"value\": \"object_0\"}, table=\"table_0\".\n",
+        "raw_model_output": "{\"arguments\": {\"conflict_policy\": \"error\", \"database\": \"sample_database_1\", \"record\": {}, \"table\": \"sample_table_1\"}}",
+        "parsed_prediction": {
+          "database": "sample_database_1",
+          "table": "sample_table_1",
+          "record": {},
+          "conflict_policy": "error"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0009_sql_insert_record_positive_medium_0",
+      "tool_name": "sql_insert_record",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: API-Bank-style local fixture database tool that inserts a structured record into a mock table. The relevant details are database=\"database_7\", record={\"value\": \"object_7\"}, table=\"table_7\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "database": "sample_database_1",
+        "table": "sample_table_1",
+        "record": {},
+        "conflict_policy": "error"
+      },
+      "expected_arguments": {
+        "database": "database_7",
+        "record": {
+          "value": "object_7"
+        },
+        "table": "table_7"
+      },
+      "prediction_latency_ms": 0.1266,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: sql_insert_record\nTool description: API-Bank-style local fixture database tool that inserts a structured record into a mock table.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture database tool that inserts a structured record into a mock table. Provide all required fields: `database`, `table`, and `record`.\nWhen to use: [\"Use `sql_insert_record` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `database`, `table`, and `record`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `conflict_policy`: 'error', 'ignore', 'update'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"database\": \"sample_database_1\", \"table\": \"sample_table_1\", \"record\": {}, \"conflict_policy\": \"error\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for sql_insert_record\", \"arguments\": {\"database\": \"sample_database_1\", \"table\": \"sample_table_1\", \"record\": {}}}, {\"scenario\": \"Richer invocation that uses optional controls for sql_insert_record\", \"arguments\": {\"database\": \"sample_database_2\", \"table\": \"sample_table_2\", \"record\": {}, \"conflict_policy\": \"ignore\"}}]\nSchema: {\"properties\": {\"conflict_policy\": {\"description\": \"Conflict handling policy.\", \"enum\": [\"error\", \"ignore\", \"update\"], \"type\": \"string\"}, \"database\": {\"description\": \"Fixture database name.\", \"type\": \"string\"}, \"record\": {\"description\": \"Record fields to insert.\", \"type\": \"object\"}, \"table\": {\"description\": \"Mock table name.\", \"type\": \"string\"}}, \"required\": [\"database\", \"table\", \"record\"], \"type\": \"object\"}\nUser request: I need help with this task: API-Bank-style local fixture database tool that inserts a structured record into a mock table. The relevant details are database=\"database_7\", record={\"value\": \"object_7\"}, table=\"table_7\".\n",
+        "raw_model_output": "{\"arguments\": {\"conflict_policy\": \"error\", \"database\": \"sample_database_1\", \"record\": {}, \"table\": \"sample_table_1\"}}",
+        "parsed_prediction": {
+          "database": "sample_database_1",
+          "table": "sample_table_1",
+          "record": {},
+          "conflict_policy": "error"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0834
+  }
+}

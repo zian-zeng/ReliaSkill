@@ -1,0 +1,169 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0115_calculate_electrostatic_potential_negative_easy_0_out_of_domain_request",
+      "tool_name": "calculate_electrostatic_potential",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate electrostatic potential.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1515,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_electrostatic_potential\nTool description: Calculate the electrostatic potential between two charged bodies using the principle of Coulomb's Law.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the electrostatic potential between two charged bodies using the principle of Coulomb's Law. Provide all required fields: `charge1`, `charge2`, and `distance`.\nWhen to use: [\"Use `calculate_electrostatic_potential` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `charge1`, `charge2`, and `distance`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"charge1\": null, \"charge2\": null, \"distance\": null, \"constant\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_electrostatic_potential\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_electrostatic_potential\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null, \"constant\": null}}]\nSchema: {\"properties\": {\"charge1\": {\"description\": \"The quantity of charge on the first body.\", \"type\": \"float\"}, \"charge2\": {\"description\": \"The quantity of charge on the second body.\", \"type\": \"float\"}, \"constant\": {\"description\": \"The value of the electrostatic constant. Default is 898755178.73\", \"type\": \"float\"}, \"distance\": {\"description\": \"The distance between the two bodies.\", \"type\": \"float\"}}, \"required\": [\"charge1\", \"charge2\", \"distance\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate electrostatic potential.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0115_calculate_electrostatic_potential_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "calculate_electrostatic_potential",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with calculate electrostatic potential; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.2761,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_electrostatic_potential\nTool description: Calculate the electrostatic potential between two charged bodies using the principle of Coulomb's Law.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the electrostatic potential between two charged bodies using the principle of Coulomb's Law. Provide all required fields: `charge1`, `charge2`, and `distance`.\nWhen to use: [\"Use `calculate_electrostatic_potential` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `charge1`, `charge2`, and `distance`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"charge1\": null, \"charge2\": null, \"distance\": null, \"constant\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_electrostatic_potential\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_electrostatic_potential\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null, \"constant\": null}}]\nSchema: {\"properties\": {\"charge1\": {\"description\": \"The quantity of charge on the first body.\", \"type\": \"float\"}, \"charge2\": {\"description\": \"The quantity of charge on the second body.\", \"type\": \"float\"}, \"constant\": {\"description\": \"The value of the electrostatic constant. Default is 898755178.73\", \"type\": \"float\"}, \"distance\": {\"description\": \"The distance between the two bodies.\", \"type\": \"float\"}}, \"required\": [\"charge1\", \"charge2\", \"distance\"], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with calculate electrostatic potential; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0115_calculate_electrostatic_potential_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "calculate_electrostatic_potential",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with calculate electrostatic potential.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1408,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_electrostatic_potential\nTool description: Calculate the electrostatic potential between two charged bodies using the principle of Coulomb's Law.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the electrostatic potential between two charged bodies using the principle of Coulomb's Law. Provide all required fields: `charge1`, `charge2`, and `distance`.\nWhen to use: [\"Use `calculate_electrostatic_potential` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `charge1`, `charge2`, and `distance`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"charge1\": null, \"charge2\": null, \"distance\": null, \"constant\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_electrostatic_potential\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_electrostatic_potential\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null, \"constant\": null}}]\nSchema: {\"properties\": {\"charge1\": {\"description\": \"The quantity of charge on the first body.\", \"type\": \"float\"}, \"charge2\": {\"description\": \"The quantity of charge on the second body.\", \"type\": \"float\"}, \"constant\": {\"description\": \"The value of the electrostatic constant. Default is 898755178.73\", \"type\": \"float\"}, \"distance\": {\"description\": \"The distance between the two bodies.\", \"type\": \"float\"}}, \"required\": [\"charge1\", \"charge2\", \"distance\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with calculate electrostatic potential.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0115_calculate_electrostatic_potential_positive_easy_0",
+      "tool_name": "calculate_electrostatic_potential",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use calculate electrostatic potential to Calculate the electrostatic potential between two charged bodies using the principle of Coulomb's Law. Set charge1=1, charge2=1, distance=1.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {
+        "charge1": 1,
+        "charge2": 1,
+        "distance": 1
+      },
+      "prediction_latency_ms": 0.1406,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_electrostatic_potential\nTool description: Calculate the electrostatic potential between two charged bodies using the principle of Coulomb's Law.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the electrostatic potential between two charged bodies using the principle of Coulomb's Law. Provide all required fields: `charge1`, `charge2`, and `distance`.\nWhen to use: [\"Use `calculate_electrostatic_potential` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `charge1`, `charge2`, and `distance`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"charge1\": null, \"charge2\": null, \"distance\": null, \"constant\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_electrostatic_potential\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_electrostatic_potential\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null, \"constant\": null}}]\nSchema: {\"properties\": {\"charge1\": {\"description\": \"The quantity of charge on the first body.\", \"type\": \"float\"}, \"charge2\": {\"description\": \"The quantity of charge on the second body.\", \"type\": \"float\"}, \"constant\": {\"description\": \"The value of the electrostatic constant. Default is 898755178.73\", \"type\": \"float\"}, \"distance\": {\"description\": \"The distance between the two bodies.\", \"type\": \"float\"}}, \"required\": [\"charge1\", \"charge2\", \"distance\"], \"type\": \"object\"}\nUser request: Use calculate electrostatic potential to Calculate the electrostatic potential between two charged bodies using the principle of Coulomb's Law. Set charge1=1, charge2=1, distance=1.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0115_calculate_electrostatic_potential_positive_medium_0",
+      "tool_name": "calculate_electrostatic_potential",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Calculate the electrostatic potential between two charged bodies using the principle of Coulomb's Law. The relevant details are charge1=8, charge2=8, distance=8.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {
+        "charge1": 8,
+        "charge2": 8,
+        "distance": 8
+      },
+      "prediction_latency_ms": 0.1409,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_electrostatic_potential\nTool description: Calculate the electrostatic potential between two charged bodies using the principle of Coulomb's Law.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the electrostatic potential between two charged bodies using the principle of Coulomb's Law. Provide all required fields: `charge1`, `charge2`, and `distance`.\nWhen to use: [\"Use `calculate_electrostatic_potential` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `charge1`, `charge2`, and `distance`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"charge1\": null, \"charge2\": null, \"distance\": null, \"constant\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_electrostatic_potential\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_electrostatic_potential\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null, \"constant\": null}}]\nSchema: {\"properties\": {\"charge1\": {\"description\": \"The quantity of charge on the first body.\", \"type\": \"float\"}, \"charge2\": {\"description\": \"The quantity of charge on the second body.\", \"type\": \"float\"}, \"constant\": {\"description\": \"The value of the electrostatic constant. Default is 898755178.73\", \"type\": \"float\"}, \"distance\": {\"description\": \"The distance between the two bodies.\", \"type\": \"float\"}}, \"required\": [\"charge1\", \"charge2\", \"distance\"], \"type\": \"object\"}\nUser request: I need help with this task: Calculate the electrostatic potential between two charged bodies using the principle of Coulomb's Law. The relevant details are charge1=8, charge2=8, distance=8.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.17
+  }
+}

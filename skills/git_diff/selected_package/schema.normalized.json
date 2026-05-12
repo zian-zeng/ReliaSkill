@@ -1,0 +1,107 @@
+{
+  "tool_name": "git_diff",
+  "server_name": "src",
+  "tool_purpose": "Shows differences between branches or commits",
+  "input_schema_raw": {
+    "properties": {
+      "context_lines": {
+        "type": "integer"
+      },
+      "repo_path": {
+        "type": "string"
+      },
+      "target": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "repo_path",
+      "target"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "repo_path",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.repo_path"
+    },
+    {
+      "name": "target",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.target"
+    },
+    {
+      "name": "context_lines",
+      "type": "integer",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.context_lines"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Shows differences between branches or commits",
+    "git_diff"
+  ],
+  "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.85,
+    "auth_required": false,
+    "documentation_length": 45,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "missing_argument_description:repo_path",
+    "missing_argument_description:target",
+    "missing_argument_description:context_lines",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "git_diff",
+    "server_name": "src",
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

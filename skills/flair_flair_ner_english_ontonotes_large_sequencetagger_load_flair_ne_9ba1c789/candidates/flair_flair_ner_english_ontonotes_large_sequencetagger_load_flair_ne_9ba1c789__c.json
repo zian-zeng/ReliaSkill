@@ -1,0 +1,62 @@
+{
+  "candidate_id": "flair_flair_ner_english_ontonotes_large_sequencetagger_load_flair_ne_9ba1c789__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags such as cardinal value, date value, event name, building name, geo-political entity, language name, law name, location name, money name, affiliation, ordinal value, organization name, percent value, person name, product name, quantity value, time value, and name of work of art. The model is based on document-level XLM-R embeddings and FLERT. Framework: Flair. Functionality: Named Entity Recognition. API call: SequenceTagger.load('flair/ner-english-ontonotes-large'). This tool has no required input fields.\nWhen to use:\n- Use `flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789` when the user's request directly matches this tool's purpose.\n- This tool has no required input fields.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Tool does not expose top-level input properties.",
+  "argument_template": {},
+  "examples": [],
+  "when_to_use": [
+    "Use `flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789` when the user's request directly matches this tool's purpose.",
+    "This tool has no required input fields.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Tool does not expose top-level input properties."
+  ],
+  "token_count": 261,
+  "skill_token_count": 261,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 0,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags such as cardinal value, date value, event name, building name, geo-political entity, language name, law name, location name, money name, affiliation, ordinal value, organization name, percent value, person name, product name, quantity value, time value, and name of work of art. The model is based on document-level XLM-R embeddings and FLERT. Framework: Flair. Functionality: Named Entity Recognition. API call: SequenceTagger.load('flair/ner-english-ontonotes-large'). This tool has no required input fields.",
+    "when_to_use": [
+      "Use `flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789` when the user's request directly matches this tool's purpose.",
+      "This tool has no required input fields.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Tool does not expose top-level input properties."
+    ],
+    "argument_template": {},
+    "examples": [],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "flair_flair_ner_english_ontonotes_large_sequencetagger_load_flair_ne_9ba1c789__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "flair_flair_ner_english_ontonotes_large_sequencetagger_load_flair_ne_9ba1c789__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

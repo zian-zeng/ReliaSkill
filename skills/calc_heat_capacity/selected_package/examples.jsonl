@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calc_heat_capacity", "arguments": {"temp": 1, "volume": 1}}
+{"scenario": "Richer invocation that uses optional controls for calc_heat_capacity", "arguments": {"temp": 2, "volume": 2, "gas": "sample_gas_2"}}

@@ -1,0 +1,130 @@
+{
+  "candidate_id": "mock_issue_tracking_search_tickets_023__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee. Provide the required field `query`.\nWhen to use:\n- Use `mock_issue_tracking_search_tickets_023` when the user's request directly matches this tool's purpose.\n- Provide the required field `query`.\n- Optional controls include `status`, `assignee`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `status`: 'open', 'blocked', 'closed'.\nArgument template:\n{\"assignee\": \"sample_assignee_4\", \"query\": \"sample query\", \"status\": \"open\"}\nExamples:\nMinimal valid request that satisfies the required fields for mock_issue_tracking_search_tickets_023\n{\"query\": \"sample query\"}\nRicher invocation that uses optional controls for mock_issue_tracking_search_tickets_023\n{\"assignee\": \"sample_assignee_2\", \"query\": \"sample query\", \"status\": \"blocked\"}\nRequired-argument dev behavior example.\n{\"query\": \"sample query\"}\nOptional, enum, nested, or array argument example.\n{\"assignee\": \"sample_assignee_4\", \"query\": \"sample query\", \"status\": \"open\"}",
+  "argument_template": {
+    "query": "sample query",
+    "status": "open",
+    "assignee": "sample_assignee_4"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for mock_issue_tracking_search_tickets_023",
+      "arguments": {
+        "query": "sample query"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for mock_issue_tracking_search_tickets_023",
+      "arguments": {
+        "query": "sample query",
+        "status": "blocked",
+        "assignee": "sample_assignee_2"
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "query": "sample query"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "query": "sample query",
+        "status": "open",
+        "assignee": "sample_assignee_4"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `mock_issue_tracking_search_tickets_023` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `query`.",
+    "Optional controls include `status`, `assignee`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `status`: 'open', 'blocked', 'closed'."
+  ],
+  "token_count": 303,
+  "skill_token_count": 303,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee. Provide the required field `query`.",
+    "when_to_use": [
+      "Use `mock_issue_tracking_search_tickets_023` when the user's request directly matches this tool's purpose.",
+      "Provide the required field `query`.",
+      "Optional controls include `status`, `assignee`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `status`: 'open', 'blocked', 'closed'."
+    ],
+    "argument_template": {
+      "query": "sample query",
+      "status": "open",
+      "assignee": "sample_assignee_4"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for mock_issue_tracking_search_tickets_023",
+        "arguments": {
+          "query": "sample query"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for mock_issue_tracking_search_tickets_023",
+        "arguments": {
+          "query": "sample query",
+          "status": "blocked",
+          "assignee": "sample_assignee_2"
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "query": "sample query"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "query": "sample query",
+          "status": "open",
+          "assignee": "sample_assignee_4"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "mock_issue_tracking_search_tickets_023__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "mock_issue_tracking_search_tickets_023__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

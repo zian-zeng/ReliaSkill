@@ -1,0 +1,52 @@
+{
+  "tool_name": "hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4",
+  "server_name": "bfcl_huggingface_eval_api",
+  "tool_purpose": "A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model can be used to answer questions about images. Framework: Hugging Face. Functionality: Visual Question Answering. API call: pipeline('visual-question-answering', model='JosephusCheung/GuanacoVQAOnConsumerHardware').",
+  "input_schema_raw": {
+    "properties": {},
+    "required": [],
+    "type": "object"
+  },
+  "arguments": [],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ],
+  "doc_snippets": [
+    "A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model can be used to answer questions about images. Framework: Hugging Face. Functionality: Visual Question Answering. API call: pipeline('visual-question-answering', model='JosephusCheung/GuanacoVQAOnConsumerHardware').",
+    "JosephusCheung/GuanacoVQAOnConsumerHardware",
+    "Visual Question Answering"
+  ],
+  "source_pointer": "bfcl",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 354,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 1,
+    "num_arguments": 0,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "num_top_level_arguments": 0,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "empty_input_schema",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4",
+    "server_name": "bfcl_huggingface_eval_api",
+    "source_pointer": "bfcl"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

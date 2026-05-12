@@ -1,0 +1,109 @@
+{
+  "tool_name": "calculate_final_velocity",
+  "server_name": "bfcl_v3",
+  "tool_purpose": "Calculate the final velocity of an object under constant acceleration, knowing its initial velocity, acceleration, and time of acceleration.",
+  "input_schema_raw": {
+    "properties": {
+      "acceleration": {
+        "description": "The acceleration of the object.",
+        "type": "float"
+      },
+      "initial_velocity": {
+        "description": "The initial velocity of the object.",
+        "type": "integer"
+      },
+      "time": {
+        "description": "The time of acceleration.",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "initial_velocity",
+      "acceleration",
+      "time"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "initial_velocity",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The initial velocity of the object.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.initial_velocity"
+    },
+    {
+      "name": "acceleration",
+      "type": "float",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The acceleration of the object.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.acceleration"
+    },
+    {
+      "name": "time",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The time of acceleration.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.time"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Calculate the final velocity of an object under constant acceleration, knowing its initial velocity, acceleration, and time of acceleration.",
+    "calculate_final_velocity",
+    "Calculate the final velocity of an object under constant acceleration, knowing its initial velocity,"
+  ],
+  "source_pointer": "bfcl_v3",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.15,
+    "auth_required": false,
+    "documentation_length": 140,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 3,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "calculate_final_velocity",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for playwright_select", "arguments": {"selector": "sample_selector_1", "value": "sample_value_1"}}
+{"scenario": "Richer invocation that uses optional controls for playwright_select", "arguments": {"selector": "sample_selector_2", "value": "sample_value_2"}}

@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0058_hugging_face_josephuscheung_guanacovqaonconsumerhardware_pipeline_vi_d60df3f4_negative_easy_0_out_of_domain_request",
+      "tool_name": "hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  josephuscheung guanacovqaonconsumerhardware  pipeline vi d60df3f4.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0325,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4\nTool description: A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model can be used to answer questions about images. Framework: Hugging Face. Functionality: Visual Question Answering. API call: pipeline('visual-question-answering', model='JosephusCheung/GuanacoVQAOnConsumerHardware').\nSkill condition: multi_candidate_skill\nSkill summary: A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model can be used to answer questions about images. Framework: Hugging Face. Functionality: Visual Question Answering. API call: pipeline('visual-question-answering', model='JosephusCheung/GuanacoVQAOnConsumerHardware'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  josephuscheung guanacovqaonconsumerhardware  pipeline vi d60df3f4.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0058_hugging_face_josephuscheung_guanacovqaonconsumerhardware_pipeline_vi_d60df3f4_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with hugging face  josephuscheung guanacovqaonconsumerhardware  pipeline vi d60df3f4; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0282,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4\nTool description: A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model can be used to answer questions about images. Framework: Hugging Face. Functionality: Visual Question Answering. API call: pipeline('visual-question-answering', model='JosephusCheung/GuanacoVQAOnConsumerHardware').\nSkill condition: multi_candidate_skill\nSkill summary: A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model can be used to answer questions about images. Framework: Hugging Face. Functionality: Visual Question Answering. API call: pipeline('visual-question-answering', model='JosephusCheung/GuanacoVQAOnConsumerHardware'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Maybe do something with hugging face  josephuscheung guanacovqaonconsumerhardware  pipeline vi d60df3f4; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0058_hugging_face_josephuscheung_guanacovqaonconsumerhardware_pipeline_vi_d60df3f4_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with hugging face  josephuscheung guanacovqaonconsumerhardware  pipeline vi d60df3f4.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0279,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4\nTool description: A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model can be used to answer questions about images. Framework: Hugging Face. Functionality: Visual Question Answering. API call: pipeline('visual-question-answering', model='JosephusCheung/GuanacoVQAOnConsumerHardware').\nSkill condition: multi_candidate_skill\nSkill summary: A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model can be used to answer questions about images. Framework: Hugging Face. Functionality: Visual Question Answering. API call: pipeline('visual-question-answering', model='JosephusCheung/GuanacoVQAOnConsumerHardware'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with hugging face  josephuscheung guanacovqaonconsumerhardware  pipeline vi d60df3f4.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0058_hugging_face_josephuscheung_guanacovqaonconsumerhardware_pipeline_vi_d60df3f4_positive_easy_0",
+      "tool_name": "hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use hugging face  josephuscheung guanacovqaonconsumerhardware  pipeline vi d60df3f4 to A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0278,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4\nTool description: A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model can be used to answer questions about images. Framework: Hugging Face. Functionality: Visual Question Answering. API call: pipeline('visual-question-answering', model='JosephusCheung/GuanacoVQAOnConsumerHardware').\nSkill condition: multi_candidate_skill\nSkill summary: A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model can be used to answer questions about images. Framework: Hugging Face. Functionality: Visual Question Answering. API call: pipeline('visual-question-answering', model='JosephusCheung/GuanacoVQAOnConsumerHardware'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use hugging face  josephuscheung guanacovqaonconsumerhardware  pipeline vi d60df3f4 to A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0058_hugging_face_josephuscheung_guanacovqaonconsumerhardware_pipeline_vi_d60df3f4_positive_medium_0",
+      "tool_name": "hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0273,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4\nTool description: A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model can be used to answer questions about images. Framework: Hugging Face. Functionality: Visual Question Answering. API call: pipeline('visual-question-answering', model='JosephusCheung/GuanacoVQAOnConsumerHardware').\nSkill condition: multi_candidate_skill\nSkill summary: A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model can be used to answer questions about images. Framework: Hugging Face. Functionality: Visual Question Answering. API call: pipeline('visual-question-answering', model='JosephusCheung/GuanacoVQAOnConsumerHardware'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__josephuscheung_guanacovqaonconsumerhardware__pipeline_vi_d60df3f4` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: A Visual Question Answering model trained on the GuanacoVQADataset, designed to work on consumer hardware like Colab Free T4 GPU. The model. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0287
+  }
+}

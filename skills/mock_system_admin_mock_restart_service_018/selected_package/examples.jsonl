@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for mock_system_admin_mock_restart_service_018", "arguments": {"service_name": "sample-name", "environment": "dev", "reason": "sample_reason_1"}}
+{"scenario": "Richer invocation that uses optional controls for mock_system_admin_mock_restart_service_018", "arguments": {"service_name": "sample-name", "environment": "staging", "reason": "sample_reason_2", "dry_run": true}}

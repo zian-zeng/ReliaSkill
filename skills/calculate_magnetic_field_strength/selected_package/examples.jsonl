@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_magnetic_field_strength", "arguments": {"current": 1, "distance": 1}}
+{"scenario": "Richer invocation that uses optional controls for calculate_magnetic_field_strength", "arguments": {"current": 2, "distance": 2, "permeability": null}}

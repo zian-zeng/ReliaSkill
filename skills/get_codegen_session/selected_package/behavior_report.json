@@ -1,0 +1,185 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0144_get_codegen_session_negative_easy_0_out_of_domain_request",
+      "tool_name": "get_codegen_session",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to get codegen session.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "sessionId": "sample_sessionId_4"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0602,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: get_codegen_session\nTool description: Get information about a code generation session\nSkill condition: multi_candidate_skill\nSkill summary: Get information about a code generation session. Provide the required field `sessionId`.\nWhen to use: [\"Use `get_codegen_session` when the user's request directly matches this tool's purpose.\", \"Provide the required field `sessionId`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"sessionId\": \"sample_sessionId_4\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for get_codegen_session\", \"arguments\": {\"sessionId\": \"sample_sessionId_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for get_codegen_session\", \"arguments\": {\"sessionId\": \"sample_sessionId_2\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"sessionId\": \"sample_sessionId_3\"}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"sessionId\": \"sample_sessionId_4\"}}]\nSchema: {\"properties\": {\"sessionId\": {\"description\": \"ID of the session to retrieve\", \"type\": \"string\"}}, \"required\": [\"sessionId\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to get codegen session.\n",
+        "raw_model_output": "{\"arguments\": {\"sessionId\": \"sample_sessionId_4\"}}",
+        "parsed_prediction": {
+          "sessionId": "sample_sessionId_4"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0144_get_codegen_session_negative_hard_1_near_miss_intent",
+      "tool_name": "get_codegen_session",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to get codegen session, but I only want a checklist for how to Get information about a code generation session; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "sessionId": "sample_sessionId_4"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1329,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: get_codegen_session\nTool description: Get information about a code generation session\nSkill condition: multi_candidate_skill\nSkill summary: Get information about a code generation session. Provide the required field `sessionId`.\nWhen to use: [\"Use `get_codegen_session` when the user's request directly matches this tool's purpose.\", \"Provide the required field `sessionId`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"sessionId\": \"sample_sessionId_4\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for get_codegen_session\", \"arguments\": {\"sessionId\": \"sample_sessionId_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for get_codegen_session\", \"arguments\": {\"sessionId\": \"sample_sessionId_2\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"sessionId\": \"sample_sessionId_3\"}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"sessionId\": \"sample_sessionId_4\"}}]\nSchema: {\"properties\": {\"sessionId\": {\"description\": \"ID of the session to retrieve\", \"type\": \"string\"}}, \"required\": [\"sessionId\"], \"type\": \"object\"}\nUser request: This sounds close to get codegen session, but I only want a checklist for how to Get information about a code generation session; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {\"sessionId\": \"sample_sessionId_4\"}}",
+        "parsed_prediction": {
+          "sessionId": "sample_sessionId_4"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0144_get_codegen_session_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "get_codegen_session",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to Fetch records from a specified database table based on certain conditions. This is adjacent to get codegen session, but the intended capability is db fetch records.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "sessionId": "sample_sessionId_4"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0553,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: get_codegen_session\nTool description: Get information about a code generation session\nSkill condition: multi_candidate_skill\nSkill summary: Get information about a code generation session. Provide the required field `sessionId`.\nWhen to use: [\"Use `get_codegen_session` when the user's request directly matches this tool's purpose.\", \"Provide the required field `sessionId`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"sessionId\": \"sample_sessionId_4\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for get_codegen_session\", \"arguments\": {\"sessionId\": \"sample_sessionId_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for get_codegen_session\", \"arguments\": {\"sessionId\": \"sample_sessionId_2\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"sessionId\": \"sample_sessionId_3\"}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"sessionId\": \"sample_sessionId_4\"}}]\nSchema: {\"properties\": {\"sessionId\": {\"description\": \"ID of the session to retrieve\", \"type\": \"string\"}}, \"required\": [\"sessionId\"], \"type\": \"object\"}\nUser request: I need to Fetch records from a specified database table based on certain conditions. This is adjacent to get codegen session, but the intended capability is db fetch records.\n",
+        "raw_model_output": "{\"arguments\": {\"sessionId\": \"sample_sessionId_4\"}}",
+        "parsed_prediction": {
+          "sessionId": "sample_sessionId_4"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0144_get_codegen_session_positive_easy_0",
+      "tool_name": "get_codegen_session",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use get codegen session to Get information about a code generation session. Set sessionId=\"item-0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "sessionId": "sample_sessionId_4"
+      },
+      "expected_arguments": {
+        "sessionId": "item-0"
+      },
+      "prediction_latency_ms": 0.0542,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: get_codegen_session\nTool description: Get information about a code generation session\nSkill condition: multi_candidate_skill\nSkill summary: Get information about a code generation session. Provide the required field `sessionId`.\nWhen to use: [\"Use `get_codegen_session` when the user's request directly matches this tool's purpose.\", \"Provide the required field `sessionId`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"sessionId\": \"sample_sessionId_4\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for get_codegen_session\", \"arguments\": {\"sessionId\": \"sample_sessionId_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for get_codegen_session\", \"arguments\": {\"sessionId\": \"sample_sessionId_2\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"sessionId\": \"sample_sessionId_3\"}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"sessionId\": \"sample_sessionId_4\"}}]\nSchema: {\"properties\": {\"sessionId\": {\"description\": \"ID of the session to retrieve\", \"type\": \"string\"}}, \"required\": [\"sessionId\"], \"type\": \"object\"}\nUser request: Use get codegen session to Get information about a code generation session. Set sessionId=\"item-0\".\n",
+        "raw_model_output": "{\"arguments\": {\"sessionId\": \"sample_sessionId_4\"}}",
+        "parsed_prediction": {
+          "sessionId": "sample_sessionId_4"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0144_get_codegen_session_positive_medium_0",
+      "tool_name": "get_codegen_session",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Get information about a code generation session. The relevant details are sessionId=\"item-7\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "sessionId": "sample_sessionId_4"
+      },
+      "expected_arguments": {
+        "sessionId": "item-7"
+      },
+      "prediction_latency_ms": 0.0555,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: get_codegen_session\nTool description: Get information about a code generation session\nSkill condition: multi_candidate_skill\nSkill summary: Get information about a code generation session. Provide the required field `sessionId`.\nWhen to use: [\"Use `get_codegen_session` when the user's request directly matches this tool's purpose.\", \"Provide the required field `sessionId`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"sessionId\": \"sample_sessionId_4\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for get_codegen_session\", \"arguments\": {\"sessionId\": \"sample_sessionId_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for get_codegen_session\", \"arguments\": {\"sessionId\": \"sample_sessionId_2\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"sessionId\": \"sample_sessionId_3\"}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"sessionId\": \"sample_sessionId_4\"}}]\nSchema: {\"properties\": {\"sessionId\": {\"description\": \"ID of the session to retrieve\", \"type\": \"string\"}}, \"required\": [\"sessionId\"], \"type\": \"object\"}\nUser request: I need help with this task: Get information about a code generation session. The relevant details are sessionId=\"item-7\".\n",
+        "raw_model_output": "{\"arguments\": {\"sessionId\": \"sample_sessionId_4\"}}",
+        "parsed_prediction": {
+          "sessionId": "sample_sessionId_4"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0716
+  }
+}

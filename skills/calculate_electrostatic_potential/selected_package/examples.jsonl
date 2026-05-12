@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_electrostatic_potential", "arguments": {"charge1": null, "charge2": null, "distance": null}}
+{"scenario": "Richer invocation that uses optional controls for calculate_electrostatic_potential", "arguments": {"charge1": null, "charge2": null, "distance": null, "constant": null}}

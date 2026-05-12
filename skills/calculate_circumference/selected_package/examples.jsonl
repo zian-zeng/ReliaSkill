@@ -1,0 +1,4 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_circumference", "arguments": {"radius": 1}}
+{"scenario": "Richer invocation that uses optional controls for calculate_circumference", "arguments": {"radius": 2, "unit": "sample_unit_2"}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"radius": 3}}
+{"scenario": "Optional, enum, nested, or array argument example.", "arguments": {"radius": 4, "unit": "sample_unit_4"}}

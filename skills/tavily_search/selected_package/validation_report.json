@@ -1,0 +1,29 @@
+{
+  "valid": false,
+  "issues": [
+    {
+      "severity": "error",
+      "code": "invalid_enum",
+      "message": "argument_template: '' is not an allowed value at $.country",
+      "location": "$.country",
+      "section": "argument_template",
+      "repairable": true,
+      "evidence": {
+        "code": "invalid_enum",
+        "location": "$.country"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "invalid_enum",
+      "message": "example[1]: '' is not an allowed value at $.country",
+      "location": "$.country",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "invalid_enum",
+        "location": "$.country"
+      }
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0208_search_nodes_negative_easy_0_out_of_domain_request",
+      "tool_name": "search_nodes",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to search nodes.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "query": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to search nodes"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0595,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search_nodes\nTool description: Search for nodes in the knowledge graph based on a query\nSkill condition: multi_candidate_skill\nSkill summary: Search for nodes in the knowledge graph based on a query. Provide the required field `query`.\nWhen to use: [\"Use `search_nodes` when the user's request directly matches this tool's purpose.\", \"Provide the required field `query`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"query\": \"sample query\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search_nodes\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for search_nodes\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"query\": \"sample query\"}}]\nSchema: {\"properties\": {\"query\": {\"type\": \"string\"}}, \"required\": [\"query\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to search nodes.\n",
+        "raw_model_output": "{\"arguments\": {\"query\": \"Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to search nodes\"}}",
+        "parsed_prediction": {
+          "query": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to search nodes"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0208_search_nodes_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "search_nodes",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with search nodes; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "query": "Maybe do something with search nodes; actually, I am not sure what input or action is intended"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0552,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search_nodes\nTool description: Search for nodes in the knowledge graph based on a query\nSkill condition: multi_candidate_skill\nSkill summary: Search for nodes in the knowledge graph based on a query. Provide the required field `query`.\nWhen to use: [\"Use `search_nodes` when the user's request directly matches this tool's purpose.\", \"Provide the required field `query`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"query\": \"sample query\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search_nodes\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for search_nodes\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"query\": \"sample query\"}}]\nSchema: {\"properties\": {\"query\": {\"type\": \"string\"}}, \"required\": [\"query\"], \"type\": \"object\"}\nUser request: Maybe do something with search nodes; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {\"query\": \"Maybe do something with search nodes; actually, I am not sure what input or action is intended\"}}",
+        "parsed_prediction": {
+          "query": "Maybe do something with search nodes; actually, I am not sure what input or action is intended"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0208_search_nodes_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "search_nodes",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to API-Bank-style local fixture tool for searching transactions by date, category, and amount range. This is adjacent to search nodes, but the intended capability is bank search transactions.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "query": "searching transactions by date, category, and amount range. This is adjacent to search nodes, but the intended capability is bank search transactions"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1054,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search_nodes\nTool description: Search for nodes in the knowledge graph based on a query\nSkill condition: multi_candidate_skill\nSkill summary: Search for nodes in the knowledge graph based on a query. Provide the required field `query`.\nWhen to use: [\"Use `search_nodes` when the user's request directly matches this tool's purpose.\", \"Provide the required field `query`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"query\": \"sample query\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search_nodes\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for search_nodes\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"query\": \"sample query\"}}]\nSchema: {\"properties\": {\"query\": {\"type\": \"string\"}}, \"required\": [\"query\"], \"type\": \"object\"}\nUser request: I need to API-Bank-style local fixture tool for searching transactions by date, category, and amount range. This is adjacent to search nodes, but the intended capability is bank search transactions.\n",
+        "raw_model_output": "{\"arguments\": {\"query\": \"searching transactions by date, category, and amount range. This is adjacent to search nodes, but the intended capability is bank search transactions\"}}",
+        "parsed_prediction": {
+          "query": "searching transactions by date, category, and amount range. This is adjacent to search nodes, but the intended capability is bank search transactions"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0208_search_nodes_positive_easy_0",
+      "tool_name": "search_nodes",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use search nodes to Search for nodes in the knowledge graph based on a query. Set query=\"reliability evaluation\".",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "query": "reliability evaluation"
+      },
+      "expected_arguments": {
+        "query": "reliability evaluation"
+      },
+      "prediction_latency_ms": 0.0524,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search_nodes\nTool description: Search for nodes in the knowledge graph based on a query\nSkill condition: multi_candidate_skill\nSkill summary: Search for nodes in the knowledge graph based on a query. Provide the required field `query`.\nWhen to use: [\"Use `search_nodes` when the user's request directly matches this tool's purpose.\", \"Provide the required field `query`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"query\": \"sample query\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search_nodes\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for search_nodes\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"query\": \"sample query\"}}]\nSchema: {\"properties\": {\"query\": {\"type\": \"string\"}}, \"required\": [\"query\"], \"type\": \"object\"}\nUser request: Use search nodes to Search for nodes in the knowledge graph based on a query. Set query=\"reliability evaluation\".\n",
+        "raw_model_output": "{\"arguments\": {\"query\": \"reliability evaluation\"}}",
+        "parsed_prediction": {
+          "query": "reliability evaluation"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0208_search_nodes_positive_medium_0",
+      "tool_name": "search_nodes",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Search for nodes in the knowledge graph based on a query. The relevant details are query=\"reliability evaluation\".",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "query": "reliability evaluation"
+      },
+      "expected_arguments": {
+        "query": "reliability evaluation"
+      },
+      "prediction_latency_ms": 0.0508,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search_nodes\nTool description: Search for nodes in the knowledge graph based on a query\nSkill condition: multi_candidate_skill\nSkill summary: Search for nodes in the knowledge graph based on a query. Provide the required field `query`.\nWhen to use: [\"Use `search_nodes` when the user's request directly matches this tool's purpose.\", \"Provide the required field `query`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"query\": \"sample query\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search_nodes\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for search_nodes\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"query\": \"sample query\"}}]\nSchema: {\"properties\": {\"query\": {\"type\": \"string\"}}, \"required\": [\"query\"], \"type\": \"object\"}\nUser request: I need help with this task: Search for nodes in the knowledge graph based on a query. The relevant details are query=\"reliability evaluation\".\n",
+        "raw_model_output": "{\"arguments\": {\"query\": \"reliability evaluation\"}}",
+        "parsed_prediction": {
+          "query": "reliability evaluation"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0647
+  }
+}

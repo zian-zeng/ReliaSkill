@@ -1,0 +1,4 @@
+{"scenario": "Minimal valid request that satisfies the required fields for database.query", "arguments": {"table": "sample_table_1", "conditions": [null]}}
+{"scenario": "Richer invocation that uses optional controls for database.query", "arguments": {"table": "sample_table_2", "conditions": [null]}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"table": "sample_table_3", "conditions": [null]}}
+{"scenario": "Optional, enum, nested, or array argument example.", "arguments": {"table": "sample_table_4", "conditions": [null]}}

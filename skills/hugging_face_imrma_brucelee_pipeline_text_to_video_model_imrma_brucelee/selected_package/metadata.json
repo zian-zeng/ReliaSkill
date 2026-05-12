@@ -1,0 +1,121 @@
+{
+  "tool_name": "hugging_face__imrma_brucelee__pipeline_text_to_video_model_imrma_brucelee",
+  "baseline_name": "multi_candidate_skill",
+  "source_pointer": "bfcl",
+  "valid": true,
+  "issues": [],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "trace_type": "generation_backend",
+      "configured_generation_backend": "heuristic",
+      "actual_generation_backend": "heuristic",
+      "generation_fallback_used": false,
+      "generation_fallback_reason": null
+    },
+    {
+      "trace_type": "multi_candidate_generation",
+      "candidate_id": "hugging_face_imrma_brucelee_pipeline_text_to_video_model_imrma_brucelee__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  ],
+  "skill_metadata": {
+    "candidate_id": "hugging_face_imrma_brucelee_pipeline_text_to_video_model_imrma_brucelee__cand_02_example_heavy",
+    "generation_strategy": "example_heavy",
+    "prompt_template_id": "heuristic_example_heavy_v1"
+  },
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 188,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 1,
+    "num_arguments": 0,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "num_top_level_arguments": 0,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "empty_input_schema",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "side_effect_hints": [],
+  "safety_hints": [],
+  "behavior_metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0286
+  },
+  "reliability_score": {
+    "score": 70.0,
+    "decision": "reject",
+    "features": {
+      "formula": "R = 100*(0.20*V + 0.30*P + 0.30*N + 0.10*A + 0.05*C + 0.05*S) - 5*repair_rounds",
+      "components": {
+        "V": 1.0,
+        "P": 1.0,
+        "N": 0.0,
+        "A": 1.0,
+        "C": 1.0,
+        "S": 1.0
+      },
+      "weights": {
+        "V": 0.2,
+        "P": 0.3,
+        "N": 0.3,
+        "A": 0.1,
+        "C": 0.05,
+        "S": 0.05
+      },
+      "weighted_component_sum": 0.7,
+      "repair_penalty": 0.0,
+      "critical_failures": [
+        "harmful_skill_injection"
+      ],
+      "validation_error_count": 0,
+      "validation_warning_count": 0,
+      "repairable_issue_count": 0,
+      "schema_argument_coverage": 1.0,
+      "required_argument_coverage": 1.0,
+      "enum_argument_coverage": 1.0,
+      "compactness": 1.0,
+      "safety_annotation_preservation": 1.0,
+      "token_overhead_estimate": 159,
+      "repair_rounds": 0,
+      "trigger_precision": 0.4,
+      "trigger_recall": 1.0,
+      "harmful_skill_injection_rate": 1.0,
+      "behavior_exact_match_rate": 1.0,
+      "avg_argument_validity": 1.0,
+      "avg_prediction_latency_ms": 0.0286,
+      "deploy_threshold": 85.0,
+      "repair_threshold": 60.0
+    },
+    "rationale": [
+      "formula score 70.0000 from components {'V': 1.0, 'P': 1.0, 'N': 0.0, 'A': 1.0, 'C': 1.0, 'S': 1.0}",
+      "critical failure(s): harmful_skill_injection",
+      "falls in repair band"
+    ],
+    "threshold": 85.0
+  },
+  "repair_report": null
+}

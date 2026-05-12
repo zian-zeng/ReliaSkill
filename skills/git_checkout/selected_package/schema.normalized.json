@@ -1,0 +1,89 @@
+{
+  "tool_name": "git_checkout",
+  "server_name": "src",
+  "tool_purpose": "Switches branches",
+  "input_schema_raw": {
+    "properties": {
+      "branch_name": {
+        "type": "string"
+      },
+      "repo_path": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "repo_path",
+      "branch_name"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "repo_path",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.repo_path"
+    },
+    {
+      "name": "branch_name",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.branch_name"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Switches branches",
+    "git_checkout"
+  ],
+  "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.85,
+    "auth_required": false,
+    "documentation_length": 17,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 2,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 2,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "missing_argument_description:repo_path",
+    "missing_argument_description:branch_name",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "git_checkout",
+    "server_name": "src",
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\git\\src\\mcp_server_git\\server.py"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

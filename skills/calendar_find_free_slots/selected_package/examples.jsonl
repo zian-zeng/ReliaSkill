@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calendar_find_free_slots", "arguments": {"calendar_ids": ["sample_calendar_ids_item_1"], "duration_minutes": 1, "window": {"end": "2026-01-01T09:00:00Z", "start": "2026-01-01T09:00:00Z"}}}
+{"scenario": "Richer invocation that uses optional controls for calendar_find_free_slots", "arguments": {"calendar_ids": ["sample_calendar_ids_item_2"], "duration_minutes": 2, "window": {"end": "2026-01-01T09:00:00Z", "start": "2026-01-01T09:00:00Z"}}}

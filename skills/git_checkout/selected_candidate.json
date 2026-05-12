@@ -1,0 +1,110 @@
+{
+  "candidate_id": "git_checkout__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Switches branches. Provide all required fields: `repo_path`, and `branch_name`.\nWhen to use:\n- Use `git_checkout` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `repo_path`, and `branch_name`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"branch_name\": \"sample-name\", \"repo_path\": \"data/sample.txt\"}\nExamples:\nMinimal valid request that satisfies the required fields for git_checkout\n{\"branch_name\": \"sample-name\", \"repo_path\": \"data/sample.txt\"}\nRicher invocation that uses optional controls for git_checkout\n{\"branch_name\": \"sample-name\", \"repo_path\": \"data/sample.txt\"}\nRequired-argument dev behavior example.\n{\"branch_name\": \"sample-name\", \"repo_path\": \"data/sample.txt\"}",
+  "argument_template": {
+    "repo_path": "data/sample.txt",
+    "branch_name": "sample-name"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for git_checkout",
+      "arguments": {
+        "repo_path": "data/sample.txt",
+        "branch_name": "sample-name"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for git_checkout",
+      "arguments": {
+        "repo_path": "data/sample.txt",
+        "branch_name": "sample-name"
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "repo_path": "data/sample.txt",
+        "branch_name": "sample-name"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `git_checkout` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `repo_path`, and `branch_name`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 223,
+  "skill_token_count": 223,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 3,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Switches branches. Provide all required fields: `repo_path`, and `branch_name`.",
+    "when_to_use": [
+      "Use `git_checkout` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `repo_path`, and `branch_name`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "repo_path": "data/sample.txt",
+      "branch_name": "sample-name"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for git_checkout",
+        "arguments": {
+          "repo_path": "data/sample.txt",
+          "branch_name": "sample-name"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for git_checkout",
+        "arguments": {
+          "repo_path": "data/sample.txt",
+          "branch_name": "sample-name"
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "repo_path": "data/sample.txt",
+          "branch_name": "sample-name"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "git_checkout__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "git_checkout__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

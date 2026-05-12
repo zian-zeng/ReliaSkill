@@ -1,0 +1,65 @@
+{
+  "valid": false,
+  "issues": [
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "argument_template: null is not allowed at $.conditions[0]",
+      "location": "$.conditions[0]",
+      "section": "argument_template",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.conditions[0]"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "example[0]: null is not allowed at $.conditions[0]",
+      "location": "$.conditions[0]",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.conditions[0]"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "example[1]: null is not allowed at $.conditions[0]",
+      "location": "$.conditions[0]",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.conditions[0]"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "example[2]: null is not allowed at $.conditions[0]",
+      "location": "$.conditions[0]",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.conditions[0]"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "example[3]: null is not allowed at $.conditions[0]",
+      "location": "$.conditions[0]",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.conditions[0]"
+      }
+    }
+  ]
+}

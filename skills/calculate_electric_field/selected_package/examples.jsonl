@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_electric_field", "arguments": {"charge": null, "distance": null}}
+{"scenario": "Richer invocation that uses optional controls for calculate_electric_field", "arguments": {"charge": null, "distance": null, "permitivity": null}}

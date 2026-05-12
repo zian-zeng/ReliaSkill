@@ -1,0 +1,132 @@
+{
+  "candidate_id": "calculate_clock_angle__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Calculate the angle between the hour and minute hands of a clock at a given time. Provide all required fields: `hours`, and `minutes`.\nWhen to use:\n- Use `calculate_clock_angle` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `hours`, and `minutes`.\n- Optional control is available through `round_to` when the request needs extra specificity.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"hours\": 4, \"minutes\": 4, \"round_to\": 4}\nExamples:\nMinimal valid request that satisfies the required fields for calculate_clock_angle\n{\"hours\": 1, \"minutes\": 1}\nRicher invocation that uses optional controls for calculate_clock_angle\n{\"hours\": 2, \"minutes\": 2, \"round_to\": 2}\nRequired-argument dev behavior example.\n{\"hours\": 3, \"minutes\": 3}\nOptional, enum, nested, or array argument example.\n{\"hours\": 4, \"minutes\": 4, \"round_to\": 4}",
+  "argument_template": {
+    "hours": 4,
+    "minutes": 4,
+    "round_to": 4
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for calculate_clock_angle",
+      "arguments": {
+        "hours": 1,
+        "minutes": 1
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for calculate_clock_angle",
+      "arguments": {
+        "hours": 2,
+        "minutes": 2,
+        "round_to": 2
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "hours": 3,
+        "minutes": 3
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "hours": 4,
+        "minutes": 4,
+        "round_to": 4
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `calculate_clock_angle` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `hours`, and `minutes`.",
+    "Optional control is available through `round_to` when the request needs extra specificity.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 283,
+  "skill_token_count": 283,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Calculate the angle between the hour and minute hands of a clock at a given time. Provide all required fields: `hours`, and `minutes`.",
+    "when_to_use": [
+      "Use `calculate_clock_angle` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `hours`, and `minutes`.",
+      "Optional control is available through `round_to` when the request needs extra specificity.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "hours": 4,
+      "minutes": 4,
+      "round_to": 4
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for calculate_clock_angle",
+        "arguments": {
+          "hours": 1,
+          "minutes": 1
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for calculate_clock_angle",
+        "arguments": {
+          "hours": 2,
+          "minutes": 2,
+          "round_to": 2
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "hours": 3,
+          "minutes": 3
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "hours": 4,
+          "minutes": 4,
+          "round_to": 4
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "calculate_clock_angle__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "calculate_clock_angle__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

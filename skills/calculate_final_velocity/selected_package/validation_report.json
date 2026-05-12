@@ -1,0 +1,41 @@
+{
+  "valid": false,
+  "issues": [
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "argument_template: null is not allowed at $.acceleration",
+      "location": "$.acceleration",
+      "section": "argument_template",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.acceleration"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "example[0]: null is not allowed at $.acceleration",
+      "location": "$.acceleration",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.acceleration"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "example[1]: null is not allowed at $.acceleration",
+      "location": "$.acceleration",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.acceleration"
+      }
+    }
+  ]
+}

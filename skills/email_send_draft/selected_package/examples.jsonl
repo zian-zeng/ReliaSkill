@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for email_send_draft", "arguments": {"draft_id": "sample-draft-id-001"}}
+{"scenario": "Richer invocation that uses optional controls for email_send_draft", "arguments": {"draft_id": "sample-draft-id-001", "send_at": "2026-01-01T09:00:00Z", "dry_run": true}}

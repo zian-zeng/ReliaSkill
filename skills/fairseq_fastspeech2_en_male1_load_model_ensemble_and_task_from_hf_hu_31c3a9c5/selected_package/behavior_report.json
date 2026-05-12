@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0027_fairseq_fastspeech2_en_male1_load_model_ensemble_and_task_from_hf_hu_31c3a9c5_negative_easy_0_out_of_domain_request",
+      "tool_name": "fairseq__fastspeech2_en_male1__load_model_ensemble_and_task_from_hf_hu_31c3a9c5",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to fairseq  fastspeech2 en male1  load model ensemble and task from hf hu 31c3a9c5.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0325,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__fastspeech2_en_male1__load_model_ensemble_and_task_from_hf_hu_31c3a9c5\nTool description: FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functionality: Text-to-Speech. API call: load_model_ensemble_and_task_from_hf_hub('facebook/fastspeech2-en-200_speaker-cv4',arg_overrides={'vocoder': 'hifigan', 'fp16': False}).\nSkill condition: multi_candidate_skill\nSkill summary: FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functionality: Text-to-Speech. API call: load_model_ensemble_and_task_from_hf_hub('facebook/fastspeech2-en-200_speaker-cv4',arg_overrides={'vocoder': 'hifigan', 'fp16': False}). This tool has no required input fields.\nWhen to use: [\"Use `fairseq__fastspeech2_en_male1__load_model_ensemble_and_task_from_hf_hu_31c3a9c5` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to fairseq  fastspeech2 en male1  load model ensemble and task from hf hu 31c3a9c5.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0027_fairseq_fastspeech2_en_male1_load_model_ensemble_and_task_from_hf_hu_31c3a9c5_negative_hard_1_missing_required_info",
+      "tool_name": "fairseq__fastspeech2_en_male1__load_model_ensemble_and_task_from_hf_hu_31c3a9c5",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I may need fairseq  fastspeech2 en male1  load model ensemble and task from hf hu 31c3a9c5 to FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functio, but I do not know the required input yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0292,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__fastspeech2_en_male1__load_model_ensemble_and_task_from_hf_hu_31c3a9c5\nTool description: FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functionality: Text-to-Speech. API call: load_model_ensemble_and_task_from_hf_hub('facebook/fastspeech2-en-200_speaker-cv4',arg_overrides={'vocoder': 'hifigan', 'fp16': False}).\nSkill condition: multi_candidate_skill\nSkill summary: FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functionality: Text-to-Speech. API call: load_model_ensemble_and_task_from_hf_hub('facebook/fastspeech2-en-200_speaker-cv4',arg_overrides={'vocoder': 'hifigan', 'fp16': False}). This tool has no required input fields.\nWhen to use: [\"Use `fairseq__fastspeech2_en_male1__load_model_ensemble_and_task_from_hf_hu_31c3a9c5` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I may need fairseq  fastspeech2 en male1  load model ensemble and task from hf hu 31c3a9c5 to FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functio, but I do not know the required input yet.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0027_fairseq_fastspeech2_en_male1_load_model_ensemble_and_task_from_hf_hu_31c3a9c5_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "fairseq__fastspeech2_en_male1__load_model_ensemble_and_task_from_hf_hu_31c3a9c5",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with fairseq  fastspeech2 en male1  load model ensemble and task from hf hu 31c3a9c5.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0279,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__fastspeech2_en_male1__load_model_ensemble_and_task_from_hf_hu_31c3a9c5\nTool description: FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functionality: Text-to-Speech. API call: load_model_ensemble_and_task_from_hf_hub('facebook/fastspeech2-en-200_speaker-cv4',arg_overrides={'vocoder': 'hifigan', 'fp16': False}).\nSkill condition: multi_candidate_skill\nSkill summary: FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functionality: Text-to-Speech. API call: load_model_ensemble_and_task_from_hf_hub('facebook/fastspeech2-en-200_speaker-cv4',arg_overrides={'vocoder': 'hifigan', 'fp16': False}). This tool has no required input fields.\nWhen to use: [\"Use `fairseq__fastspeech2_en_male1__load_model_ensemble_and_task_from_hf_hu_31c3a9c5` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with fairseq  fastspeech2 en male1  load model ensemble and task from hf hu 31c3a9c5.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0027_fairseq_fastspeech2_en_male1_load_model_ensemble_and_task_from_hf_hu_31c3a9c5_positive_easy_0",
+      "tool_name": "fairseq__fastspeech2_en_male1__load_model_ensemble_and_task_from_hf_hu_31c3a9c5",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use fairseq  fastspeech2 en male1  load model ensemble and task from hf hu 31c3a9c5 to FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functio. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0281,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__fastspeech2_en_male1__load_model_ensemble_and_task_from_hf_hu_31c3a9c5\nTool description: FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functionality: Text-to-Speech. API call: load_model_ensemble_and_task_from_hf_hub('facebook/fastspeech2-en-200_speaker-cv4',arg_overrides={'vocoder': 'hifigan', 'fp16': False}).\nSkill condition: multi_candidate_skill\nSkill summary: FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functionality: Text-to-Speech. API call: load_model_ensemble_and_task_from_hf_hub('facebook/fastspeech2-en-200_speaker-cv4',arg_overrides={'vocoder': 'hifigan', 'fp16': False}). This tool has no required input fields.\nWhen to use: [\"Use `fairseq__fastspeech2_en_male1__load_model_ensemble_and_task_from_hf_hu_31c3a9c5` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use fairseq  fastspeech2 en male1  load model ensemble and task from hf hu 31c3a9c5 to FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functio. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0027_fairseq_fastspeech2_en_male1_load_model_ensemble_and_task_from_hf_hu_31c3a9c5_positive_medium_0",
+      "tool_name": "fairseq__fastspeech2_en_male1__load_model_ensemble_and_task_from_hf_hu_31c3a9c5",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functio. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0276,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__fastspeech2_en_male1__load_model_ensemble_and_task_from_hf_hu_31c3a9c5\nTool description: FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functionality: Text-to-Speech. API call: load_model_ensemble_and_task_from_hf_hub('facebook/fastspeech2-en-200_speaker-cv4',arg_overrides={'vocoder': 'hifigan', 'fp16': False}).\nSkill condition: multi_candidate_skill\nSkill summary: FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functionality: Text-to-Speech. API call: load_model_ensemble_and_task_from_hf_hub('facebook/fastspeech2-en-200_speaker-cv4',arg_overrides={'vocoder': 'hifigan', 'fp16': False}). This tool has no required input fields.\nWhen to use: [\"Use `fairseq__fastspeech2_en_male1__load_model_ensemble_and_task_from_hf_hu_31c3a9c5` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: FastSpeech 2 text-to-speech model from fairseq S^2. English, 200 male/female voices, trained on Common Voice v4. Framework: Fairseq. Functio. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0291
+  }
+}

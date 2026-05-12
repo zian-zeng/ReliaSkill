@@ -1,0 +1,104 @@
+{
+  "candidate_id": "gzip_file_as_resource__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Compresses a single file using gzip compression. Depending upon the selected output type, returns either the compressed data as a gzipped resource or a resource link, allowing it to be downloaded in a subsequent request during the current session. This tool has no required input fields.\nWhen to use:\n- Use `gzip-file-as-resource` when the user's request directly matches this tool's purpose.\n- This tool has no required input fields.\n- Optional controls include `name`, `data`, `outputType`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"data\": \"sample_data_4\", \"name\": \"sample-name\", \"outputType\": \"sample_outputType_4\"}\nExamples:\nRicher invocation that uses optional controls for gzip-file-as-resource\n{\"data\": \"sample_data_2\", \"name\": \"sample-name\", \"outputType\": \"sample_outputType_2\"}\nOptional, enum, nested, or array argument example.\n{\"data\": \"sample_data_4\", \"name\": \"sample-name\", \"outputType\": \"sample_outputType_4\"}",
+  "argument_template": {
+    "name": "sample-name",
+    "data": "sample_data_4",
+    "outputType": "sample_outputType_4"
+  },
+  "examples": [
+    {
+      "scenario": "Richer invocation that uses optional controls for gzip-file-as-resource",
+      "arguments": {
+        "name": "sample-name",
+        "data": "sample_data_2",
+        "outputType": "sample_outputType_2"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "name": "sample-name",
+        "data": "sample_data_4",
+        "outputType": "sample_outputType_4"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `gzip-file-as-resource` when the user's request directly matches this tool's purpose.",
+    "This tool has no required input fields.",
+    "Optional controls include `name`, `data`, `outputType`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 268,
+  "skill_token_count": 268,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 2,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Compresses a single file using gzip compression. Depending upon the selected output type, returns either the compressed data as a gzipped resource or a resource link, allowing it to be downloaded in a subsequent request during the current session. This tool has no required input fields.",
+    "when_to_use": [
+      "Use `gzip-file-as-resource` when the user's request directly matches this tool's purpose.",
+      "This tool has no required input fields.",
+      "Optional controls include `name`, `data`, `outputType`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "name": "sample-name",
+      "data": "sample_data_4",
+      "outputType": "sample_outputType_4"
+    },
+    "examples": [
+      {
+        "scenario": "Richer invocation that uses optional controls for gzip-file-as-resource",
+        "arguments": {
+          "name": "sample-name",
+          "data": "sample_data_2",
+          "outputType": "sample_outputType_2"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "name": "sample-name",
+          "data": "sample_data_4",
+          "outputType": "sample_outputType_4"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "gzip_file_as_resource__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "gzip_file_as_resource__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

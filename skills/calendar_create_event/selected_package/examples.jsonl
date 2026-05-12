@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calendar_create_event", "arguments": {"calendar_id": "sample-calendar-id-001", "title": "Sample Title", "start_time": "2026-01-01T09:00:00Z", "end_time": "2026-01-01T09:00:00Z"}}
+{"scenario": "Richer invocation that uses optional controls for calendar_create_event", "arguments": {"calendar_id": "sample-calendar-id-001", "title": "Sample Title", "start_time": "2026-01-01T09:00:00Z", "end_time": "2026-01-01T09:00:00Z", "attendees": ["sample_attendees_item_2"], "visibility": "private"}}

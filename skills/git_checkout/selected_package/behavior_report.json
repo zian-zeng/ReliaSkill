@@ -1,0 +1,197 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0220_git_checkout_negative_easy_0_out_of_domain_request",
+      "tool_name": "git_checkout",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to git checkout.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "branch_name": "sample-name"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0618,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_checkout\nTool description: Switches branches\nSkill condition: multi_candidate_skill\nSkill summary: Switches branches. Provide all required fields: `repo_path`, and `branch_name`.\nWhen to use: [\"Use `git_checkout` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `repo_path`, and `branch_name`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_checkout\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_checkout\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}}]\nSchema: {\"properties\": {\"branch_name\": {\"type\": \"string\"}, \"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\", \"branch_name\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to git checkout.\n",
+        "raw_model_output": "{\"arguments\": {\"branch_name\": \"sample-name\", \"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "branch_name": "sample-name"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0220_git_checkout_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "git_checkout",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with git checkout; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "branch_name": "sample-name"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.056,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_checkout\nTool description: Switches branches\nSkill condition: multi_candidate_skill\nSkill summary: Switches branches. Provide all required fields: `repo_path`, and `branch_name`.\nWhen to use: [\"Use `git_checkout` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `repo_path`, and `branch_name`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_checkout\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_checkout\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}}]\nSchema: {\"properties\": {\"branch_name\": {\"type\": \"string\"}, \"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\", \"branch_name\"], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with git checkout; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {\"branch_name\": \"sample-name\", \"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "branch_name": "sample-name"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0220_git_checkout_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "git_checkout",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to List Git branches. This is adjacent to git checkout, but the intended capability is git branch.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "branch_name": "sample-name"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1072,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_checkout\nTool description: Switches branches\nSkill condition: multi_candidate_skill\nSkill summary: Switches branches. Provide all required fields: `repo_path`, and `branch_name`.\nWhen to use: [\"Use `git_checkout` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `repo_path`, and `branch_name`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_checkout\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_checkout\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}}]\nSchema: {\"properties\": {\"branch_name\": {\"type\": \"string\"}, \"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\", \"branch_name\"], \"type\": \"object\"}\nUser request: I need to List Git branches. This is adjacent to git checkout, but the intended capability is git branch.\n",
+        "raw_model_output": "{\"arguments\": {\"branch_name\": \"sample-name\", \"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "branch_name": "sample-name"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0220_git_checkout_positive_easy_0",
+      "tool_name": "git_checkout",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use git checkout to Switches branches. Set branch_name=\"branch_name_0\", repo_path=\"docs/control_0.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "branch_name": "sample-name"
+      },
+      "expected_arguments": {
+        "branch_name": "branch_name_0",
+        "repo_path": "docs/control_0.md"
+      },
+      "prediction_latency_ms": 0.056,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_checkout\nTool description: Switches branches\nSkill condition: multi_candidate_skill\nSkill summary: Switches branches. Provide all required fields: `repo_path`, and `branch_name`.\nWhen to use: [\"Use `git_checkout` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `repo_path`, and `branch_name`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_checkout\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_checkout\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}}]\nSchema: {\"properties\": {\"branch_name\": {\"type\": \"string\"}, \"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\", \"branch_name\"], \"type\": \"object\"}\nUser request: Use git checkout to Switches branches. Set branch_name=\"branch_name_0\", repo_path=\"docs/control_0.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"branch_name\": \"sample-name\", \"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "branch_name": "sample-name"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0220_git_checkout_positive_medium_0",
+      "tool_name": "git_checkout",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Switches branches. The relevant details are branch_name=\"branch_name_7\", repo_path=\"docs/control_7.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "branch_name": "sample-name"
+      },
+      "expected_arguments": {
+        "branch_name": "branch_name_7",
+        "repo_path": "docs/control_7.md"
+      },
+      "prediction_latency_ms": 0.0696,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_checkout\nTool description: Switches branches\nSkill condition: multi_candidate_skill\nSkill summary: Switches branches. Provide all required fields: `repo_path`, and `branch_name`.\nWhen to use: [\"Use `git_checkout` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `repo_path`, and `branch_name`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_checkout\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_checkout\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_name\": \"sample-name\"}}]\nSchema: {\"properties\": {\"branch_name\": {\"type\": \"string\"}, \"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\", \"branch_name\"], \"type\": \"object\"}\nUser request: I need help with this task: Switches branches. The relevant details are branch_name=\"branch_name_7\", repo_path=\"docs/control_7.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"branch_name\": \"sample-name\", \"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "branch_name": "sample-name"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0701
+  }
+}

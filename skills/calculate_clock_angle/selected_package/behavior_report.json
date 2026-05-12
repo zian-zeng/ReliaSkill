@@ -1,0 +1,207 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0108_calculate_clock_angle_negative_easy_0_out_of_domain_request",
+      "tool_name": "calculate_clock_angle",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate clock angle.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "hours": 1,
+        "minutes": 1,
+        "round_to": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0913,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_clock_angle\nTool description: Calculate the angle between the hour and minute hands of a clock at a given time.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the angle between the hour and minute hands of a clock at a given time. Provide all required fields: `hours`, and `minutes`.\nWhen to use: [\"Use `calculate_clock_angle` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `hours`, and `minutes`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"hours\": 1, \"minutes\": 1, \"round_to\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_clock_angle\", \"arguments\": {\"hours\": 1, \"minutes\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_clock_angle\", \"arguments\": {\"hours\": 2, \"minutes\": 2, \"round_to\": 2}}]\nSchema: {\"properties\": {\"hours\": {\"description\": \"The hour on the clock face.\", \"type\": \"integer\"}, \"minutes\": {\"description\": \"The minutes on the clock face.\", \"type\": \"integer\"}, \"round_to\": {\"description\": \"The number of decimal places to round the result to, default is 2.\", \"type\": \"integer\"}}, \"required\": [\"hours\", \"minutes\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate clock angle.\n",
+        "raw_model_output": "{\"arguments\": {\"hours\": 1, \"minutes\": 1, \"round_to\": 1}}",
+        "parsed_prediction": {
+          "hours": 1,
+          "minutes": 1,
+          "round_to": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0108_calculate_clock_angle_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "calculate_clock_angle",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with calculate clock angle; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "hours": 1,
+        "minutes": 1,
+        "round_to": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0822,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_clock_angle\nTool description: Calculate the angle between the hour and minute hands of a clock at a given time.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the angle between the hour and minute hands of a clock at a given time. Provide all required fields: `hours`, and `minutes`.\nWhen to use: [\"Use `calculate_clock_angle` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `hours`, and `minutes`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"hours\": 1, \"minutes\": 1, \"round_to\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_clock_angle\", \"arguments\": {\"hours\": 1, \"minutes\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_clock_angle\", \"arguments\": {\"hours\": 2, \"minutes\": 2, \"round_to\": 2}}]\nSchema: {\"properties\": {\"hours\": {\"description\": \"The hour on the clock face.\", \"type\": \"integer\"}, \"minutes\": {\"description\": \"The minutes on the clock face.\", \"type\": \"integer\"}, \"round_to\": {\"description\": \"The number of decimal places to round the result to, default is 2.\", \"type\": \"integer\"}}, \"required\": [\"hours\", \"minutes\"], \"type\": \"object\"}\nUser request: Maybe do something with calculate clock angle; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {\"hours\": 1, \"minutes\": 1, \"round_to\": 1}}",
+        "parsed_prediction": {
+          "hours": 1,
+          "minutes": 1,
+          "round_to": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0108_calculate_clock_angle_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "calculate_clock_angle",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to API-Bank-style local fixture tool that creates a mock calendar event with attendees and reminders. This is adjacent to calculate clock angle, but the intended capability is calendar create event.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "hours": 1,
+        "minutes": 1,
+        "round_to": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0603,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_clock_angle\nTool description: Calculate the angle between the hour and minute hands of a clock at a given time.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the angle between the hour and minute hands of a clock at a given time. Provide all required fields: `hours`, and `minutes`.\nWhen to use: [\"Use `calculate_clock_angle` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `hours`, and `minutes`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"hours\": 1, \"minutes\": 1, \"round_to\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_clock_angle\", \"arguments\": {\"hours\": 1, \"minutes\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_clock_angle\", \"arguments\": {\"hours\": 2, \"minutes\": 2, \"round_to\": 2}}]\nSchema: {\"properties\": {\"hours\": {\"description\": \"The hour on the clock face.\", \"type\": \"integer\"}, \"minutes\": {\"description\": \"The minutes on the clock face.\", \"type\": \"integer\"}, \"round_to\": {\"description\": \"The number of decimal places to round the result to, default is 2.\", \"type\": \"integer\"}}, \"required\": [\"hours\", \"minutes\"], \"type\": \"object\"}\nUser request: I need to API-Bank-style local fixture tool that creates a mock calendar event with attendees and reminders. This is adjacent to calculate clock angle, but the intended capability is calendar create event.\n",
+        "raw_model_output": "{\"arguments\": {\"hours\": 1, \"minutes\": 1, \"round_to\": 1}}",
+        "parsed_prediction": {
+          "hours": 1,
+          "minutes": 1,
+          "round_to": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0108_calculate_clock_angle_positive_easy_0",
+      "tool_name": "calculate_clock_angle",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use calculate clock angle to Calculate the angle between the hour and minute hands of a clock at a given time. Set hours=1, minutes=1.",
+      "exact_match": false,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "hours": 1,
+        "minutes": 1,
+        "round_to": 1
+      },
+      "expected_arguments": {
+        "hours": 1,
+        "minutes": 1
+      },
+      "prediction_latency_ms": 0.0602,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_clock_angle\nTool description: Calculate the angle between the hour and minute hands of a clock at a given time.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the angle between the hour and minute hands of a clock at a given time. Provide all required fields: `hours`, and `minutes`.\nWhen to use: [\"Use `calculate_clock_angle` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `hours`, and `minutes`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"hours\": 1, \"minutes\": 1, \"round_to\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_clock_angle\", \"arguments\": {\"hours\": 1, \"minutes\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_clock_angle\", \"arguments\": {\"hours\": 2, \"minutes\": 2, \"round_to\": 2}}]\nSchema: {\"properties\": {\"hours\": {\"description\": \"The hour on the clock face.\", \"type\": \"integer\"}, \"minutes\": {\"description\": \"The minutes on the clock face.\", \"type\": \"integer\"}, \"round_to\": {\"description\": \"The number of decimal places to round the result to, default is 2.\", \"type\": \"integer\"}}, \"required\": [\"hours\", \"minutes\"], \"type\": \"object\"}\nUser request: Use calculate clock angle to Calculate the angle between the hour and minute hands of a clock at a given time. Set hours=1, minutes=1.\n",
+        "raw_model_output": "{\"arguments\": {\"hours\": 1, \"minutes\": 1, \"round_to\": 1}}",
+        "parsed_prediction": {
+          "hours": 1,
+          "minutes": 1,
+          "round_to": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0108_calculate_clock_angle_positive_medium_0",
+      "tool_name": "calculate_clock_angle",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Calculate the angle between the hour and minute hands of a clock at a given time. The relevant details are hours=8, minutes=8.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "hours": 1,
+        "minutes": 1,
+        "round_to": 1
+      },
+      "expected_arguments": {
+        "hours": 8,
+        "minutes": 8
+      },
+      "prediction_latency_ms": 0.1634,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_clock_angle\nTool description: Calculate the angle between the hour and minute hands of a clock at a given time.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the angle between the hour and minute hands of a clock at a given time. Provide all required fields: `hours`, and `minutes`.\nWhen to use: [\"Use `calculate_clock_angle` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `hours`, and `minutes`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"hours\": 1, \"minutes\": 1, \"round_to\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_clock_angle\", \"arguments\": {\"hours\": 1, \"minutes\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_clock_angle\", \"arguments\": {\"hours\": 2, \"minutes\": 2, \"round_to\": 2}}]\nSchema: {\"properties\": {\"hours\": {\"description\": \"The hour on the clock face.\", \"type\": \"integer\"}, \"minutes\": {\"description\": \"The minutes on the clock face.\", \"type\": \"integer\"}, \"round_to\": {\"description\": \"The number of decimal places to round the result to, default is 2.\", \"type\": \"integer\"}}, \"required\": [\"hours\", \"minutes\"], \"type\": \"object\"}\nUser request: I need help with this task: Calculate the angle between the hour and minute hands of a clock at a given time. The relevant details are hours=8, minutes=8.\n",
+        "raw_model_output": "{\"arguments\": {\"hours\": 1, \"minutes\": 1, \"round_to\": 1}}",
+        "parsed_prediction": {
+          "hours": 1,
+          "minutes": 1,
+          "round_to": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.5,
+    "avg_prediction_latency_ms": 0.0915
+  }
+}

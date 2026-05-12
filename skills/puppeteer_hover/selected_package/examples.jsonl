@@ -1,0 +1,4 @@
+{"scenario": "Minimal valid request that satisfies the required fields for puppeteer_hover", "arguments": {"selector": "sample_selector_1"}}
+{"scenario": "Richer invocation that uses optional controls for puppeteer_hover", "arguments": {"selector": "sample_selector_2"}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"selector": "sample_selector_3"}}
+{"scenario": "Optional, enum, nested, or array argument example.", "arguments": {"selector": "sample_selector_4"}}

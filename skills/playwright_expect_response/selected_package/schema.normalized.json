@@ -1,0 +1,89 @@
+{
+  "tool_name": "playwright_expect_response",
+  "server_name": "browser",
+  "tool_purpose": "Ask Playwright to start waiting for a HTTP response. This tool initiates the wait operation but does not wait for its completion.",
+  "input_schema_raw": {
+    "properties": {
+      "id": {
+        "description": "Unique & arbitrary identifier to be used for retrieving this response later with `Playwright_assert_response`.",
+        "type": "string"
+      },
+      "url": {
+        "description": "URL pattern to match in the response.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "url"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "id",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Unique & arbitrary identifier to be used for retrieving this response later with `Playwright_assert_response`.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.id"
+    },
+    {
+      "name": "url",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "URL pattern to match in the response.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.url"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Ask Playwright to start waiting for a HTTP response. This tool initiates the wait operation but does not wait for its completion.",
+    "Playwright Expect Response"
+  ],
+  "source_pointer": "data/raw/mcptoolbenchpp_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 129,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 2,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 2,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "playwright_expect_response",
+    "server_name": "browser",
+    "source_pointer": "data/raw/mcptoolbenchpp_tools.json"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

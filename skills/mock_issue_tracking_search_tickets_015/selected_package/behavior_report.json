@@ -1,0 +1,206 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0249_mock_issue_tracking_search_tickets_015_negative_easy_0_out_of_domain_request",
+      "tool_name": "mock_issue_tracking_search_tickets_015",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to mock issue tracking search tickets 015.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "query": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to mock issue tracking search tickets 015",
+        "status": "open",
+        "assignee": "sample_assignee_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1032,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: mock_issue_tracking_search_tickets_015\nTool description: Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee.\nSkill condition: multi_candidate_skill\nSkill summary: Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee. Provide the required field `query`.\nWhen to use: [\"Use `mock_issue_tracking_search_tickets_015` when the user's request directly matches this tool's purpose.\", \"Provide the required field `query`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `status`: 'open', 'blocked', 'closed'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"query\": \"sample query\", \"status\": \"open\", \"assignee\": \"sample_assignee_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for mock_issue_tracking_search_tickets_015\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for mock_issue_tracking_search_tickets_015\", \"arguments\": {\"query\": \"sample query\", \"status\": \"blocked\", \"assignee\": \"sample_assignee_2\"}}]\nSchema: {\"properties\": {\"assignee\": {\"description\": \"Mock assignee username.\", \"type\": \"string\"}, \"query\": {\"description\": \"Search text.\", \"type\": \"string\"}, \"status\": {\"description\": \"Ticket status.\", \"enum\": [\"open\", \"blocked\", \"closed\"], \"type\": \"string\"}}, \"required\": [\"query\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to mock issue tracking search tickets 015.\n",
+        "raw_model_output": "{\"arguments\": {\"assignee\": \"sample_assignee_1\", \"query\": \"Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to mock issue tracking search tickets 015\", \"status\": \"open\"}}",
+        "parsed_prediction": {
+          "query": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to mock issue tracking search tickets 015",
+          "status": "open",
+          "assignee": "sample_assignee_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0249_mock_issue_tracking_search_tickets_015_negative_hard_1_near_miss_intent",
+      "tool_name": "mock_issue_tracking_search_tickets_015",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to mock issue tracking search tickets 015, but I only want a checklist for how to Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "query": "how to Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee; no tool call yet",
+        "status": "open",
+        "assignee": "sample_assignee_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.2021,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: mock_issue_tracking_search_tickets_015\nTool description: Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee.\nSkill condition: multi_candidate_skill\nSkill summary: Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee. Provide the required field `query`.\nWhen to use: [\"Use `mock_issue_tracking_search_tickets_015` when the user's request directly matches this tool's purpose.\", \"Provide the required field `query`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `status`: 'open', 'blocked', 'closed'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"query\": \"sample query\", \"status\": \"open\", \"assignee\": \"sample_assignee_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for mock_issue_tracking_search_tickets_015\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for mock_issue_tracking_search_tickets_015\", \"arguments\": {\"query\": \"sample query\", \"status\": \"blocked\", \"assignee\": \"sample_assignee_2\"}}]\nSchema: {\"properties\": {\"assignee\": {\"description\": \"Mock assignee username.\", \"type\": \"string\"}, \"query\": {\"description\": \"Search text.\", \"type\": \"string\"}, \"status\": {\"description\": \"Ticket status.\", \"enum\": [\"open\", \"blocked\", \"closed\"], \"type\": \"string\"}}, \"required\": [\"query\"], \"type\": \"object\"}\nUser request: This sounds close to mock issue tracking search tickets 015, but I only want a checklist for how to Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {\"assignee\": \"sample_assignee_1\", \"query\": \"how to Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee; no tool call yet\", \"status\": \"open\"}}",
+        "parsed_prediction": {
+          "query": "how to Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee; no tool call yet",
+          "status": "open",
+          "assignee": "sample_assignee_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0249_mock_issue_tracking_search_tickets_015_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "mock_issue_tracking_search_tickets_015",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use mock issue tracking search tickets 015; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "query": "Explain when someone should use mock issue tracking search tickets 015; do not actually call it or perform the action",
+        "status": "open",
+        "assignee": "sample_assignee_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0774,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: mock_issue_tracking_search_tickets_015\nTool description: Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee.\nSkill condition: multi_candidate_skill\nSkill summary: Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee. Provide the required field `query`.\nWhen to use: [\"Use `mock_issue_tracking_search_tickets_015` when the user's request directly matches this tool's purpose.\", \"Provide the required field `query`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `status`: 'open', 'blocked', 'closed'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"query\": \"sample query\", \"status\": \"open\", \"assignee\": \"sample_assignee_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for mock_issue_tracking_search_tickets_015\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for mock_issue_tracking_search_tickets_015\", \"arguments\": {\"query\": \"sample query\", \"status\": \"blocked\", \"assignee\": \"sample_assignee_2\"}}]\nSchema: {\"properties\": {\"assignee\": {\"description\": \"Mock assignee username.\", \"type\": \"string\"}, \"query\": {\"description\": \"Search text.\", \"type\": \"string\"}, \"status\": {\"description\": \"Ticket status.\", \"enum\": [\"open\", \"blocked\", \"closed\"], \"type\": \"string\"}}, \"required\": [\"query\"], \"type\": \"object\"}\nUser request: Explain when someone should use mock issue tracking search tickets 015; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"assignee\": \"sample_assignee_1\", \"query\": \"Explain when someone should use mock issue tracking search tickets 015; do not actually call it or perform the action\", \"status\": \"open\"}}",
+        "parsed_prediction": {
+          "query": "Explain when someone should use mock issue tracking search tickets 015; do not actually call it or perform the action",
+          "status": "open",
+          "assignee": "sample_assignee_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0249_mock_issue_tracking_search_tickets_015_positive_easy_0",
+      "tool_name": "mock_issue_tracking_search_tickets_015",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use mock issue tracking search tickets 015 to Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee. Set query=\"reliability evaluation\".",
+      "exact_match": false,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "query": "reliability evaluation",
+        "status": "open",
+        "assignee": "sample_assignee_1"
+      },
+      "expected_arguments": {
+        "query": "reliability evaluation"
+      },
+      "prediction_latency_ms": 0.0699,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: mock_issue_tracking_search_tickets_015\nTool description: Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee.\nSkill condition: multi_candidate_skill\nSkill summary: Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee. Provide the required field `query`.\nWhen to use: [\"Use `mock_issue_tracking_search_tickets_015` when the user's request directly matches this tool's purpose.\", \"Provide the required field `query`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `status`: 'open', 'blocked', 'closed'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"query\": \"sample query\", \"status\": \"open\", \"assignee\": \"sample_assignee_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for mock_issue_tracking_search_tickets_015\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for mock_issue_tracking_search_tickets_015\", \"arguments\": {\"query\": \"sample query\", \"status\": \"blocked\", \"assignee\": \"sample_assignee_2\"}}]\nSchema: {\"properties\": {\"assignee\": {\"description\": \"Mock assignee username.\", \"type\": \"string\"}, \"query\": {\"description\": \"Search text.\", \"type\": \"string\"}, \"status\": {\"description\": \"Ticket status.\", \"enum\": [\"open\", \"blocked\", \"closed\"], \"type\": \"string\"}}, \"required\": [\"query\"], \"type\": \"object\"}\nUser request: Use mock issue tracking search tickets 015 to Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee. Set query=\"reliability evaluation\".\n",
+        "raw_model_output": "{\"arguments\": {\"assignee\": \"sample_assignee_1\", \"query\": \"reliability evaluation\", \"status\": \"open\"}}",
+        "parsed_prediction": {
+          "query": "reliability evaluation",
+          "status": "open",
+          "assignee": "sample_assignee_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0249_mock_issue_tracking_search_tickets_015_positive_medium_0",
+      "tool_name": "mock_issue_tracking_search_tickets_015",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee. The relevant details are query=\"reliability evaluation\", status=\"blocked\".",
+      "exact_match": false,
+      "argument_validity": 0.5,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "query": "reliability evaluation",
+        "status": "open",
+        "assignee": "sample_assignee_1"
+      },
+      "expected_arguments": {
+        "query": "reliability evaluation",
+        "status": "blocked"
+      },
+      "prediction_latency_ms": 0.0707,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: mock_issue_tracking_search_tickets_015\nTool description: Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee.\nSkill condition: multi_candidate_skill\nSkill summary: Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee. Provide the required field `query`.\nWhen to use: [\"Use `mock_issue_tracking_search_tickets_015` when the user's request directly matches this tool's purpose.\", \"Provide the required field `query`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `status`: 'open', 'blocked', 'closed'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"query\": \"sample query\", \"status\": \"open\", \"assignee\": \"sample_assignee_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for mock_issue_tracking_search_tickets_015\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for mock_issue_tracking_search_tickets_015\", \"arguments\": {\"query\": \"sample query\", \"status\": \"blocked\", \"assignee\": \"sample_assignee_2\"}}]\nSchema: {\"properties\": {\"assignee\": {\"description\": \"Mock assignee username.\", \"type\": \"string\"}, \"query\": {\"description\": \"Search text.\", \"type\": \"string\"}, \"status\": {\"description\": \"Ticket status.\", \"enum\": [\"open\", \"blocked\", \"closed\"], \"type\": \"string\"}}, \"required\": [\"query\"], \"type\": \"object\"}\nUser request: I need help with this task: Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee. The relevant details are query=\"reliability evaluation\", status=\"blocked\".\n",
+        "raw_model_output": "{\"arguments\": {\"assignee\": \"sample_assignee_1\", \"query\": \"reliability evaluation\", \"status\": \"open\"}}",
+        "parsed_prediction": {
+          "query": "reliability evaluation",
+          "status": "open",
+          "assignee": "sample_assignee_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.75,
+    "avg_prediction_latency_ms": 0.1047
+  }
+}

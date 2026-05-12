@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for sql_run_readonly_query", "arguments": {"database": "sample_database_1", "query": "sample query"}}
+{"scenario": "Richer invocation that uses optional controls for sql_run_readonly_query", "arguments": {"database": "sample_database_2", "query": "sample query", "parameters": {}, "limit": 2}}

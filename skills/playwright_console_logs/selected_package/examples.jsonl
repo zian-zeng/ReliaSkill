@@ -1,0 +1,1 @@
+{"scenario": "Richer invocation that uses optional controls for playwright_console_logs", "arguments": {"type": "error", "search": "sample query", "limit": 2.0, "clear": true}}

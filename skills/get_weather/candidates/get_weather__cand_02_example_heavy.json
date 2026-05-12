@@ -1,0 +1,134 @@
+{
+  "candidate_id": "get_weather__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Fetch the current weather for a given city. Provide all required fields: `city`, and `unit`.\nWhen to use:\n- Use `get_weather` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `city`, and `unit`.\n- Optional control is available through `include_forecast` when the request needs extra specificity.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `unit`: 'C', 'F'.\nArgument template:\n{\"city\": \"New York\", \"include_forecast\": false, \"unit\": \"F\"}\nExamples:\nMinimal valid request that satisfies the required fields for get_weather\n{\"city\": \"New York\", \"unit\": \"C\"}\nRicher invocation that uses optional controls for get_weather\n{\"city\": \"New York\", \"include_forecast\": false, \"unit\": \"F\"}\nRequired-argument dev behavior example.\n{\"city\": \"New York\", \"unit\": \"C\"}\nOptional, enum, nested, or array argument example.\n{\"city\": \"New York\", \"include_forecast\": false, \"unit\": \"F\"}",
+  "argument_template": {
+    "city": "New York",
+    "unit": "F",
+    "include_forecast": false
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for get_weather",
+      "arguments": {
+        "city": "New York",
+        "unit": "C"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for get_weather",
+      "arguments": {
+        "city": "New York",
+        "unit": "F",
+        "include_forecast": false
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "city": "New York",
+        "unit": "C"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "city": "New York",
+        "unit": "F",
+        "include_forecast": false
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `get_weather` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `city`, and `unit`.",
+    "Optional control is available through `include_forecast` when the request needs extra specificity.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `unit`: 'C', 'F'."
+  ],
+  "token_count": 293,
+  "skill_token_count": 293,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Fetch the current weather for a given city. Provide all required fields: `city`, and `unit`.",
+    "when_to_use": [
+      "Use `get_weather` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `city`, and `unit`.",
+      "Optional control is available through `include_forecast` when the request needs extra specificity.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `unit`: 'C', 'F'."
+    ],
+    "argument_template": {
+      "city": "New York",
+      "unit": "F",
+      "include_forecast": false
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for get_weather",
+        "arguments": {
+          "city": "New York",
+          "unit": "C"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for get_weather",
+        "arguments": {
+          "city": "New York",
+          "unit": "F",
+          "include_forecast": false
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "city": "New York",
+          "unit": "C"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "city": "New York",
+          "unit": "F",
+          "include_forecast": false
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "get_weather__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "get_weather__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

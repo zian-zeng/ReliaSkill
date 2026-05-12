@@ -1,0 +1,115 @@
+{
+  "tool_name": "mock_issue_tracking_search_tickets_039",
+  "server_name": "synthetic_issue_tracking",
+  "tool_purpose": "Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee.",
+  "input_schema_raw": {
+    "properties": {
+      "assignee": {
+        "description": "Mock assignee username.",
+        "type": "string"
+      },
+      "query": {
+        "description": "Search text.",
+        "type": "string"
+      },
+      "status": {
+        "description": "Ticket status.",
+        "enum": [
+          "open",
+          "blocked",
+          "closed"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "query"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Search text.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.query"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": [
+        "open",
+        "blocked",
+        "closed"
+      ],
+      "description": "Ticket status.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.status"
+    },
+    {
+      "name": "assignee",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Mock assignee username.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.assignee"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Synthetic safe mock issue-tracking retrieval tool for searching offline tickets by status and assignee.",
+    "Mock Issue Tracking Search Tickets 039"
+  ],
+  "source_pointer": "synthetic_mock:issue-tracking:9",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.15,
+    "auth_required": false,
+    "documentation_length": 103,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 1,
+    "num_enum_fields": 1,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 2,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "mock_issue_tracking_search_tickets_039",
+    "server_name": "synthetic_issue_tracking",
+    "source_pointer": "synthetic_mock:issue-tracking:9"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

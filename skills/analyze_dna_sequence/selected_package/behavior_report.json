@@ -1,0 +1,207 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0093_analyze_dna_sequence_negative_easy_0_out_of_domain_request",
+      "tool_name": "analyze_dna_sequence",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to analyze dna sequence.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "sequence": "sample_sequence_1",
+        "reference_sequence": "sample_reference_sequence_1",
+        "mutation_type": "insertion"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0807,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: analyze_dna_sequence\nTool description: Analyzes the DNA sequence based on a reference sequence and return any potential mutations.\nSkill condition: multi_candidate_skill\nSkill summary: Analyzes the DNA sequence based on a reference sequence and return any potential mutations. Provide all required fields: `sequence`, and `reference_sequence`.\nWhen to use: [\"Use `analyze_dna_sequence` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `sequence`, and `reference_sequence`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `mutation_type`: 'insertion', 'deletion', 'substitution'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"sequence\": \"sample_sequence_1\", \"reference_sequence\": \"sample_reference_sequence_1\", \"mutation_type\": \"insertion\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for analyze_dna_sequence\", \"arguments\": {\"sequence\": \"sample_sequence_1\", \"reference_sequence\": \"sample_reference_sequence_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for analyze_dna_sequence\", \"arguments\": {\"sequence\": \"sample_sequence_2\", \"reference_sequence\": \"sample_reference_sequence_2\", \"mutation_type\": \"deletion\"}}]\nSchema: {\"properties\": {\"mutation_type\": {\"description\": \"Type of the mutation to be looked for in the sequence. Default to 'substitution'.\", \"enum\": [\"insertion\", \"deletion\", \"substitution\"], \"type\": \"string\"}, \"reference_sequence\": {\"description\": \"The reference DNA sequence.\", \"type\": \"string\"}, \"sequence\": {\"description\": \"The DNA sequence to be analyzed.\", \"type\": \"string\"}}, \"required\": [\"sequence\", \"reference_sequence\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to analyze dna sequence.\n",
+        "raw_model_output": "{\"arguments\": {\"mutation_type\": \"insertion\", \"reference_sequence\": \"sample_reference_sequence_1\", \"sequence\": \"sample_sequence_1\"}}",
+        "parsed_prediction": {
+          "sequence": "sample_sequence_1",
+          "reference_sequence": "sample_reference_sequence_1",
+          "mutation_type": "insertion"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0093_analyze_dna_sequence_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "analyze_dna_sequence",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with analyze dna sequence; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "sequence": "sample_sequence_1",
+        "reference_sequence": "sample_reference_sequence_1",
+        "mutation_type": "insertion"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0708,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: analyze_dna_sequence\nTool description: Analyzes the DNA sequence based on a reference sequence and return any potential mutations.\nSkill condition: multi_candidate_skill\nSkill summary: Analyzes the DNA sequence based on a reference sequence and return any potential mutations. Provide all required fields: `sequence`, and `reference_sequence`.\nWhen to use: [\"Use `analyze_dna_sequence` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `sequence`, and `reference_sequence`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `mutation_type`: 'insertion', 'deletion', 'substitution'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"sequence\": \"sample_sequence_1\", \"reference_sequence\": \"sample_reference_sequence_1\", \"mutation_type\": \"insertion\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for analyze_dna_sequence\", \"arguments\": {\"sequence\": \"sample_sequence_1\", \"reference_sequence\": \"sample_reference_sequence_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for analyze_dna_sequence\", \"arguments\": {\"sequence\": \"sample_sequence_2\", \"reference_sequence\": \"sample_reference_sequence_2\", \"mutation_type\": \"deletion\"}}]\nSchema: {\"properties\": {\"mutation_type\": {\"description\": \"Type of the mutation to be looked for in the sequence. Default to 'substitution'.\", \"enum\": [\"insertion\", \"deletion\", \"substitution\"], \"type\": \"string\"}, \"reference_sequence\": {\"description\": \"The reference DNA sequence.\", \"type\": \"string\"}, \"sequence\": {\"description\": \"The DNA sequence to be analyzed.\", \"type\": \"string\"}}, \"required\": [\"sequence\", \"reference_sequence\"], \"type\": \"object\"}\nUser request: Maybe do something with analyze dna sequence; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {\"mutation_type\": \"insertion\", \"reference_sequence\": \"sample_reference_sequence_1\", \"sequence\": \"sample_sequence_1\"}}",
+        "parsed_prediction": {
+          "sequence": "sample_sequence_1",
+          "reference_sequence": "sample_reference_sequence_1",
+          "mutation_type": "insertion"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0093_analyze_dna_sequence_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "analyze_dna_sequence",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use analyze dna sequence; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "sequence": "sample_sequence_1",
+        "reference_sequence": "sample_reference_sequence_1",
+        "mutation_type": "insertion"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0684,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: analyze_dna_sequence\nTool description: Analyzes the DNA sequence based on a reference sequence and return any potential mutations.\nSkill condition: multi_candidate_skill\nSkill summary: Analyzes the DNA sequence based on a reference sequence and return any potential mutations. Provide all required fields: `sequence`, and `reference_sequence`.\nWhen to use: [\"Use `analyze_dna_sequence` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `sequence`, and `reference_sequence`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `mutation_type`: 'insertion', 'deletion', 'substitution'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"sequence\": \"sample_sequence_1\", \"reference_sequence\": \"sample_reference_sequence_1\", \"mutation_type\": \"insertion\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for analyze_dna_sequence\", \"arguments\": {\"sequence\": \"sample_sequence_1\", \"reference_sequence\": \"sample_reference_sequence_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for analyze_dna_sequence\", \"arguments\": {\"sequence\": \"sample_sequence_2\", \"reference_sequence\": \"sample_reference_sequence_2\", \"mutation_type\": \"deletion\"}}]\nSchema: {\"properties\": {\"mutation_type\": {\"description\": \"Type of the mutation to be looked for in the sequence. Default to 'substitution'.\", \"enum\": [\"insertion\", \"deletion\", \"substitution\"], \"type\": \"string\"}, \"reference_sequence\": {\"description\": \"The reference DNA sequence.\", \"type\": \"string\"}, \"sequence\": {\"description\": \"The DNA sequence to be analyzed.\", \"type\": \"string\"}}, \"required\": [\"sequence\", \"reference_sequence\"], \"type\": \"object\"}\nUser request: Explain when someone should use analyze dna sequence; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"mutation_type\": \"insertion\", \"reference_sequence\": \"sample_reference_sequence_1\", \"sequence\": \"sample_sequence_1\"}}",
+        "parsed_prediction": {
+          "sequence": "sample_sequence_1",
+          "reference_sequence": "sample_reference_sequence_1",
+          "mutation_type": "insertion"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0093_analyze_dna_sequence_positive_easy_0",
+      "tool_name": "analyze_dna_sequence",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use analyze dna sequence to Analyzes the DNA sequence based on a reference sequence and return any potential mutations. Set reference_sequence=\"reference_sequence_0\", sequence=\"sequence_0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "sequence": "sample_sequence_1",
+        "reference_sequence": "sample_reference_sequence_1",
+        "mutation_type": "insertion"
+      },
+      "expected_arguments": {
+        "reference_sequence": "reference_sequence_0",
+        "sequence": "sequence_0"
+      },
+      "prediction_latency_ms": 0.1307,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: analyze_dna_sequence\nTool description: Analyzes the DNA sequence based on a reference sequence and return any potential mutations.\nSkill condition: multi_candidate_skill\nSkill summary: Analyzes the DNA sequence based on a reference sequence and return any potential mutations. Provide all required fields: `sequence`, and `reference_sequence`.\nWhen to use: [\"Use `analyze_dna_sequence` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `sequence`, and `reference_sequence`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `mutation_type`: 'insertion', 'deletion', 'substitution'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"sequence\": \"sample_sequence_1\", \"reference_sequence\": \"sample_reference_sequence_1\", \"mutation_type\": \"insertion\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for analyze_dna_sequence\", \"arguments\": {\"sequence\": \"sample_sequence_1\", \"reference_sequence\": \"sample_reference_sequence_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for analyze_dna_sequence\", \"arguments\": {\"sequence\": \"sample_sequence_2\", \"reference_sequence\": \"sample_reference_sequence_2\", \"mutation_type\": \"deletion\"}}]\nSchema: {\"properties\": {\"mutation_type\": {\"description\": \"Type of the mutation to be looked for in the sequence. Default to 'substitution'.\", \"enum\": [\"insertion\", \"deletion\", \"substitution\"], \"type\": \"string\"}, \"reference_sequence\": {\"description\": \"The reference DNA sequence.\", \"type\": \"string\"}, \"sequence\": {\"description\": \"The DNA sequence to be analyzed.\", \"type\": \"string\"}}, \"required\": [\"sequence\", \"reference_sequence\"], \"type\": \"object\"}\nUser request: Use analyze dna sequence to Analyzes the DNA sequence based on a reference sequence and return any potential mutations. Set reference_sequence=\"reference_sequence_0\", sequence=\"sequence_0\".\n",
+        "raw_model_output": "{\"arguments\": {\"mutation_type\": \"insertion\", \"reference_sequence\": \"sample_reference_sequence_1\", \"sequence\": \"sample_sequence_1\"}}",
+        "parsed_prediction": {
+          "sequence": "sample_sequence_1",
+          "reference_sequence": "sample_reference_sequence_1",
+          "mutation_type": "insertion"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0093_analyze_dna_sequence_positive_medium_0",
+      "tool_name": "analyze_dna_sequence",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Analyzes the DNA sequence based on a reference sequence and return any potential mutations. The relevant details are reference_sequence=\"reference_sequence_7\", sequence=\"sequence_7\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "sequence": "sample_sequence_1",
+        "reference_sequence": "sample_reference_sequence_1",
+        "mutation_type": "insertion"
+      },
+      "expected_arguments": {
+        "reference_sequence": "reference_sequence_7",
+        "sequence": "sequence_7"
+      },
+      "prediction_latency_ms": 0.0656,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: analyze_dna_sequence\nTool description: Analyzes the DNA sequence based on a reference sequence and return any potential mutations.\nSkill condition: multi_candidate_skill\nSkill summary: Analyzes the DNA sequence based on a reference sequence and return any potential mutations. Provide all required fields: `sequence`, and `reference_sequence`.\nWhen to use: [\"Use `analyze_dna_sequence` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `sequence`, and `reference_sequence`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `mutation_type`: 'insertion', 'deletion', 'substitution'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"sequence\": \"sample_sequence_1\", \"reference_sequence\": \"sample_reference_sequence_1\", \"mutation_type\": \"insertion\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for analyze_dna_sequence\", \"arguments\": {\"sequence\": \"sample_sequence_1\", \"reference_sequence\": \"sample_reference_sequence_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for analyze_dna_sequence\", \"arguments\": {\"sequence\": \"sample_sequence_2\", \"reference_sequence\": \"sample_reference_sequence_2\", \"mutation_type\": \"deletion\"}}]\nSchema: {\"properties\": {\"mutation_type\": {\"description\": \"Type of the mutation to be looked for in the sequence. Default to 'substitution'.\", \"enum\": [\"insertion\", \"deletion\", \"substitution\"], \"type\": \"string\"}, \"reference_sequence\": {\"description\": \"The reference DNA sequence.\", \"type\": \"string\"}, \"sequence\": {\"description\": \"The DNA sequence to be analyzed.\", \"type\": \"string\"}}, \"required\": [\"sequence\", \"reference_sequence\"], \"type\": \"object\"}\nUser request: I need help with this task: Analyzes the DNA sequence based on a reference sequence and return any potential mutations. The relevant details are reference_sequence=\"reference_sequence_7\", sequence=\"sequence_7\".\n",
+        "raw_model_output": "{\"arguments\": {\"mutation_type\": \"insertion\", \"reference_sequence\": \"sample_reference_sequence_1\", \"sequence\": \"sample_sequence_1\"}}",
+        "parsed_prediction": {
+          "sequence": "sample_sequence_1",
+          "reference_sequence": "sample_reference_sequence_1",
+          "mutation_type": "insertion"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0832
+  }
+}

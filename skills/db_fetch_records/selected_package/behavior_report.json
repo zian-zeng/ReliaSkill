@@ -1,0 +1,209 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0135_db_fetch_records_negative_easy_0_out_of_domain_request",
+      "tool_name": "db_fetch_records",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to db fetch records.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "database_name": "sample-name",
+        "table_name": "sample-name",
+        "fetch_limit": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.258,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: db_fetch_records\nTool description: Fetch records from a specified database table based on certain conditions.\nSkill condition: multi_candidate_skill\nSkill summary: Fetch records from a specified database table based on certain conditions. Provide all required fields: `database_name`, `table_name`, and `conditions`.\nWhen to use: [\"Use `db_fetch_records` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `database_name`, `table_name`, and `conditions`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"database_name\": \"sample-name\", \"table_name\": \"sample-name\", \"conditions\": null, \"fetch_limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for db_fetch_records\", \"arguments\": {\"database_name\": \"sample-name\", \"table_name\": \"sample-name\", \"conditions\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for db_fetch_records\", \"arguments\": {\"database_name\": \"sample-name\", \"table_name\": \"sample-name\", \"conditions\": null, \"fetch_limit\": 2}}]\nSchema: {\"properties\": {\"conditions\": {\"description\": \"The conditions based on which records are to be fetched.\", \"properties\": {\"department\": {\"description\": \"The name of the department of students.\", \"type\": \"string\"}, \"school\": {\"description\": \"The name of the school students are enrolled in.\", \"type\": \"string\"}}, \"type\": \"dict\"}, \"database_name\": {\"description\": \"The name of the database.\", \"type\": \"string\"}, \"fetch_limit\": {\"description\": \"Limits the number of records to be fetched. If left empty, it fetches all records. (Optional) Default is 0.\", \"type\": \"integer\"}, \"table_name\": {\"description\": \"The name of the table from which records need to be fetched.\", \"type\": \"string\"}}, \"required\": [\"database_name\", \"table_name\", \"conditions\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to db fetch records.\n",
+        "raw_model_output": "{\"arguments\": {\"database_name\": \"sample-name\", \"fetch_limit\": 1, \"table_name\": \"sample-name\"}}",
+        "parsed_prediction": {
+          "database_name": "sample-name",
+          "table_name": "sample-name",
+          "fetch_limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0135_db_fetch_records_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "db_fetch_records",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with db fetch records; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "database_name": "sample-name",
+        "table_name": "sample-name",
+        "fetch_limit": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1518,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: db_fetch_records\nTool description: Fetch records from a specified database table based on certain conditions.\nSkill condition: multi_candidate_skill\nSkill summary: Fetch records from a specified database table based on certain conditions. Provide all required fields: `database_name`, `table_name`, and `conditions`.\nWhen to use: [\"Use `db_fetch_records` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `database_name`, `table_name`, and `conditions`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"database_name\": \"sample-name\", \"table_name\": \"sample-name\", \"conditions\": null, \"fetch_limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for db_fetch_records\", \"arguments\": {\"database_name\": \"sample-name\", \"table_name\": \"sample-name\", \"conditions\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for db_fetch_records\", \"arguments\": {\"database_name\": \"sample-name\", \"table_name\": \"sample-name\", \"conditions\": null, \"fetch_limit\": 2}}]\nSchema: {\"properties\": {\"conditions\": {\"description\": \"The conditions based on which records are to be fetched.\", \"properties\": {\"department\": {\"description\": \"The name of the department of students.\", \"type\": \"string\"}, \"school\": {\"description\": \"The name of the school students are enrolled in.\", \"type\": \"string\"}}, \"type\": \"dict\"}, \"database_name\": {\"description\": \"The name of the database.\", \"type\": \"string\"}, \"fetch_limit\": {\"description\": \"Limits the number of records to be fetched. If left empty, it fetches all records. (Optional) Default is 0.\", \"type\": \"integer\"}, \"table_name\": {\"description\": \"The name of the table from which records need to be fetched.\", \"type\": \"string\"}}, \"required\": [\"database_name\", \"table_name\", \"conditions\"], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with db fetch records; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {\"database_name\": \"sample-name\", \"fetch_limit\": 1, \"table_name\": \"sample-name\"}}",
+        "parsed_prediction": {
+          "database_name": "sample-name",
+          "table_name": "sample-name",
+          "fetch_limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0135_db_fetch_records_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "db_fetch_records",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with db fetch records.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "database_name": "sample-name",
+        "table_name": "sample-name",
+        "fetch_limit": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1522,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: db_fetch_records\nTool description: Fetch records from a specified database table based on certain conditions.\nSkill condition: multi_candidate_skill\nSkill summary: Fetch records from a specified database table based on certain conditions. Provide all required fields: `database_name`, `table_name`, and `conditions`.\nWhen to use: [\"Use `db_fetch_records` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `database_name`, `table_name`, and `conditions`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"database_name\": \"sample-name\", \"table_name\": \"sample-name\", \"conditions\": null, \"fetch_limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for db_fetch_records\", \"arguments\": {\"database_name\": \"sample-name\", \"table_name\": \"sample-name\", \"conditions\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for db_fetch_records\", \"arguments\": {\"database_name\": \"sample-name\", \"table_name\": \"sample-name\", \"conditions\": null, \"fetch_limit\": 2}}]\nSchema: {\"properties\": {\"conditions\": {\"description\": \"The conditions based on which records are to be fetched.\", \"properties\": {\"department\": {\"description\": \"The name of the department of students.\", \"type\": \"string\"}, \"school\": {\"description\": \"The name of the school students are enrolled in.\", \"type\": \"string\"}}, \"type\": \"dict\"}, \"database_name\": {\"description\": \"The name of the database.\", \"type\": \"string\"}, \"fetch_limit\": {\"description\": \"Limits the number of records to be fetched. If left empty, it fetches all records. (Optional) Default is 0.\", \"type\": \"integer\"}, \"table_name\": {\"description\": \"The name of the table from which records need to be fetched.\", \"type\": \"string\"}}, \"required\": [\"database_name\", \"table_name\", \"conditions\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with db fetch records.\n",
+        "raw_model_output": "{\"arguments\": {\"database_name\": \"sample-name\", \"fetch_limit\": 1, \"table_name\": \"sample-name\"}}",
+        "parsed_prediction": {
+          "database_name": "sample-name",
+          "table_name": "sample-name",
+          "fetch_limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0135_db_fetch_records_positive_easy_0",
+      "tool_name": "db_fetch_records",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use db fetch records to Fetch records from a specified database table based on certain conditions. Set conditions=\"conditions_0\", database_name=\"database_name_0\", table_name=\"table_name_0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "database_name": "sample-name",
+        "table_name": "sample-name",
+        "fetch_limit": 1
+      },
+      "expected_arguments": {
+        "conditions": "conditions_0",
+        "database_name": "database_name_0",
+        "table_name": "table_name_0"
+      },
+      "prediction_latency_ms": 0.1029,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: db_fetch_records\nTool description: Fetch records from a specified database table based on certain conditions.\nSkill condition: multi_candidate_skill\nSkill summary: Fetch records from a specified database table based on certain conditions. Provide all required fields: `database_name`, `table_name`, and `conditions`.\nWhen to use: [\"Use `db_fetch_records` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `database_name`, `table_name`, and `conditions`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"database_name\": \"sample-name\", \"table_name\": \"sample-name\", \"conditions\": null, \"fetch_limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for db_fetch_records\", \"arguments\": {\"database_name\": \"sample-name\", \"table_name\": \"sample-name\", \"conditions\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for db_fetch_records\", \"arguments\": {\"database_name\": \"sample-name\", \"table_name\": \"sample-name\", \"conditions\": null, \"fetch_limit\": 2}}]\nSchema: {\"properties\": {\"conditions\": {\"description\": \"The conditions based on which records are to be fetched.\", \"properties\": {\"department\": {\"description\": \"The name of the department of students.\", \"type\": \"string\"}, \"school\": {\"description\": \"The name of the school students are enrolled in.\", \"type\": \"string\"}}, \"type\": \"dict\"}, \"database_name\": {\"description\": \"The name of the database.\", \"type\": \"string\"}, \"fetch_limit\": {\"description\": \"Limits the number of records to be fetched. If left empty, it fetches all records. (Optional) Default is 0.\", \"type\": \"integer\"}, \"table_name\": {\"description\": \"The name of the table from which records need to be fetched.\", \"type\": \"string\"}}, \"required\": [\"database_name\", \"table_name\", \"conditions\"], \"type\": \"object\"}\nUser request: Use db fetch records to Fetch records from a specified database table based on certain conditions. Set conditions=\"conditions_0\", database_name=\"database_name_0\", table_name=\"table_name_0\".\n",
+        "raw_model_output": "{\"arguments\": {\"database_name\": \"sample-name\", \"fetch_limit\": 1, \"table_name\": \"sample-name\"}}",
+        "parsed_prediction": {
+          "database_name": "sample-name",
+          "table_name": "sample-name",
+          "fetch_limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0135_db_fetch_records_positive_medium_0",
+      "tool_name": "db_fetch_records",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Fetch records from a specified database table based on certain conditions. The relevant details are conditions=\"conditions_7\", database_name=\"database_name_7\", table_name=\"table_name_7\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "database_name": "sample-name",
+        "table_name": "sample-name",
+        "fetch_limit": 1
+      },
+      "expected_arguments": {
+        "conditions": "conditions_7",
+        "database_name": "database_name_7",
+        "table_name": "table_name_7"
+      },
+      "prediction_latency_ms": 0.1195,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: db_fetch_records\nTool description: Fetch records from a specified database table based on certain conditions.\nSkill condition: multi_candidate_skill\nSkill summary: Fetch records from a specified database table based on certain conditions. Provide all required fields: `database_name`, `table_name`, and `conditions`.\nWhen to use: [\"Use `db_fetch_records` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `database_name`, `table_name`, and `conditions`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"database_name\": \"sample-name\", \"table_name\": \"sample-name\", \"conditions\": null, \"fetch_limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for db_fetch_records\", \"arguments\": {\"database_name\": \"sample-name\", \"table_name\": \"sample-name\", \"conditions\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for db_fetch_records\", \"arguments\": {\"database_name\": \"sample-name\", \"table_name\": \"sample-name\", \"conditions\": null, \"fetch_limit\": 2}}]\nSchema: {\"properties\": {\"conditions\": {\"description\": \"The conditions based on which records are to be fetched.\", \"properties\": {\"department\": {\"description\": \"The name of the department of students.\", \"type\": \"string\"}, \"school\": {\"description\": \"The name of the school students are enrolled in.\", \"type\": \"string\"}}, \"type\": \"dict\"}, \"database_name\": {\"description\": \"The name of the database.\", \"type\": \"string\"}, \"fetch_limit\": {\"description\": \"Limits the number of records to be fetched. If left empty, it fetches all records. (Optional) Default is 0.\", \"type\": \"integer\"}, \"table_name\": {\"description\": \"The name of the table from which records need to be fetched.\", \"type\": \"string\"}}, \"required\": [\"database_name\", \"table_name\", \"conditions\"], \"type\": \"object\"}\nUser request: I need help with this task: Fetch records from a specified database table based on certain conditions. The relevant details are conditions=\"conditions_7\", database_name=\"database_name_7\", table_name=\"table_name_7\".\n",
+        "raw_model_output": "{\"arguments\": {\"database_name\": \"sample-name\", \"fetch_limit\": 1, \"table_name\": \"sample-name\"}}",
+        "parsed_prediction": {
+          "database_name": "sample-name",
+          "table_name": "sample-name",
+          "fetch_limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.1569
+  }
+}

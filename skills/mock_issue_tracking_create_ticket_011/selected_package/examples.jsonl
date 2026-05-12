@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for mock_issue_tracking_create_ticket_011", "arguments": {"project_key": "sample_project_key_1", "title": "Sample Title"}}
+{"scenario": "Richer invocation that uses optional controls for mock_issue_tracking_create_ticket_011", "arguments": {"project_key": "sample_project_key_2", "title": "Sample Title", "priority": "medium", "labels": ["sample_labels_item_2"], "dry_run": true}}

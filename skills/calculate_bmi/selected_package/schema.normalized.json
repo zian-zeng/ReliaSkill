@@ -1,0 +1,107 @@
+{
+  "tool_name": "calculate_bmi",
+  "server_name": "bfcl_v3",
+  "tool_purpose": "Calculate the Body Mass Index (BMI) for a person based on their weight and height.",
+  "input_schema_raw": {
+    "properties": {
+      "height": {
+        "description": "The height of the person in centimeters.",
+        "type": "integer"
+      },
+      "system": {
+        "description": "The system of units to be used, 'metric' or 'imperial'. Default is 'metric'.",
+        "type": "string"
+      },
+      "weight": {
+        "description": "The weight of the person in kilograms.",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "weight",
+      "height"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "weight",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The weight of the person in kilograms.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.weight"
+    },
+    {
+      "name": "height",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The height of the person in centimeters.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.height"
+    },
+    {
+      "name": "system",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "The system of units to be used, 'metric' or 'imperial'. Default is 'metric'.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.system"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Calculate the Body Mass Index (BMI) for a person based on their weight and height.",
+    "calculate_bmi"
+  ],
+  "source_pointer": "bfcl_v3",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 82,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "calculate_bmi",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

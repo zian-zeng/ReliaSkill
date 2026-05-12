@@ -1,0 +1,136 @@
+{
+  "candidate_id": "storage_copy_object__cand_00_concise_default",
+  "generation_strategy": "concise_default",
+  "prompt_template_id": "heuristic_concise_default_v1",
+  "skill_text": "API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets. Provide all required fields: `source`, and `destination`.\nWhen to use:\n- Use `storage_copy_object` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `source`, and `destination`.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Do not use when required inputs are missing.\nArgument template:\n{\"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"overwrite\": false, \"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}}\nExamples:\nMinimal valid request that satisfies the required fields for storage_copy_object\n{\"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}}\nRicher invocation that uses optional controls for storage_copy_object\n{\"destination\": {\"bucket\": \"sample_bucket_2\", \"key\": \"sample_key_2\"}, \"overwrite\": true, \"source\": {\"bucket\": \"sample_bucket_2\", \"key\": \"sample_key_2\"}}",
+  "argument_template": {
+    "source": {
+      "bucket": "sample_bucket_1",
+      "key": "sample_key_1"
+    },
+    "destination": {
+      "bucket": "sample_bucket_1",
+      "key": "sample_key_1"
+    },
+    "overwrite": false
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for storage_copy_object",
+      "arguments": {
+        "source": {
+          "bucket": "sample_bucket_1",
+          "key": "sample_key_1"
+        },
+        "destination": {
+          "bucket": "sample_bucket_1",
+          "key": "sample_key_1"
+        }
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for storage_copy_object",
+      "arguments": {
+        "source": {
+          "bucket": "sample_bucket_2",
+          "key": "sample_key_2"
+        },
+        "destination": {
+          "bucket": "sample_bucket_2",
+          "key": "sample_key_2"
+        },
+        "overwrite": true
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `storage_copy_object` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `source`, and `destination`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Do not use when required inputs are missing."
+  ],
+  "token_count": 286,
+  "skill_token_count": 286,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 2,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets. Provide all required fields: `source`, and `destination`.",
+    "when_to_use": [
+      "Use `storage_copy_object` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `source`, and `destination`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Do not use when required inputs are missing."
+    ],
+    "argument_template": {
+      "source": {
+        "bucket": "sample_bucket_1",
+        "key": "sample_key_1"
+      },
+      "destination": {
+        "bucket": "sample_bucket_1",
+        "key": "sample_key_1"
+      },
+      "overwrite": false
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for storage_copy_object",
+        "arguments": {
+          "source": {
+            "bucket": "sample_bucket_1",
+            "key": "sample_key_1"
+          },
+          "destination": {
+            "bucket": "sample_bucket_1",
+            "key": "sample_key_1"
+          }
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for storage_copy_object",
+        "arguments": {
+          "source": {
+            "bucket": "sample_bucket_2",
+            "key": "sample_key_2"
+          },
+          "destination": {
+            "bucket": "sample_bucket_2",
+            "key": "sample_key_2"
+          },
+          "overwrite": true
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "storage_copy_object__cand_00_concise_default",
+        "generation_strategy": "concise_default",
+        "prompt_template_id": "heuristic_concise_default_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "storage_copy_object__cand_00_concise_default",
+      "generation_strategy": "concise_default",
+      "prompt_template_id": "heuristic_concise_default_v1"
+    }
+  }
+}

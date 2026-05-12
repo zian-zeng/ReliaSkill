@@ -1,0 +1,89 @@
+{
+  "tool_name": "playwright_patch",
+  "server_name": "browser",
+  "tool_purpose": "Perform an HTTP PATCH request",
+  "input_schema_raw": {
+    "properties": {
+      "url": {
+        "description": "URL to perform PUT operation",
+        "type": "string"
+      },
+      "value": {
+        "description": "Data to PATCH in the body",
+        "type": "string"
+      }
+    },
+    "required": [
+      "url",
+      "value"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "url",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "URL to perform PUT operation",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.url"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Data to PATCH in the body",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.value"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Perform an HTTP PATCH request",
+    "Playwright Patch"
+  ],
+  "source_pointer": "data/raw/mcptoolbenchpp_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 29,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": true,
+    "max_schema_depth": 2,
+    "num_arguments": 2,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 2,
+    "side_effect_type": "write"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "playwright_patch",
+    "server_name": "browser",
+    "source_pointer": "data/raw/mcptoolbenchpp_tools.json"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

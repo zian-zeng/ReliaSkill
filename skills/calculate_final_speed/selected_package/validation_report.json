@@ -1,0 +1,29 @@
+{
+  "valid": false,
+  "issues": [
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "argument_template: null is not allowed at $.gravity",
+      "location": "$.gravity",
+      "section": "argument_template",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.gravity"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "example[1]: null is not allowed at $.gravity",
+      "location": "$.gravity",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.gravity"
+      }
+    }
+  ]
+}

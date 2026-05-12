@@ -1,0 +1,187 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0106_calculate_cell_density_negative_easy_0_out_of_domain_request",
+      "tool_name": "calculate_cell_density",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate cell density.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "dilution": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1356,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_cell_density\nTool description: Calculate the cell density of a biological sample based on its optical density and the experiment dilution.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the cell density of a biological sample based on its optical density and the experiment dilution. Provide all required fields: `optical_density`, and `dilution`.\nWhen to use: [\"Use `calculate_cell_density` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `optical_density`, and `dilution`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"optical_density\": null, \"dilution\": 1, \"calibration_factor\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_cell_density\", \"arguments\": {\"optical_density\": null, \"dilution\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_cell_density\", \"arguments\": {\"optical_density\": null, \"dilution\": 2, \"calibration_factor\": null}}]\nSchema: {\"properties\": {\"calibration_factor\": {\"description\": \"The calibration factor to adjust the density, default value is 1e9 assuming cell density is in CFU/mL.\", \"type\": \"float\"}, \"dilution\": {\"description\": \"The dilution factor applied during the experiment.\", \"type\": \"integer\"}, \"optical_density\": {\"description\": \"The optical density of the sample, usually obtained from a spectrophotometer reading.\", \"type\": \"float\"}}, \"required\": [\"optical_density\", \"dilution\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate cell density.\n",
+        "raw_model_output": "{\"arguments\": {\"dilution\": 1}}",
+        "parsed_prediction": {
+          "dilution": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0106_calculate_cell_density_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "calculate_cell_density",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with calculate cell density.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "dilution": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1033,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_cell_density\nTool description: Calculate the cell density of a biological sample based on its optical density and the experiment dilution.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the cell density of a biological sample based on its optical density and the experiment dilution. Provide all required fields: `optical_density`, and `dilution`.\nWhen to use: [\"Use `calculate_cell_density` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `optical_density`, and `dilution`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"optical_density\": null, \"dilution\": 1, \"calibration_factor\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_cell_density\", \"arguments\": {\"optical_density\": null, \"dilution\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_cell_density\", \"arguments\": {\"optical_density\": null, \"dilution\": 2, \"calibration_factor\": null}}]\nSchema: {\"properties\": {\"calibration_factor\": {\"description\": \"The calibration factor to adjust the density, default value is 1e9 assuming cell density is in CFU/mL.\", \"type\": \"float\"}, \"dilution\": {\"description\": \"The dilution factor applied during the experiment.\", \"type\": \"integer\"}, \"optical_density\": {\"description\": \"The optical density of the sample, usually obtained from a spectrophotometer reading.\", \"type\": \"float\"}}, \"required\": [\"optical_density\", \"dilution\"], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with calculate cell density.\n",
+        "raw_model_output": "{\"arguments\": {\"dilution\": 1}}",
+        "parsed_prediction": {
+          "dilution": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0106_calculate_cell_density_positive_easy_0",
+      "tool_name": "calculate_cell_density",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use calculate cell density to Calculate the cell density of a biological sample based on its optical density and the experiment dilution. Set dilution=1, optical_density=1.",
+      "exact_match": false,
+      "argument_validity": 0.5,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "dilution": 1
+      },
+      "expected_arguments": {
+        "dilution": 1,
+        "optical_density": 1
+      },
+      "prediction_latency_ms": 0.1061,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_cell_density\nTool description: Calculate the cell density of a biological sample based on its optical density and the experiment dilution.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the cell density of a biological sample based on its optical density and the experiment dilution. Provide all required fields: `optical_density`, and `dilution`.\nWhen to use: [\"Use `calculate_cell_density` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `optical_density`, and `dilution`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"optical_density\": null, \"dilution\": 1, \"calibration_factor\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_cell_density\", \"arguments\": {\"optical_density\": null, \"dilution\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_cell_density\", \"arguments\": {\"optical_density\": null, \"dilution\": 2, \"calibration_factor\": null}}]\nSchema: {\"properties\": {\"calibration_factor\": {\"description\": \"The calibration factor to adjust the density, default value is 1e9 assuming cell density is in CFU/mL.\", \"type\": \"float\"}, \"dilution\": {\"description\": \"The dilution factor applied during the experiment.\", \"type\": \"integer\"}, \"optical_density\": {\"description\": \"The optical density of the sample, usually obtained from a spectrophotometer reading.\", \"type\": \"float\"}}, \"required\": [\"optical_density\", \"dilution\"], \"type\": \"object\"}\nUser request: Use calculate cell density to Calculate the cell density of a biological sample based on its optical density and the experiment dilution. Set dilution=1, optical_density=1.\n",
+        "raw_model_output": "{\"arguments\": {\"dilution\": 1}}",
+        "parsed_prediction": {
+          "dilution": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0106_calculate_cell_density_positive_medium_0",
+      "tool_name": "calculate_cell_density",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Calculate the cell density of a biological sample based on its optical density and the experiment dilution. The relevant details are dilution=8, optical_density=8.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "dilution": 1
+      },
+      "expected_arguments": {
+        "dilution": 8,
+        "optical_density": 8
+      },
+      "prediction_latency_ms": 0.1405,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_cell_density\nTool description: Calculate the cell density of a biological sample based on its optical density and the experiment dilution.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the cell density of a biological sample based on its optical density and the experiment dilution. Provide all required fields: `optical_density`, and `dilution`.\nWhen to use: [\"Use `calculate_cell_density` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `optical_density`, and `dilution`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"optical_density\": null, \"dilution\": 1, \"calibration_factor\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_cell_density\", \"arguments\": {\"optical_density\": null, \"dilution\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_cell_density\", \"arguments\": {\"optical_density\": null, \"dilution\": 2, \"calibration_factor\": null}}]\nSchema: {\"properties\": {\"calibration_factor\": {\"description\": \"The calibration factor to adjust the density, default value is 1e9 assuming cell density is in CFU/mL.\", \"type\": \"float\"}, \"dilution\": {\"description\": \"The dilution factor applied during the experiment.\", \"type\": \"integer\"}, \"optical_density\": {\"description\": \"The optical density of the sample, usually obtained from a spectrophotometer reading.\", \"type\": \"float\"}}, \"required\": [\"optical_density\", \"dilution\"], \"type\": \"object\"}\nUser request: I need help with this task: Calculate the cell density of a biological sample based on its optical density and the experiment dilution. The relevant details are dilution=8, optical_density=8.\n",
+        "raw_model_output": "{\"arguments\": {\"dilution\": 1}}",
+        "parsed_prediction": {
+          "dilution": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0106_calculate_cell_density_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "calculate_cell_density",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN; calculate cell density is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "dilution": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1733,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_cell_density\nTool description: Calculate the cell density of a biological sample based on its optical density and the experiment dilution.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the cell density of a biological sample based on its optical density and the experiment dilution. Provide all required fields: `optical_density`, and `dilution`.\nWhen to use: [\"Use `calculate_cell_density` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `optical_density`, and `dilution`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"optical_density\": null, \"dilution\": 1, \"calibration_factor\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_cell_density\", \"arguments\": {\"optical_density\": null, \"dilution\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_cell_density\", \"arguments\": {\"optical_density\": null, \"dilution\": 2, \"calibration_factor\": null}}]\nSchema: {\"properties\": {\"calibration_factor\": {\"description\": \"The calibration factor to adjust the density, default value is 1e9 assuming cell density is in CFU/mL.\", \"type\": \"float\"}, \"dilution\": {\"description\": \"The dilution factor applied during the experiment.\", \"type\": \"integer\"}, \"optical_density\": {\"description\": \"The optical density of the sample, usually obtained from a spectrophotometer reading.\", \"type\": \"float\"}}, \"required\": [\"optical_density\", \"dilution\"], \"type\": \"object\"}\nUser request: Use diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN; calculate cell density is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"dilution\": 1}}",
+        "parsed_prediction": {
+          "dilution": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.25,
+    "avg_prediction_latency_ms": 0.1318
+  }
+}

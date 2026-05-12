@@ -1,0 +1,196 @@
+{
+  "tool_name": "playwright_screenshot",
+  "server_name": "browser",
+  "tool_purpose": "Take a screenshot of the current page or a specific element",
+  "input_schema_raw": {
+    "properties": {
+      "downloadsDir": {
+        "description": "Custom downloads directory path (default: user's Downloads folder)",
+        "type": "string"
+      },
+      "fullPage": {
+        "description": "Store screenshot of the entire page (default: false)",
+        "type": "boolean"
+      },
+      "height": {
+        "description": "Height in pixels (default: 600)",
+        "type": "number"
+      },
+      "name": {
+        "description": "Name for the screenshot",
+        "type": "string"
+      },
+      "savePng": {
+        "description": "Save screenshot as PNG file (default: false)",
+        "type": "boolean"
+      },
+      "selector": {
+        "description": "CSS selector for element to screenshot",
+        "type": "string"
+      },
+      "storeBase64": {
+        "description": "Store screenshot in base64 format (default: true)",
+        "type": "boolean"
+      },
+      "width": {
+        "description": "Width in pixels (default: 800)",
+        "type": "number"
+      }
+    },
+    "required": [
+      "name"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Name for the screenshot",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.name"
+    },
+    {
+      "name": "selector",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "CSS selector for element to screenshot",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.selector"
+    },
+    {
+      "name": "width",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Width in pixels (default: 800)",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.width"
+    },
+    {
+      "name": "height",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Height in pixels (default: 600)",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.height"
+    },
+    {
+      "name": "storeBase64",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Store screenshot in base64 format (default: true)",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.storeBase64"
+    },
+    {
+      "name": "fullPage",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Store screenshot of the entire page (default: false)",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.fullPage"
+    },
+    {
+      "name": "savePng",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Save screenshot as PNG file (default: false)",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.savePng"
+    },
+    {
+      "name": "downloadsDir",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Custom downloads directory path (default: user's Downloads folder)",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.downloadsDir"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Take a screenshot of the current page or a specific element",
+    "Playwright Screenshot"
+  ],
+  "source_pointer": "data/raw/mcptoolbenchpp_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.6,
+    "auth_required": false,
+    "documentation_length": 59,
+    "has_array_argument": false,
+    "has_boolean_flag": true,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 8,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 7,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 8,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "playwright_screenshot",
+    "server_name": "browser",
+    "source_pointer": "data/raw/mcptoolbenchpp_tools.json"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

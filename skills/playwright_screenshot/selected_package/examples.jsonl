@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for playwright_screenshot", "arguments": {"name": "sample-name"}}
+{"scenario": "Richer invocation that uses optional controls for playwright_screenshot", "arguments": {"name": "sample-name", "selector": "sample_selector_2", "width": 2.0, "height": 2.0, "storeBase64": true, "fullPage": true, "savePng": true, "downloadsDir": "sample_downloadsDir_2"}}

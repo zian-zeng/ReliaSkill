@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for mock_cloud_storage_mock_put_object_016", "arguments": {"bucket": "sample_bucket_1", "key": "sample_key_1"}}
+{"scenario": "Richer invocation that uses optional controls for mock_cloud_storage_mock_put_object_016", "arguments": {"bucket": "sample_bucket_2", "key": "sample_key_2", "metadata": {"cache_control": "sample_cache_control_2", "content_type": "sample_content_type_2"}, "dry_run": true}}

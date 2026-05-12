@@ -1,0 +1,196 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0292_trigger_sampling_request_negative_easy_0_out_of_domain_request",
+      "tool_name": "trigger-sampling-request",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to trigger-sampling-request.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "prompt": "Summarize the latest update.",
+        "maxTokens": "sample_maxTokens_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0661,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: trigger-sampling-request\nTool description: Trigger a Request from the Server for LLM Sampling\nSkill condition: multi_candidate_skill\nSkill summary: Trigger a Request from the Server for LLM Sampling. Provide the required field `prompt`.\nWhen to use: [\"Use `trigger-sampling-request` when the user's request directly matches this tool's purpose.\", \"Provide the required field `prompt`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"prompt\": \"Summarize the latest update.\", \"maxTokens\": \"sample_maxTokens_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for trigger-sampling-request\", \"arguments\": {\"prompt\": \"Summarize the latest update.\"}}, {\"scenario\": \"Richer invocation that uses optional controls for trigger-sampling-request\", \"arguments\": {\"prompt\": \"Summarize the latest update.\", \"maxTokens\": \"sample_maxTokens_2\"}}]\nSchema: {\"properties\": {\"maxTokens\": {\"type\": \"string\"}, \"prompt\": {\"type\": \"string\"}}, \"required\": [\"prompt\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to trigger-sampling-request.\n",
+        "raw_model_output": "{\"arguments\": {\"maxTokens\": \"sample_maxTokens_1\", \"prompt\": \"Summarize the latest update.\"}}",
+        "parsed_prediction": {
+          "prompt": "Summarize the latest update.",
+          "maxTokens": "sample_maxTokens_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0292_trigger_sampling_request_negative_hard_1_missing_required_info",
+      "tool_name": "trigger-sampling-request",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I may need trigger-sampling-request to Trigger a Request from the Server for LLM Sampling, but I do not know prompt yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "prompt": "Summarize the latest update.",
+        "maxTokens": "sample_maxTokens_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0573,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: trigger-sampling-request\nTool description: Trigger a Request from the Server for LLM Sampling\nSkill condition: multi_candidate_skill\nSkill summary: Trigger a Request from the Server for LLM Sampling. Provide the required field `prompt`.\nWhen to use: [\"Use `trigger-sampling-request` when the user's request directly matches this tool's purpose.\", \"Provide the required field `prompt`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"prompt\": \"Summarize the latest update.\", \"maxTokens\": \"sample_maxTokens_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for trigger-sampling-request\", \"arguments\": {\"prompt\": \"Summarize the latest update.\"}}, {\"scenario\": \"Richer invocation that uses optional controls for trigger-sampling-request\", \"arguments\": {\"prompt\": \"Summarize the latest update.\", \"maxTokens\": \"sample_maxTokens_2\"}}]\nSchema: {\"properties\": {\"maxTokens\": {\"type\": \"string\"}, \"prompt\": {\"type\": \"string\"}}, \"required\": [\"prompt\"], \"type\": \"object\"}\nUser request: I may need trigger-sampling-request to Trigger a Request from the Server for LLM Sampling, but I do not know prompt yet.\n",
+        "raw_model_output": "{\"arguments\": {\"maxTokens\": \"sample_maxTokens_1\", \"prompt\": \"Summarize the latest update.\"}}",
+        "parsed_prediction": {
+          "prompt": "Summarize the latest update.",
+          "maxTokens": "sample_maxTokens_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0292_trigger_sampling_request_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "trigger-sampling-request",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. This is adjacent to trigger-sampling-request, but the intended capability is bank get account balance.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "prompt": "Summarize the latest update.",
+        "maxTokens": "sample_maxTokens_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0534,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: trigger-sampling-request\nTool description: Trigger a Request from the Server for LLM Sampling\nSkill condition: multi_candidate_skill\nSkill summary: Trigger a Request from the Server for LLM Sampling. Provide the required field `prompt`.\nWhen to use: [\"Use `trigger-sampling-request` when the user's request directly matches this tool's purpose.\", \"Provide the required field `prompt`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"prompt\": \"Summarize the latest update.\", \"maxTokens\": \"sample_maxTokens_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for trigger-sampling-request\", \"arguments\": {\"prompt\": \"Summarize the latest update.\"}}, {\"scenario\": \"Richer invocation that uses optional controls for trigger-sampling-request\", \"arguments\": {\"prompt\": \"Summarize the latest update.\", \"maxTokens\": \"sample_maxTokens_2\"}}]\nSchema: {\"properties\": {\"maxTokens\": {\"type\": \"string\"}, \"prompt\": {\"type\": \"string\"}}, \"required\": [\"prompt\"], \"type\": \"object\"}\nUser request: I need to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. This is adjacent to trigger-sampling-request, but the intended capability is bank get account balance.\n",
+        "raw_model_output": "{\"arguments\": {\"maxTokens\": \"sample_maxTokens_1\", \"prompt\": \"Summarize the latest update.\"}}",
+        "parsed_prediction": {
+          "prompt": "Summarize the latest update.",
+          "maxTokens": "sample_maxTokens_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0292_trigger_sampling_request_positive_easy_0",
+      "tool_name": "trigger-sampling-request",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use trigger-sampling-request to Trigger a Request from the Server for LLM Sampling. Set prompt=\"prompt_0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "prompt": "Summarize the latest update.",
+        "maxTokens": "sample_maxTokens_1"
+      },
+      "expected_arguments": {
+        "prompt": "prompt_0"
+      },
+      "prediction_latency_ms": 0.1536,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: trigger-sampling-request\nTool description: Trigger a Request from the Server for LLM Sampling\nSkill condition: multi_candidate_skill\nSkill summary: Trigger a Request from the Server for LLM Sampling. Provide the required field `prompt`.\nWhen to use: [\"Use `trigger-sampling-request` when the user's request directly matches this tool's purpose.\", \"Provide the required field `prompt`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"prompt\": \"Summarize the latest update.\", \"maxTokens\": \"sample_maxTokens_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for trigger-sampling-request\", \"arguments\": {\"prompt\": \"Summarize the latest update.\"}}, {\"scenario\": \"Richer invocation that uses optional controls for trigger-sampling-request\", \"arguments\": {\"prompt\": \"Summarize the latest update.\", \"maxTokens\": \"sample_maxTokens_2\"}}]\nSchema: {\"properties\": {\"maxTokens\": {\"type\": \"string\"}, \"prompt\": {\"type\": \"string\"}}, \"required\": [\"prompt\"], \"type\": \"object\"}\nUser request: Use trigger-sampling-request to Trigger a Request from the Server for LLM Sampling. Set prompt=\"prompt_0\".\n",
+        "raw_model_output": "{\"arguments\": {\"maxTokens\": \"sample_maxTokens_1\", \"prompt\": \"Summarize the latest update.\"}}",
+        "parsed_prediction": {
+          "prompt": "Summarize the latest update.",
+          "maxTokens": "sample_maxTokens_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0292_trigger_sampling_request_positive_medium_0",
+      "tool_name": "trigger-sampling-request",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Trigger a Request from the Server for LLM Sampling. The relevant details are maxTokens=\"maxtokens_7\", prompt=\"prompt_7\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "prompt": "Summarize the latest update.",
+        "maxTokens": "sample_maxTokens_1"
+      },
+      "expected_arguments": {
+        "maxTokens": "maxtokens_7",
+        "prompt": "prompt_7"
+      },
+      "prediction_latency_ms": 0.0754,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: trigger-sampling-request\nTool description: Trigger a Request from the Server for LLM Sampling\nSkill condition: multi_candidate_skill\nSkill summary: Trigger a Request from the Server for LLM Sampling. Provide the required field `prompt`.\nWhen to use: [\"Use `trigger-sampling-request` when the user's request directly matches this tool's purpose.\", \"Provide the required field `prompt`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"prompt\": \"Summarize the latest update.\", \"maxTokens\": \"sample_maxTokens_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for trigger-sampling-request\", \"arguments\": {\"prompt\": \"Summarize the latest update.\"}}, {\"scenario\": \"Richer invocation that uses optional controls for trigger-sampling-request\", \"arguments\": {\"prompt\": \"Summarize the latest update.\", \"maxTokens\": \"sample_maxTokens_2\"}}]\nSchema: {\"properties\": {\"maxTokens\": {\"type\": \"string\"}, \"prompt\": {\"type\": \"string\"}}, \"required\": [\"prompt\"], \"type\": \"object\"}\nUser request: I need help with this task: Trigger a Request from the Server for LLM Sampling. The relevant details are maxTokens=\"maxtokens_7\", prompt=\"prompt_7\".\n",
+        "raw_model_output": "{\"arguments\": {\"maxTokens\": \"sample_maxTokens_1\", \"prompt\": \"Summarize the latest update.\"}}",
+        "parsed_prediction": {
+          "prompt": "Summarize the latest update.",
+          "maxTokens": "sample_maxTokens_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0812
+  }
+}

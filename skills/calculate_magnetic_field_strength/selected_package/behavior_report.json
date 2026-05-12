@@ -1,0 +1,197 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0123_calculate_magnetic_field_strength_negative_easy_0_out_of_domain_request",
+      "tool_name": "calculate_magnetic_field_strength",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate magnetic field strength.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "current": 1,
+        "distance": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0961,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_magnetic_field_strength\nTool description: Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current. Provide all required fields: `current`, and `distance`.\nWhen to use: [\"Use `calculate_magnetic_field_strength` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `current`, and `distance`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"current\": 1, \"distance\": 1, \"permeability\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_magnetic_field_strength\", \"arguments\": {\"current\": 1, \"distance\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_magnetic_field_strength\", \"arguments\": {\"current\": 2, \"distance\": 2, \"permeability\": null}}]\nSchema: {\"properties\": {\"current\": {\"description\": \"The current flowing through the wire in Amperes.\", \"type\": \"integer\"}, \"distance\": {\"description\": \"The perpendicular distance from the wire to the point where the magnetic field is being calculated.\", \"type\": \"integer\"}, \"permeability\": {\"description\": \"The permeability of the medium. Default is 12.57e-7 (Vacuum Permeability).\", \"type\": \"float\"}}, \"required\": [\"current\", \"distance\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate magnetic field strength.\n",
+        "raw_model_output": "{\"arguments\": {\"current\": 1, \"distance\": 1}}",
+        "parsed_prediction": {
+          "current": 1,
+          "distance": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0123_calculate_magnetic_field_strength_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "calculate_magnetic_field_strength",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with calculate magnetic field strength; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "current": 1,
+        "distance": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1749,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_magnetic_field_strength\nTool description: Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current. Provide all required fields: `current`, and `distance`.\nWhen to use: [\"Use `calculate_magnetic_field_strength` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `current`, and `distance`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"current\": 1, \"distance\": 1, \"permeability\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_magnetic_field_strength\", \"arguments\": {\"current\": 1, \"distance\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_magnetic_field_strength\", \"arguments\": {\"current\": 2, \"distance\": 2, \"permeability\": null}}]\nSchema: {\"properties\": {\"current\": {\"description\": \"The current flowing through the wire in Amperes.\", \"type\": \"integer\"}, \"distance\": {\"description\": \"The perpendicular distance from the wire to the point where the magnetic field is being calculated.\", \"type\": \"integer\"}, \"permeability\": {\"description\": \"The permeability of the medium. Default is 12.57e-7 (Vacuum Permeability).\", \"type\": \"float\"}}, \"required\": [\"current\", \"distance\"], \"type\": \"object\"}\nUser request: Maybe do something with calculate magnetic field strength; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {\"current\": 1, \"distance\": 1}}",
+        "parsed_prediction": {
+          "current": 1,
+          "distance": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0123_calculate_magnetic_field_strength_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "calculate_magnetic_field_strength",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with calculate magnetic field strength.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "current": 1,
+        "distance": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0777,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_magnetic_field_strength\nTool description: Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current. Provide all required fields: `current`, and `distance`.\nWhen to use: [\"Use `calculate_magnetic_field_strength` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `current`, and `distance`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"current\": 1, \"distance\": 1, \"permeability\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_magnetic_field_strength\", \"arguments\": {\"current\": 1, \"distance\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_magnetic_field_strength\", \"arguments\": {\"current\": 2, \"distance\": 2, \"permeability\": null}}]\nSchema: {\"properties\": {\"current\": {\"description\": \"The current flowing through the wire in Amperes.\", \"type\": \"integer\"}, \"distance\": {\"description\": \"The perpendicular distance from the wire to the point where the magnetic field is being calculated.\", \"type\": \"integer\"}, \"permeability\": {\"description\": \"The permeability of the medium. Default is 12.57e-7 (Vacuum Permeability).\", \"type\": \"float\"}}, \"required\": [\"current\", \"distance\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with calculate magnetic field strength.\n",
+        "raw_model_output": "{\"arguments\": {\"current\": 1, \"distance\": 1}}",
+        "parsed_prediction": {
+          "current": 1,
+          "distance": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0123_calculate_magnetic_field_strength_positive_easy_0",
+      "tool_name": "calculate_magnetic_field_strength",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use calculate magnetic field strength to Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current. Set current=1, distance=1.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "current": 1,
+        "distance": 1
+      },
+      "expected_arguments": {
+        "current": 1,
+        "distance": 1
+      },
+      "prediction_latency_ms": 0.0767,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_magnetic_field_strength\nTool description: Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current. Provide all required fields: `current`, and `distance`.\nWhen to use: [\"Use `calculate_magnetic_field_strength` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `current`, and `distance`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"current\": 1, \"distance\": 1, \"permeability\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_magnetic_field_strength\", \"arguments\": {\"current\": 1, \"distance\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_magnetic_field_strength\", \"arguments\": {\"current\": 2, \"distance\": 2, \"permeability\": null}}]\nSchema: {\"properties\": {\"current\": {\"description\": \"The current flowing through the wire in Amperes.\", \"type\": \"integer\"}, \"distance\": {\"description\": \"The perpendicular distance from the wire to the point where the magnetic field is being calculated.\", \"type\": \"integer\"}, \"permeability\": {\"description\": \"The permeability of the medium. Default is 12.57e-7 (Vacuum Permeability).\", \"type\": \"float\"}}, \"required\": [\"current\", \"distance\"], \"type\": \"object\"}\nUser request: Use calculate magnetic field strength to Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current. Set current=1, distance=1.\n",
+        "raw_model_output": "{\"arguments\": {\"current\": 1, \"distance\": 1}}",
+        "parsed_prediction": {
+          "current": 1,
+          "distance": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0123_calculate_magnetic_field_strength_positive_medium_0",
+      "tool_name": "calculate_magnetic_field_strength",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current. The relevant details are current=8, distance=8.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "current": 1,
+        "distance": 1
+      },
+      "expected_arguments": {
+        "current": 8,
+        "distance": 8
+      },
+      "prediction_latency_ms": 0.0799,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_magnetic_field_strength\nTool description: Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current. Provide all required fields: `current`, and `distance`.\nWhen to use: [\"Use `calculate_magnetic_field_strength` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `current`, and `distance`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"current\": 1, \"distance\": 1, \"permeability\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_magnetic_field_strength\", \"arguments\": {\"current\": 1, \"distance\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_magnetic_field_strength\", \"arguments\": {\"current\": 2, \"distance\": 2, \"permeability\": null}}]\nSchema: {\"properties\": {\"current\": {\"description\": \"The current flowing through the wire in Amperes.\", \"type\": \"integer\"}, \"distance\": {\"description\": \"The perpendicular distance from the wire to the point where the magnetic field is being calculated.\", \"type\": \"integer\"}, \"permeability\": {\"description\": \"The permeability of the medium. Default is 12.57e-7 (Vacuum Permeability).\", \"type\": \"float\"}}, \"required\": [\"current\", \"distance\"], \"type\": \"object\"}\nUser request: I need help with this task: Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current. The relevant details are current=8, distance=8.\n",
+        "raw_model_output": "{\"arguments\": {\"current\": 1, \"distance\": 1}}",
+        "parsed_prediction": {
+          "current": 1,
+          "distance": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.5,
+    "avg_argument_validity": 0.5,
+    "avg_prediction_latency_ms": 0.1011
+  }
+}

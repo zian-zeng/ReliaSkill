@@ -1,0 +1,182 @@
+{
+  "tool_name": "calculate_cell_density",
+  "baseline_name": "multi_candidate_skill",
+  "source_pointer": "bfcl_v3",
+  "valid": false,
+  "issues": [
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "argument_template: null is not allowed at $.optical_density",
+      "location": "$.optical_density",
+      "section": "argument_template",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.optical_density"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "argument_template: null is not allowed at $.calibration_factor",
+      "location": "$.calibration_factor",
+      "section": "argument_template",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.calibration_factor"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "example[0]: null is not allowed at $.optical_density",
+      "location": "$.optical_density",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.optical_density"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "example[1]: null is not allowed at $.optical_density",
+      "location": "$.optical_density",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.optical_density"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "type_mismatch",
+      "message": "example[1]: null is not allowed at $.calibration_factor",
+      "location": "$.calibration_factor",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "type_mismatch",
+        "location": "$.calibration_factor"
+      }
+    }
+  ],
+  "semantic_hints": {},
+  "method_trace": [
+    {
+      "trace_type": "generation_backend",
+      "configured_generation_backend": "heuristic",
+      "actual_generation_backend": "heuristic",
+      "generation_fallback_used": false,
+      "generation_fallback_reason": null
+    },
+    {
+      "trace_type": "multi_candidate_generation",
+      "candidate_id": "calculate_cell_density__cand_00_concise_default",
+      "generation_strategy": "concise_default",
+      "prompt_template_id": "heuristic_concise_default_v1"
+    }
+  ],
+  "skill_metadata": {
+    "candidate_id": "calculate_cell_density__cand_00_concise_default",
+    "generation_strategy": "concise_default",
+    "prompt_template_id": "heuristic_concise_default_v1"
+  },
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.15,
+    "auth_required": false,
+    "documentation_length": 107,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "side_effect_hints": [],
+  "safety_hints": [],
+  "behavior_metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.25,
+    "avg_prediction_latency_ms": 0.1318
+  },
+  "reliability_score": {
+    "score": 12.5,
+    "decision": "repair",
+    "features": {
+      "formula": "R = 100*(0.20*V + 0.30*P + 0.30*N + 0.10*A + 0.05*C + 0.05*S) - 5*repair_rounds",
+      "components": {
+        "V": 0.0,
+        "P": 0.0,
+        "N": 0.0,
+        "A": 0.25,
+        "C": 1.0,
+        "S": 1.0
+      },
+      "weights": {
+        "V": 0.2,
+        "P": 0.3,
+        "N": 0.3,
+        "A": 0.1,
+        "C": 0.05,
+        "S": 0.05
+      },
+      "weighted_component_sum": 0.125,
+      "repair_penalty": 0.0,
+      "critical_failures": [
+        "structural_validation_error",
+        "harmful_skill_injection"
+      ],
+      "validation_error_count": 5,
+      "validation_warning_count": 0,
+      "repairable_issue_count": 5,
+      "schema_argument_coverage": 1.0,
+      "required_argument_coverage": 1.0,
+      "enum_argument_coverage": 1.0,
+      "compactness": 1.0,
+      "safety_annotation_preservation": 1.0,
+      "token_overhead_estimate": 217,
+      "repair_rounds": 0,
+      "trigger_precision": 0.4,
+      "trigger_recall": 1.0,
+      "harmful_skill_injection_rate": 1.0,
+      "behavior_exact_match_rate": 0.0,
+      "avg_argument_validity": 0.25,
+      "avg_prediction_latency_ms": 0.1318,
+      "deploy_threshold": 85.0,
+      "repair_threshold": 60.0
+    },
+    "rationale": [
+      "formula score 12.5000 from components {'V': 0.0, 'P': 0.0, 'N': 0.0, 'A': 0.25, 'C': 1.0, 'S': 1.0}",
+      "critical failure(s): structural_validation_error, harmful_skill_injection",
+      "falls below repair threshold"
+    ],
+    "threshold": 85.0
+  },
+  "repair_report": null
+}

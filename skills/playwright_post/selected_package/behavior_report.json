@@ -1,0 +1,217 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0166_playwright_post_negative_easy_0_out_of_domain_request",
+      "tool_name": "playwright_post",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to playwright post.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "url": "https://example.com/resource",
+        "value": "sample_value_1",
+        "token": "sample_token_1",
+        "headers": {}
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0988,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_post\nTool description: Perform an HTTP POST request\nSkill condition: multi_candidate_skill\nSkill summary: Perform an HTTP POST request. Provide all required fields: `url`, and `value`.\nWhen to use: [\"Use `playwright_post` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `url`, and `value`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"url\": \"https://example.com/resource\", \"value\": \"sample_value_1\", \"token\": \"sample_token_1\", \"headers\": {}}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_post\", \"arguments\": {\"url\": \"https://example.com/resource\", \"value\": \"sample_value_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_post\", \"arguments\": {\"url\": \"https://example.com/resource\", \"value\": \"sample_value_2\", \"token\": \"sample_token_2\", \"headers\": {}}}]\nSchema: {\"properties\": {\"headers\": {\"additionalProperties\": {\"type\": \"string\"}, \"description\": \"Additional headers to include in the request\", \"type\": \"object\"}, \"token\": {\"description\": \"Bearer token for authorization\", \"type\": \"string\"}, \"url\": {\"description\": \"URL to perform POST operation\", \"type\": \"string\"}, \"value\": {\"description\": \"Data to post in the body\", \"type\": \"string\"}}, \"required\": [\"url\", \"value\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to playwright post.\n",
+        "raw_model_output": "{\"arguments\": {\"headers\": {}, \"token\": \"sample_token_1\", \"url\": \"https://example.com/resource\", \"value\": \"sample_value_1\"}}",
+        "parsed_prediction": {
+          "url": "https://example.com/resource",
+          "value": "sample_value_1",
+          "token": "sample_token_1",
+          "headers": {}
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0166_playwright_post_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "playwright_post",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with playwright post.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "url": "https://example.com/resource",
+        "value": "sample_value_1",
+        "token": "sample_token_1",
+        "headers": {}
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1908,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_post\nTool description: Perform an HTTP POST request\nSkill condition: multi_candidate_skill\nSkill summary: Perform an HTTP POST request. Provide all required fields: `url`, and `value`.\nWhen to use: [\"Use `playwright_post` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `url`, and `value`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"url\": \"https://example.com/resource\", \"value\": \"sample_value_1\", \"token\": \"sample_token_1\", \"headers\": {}}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_post\", \"arguments\": {\"url\": \"https://example.com/resource\", \"value\": \"sample_value_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_post\", \"arguments\": {\"url\": \"https://example.com/resource\", \"value\": \"sample_value_2\", \"token\": \"sample_token_2\", \"headers\": {}}}]\nSchema: {\"properties\": {\"headers\": {\"additionalProperties\": {\"type\": \"string\"}, \"description\": \"Additional headers to include in the request\", \"type\": \"object\"}, \"token\": {\"description\": \"Bearer token for authorization\", \"type\": \"string\"}, \"url\": {\"description\": \"URL to perform POST operation\", \"type\": \"string\"}, \"value\": {\"description\": \"Data to post in the body\", \"type\": \"string\"}}, \"required\": [\"url\", \"value\"], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with playwright post.\n",
+        "raw_model_output": "{\"arguments\": {\"headers\": {}, \"token\": \"sample_token_1\", \"url\": \"https://example.com/resource\", \"value\": \"sample_value_1\"}}",
+        "parsed_prediction": {
+          "url": "https://example.com/resource",
+          "value": "sample_value_1",
+          "token": "sample_token_1",
+          "headers": {}
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0166_playwright_post_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "playwright_post",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use db fetch records to Fetch records from a specified database table based on certain conditions; playwright post is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "url": "https://example.com/resource",
+        "value": "sample_value_1",
+        "token": "sample_token_1",
+        "headers": {}
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.086,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_post\nTool description: Perform an HTTP POST request\nSkill condition: multi_candidate_skill\nSkill summary: Perform an HTTP POST request. Provide all required fields: `url`, and `value`.\nWhen to use: [\"Use `playwright_post` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `url`, and `value`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"url\": \"https://example.com/resource\", \"value\": \"sample_value_1\", \"token\": \"sample_token_1\", \"headers\": {}}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_post\", \"arguments\": {\"url\": \"https://example.com/resource\", \"value\": \"sample_value_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_post\", \"arguments\": {\"url\": \"https://example.com/resource\", \"value\": \"sample_value_2\", \"token\": \"sample_token_2\", \"headers\": {}}}]\nSchema: {\"properties\": {\"headers\": {\"additionalProperties\": {\"type\": \"string\"}, \"description\": \"Additional headers to include in the request\", \"type\": \"object\"}, \"token\": {\"description\": \"Bearer token for authorization\", \"type\": \"string\"}, \"url\": {\"description\": \"URL to perform POST operation\", \"type\": \"string\"}, \"value\": {\"description\": \"Data to post in the body\", \"type\": \"string\"}}, \"required\": [\"url\", \"value\"], \"type\": \"object\"}\nUser request: Use db fetch records to Fetch records from a specified database table based on certain conditions; playwright post is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"headers\": {}, \"token\": \"sample_token_1\", \"url\": \"https://example.com/resource\", \"value\": \"sample_value_1\"}}",
+        "parsed_prediction": {
+          "url": "https://example.com/resource",
+          "value": "sample_value_1",
+          "token": "sample_token_1",
+          "headers": {}
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0166_playwright_post_positive_easy_0",
+      "tool_name": "playwright_post",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use playwright post to Perform an HTTP POST request. Set url=\"https://example.com/resource\", value=\"value_0\".",
+      "exact_match": false,
+      "argument_validity": 0.5,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "url": "https://example.com/resource",
+        "value": "sample_value_1",
+        "token": "sample_token_1",
+        "headers": {}
+      },
+      "expected_arguments": {
+        "url": "https://example.com/resource",
+        "value": "value_0"
+      },
+      "prediction_latency_ms": 0.0728,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_post\nTool description: Perform an HTTP POST request\nSkill condition: multi_candidate_skill\nSkill summary: Perform an HTTP POST request. Provide all required fields: `url`, and `value`.\nWhen to use: [\"Use `playwright_post` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `url`, and `value`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"url\": \"https://example.com/resource\", \"value\": \"sample_value_1\", \"token\": \"sample_token_1\", \"headers\": {}}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_post\", \"arguments\": {\"url\": \"https://example.com/resource\", \"value\": \"sample_value_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_post\", \"arguments\": {\"url\": \"https://example.com/resource\", \"value\": \"sample_value_2\", \"token\": \"sample_token_2\", \"headers\": {}}}]\nSchema: {\"properties\": {\"headers\": {\"additionalProperties\": {\"type\": \"string\"}, \"description\": \"Additional headers to include in the request\", \"type\": \"object\"}, \"token\": {\"description\": \"Bearer token for authorization\", \"type\": \"string\"}, \"url\": {\"description\": \"URL to perform POST operation\", \"type\": \"string\"}, \"value\": {\"description\": \"Data to post in the body\", \"type\": \"string\"}}, \"required\": [\"url\", \"value\"], \"type\": \"object\"}\nUser request: Use playwright post to Perform an HTTP POST request. Set url=\"https://example.com/resource\", value=\"value_0\".\n",
+        "raw_model_output": "{\"arguments\": {\"headers\": {}, \"token\": \"sample_token_1\", \"url\": \"https://example.com/resource\", \"value\": \"sample_value_1\"}}",
+        "parsed_prediction": {
+          "url": "https://example.com/resource",
+          "value": "sample_value_1",
+          "token": "sample_token_1",
+          "headers": {}
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0166_playwright_post_positive_medium_0",
+      "tool_name": "playwright_post",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Perform an HTTP POST request. The relevant details are url=\"https://example.com/resource\", value=\"value_7\".",
+      "exact_match": false,
+      "argument_validity": 0.5,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "url": "https://example.com/resource",
+        "value": "sample_value_1",
+        "token": "sample_token_1",
+        "headers": {}
+      },
+      "expected_arguments": {
+        "url": "https://example.com/resource",
+        "value": "value_7"
+      },
+      "prediction_latency_ms": 0.0863,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_post\nTool description: Perform an HTTP POST request\nSkill condition: multi_candidate_skill\nSkill summary: Perform an HTTP POST request. Provide all required fields: `url`, and `value`.\nWhen to use: [\"Use `playwright_post` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `url`, and `value`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"url\": \"https://example.com/resource\", \"value\": \"sample_value_1\", \"token\": \"sample_token_1\", \"headers\": {}}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_post\", \"arguments\": {\"url\": \"https://example.com/resource\", \"value\": \"sample_value_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_post\", \"arguments\": {\"url\": \"https://example.com/resource\", \"value\": \"sample_value_2\", \"token\": \"sample_token_2\", \"headers\": {}}}]\nSchema: {\"properties\": {\"headers\": {\"additionalProperties\": {\"type\": \"string\"}, \"description\": \"Additional headers to include in the request\", \"type\": \"object\"}, \"token\": {\"description\": \"Bearer token for authorization\", \"type\": \"string\"}, \"url\": {\"description\": \"URL to perform POST operation\", \"type\": \"string\"}, \"value\": {\"description\": \"Data to post in the body\", \"type\": \"string\"}}, \"required\": [\"url\", \"value\"], \"type\": \"object\"}\nUser request: I need help with this task: Perform an HTTP POST request. The relevant details are url=\"https://example.com/resource\", value=\"value_7\".\n",
+        "raw_model_output": "{\"arguments\": {\"headers\": {}, \"token\": \"sample_token_1\", \"url\": \"https://example.com/resource\", \"value\": \"sample_value_1\"}}",
+        "parsed_prediction": {
+          "url": "https://example.com/resource",
+          "value": "sample_value_1",
+          "token": "sample_token_1",
+          "headers": {}
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.5,
+    "avg_prediction_latency_ms": 0.1069
+  }
+}

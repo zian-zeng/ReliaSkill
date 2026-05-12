@@ -1,0 +1,2 @@
+{"scenario": "Richer invocation that uses optional controls for trigger-long-running-operation", "arguments": {"duration": "sample_duration_2", "steps": 2.0}}
+{"scenario": "Optional, enum, nested, or array argument example.", "arguments": {"duration": "sample_duration_4", "steps": 4.0}}

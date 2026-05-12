@@ -1,0 +1,52 @@
+{
+  "tool_name": "tensorflow_hub__faster_rcnn_resnet50_v1_640x640__hub_load_https_tfhub_dev_tensorflow_faster_rcnn_resnet50_v1_640x640_1",
+  "server_name": "bfcl_tensorflow_api",
+  "tool_purpose": "A pre-trained Faster R-CNN model with ResNet-50 backbone for object detection in images Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/tensorflow/faster_rcnn/resnet50_v1_640x640/1').",
+  "input_schema_raw": {
+    "properties": {},
+    "required": [],
+    "type": "object"
+  },
+  "arguments": [],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ],
+  "doc_snippets": [
+    "A pre-trained Faster R-CNN model with ResNet-50 backbone for object detection in images Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/tensorflow/faster_rcnn/resnet50_v1_640x640/1').",
+    "faster_rcnn_resnet50_v1_640x640",
+    "Detect objects in images"
+  ],
+  "source_pointer": "bfcl",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 241,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 1,
+    "num_arguments": 0,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "num_top_level_arguments": 0,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "empty_input_schema",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "tensorflow_hub__faster_rcnn_resnet50_v1_640x640__hub_load_https_tfhub_dev_tensorflow_faster_rcnn_resnet50_v1_640x640_1",
+    "server_name": "bfcl_tensorflow_api",
+    "source_pointer": "bfcl"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

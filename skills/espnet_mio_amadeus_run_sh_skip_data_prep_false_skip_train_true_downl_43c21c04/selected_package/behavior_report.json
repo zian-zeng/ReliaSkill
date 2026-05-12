@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0018_espnet_mio_amadeus_run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04_negative_easy_0_out_of_domain_request",
+      "tool_name": "espnet__mio_amadeus__run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to espnet  mio amadeus  run sh skip data prep false skip train true downl 43c21c04.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0323,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: espnet__mio_amadeus__run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04\nTool description: This model was trained by mio using amadeus recipe in espnet. Framework: ESPnet. Functionality: Text-to-Speech. API call: ./run.sh --skip_data_prep false --skip_train true --download_model mio/amadeus.\nSkill condition: multi_candidate_skill\nSkill summary: This model was trained by mio using amadeus recipe in espnet. Framework: ESPnet. Functionality: Text-to-Speech. API call: ./run.sh --skip_data_prep false --skip_train true --download_model mio/amadeus. This tool has no required input fields.\nWhen to use: [\"Use `espnet__mio_amadeus__run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to espnet  mio amadeus  run sh skip data prep false skip train true downl 43c21c04.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0018_espnet_mio_amadeus_run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "espnet__mio_amadeus__run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with espnet  mio amadeus  run sh skip data prep false skip train true downl 43c21c04; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0287,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: espnet__mio_amadeus__run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04\nTool description: This model was trained by mio using amadeus recipe in espnet. Framework: ESPnet. Functionality: Text-to-Speech. API call: ./run.sh --skip_data_prep false --skip_train true --download_model mio/amadeus.\nSkill condition: multi_candidate_skill\nSkill summary: This model was trained by mio using amadeus recipe in espnet. Framework: ESPnet. Functionality: Text-to-Speech. API call: ./run.sh --skip_data_prep false --skip_train true --download_model mio/amadeus. This tool has no required input fields.\nWhen to use: [\"Use `espnet__mio_amadeus__run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Maybe do something with espnet  mio amadeus  run sh skip data prep false skip train true downl 43c21c04; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0018_espnet_mio_amadeus_run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "espnet__mio_amadeus__run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with espnet  mio amadeus  run sh skip data prep false skip train true downl 43c21c04.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0282,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: espnet__mio_amadeus__run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04\nTool description: This model was trained by mio using amadeus recipe in espnet. Framework: ESPnet. Functionality: Text-to-Speech. API call: ./run.sh --skip_data_prep false --skip_train true --download_model mio/amadeus.\nSkill condition: multi_candidate_skill\nSkill summary: This model was trained by mio using amadeus recipe in espnet. Framework: ESPnet. Functionality: Text-to-Speech. API call: ./run.sh --skip_data_prep false --skip_train true --download_model mio/amadeus. This tool has no required input fields.\nWhen to use: [\"Use `espnet__mio_amadeus__run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with espnet  mio amadeus  run sh skip data prep false skip train true downl 43c21c04.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0018_espnet_mio_amadeus_run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04_positive_easy_0",
+      "tool_name": "espnet__mio_amadeus__run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use espnet  mio amadeus  run sh skip data prep false skip train true downl 43c21c04 to This model was trained by mio using amadeus recipe in espnet. Framework: ESPnet. Functionality: Text-to-Speech. API call: ./run.sh --skip_da. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.029,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: espnet__mio_amadeus__run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04\nTool description: This model was trained by mio using amadeus recipe in espnet. Framework: ESPnet. Functionality: Text-to-Speech. API call: ./run.sh --skip_data_prep false --skip_train true --download_model mio/amadeus.\nSkill condition: multi_candidate_skill\nSkill summary: This model was trained by mio using amadeus recipe in espnet. Framework: ESPnet. Functionality: Text-to-Speech. API call: ./run.sh --skip_data_prep false --skip_train true --download_model mio/amadeus. This tool has no required input fields.\nWhen to use: [\"Use `espnet__mio_amadeus__run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use espnet  mio amadeus  run sh skip data prep false skip train true downl 43c21c04 to This model was trained by mio using amadeus recipe in espnet. Framework: ESPnet. Functionality: Text-to-Speech. API call: ./run.sh --skip_da. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0018_espnet_mio_amadeus_run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04_positive_medium_0",
+      "tool_name": "espnet__mio_amadeus__run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: This model was trained by mio using amadeus recipe in espnet. Framework: ESPnet. Functionality: Text-to-Speech. API call: ./run.sh --skip_da. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0296,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: espnet__mio_amadeus__run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04\nTool description: This model was trained by mio using amadeus recipe in espnet. Framework: ESPnet. Functionality: Text-to-Speech. API call: ./run.sh --skip_data_prep false --skip_train true --download_model mio/amadeus.\nSkill condition: multi_candidate_skill\nSkill summary: This model was trained by mio using amadeus recipe in espnet. Framework: ESPnet. Functionality: Text-to-Speech. API call: ./run.sh --skip_data_prep false --skip_train true --download_model mio/amadeus. This tool has no required input fields.\nWhen to use: [\"Use `espnet__mio_amadeus__run_sh_skip_data_prep_false_skip_train_true_downl_43c21c04` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: This model was trained by mio using amadeus recipe in espnet. Framework: ESPnet. Functionality: Text-to-Speech. API call: ./run.sh --skip_da. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0296
+  }
+}

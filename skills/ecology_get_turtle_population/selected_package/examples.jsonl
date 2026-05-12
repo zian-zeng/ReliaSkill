@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for ecology.get_turtle_population", "arguments": {"location": "sample_location_1"}}
+{"scenario": "Richer invocation that uses optional controls for ecology.get_turtle_population", "arguments": {"location": "sample_location_2", "year": 2, "species": true}}

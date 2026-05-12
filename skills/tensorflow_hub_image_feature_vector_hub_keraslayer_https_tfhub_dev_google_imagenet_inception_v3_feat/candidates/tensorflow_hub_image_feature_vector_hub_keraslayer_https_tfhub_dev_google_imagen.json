@@ -1,0 +1,62 @@
+{
+  "candidate_id": "tensorflow_hub_image_feature_vector_hub_keraslayer_https_tfhub_dev_google_imagenet_inception_v3_feat__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "A pre-trained model that extracts feature vectors from images using Inception V3 architecture Framework: TensorFlow Hub. Functionality: Feature extraction from images. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/inception_v3/feature_vector/5'). This tool has no required input fields.\nWhen to use:\n- Use `tensorflow_hub__image_feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_inception_v3_feature_vector_5` when the user's request directly matches this tool's purpose.\n- This tool has no required input fields.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Tool does not expose top-level input properties.",
+  "argument_template": {},
+  "examples": [],
+  "when_to_use": [
+    "Use `tensorflow_hub__image_feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_inception_v3_feature_vector_5` when the user's request directly matches this tool's purpose.",
+    "This tool has no required input fields.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Tool does not expose top-level input properties."
+  ],
+  "token_count": 171,
+  "skill_token_count": 171,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 0,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "A pre-trained model that extracts feature vectors from images using Inception V3 architecture Framework: TensorFlow Hub. Functionality: Feature extraction from images. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/inception_v3/feature_vector/5'). This tool has no required input fields.",
+    "when_to_use": [
+      "Use `tensorflow_hub__image_feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_inception_v3_feature_vector_5` when the user's request directly matches this tool's purpose.",
+      "This tool has no required input fields.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Tool does not expose top-level input properties."
+    ],
+    "argument_template": {},
+    "examples": [],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "tensorflow_hub_image_feature_vector_hub_keraslayer_https_tfhub_dev_google_imagenet_inception_v3_feat__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "tensorflow_hub_image_feature_vector_hub_keraslayer_https_tfhub_dev_google_imagenet_inception_v3_feat__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

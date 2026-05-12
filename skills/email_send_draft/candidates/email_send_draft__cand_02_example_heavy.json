@@ -1,0 +1,128 @@
+{
+  "candidate_id": "email_send_draft__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "API-Bank-style local fixture tool that marks a mock email draft as sent without using a real network service. Provide the required field `draft_id`.\nWhen to use:\n- Use `email_send_draft` when the user's request directly matches this tool's purpose.\n- Provide the required field `draft_id`.\n- Optional controls include `send_at`, `dry_run`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"draft_id\": \"sample-draft-id-001\", \"dry_run\": true, \"send_at\": \"2026-01-01T09:00:00Z\"}\nExamples:\nMinimal valid request that satisfies the required fields for email_send_draft\n{\"draft_id\": \"sample-draft-id-001\"}\nRicher invocation that uses optional controls for email_send_draft\n{\"draft_id\": \"sample-draft-id-001\", \"dry_run\": true, \"send_at\": \"2026-01-01T09:00:00Z\"}\nRequired-argument dev behavior example.\n{\"draft_id\": \"sample-draft-id-001\"}\nOptional, enum, nested, or array argument example.\n{\"draft_id\": \"sample-draft-id-001\", \"dry_run\": true, \"send_at\": \"2026-01-01T09:00:00Z\"}",
+  "argument_template": {
+    "draft_id": "sample-draft-id-001",
+    "send_at": "2026-01-01T09:00:00Z",
+    "dry_run": true
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for email_send_draft",
+      "arguments": {
+        "draft_id": "sample-draft-id-001"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for email_send_draft",
+      "arguments": {
+        "draft_id": "sample-draft-id-001",
+        "send_at": "2026-01-01T09:00:00Z",
+        "dry_run": true
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "draft_id": "sample-draft-id-001"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "draft_id": "sample-draft-id-001",
+        "send_at": "2026-01-01T09:00:00Z",
+        "dry_run": true
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `email_send_draft` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `draft_id`.",
+    "Optional controls include `send_at`, `dry_run`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 329,
+  "skill_token_count": 329,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "API-Bank-style local fixture tool that marks a mock email draft as sent without using a real network service. Provide the required field `draft_id`.",
+    "when_to_use": [
+      "Use `email_send_draft` when the user's request directly matches this tool's purpose.",
+      "Provide the required field `draft_id`.",
+      "Optional controls include `send_at`, `dry_run`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "draft_id": "sample-draft-id-001",
+      "send_at": "2026-01-01T09:00:00Z",
+      "dry_run": true
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for email_send_draft",
+        "arguments": {
+          "draft_id": "sample-draft-id-001"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for email_send_draft",
+        "arguments": {
+          "draft_id": "sample-draft-id-001",
+          "send_at": "2026-01-01T09:00:00Z",
+          "dry_run": true
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "draft_id": "sample-draft-id-001"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "draft_id": "sample-draft-id-001",
+          "send_at": "2026-01-01T09:00:00Z",
+          "dry_run": true
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "email_send_draft__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "email_send_draft__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

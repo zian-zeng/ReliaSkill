@@ -1,0 +1,206 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0137_ecology_get_turtle_population_negative_easy_0_out_of_domain_request",
+      "tool_name": "ecology.get_turtle_population",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to ecology.get turtle population.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "location": "sample_location_1",
+        "year": 1,
+        "species": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1029,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: ecology.get_turtle_population\nTool description: Get the population and species of turtles in a specific location.\nSkill condition: multi_candidate_skill\nSkill summary: Get the population and species of turtles in a specific location. Provide the required field `location`.\nWhen to use: [\"Use `ecology.get_turtle_population` when the user's request directly matches this tool's purpose.\", \"Provide the required field `location`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"location\": \"sample_location_1\", \"year\": 1, \"species\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for ecology.get_turtle_population\", \"arguments\": {\"location\": \"sample_location_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for ecology.get_turtle_population\", \"arguments\": {\"location\": \"sample_location_2\", \"year\": 2, \"species\": true}}]\nSchema: {\"properties\": {\"location\": {\"description\": \"The name of the location.\", \"type\": \"string\"}, \"species\": {\"description\": \"Whether to include species information. Default is false. (optional)\", \"type\": \"boolean\"}, \"year\": {\"description\": \"The year of the data requested. (optional) Default is 2024.\", \"type\": \"integer\"}}, \"required\": [\"location\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to ecology.get turtle population.\n",
+        "raw_model_output": "{\"arguments\": {\"location\": \"sample_location_1\", \"species\": false, \"year\": 1}}",
+        "parsed_prediction": {
+          "location": "sample_location_1",
+          "year": 1,
+          "species": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0137_ecology_get_turtle_population_negative_hard_1_missing_required_info",
+      "tool_name": "ecology.get_turtle_population",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I may need ecology.get turtle population to Get the population and species of turtles in a specific location, but I do not know location yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "location": "sample_location_1",
+        "year": 1,
+        "species": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0716,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: ecology.get_turtle_population\nTool description: Get the population and species of turtles in a specific location.\nSkill condition: multi_candidate_skill\nSkill summary: Get the population and species of turtles in a specific location. Provide the required field `location`.\nWhen to use: [\"Use `ecology.get_turtle_population` when the user's request directly matches this tool's purpose.\", \"Provide the required field `location`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"location\": \"sample_location_1\", \"year\": 1, \"species\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for ecology.get_turtle_population\", \"arguments\": {\"location\": \"sample_location_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for ecology.get_turtle_population\", \"arguments\": {\"location\": \"sample_location_2\", \"year\": 2, \"species\": true}}]\nSchema: {\"properties\": {\"location\": {\"description\": \"The name of the location.\", \"type\": \"string\"}, \"species\": {\"description\": \"Whether to include species information. Default is false. (optional)\", \"type\": \"boolean\"}, \"year\": {\"description\": \"The year of the data requested. (optional) Default is 2024.\", \"type\": \"integer\"}}, \"required\": [\"location\"], \"type\": \"object\"}\nUser request: I may need ecology.get turtle population to Get the population and species of turtles in a specific location, but I do not know location yet.\n",
+        "raw_model_output": "{\"arguments\": {\"location\": \"sample_location_1\", \"species\": false, \"year\": 1}}",
+        "parsed_prediction": {
+          "location": "sample_location_1",
+          "year": 1,
+          "species": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0137_ecology_get_turtle_population_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "ecology.get_turtle_population",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use ecology.get turtle population; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "location": "sample_location_1",
+        "year": 1,
+        "species": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0665,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: ecology.get_turtle_population\nTool description: Get the population and species of turtles in a specific location.\nSkill condition: multi_candidate_skill\nSkill summary: Get the population and species of turtles in a specific location. Provide the required field `location`.\nWhen to use: [\"Use `ecology.get_turtle_population` when the user's request directly matches this tool's purpose.\", \"Provide the required field `location`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"location\": \"sample_location_1\", \"year\": 1, \"species\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for ecology.get_turtle_population\", \"arguments\": {\"location\": \"sample_location_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for ecology.get_turtle_population\", \"arguments\": {\"location\": \"sample_location_2\", \"year\": 2, \"species\": true}}]\nSchema: {\"properties\": {\"location\": {\"description\": \"The name of the location.\", \"type\": \"string\"}, \"species\": {\"description\": \"Whether to include species information. Default is false. (optional)\", \"type\": \"boolean\"}, \"year\": {\"description\": \"The year of the data requested. (optional) Default is 2024.\", \"type\": \"integer\"}}, \"required\": [\"location\"], \"type\": \"object\"}\nUser request: Explain when someone should use ecology.get turtle population; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"location\": \"sample_location_1\", \"species\": false, \"year\": 1}}",
+        "parsed_prediction": {
+          "location": "sample_location_1",
+          "year": 1,
+          "species": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0137_ecology_get_turtle_population_positive_easy_0",
+      "tool_name": "ecology.get_turtle_population",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use ecology.get turtle population to Get the population and species of turtles in a specific location. Set location=\"Boston\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "location": "sample_location_1",
+        "year": 1,
+        "species": false
+      },
+      "expected_arguments": {
+        "location": "Boston"
+      },
+      "prediction_latency_ms": 0.0656,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: ecology.get_turtle_population\nTool description: Get the population and species of turtles in a specific location.\nSkill condition: multi_candidate_skill\nSkill summary: Get the population and species of turtles in a specific location. Provide the required field `location`.\nWhen to use: [\"Use `ecology.get_turtle_population` when the user's request directly matches this tool's purpose.\", \"Provide the required field `location`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"location\": \"sample_location_1\", \"year\": 1, \"species\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for ecology.get_turtle_population\", \"arguments\": {\"location\": \"sample_location_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for ecology.get_turtle_population\", \"arguments\": {\"location\": \"sample_location_2\", \"year\": 2, \"species\": true}}]\nSchema: {\"properties\": {\"location\": {\"description\": \"The name of the location.\", \"type\": \"string\"}, \"species\": {\"description\": \"Whether to include species information. Default is false. (optional)\", \"type\": \"boolean\"}, \"year\": {\"description\": \"The year of the data requested. (optional) Default is 2024.\", \"type\": \"integer\"}}, \"required\": [\"location\"], \"type\": \"object\"}\nUser request: Use ecology.get turtle population to Get the population and species of turtles in a specific location. Set location=\"Boston\".\n",
+        "raw_model_output": "{\"arguments\": {\"location\": \"sample_location_1\", \"species\": false, \"year\": 1}}",
+        "parsed_prediction": {
+          "location": "sample_location_1",
+          "year": 1,
+          "species": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0137_ecology_get_turtle_population_positive_medium_0",
+      "tool_name": "ecology.get_turtle_population",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Get the population and species of turtles in a specific location. The relevant details are location=\"Boston\", year=2026.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "location": "sample_location_1",
+        "year": 1,
+        "species": false
+      },
+      "expected_arguments": {
+        "location": "Boston",
+        "year": 2026
+      },
+      "prediction_latency_ms": 0.1232,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: ecology.get_turtle_population\nTool description: Get the population and species of turtles in a specific location.\nSkill condition: multi_candidate_skill\nSkill summary: Get the population and species of turtles in a specific location. Provide the required field `location`.\nWhen to use: [\"Use `ecology.get_turtle_population` when the user's request directly matches this tool's purpose.\", \"Provide the required field `location`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"location\": \"sample_location_1\", \"year\": 1, \"species\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for ecology.get_turtle_population\", \"arguments\": {\"location\": \"sample_location_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for ecology.get_turtle_population\", \"arguments\": {\"location\": \"sample_location_2\", \"year\": 2, \"species\": true}}]\nSchema: {\"properties\": {\"location\": {\"description\": \"The name of the location.\", \"type\": \"string\"}, \"species\": {\"description\": \"Whether to include species information. Default is false. (optional)\", \"type\": \"boolean\"}, \"year\": {\"description\": \"The year of the data requested. (optional) Default is 2024.\", \"type\": \"integer\"}}, \"required\": [\"location\"], \"type\": \"object\"}\nUser request: I need help with this task: Get the population and species of turtles in a specific location. The relevant details are location=\"Boston\", year=2026.\n",
+        "raw_model_output": "{\"arguments\": {\"location\": \"sample_location_1\", \"species\": false, \"year\": 1}}",
+        "parsed_prediction": {
+          "location": "sample_location_1",
+          "year": 1,
+          "species": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.086
+  }
+}

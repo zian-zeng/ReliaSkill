@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for mock_messaging_email_mock_search_mail_005", "arguments": {"query": "sample query"}}
+{"scenario": "Richer invocation that uses optional controls for mock_messaging_email_mock_search_mail_005", "arguments": {"query": "sample query", "folder": "sent", "limit": 2}}

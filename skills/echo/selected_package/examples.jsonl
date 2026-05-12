@@ -1,0 +1,4 @@
+{"scenario": "Minimal valid request that satisfies the required fields for echo", "arguments": {"message": "sample_message_1"}}
+{"scenario": "Richer invocation that uses optional controls for echo", "arguments": {"message": "sample_message_2"}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"message": "sample_message_3"}}
+{"scenario": "Optional, enum, nested, or array argument example.", "arguments": {"message": "sample_message_4"}}

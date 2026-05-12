@@ -1,0 +1,229 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0179_start_codegen_session_negative_easy_0_out_of_domain_request",
+      "tool_name": "start_codegen_session",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to start codegen session.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "options": {
+          "includeComments": false,
+          "outputPath": "data/sample.txt",
+          "testNamePrefix": "sample-name"
+        }
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0997,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: start_codegen_session\nTool description: Start a new code generation session to record Playwright actions\nSkill condition: multi_candidate_skill\nSkill summary: Start a new code generation session to record Playwright actions. Provide the required field `options`.\nWhen to use: [\"Use `start_codegen_session` when the user's request directly matches this tool's purpose.\", \"Provide the required field `options`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"options\": {\"includeComments\": false, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for start_codegen_session\", \"arguments\": {\"options\": {\"includeComments\": false, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}}, {\"scenario\": \"Richer invocation that uses optional controls for start_codegen_session\", \"arguments\": {\"options\": {\"includeComments\": true, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}}]\nSchema: {\"properties\": {\"options\": {\"description\": \"Code generation options\", \"properties\": {\"includeComments\": {\"description\": \"Whether to include descriptive comments in generated tests\", \"type\": \"boolean\"}, \"outputPath\": {\"description\": \"Directory path where generated tests will be saved (use absolute path)\", \"type\": \"string\"}, \"testNamePrefix\": {\"description\": \"Prefix to use for generated test names (default: 'GeneratedTest')\", \"type\": \"string\"}}, \"required\": [\"outputPath\"], \"type\": \"object\"}}, \"required\": [\"options\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to start codegen session.\n",
+        "raw_model_output": "{\"arguments\": {\"options\": {\"includeComments\": false, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}}",
+        "parsed_prediction": {
+          "options": {
+            "includeComments": false,
+            "outputPath": "data/sample.txt",
+            "testNamePrefix": "sample-name"
+          }
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0179_start_codegen_session_negative_hard_1_near_miss_intent",
+      "tool_name": "start_codegen_session",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to start codegen session, but I only want a checklist for how to Start a new code generation session to record Playwright actions; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "options": {
+          "includeComments": false,
+          "outputPath": "data/sample.txt",
+          "testNamePrefix": "sample-name"
+        }
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.2461,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: start_codegen_session\nTool description: Start a new code generation session to record Playwright actions\nSkill condition: multi_candidate_skill\nSkill summary: Start a new code generation session to record Playwright actions. Provide the required field `options`.\nWhen to use: [\"Use `start_codegen_session` when the user's request directly matches this tool's purpose.\", \"Provide the required field `options`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"options\": {\"includeComments\": false, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for start_codegen_session\", \"arguments\": {\"options\": {\"includeComments\": false, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}}, {\"scenario\": \"Richer invocation that uses optional controls for start_codegen_session\", \"arguments\": {\"options\": {\"includeComments\": true, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}}]\nSchema: {\"properties\": {\"options\": {\"description\": \"Code generation options\", \"properties\": {\"includeComments\": {\"description\": \"Whether to include descriptive comments in generated tests\", \"type\": \"boolean\"}, \"outputPath\": {\"description\": \"Directory path where generated tests will be saved (use absolute path)\", \"type\": \"string\"}, \"testNamePrefix\": {\"description\": \"Prefix to use for generated test names (default: 'GeneratedTest')\", \"type\": \"string\"}}, \"required\": [\"outputPath\"], \"type\": \"object\"}}, \"required\": [\"options\"], \"type\": \"object\"}\nUser request: This sounds close to start codegen session, but I only want a checklist for how to Start a new code generation session to record Playwright actions; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {\"options\": {\"includeComments\": false, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}}",
+        "parsed_prediction": {
+          "options": {
+            "includeComments": false,
+            "outputPath": "data/sample.txt",
+            "testNamePrefix": "sample-name"
+          }
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0179_start_codegen_session_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "start_codegen_session",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with start codegen session.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "options": {
+          "includeComments": false,
+          "outputPath": "data/sample.txt",
+          "testNamePrefix": "sample-name"
+        }
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0798,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: start_codegen_session\nTool description: Start a new code generation session to record Playwright actions\nSkill condition: multi_candidate_skill\nSkill summary: Start a new code generation session to record Playwright actions. Provide the required field `options`.\nWhen to use: [\"Use `start_codegen_session` when the user's request directly matches this tool's purpose.\", \"Provide the required field `options`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"options\": {\"includeComments\": false, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for start_codegen_session\", \"arguments\": {\"options\": {\"includeComments\": false, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}}, {\"scenario\": \"Richer invocation that uses optional controls for start_codegen_session\", \"arguments\": {\"options\": {\"includeComments\": true, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}}]\nSchema: {\"properties\": {\"options\": {\"description\": \"Code generation options\", \"properties\": {\"includeComments\": {\"description\": \"Whether to include descriptive comments in generated tests\", \"type\": \"boolean\"}, \"outputPath\": {\"description\": \"Directory path where generated tests will be saved (use absolute path)\", \"type\": \"string\"}, \"testNamePrefix\": {\"description\": \"Prefix to use for generated test names (default: 'GeneratedTest')\", \"type\": \"string\"}}, \"required\": [\"outputPath\"], \"type\": \"object\"}}, \"required\": [\"options\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with start codegen session.\n",
+        "raw_model_output": "{\"arguments\": {\"options\": {\"includeComments\": false, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}}",
+        "parsed_prediction": {
+          "options": {
+            "includeComments": false,
+            "outputPath": "data/sample.txt",
+            "testNamePrefix": "sample-name"
+          }
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0179_start_codegen_session_positive_easy_0",
+      "tool_name": "start_codegen_session",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use start codegen session to Start a new code generation session to record Playwright actions. Set options={\"outputPath\": \"docs/control_0.md\"}.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "options": {
+          "includeComments": false,
+          "outputPath": "data/sample.txt",
+          "testNamePrefix": "sample-name"
+        }
+      },
+      "expected_arguments": {
+        "options": {
+          "outputPath": "docs/control_0.md"
+        }
+      },
+      "prediction_latency_ms": 0.0775,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: start_codegen_session\nTool description: Start a new code generation session to record Playwright actions\nSkill condition: multi_candidate_skill\nSkill summary: Start a new code generation session to record Playwright actions. Provide the required field `options`.\nWhen to use: [\"Use `start_codegen_session` when the user's request directly matches this tool's purpose.\", \"Provide the required field `options`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"options\": {\"includeComments\": false, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for start_codegen_session\", \"arguments\": {\"options\": {\"includeComments\": false, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}}, {\"scenario\": \"Richer invocation that uses optional controls for start_codegen_session\", \"arguments\": {\"options\": {\"includeComments\": true, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}}]\nSchema: {\"properties\": {\"options\": {\"description\": \"Code generation options\", \"properties\": {\"includeComments\": {\"description\": \"Whether to include descriptive comments in generated tests\", \"type\": \"boolean\"}, \"outputPath\": {\"description\": \"Directory path where generated tests will be saved (use absolute path)\", \"type\": \"string\"}, \"testNamePrefix\": {\"description\": \"Prefix to use for generated test names (default: 'GeneratedTest')\", \"type\": \"string\"}}, \"required\": [\"outputPath\"], \"type\": \"object\"}}, \"required\": [\"options\"], \"type\": \"object\"}\nUser request: Use start codegen session to Start a new code generation session to record Playwright actions. Set options={\"outputPath\": \"docs/control_0.md\"}.\n",
+        "raw_model_output": "{\"arguments\": {\"options\": {\"includeComments\": false, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}}",
+        "parsed_prediction": {
+          "options": {
+            "includeComments": false,
+            "outputPath": "data/sample.txt",
+            "testNamePrefix": "sample-name"
+          }
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0179_start_codegen_session_positive_medium_0",
+      "tool_name": "start_codegen_session",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Start a new code generation session to record Playwright actions. The relevant details are options={\"outputPath\": \"docs/control_7.md\"}.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "options": {
+          "includeComments": false,
+          "outputPath": "data/sample.txt",
+          "testNamePrefix": "sample-name"
+        }
+      },
+      "expected_arguments": {
+        "options": {
+          "outputPath": "docs/control_7.md"
+        }
+      },
+      "prediction_latency_ms": 0.0742,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: start_codegen_session\nTool description: Start a new code generation session to record Playwright actions\nSkill condition: multi_candidate_skill\nSkill summary: Start a new code generation session to record Playwright actions. Provide the required field `options`.\nWhen to use: [\"Use `start_codegen_session` when the user's request directly matches this tool's purpose.\", \"Provide the required field `options`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"options\": {\"includeComments\": false, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for start_codegen_session\", \"arguments\": {\"options\": {\"includeComments\": false, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}}, {\"scenario\": \"Richer invocation that uses optional controls for start_codegen_session\", \"arguments\": {\"options\": {\"includeComments\": true, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}}]\nSchema: {\"properties\": {\"options\": {\"description\": \"Code generation options\", \"properties\": {\"includeComments\": {\"description\": \"Whether to include descriptive comments in generated tests\", \"type\": \"boolean\"}, \"outputPath\": {\"description\": \"Directory path where generated tests will be saved (use absolute path)\", \"type\": \"string\"}, \"testNamePrefix\": {\"description\": \"Prefix to use for generated test names (default: 'GeneratedTest')\", \"type\": \"string\"}}, \"required\": [\"outputPath\"], \"type\": \"object\"}}, \"required\": [\"options\"], \"type\": \"object\"}\nUser request: I need help with this task: Start a new code generation session to record Playwright actions. The relevant details are options={\"outputPath\": \"docs/control_7.md\"}.\n",
+        "raw_model_output": "{\"arguments\": {\"options\": {\"includeComments\": false, \"outputPath\": \"data/sample.txt\", \"testNamePrefix\": \"sample-name\"}}}",
+        "parsed_prediction": {
+          "options": {
+            "includeComments": false,
+            "outputPath": "data/sample.txt",
+            "testNamePrefix": "sample-name"
+          }
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.1155
+  }
+}

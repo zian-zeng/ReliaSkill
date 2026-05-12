@@ -1,0 +1,108 @@
+{
+  "tool_name": "calculate_cell_density",
+  "server_name": "bfcl_v3",
+  "tool_purpose": "Calculate the cell density of a biological sample based on its optical density and the experiment dilution.",
+  "input_schema_raw": {
+    "properties": {
+      "calibration_factor": {
+        "description": "The calibration factor to adjust the density, default value is 1e9 assuming cell density is in CFU/mL.",
+        "type": "float"
+      },
+      "dilution": {
+        "description": "The dilution factor applied during the experiment.",
+        "type": "integer"
+      },
+      "optical_density": {
+        "description": "The optical density of the sample, usually obtained from a spectrophotometer reading.",
+        "type": "float"
+      }
+    },
+    "required": [
+      "optical_density",
+      "dilution"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "optical_density",
+      "type": "float",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The optical density of the sample, usually obtained from a spectrophotometer reading.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.optical_density"
+    },
+    {
+      "name": "dilution",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The dilution factor applied during the experiment.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.dilution"
+    },
+    {
+      "name": "calibration_factor",
+      "type": "float",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "The calibration factor to adjust the density, default value is 1e9 assuming cell density is in CFU/mL.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.calibration_factor"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Calculate the cell density of a biological sample based on its optical density and the experiment dilution.",
+    "calculate_cell_density",
+    "Calculate the cell density of a biological sample based on its optical density and the experiment di"
+  ],
+  "source_pointer": "bfcl_v3",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.15,
+    "auth_required": false,
+    "documentation_length": 107,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "calculate_cell_density",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

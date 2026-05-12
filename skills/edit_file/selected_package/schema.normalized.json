@@ -1,0 +1,123 @@
+{
+  "tool_name": "edit_file",
+  "server_name": "filesystem",
+  "tool_purpose": "Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories.",
+  "input_schema_raw": {
+    "properties": {
+      "dryRun": {
+        "type": "boolean"
+      },
+      "edits": {
+        "items": {
+          "properties": {
+            "newText": {
+              "type": "string"
+            },
+            "oldText": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "oldText",
+            "newText"
+          ],
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "path": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "path",
+      "edits",
+      "dryRun"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "path",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.path"
+    },
+    {
+      "name": "edits",
+      "type": "array",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": "object",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.edits"
+    },
+    {
+      "name": "dryRun",
+      "type": "boolean",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.dryRun"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories.",
+    "Edit File"
+  ],
+  "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.6,
+    "auth_required": false,
+    "documentation_length": 185,
+    "has_array_argument": true,
+    "has_boolean_flag": true,
+    "has_nested_object": true,
+    "has_side_effect": true,
+    "max_schema_depth": 4,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 3,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "write"
+  },
+  "ambiguity_flags": [
+    "missing_argument_description:path",
+    "missing_argument_description:edits",
+    "missing_argument_description:dryRun",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "edit_file",
+    "server_name": "filesystem",
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\filesystem\\index.ts"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

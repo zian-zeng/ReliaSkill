@@ -1,0 +1,102 @@
+{
+  "candidate_id": "analyze_dna_sequence__cand_00_concise_default",
+  "generation_strategy": "concise_default",
+  "prompt_template_id": "heuristic_concise_default_v1",
+  "skill_text": "Analyzes the DNA sequence based on a reference sequence and return any potential mutations. Provide all required fields: `sequence`, and `reference_sequence`.\nWhen to use:\n- Use `analyze_dna_sequence` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `sequence`, and `reference_sequence`.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `mutation_type`: 'insertion', 'deletion', 'substitution'.\n- Do not use when required inputs are missing.\nArgument template:\n{\"mutation_type\": \"insertion\", \"reference_sequence\": \"sample_reference_sequence_1\", \"sequence\": \"sample_sequence_1\"}\nExamples:\nMinimal valid request that satisfies the required fields for analyze_dna_sequence\n{\"reference_sequence\": \"sample_reference_sequence_1\", \"sequence\": \"sample_sequence_1\"}\nRicher invocation that uses optional controls for analyze_dna_sequence\n{\"mutation_type\": \"deletion\", \"reference_sequence\": \"sample_reference_sequence_2\", \"sequence\": \"sample_sequence_2\"}",
+  "argument_template": {
+    "sequence": "sample_sequence_1",
+    "reference_sequence": "sample_reference_sequence_1",
+    "mutation_type": "insertion"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for analyze_dna_sequence",
+      "arguments": {
+        "sequence": "sample_sequence_1",
+        "reference_sequence": "sample_reference_sequence_1"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for analyze_dna_sequence",
+      "arguments": {
+        "sequence": "sample_sequence_2",
+        "reference_sequence": "sample_reference_sequence_2",
+        "mutation_type": "deletion"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `analyze_dna_sequence` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `sequence`, and `reference_sequence`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `mutation_type`: 'insertion', 'deletion', 'substitution'.",
+    "Do not use when required inputs are missing."
+  ],
+  "token_count": 250,
+  "skill_token_count": 250,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 2,
+  "nonuse_boundary_count": 4,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Analyzes the DNA sequence based on a reference sequence and return any potential mutations. Provide all required fields: `sequence`, and `reference_sequence`.",
+    "when_to_use": [
+      "Use `analyze_dna_sequence` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `sequence`, and `reference_sequence`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `mutation_type`: 'insertion', 'deletion', 'substitution'.",
+      "Do not use when required inputs are missing."
+    ],
+    "argument_template": {
+      "sequence": "sample_sequence_1",
+      "reference_sequence": "sample_reference_sequence_1",
+      "mutation_type": "insertion"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for analyze_dna_sequence",
+        "arguments": {
+          "sequence": "sample_sequence_1",
+          "reference_sequence": "sample_reference_sequence_1"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for analyze_dna_sequence",
+        "arguments": {
+          "sequence": "sample_sequence_2",
+          "reference_sequence": "sample_reference_sequence_2",
+          "mutation_type": "deletion"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "analyze_dna_sequence__cand_00_concise_default",
+        "generation_strategy": "concise_default",
+        "prompt_template_id": "heuristic_concise_default_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "analyze_dna_sequence__cand_00_concise_default",
+      "generation_strategy": "concise_default",
+      "prompt_template_id": "heuristic_concise_default_v1"
+    }
+  }
+}

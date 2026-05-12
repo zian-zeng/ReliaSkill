@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for puppeteer_navigate", "arguments": {"url": "https://example.com/resource"}}
+{"scenario": "Richer invocation that uses optional controls for puppeteer_navigate", "arguments": {"url": "https://example.com/resource", "launchOptions": {}, "allowDangerous": true}}

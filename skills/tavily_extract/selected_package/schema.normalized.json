@@ -1,0 +1,144 @@
+{
+  "tool_name": "tavily-extract",
+  "server_name": "search",
+  "tool_purpose": "A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content analysis, and research tasks.",
+  "input_schema_raw": {
+    "properties": {
+      "extract_depth": {
+        "default": "basic",
+        "description": "Depth of extraction - 'basic' or 'advanced', if usrls are linkedin use 'advanced' or if explicitly told to use advanced",
+        "enum": [
+          "basic",
+          "advanced"
+        ],
+        "type": "string"
+      },
+      "format": {
+        "default": "markdown",
+        "description": "The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.",
+        "enum": [
+          "markdown",
+          "text"
+        ],
+        "type": "string"
+      },
+      "include_images": {
+        "default": false,
+        "description": "Include a list of images extracted from the urls in the response",
+        "type": "boolean"
+      },
+      "urls": {
+        "description": "List of URLs to extract content from",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      }
+    },
+    "required": [
+      "urls"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "urls",
+      "type": "array",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "List of URLs to extract content from",
+      "items_type": "string",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.urls"
+    },
+    {
+      "name": "extract_depth",
+      "type": "string",
+      "required": false,
+      "default": "basic",
+      "enum": [
+        "basic",
+        "advanced"
+      ],
+      "description": "Depth of extraction - 'basic' or 'advanced', if usrls are linkedin use 'advanced' or if explicitly told to use advanced",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.extract_depth"
+    },
+    {
+      "name": "include_images",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "enum": null,
+      "description": "Include a list of images extracted from the urls in the response",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.include_images"
+    },
+    {
+      "name": "format",
+      "type": "string",
+      "required": false,
+      "default": "markdown",
+      "enum": [
+        "markdown",
+        "text"
+      ],
+      "description": "The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.format"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content analysis, and research tasks.",
+    "Tavily-Extract"
+  ],
+  "source_pointer": "data/raw/mcptoolbenchpp_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.15,
+    "auth_required": false,
+    "documentation_length": 165,
+    "has_array_argument": true,
+    "has_boolean_flag": true,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 3,
+    "num_arguments": 4,
+    "num_enum_arguments": 2,
+    "num_enum_fields": 2,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 3,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 4,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "tavily-extract",
+    "server_name": "search",
+    "source_pointer": "data/raw/mcptoolbenchpp_tools.json"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

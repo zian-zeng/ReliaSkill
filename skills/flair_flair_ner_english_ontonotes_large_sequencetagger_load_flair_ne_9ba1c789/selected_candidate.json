@@ -1,0 +1,62 @@
+{
+  "candidate_id": "flair_flair_ner_english_ontonotes_large_sequencetagger_load_flair_ne_9ba1c789__cand_00_concise_default",
+  "generation_strategy": "concise_default",
+  "prompt_template_id": "heuristic_concise_default_v1",
+  "skill_text": "English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags such as cardinal value, date value, event name, building name, geo-political entity, language name, law name.\nWhen to use:\n- Use `flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789` when the user's request directly matches this tool's purpose.\n- This tool has no required input fields.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Tool does not expose top-level input properties.\n- Do not use when required inputs are missing.",
+  "argument_template": {},
+  "examples": [],
+  "when_to_use": [
+    "Use `flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789` when the user's request directly matches this tool's purpose.",
+    "This tool has no required input fields."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Tool does not expose top-level input properties.",
+    "Do not use when required inputs are missing."
+  ],
+  "token_count": 165,
+  "skill_token_count": 165,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 0,
+  "nonuse_boundary_count": 4,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags such as cardinal value, date value, event name, building name, geo-political entity, language name, law name.",
+    "when_to_use": [
+      "Use `flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789` when the user's request directly matches this tool's purpose.",
+      "This tool has no required input fields."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Tool does not expose top-level input properties.",
+      "Do not use when required inputs are missing."
+    ],
+    "argument_template": {},
+    "examples": [],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "flair_flair_ner_english_ontonotes_large_sequencetagger_load_flair_ne_9ba1c789__cand_00_concise_default",
+        "generation_strategy": "concise_default",
+        "prompt_template_id": "heuristic_concise_default_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "flair_flair_ner_english_ontonotes_large_sequencetagger_load_flair_ne_9ba1c789__cand_00_concise_default",
+      "generation_strategy": "concise_default",
+      "prompt_template_id": "heuristic_concise_default_v1"
+    }
+  }
+}

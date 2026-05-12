@@ -1,0 +1,209 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0203_delete_entities_negative_easy_0_out_of_domain_request",
+      "tool_name": "delete_entities",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to delete entities.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "entityNames": [
+          "sample-name"
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0888,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: delete_entities\nTool description: Delete multiple entities and their associated relations from the knowledge graph\nSkill condition: multi_candidate_skill\nSkill summary: Delete multiple entities and their associated relations from the knowledge graph. Provide the required field `entityNames`.\nWhen to use: [\"Use `delete_entities` when the user's request directly matches this tool's purpose.\", \"Provide the required field `entityNames`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"entityNames\": [\"sample-name\"]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for delete_entities\", \"arguments\": {\"entityNames\": [\"sample-name\"]}}, {\"scenario\": \"Richer invocation that uses optional controls for delete_entities\", \"arguments\": {\"entityNames\": [\"sample-name\"]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"entityNames\": [\"sample-name\"]}}]\nSchema: {\"properties\": {\"entityNames\": {\"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"entityNames\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to delete entities.\n",
+        "raw_model_output": "{\"arguments\": {\"entityNames\": [\"sample-name\"]}}",
+        "parsed_prediction": {
+          "entityNames": [
+            "sample-name"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0203_delete_entities_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "delete_entities",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with delete entities; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "entityNames": [
+          "sample-name"
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1556,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: delete_entities\nTool description: Delete multiple entities and their associated relations from the knowledge graph\nSkill condition: multi_candidate_skill\nSkill summary: Delete multiple entities and their associated relations from the knowledge graph. Provide the required field `entityNames`.\nWhen to use: [\"Use `delete_entities` when the user's request directly matches this tool's purpose.\", \"Provide the required field `entityNames`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"entityNames\": [\"sample-name\"]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for delete_entities\", \"arguments\": {\"entityNames\": [\"sample-name\"]}}, {\"scenario\": \"Richer invocation that uses optional controls for delete_entities\", \"arguments\": {\"entityNames\": [\"sample-name\"]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"entityNames\": [\"sample-name\"]}}]\nSchema: {\"properties\": {\"entityNames\": {\"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"entityNames\"], \"type\": \"object\"}\nUser request: Maybe do something with delete entities; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {\"entityNames\": [\"sample-name\"]}}",
+        "parsed_prediction": {
+          "entityNames": [
+            "sample-name"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0203_delete_entities_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "delete_entities",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with delete entities.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "entityNames": [
+          "sample-name"
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0758,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: delete_entities\nTool description: Delete multiple entities and their associated relations from the knowledge graph\nSkill condition: multi_candidate_skill\nSkill summary: Delete multiple entities and their associated relations from the knowledge graph. Provide the required field `entityNames`.\nWhen to use: [\"Use `delete_entities` when the user's request directly matches this tool's purpose.\", \"Provide the required field `entityNames`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"entityNames\": [\"sample-name\"]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for delete_entities\", \"arguments\": {\"entityNames\": [\"sample-name\"]}}, {\"scenario\": \"Richer invocation that uses optional controls for delete_entities\", \"arguments\": {\"entityNames\": [\"sample-name\"]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"entityNames\": [\"sample-name\"]}}]\nSchema: {\"properties\": {\"entityNames\": {\"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"entityNames\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with delete entities.\n",
+        "raw_model_output": "{\"arguments\": {\"entityNames\": [\"sample-name\"]}}",
+        "parsed_prediction": {
+          "entityNames": [
+            "sample-name"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0203_delete_entities_positive_easy_0",
+      "tool_name": "delete_entities",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use delete entities to Delete multiple entities and their associated relations from the knowledge graph. Set entityNames=[\"item_0\"].",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "entityNames": [
+          "sample-name"
+        ]
+      },
+      "expected_arguments": {
+        "entityNames": [
+          "item_0"
+        ]
+      },
+      "prediction_latency_ms": 0.0594,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: delete_entities\nTool description: Delete multiple entities and their associated relations from the knowledge graph\nSkill condition: multi_candidate_skill\nSkill summary: Delete multiple entities and their associated relations from the knowledge graph. Provide the required field `entityNames`.\nWhen to use: [\"Use `delete_entities` when the user's request directly matches this tool's purpose.\", \"Provide the required field `entityNames`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"entityNames\": [\"sample-name\"]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for delete_entities\", \"arguments\": {\"entityNames\": [\"sample-name\"]}}, {\"scenario\": \"Richer invocation that uses optional controls for delete_entities\", \"arguments\": {\"entityNames\": [\"sample-name\"]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"entityNames\": [\"sample-name\"]}}]\nSchema: {\"properties\": {\"entityNames\": {\"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"entityNames\"], \"type\": \"object\"}\nUser request: Use delete entities to Delete multiple entities and their associated relations from the knowledge graph. Set entityNames=[\"item_0\"].\n",
+        "raw_model_output": "{\"arguments\": {\"entityNames\": [\"sample-name\"]}}",
+        "parsed_prediction": {
+          "entityNames": [
+            "sample-name"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0203_delete_entities_positive_medium_0",
+      "tool_name": "delete_entities",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Delete multiple entities and their associated relations from the knowledge graph. The relevant details are entityNames=[\"item_7\"].",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "entityNames": [
+          "sample-name"
+        ]
+      },
+      "expected_arguments": {
+        "entityNames": [
+          "item_7"
+        ]
+      },
+      "prediction_latency_ms": 0.0583,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: delete_entities\nTool description: Delete multiple entities and their associated relations from the knowledge graph\nSkill condition: multi_candidate_skill\nSkill summary: Delete multiple entities and their associated relations from the knowledge graph. Provide the required field `entityNames`.\nWhen to use: [\"Use `delete_entities` when the user's request directly matches this tool's purpose.\", \"Provide the required field `entityNames`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"entityNames\": [\"sample-name\"]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for delete_entities\", \"arguments\": {\"entityNames\": [\"sample-name\"]}}, {\"scenario\": \"Richer invocation that uses optional controls for delete_entities\", \"arguments\": {\"entityNames\": [\"sample-name\"]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"entityNames\": [\"sample-name\"]}}]\nSchema: {\"properties\": {\"entityNames\": {\"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"entityNames\"], \"type\": \"object\"}\nUser request: I need help with this task: Delete multiple entities and their associated relations from the knowledge graph. The relevant details are entityNames=[\"item_7\"].\n",
+        "raw_model_output": "{\"arguments\": {\"entityNames\": [\"sample-name\"]}}",
+        "parsed_prediction": {
+          "entityNames": [
+            "sample-name"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0876
+  }
+}

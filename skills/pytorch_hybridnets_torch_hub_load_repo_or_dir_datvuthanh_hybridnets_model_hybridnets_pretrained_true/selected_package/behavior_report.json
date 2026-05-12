@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0091_pytorch_hybridnets_torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybrid_negative_easy_0_out_of_domain_request",
+      "tool_name": "pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybridnets_pretrained_true",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to pytorch  hybridnets  torch hub load repo or dir datvuthanh hybridnets model hybridnets pretrained true.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0342,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybridnets_pretrained_true\nTool description: HybridNets is an end2end perception network for multi-tasks. Our work focused on traffic object detection, drivable area segmentation and lane detection. HybridNets can run real-time on embedded systems, and obtains SOTA Object Detection, Lane Detection on BDD100K Dataset. Framework: PyTorch. Functionality: Traffic Object Detection, Drivable Area Segmentation, Lane Detection. API call: torch.hub.load(repo_or_dir='datvuthanh/hybridnets', model='hybridnets', pretrained=True).\nSkill condition: multi_candidate_skill\nSkill summary: HybridNets is an end2end perception network for multi-tasks. Our work focused on traffic object detection, drivable area segmentation and lane detection. HybridNets can run real-time on embedded systems, and obtains SOTA Object Detection, Lane Detection on BDD100K Dataset. Framework: PyTorch. Functionality: Traffic Object Detection, Drivable Area Segmentation, Lane Detection. API call: torch.hub.load(repo_or_dir='datvuthanh/hybridnets', model='hybridnets', pretrained=True). This tool has no required input fields.\nWhen to use: [\"Use `pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybridnets_pretrained_true` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to pytorch  hybridnets  torch hub load repo or dir datvuthanh hybridnets model hybridnets pretrained true.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0091_pytorch_hybridnets_torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybrid_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybridnets_pretrained_true",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with pytorch  hybridnets  torch hub load repo or dir datvuthanh hybridnets model hybridnets pretrained true.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0298,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybridnets_pretrained_true\nTool description: HybridNets is an end2end perception network for multi-tasks. Our work focused on traffic object detection, drivable area segmentation and lane detection. HybridNets can run real-time on embedded systems, and obtains SOTA Object Detection, Lane Detection on BDD100K Dataset. Framework: PyTorch. Functionality: Traffic Object Detection, Drivable Area Segmentation, Lane Detection. API call: torch.hub.load(repo_or_dir='datvuthanh/hybridnets', model='hybridnets', pretrained=True).\nSkill condition: multi_candidate_skill\nSkill summary: HybridNets is an end2end perception network for multi-tasks. Our work focused on traffic object detection, drivable area segmentation and lane detection. HybridNets can run real-time on embedded systems, and obtains SOTA Object Detection, Lane Detection on BDD100K Dataset. Framework: PyTorch. Functionality: Traffic Object Detection, Drivable Area Segmentation, Lane Detection. API call: torch.hub.load(repo_or_dir='datvuthanh/hybridnets', model='hybridnets', pretrained=True). This tool has no required input fields.\nWhen to use: [\"Use `pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybridnets_pretrained_true` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with pytorch  hybridnets  torch hub load repo or dir datvuthanh hybridnets model hybridnets pretrained true.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0091_pytorch_hybridnets_torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybrid_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybridnets_pretrained_true",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN; pytorch  hybridnets  torch hub load repo or dir datvuthanh hybridnets model hybridnets pretrained true is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0291,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybridnets_pretrained_true\nTool description: HybridNets is an end2end perception network for multi-tasks. Our work focused on traffic object detection, drivable area segmentation and lane detection. HybridNets can run real-time on embedded systems, and obtains SOTA Object Detection, Lane Detection on BDD100K Dataset. Framework: PyTorch. Functionality: Traffic Object Detection, Drivable Area Segmentation, Lane Detection. API call: torch.hub.load(repo_or_dir='datvuthanh/hybridnets', model='hybridnets', pretrained=True).\nSkill condition: multi_candidate_skill\nSkill summary: HybridNets is an end2end perception network for multi-tasks. Our work focused on traffic object detection, drivable area segmentation and lane detection. HybridNets can run real-time on embedded systems, and obtains SOTA Object Detection, Lane Detection on BDD100K Dataset. Framework: PyTorch. Functionality: Traffic Object Detection, Drivable Area Segmentation, Lane Detection. API call: torch.hub.load(repo_or_dir='datvuthanh/hybridnets', model='hybridnets', pretrained=True). This tool has no required input fields.\nWhen to use: [\"Use `pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybridnets_pretrained_true` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN; pytorch  hybridnets  torch hub load repo or dir datvuthanh hybridnets model hybridnets pretrained true is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0091_pytorch_hybridnets_torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybrid_positive_easy_0",
+      "tool_name": "pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybridnets_pretrained_true",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use pytorch  hybridnets  torch hub load repo or dir datvuthanh hybridnets model hybridnets pretrained true to HybridNets is an end2end perception network for multi-tasks. Our work focused on traffic object detection, drivable area segmentation and la. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0287,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybridnets_pretrained_true\nTool description: HybridNets is an end2end perception network for multi-tasks. Our work focused on traffic object detection, drivable area segmentation and lane detection. HybridNets can run real-time on embedded systems, and obtains SOTA Object Detection, Lane Detection on BDD100K Dataset. Framework: PyTorch. Functionality: Traffic Object Detection, Drivable Area Segmentation, Lane Detection. API call: torch.hub.load(repo_or_dir='datvuthanh/hybridnets', model='hybridnets', pretrained=True).\nSkill condition: multi_candidate_skill\nSkill summary: HybridNets is an end2end perception network for multi-tasks. Our work focused on traffic object detection, drivable area segmentation and lane detection. HybridNets can run real-time on embedded systems, and obtains SOTA Object Detection, Lane Detection on BDD100K Dataset. Framework: PyTorch. Functionality: Traffic Object Detection, Drivable Area Segmentation, Lane Detection. API call: torch.hub.load(repo_or_dir='datvuthanh/hybridnets', model='hybridnets', pretrained=True). This tool has no required input fields.\nWhen to use: [\"Use `pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybridnets_pretrained_true` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use pytorch  hybridnets  torch hub load repo or dir datvuthanh hybridnets model hybridnets pretrained true to HybridNets is an end2end perception network for multi-tasks. Our work focused on traffic object detection, drivable area segmentation and la. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0091_pytorch_hybridnets_torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybrid_positive_medium_0",
+      "tool_name": "pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybridnets_pretrained_true",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: HybridNets is an end2end perception network for multi-tasks. Our work focused on traffic object detection, drivable area segmentation and la. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0295,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybridnets_pretrained_true\nTool description: HybridNets is an end2end perception network for multi-tasks. Our work focused on traffic object detection, drivable area segmentation and lane detection. HybridNets can run real-time on embedded systems, and obtains SOTA Object Detection, Lane Detection on BDD100K Dataset. Framework: PyTorch. Functionality: Traffic Object Detection, Drivable Area Segmentation, Lane Detection. API call: torch.hub.load(repo_or_dir='datvuthanh/hybridnets', model='hybridnets', pretrained=True).\nSkill condition: multi_candidate_skill\nSkill summary: HybridNets is an end2end perception network for multi-tasks. Our work focused on traffic object detection, drivable area segmentation and lane detection. HybridNets can run real-time on embedded systems, and obtains SOTA Object Detection, Lane Detection on BDD100K Dataset. Framework: PyTorch. Functionality: Traffic Object Detection, Drivable Area Segmentation, Lane Detection. API call: torch.hub.load(repo_or_dir='datvuthanh/hybridnets', model='hybridnets', pretrained=True). This tool has no required input fields.\nWhen to use: [\"Use `pytorch__hybridnets__torch_hub_load_repo_or_dir_datvuthanh_hybridnets_model_hybridnets_pretrained_true` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: HybridNets is an end2end perception network for multi-tasks. Our work focused on traffic object detection, drivable area segmentation and la. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0303
+  }
+}

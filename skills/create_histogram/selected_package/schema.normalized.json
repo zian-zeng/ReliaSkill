@@ -1,0 +1,96 @@
+{
+  "tool_name": "create_histogram",
+  "server_name": "bfcl_v3",
+  "tool_purpose": "Create a histogram based on provided data.",
+  "input_schema_raw": {
+    "properties": {
+      "bins": {
+        "description": "The number of equal-width bins in the range. Default is 10.",
+        "type": "integer"
+      },
+      "data": {
+        "description": "The data for which histogram needs to be plotted.",
+        "items": {
+          "type": "float"
+        },
+        "type": "array"
+      }
+    },
+    "required": [
+      "data",
+      "bins"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "data",
+      "type": "array",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The data for which histogram needs to be plotted.",
+      "items_type": "float",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.data"
+    },
+    {
+      "name": "bins",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The number of equal-width bins in the range. Default is 10.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.bins"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Create a histogram based on provided data.",
+    "create_histogram"
+  ],
+  "source_pointer": "bfcl_v3",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.4,
+    "auth_required": false,
+    "documentation_length": 42,
+    "has_array_argument": true,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": true,
+    "max_schema_depth": 3,
+    "num_arguments": 2,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 2,
+    "side_effect_type": "write"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "create_histogram",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "side_effect_hints": [
+    "creates_resource"
+  ],
+  "safety_hints": [
+    "review_side_effects_before_deployment"
+  ]
+}

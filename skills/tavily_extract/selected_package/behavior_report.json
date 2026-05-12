@@ -1,0 +1,235 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0211_tavily_extract_negative_easy_0_out_of_domain_request",
+      "tool_name": "tavily-extract",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to tavily-extract.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "extract_depth": "basic",
+        "include_images": false,
+        "format": "markdown",
+        "urls": [
+          "https://example.com/resource"
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1026,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tavily-extract\nTool description: A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content analysis, and research tasks.\nSkill condition: multi_candidate_skill\nSkill summary: A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content analysis, and research tasks. Provide the required field `urls`.\nWhen to use: [\"Use `tavily-extract` when the user's request directly matches this tool's purpose.\", \"Provide the required field `urls`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `extract_depth`: 'basic', 'advanced'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"urls\": [\"https://example.com/resource\"], \"extract_depth\": \"basic\", \"include_images\": false, \"format\": \"markdown\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for tavily-extract\", \"arguments\": {\"urls\": [\"https://example.com/resource\"]}}, {\"scenario\": \"Richer invocation that uses optional controls for tavily-extract\", \"arguments\": {\"urls\": [\"https://example.com/resource\"], \"extract_depth\": \"basic\", \"include_images\": false, \"format\": \"markdown\"}}]\nSchema: {\"properties\": {\"extract_depth\": {\"default\": \"basic\", \"description\": \"Depth of extraction - 'basic' or 'advanced', if usrls are linkedin use 'advanced' or if explicitly told to use advanced\", \"enum\": [\"basic\", \"advanced\"], \"type\": \"string\"}, \"format\": {\"default\": \"markdown\", \"description\": \"The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.\", \"enum\": [\"markdown\", \"text\"], \"type\": \"string\"}, \"include_images\": {\"default\": false, \"description\": \"Include a list of images extracted from the urls in the response\", \"type\": \"boolean\"}, \"urls\": {\"description\": \"List of URLs to extract content from\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"urls\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to tavily-extract.\n",
+        "raw_model_output": "{\"arguments\": {\"extract_depth\": \"basic\", \"format\": \"markdown\", \"include_images\": false, \"urls\": [\"https://example.com/resource\"]}}",
+        "parsed_prediction": {
+          "extract_depth": "basic",
+          "include_images": false,
+          "format": "markdown",
+          "urls": [
+            "https://example.com/resource"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0211_tavily_extract_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "tavily-extract",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with tavily-extract.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "extract_depth": "basic",
+        "include_images": false,
+        "format": "markdown",
+        "urls": [
+          "https://example.com/resource"
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0882,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tavily-extract\nTool description: A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content analysis, and research tasks.\nSkill condition: multi_candidate_skill\nSkill summary: A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content analysis, and research tasks. Provide the required field `urls`.\nWhen to use: [\"Use `tavily-extract` when the user's request directly matches this tool's purpose.\", \"Provide the required field `urls`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `extract_depth`: 'basic', 'advanced'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"urls\": [\"https://example.com/resource\"], \"extract_depth\": \"basic\", \"include_images\": false, \"format\": \"markdown\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for tavily-extract\", \"arguments\": {\"urls\": [\"https://example.com/resource\"]}}, {\"scenario\": \"Richer invocation that uses optional controls for tavily-extract\", \"arguments\": {\"urls\": [\"https://example.com/resource\"], \"extract_depth\": \"basic\", \"include_images\": false, \"format\": \"markdown\"}}]\nSchema: {\"properties\": {\"extract_depth\": {\"default\": \"basic\", \"description\": \"Depth of extraction - 'basic' or 'advanced', if usrls are linkedin use 'advanced' or if explicitly told to use advanced\", \"enum\": [\"basic\", \"advanced\"], \"type\": \"string\"}, \"format\": {\"default\": \"markdown\", \"description\": \"The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.\", \"enum\": [\"markdown\", \"text\"], \"type\": \"string\"}, \"include_images\": {\"default\": false, \"description\": \"Include a list of images extracted from the urls in the response\", \"type\": \"boolean\"}, \"urls\": {\"description\": \"List of URLs to extract content from\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"urls\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with tavily-extract.\n",
+        "raw_model_output": "{\"arguments\": {\"extract_depth\": \"basic\", \"format\": \"markdown\", \"include_images\": false, \"urls\": [\"https://example.com/resource\"]}}",
+        "parsed_prediction": {
+          "extract_depth": "basic",
+          "include_images": false,
+          "format": "markdown",
+          "urls": [
+            "https://example.com/resource"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0211_tavily_extract_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "tavily-extract",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use db fetch records to Fetch records from a specified database table based on certain conditions; tavily-extract is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "extract_depth": "basic",
+        "include_images": false,
+        "format": "markdown",
+        "urls": [
+          "https://example.com/resource"
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0838,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tavily-extract\nTool description: A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content analysis, and research tasks.\nSkill condition: multi_candidate_skill\nSkill summary: A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content analysis, and research tasks. Provide the required field `urls`.\nWhen to use: [\"Use `tavily-extract` when the user's request directly matches this tool's purpose.\", \"Provide the required field `urls`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `extract_depth`: 'basic', 'advanced'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"urls\": [\"https://example.com/resource\"], \"extract_depth\": \"basic\", \"include_images\": false, \"format\": \"markdown\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for tavily-extract\", \"arguments\": {\"urls\": [\"https://example.com/resource\"]}}, {\"scenario\": \"Richer invocation that uses optional controls for tavily-extract\", \"arguments\": {\"urls\": [\"https://example.com/resource\"], \"extract_depth\": \"basic\", \"include_images\": false, \"format\": \"markdown\"}}]\nSchema: {\"properties\": {\"extract_depth\": {\"default\": \"basic\", \"description\": \"Depth of extraction - 'basic' or 'advanced', if usrls are linkedin use 'advanced' or if explicitly told to use advanced\", \"enum\": [\"basic\", \"advanced\"], \"type\": \"string\"}, \"format\": {\"default\": \"markdown\", \"description\": \"The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.\", \"enum\": [\"markdown\", \"text\"], \"type\": \"string\"}, \"include_images\": {\"default\": false, \"description\": \"Include a list of images extracted from the urls in the response\", \"type\": \"boolean\"}, \"urls\": {\"description\": \"List of URLs to extract content from\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"urls\"], \"type\": \"object\"}\nUser request: Use db fetch records to Fetch records from a specified database table based on certain conditions; tavily-extract is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"extract_depth\": \"basic\", \"format\": \"markdown\", \"include_images\": false, \"urls\": [\"https://example.com/resource\"]}}",
+        "parsed_prediction": {
+          "extract_depth": "basic",
+          "include_images": false,
+          "format": "markdown",
+          "urls": [
+            "https://example.com/resource"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0211_tavily_extract_positive_easy_0",
+      "tool_name": "tavily-extract",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use tavily-extract to A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content anal. Set urls=[\"item_0\"].",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "urls": [
+          "https://example.com/resource"
+        ]
+      },
+      "expected_arguments": {
+        "urls": [
+          "item_0"
+        ]
+      },
+      "prediction_latency_ms": 0.0805,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tavily-extract\nTool description: A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content analysis, and research tasks.\nSkill condition: multi_candidate_skill\nSkill summary: A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content analysis, and research tasks. Provide the required field `urls`.\nWhen to use: [\"Use `tavily-extract` when the user's request directly matches this tool's purpose.\", \"Provide the required field `urls`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `extract_depth`: 'basic', 'advanced'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"urls\": [\"https://example.com/resource\"], \"extract_depth\": \"basic\", \"include_images\": false, \"format\": \"markdown\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for tavily-extract\", \"arguments\": {\"urls\": [\"https://example.com/resource\"]}}, {\"scenario\": \"Richer invocation that uses optional controls for tavily-extract\", \"arguments\": {\"urls\": [\"https://example.com/resource\"], \"extract_depth\": \"basic\", \"include_images\": false, \"format\": \"markdown\"}}]\nSchema: {\"properties\": {\"extract_depth\": {\"default\": \"basic\", \"description\": \"Depth of extraction - 'basic' or 'advanced', if usrls are linkedin use 'advanced' or if explicitly told to use advanced\", \"enum\": [\"basic\", \"advanced\"], \"type\": \"string\"}, \"format\": {\"default\": \"markdown\", \"description\": \"The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.\", \"enum\": [\"markdown\", \"text\"], \"type\": \"string\"}, \"include_images\": {\"default\": false, \"description\": \"Include a list of images extracted from the urls in the response\", \"type\": \"boolean\"}, \"urls\": {\"description\": \"List of URLs to extract content from\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"urls\"], \"type\": \"object\"}\nUser request: Use tavily-extract to A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content anal. Set urls=[\"item_0\"].\n",
+        "raw_model_output": "{\"arguments\": {\"extract_depth\": \"basic\", \"format\": \"markdown\", \"include_images\": false, \"urls\": [\"https://example.com/resource\"]}}",
+        "parsed_prediction": {
+          "extract_depth": "basic",
+          "include_images": false,
+          "format": "markdown",
+          "urls": [
+            "https://example.com/resource"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0211_tavily_extract_positive_medium_0",
+      "tool_name": "tavily-extract",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content anal. The relevant details are extract_depth=\"advanced\", urls=[\"item_7\"].",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "extract_depth": "basic",
+        "urls": [
+          "https://example.com/resource"
+        ]
+      },
+      "expected_arguments": {
+        "extract_depth": "advanced",
+        "urls": [
+          "item_7"
+        ]
+      },
+      "prediction_latency_ms": 0.1489,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tavily-extract\nTool description: A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content analysis, and research tasks.\nSkill condition: multi_candidate_skill\nSkill summary: A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content analysis, and research tasks. Provide the required field `urls`.\nWhen to use: [\"Use `tavily-extract` when the user's request directly matches this tool's purpose.\", \"Provide the required field `urls`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `extract_depth`: 'basic', 'advanced'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"urls\": [\"https://example.com/resource\"], \"extract_depth\": \"basic\", \"include_images\": false, \"format\": \"markdown\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for tavily-extract\", \"arguments\": {\"urls\": [\"https://example.com/resource\"]}}, {\"scenario\": \"Richer invocation that uses optional controls for tavily-extract\", \"arguments\": {\"urls\": [\"https://example.com/resource\"], \"extract_depth\": \"basic\", \"include_images\": false, \"format\": \"markdown\"}}]\nSchema: {\"properties\": {\"extract_depth\": {\"default\": \"basic\", \"description\": \"Depth of extraction - 'basic' or 'advanced', if usrls are linkedin use 'advanced' or if explicitly told to use advanced\", \"enum\": [\"basic\", \"advanced\"], \"type\": \"string\"}, \"format\": {\"default\": \"markdown\", \"description\": \"The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.\", \"enum\": [\"markdown\", \"text\"], \"type\": \"string\"}, \"include_images\": {\"default\": false, \"description\": \"Include a list of images extracted from the urls in the response\", \"type\": \"boolean\"}, \"urls\": {\"description\": \"List of URLs to extract content from\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"urls\"], \"type\": \"object\"}\nUser request: I need help with this task: A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content anal. The relevant details are extract_depth=\"advanced\", urls=[\"item_7\"].\n",
+        "raw_model_output": "{\"arguments\": {\"extract_depth\": \"basic\", \"format\": \"markdown\", \"include_images\": false, \"urls\": [\"https://example.com/resource\"]}}",
+        "parsed_prediction": {
+          "extract_depth": "basic",
+          "include_images": false,
+          "format": "markdown",
+          "urls": [
+            "https://example.com/resource"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.1008
+  }
+}

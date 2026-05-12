@@ -1,0 +1,182 @@
+{
+  "tool_name": "calendar_create_event",
+  "server_name": "apibank_style_fixture",
+  "tool_purpose": "API-Bank-style local fixture tool that creates a mock calendar event with attendees and reminders.",
+  "input_schema_raw": {
+    "properties": {
+      "attendees": {
+        "description": "Attendee email addresses.",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "calendar_id": {
+        "description": "Mock calendar identifier.",
+        "type": "string"
+      },
+      "end_time": {
+        "description": "Event end time.",
+        "format": "date-time",
+        "type": "string"
+      },
+      "start_time": {
+        "description": "Event start time.",
+        "format": "date-time",
+        "type": "string"
+      },
+      "title": {
+        "description": "Event title.",
+        "type": "string"
+      },
+      "visibility": {
+        "description": "Event visibility.",
+        "enum": [
+          "default",
+          "private",
+          "public"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "calendar_id",
+      "title",
+      "start_time",
+      "end_time"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "calendar_id",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Mock calendar identifier.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.calendar_id"
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Event title.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.title"
+    },
+    {
+      "name": "start_time",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Event start time.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": "date-time",
+      "schema_path": "$.properties.start_time"
+    },
+    {
+      "name": "end_time",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Event end time.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": "date-time",
+      "schema_path": "$.properties.end_time"
+    },
+    {
+      "name": "attendees",
+      "type": "array",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Attendee email addresses.",
+      "items_type": "string",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.attendees"
+    },
+    {
+      "name": "visibility",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": [
+        "default",
+        "private",
+        "public"
+      ],
+      "description": "Event visibility.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.visibility"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "API-Bank-style local fixture tool that creates a mock calendar event with attendees and reminders.",
+    "Create Calendar Event",
+    "Create an offline fixture calendar event."
+  ],
+  "source_pointer": "data/raw/apibank_style_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 98,
+    "has_array_argument": true,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": true,
+    "max_schema_depth": 3,
+    "num_arguments": 6,
+    "num_enum_arguments": 1,
+    "num_enum_fields": 1,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 2,
+    "num_required_arguments": 4,
+    "num_top_level_arguments": 6,
+    "side_effect_type": "write"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "calendar_create_event",
+    "server_name": "apibank_style_fixture",
+    "source_pointer": "data/raw/apibank_style_tools.json"
+  },
+  "side_effect_hints": [
+    "creates_resource"
+  ],
+  "safety_hints": [
+    "review_side_effects_before_deployment"
+  ]
+}

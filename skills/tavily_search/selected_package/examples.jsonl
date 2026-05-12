@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for tavily-search", "arguments": {"query": "sample query"}}
+{"scenario": "Richer invocation that uses optional controls for tavily-search", "arguments": {"query": "sample query", "search_depth": "basic", "topic": "general", "days": 3, "time_range": "week", "max_results": 10, "include_images": false, "include_image_descriptions": false, "include_raw_content": false, "include_domains": [], "exclude_domains": [], "country": ""}}

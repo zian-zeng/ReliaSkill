@@ -1,0 +1,269 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0210_tavily_crawl_negative_easy_0_out_of_domain_request",
+      "tool_name": "tavily-crawl",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to tavily-crawl.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "max_depth": 1,
+        "max_breadth": 20,
+        "limit": 50,
+        "select_paths": [],
+        "select_domains": [],
+        "allow_external": false,
+        "categories": [],
+        "extract_depth": "basic",
+        "format": "markdown",
+        "url": "https://example.com/resource",
+        "instructions": "sample_instructions_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1505,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tavily-crawl\nTool description: A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pages. You can control how deep and wide it goes, and guide it to focus on specific sections of the site.\nSkill condition: multi_candidate_skill\nSkill summary: A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pages. You can control how deep and wide it goes, and.\nWhen to use: [\"Use `tavily-crawl` when the user's request directly matches this tool's purpose.\", \"Provide the required field `url`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `extract_depth`: 'basic', 'advanced'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"url\": \"https://example.com/resource\", \"max_depth\": 1, \"max_breadth\": 20, \"limit\": 50, \"instructions\": \"sample_instructions_1\", \"select_paths\": [], \"select_domains\": [], \"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for tavily-crawl\", \"arguments\": {\"url\": \"https://example.com/resource\"}}, {\"scenario\": \"Richer invocation that uses optional controls for tavily-crawl\", \"arguments\": {\"url\": \"https://example.com/resource\", \"max_depth\": 1, \"max_breadth\": 20, \"limit\": 50, \"instructions\": \"sample_instructions_2\", \"select_paths\": [], \"select_domains\": [], \"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\"}}]\nSchema: {\"properties\": {\"allow_external\": {\"default\": false, \"description\": \"Whether to allow following links that go to external domains\", \"type\": \"boolean\"}, \"categories\": {\"default\": [], \"description\": \"Filter URLs using predefined categories like documentation, blog, api, etc\", \"items\": {\"enum\": [\"Careers\", \"Blog\", \"Documentation\", \"About\", \"Pricing\", \"Community\", \"Developers\", \"Contact\", \"Media\"], \"type\": \"string\"}, \"type\": \"array\"}, \"extract_depth\": {\"default\": \"basic\", \"description\": \"Advanced extraction retrieves more data, including tables and embedded content, with higher success but may increase latency\", \"enum\": [\"basic\", \"advanced\"], \"type\": \"string\"}, \"format\": {\"default\": \"markdown\", \"description\": \"The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.\", \"enum\": [\"markdown\", \"text\"], \"type\": \"string\"}, \"instructions\": {\"description\": \"Natural language instructions for the crawler\", \"type\": \"string\"}, \"limit\": {\"default\": 50, \"description\": \"Total number of links the crawler will process before stopping\", \"minimum\": 1, \"type\": \"integer\"}, \"max_breadth\": {\"default\": 20, \"description\": \"Max number of links to follow per level of the tree (i.e., per page)\", \"minimum\": 1, \"type\": \"integer\"}, \"max_depth\": {\"default\": 1, \"description\": \"Max depth of the crawl. Defines how far from the base URL the crawler can explore.\", \"minimum\": 1, \"type\": \"integer\"}, \"select_domains\": {\"default\": [], \"description\": \"Regex patterns to select crawling to specific domains or subdomains (e.g., ^docs\\\\.example\\\\.com$)\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"select_paths\": {\"default\": [], \"description\": \"Regex patterns to select only URLs with specific path patterns (e.g., /docs/.*, /api/v1.*)\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"url\": {\"description\": \"The root URL to begin the crawl\", \"type\": \"string\"}}, \"required\": [\"url\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to tavily-crawl.\n",
+        "raw_model_output": "{\"arguments\": {\"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\", \"instructions\": \"sample_instructions_1\", \"limit\": 50, \"max_breadth\": 20, \"max_depth\": 1, \"select_domains\": [], \"select_paths\": [], \"url\": \"https://example.com/resource\"}}",
+        "parsed_prediction": {
+          "max_depth": 1,
+          "max_breadth": 20,
+          "limit": 50,
+          "select_paths": [],
+          "select_domains": [],
+          "allow_external": false,
+          "categories": [],
+          "extract_depth": "basic",
+          "format": "markdown",
+          "url": "https://example.com/resource",
+          "instructions": "sample_instructions_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0210_tavily_crawl_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "tavily-crawl",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with tavily-crawl; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "max_depth": 1,
+        "max_breadth": 20,
+        "limit": 50,
+        "select_paths": [],
+        "select_domains": [],
+        "allow_external": false,
+        "categories": [],
+        "extract_depth": "basic",
+        "format": "markdown",
+        "url": "https://example.com/resource",
+        "instructions": "sample_instructions_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.2049,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tavily-crawl\nTool description: A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pages. You can control how deep and wide it goes, and guide it to focus on specific sections of the site.\nSkill condition: multi_candidate_skill\nSkill summary: A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pages. You can control how deep and wide it goes, and.\nWhen to use: [\"Use `tavily-crawl` when the user's request directly matches this tool's purpose.\", \"Provide the required field `url`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `extract_depth`: 'basic', 'advanced'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"url\": \"https://example.com/resource\", \"max_depth\": 1, \"max_breadth\": 20, \"limit\": 50, \"instructions\": \"sample_instructions_1\", \"select_paths\": [], \"select_domains\": [], \"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for tavily-crawl\", \"arguments\": {\"url\": \"https://example.com/resource\"}}, {\"scenario\": \"Richer invocation that uses optional controls for tavily-crawl\", \"arguments\": {\"url\": \"https://example.com/resource\", \"max_depth\": 1, \"max_breadth\": 20, \"limit\": 50, \"instructions\": \"sample_instructions_2\", \"select_paths\": [], \"select_domains\": [], \"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\"}}]\nSchema: {\"properties\": {\"allow_external\": {\"default\": false, \"description\": \"Whether to allow following links that go to external domains\", \"type\": \"boolean\"}, \"categories\": {\"default\": [], \"description\": \"Filter URLs using predefined categories like documentation, blog, api, etc\", \"items\": {\"enum\": [\"Careers\", \"Blog\", \"Documentation\", \"About\", \"Pricing\", \"Community\", \"Developers\", \"Contact\", \"Media\"], \"type\": \"string\"}, \"type\": \"array\"}, \"extract_depth\": {\"default\": \"basic\", \"description\": \"Advanced extraction retrieves more data, including tables and embedded content, with higher success but may increase latency\", \"enum\": [\"basic\", \"advanced\"], \"type\": \"string\"}, \"format\": {\"default\": \"markdown\", \"description\": \"The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.\", \"enum\": [\"markdown\", \"text\"], \"type\": \"string\"}, \"instructions\": {\"description\": \"Natural language instructions for the crawler\", \"type\": \"string\"}, \"limit\": {\"default\": 50, \"description\": \"Total number of links the crawler will process before stopping\", \"minimum\": 1, \"type\": \"integer\"}, \"max_breadth\": {\"default\": 20, \"description\": \"Max number of links to follow per level of the tree (i.e., per page)\", \"minimum\": 1, \"type\": \"integer\"}, \"max_depth\": {\"default\": 1, \"description\": \"Max depth of the crawl. Defines how far from the base URL the crawler can explore.\", \"minimum\": 1, \"type\": \"integer\"}, \"select_domains\": {\"default\": [], \"description\": \"Regex patterns to select crawling to specific domains or subdomains (e.g., ^docs\\\\.example\\\\.com$)\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"select_paths\": {\"default\": [], \"description\": \"Regex patterns to select only URLs with specific path patterns (e.g., /docs/.*, /api/v1.*)\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"url\": {\"description\": \"The root URL to begin the crawl\", \"type\": \"string\"}}, \"required\": [\"url\"], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with tavily-crawl; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {\"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\", \"instructions\": \"sample_instructions_1\", \"limit\": 50, \"max_breadth\": 20, \"max_depth\": 1, \"select_domains\": [], \"select_paths\": [], \"url\": \"https://example.com/resource\"}}",
+        "parsed_prediction": {
+          "max_depth": 1,
+          "max_breadth": 20,
+          "limit": 50,
+          "select_paths": [],
+          "select_domains": [],
+          "allow_external": false,
+          "categories": [],
+          "extract_depth": "basic",
+          "format": "markdown",
+          "url": "https://example.com/resource",
+          "instructions": "sample_instructions_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0210_tavily_crawl_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "tavily-crawl",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with tavily-crawl.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "max_depth": 1,
+        "max_breadth": 20,
+        "limit": 50,
+        "select_paths": [],
+        "select_domains": [],
+        "allow_external": false,
+        "categories": [],
+        "extract_depth": "basic",
+        "format": "markdown",
+        "url": "https://example.com/resource",
+        "instructions": "sample_instructions_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1371,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tavily-crawl\nTool description: A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pages. You can control how deep and wide it goes, and guide it to focus on specific sections of the site.\nSkill condition: multi_candidate_skill\nSkill summary: A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pages. You can control how deep and wide it goes, and.\nWhen to use: [\"Use `tavily-crawl` when the user's request directly matches this tool's purpose.\", \"Provide the required field `url`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `extract_depth`: 'basic', 'advanced'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"url\": \"https://example.com/resource\", \"max_depth\": 1, \"max_breadth\": 20, \"limit\": 50, \"instructions\": \"sample_instructions_1\", \"select_paths\": [], \"select_domains\": [], \"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for tavily-crawl\", \"arguments\": {\"url\": \"https://example.com/resource\"}}, {\"scenario\": \"Richer invocation that uses optional controls for tavily-crawl\", \"arguments\": {\"url\": \"https://example.com/resource\", \"max_depth\": 1, \"max_breadth\": 20, \"limit\": 50, \"instructions\": \"sample_instructions_2\", \"select_paths\": [], \"select_domains\": [], \"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\"}}]\nSchema: {\"properties\": {\"allow_external\": {\"default\": false, \"description\": \"Whether to allow following links that go to external domains\", \"type\": \"boolean\"}, \"categories\": {\"default\": [], \"description\": \"Filter URLs using predefined categories like documentation, blog, api, etc\", \"items\": {\"enum\": [\"Careers\", \"Blog\", \"Documentation\", \"About\", \"Pricing\", \"Community\", \"Developers\", \"Contact\", \"Media\"], \"type\": \"string\"}, \"type\": \"array\"}, \"extract_depth\": {\"default\": \"basic\", \"description\": \"Advanced extraction retrieves more data, including tables and embedded content, with higher success but may increase latency\", \"enum\": [\"basic\", \"advanced\"], \"type\": \"string\"}, \"format\": {\"default\": \"markdown\", \"description\": \"The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.\", \"enum\": [\"markdown\", \"text\"], \"type\": \"string\"}, \"instructions\": {\"description\": \"Natural language instructions for the crawler\", \"type\": \"string\"}, \"limit\": {\"default\": 50, \"description\": \"Total number of links the crawler will process before stopping\", \"minimum\": 1, \"type\": \"integer\"}, \"max_breadth\": {\"default\": 20, \"description\": \"Max number of links to follow per level of the tree (i.e., per page)\", \"minimum\": 1, \"type\": \"integer\"}, \"max_depth\": {\"default\": 1, \"description\": \"Max depth of the crawl. Defines how far from the base URL the crawler can explore.\", \"minimum\": 1, \"type\": \"integer\"}, \"select_domains\": {\"default\": [], \"description\": \"Regex patterns to select crawling to specific domains or subdomains (e.g., ^docs\\\\.example\\\\.com$)\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"select_paths\": {\"default\": [], \"description\": \"Regex patterns to select only URLs with specific path patterns (e.g., /docs/.*, /api/v1.*)\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"url\": {\"description\": \"The root URL to begin the crawl\", \"type\": \"string\"}}, \"required\": [\"url\"], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with tavily-crawl.\n",
+        "raw_model_output": "{\"arguments\": {\"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\", \"instructions\": \"sample_instructions_1\", \"limit\": 50, \"max_breadth\": 20, \"max_depth\": 1, \"select_domains\": [], \"select_paths\": [], \"url\": \"https://example.com/resource\"}}",
+        "parsed_prediction": {
+          "max_depth": 1,
+          "max_breadth": 20,
+          "limit": 50,
+          "select_paths": [],
+          "select_domains": [],
+          "allow_external": false,
+          "categories": [],
+          "extract_depth": "basic",
+          "format": "markdown",
+          "url": "https://example.com/resource",
+          "instructions": "sample_instructions_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0210_tavily_crawl_positive_easy_0",
+      "tool_name": "tavily-crawl",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use tavily-crawl to A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a. Set url=\"https://example.com/resource\".",
+      "exact_match": false,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "url": "https://example.com/resource",
+        "instructions": "sample_instructions_1"
+      },
+      "expected_arguments": {
+        "url": "https://example.com/resource"
+      },
+      "prediction_latency_ms": 0.1341,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tavily-crawl\nTool description: A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pages. You can control how deep and wide it goes, and guide it to focus on specific sections of the site.\nSkill condition: multi_candidate_skill\nSkill summary: A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pages. You can control how deep and wide it goes, and.\nWhen to use: [\"Use `tavily-crawl` when the user's request directly matches this tool's purpose.\", \"Provide the required field `url`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `extract_depth`: 'basic', 'advanced'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"url\": \"https://example.com/resource\", \"max_depth\": 1, \"max_breadth\": 20, \"limit\": 50, \"instructions\": \"sample_instructions_1\", \"select_paths\": [], \"select_domains\": [], \"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for tavily-crawl\", \"arguments\": {\"url\": \"https://example.com/resource\"}}, {\"scenario\": \"Richer invocation that uses optional controls for tavily-crawl\", \"arguments\": {\"url\": \"https://example.com/resource\", \"max_depth\": 1, \"max_breadth\": 20, \"limit\": 50, \"instructions\": \"sample_instructions_2\", \"select_paths\": [], \"select_domains\": [], \"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\"}}]\nSchema: {\"properties\": {\"allow_external\": {\"default\": false, \"description\": \"Whether to allow following links that go to external domains\", \"type\": \"boolean\"}, \"categories\": {\"default\": [], \"description\": \"Filter URLs using predefined categories like documentation, blog, api, etc\", \"items\": {\"enum\": [\"Careers\", \"Blog\", \"Documentation\", \"About\", \"Pricing\", \"Community\", \"Developers\", \"Contact\", \"Media\"], \"type\": \"string\"}, \"type\": \"array\"}, \"extract_depth\": {\"default\": \"basic\", \"description\": \"Advanced extraction retrieves more data, including tables and embedded content, with higher success but may increase latency\", \"enum\": [\"basic\", \"advanced\"], \"type\": \"string\"}, \"format\": {\"default\": \"markdown\", \"description\": \"The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.\", \"enum\": [\"markdown\", \"text\"], \"type\": \"string\"}, \"instructions\": {\"description\": \"Natural language instructions for the crawler\", \"type\": \"string\"}, \"limit\": {\"default\": 50, \"description\": \"Total number of links the crawler will process before stopping\", \"minimum\": 1, \"type\": \"integer\"}, \"max_breadth\": {\"default\": 20, \"description\": \"Max number of links to follow per level of the tree (i.e., per page)\", \"minimum\": 1, \"type\": \"integer\"}, \"max_depth\": {\"default\": 1, \"description\": \"Max depth of the crawl. Defines how far from the base URL the crawler can explore.\", \"minimum\": 1, \"type\": \"integer\"}, \"select_domains\": {\"default\": [], \"description\": \"Regex patterns to select crawling to specific domains or subdomains (e.g., ^docs\\\\.example\\\\.com$)\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"select_paths\": {\"default\": [], \"description\": \"Regex patterns to select only URLs with specific path patterns (e.g., /docs/.*, /api/v1.*)\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"url\": {\"description\": \"The root URL to begin the crawl\", \"type\": \"string\"}}, \"required\": [\"url\"], \"type\": \"object\"}\nUser request: Use tavily-crawl to A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a. Set url=\"https://example.com/resource\".\n",
+        "raw_model_output": "{\"arguments\": {\"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\", \"instructions\": \"sample_instructions_1\", \"limit\": 50, \"max_breadth\": 20, \"max_depth\": 1, \"select_domains\": [], \"select_paths\": [], \"url\": \"https://example.com/resource\"}}",
+        "parsed_prediction": {
+          "max_depth": 1,
+          "max_breadth": 20,
+          "limit": 50,
+          "select_paths": [],
+          "select_domains": [],
+          "allow_external": false,
+          "categories": [],
+          "extract_depth": "basic",
+          "format": "markdown",
+          "url": "https://example.com/resource",
+          "instructions": "sample_instructions_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0210_tavily_crawl_positive_medium_0",
+      "tool_name": "tavily-crawl",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a. The relevant details are max_depth=10, url=\"https://example.com/resource\".",
+      "exact_match": false,
+      "argument_validity": 0.5,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "max_depth": 1,
+        "url": "https://example.com/resource",
+        "instructions": "sample_instructions_1"
+      },
+      "expected_arguments": {
+        "max_depth": 10,
+        "url": "https://example.com/resource"
+      },
+      "prediction_latency_ms": 0.1356,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tavily-crawl\nTool description: A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pages. You can control how deep and wide it goes, and guide it to focus on specific sections of the site.\nSkill condition: multi_candidate_skill\nSkill summary: A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pages. You can control how deep and wide it goes, and.\nWhen to use: [\"Use `tavily-crawl` when the user's request directly matches this tool's purpose.\", \"Provide the required field `url`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `extract_depth`: 'basic', 'advanced'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"url\": \"https://example.com/resource\", \"max_depth\": 1, \"max_breadth\": 20, \"limit\": 50, \"instructions\": \"sample_instructions_1\", \"select_paths\": [], \"select_domains\": [], \"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for tavily-crawl\", \"arguments\": {\"url\": \"https://example.com/resource\"}}, {\"scenario\": \"Richer invocation that uses optional controls for tavily-crawl\", \"arguments\": {\"url\": \"https://example.com/resource\", \"max_depth\": 1, \"max_breadth\": 20, \"limit\": 50, \"instructions\": \"sample_instructions_2\", \"select_paths\": [], \"select_domains\": [], \"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\"}}]\nSchema: {\"properties\": {\"allow_external\": {\"default\": false, \"description\": \"Whether to allow following links that go to external domains\", \"type\": \"boolean\"}, \"categories\": {\"default\": [], \"description\": \"Filter URLs using predefined categories like documentation, blog, api, etc\", \"items\": {\"enum\": [\"Careers\", \"Blog\", \"Documentation\", \"About\", \"Pricing\", \"Community\", \"Developers\", \"Contact\", \"Media\"], \"type\": \"string\"}, \"type\": \"array\"}, \"extract_depth\": {\"default\": \"basic\", \"description\": \"Advanced extraction retrieves more data, including tables and embedded content, with higher success but may increase latency\", \"enum\": [\"basic\", \"advanced\"], \"type\": \"string\"}, \"format\": {\"default\": \"markdown\", \"description\": \"The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.\", \"enum\": [\"markdown\", \"text\"], \"type\": \"string\"}, \"instructions\": {\"description\": \"Natural language instructions for the crawler\", \"type\": \"string\"}, \"limit\": {\"default\": 50, \"description\": \"Total number of links the crawler will process before stopping\", \"minimum\": 1, \"type\": \"integer\"}, \"max_breadth\": {\"default\": 20, \"description\": \"Max number of links to follow per level of the tree (i.e., per page)\", \"minimum\": 1, \"type\": \"integer\"}, \"max_depth\": {\"default\": 1, \"description\": \"Max depth of the crawl. Defines how far from the base URL the crawler can explore.\", \"minimum\": 1, \"type\": \"integer\"}, \"select_domains\": {\"default\": [], \"description\": \"Regex patterns to select crawling to specific domains or subdomains (e.g., ^docs\\\\.example\\\\.com$)\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"select_paths\": {\"default\": [], \"description\": \"Regex patterns to select only URLs with specific path patterns (e.g., /docs/.*, /api/v1.*)\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"url\": {\"description\": \"The root URL to begin the crawl\", \"type\": \"string\"}}, \"required\": [\"url\"], \"type\": \"object\"}\nUser request: I need help with this task: A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a. The relevant details are max_depth=10, url=\"https://example.com/resource\".\n",
+        "raw_model_output": "{\"arguments\": {\"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\", \"instructions\": \"sample_instructions_1\", \"limit\": 50, \"max_breadth\": 20, \"max_depth\": 1, \"select_domains\": [], \"select_paths\": [], \"url\": \"https://example.com/resource\"}}",
+        "parsed_prediction": {
+          "max_depth": 1,
+          "max_breadth": 20,
+          "limit": 50,
+          "select_paths": [],
+          "select_domains": [],
+          "allow_external": false,
+          "categories": [],
+          "extract_depth": "basic",
+          "format": "markdown",
+          "url": "https://example.com/resource",
+          "instructions": "sample_instructions_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.75,
+    "avg_prediction_latency_ms": 0.1524
+  }
+}

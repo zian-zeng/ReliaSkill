@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for array_sort", "arguments": {"list": [null], "order": "ascending"}}
+{"scenario": "Richer invocation that uses optional controls for array_sort", "arguments": {"list": [null], "order": "descending"}}

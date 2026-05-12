@@ -1,0 +1,86 @@
+{
+  "tool_name": "get-resource-reference",
+  "server_name": "tools",
+  "tool_purpose": "Returns a resource reference that can be used by MCP clients",
+  "input_schema_raw": {
+    "properties": {
+      "resourceId": {
+        "type": "string"
+      },
+      "resourceType": {
+        "type": "string"
+      }
+    },
+    "required": [],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "resourceType",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.resourceType"
+    },
+    {
+      "name": "resourceId",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.resourceId"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Returns a resource reference that can be used by MCP clients",
+    "Get Resource Reference Tool"
+  ],
+  "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-resource-reference.ts",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.85,
+    "auth_required": false,
+    "documentation_length": 60,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 2,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 2,
+    "num_required_arguments": 0,
+    "num_top_level_arguments": 2,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "missing_argument_description:resourceType",
+    "missing_argument_description:resourceId",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "get-resource-reference",
+    "server_name": "tools",
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\everything\\tools\\get-resource-reference.ts"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

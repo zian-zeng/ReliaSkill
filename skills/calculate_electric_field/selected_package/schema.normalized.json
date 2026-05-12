@@ -1,0 +1,107 @@
+{
+  "tool_name": "calculate_electric_field",
+  "server_name": "bfcl_v3",
+  "tool_purpose": "Calculate the electric field produced by a charge at a certain distance.",
+  "input_schema_raw": {
+    "properties": {
+      "charge": {
+        "description": "Charge in coulombs producing the electric field.",
+        "type": "float"
+      },
+      "distance": {
+        "description": "Distance from the charge in meters where the field is being measured.",
+        "type": "float"
+      },
+      "permitivity": {
+        "description": "Permitivity of the space where field is being calculated, default is for vacuum.",
+        "type": "float"
+      }
+    },
+    "required": [
+      "charge",
+      "distance"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "charge",
+      "type": "float",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Charge in coulombs producing the electric field.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.charge"
+    },
+    {
+      "name": "distance",
+      "type": "float",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Distance from the charge in meters where the field is being measured.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.distance"
+    },
+    {
+      "name": "permitivity",
+      "type": "float",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Permitivity of the space where field is being calculated, default is for vacuum.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.permitivity"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Calculate the electric field produced by a charge at a certain distance.",
+    "calculate_electric_field"
+  ],
+  "source_pointer": "bfcl_v3",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.4,
+    "auth_required": false,
+    "documentation_length": 72,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "calculate_electric_field",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

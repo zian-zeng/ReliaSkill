@@ -1,0 +1,122 @@
+{
+  "candidate_id": "get_annotated_message__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Demonstrates how annotations can be used to provide metadata about content. Provide the required field `messageType`.\nWhen to use:\n- Use `get-annotated-message` when the user's request directly matches this tool's purpose.\n- Provide the required field `messageType`.\n- Optional control is available through `includeImage` when the request needs extra specificity.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"includeImage\": \"sample_includeImage_4\", \"messageType\": \"sample_messageType_4\"}\nExamples:\nMinimal valid request that satisfies the required fields for get-annotated-message\n{\"messageType\": \"sample_messageType_1\"}\nRicher invocation that uses optional controls for get-annotated-message\n{\"includeImage\": \"sample_includeImage_2\", \"messageType\": \"sample_messageType_2\"}\nRequired-argument dev behavior example.\n{\"messageType\": \"sample_messageType_3\"}\nOptional, enum, nested, or array argument example.\n{\"includeImage\": \"sample_includeImage_4\", \"messageType\": \"sample_messageType_4\"}",
+  "argument_template": {
+    "messageType": "sample_messageType_4",
+    "includeImage": "sample_includeImage_4"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for get-annotated-message",
+      "arguments": {
+        "messageType": "sample_messageType_1"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for get-annotated-message",
+      "arguments": {
+        "messageType": "sample_messageType_2",
+        "includeImage": "sample_includeImage_2"
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "messageType": "sample_messageType_3"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "messageType": "sample_messageType_4",
+        "includeImage": "sample_includeImage_4"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `get-annotated-message` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `messageType`.",
+    "Optional control is available through `includeImage` when the request needs extra specificity.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 285,
+  "skill_token_count": 285,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Demonstrates how annotations can be used to provide metadata about content. Provide the required field `messageType`.",
+    "when_to_use": [
+      "Use `get-annotated-message` when the user's request directly matches this tool's purpose.",
+      "Provide the required field `messageType`.",
+      "Optional control is available through `includeImage` when the request needs extra specificity.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "messageType": "sample_messageType_4",
+      "includeImage": "sample_includeImage_4"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for get-annotated-message",
+        "arguments": {
+          "messageType": "sample_messageType_1"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for get-annotated-message",
+        "arguments": {
+          "messageType": "sample_messageType_2",
+          "includeImage": "sample_includeImage_2"
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "messageType": "sample_messageType_3"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "messageType": "sample_messageType_4",
+          "includeImage": "sample_includeImage_4"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "get_annotated_message__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "get_annotated_message__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for employee.fetch_data", "arguments": {"company_name": "sample-name", "employee_id": 1}}
+{"scenario": "Richer invocation that uses optional controls for employee.fetch_data", "arguments": {"company_name": "sample-name", "employee_id": 2, "data_field": ["sample_data_field_item_2"]}}

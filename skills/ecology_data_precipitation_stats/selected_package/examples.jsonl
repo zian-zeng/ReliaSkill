@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for ecology_data.precipitation_stats", "arguments": {"location": "sample_location_1", "time_frame": "six_months"}}
+{"scenario": "Richer invocation that uses optional controls for ecology_data.precipitation_stats", "arguments": {"location": "sample_location_2", "time_frame": "year"}}

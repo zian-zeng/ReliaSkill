@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for playwright_press_key", "arguments": {"key": "sample_key_1"}}
+{"scenario": "Richer invocation that uses optional controls for playwright_press_key", "arguments": {"key": "sample_key_2", "selector": "sample_selector_2"}}

@@ -1,0 +1,221 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0118_calculate_final_temperature_negative_easy_0_out_of_domain_request",
+      "tool_name": "calculate_final_temperature",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate final temperature.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "quantity1": 1,
+        "temperature1": 1,
+        "quantity2": 1,
+        "temperature2": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.083,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_final_temperature\nTool description: Calculate the final temperature when different quantities of the same gas at different temperatures are mixed.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the final temperature when different quantities of the same gas at different temperatures are mixed. Provide all required fields: `quantity1`, `temperature1`, `quantity2`, and `temperature2`.\nWhen to use: [\"Use `calculate_final_temperature` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `quantity1`, `temperature1`, `quantity2`, and `temperature2`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"quantity1\": 1, \"temperature1\": 1, \"quantity2\": 1, \"temperature2\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_final_temperature\", \"arguments\": {\"quantity1\": 1, \"temperature1\": 1, \"quantity2\": 1, \"temperature2\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_final_temperature\", \"arguments\": {\"quantity1\": 2, \"temperature1\": 2, \"quantity2\": 2, \"temperature2\": 2}}]\nSchema: {\"properties\": {\"quantity1\": {\"description\": \"The quantity of the first sample of gas.\", \"type\": \"integer\"}, \"quantity2\": {\"description\": \"The quantity of the second sample of gas.\", \"type\": \"integer\"}, \"temperature1\": {\"description\": \"The temperature of the first sample of gas.\", \"type\": \"integer\"}, \"temperature2\": {\"description\": \"The temperature of the second sample of gas.\", \"type\": \"integer\"}}, \"required\": [\"quantity1\", \"temperature1\", \"quantity2\", \"temperature2\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate final temperature.\n",
+        "raw_model_output": "{\"arguments\": {\"quantity1\": 1, \"quantity2\": 1, \"temperature1\": 1, \"temperature2\": 1}}",
+        "parsed_prediction": {
+          "quantity1": 1,
+          "temperature1": 1,
+          "quantity2": 1,
+          "temperature2": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0118_calculate_final_temperature_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "calculate_final_temperature",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with calculate final temperature; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "quantity1": 1,
+        "temperature1": 1,
+        "quantity2": 1,
+        "temperature2": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0704,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_final_temperature\nTool description: Calculate the final temperature when different quantities of the same gas at different temperatures are mixed.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the final temperature when different quantities of the same gas at different temperatures are mixed. Provide all required fields: `quantity1`, `temperature1`, `quantity2`, and `temperature2`.\nWhen to use: [\"Use `calculate_final_temperature` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `quantity1`, `temperature1`, `quantity2`, and `temperature2`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"quantity1\": 1, \"temperature1\": 1, \"quantity2\": 1, \"temperature2\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_final_temperature\", \"arguments\": {\"quantity1\": 1, \"temperature1\": 1, \"quantity2\": 1, \"temperature2\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_final_temperature\", \"arguments\": {\"quantity1\": 2, \"temperature1\": 2, \"quantity2\": 2, \"temperature2\": 2}}]\nSchema: {\"properties\": {\"quantity1\": {\"description\": \"The quantity of the first sample of gas.\", \"type\": \"integer\"}, \"quantity2\": {\"description\": \"The quantity of the second sample of gas.\", \"type\": \"integer\"}, \"temperature1\": {\"description\": \"The temperature of the first sample of gas.\", \"type\": \"integer\"}, \"temperature2\": {\"description\": \"The temperature of the second sample of gas.\", \"type\": \"integer\"}}, \"required\": [\"quantity1\", \"temperature1\", \"quantity2\", \"temperature2\"], \"type\": \"object\"}\nUser request: Maybe do something with calculate final temperature; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {\"quantity1\": 1, \"quantity2\": 1, \"temperature1\": 1, \"temperature2\": 1}}",
+        "parsed_prediction": {
+          "quantity1": 1,
+          "temperature1": 1,
+          "quantity2": 1,
+          "temperature2": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0118_calculate_final_temperature_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "calculate_final_temperature",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with calculate final temperature.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "quantity1": 1,
+        "temperature1": 1,
+        "quantity2": 1,
+        "temperature2": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0668,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_final_temperature\nTool description: Calculate the final temperature when different quantities of the same gas at different temperatures are mixed.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the final temperature when different quantities of the same gas at different temperatures are mixed. Provide all required fields: `quantity1`, `temperature1`, `quantity2`, and `temperature2`.\nWhen to use: [\"Use `calculate_final_temperature` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `quantity1`, `temperature1`, `quantity2`, and `temperature2`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"quantity1\": 1, \"temperature1\": 1, \"quantity2\": 1, \"temperature2\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_final_temperature\", \"arguments\": {\"quantity1\": 1, \"temperature1\": 1, \"quantity2\": 1, \"temperature2\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_final_temperature\", \"arguments\": {\"quantity1\": 2, \"temperature1\": 2, \"quantity2\": 2, \"temperature2\": 2}}]\nSchema: {\"properties\": {\"quantity1\": {\"description\": \"The quantity of the first sample of gas.\", \"type\": \"integer\"}, \"quantity2\": {\"description\": \"The quantity of the second sample of gas.\", \"type\": \"integer\"}, \"temperature1\": {\"description\": \"The temperature of the first sample of gas.\", \"type\": \"integer\"}, \"temperature2\": {\"description\": \"The temperature of the second sample of gas.\", \"type\": \"integer\"}}, \"required\": [\"quantity1\", \"temperature1\", \"quantity2\", \"temperature2\"], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with calculate final temperature.\n",
+        "raw_model_output": "{\"arguments\": {\"quantity1\": 1, \"quantity2\": 1, \"temperature1\": 1, \"temperature2\": 1}}",
+        "parsed_prediction": {
+          "quantity1": 1,
+          "temperature1": 1,
+          "quantity2": 1,
+          "temperature2": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0118_calculate_final_temperature_positive_easy_0",
+      "tool_name": "calculate_final_temperature",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use calculate final temperature to Calculate the final temperature when different quantities of the same gas at different temperatures are mixed. Set quantity1=1, quantity2=1, temperature1=1, temperature2=1.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "quantity1": 1,
+        "temperature1": 1,
+        "quantity2": 1,
+        "temperature2": 1
+      },
+      "expected_arguments": {
+        "quantity1": 1,
+        "quantity2": 1,
+        "temperature1": 1,
+        "temperature2": 1
+      },
+      "prediction_latency_ms": 0.0664,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_final_temperature\nTool description: Calculate the final temperature when different quantities of the same gas at different temperatures are mixed.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the final temperature when different quantities of the same gas at different temperatures are mixed. Provide all required fields: `quantity1`, `temperature1`, `quantity2`, and `temperature2`.\nWhen to use: [\"Use `calculate_final_temperature` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `quantity1`, `temperature1`, `quantity2`, and `temperature2`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"quantity1\": 1, \"temperature1\": 1, \"quantity2\": 1, \"temperature2\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_final_temperature\", \"arguments\": {\"quantity1\": 1, \"temperature1\": 1, \"quantity2\": 1, \"temperature2\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_final_temperature\", \"arguments\": {\"quantity1\": 2, \"temperature1\": 2, \"quantity2\": 2, \"temperature2\": 2}}]\nSchema: {\"properties\": {\"quantity1\": {\"description\": \"The quantity of the first sample of gas.\", \"type\": \"integer\"}, \"quantity2\": {\"description\": \"The quantity of the second sample of gas.\", \"type\": \"integer\"}, \"temperature1\": {\"description\": \"The temperature of the first sample of gas.\", \"type\": \"integer\"}, \"temperature2\": {\"description\": \"The temperature of the second sample of gas.\", \"type\": \"integer\"}}, \"required\": [\"quantity1\", \"temperature1\", \"quantity2\", \"temperature2\"], \"type\": \"object\"}\nUser request: Use calculate final temperature to Calculate the final temperature when different quantities of the same gas at different temperatures are mixed. Set quantity1=1, quantity2=1, temperature1=1, temperature2=1.\n",
+        "raw_model_output": "{\"arguments\": {\"quantity1\": 1, \"quantity2\": 1, \"temperature1\": 1, \"temperature2\": 1}}",
+        "parsed_prediction": {
+          "quantity1": 1,
+          "temperature1": 1,
+          "quantity2": 1,
+          "temperature2": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0118_calculate_final_temperature_positive_medium_0",
+      "tool_name": "calculate_final_temperature",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Calculate the final temperature when different quantities of the same gas at different temperatures are mixed. The relevant details are quantity1=8, quantity2=8, temperature1=8, temperature2=8.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "quantity1": 1,
+        "temperature1": 1,
+        "quantity2": 1,
+        "temperature2": 1
+      },
+      "expected_arguments": {
+        "quantity1": 8,
+        "quantity2": 8,
+        "temperature1": 8,
+        "temperature2": 8
+      },
+      "prediction_latency_ms": 0.1274,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_final_temperature\nTool description: Calculate the final temperature when different quantities of the same gas at different temperatures are mixed.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the final temperature when different quantities of the same gas at different temperatures are mixed. Provide all required fields: `quantity1`, `temperature1`, `quantity2`, and `temperature2`.\nWhen to use: [\"Use `calculate_final_temperature` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `quantity1`, `temperature1`, `quantity2`, and `temperature2`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"quantity1\": 1, \"temperature1\": 1, \"quantity2\": 1, \"temperature2\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_final_temperature\", \"arguments\": {\"quantity1\": 1, \"temperature1\": 1, \"quantity2\": 1, \"temperature2\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_final_temperature\", \"arguments\": {\"quantity1\": 2, \"temperature1\": 2, \"quantity2\": 2, \"temperature2\": 2}}]\nSchema: {\"properties\": {\"quantity1\": {\"description\": \"The quantity of the first sample of gas.\", \"type\": \"integer\"}, \"quantity2\": {\"description\": \"The quantity of the second sample of gas.\", \"type\": \"integer\"}, \"temperature1\": {\"description\": \"The temperature of the first sample of gas.\", \"type\": \"integer\"}, \"temperature2\": {\"description\": \"The temperature of the second sample of gas.\", \"type\": \"integer\"}}, \"required\": [\"quantity1\", \"temperature1\", \"quantity2\", \"temperature2\"], \"type\": \"object\"}\nUser request: I need help with this task: Calculate the final temperature when different quantities of the same gas at different temperatures are mixed. The relevant details are quantity1=8, quantity2=8, temperature1=8, temperature2=8.\n",
+        "raw_model_output": "{\"arguments\": {\"quantity1\": 1, \"quantity2\": 1, \"temperature1\": 1, \"temperature2\": 1}}",
+        "parsed_prediction": {
+          "quantity1": 1,
+          "temperature1": 1,
+          "quantity2": 1,
+          "temperature2": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.5,
+    "avg_argument_validity": 0.5,
+    "avg_prediction_latency_ms": 0.0828
+  }
+}

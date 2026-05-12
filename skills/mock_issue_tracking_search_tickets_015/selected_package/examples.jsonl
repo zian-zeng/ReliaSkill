@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for mock_issue_tracking_search_tickets_015", "arguments": {"query": "sample query"}}
+{"scenario": "Richer invocation that uses optional controls for mock_issue_tracking_search_tickets_015", "arguments": {"query": "sample query", "status": "blocked", "assignee": "sample_assignee_2"}}

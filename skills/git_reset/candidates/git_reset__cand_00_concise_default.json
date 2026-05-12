@@ -1,0 +1,90 @@
+{
+  "candidate_id": "git_reset__cand_00_concise_default",
+  "generation_strategy": "concise_default",
+  "prompt_template_id": "heuristic_concise_default_v1",
+  "skill_text": "Unstages all staged changes. Provide the required field `repo_path`.\nWhen to use:\n- Use `git_reset` when the user's request directly matches this tool's purpose.\n- Provide the required field `repo_path`.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Do not use when required inputs are missing.\nArgument template:\n{\"repo_path\": \"data/sample.txt\"}\nExamples:\nMinimal valid request that satisfies the required fields for git_reset\n{\"repo_path\": \"data/sample.txt\"}\nRicher invocation that uses optional controls for git_reset\n{\"repo_path\": \"data/sample.txt\"}",
+  "argument_template": {
+    "repo_path": "data/sample.txt"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for git_reset",
+      "arguments": {
+        "repo_path": "data/sample.txt"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for git_reset",
+      "arguments": {
+        "repo_path": "data/sample.txt"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `git_reset` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `repo_path`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Do not use when required inputs are missing."
+  ],
+  "token_count": 154,
+  "skill_token_count": 154,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 2,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Unstages all staged changes. Provide the required field `repo_path`.",
+    "when_to_use": [
+      "Use `git_reset` when the user's request directly matches this tool's purpose.",
+      "Provide the required field `repo_path`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Do not use when required inputs are missing."
+    ],
+    "argument_template": {
+      "repo_path": "data/sample.txt"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for git_reset",
+        "arguments": {
+          "repo_path": "data/sample.txt"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for git_reset",
+        "arguments": {
+          "repo_path": "data/sample.txt"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "git_reset__cand_00_concise_default",
+        "generation_strategy": "concise_default",
+        "prompt_template_id": "heuristic_concise_default_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "git_reset__cand_00_concise_default",
+      "generation_strategy": "concise_default",
+      "prompt_template_id": "heuristic_concise_default_v1"
+    }
+  }
+}

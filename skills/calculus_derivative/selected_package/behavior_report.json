@@ -1,0 +1,207 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0129_calculus_derivative_negative_easy_0_out_of_domain_request",
+      "tool_name": "calculus.derivative",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculus.derivative.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "function": "sample_function_1",
+        "value": 1,
+        "function_variable": "sample_function_variable_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1017,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculus.derivative\nTool description: Compute the derivative of a function at a specific value.\nSkill condition: multi_candidate_skill\nSkill summary: Compute the derivative of a function at a specific value. Provide all required fields: `function`, and `value`.\nWhen to use: [\"Use `calculus.derivative` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `function`, and `value`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"function\": \"sample_function_1\", \"value\": 1, \"function_variable\": \"sample_function_variable_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculus.derivative\", \"arguments\": {\"function\": \"sample_function_1\", \"value\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculus.derivative\", \"arguments\": {\"function\": \"sample_function_2\", \"value\": 2, \"function_variable\": \"sample_function_variable_2\"}}]\nSchema: {\"properties\": {\"function\": {\"description\": \"The function to calculate the derivative of.\", \"type\": \"string\"}, \"function_variable\": {\"description\": \"The variable present in the function, for instance x or y, etc. Default is 'x'\", \"type\": \"string\"}, \"value\": {\"description\": \"The value where the derivative needs to be calculated at.\", \"type\": \"integer\"}}, \"required\": [\"function\", \"value\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculus.derivative.\n",
+        "raw_model_output": "{\"arguments\": {\"function\": \"sample_function_1\", \"function_variable\": \"sample_function_variable_1\", \"value\": 1}}",
+        "parsed_prediction": {
+          "function": "sample_function_1",
+          "value": 1,
+          "function_variable": "sample_function_variable_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0129_calculus_derivative_negative_hard_1_near_miss_intent",
+      "tool_name": "calculus.derivative",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to calculus.derivative, but I only want a checklist for how to Compute the derivative of a function at a specific value; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "function": "sample_function_1",
+        "value": 1,
+        "function_variable": "sample_function_variable_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1611,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculus.derivative\nTool description: Compute the derivative of a function at a specific value.\nSkill condition: multi_candidate_skill\nSkill summary: Compute the derivative of a function at a specific value. Provide all required fields: `function`, and `value`.\nWhen to use: [\"Use `calculus.derivative` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `function`, and `value`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"function\": \"sample_function_1\", \"value\": 1, \"function_variable\": \"sample_function_variable_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculus.derivative\", \"arguments\": {\"function\": \"sample_function_1\", \"value\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculus.derivative\", \"arguments\": {\"function\": \"sample_function_2\", \"value\": 2, \"function_variable\": \"sample_function_variable_2\"}}]\nSchema: {\"properties\": {\"function\": {\"description\": \"The function to calculate the derivative of.\", \"type\": \"string\"}, \"function_variable\": {\"description\": \"The variable present in the function, for instance x or y, etc. Default is 'x'\", \"type\": \"string\"}, \"value\": {\"description\": \"The value where the derivative needs to be calculated at.\", \"type\": \"integer\"}}, \"required\": [\"function\", \"value\"], \"type\": \"object\"}\nUser request: This sounds close to calculus.derivative, but I only want a checklist for how to Compute the derivative of a function at a specific value; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {\"function\": \"sample_function_1\", \"function_variable\": \"sample_function_variable_1\", \"value\": 1}}",
+        "parsed_prediction": {
+          "function": "sample_function_1",
+          "value": 1,
+          "function_variable": "sample_function_variable_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0129_calculus_derivative_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "calculus.derivative",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use calculus.derivative; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "function": "sample_function_1",
+        "value": 1,
+        "function_variable": "sample_function_variable_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0797,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculus.derivative\nTool description: Compute the derivative of a function at a specific value.\nSkill condition: multi_candidate_skill\nSkill summary: Compute the derivative of a function at a specific value. Provide all required fields: `function`, and `value`.\nWhen to use: [\"Use `calculus.derivative` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `function`, and `value`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"function\": \"sample_function_1\", \"value\": 1, \"function_variable\": \"sample_function_variable_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculus.derivative\", \"arguments\": {\"function\": \"sample_function_1\", \"value\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculus.derivative\", \"arguments\": {\"function\": \"sample_function_2\", \"value\": 2, \"function_variable\": \"sample_function_variable_2\"}}]\nSchema: {\"properties\": {\"function\": {\"description\": \"The function to calculate the derivative of.\", \"type\": \"string\"}, \"function_variable\": {\"description\": \"The variable present in the function, for instance x or y, etc. Default is 'x'\", \"type\": \"string\"}, \"value\": {\"description\": \"The value where the derivative needs to be calculated at.\", \"type\": \"integer\"}}, \"required\": [\"function\", \"value\"], \"type\": \"object\"}\nUser request: Explain when someone should use calculus.derivative; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"function\": \"sample_function_1\", \"function_variable\": \"sample_function_variable_1\", \"value\": 1}}",
+        "parsed_prediction": {
+          "function": "sample_function_1",
+          "value": 1,
+          "function_variable": "sample_function_variable_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0129_calculus_derivative_positive_easy_0",
+      "tool_name": "calculus.derivative",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use calculus.derivative to Compute the derivative of a function at a specific value. Set function=\"function_0\", value=1.",
+      "exact_match": false,
+      "argument_validity": 0.5,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "function": "sample_function_1",
+        "value": 1,
+        "function_variable": "sample_function_variable_1"
+      },
+      "expected_arguments": {
+        "function": "function_0",
+        "value": 1
+      },
+      "prediction_latency_ms": 0.078,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculus.derivative\nTool description: Compute the derivative of a function at a specific value.\nSkill condition: multi_candidate_skill\nSkill summary: Compute the derivative of a function at a specific value. Provide all required fields: `function`, and `value`.\nWhen to use: [\"Use `calculus.derivative` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `function`, and `value`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"function\": \"sample_function_1\", \"value\": 1, \"function_variable\": \"sample_function_variable_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculus.derivative\", \"arguments\": {\"function\": \"sample_function_1\", \"value\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculus.derivative\", \"arguments\": {\"function\": \"sample_function_2\", \"value\": 2, \"function_variable\": \"sample_function_variable_2\"}}]\nSchema: {\"properties\": {\"function\": {\"description\": \"The function to calculate the derivative of.\", \"type\": \"string\"}, \"function_variable\": {\"description\": \"The variable present in the function, for instance x or y, etc. Default is 'x'\", \"type\": \"string\"}, \"value\": {\"description\": \"The value where the derivative needs to be calculated at.\", \"type\": \"integer\"}}, \"required\": [\"function\", \"value\"], \"type\": \"object\"}\nUser request: Use calculus.derivative to Compute the derivative of a function at a specific value. Set function=\"function_0\", value=1.\n",
+        "raw_model_output": "{\"arguments\": {\"function\": \"sample_function_1\", \"function_variable\": \"sample_function_variable_1\", \"value\": 1}}",
+        "parsed_prediction": {
+          "function": "sample_function_1",
+          "value": 1,
+          "function_variable": "sample_function_variable_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0129_calculus_derivative_positive_medium_0",
+      "tool_name": "calculus.derivative",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Compute the derivative of a function at a specific value. The relevant details are function=\"function_7\", value=8.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "function": "sample_function_1",
+        "value": 1,
+        "function_variable": "sample_function_variable_1"
+      },
+      "expected_arguments": {
+        "function": "function_7",
+        "value": 8
+      },
+      "prediction_latency_ms": 0.0767,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculus.derivative\nTool description: Compute the derivative of a function at a specific value.\nSkill condition: multi_candidate_skill\nSkill summary: Compute the derivative of a function at a specific value. Provide all required fields: `function`, and `value`.\nWhen to use: [\"Use `calculus.derivative` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `function`, and `value`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"function\": \"sample_function_1\", \"value\": 1, \"function_variable\": \"sample_function_variable_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculus.derivative\", \"arguments\": {\"function\": \"sample_function_1\", \"value\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculus.derivative\", \"arguments\": {\"function\": \"sample_function_2\", \"value\": 2, \"function_variable\": \"sample_function_variable_2\"}}]\nSchema: {\"properties\": {\"function\": {\"description\": \"The function to calculate the derivative of.\", \"type\": \"string\"}, \"function_variable\": {\"description\": \"The variable present in the function, for instance x or y, etc. Default is 'x'\", \"type\": \"string\"}, \"value\": {\"description\": \"The value where the derivative needs to be calculated at.\", \"type\": \"integer\"}}, \"required\": [\"function\", \"value\"], \"type\": \"object\"}\nUser request: I need help with this task: Compute the derivative of a function at a specific value. The relevant details are function=\"function_7\", value=8.\n",
+        "raw_model_output": "{\"arguments\": {\"function\": \"sample_function_1\", \"function_variable\": \"sample_function_variable_1\", \"value\": 1}}",
+        "parsed_prediction": {
+          "function": "sample_function_1",
+          "value": 1,
+          "function_variable": "sample_function_variable_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.25,
+    "avg_prediction_latency_ms": 0.0994
+  }
+}

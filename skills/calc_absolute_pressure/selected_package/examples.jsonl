@@ -1,0 +1,4 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calc_absolute_pressure", "arguments": {"gauge_pressure": null}}
+{"scenario": "Richer invocation that uses optional controls for calc_absolute_pressure", "arguments": {"atm_pressure": null, "gauge_pressure": null}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"gauge_pressure": null}}
+{"scenario": "Optional, enum, nested, or array argument example.", "arguments": {"atm_pressure": null, "gauge_pressure": null}}

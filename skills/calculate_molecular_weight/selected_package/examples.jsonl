@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_molecular_weight", "arguments": {"compound": "sample_compound_1", "to_unit": "sample_to_unit_1"}}
+{"scenario": "Richer invocation that uses optional controls for calculate_molecular_weight", "arguments": {"compound": "sample_compound_2", "to_unit": "sample_to_unit_2"}}

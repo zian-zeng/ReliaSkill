@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for diabetes_prediction", "arguments": {"weight": null, "height": null, "activity_level": "sedentary"}}
+{"scenario": "Richer invocation that uses optional controls for diabetes_prediction", "arguments": {"weight": null, "height": null, "activity_level": "lightly active"}}

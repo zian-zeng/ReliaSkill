@@ -1,0 +1,3 @@
+{"scenario": "Minimal valid request that satisfies the required fields for git_checkout", "arguments": {"repo_path": "data/sample.txt", "branch_name": "sample-name"}}
+{"scenario": "Richer invocation that uses optional controls for git_checkout", "arguments": {"repo_path": "data/sample.txt", "branch_name": "sample-name"}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"repo_path": "data/sample.txt", "branch_name": "sample-name"}}

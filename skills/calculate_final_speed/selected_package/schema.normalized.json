@@ -1,0 +1,107 @@
+{
+  "tool_name": "calculate_final_speed",
+  "server_name": "bfcl_v3",
+  "tool_purpose": "Calculate the final speed of an object dropped from a certain height without air resistance.",
+  "input_schema_raw": {
+    "properties": {
+      "gravity": {
+        "description": "The gravitational acceleration. Default is 9.8 m/s^2.",
+        "type": "float"
+      },
+      "height": {
+        "description": "The height from which the object is dropped.",
+        "type": "integer"
+      },
+      "initial_velocity": {
+        "description": "The initial velocity of the object.",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "initial_velocity",
+      "height"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "initial_velocity",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The initial velocity of the object.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.initial_velocity"
+    },
+    {
+      "name": "height",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The height from which the object is dropped.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.height"
+    },
+    {
+      "name": "gravity",
+      "type": "float",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "The gravitational acceleration. Default is 9.8 m/s^2.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.gravity"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Calculate the final speed of an object dropped from a certain height without air resistance.",
+    "calculate_final_speed"
+  ],
+  "source_pointer": "bfcl_v3",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.15,
+    "auth_required": false,
+    "documentation_length": 92,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "calculate_final_speed",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

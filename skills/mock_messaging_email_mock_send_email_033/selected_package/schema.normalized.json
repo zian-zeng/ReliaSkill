@@ -1,0 +1,158 @@
+{
+  "tool_name": "mock_messaging_email_mock_send_email_033",
+  "server_name": "synthetic_messaging_email_mock",
+  "tool_purpose": "Synthetic safe mock email tool that records an outbound message without contacting any external service.",
+  "input_schema_raw": {
+    "properties": {
+      "body": {
+        "description": "Message body.",
+        "type": "string"
+      },
+      "dry_run": {
+        "description": "When true, validate the request without changing the mock system.",
+        "type": "boolean"
+      },
+      "importance": {
+        "description": "Mock importance flag.",
+        "enum": [
+          "normal",
+          "high"
+        ],
+        "type": "string"
+      },
+      "subject": {
+        "description": "Message subject.",
+        "type": "string"
+      },
+      "to": {
+        "description": "Recipient email addresses.",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      }
+    },
+    "required": [
+      "to",
+      "subject",
+      "body"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "to",
+      "type": "array",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Recipient email addresses.",
+      "items_type": "string",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.to"
+    },
+    {
+      "name": "subject",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Message subject.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.subject"
+    },
+    {
+      "name": "body",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Message body.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.body"
+    },
+    {
+      "name": "importance",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": [
+        "normal",
+        "high"
+      ],
+      "description": "Mock importance flag.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.importance"
+    },
+    {
+      "name": "dry_run",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "When true, validate the request without changing the mock system.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.dry_run"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Synthetic safe mock email tool that records an outbound message without contacting any external service.",
+    "Mock Messaging Email Mock Send Email 033"
+  ],
+  "source_pointer": "synthetic_mock:messaging/email mock:8",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 104,
+    "has_array_argument": true,
+    "has_boolean_flag": true,
+    "has_nested_object": false,
+    "has_side_effect": true,
+    "max_schema_depth": 3,
+    "num_arguments": 5,
+    "num_enum_arguments": 1,
+    "num_enum_fields": 1,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 2,
+    "num_required_arguments": 3,
+    "num_top_level_arguments": 5,
+    "side_effect_type": "external_communication"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "mock_messaging_email_mock_send_email_033",
+    "server_name": "synthetic_messaging_email_mock",
+    "source_pointer": "synthetic_mock:messaging/email mock:8"
+  },
+  "side_effect_hints": [
+    "external_communication"
+  ],
+  "safety_hints": [
+    "review_side_effects_before_deployment"
+  ]
+}

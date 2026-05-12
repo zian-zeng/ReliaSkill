@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for playwright_navigate", "arguments": {"url": "https://example.com/resource"}}
+{"scenario": "Richer invocation that uses optional controls for playwright_navigate", "arguments": {"url": "https://example.com/resource", "browserType": "firefox", "width": 2.0, "height": 2.0, "timeout": 2.0, "waitUntil": "sample_waitUntil_2", "headless": true}}

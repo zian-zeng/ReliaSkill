@@ -1,0 +1,4 @@
+{"scenario": "Minimal valid request that satisfies the required fields for end_codegen_session", "arguments": {"sessionId": "sample_sessionId_1"}}
+{"scenario": "Richer invocation that uses optional controls for end_codegen_session", "arguments": {"sessionId": "sample_sessionId_2"}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"sessionId": "sample_sessionId_3"}}
+{"scenario": "Optional, enum, nested, or array argument example.", "arguments": {"sessionId": "sample_sessionId_4"}}

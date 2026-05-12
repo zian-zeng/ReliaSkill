@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0066_tensorflow_hub_faster_rcnn_inception_resnet_v2_atrous_oid_v4_hub_load_https_tfhu_negative_easy_0_out_of_domain_request",
+      "tool_name": "tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to tensorflow hub  faster rcnn inception resnet v2 atrous oid v4  hub load https tfhub dev google faster rcnn inception resnet v2 atrous oid v4 1.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0335,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1\nTool description: A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor for object detection on the Open Images Dataset v4. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/google/faster_rcnn/inception_resnet_v2/atrous/oid_v4/1').\nSkill condition: multi_candidate_skill\nSkill summary: A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor for object detection on the Open Images Dataset v4. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/google/faster_rcnn/inception_resnet_v2/atrous/oid_v4/1'). This tool has no required input fields.\nWhen to use: [\"Use `tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to tensorflow hub  faster rcnn inception resnet v2 atrous oid v4  hub load https tfhub dev google faster rcnn inception resnet v2 atrous oid v4 1.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0066_tensorflow_hub_faster_rcnn_inception_resnet_v2_atrous_oid_v4_hub_load_https_tfhu_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with tensorflow hub  faster rcnn inception resnet v2 atrous oid v4  hub load https tfhub dev google faster rcnn inception resnet v2 atrous oid v4 1.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0291,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1\nTool description: A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor for object detection on the Open Images Dataset v4. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/google/faster_rcnn/inception_resnet_v2/atrous/oid_v4/1').\nSkill condition: multi_candidate_skill\nSkill summary: A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor for object detection on the Open Images Dataset v4. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/google/faster_rcnn/inception_resnet_v2/atrous/oid_v4/1'). This tool has no required input fields.\nWhen to use: [\"Use `tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with tensorflow hub  faster rcnn inception resnet v2 atrous oid v4  hub load https tfhub dev google faster rcnn inception resnet v2 atrous oid v4 1.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0066_tensorflow_hub_faster_rcnn_inception_resnet_v2_atrous_oid_v4_hub_load_https_tfhu_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN; tensorflow hub  faster rcnn inception resnet v2 atrous oid v4  hub load https tfhub dev google faster rcnn inception resnet v2 atrous oid v4 1 is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0286,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1\nTool description: A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor for object detection on the Open Images Dataset v4. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/google/faster_rcnn/inception_resnet_v2/atrous/oid_v4/1').\nSkill condition: multi_candidate_skill\nSkill summary: A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor for object detection on the Open Images Dataset v4. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/google/faster_rcnn/inception_resnet_v2/atrous/oid_v4/1'). This tool has no required input fields.\nWhen to use: [\"Use `tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN; tensorflow hub  faster rcnn inception resnet v2 atrous oid v4  hub load https tfhub dev google faster rcnn inception resnet v2 atrous oid v4 1 is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0066_tensorflow_hub_faster_rcnn_inception_resnet_v2_atrous_oid_v4_hub_load_https_tfhu_positive_easy_0",
+      "tool_name": "tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use tensorflow hub  faster rcnn inception resnet v2 atrous oid v4  hub load https tfhub dev google faster rcnn inception resnet v2 atrous oid v4 1 to A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor for object detection on the Open Images Dataset v4. Framework: T. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0282,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1\nTool description: A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor for object detection on the Open Images Dataset v4. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/google/faster_rcnn/inception_resnet_v2/atrous/oid_v4/1').\nSkill condition: multi_candidate_skill\nSkill summary: A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor for object detection on the Open Images Dataset v4. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/google/faster_rcnn/inception_resnet_v2/atrous/oid_v4/1'). This tool has no required input fields.\nWhen to use: [\"Use `tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use tensorflow hub  faster rcnn inception resnet v2 atrous oid v4  hub load https tfhub dev google faster rcnn inception resnet v2 atrous oid v4 1 to A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor for object detection on the Open Images Dataset v4. Framework: T. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0066_tensorflow_hub_faster_rcnn_inception_resnet_v2_atrous_oid_v4_hub_load_https_tfhu_positive_medium_0",
+      "tool_name": "tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor for object detection on the Open Images Dataset v4. Framework: T. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0284,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1\nTool description: A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor for object detection on the Open Images Dataset v4. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/google/faster_rcnn/inception_resnet_v2/atrous/oid_v4/1').\nSkill condition: multi_candidate_skill\nSkill summary: A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor for object detection on the Open Images Dataset v4. Framework: TensorFlow Hub. Functionality: Detect objects in images. API call: hub.load('https://tfhub.dev/google/faster_rcnn/inception_resnet_v2/atrous/oid_v4/1'). This tool has no required input fields.\nWhen to use: [\"Use `tensorflow_hub__faster_rcnn_inception_resnet_v2_atrous_oid_v4__hub_load_https_tfhub_dev_google_faster_rcnn_inception_resnet_v2_atrous_oid_v4_1` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: A pre-trained Faster R-CNN model with Inception-ResNet-v2 feature extractor for object detection on the Open Images Dataset v4. Framework: T. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0296
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "candidate_id": "calculate_entropy_change__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Calculate the entropy change for an isothermal and reversible process. Provide all required fields: `initial_temp`, `final_temp`, and `heat_capacity`.\nWhen to use:\n- Use `calculate_entropy_change` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `initial_temp`, `final_temp`, and `heat_capacity`.\n- Optional control is available through `isothermal` when the request needs extra specificity.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"final_temp\": null, \"heat_capacity\": null, \"initial_temp\": null, \"isothermal\": true}\nExamples:\nMinimal valid request that satisfies the required fields for calculate_entropy_change\n{\"final_temp\": null, \"heat_capacity\": null, \"initial_temp\": null}\nRicher invocation that uses optional controls for calculate_entropy_change\n{\"final_temp\": null, \"heat_capacity\": null, \"initial_temp\": null, \"isothermal\": true}\nRequired-argument dev behavior example.\n{\"final_temp\": null, \"heat_capacity\": null, \"initial_temp\": null}\nOptional, enum, nested, or array argument example.\n{\"final_temp\": null, \"heat_capacity\": null, \"initial_temp\": null, \"isothermal\": true}",
+  "argument_template": {
+    "initial_temp": null,
+    "final_temp": null,
+    "heat_capacity": null,
+    "isothermal": true
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for calculate_entropy_change",
+      "arguments": {
+        "initial_temp": null,
+        "final_temp": null,
+        "heat_capacity": null
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for calculate_entropy_change",
+      "arguments": {
+        "initial_temp": null,
+        "final_temp": null,
+        "heat_capacity": null,
+        "isothermal": true
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "initial_temp": null,
+        "final_temp": null,
+        "heat_capacity": null
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "initial_temp": null,
+        "final_temp": null,
+        "heat_capacity": null,
+        "isothermal": true
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `calculate_entropy_change` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `initial_temp`, `final_temp`, and `heat_capacity`.",
+    "Optional control is available through `isothermal` when the request needs extra specificity.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 317,
+  "skill_token_count": 317,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Calculate the entropy change for an isothermal and reversible process. Provide all required fields: `initial_temp`, `final_temp`, and `heat_capacity`.",
+    "when_to_use": [
+      "Use `calculate_entropy_change` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `initial_temp`, `final_temp`, and `heat_capacity`.",
+      "Optional control is available through `isothermal` when the request needs extra specificity.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "initial_temp": null,
+      "final_temp": null,
+      "heat_capacity": null,
+      "isothermal": true
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for calculate_entropy_change",
+        "arguments": {
+          "initial_temp": null,
+          "final_temp": null,
+          "heat_capacity": null
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for calculate_entropy_change",
+        "arguments": {
+          "initial_temp": null,
+          "final_temp": null,
+          "heat_capacity": null,
+          "isothermal": true
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "initial_temp": null,
+          "final_temp": null,
+          "heat_capacity": null
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "initial_temp": null,
+          "final_temp": null,
+          "heat_capacity": null,
+          "isothermal": true
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "calculate_entropy_change__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "calculate_entropy_change__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0083_pytorch_efficientnet_torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torc_negative_easy_0_out_of_domain_request",
+      "tool_name": "pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torchhub_model_nvidia_efficientnet_b0_pretrained_true",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to pytorch  efficientnet  torch hub load repo or dir nvidia deeplearningexamples torchhub model nvidia efficientnet b0 pretrained true.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0436,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torchhub_model_nvidia_efficientnet_b0_pretrained_true\nTool description: EfficientNet is a family of image classification models that achieve state-of-the-art accuracy while being smaller and faster. The models are trained with mixed precision using Tensor Cores on the NVIDIA Volta and Ampere GPU architectures. The EfficientNet models include EfficientNet-B0, EfficientNet-B4, EfficientNet-WideSE-B0, and EfficientNet-WideSE-B4. The WideSE models use wider Squeeze-and-Excitation layers than the original EfficientNet models, resulting in slightly better accuracy. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='NVIDIA/DeepLearningExamples:torchhub', model='nvidia_efficientnet_b0', pretrained=True).\nSkill condition: multi_candidate_skill\nSkill summary: EfficientNet is a family of image classification models that achieve state-of-the-art accuracy while being smaller and faster. The models are trained with mixed precision using Tensor Cores on the NVIDIA Volta and Ampere GPU architectures. The EfficientNet models include EfficientNet-B0.\nWhen to use: [\"Use `pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torchhub_model_nvidia_efficientnet_b0_pretrained_true` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\", \"Do not use when required inputs are missing.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to pytorch  efficientnet  torch hub load repo or dir nvidia deeplearningexamples torchhub model nvidia efficientnet b0 pretrained true.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0083_pytorch_efficientnet_torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torc_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torchhub_model_nvidia_efficientnet_b0_pretrained_true",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with pytorch  efficientnet  torch hub load repo or dir nvidia deeplearningexamples torchhub model nvidia efficientnet b0 pretrained true; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0323,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torchhub_model_nvidia_efficientnet_b0_pretrained_true\nTool description: EfficientNet is a family of image classification models that achieve state-of-the-art accuracy while being smaller and faster. The models are trained with mixed precision using Tensor Cores on the NVIDIA Volta and Ampere GPU architectures. The EfficientNet models include EfficientNet-B0, EfficientNet-B4, EfficientNet-WideSE-B0, and EfficientNet-WideSE-B4. The WideSE models use wider Squeeze-and-Excitation layers than the original EfficientNet models, resulting in slightly better accuracy. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='NVIDIA/DeepLearningExamples:torchhub', model='nvidia_efficientnet_b0', pretrained=True).\nSkill condition: multi_candidate_skill\nSkill summary: EfficientNet is a family of image classification models that achieve state-of-the-art accuracy while being smaller and faster. The models are trained with mixed precision using Tensor Cores on the NVIDIA Volta and Ampere GPU architectures. The EfficientNet models include EfficientNet-B0.\nWhen to use: [\"Use `pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torchhub_model_nvidia_efficientnet_b0_pretrained_true` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\", \"Do not use when required inputs are missing.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Maybe do something with pytorch  efficientnet  torch hub load repo or dir nvidia deeplearningexamples torchhub model nvidia efficientnet b0 pretrained true; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0083_pytorch_efficientnet_torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torc_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torchhub_model_nvidia_efficientnet_b0_pretrained_true",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with pytorch  efficientnet  torch hub load repo or dir nvidia deeplearningexamples torchhub model nvidia efficientnet b0 pretrained true.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0302,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torchhub_model_nvidia_efficientnet_b0_pretrained_true\nTool description: EfficientNet is a family of image classification models that achieve state-of-the-art accuracy while being smaller and faster. The models are trained with mixed precision using Tensor Cores on the NVIDIA Volta and Ampere GPU architectures. The EfficientNet models include EfficientNet-B0, EfficientNet-B4, EfficientNet-WideSE-B0, and EfficientNet-WideSE-B4. The WideSE models use wider Squeeze-and-Excitation layers than the original EfficientNet models, resulting in slightly better accuracy. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='NVIDIA/DeepLearningExamples:torchhub', model='nvidia_efficientnet_b0', pretrained=True).\nSkill condition: multi_candidate_skill\nSkill summary: EfficientNet is a family of image classification models that achieve state-of-the-art accuracy while being smaller and faster. The models are trained with mixed precision using Tensor Cores on the NVIDIA Volta and Ampere GPU architectures. The EfficientNet models include EfficientNet-B0.\nWhen to use: [\"Use `pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torchhub_model_nvidia_efficientnet_b0_pretrained_true` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\", \"Do not use when required inputs are missing.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with pytorch  efficientnet  torch hub load repo or dir nvidia deeplearningexamples torchhub model nvidia efficientnet b0 pretrained true.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0083_pytorch_efficientnet_torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torc_positive_easy_0",
+      "tool_name": "pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torchhub_model_nvidia_efficientnet_b0_pretrained_true",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use pytorch  efficientnet  torch hub load repo or dir nvidia deeplearningexamples torchhub model nvidia efficientnet b0 pretrained true to EfficientNet is a family of image classification models that achieve state-of-the-art accuracy while being smaller and faster. The models ar. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0295,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torchhub_model_nvidia_efficientnet_b0_pretrained_true\nTool description: EfficientNet is a family of image classification models that achieve state-of-the-art accuracy while being smaller and faster. The models are trained with mixed precision using Tensor Cores on the NVIDIA Volta and Ampere GPU architectures. The EfficientNet models include EfficientNet-B0, EfficientNet-B4, EfficientNet-WideSE-B0, and EfficientNet-WideSE-B4. The WideSE models use wider Squeeze-and-Excitation layers than the original EfficientNet models, resulting in slightly better accuracy. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='NVIDIA/DeepLearningExamples:torchhub', model='nvidia_efficientnet_b0', pretrained=True).\nSkill condition: multi_candidate_skill\nSkill summary: EfficientNet is a family of image classification models that achieve state-of-the-art accuracy while being smaller and faster. The models are trained with mixed precision using Tensor Cores on the NVIDIA Volta and Ampere GPU architectures. The EfficientNet models include EfficientNet-B0.\nWhen to use: [\"Use `pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torchhub_model_nvidia_efficientnet_b0_pretrained_true` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\", \"Do not use when required inputs are missing.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use pytorch  efficientnet  torch hub load repo or dir nvidia deeplearningexamples torchhub model nvidia efficientnet b0 pretrained true to EfficientNet is a family of image classification models that achieve state-of-the-art accuracy while being smaller and faster. The models ar. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0083_pytorch_efficientnet_torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torc_positive_medium_0",
+      "tool_name": "pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torchhub_model_nvidia_efficientnet_b0_pretrained_true",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: EfficientNet is a family of image classification models that achieve state-of-the-art accuracy while being smaller and faster. The models ar. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0304,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torchhub_model_nvidia_efficientnet_b0_pretrained_true\nTool description: EfficientNet is a family of image classification models that achieve state-of-the-art accuracy while being smaller and faster. The models are trained with mixed precision using Tensor Cores on the NVIDIA Volta and Ampere GPU architectures. The EfficientNet models include EfficientNet-B0, EfficientNet-B4, EfficientNet-WideSE-B0, and EfficientNet-WideSE-B4. The WideSE models use wider Squeeze-and-Excitation layers than the original EfficientNet models, resulting in slightly better accuracy. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='NVIDIA/DeepLearningExamples:torchhub', model='nvidia_efficientnet_b0', pretrained=True).\nSkill condition: multi_candidate_skill\nSkill summary: EfficientNet is a family of image classification models that achieve state-of-the-art accuracy while being smaller and faster. The models are trained with mixed precision using Tensor Cores on the NVIDIA Volta and Ampere GPU architectures. The EfficientNet models include EfficientNet-B0.\nWhen to use: [\"Use `pytorch__efficientnet__torch_hub_load_repo_or_dir_nvidia_deeplearningexamples_torchhub_model_nvidia_efficientnet_b0_pretrained_true` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\", \"Do not use when required inputs are missing.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: EfficientNet is a family of image classification models that achieve state-of-the-art accuracy while being smaller and faster. The models ar. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0332
+  }
+}

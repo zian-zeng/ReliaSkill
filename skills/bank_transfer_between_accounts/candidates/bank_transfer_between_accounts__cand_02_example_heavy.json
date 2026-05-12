@@ -1,0 +1,148 @@
+{
+  "candidate_id": "bank_transfer_between_accounts__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "API-Bank-style local fixture tool that records a mock transfer between two fixture accounts. Provide all required fields: `source_account_id`, `destination_account_id`, and `amount`.\nWhen to use:\n- Use `bank_transfer_between_accounts` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `source_account_id`, `destination_account_id`, and `amount`.\n- Optional controls include `memo`, `dry_run`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"amount\": 4.0, \"destination_account_id\": \"sample-destination-account-id-001\", \"dry_run\": true, \"memo\": \"sample_memo_4\", \"source_account_id\": \"sample-source-account-id-001\"}\nExamples:\nMinimal valid request that satisfies the required fields for bank_transfer_between_accounts\n{\"amount\": 1.0, \"destination_account_id\": \"sample-destination-account-id-001\", \"source_account_id\": \"sample-source-account-id-001\"}\nRicher invocation that uses optional controls for bank_transfer_between_accounts\n{\"amount\": 2.0, \"destination_account_id\": \"sample-destination-account-id-001\", \"dry_run\": true, \"memo\": \"sample_memo_2\", \"source_account_id\": \"sample-source-account-id-001\"}\nRequired-argument dev behavior example.\n{\"amount\": 3.0, \"destination_account_id\": \"sample-destination-account-id-001\", \"source_account_id\": \"sample-source-account-id-001\"}\nOptional, enum, nested, or array argument example.\n{\"amount\": 4.0, \"destination_account_id\": \"sample-destination-account-id-001\", \"dry_run\": true, \"memo\": \"sample_memo_4\", \"source_account_id\": \"sample-source-account-id-001\"}",
+  "argument_template": {
+    "source_account_id": "sample-source-account-id-001",
+    "destination_account_id": "sample-destination-account-id-001",
+    "amount": 4.0,
+    "memo": "sample_memo_4",
+    "dry_run": true
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for bank_transfer_between_accounts",
+      "arguments": {
+        "source_account_id": "sample-source-account-id-001",
+        "destination_account_id": "sample-destination-account-id-001",
+        "amount": 1.0
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for bank_transfer_between_accounts",
+      "arguments": {
+        "source_account_id": "sample-source-account-id-001",
+        "destination_account_id": "sample-destination-account-id-001",
+        "amount": 2.0,
+        "memo": "sample_memo_2",
+        "dry_run": true
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "source_account_id": "sample-source-account-id-001",
+        "destination_account_id": "sample-destination-account-id-001",
+        "amount": 3.0
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "source_account_id": "sample-source-account-id-001",
+        "destination_account_id": "sample-destination-account-id-001",
+        "amount": 4.0,
+        "memo": "sample_memo_4",
+        "dry_run": true
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `bank_transfer_between_accounts` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `source_account_id`, `destination_account_id`, and `amount`.",
+    "Optional controls include `memo`, `dry_run`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 436,
+  "skill_token_count": 436,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "API-Bank-style local fixture tool that records a mock transfer between two fixture accounts. Provide all required fields: `source_account_id`, `destination_account_id`, and `amount`.",
+    "when_to_use": [
+      "Use `bank_transfer_between_accounts` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `source_account_id`, `destination_account_id`, and `amount`.",
+      "Optional controls include `memo`, `dry_run`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "source_account_id": "sample-source-account-id-001",
+      "destination_account_id": "sample-destination-account-id-001",
+      "amount": 4.0,
+      "memo": "sample_memo_4",
+      "dry_run": true
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for bank_transfer_between_accounts",
+        "arguments": {
+          "source_account_id": "sample-source-account-id-001",
+          "destination_account_id": "sample-destination-account-id-001",
+          "amount": 1.0
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for bank_transfer_between_accounts",
+        "arguments": {
+          "source_account_id": "sample-source-account-id-001",
+          "destination_account_id": "sample-destination-account-id-001",
+          "amount": 2.0,
+          "memo": "sample_memo_2",
+          "dry_run": true
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "source_account_id": "sample-source-account-id-001",
+          "destination_account_id": "sample-destination-account-id-001",
+          "amount": 3.0
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "source_account_id": "sample-source-account-id-001",
+          "destination_account_id": "sample-destination-account-id-001",
+          "amount": 4.0,
+          "memo": "sample_memo_4",
+          "dry_run": true
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "bank_transfer_between_accounts__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "bank_transfer_between_accounts__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "candidate_id": "electromagnetic_force__cand_00_concise_default",
+  "generation_strategy": "concise_default",
+  "prompt_template_id": "heuristic_concise_default_v1",
+  "skill_text": "Calculate the electromagnetic force between two charges placed at a certain distance. Provide all required fields: `charge1`, `charge2`, and `distance`.\nWhen to use:\n- Use `electromagnetic_force` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `charge1`, `charge2`, and `distance`.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Do not use when required inputs are missing.\nArgument template:\n{\"charge1\": null, \"charge2\": null, \"distance\": null, \"medium_permittivity\": null}\nExamples:\nMinimal valid request that satisfies the required fields for electromagnetic_force\n{\"charge1\": null, \"charge2\": null, \"distance\": null}\nRicher invocation that uses optional controls for electromagnetic_force\n{\"charge1\": null, \"charge2\": null, \"distance\": null, \"medium_permittivity\": null}",
+  "argument_template": {
+    "charge1": null,
+    "charge2": null,
+    "distance": null,
+    "medium_permittivity": null
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for electromagnetic_force",
+      "arguments": {
+        "charge1": null,
+        "charge2": null,
+        "distance": null
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for electromagnetic_force",
+      "arguments": {
+        "charge1": null,
+        "charge2": null,
+        "distance": null,
+        "medium_permittivity": null
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `electromagnetic_force` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `charge1`, `charge2`, and `distance`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Do not use when required inputs are missing."
+  ],
+  "token_count": 220,
+  "skill_token_count": 220,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 2,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Calculate the electromagnetic force between two charges placed at a certain distance. Provide all required fields: `charge1`, `charge2`, and `distance`.",
+    "when_to_use": [
+      "Use `electromagnetic_force` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `charge1`, `charge2`, and `distance`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Do not use when required inputs are missing."
+    ],
+    "argument_template": {
+      "charge1": null,
+      "charge2": null,
+      "distance": null,
+      "medium_permittivity": null
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for electromagnetic_force",
+        "arguments": {
+          "charge1": null,
+          "charge2": null,
+          "distance": null
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for electromagnetic_force",
+        "arguments": {
+          "charge1": null,
+          "charge2": null,
+          "distance": null,
+          "medium_permittivity": null
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "electromagnetic_force__cand_00_concise_default",
+        "generation_strategy": "concise_default",
+        "prompt_template_id": "heuristic_concise_default_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "electromagnetic_force__cand_00_concise_default",
+      "generation_strategy": "concise_default",
+      "prompt_template_id": "heuristic_concise_default_v1"
+    }
+  }
+}

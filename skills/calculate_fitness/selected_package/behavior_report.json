@@ -1,0 +1,245 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0120_calculate_fitness_negative_easy_0_out_of_domain_request",
+      "tool_name": "calculate_fitness",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate fitness.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "trait_values": [
+          null
+        ],
+        "trait_contributions": [
+          null
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0813,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_fitness\nTool description: Calculate the expected evolutionary fitness of a creature based on the individual values and contributions of its traits.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the expected evolutionary fitness of a creature based on the individual values and contributions of its traits. Provide all required fields: `trait_values`, and `trait_contributions`.\nWhen to use: [\"Use `calculate_fitness` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `trait_values`, and `trait_contributions`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"trait_values\": [null], \"trait_contributions\": [null]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_fitness\", \"arguments\": {\"trait_values\": [null], \"trait_contributions\": [null]}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_fitness\", \"arguments\": {\"trait_values\": [null], \"trait_contributions\": [null]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"trait_values\": [null], \"trait_contributions\": [null]}}]\nSchema: {\"properties\": {\"trait_contributions\": {\"description\": \"List of the percentage contributions of each trait to the overall fitness, which must sum to 1.\", \"items\": {\"type\": \"float\"}, \"type\": \"array\"}, \"trait_values\": {\"description\": \"List of trait values, which are decimal numbers between 0 and 1, where 1 represents the trait maximally contributing to fitness.\", \"items\": {\"type\": \"float\"}, \"type\": \"array\"}}, \"required\": [\"trait_values\", \"trait_contributions\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate fitness.\n",
+        "raw_model_output": "{\"arguments\": {\"trait_contributions\": [null], \"trait_values\": [null]}}",
+        "parsed_prediction": {
+          "trait_values": [
+            null
+          ],
+          "trait_contributions": [
+            null
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0120_calculate_fitness_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "calculate_fitness",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with calculate fitness; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "trait_values": [
+          null
+        ],
+        "trait_contributions": [
+          null
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.077,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_fitness\nTool description: Calculate the expected evolutionary fitness of a creature based on the individual values and contributions of its traits.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the expected evolutionary fitness of a creature based on the individual values and contributions of its traits. Provide all required fields: `trait_values`, and `trait_contributions`.\nWhen to use: [\"Use `calculate_fitness` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `trait_values`, and `trait_contributions`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"trait_values\": [null], \"trait_contributions\": [null]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_fitness\", \"arguments\": {\"trait_values\": [null], \"trait_contributions\": [null]}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_fitness\", \"arguments\": {\"trait_values\": [null], \"trait_contributions\": [null]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"trait_values\": [null], \"trait_contributions\": [null]}}]\nSchema: {\"properties\": {\"trait_contributions\": {\"description\": \"List of the percentage contributions of each trait to the overall fitness, which must sum to 1.\", \"items\": {\"type\": \"float\"}, \"type\": \"array\"}, \"trait_values\": {\"description\": \"List of trait values, which are decimal numbers between 0 and 1, where 1 represents the trait maximally contributing to fitness.\", \"items\": {\"type\": \"float\"}, \"type\": \"array\"}}, \"required\": [\"trait_values\", \"trait_contributions\"], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with calculate fitness; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {\"trait_contributions\": [null], \"trait_values\": [null]}}",
+        "parsed_prediction": {
+          "trait_values": [
+            null
+          ],
+          "trait_contributions": [
+            null
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0120_calculate_fitness_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "calculate_fitness",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to calculate fitness, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "trait_values": [
+          null
+        ],
+        "trait_contributions": [
+          null
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0747,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_fitness\nTool description: Calculate the expected evolutionary fitness of a creature based on the individual values and contributions of its traits.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the expected evolutionary fitness of a creature based on the individual values and contributions of its traits. Provide all required fields: `trait_values`, and `trait_contributions`.\nWhen to use: [\"Use `calculate_fitness` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `trait_values`, and `trait_contributions`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"trait_values\": [null], \"trait_contributions\": [null]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_fitness\", \"arguments\": {\"trait_values\": [null], \"trait_contributions\": [null]}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_fitness\", \"arguments\": {\"trait_values\": [null], \"trait_contributions\": [null]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"trait_values\": [null], \"trait_contributions\": [null]}}]\nSchema: {\"properties\": {\"trait_contributions\": {\"description\": \"List of the percentage contributions of each trait to the overall fitness, which must sum to 1.\", \"items\": {\"type\": \"float\"}, \"type\": \"array\"}, \"trait_values\": {\"description\": \"List of trait values, which are decimal numbers between 0 and 1, where 1 represents the trait maximally contributing to fitness.\", \"items\": {\"type\": \"float\"}, \"type\": \"array\"}}, \"required\": [\"trait_values\", \"trait_contributions\"], \"type\": \"object\"}\nUser request: I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to calculate fitness, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.\n",
+        "raw_model_output": "{\"arguments\": {\"trait_contributions\": [null], \"trait_values\": [null]}}",
+        "parsed_prediction": {
+          "trait_values": [
+            null
+          ],
+          "trait_contributions": [
+            null
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0120_calculate_fitness_positive_easy_0",
+      "tool_name": "calculate_fitness",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use calculate fitness to Calculate the expected evolutionary fitness of a creature based on the individual values and contributions of its traits. Set trait_contributions=[1], trait_values=[1].",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "trait_values": [
+          null
+        ],
+        "trait_contributions": [
+          null
+        ]
+      },
+      "expected_arguments": {
+        "trait_contributions": [
+          1
+        ],
+        "trait_values": [
+          1
+        ]
+      },
+      "prediction_latency_ms": 0.1297,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_fitness\nTool description: Calculate the expected evolutionary fitness of a creature based on the individual values and contributions of its traits.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the expected evolutionary fitness of a creature based on the individual values and contributions of its traits. Provide all required fields: `trait_values`, and `trait_contributions`.\nWhen to use: [\"Use `calculate_fitness` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `trait_values`, and `trait_contributions`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"trait_values\": [null], \"trait_contributions\": [null]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_fitness\", \"arguments\": {\"trait_values\": [null], \"trait_contributions\": [null]}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_fitness\", \"arguments\": {\"trait_values\": [null], \"trait_contributions\": [null]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"trait_values\": [null], \"trait_contributions\": [null]}}]\nSchema: {\"properties\": {\"trait_contributions\": {\"description\": \"List of the percentage contributions of each trait to the overall fitness, which must sum to 1.\", \"items\": {\"type\": \"float\"}, \"type\": \"array\"}, \"trait_values\": {\"description\": \"List of trait values, which are decimal numbers between 0 and 1, where 1 represents the trait maximally contributing to fitness.\", \"items\": {\"type\": \"float\"}, \"type\": \"array\"}}, \"required\": [\"trait_values\", \"trait_contributions\"], \"type\": \"object\"}\nUser request: Use calculate fitness to Calculate the expected evolutionary fitness of a creature based on the individual values and contributions of its traits. Set trait_contributions=[1], trait_values=[1].\n",
+        "raw_model_output": "{\"arguments\": {\"trait_contributions\": [null], \"trait_values\": [null]}}",
+        "parsed_prediction": {
+          "trait_values": [
+            null
+          ],
+          "trait_contributions": [
+            null
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0120_calculate_fitness_positive_medium_0",
+      "tool_name": "calculate_fitness",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Calculate the expected evolutionary fitness of a creature based on the individual values and contributions of its traits. The relevant details are trait_contributions=[8], trait_values=[8].",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "trait_values": [
+          null
+        ],
+        "trait_contributions": [
+          null
+        ]
+      },
+      "expected_arguments": {
+        "trait_contributions": [
+          8
+        ],
+        "trait_values": [
+          8
+        ]
+      },
+      "prediction_latency_ms": 0.0749,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_fitness\nTool description: Calculate the expected evolutionary fitness of a creature based on the individual values and contributions of its traits.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the expected evolutionary fitness of a creature based on the individual values and contributions of its traits. Provide all required fields: `trait_values`, and `trait_contributions`.\nWhen to use: [\"Use `calculate_fitness` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `trait_values`, and `trait_contributions`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"trait_values\": [null], \"trait_contributions\": [null]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_fitness\", \"arguments\": {\"trait_values\": [null], \"trait_contributions\": [null]}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_fitness\", \"arguments\": {\"trait_values\": [null], \"trait_contributions\": [null]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"trait_values\": [null], \"trait_contributions\": [null]}}]\nSchema: {\"properties\": {\"trait_contributions\": {\"description\": \"List of the percentage contributions of each trait to the overall fitness, which must sum to 1.\", \"items\": {\"type\": \"float\"}, \"type\": \"array\"}, \"trait_values\": {\"description\": \"List of trait values, which are decimal numbers between 0 and 1, where 1 represents the trait maximally contributing to fitness.\", \"items\": {\"type\": \"float\"}, \"type\": \"array\"}}, \"required\": [\"trait_values\", \"trait_contributions\"], \"type\": \"object\"}\nUser request: I need help with this task: Calculate the expected evolutionary fitness of a creature based on the individual values and contributions of its traits. The relevant details are trait_contributions=[8], trait_values=[8].\n",
+        "raw_model_output": "{\"arguments\": {\"trait_contributions\": [null], \"trait_values\": [null]}}",
+        "parsed_prediction": {
+          "trait_values": [
+            null
+          ],
+          "trait_contributions": [
+            null
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0875
+  }
+}

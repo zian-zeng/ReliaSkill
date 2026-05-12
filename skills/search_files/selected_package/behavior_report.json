@@ -1,0 +1,398 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0193_search_files_negative_easy_0_out_of_domain_request",
+      "tool_name": "search_files",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to search files.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "excludePatterns": [],
+        "path": "data/sample.txt",
+        "pattern": "sample_pattern_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.2301,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search_files\nTool description: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all.\nWhen to use: [\"Use `search_files` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `path`, and `pattern`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\", \"excludePatterns\": []}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_2\", \"excludePatterns\": []}}]\nSchema: {\"properties\": {\"excludePatterns\": {\"default\": [], \"description\": \"Optional glob patterns to exclude.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"path\": {\"description\": \"Base directory to search within an allowed directory.\", \"type\": \"string\"}, \"pattern\": {\"description\": \"Glob-style pattern to match.\", \"type\": \"string\"}}, \"required\": [\"path\", \"pattern\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to search files.\n",
+        "raw_model_output": "{\"arguments\": {\"excludePatterns\": [], \"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}",
+        "parsed_prediction": {
+          "excludePatterns": [],
+          "path": "data/sample.txt",
+          "pattern": "sample_pattern_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0198_search_files_negative_easy_0_out_of_domain_request",
+      "tool_name": "search_files",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to search files.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "excludePatterns": [],
+        "path": "data/sample.txt",
+        "pattern": "sample_pattern_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.2109,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search_files\nTool description: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all.\nWhen to use: [\"Use `search_files` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `path`, and `pattern`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\", \"excludePatterns\": []}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_2\", \"excludePatterns\": []}}]\nSchema: {\"properties\": {\"excludePatterns\": {\"default\": [], \"description\": \"Optional glob patterns to exclude.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"path\": {\"description\": \"Base directory to search within an allowed directory.\", \"type\": \"string\"}, \"pattern\": {\"description\": \"Glob-style pattern to match.\", \"type\": \"string\"}}, \"required\": [\"path\", \"pattern\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to search files.\n",
+        "raw_model_output": "{\"arguments\": {\"excludePatterns\": [], \"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}",
+        "parsed_prediction": {
+          "excludePatterns": [],
+          "path": "data/sample.txt",
+          "pattern": "sample_pattern_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0193_search_files_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "search_files",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with search files; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "excludePatterns": [],
+        "path": "data/sample.txt",
+        "pattern": "sample_pattern_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1397,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search_files\nTool description: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all.\nWhen to use: [\"Use `search_files` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `path`, and `pattern`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\", \"excludePatterns\": []}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_2\", \"excludePatterns\": []}}]\nSchema: {\"properties\": {\"excludePatterns\": {\"default\": [], \"description\": \"Optional glob patterns to exclude.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"path\": {\"description\": \"Base directory to search within an allowed directory.\", \"type\": \"string\"}, \"pattern\": {\"description\": \"Glob-style pattern to match.\", \"type\": \"string\"}}, \"required\": [\"path\", \"pattern\"], \"type\": \"object\"}\nUser request: Maybe do something with search files; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {\"excludePatterns\": [], \"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}",
+        "parsed_prediction": {
+          "excludePatterns": [],
+          "path": "data/sample.txt",
+          "pattern": "sample_pattern_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0198_search_files_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "search_files",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with search files; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "excludePatterns": [],
+        "path": "data/sample.txt",
+        "pattern": "sample_pattern_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1431,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search_files\nTool description: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all.\nWhen to use: [\"Use `search_files` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `path`, and `pattern`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\", \"excludePatterns\": []}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_2\", \"excludePatterns\": []}}]\nSchema: {\"properties\": {\"excludePatterns\": {\"default\": [], \"description\": \"Optional glob patterns to exclude.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"path\": {\"description\": \"Base directory to search within an allowed directory.\", \"type\": \"string\"}, \"pattern\": {\"description\": \"Glob-style pattern to match.\", \"type\": \"string\"}}, \"required\": [\"path\", \"pattern\"], \"type\": \"object\"}\nUser request: Maybe do something with search files; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {\"excludePatterns\": [], \"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}",
+        "parsed_prediction": {
+          "excludePatterns": [],
+          "path": "data/sample.txt",
+          "pattern": "sample_pattern_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0193_search_files_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "search_files",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use search files; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "excludePatterns": [],
+        "path": "data/sample.txt",
+        "pattern": "sample_pattern_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.132,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search_files\nTool description: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all.\nWhen to use: [\"Use `search_files` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `path`, and `pattern`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\", \"excludePatterns\": []}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_2\", \"excludePatterns\": []}}]\nSchema: {\"properties\": {\"excludePatterns\": {\"default\": [], \"description\": \"Optional glob patterns to exclude.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"path\": {\"description\": \"Base directory to search within an allowed directory.\", \"type\": \"string\"}, \"pattern\": {\"description\": \"Glob-style pattern to match.\", \"type\": \"string\"}}, \"required\": [\"path\", \"pattern\"], \"type\": \"object\"}\nUser request: Explain when someone should use search files; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"excludePatterns\": [], \"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}",
+        "parsed_prediction": {
+          "excludePatterns": [],
+          "path": "data/sample.txt",
+          "pattern": "sample_pattern_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0198_search_files_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "search_files",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with search files. Use trace id ctrl_0198_search_files_negative_medium_0_known_path_no_search_needed for this benchmark item.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "excludePatterns": [],
+        "path": "data/sample.txt",
+        "pattern": "sample_pattern_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.2426,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search_files\nTool description: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all.\nWhen to use: [\"Use `search_files` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `path`, and `pattern`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\", \"excludePatterns\": []}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_2\", \"excludePatterns\": []}}]\nSchema: {\"properties\": {\"excludePatterns\": {\"default\": [], \"description\": \"Optional glob patterns to exclude.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"path\": {\"description\": \"Base directory to search within an allowed directory.\", \"type\": \"string\"}, \"pattern\": {\"description\": \"Glob-style pattern to match.\", \"type\": \"string\"}}, \"required\": [\"path\", \"pattern\"], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with search files. Use trace id ctrl_0198_search_files_negative_medium_0_known_path_no_search_needed for this benchmark item.\n",
+        "raw_model_output": "{\"arguments\": {\"excludePatterns\": [], \"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}",
+        "parsed_prediction": {
+          "excludePatterns": [],
+          "path": "data/sample.txt",
+          "pattern": "sample_pattern_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0193_search_files_positive_easy_0",
+      "tool_name": "search_files",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use search files to Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the. Set excludePatterns=[\"item_0\"], path=\"docs/control_0.md\", pattern=\"**/*.md\".",
+      "exact_match": false,
+      "argument_validity": 0.3333,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "excludePatterns": [],
+        "path": "data/sample.txt",
+        "pattern": "**/*.md"
+      },
+      "expected_arguments": {
+        "excludePatterns": [
+          "item_0"
+        ],
+        "path": "docs/control_0.md",
+        "pattern": "**/*.md"
+      },
+      "prediction_latency_ms": 0.1563,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search_files\nTool description: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all.\nWhen to use: [\"Use `search_files` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `path`, and `pattern`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\", \"excludePatterns\": []}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_2\", \"excludePatterns\": []}}]\nSchema: {\"properties\": {\"excludePatterns\": {\"default\": [], \"description\": \"Optional glob patterns to exclude.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"path\": {\"description\": \"Base directory to search within an allowed directory.\", \"type\": \"string\"}, \"pattern\": {\"description\": \"Glob-style pattern to match.\", \"type\": \"string\"}}, \"required\": [\"path\", \"pattern\"], \"type\": \"object\"}\nUser request: Use search files to Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the. Set excludePatterns=[\"item_0\"], path=\"docs/control_0.md\", pattern=\"**/*.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"excludePatterns\": [], \"path\": \"data/sample.txt\", \"pattern\": \"**/*.md\"}}",
+        "parsed_prediction": {
+          "excludePatterns": [],
+          "path": "data/sample.txt",
+          "pattern": "**/*.md"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0198_search_files_positive_easy_0",
+      "tool_name": "search_files",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use search files to Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the. Set path=\"docs/control_0.md\", pattern=\"**/*.md\".",
+      "exact_match": false,
+      "argument_validity": 0.5,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "data/sample.txt",
+        "pattern": "**/*.md"
+      },
+      "expected_arguments": {
+        "path": "docs/control_0.md",
+        "pattern": "**/*.md"
+      },
+      "prediction_latency_ms": 0.1413,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search_files\nTool description: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all.\nWhen to use: [\"Use `search_files` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `path`, and `pattern`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\", \"excludePatterns\": []}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_2\", \"excludePatterns\": []}}]\nSchema: {\"properties\": {\"excludePatterns\": {\"default\": [], \"description\": \"Optional glob patterns to exclude.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"path\": {\"description\": \"Base directory to search within an allowed directory.\", \"type\": \"string\"}, \"pattern\": {\"description\": \"Glob-style pattern to match.\", \"type\": \"string\"}}, \"required\": [\"path\", \"pattern\"], \"type\": \"object\"}\nUser request: Use search files to Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the. Set path=\"docs/control_0.md\", pattern=\"**/*.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"excludePatterns\": [], \"path\": \"data/sample.txt\", \"pattern\": \"**/*.md\"}}",
+        "parsed_prediction": {
+          "excludePatterns": [],
+          "path": "data/sample.txt",
+          "pattern": "**/*.md"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0193_search_files_positive_medium_0",
+      "tool_name": "search_files",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the. The relevant details are excludePatterns=[\"item_7\"], path=\"docs/control_7.md\", pattern=\"**/*.md\".",
+      "exact_match": false,
+      "argument_validity": 0.3333,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "excludePatterns": [],
+        "path": "data/sample.txt",
+        "pattern": "**/*.md"
+      },
+      "expected_arguments": {
+        "excludePatterns": [
+          "item_7"
+        ],
+        "path": "docs/control_7.md",
+        "pattern": "**/*.md"
+      },
+      "prediction_latency_ms": 0.1618,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search_files\nTool description: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all.\nWhen to use: [\"Use `search_files` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `path`, and `pattern`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\", \"excludePatterns\": []}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_2\", \"excludePatterns\": []}}]\nSchema: {\"properties\": {\"excludePatterns\": {\"default\": [], \"description\": \"Optional glob patterns to exclude.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"path\": {\"description\": \"Base directory to search within an allowed directory.\", \"type\": \"string\"}, \"pattern\": {\"description\": \"Glob-style pattern to match.\", \"type\": \"string\"}}, \"required\": [\"path\", \"pattern\"], \"type\": \"object\"}\nUser request: I need help with this task: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the. The relevant details are excludePatterns=[\"item_7\"], path=\"docs/control_7.md\", pattern=\"**/*.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"excludePatterns\": [], \"path\": \"data/sample.txt\", \"pattern\": \"**/*.md\"}}",
+        "parsed_prediction": {
+          "excludePatterns": [],
+          "path": "data/sample.txt",
+          "pattern": "**/*.md"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0198_search_files_positive_medium_0",
+      "tool_name": "search_files",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the. The relevant details are path=\"docs/control_7.md\", pattern=\"**/*.md\".",
+      "exact_match": false,
+      "argument_validity": 0.5,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "data/sample.txt",
+        "pattern": "**/*.md"
+      },
+      "expected_arguments": {
+        "path": "docs/control_7.md",
+        "pattern": "**/*.md"
+      },
+      "prediction_latency_ms": 0.1437,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search_files\nTool description: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all matching items. Great for finding files when you do not know their exact location. Only searches within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all.\nWhen to use: [\"Use `search_files` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `path`, and `pattern`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\", \"excludePatterns\": []}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for search_files\", \"arguments\": {\"path\": \"data/sample.txt\", \"pattern\": \"sample_pattern_2\", \"excludePatterns\": []}}]\nSchema: {\"properties\": {\"excludePatterns\": {\"default\": [], \"description\": \"Optional glob patterns to exclude.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"path\": {\"description\": \"Base directory to search within an allowed directory.\", \"type\": \"string\"}, \"pattern\": {\"description\": \"Glob-style pattern to match.\", \"type\": \"string\"}}, \"required\": [\"path\", \"pattern\"], \"type\": \"object\"}\nUser request: I need help with this task: Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the. The relevant details are path=\"docs/control_7.md\", pattern=\"**/*.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"excludePatterns\": [], \"path\": \"data/sample.txt\", \"pattern\": \"**/*.md\"}}",
+        "parsed_prediction": {
+          "excludePatterns": [],
+          "path": "data/sample.txt",
+          "pattern": "**/*.md"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 10,
+    "positive_cases": 4,
+    "negative_cases": 6,
+    "trigger_true_positive": 4,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 6,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.4166,
+    "avg_prediction_latency_ms": 0.1701
+  }
+}

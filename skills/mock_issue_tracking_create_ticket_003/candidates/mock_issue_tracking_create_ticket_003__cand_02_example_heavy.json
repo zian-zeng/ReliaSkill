@@ -1,0 +1,158 @@
+{
+  "candidate_id": "mock_issue_tracking_create_ticket_003__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture. Provide all required fields: `project_key`, and `title`.\nWhen to use:\n- Use `mock_issue_tracking_create_ticket_003` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `project_key`, and `title`.\n- Optional controls include `priority`, `labels`, `dry_run`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `priority`: 'low', 'medium', 'high'.\nArgument template:\n{\"dry_run\": true, \"labels\": [\"sample_labels_item_4\"], \"priority\": \"low\", \"project_key\": \"sample_project_key_4\", \"title\": \"Sample Title\"}\nExamples:\nMinimal valid request that satisfies the required fields for mock_issue_tracking_create_ticket_003\n{\"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\"}\nRicher invocation that uses optional controls for mock_issue_tracking_create_ticket_003\n{\"dry_run\": true, \"labels\": [\"sample_labels_item_2\"], \"priority\": \"medium\", \"project_key\": \"sample_project_key_2\", \"title\": \"Sample Title\"}\nRequired-argument dev behavior example.\n{\"project_key\": \"sample_project_key_3\", \"title\": \"Sample Title\"}\nOptional, enum, nested, or array argument example.\n{\"dry_run\": true, \"labels\": [\"sample_labels_item_4\"], \"priority\": \"low\", \"project_key\": \"sample_project_key_4\", \"title\": \"Sample Title\"}",
+  "argument_template": {
+    "project_key": "sample_project_key_4",
+    "title": "Sample Title",
+    "priority": "low",
+    "labels": [
+      "sample_labels_item_4"
+    ],
+    "dry_run": true
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for mock_issue_tracking_create_ticket_003",
+      "arguments": {
+        "project_key": "sample_project_key_1",
+        "title": "Sample Title"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for mock_issue_tracking_create_ticket_003",
+      "arguments": {
+        "project_key": "sample_project_key_2",
+        "title": "Sample Title",
+        "priority": "medium",
+        "labels": [
+          "sample_labels_item_2"
+        ],
+        "dry_run": true
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "project_key": "sample_project_key_3",
+        "title": "Sample Title"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "project_key": "sample_project_key_4",
+        "title": "Sample Title",
+        "priority": "low",
+        "labels": [
+          "sample_labels_item_4"
+        ],
+        "dry_run": true
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `mock_issue_tracking_create_ticket_003` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `project_key`, and `title`.",
+    "Optional controls include `priority`, `labels`, `dry_run`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `priority`: 'low', 'medium', 'high'."
+  ],
+  "token_count": 387,
+  "skill_token_count": 387,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture. Provide all required fields: `project_key`, and `title`.",
+    "when_to_use": [
+      "Use `mock_issue_tracking_create_ticket_003` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `project_key`, and `title`.",
+      "Optional controls include `priority`, `labels`, `dry_run`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `priority`: 'low', 'medium', 'high'."
+    ],
+    "argument_template": {
+      "project_key": "sample_project_key_4",
+      "title": "Sample Title",
+      "priority": "low",
+      "labels": [
+        "sample_labels_item_4"
+      ],
+      "dry_run": true
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for mock_issue_tracking_create_ticket_003",
+        "arguments": {
+          "project_key": "sample_project_key_1",
+          "title": "Sample Title"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for mock_issue_tracking_create_ticket_003",
+        "arguments": {
+          "project_key": "sample_project_key_2",
+          "title": "Sample Title",
+          "priority": "medium",
+          "labels": [
+            "sample_labels_item_2"
+          ],
+          "dry_run": true
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "project_key": "sample_project_key_3",
+          "title": "Sample Title"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "project_key": "sample_project_key_4",
+          "title": "Sample Title",
+          "priority": "low",
+          "labels": [
+            "sample_labels_item_4"
+          ],
+          "dry_run": true
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "mock_issue_tracking_create_ticket_003__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "mock_issue_tracking_create_ticket_003__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0229_git_status_negative_easy_0_out_of_domain_request",
+      "tool_name": "git_status",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to git status.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0564,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_status\nTool description: Shows the working tree status\nSkill condition: multi_candidate_skill\nSkill summary: Shows the working tree status. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_status` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_status\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_status\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to git status.\n",
+        "raw_model_output": "{\"arguments\": {\"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0229_git_status_negative_hard_1_near_miss_intent",
+      "tool_name": "git_status",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to git status, but I only want a checklist for how to Shows the working tree status; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0518,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_status\nTool description: Shows the working tree status\nSkill condition: multi_candidate_skill\nSkill summary: Shows the working tree status. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_status` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_status\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_status\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: This sounds close to git status, but I only want a checklist for how to Shows the working tree status; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {\"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0229_git_status_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "git_status",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use git status; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0496,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_status\nTool description: Shows the working tree status\nSkill condition: multi_candidate_skill\nSkill summary: Shows the working tree status. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_status` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_status\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_status\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: Explain when someone should use git status; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0229_git_status_positive_easy_0",
+      "tool_name": "git_status",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use git status to Shows the working tree status. Set repo_path=\"docs/control_0.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt"
+      },
+      "expected_arguments": {
+        "repo_path": "docs/control_0.md"
+      },
+      "prediction_latency_ms": 0.0495,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_status\nTool description: Shows the working tree status\nSkill condition: multi_candidate_skill\nSkill summary: Shows the working tree status. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_status` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_status\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_status\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: Use git status to Shows the working tree status. Set repo_path=\"docs/control_0.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0229_git_status_positive_medium_0",
+      "tool_name": "git_status",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Shows the working tree status. The relevant details are repo_path=\"docs/control_7.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt"
+      },
+      "expected_arguments": {
+        "repo_path": "docs/control_7.md"
+      },
+      "prediction_latency_ms": 0.108,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_status\nTool description: Shows the working tree status\nSkill condition: multi_candidate_skill\nSkill summary: Shows the working tree status. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_status` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_status\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_status\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: I need help with this task: Shows the working tree status. The relevant details are repo_path=\"docs/control_7.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0631
+  }
+}

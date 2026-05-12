@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for list_directory_with_sizes", "arguments": {"path": "data/sample.txt", "sortBy": "name"}}
+{"scenario": "Richer invocation that uses optional controls for list_directory_with_sizes", "arguments": {"path": "data/sample.txt", "sortBy": "size"}}

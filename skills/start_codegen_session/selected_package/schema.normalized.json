@@ -1,0 +1,102 @@
+{
+  "tool_name": "start_codegen_session",
+  "server_name": "browser",
+  "tool_purpose": "Start a new code generation session to record Playwright actions",
+  "input_schema_raw": {
+    "properties": {
+      "options": {
+        "description": "Code generation options",
+        "properties": {
+          "includeComments": {
+            "description": "Whether to include descriptive comments in generated tests",
+            "type": "boolean"
+          },
+          "outputPath": {
+            "description": "Directory path where generated tests will be saved (use absolute path)",
+            "type": "string"
+          },
+          "testNamePrefix": {
+            "description": "Prefix to use for generated test names (default: 'GeneratedTest')",
+            "type": "string"
+          }
+        },
+        "required": [
+          "outputPath"
+        ],
+        "type": "object"
+      }
+    },
+    "required": [
+      "options"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "options",
+      "type": "object",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Code generation options",
+      "items_type": null,
+      "properties": {
+        "includeComments": {
+          "description": "Whether to include descriptive comments in generated tests",
+          "type": "boolean"
+        },
+        "outputPath": {
+          "description": "Directory path where generated tests will be saved (use absolute path)",
+          "type": "string"
+        },
+        "testNamePrefix": {
+          "description": "Prefix to use for generated test names (default: 'GeneratedTest')",
+          "type": "string"
+        }
+      },
+      "required_properties": [
+        "outputPath"
+      ],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.options"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Start a new code generation session to record Playwright actions",
+    "Start Codegen Session"
+  ],
+  "source_pointer": "data/raw/mcptoolbenchpp_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 64,
+    "has_array_argument": false,
+    "has_boolean_flag": true,
+    "has_nested_object": true,
+    "has_side_effect": true,
+    "max_schema_depth": 3,
+    "num_arguments": 1,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 1,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 1,
+    "side_effect_type": "execute"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "start_codegen_session",
+    "server_name": "browser",
+    "source_pointer": "data/raw/mcptoolbenchpp_tools.json"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

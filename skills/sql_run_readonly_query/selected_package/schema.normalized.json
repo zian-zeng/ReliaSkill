@@ -1,0 +1,130 @@
+{
+  "tool_name": "sql_run_readonly_query",
+  "server_name": "apibank_style_fixture",
+  "tool_purpose": "API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database.",
+  "input_schema_raw": {
+    "properties": {
+      "database": {
+        "description": "Fixture database name.",
+        "type": "string"
+      },
+      "limit": {
+        "description": "Maximum rows.",
+        "type": "integer"
+      },
+      "parameters": {
+        "description": "Named query parameters.",
+        "type": "object"
+      },
+      "query": {
+        "description": "Readonly SQL query.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "database",
+      "query"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "database",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Fixture database name.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.database"
+    },
+    {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Readonly SQL query.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.query"
+    },
+    {
+      "name": "parameters",
+      "type": "object",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Named query parameters.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Maximum rows.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.limit"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database.",
+    "Run Readonly SQL Query",
+    "Run a readonly query on a fixture database."
+  ],
+  "source_pointer": "data/raw/apibank_style_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 102,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": true,
+    "has_side_effect": true,
+    "max_schema_depth": 2,
+    "num_arguments": 4,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 1,
+    "num_optional_arguments": 2,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 4,
+    "side_effect_type": "execute"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "sql_run_readonly_query",
+    "server_name": "apibank_style_fixture",
+    "source_pointer": "data/raw/apibank_style_tools.json"
+  },
+  "side_effect_hints": [
+    "executes_code"
+  ],
+  "safety_hints": [
+    "review_side_effects_before_deployment"
+  ]
+}

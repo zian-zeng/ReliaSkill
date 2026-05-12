@@ -1,0 +1,128 @@
+{
+  "tool_name": "calculate_final_temperature",
+  "server_name": "bfcl_v3",
+  "tool_purpose": "Calculate the final temperature when different quantities of the same gas at different temperatures are mixed.",
+  "input_schema_raw": {
+    "properties": {
+      "quantity1": {
+        "description": "The quantity of the first sample of gas.",
+        "type": "integer"
+      },
+      "quantity2": {
+        "description": "The quantity of the second sample of gas.",
+        "type": "integer"
+      },
+      "temperature1": {
+        "description": "The temperature of the first sample of gas.",
+        "type": "integer"
+      },
+      "temperature2": {
+        "description": "The temperature of the second sample of gas.",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "quantity1",
+      "temperature1",
+      "quantity2",
+      "temperature2"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "quantity1",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The quantity of the first sample of gas.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.quantity1"
+    },
+    {
+      "name": "temperature1",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The temperature of the first sample of gas.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.temperature1"
+    },
+    {
+      "name": "quantity2",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The quantity of the second sample of gas.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.quantity2"
+    },
+    {
+      "name": "temperature2",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The temperature of the second sample of gas.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.temperature2"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Calculate the final temperature when different quantities of the same gas at different temperatures are mixed.",
+    "calculate_final_temperature",
+    "Calculate the final temperature when different quantities of the same gas at different temperatures"
+  ],
+  "source_pointer": "bfcl_v3",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.15,
+    "auth_required": false,
+    "documentation_length": 110,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 4,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 4,
+    "num_top_level_arguments": 4,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "calculate_final_temperature",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

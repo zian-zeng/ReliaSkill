@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for playwright_assert_response", "arguments": {"id": "sample-id-001"}}
+{"scenario": "Richer invocation that uses optional controls for playwright_assert_response", "arguments": {"id": "sample-id-001", "value": "sample_value_2"}}

@@ -1,0 +1,194 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0291_trigger_long_running_operation_negative_easy_0_out_of_domain_request",
+      "tool_name": "trigger-long-running-operation",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to trigger-long-running-operation.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "duration": "sample_duration_4",
+        "steps": 4.0
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.064,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: trigger-long-running-operation\nTool description: Demonstrates a long running operation with progress updates.\nSkill condition: multi_candidate_skill\nSkill summary: Demonstrates a long running operation with progress updates. This tool has no required input fields.\nWhen to use: [\"Use `trigger-long-running-operation` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Optional controls include `duration`, `steps`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"duration\": \"sample_duration_4\", \"steps\": 4.0}\nExamples: [{\"scenario\": \"Richer invocation that uses optional controls for trigger-long-running-operation\", \"arguments\": {\"duration\": \"sample_duration_2\", \"steps\": 2.0}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"duration\": \"sample_duration_4\", \"steps\": 4.0}}]\nSchema: {\"properties\": {\"duration\": {\"type\": \"string\"}, \"steps\": {\"type\": \"number\"}}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to trigger-long-running-operation.\n",
+        "raw_model_output": "{\"arguments\": {\"duration\": \"sample_duration_4\", \"steps\": 4.0}}",
+        "parsed_prediction": {
+          "duration": "sample_duration_4",
+          "steps": 4.0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0291_trigger_long_running_operation_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "trigger-long-running-operation",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with trigger-long-running-operation.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "duration": "sample_duration_4",
+        "steps": 4.0
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1156,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: trigger-long-running-operation\nTool description: Demonstrates a long running operation with progress updates.\nSkill condition: multi_candidate_skill\nSkill summary: Demonstrates a long running operation with progress updates. This tool has no required input fields.\nWhen to use: [\"Use `trigger-long-running-operation` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Optional controls include `duration`, `steps`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"duration\": \"sample_duration_4\", \"steps\": 4.0}\nExamples: [{\"scenario\": \"Richer invocation that uses optional controls for trigger-long-running-operation\", \"arguments\": {\"duration\": \"sample_duration_2\", \"steps\": 2.0}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"duration\": \"sample_duration_4\", \"steps\": 4.0}}]\nSchema: {\"properties\": {\"duration\": {\"type\": \"string\"}, \"steps\": {\"type\": \"number\"}}, \"required\": [], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with trigger-long-running-operation.\n",
+        "raw_model_output": "{\"arguments\": {\"duration\": \"sample_duration_4\", \"steps\": 4.0}}",
+        "parsed_prediction": {
+          "duration": "sample_duration_4",
+          "steps": 4.0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0291_trigger_long_running_operation_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "trigger-long-running-operation",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use bank get account balance to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services; trigger-long-running-operation is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "duration": "sample_duration_4",
+        "steps": 4.0
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0548,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: trigger-long-running-operation\nTool description: Demonstrates a long running operation with progress updates.\nSkill condition: multi_candidate_skill\nSkill summary: Demonstrates a long running operation with progress updates. This tool has no required input fields.\nWhen to use: [\"Use `trigger-long-running-operation` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Optional controls include `duration`, `steps`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"duration\": \"sample_duration_4\", \"steps\": 4.0}\nExamples: [{\"scenario\": \"Richer invocation that uses optional controls for trigger-long-running-operation\", \"arguments\": {\"duration\": \"sample_duration_2\", \"steps\": 2.0}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"duration\": \"sample_duration_4\", \"steps\": 4.0}}]\nSchema: {\"properties\": {\"duration\": {\"type\": \"string\"}, \"steps\": {\"type\": \"number\"}}, \"required\": [], \"type\": \"object\"}\nUser request: Use bank get account balance to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services; trigger-long-running-operation is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"duration\": \"sample_duration_4\", \"steps\": 4.0}}",
+        "parsed_prediction": {
+          "duration": "sample_duration_4",
+          "steps": 4.0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0291_trigger_long_running_operation_positive_easy_0",
+      "tool_name": "trigger-long-running-operation",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use trigger-long-running-operation to Demonstrates a long running operation with progress updates. Set no arguments.",
+      "exact_match": false,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "duration": "sample_duration_4",
+        "steps": 4.0
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0517,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: trigger-long-running-operation\nTool description: Demonstrates a long running operation with progress updates.\nSkill condition: multi_candidate_skill\nSkill summary: Demonstrates a long running operation with progress updates. This tool has no required input fields.\nWhen to use: [\"Use `trigger-long-running-operation` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Optional controls include `duration`, `steps`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"duration\": \"sample_duration_4\", \"steps\": 4.0}\nExamples: [{\"scenario\": \"Richer invocation that uses optional controls for trigger-long-running-operation\", \"arguments\": {\"duration\": \"sample_duration_2\", \"steps\": 2.0}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"duration\": \"sample_duration_4\", \"steps\": 4.0}}]\nSchema: {\"properties\": {\"duration\": {\"type\": \"string\"}, \"steps\": {\"type\": \"number\"}}, \"required\": [], \"type\": \"object\"}\nUser request: Use trigger-long-running-operation to Demonstrates a long running operation with progress updates. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {\"duration\": \"sample_duration_4\", \"steps\": 4.0}}",
+        "parsed_prediction": {
+          "duration": "sample_duration_4",
+          "steps": 4.0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0291_trigger_long_running_operation_positive_medium_0",
+      "tool_name": "trigger-long-running-operation",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Demonstrates a long running operation with progress updates. The relevant details are duration=\"duration_7\", steps=8.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "duration": "sample_duration_4",
+        "steps": 4.0
+      },
+      "expected_arguments": {
+        "duration": "duration_7",
+        "steps": 8
+      },
+      "prediction_latency_ms": 0.0512,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: trigger-long-running-operation\nTool description: Demonstrates a long running operation with progress updates.\nSkill condition: multi_candidate_skill\nSkill summary: Demonstrates a long running operation with progress updates. This tool has no required input fields.\nWhen to use: [\"Use `trigger-long-running-operation` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Optional controls include `duration`, `steps`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"duration\": \"sample_duration_4\", \"steps\": 4.0}\nExamples: [{\"scenario\": \"Richer invocation that uses optional controls for trigger-long-running-operation\", \"arguments\": {\"duration\": \"sample_duration_2\", \"steps\": 2.0}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"duration\": \"sample_duration_4\", \"steps\": 4.0}}]\nSchema: {\"properties\": {\"duration\": {\"type\": \"string\"}, \"steps\": {\"type\": \"number\"}}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: Demonstrates a long running operation with progress updates. The relevant details are duration=\"duration_7\", steps=8.\n",
+        "raw_model_output": "{\"arguments\": {\"duration\": \"sample_duration_4\", \"steps\": 4.0}}",
+        "parsed_prediction": {
+          "duration": "sample_duration_4",
+          "steps": 4.0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.5,
+    "avg_prediction_latency_ms": 0.0675
+  }
+}

@@ -1,0 +1,297 @@
+{
+  "tool_name": "tavily-crawl",
+  "server_name": "search",
+  "tool_purpose": "A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pages. You can control how deep and wide it goes, and guide it to focus on specific sections of the site.",
+  "input_schema_raw": {
+    "properties": {
+      "allow_external": {
+        "default": false,
+        "description": "Whether to allow following links that go to external domains",
+        "type": "boolean"
+      },
+      "categories": {
+        "default": [],
+        "description": "Filter URLs using predefined categories like documentation, blog, api, etc",
+        "items": {
+          "enum": [
+            "Careers",
+            "Blog",
+            "Documentation",
+            "About",
+            "Pricing",
+            "Community",
+            "Developers",
+            "Contact",
+            "Media"
+          ],
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "extract_depth": {
+        "default": "basic",
+        "description": "Advanced extraction retrieves more data, including tables and embedded content, with higher success but may increase latency",
+        "enum": [
+          "basic",
+          "advanced"
+        ],
+        "type": "string"
+      },
+      "format": {
+        "default": "markdown",
+        "description": "The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.",
+        "enum": [
+          "markdown",
+          "text"
+        ],
+        "type": "string"
+      },
+      "instructions": {
+        "description": "Natural language instructions for the crawler",
+        "type": "string"
+      },
+      "limit": {
+        "default": 50,
+        "description": "Total number of links the crawler will process before stopping",
+        "minimum": 1,
+        "type": "integer"
+      },
+      "max_breadth": {
+        "default": 20,
+        "description": "Max number of links to follow per level of the tree (i.e., per page)",
+        "minimum": 1,
+        "type": "integer"
+      },
+      "max_depth": {
+        "default": 1,
+        "description": "Max depth of the crawl. Defines how far from the base URL the crawler can explore.",
+        "minimum": 1,
+        "type": "integer"
+      },
+      "select_domains": {
+        "default": [],
+        "description": "Regex patterns to select crawling to specific domains or subdomains (e.g., ^docs\\.example\\.com$)",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "select_paths": {
+        "default": [],
+        "description": "Regex patterns to select only URLs with specific path patterns (e.g., /docs/.*, /api/v1.*)",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "url": {
+        "description": "The root URL to begin the crawl",
+        "type": "string"
+      }
+    },
+    "required": [
+      "url"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "url",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The root URL to begin the crawl",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.url"
+    },
+    {
+      "name": "max_depth",
+      "type": "integer",
+      "required": false,
+      "default": 1,
+      "enum": null,
+      "description": "Max depth of the crawl. Defines how far from the base URL the crawler can explore.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.max_depth"
+    },
+    {
+      "name": "max_breadth",
+      "type": "integer",
+      "required": false,
+      "default": 20,
+      "enum": null,
+      "description": "Max number of links to follow per level of the tree (i.e., per page)",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.max_breadth"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "default": 50,
+      "enum": null,
+      "description": "Total number of links the crawler will process before stopping",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.limit"
+    },
+    {
+      "name": "instructions",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Natural language instructions for the crawler",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.instructions"
+    },
+    {
+      "name": "select_paths",
+      "type": "array",
+      "required": false,
+      "default": [],
+      "enum": null,
+      "description": "Regex patterns to select only URLs with specific path patterns (e.g., /docs/.*, /api/v1.*)",
+      "items_type": "string",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.select_paths"
+    },
+    {
+      "name": "select_domains",
+      "type": "array",
+      "required": false,
+      "default": [],
+      "enum": null,
+      "description": "Regex patterns to select crawling to specific domains or subdomains (e.g., ^docs\\.example\\.com$)",
+      "items_type": "string",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.select_domains"
+    },
+    {
+      "name": "allow_external",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "enum": null,
+      "description": "Whether to allow following links that go to external domains",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.allow_external"
+    },
+    {
+      "name": "categories",
+      "type": "array",
+      "required": false,
+      "default": [],
+      "enum": null,
+      "description": "Filter URLs using predefined categories like documentation, blog, api, etc",
+      "items_type": "string",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.categories"
+    },
+    {
+      "name": "extract_depth",
+      "type": "string",
+      "required": false,
+      "default": "basic",
+      "enum": [
+        "basic",
+        "advanced"
+      ],
+      "description": "Advanced extraction retrieves more data, including tables and embedded content, with higher success but may increase latency",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.extract_depth"
+    },
+    {
+      "name": "format",
+      "type": "string",
+      "required": false,
+      "default": "markdown",
+      "enum": [
+        "markdown",
+        "text"
+      ],
+      "description": "The format of the extracted web page content. markdown returns content in markdown format. text returns plain text and may increase latency.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.format"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pages. You can control how deep and wide it goes, and guide it to focus on specific sections of the site.",
+    "Tavily-Crawl",
+    "A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pa"
+  ],
+  "source_pointer": "data/raw/mcptoolbenchpp_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 283,
+    "has_array_argument": true,
+    "has_boolean_flag": true,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 3,
+    "num_arguments": 11,
+    "num_enum_arguments": 2,
+    "num_enum_fields": 3,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 10,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 11,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "tavily-crawl",
+    "server_name": "search",
+    "source_pointer": "data/raw/mcptoolbenchpp_tools.json"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

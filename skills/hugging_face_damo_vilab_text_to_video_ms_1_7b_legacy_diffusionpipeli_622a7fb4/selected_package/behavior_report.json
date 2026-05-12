@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0043_hugging_face_damo_vilab_text_to_video_ms_1_7b_legacy_diffusionpipeli_622a7fb4_negative_easy_0_out_of_domain_request",
+      "tool_name": "hugging_face__damo_vilab_text_to_video_ms_1_7b_legacy__diffusionpipeli_622a7fb4",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  damo vilab text to video ms 1 7b legacy  diffusionpipeli 622a7fb4.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0331,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__damo_vilab_text_to_video_ms_1_7b_legacy__diffusionpipeli_622a7fb4\nTool description: This model is based on a multi-stage text-to-video generation diffusion model, which inputs a description text and returns a video that matches the text description. Only English input is supported. Framework: Hugging Face. Functionality: Text-to-Video Synthesis. API call: DiffusionPipeline.from_pretrained('damo-vilab/text-to-video-ms-1.7b-legacy', torch_dtype=torch.float16).\nSkill condition: multi_candidate_skill\nSkill summary: This model is based on a multi-stage text-to-video generation diffusion model, which inputs a description text and returns a video that matches the text description. Only English input is supported. Framework: Hugging Face. Functionality: Text-to-Video Synthesis. API call: DiffusionPipeline.from_pretrained('damo-vilab/text-to-video-ms-1.7b-legacy', torch_dtype=torch.float16). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__damo_vilab_text_to_video_ms_1_7b_legacy__diffusionpipeli_622a7fb4` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  damo vilab text to video ms 1 7b legacy  diffusionpipeli 622a7fb4.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0043_hugging_face_damo_vilab_text_to_video_ms_1_7b_legacy_diffusionpipeli_622a7fb4_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "hugging_face__damo_vilab_text_to_video_ms_1_7b_legacy__diffusionpipeli_622a7fb4",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with hugging face  damo vilab text to video ms 1 7b legacy  diffusionpipeli 622a7fb4; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0807,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__damo_vilab_text_to_video_ms_1_7b_legacy__diffusionpipeli_622a7fb4\nTool description: This model is based on a multi-stage text-to-video generation diffusion model, which inputs a description text and returns a video that matches the text description. Only English input is supported. Framework: Hugging Face. Functionality: Text-to-Video Synthesis. API call: DiffusionPipeline.from_pretrained('damo-vilab/text-to-video-ms-1.7b-legacy', torch_dtype=torch.float16).\nSkill condition: multi_candidate_skill\nSkill summary: This model is based on a multi-stage text-to-video generation diffusion model, which inputs a description text and returns a video that matches the text description. Only English input is supported. Framework: Hugging Face. Functionality: Text-to-Video Synthesis. API call: DiffusionPipeline.from_pretrained('damo-vilab/text-to-video-ms-1.7b-legacy', torch_dtype=torch.float16). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__damo_vilab_text_to_video_ms_1_7b_legacy__diffusionpipeli_622a7fb4` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Maybe do something with hugging face  damo vilab text to video ms 1 7b legacy  diffusionpipeli 622a7fb4; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0043_hugging_face_damo_vilab_text_to_video_ms_1_7b_legacy_diffusionpipeli_622a7fb4_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "hugging_face__damo_vilab_text_to_video_ms_1_7b_legacy__diffusionpipeli_622a7fb4",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with hugging face  damo vilab text to video ms 1 7b legacy  diffusionpipeli 622a7fb4.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0297,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__damo_vilab_text_to_video_ms_1_7b_legacy__diffusionpipeli_622a7fb4\nTool description: This model is based on a multi-stage text-to-video generation diffusion model, which inputs a description text and returns a video that matches the text description. Only English input is supported. Framework: Hugging Face. Functionality: Text-to-Video Synthesis. API call: DiffusionPipeline.from_pretrained('damo-vilab/text-to-video-ms-1.7b-legacy', torch_dtype=torch.float16).\nSkill condition: multi_candidate_skill\nSkill summary: This model is based on a multi-stage text-to-video generation diffusion model, which inputs a description text and returns a video that matches the text description. Only English input is supported. Framework: Hugging Face. Functionality: Text-to-Video Synthesis. API call: DiffusionPipeline.from_pretrained('damo-vilab/text-to-video-ms-1.7b-legacy', torch_dtype=torch.float16). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__damo_vilab_text_to_video_ms_1_7b_legacy__diffusionpipeli_622a7fb4` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with hugging face  damo vilab text to video ms 1 7b legacy  diffusionpipeli 622a7fb4.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0043_hugging_face_damo_vilab_text_to_video_ms_1_7b_legacy_diffusionpipeli_622a7fb4_positive_easy_0",
+      "tool_name": "hugging_face__damo_vilab_text_to_video_ms_1_7b_legacy__diffusionpipeli_622a7fb4",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use hugging face  damo vilab text to video ms 1 7b legacy  diffusionpipeli 622a7fb4 to This model is based on a multi-stage text-to-video generation diffusion model, which inputs a description text and returns a video that matc. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0289,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__damo_vilab_text_to_video_ms_1_7b_legacy__diffusionpipeli_622a7fb4\nTool description: This model is based on a multi-stage text-to-video generation diffusion model, which inputs a description text and returns a video that matches the text description. Only English input is supported. Framework: Hugging Face. Functionality: Text-to-Video Synthesis. API call: DiffusionPipeline.from_pretrained('damo-vilab/text-to-video-ms-1.7b-legacy', torch_dtype=torch.float16).\nSkill condition: multi_candidate_skill\nSkill summary: This model is based on a multi-stage text-to-video generation diffusion model, which inputs a description text and returns a video that matches the text description. Only English input is supported. Framework: Hugging Face. Functionality: Text-to-Video Synthesis. API call: DiffusionPipeline.from_pretrained('damo-vilab/text-to-video-ms-1.7b-legacy', torch_dtype=torch.float16). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__damo_vilab_text_to_video_ms_1_7b_legacy__diffusionpipeli_622a7fb4` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use hugging face  damo vilab text to video ms 1 7b legacy  diffusionpipeli 622a7fb4 to This model is based on a multi-stage text-to-video generation diffusion model, which inputs a description text and returns a video that matc. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0043_hugging_face_damo_vilab_text_to_video_ms_1_7b_legacy_diffusionpipeli_622a7fb4_positive_medium_0",
+      "tool_name": "hugging_face__damo_vilab_text_to_video_ms_1_7b_legacy__diffusionpipeli_622a7fb4",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: This model is based on a multi-stage text-to-video generation diffusion model, which inputs a description text and returns a video that matc. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0297,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__damo_vilab_text_to_video_ms_1_7b_legacy__diffusionpipeli_622a7fb4\nTool description: This model is based on a multi-stage text-to-video generation diffusion model, which inputs a description text and returns a video that matches the text description. Only English input is supported. Framework: Hugging Face. Functionality: Text-to-Video Synthesis. API call: DiffusionPipeline.from_pretrained('damo-vilab/text-to-video-ms-1.7b-legacy', torch_dtype=torch.float16).\nSkill condition: multi_candidate_skill\nSkill summary: This model is based on a multi-stage text-to-video generation diffusion model, which inputs a description text and returns a video that matches the text description. Only English input is supported. Framework: Hugging Face. Functionality: Text-to-Video Synthesis. API call: DiffusionPipeline.from_pretrained('damo-vilab/text-to-video-ms-1.7b-legacy', torch_dtype=torch.float16). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__damo_vilab_text_to_video_ms_1_7b_legacy__diffusionpipeli_622a7fb4` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: This model is based on a multi-stage text-to-video generation diffusion model, which inputs a description text and returns a video that matc. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0404
+  }
+}

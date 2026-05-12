@@ -1,0 +1,221 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0134_database_query_negative_easy_0_out_of_domain_request",
+      "tool_name": "database.query",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to database.query.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "table": "sample_table_4",
+        "conditions": [
+          null
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1001,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: database.query\nTool description: Query the database based on certain conditions.\nSkill condition: multi_candidate_skill\nSkill summary: Query the database based on certain conditions. Provide all required fields: `table`, and `conditions`.\nWhen to use: [\"Use `database.query` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `table`, and `conditions`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"table\": \"sample_table_4\", \"conditions\": [null]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for database.query\", \"arguments\": {\"table\": \"sample_table_1\", \"conditions\": [null]}}, {\"scenario\": \"Richer invocation that uses optional controls for database.query\", \"arguments\": {\"table\": \"sample_table_2\", \"conditions\": [null]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"table\": \"sample_table_3\", \"conditions\": [null]}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"table\": \"sample_table_4\", \"conditions\": [null]}}]\nSchema: {\"properties\": {\"conditions\": {\"description\": \"Conditions for the query.\", \"items\": {\"properties\": {\"field\": {\"description\": \"The field to apply the condition.\", \"type\": \"string\"}, \"operation\": {\"description\": \"The operation to be performed.\", \"enum\": [\"<\", \">\", \"=\", \">=\", \"<=\"], \"type\": \"string\"}, \"value\": {\"description\": \"The value to be compared.\", \"type\": \"string\"}}, \"required\": [\"field\", \"operation\", \"value\"], \"type\": \"dict\"}, \"type\": \"array\"}, \"table\": {\"description\": \"Name of the table to query.\", \"type\": \"string\"}}, \"required\": [\"table\", \"conditions\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to database.query.\n",
+        "raw_model_output": "{\"arguments\": {\"conditions\": [null], \"table\": \"sample_table_4\"}}",
+        "parsed_prediction": {
+          "table": "sample_table_4",
+          "conditions": [
+            null
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0134_database_query_negative_hard_1_near_miss_intent",
+      "tool_name": "database.query",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to database.query, but I only want a checklist for how to Query the database based on certain conditions; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "table": "sample_table_4",
+        "conditions": [
+          null
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.096,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: database.query\nTool description: Query the database based on certain conditions.\nSkill condition: multi_candidate_skill\nSkill summary: Query the database based on certain conditions. Provide all required fields: `table`, and `conditions`.\nWhen to use: [\"Use `database.query` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `table`, and `conditions`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"table\": \"sample_table_4\", \"conditions\": [null]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for database.query\", \"arguments\": {\"table\": \"sample_table_1\", \"conditions\": [null]}}, {\"scenario\": \"Richer invocation that uses optional controls for database.query\", \"arguments\": {\"table\": \"sample_table_2\", \"conditions\": [null]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"table\": \"sample_table_3\", \"conditions\": [null]}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"table\": \"sample_table_4\", \"conditions\": [null]}}]\nSchema: {\"properties\": {\"conditions\": {\"description\": \"Conditions for the query.\", \"items\": {\"properties\": {\"field\": {\"description\": \"The field to apply the condition.\", \"type\": \"string\"}, \"operation\": {\"description\": \"The operation to be performed.\", \"enum\": [\"<\", \">\", \"=\", \">=\", \"<=\"], \"type\": \"string\"}, \"value\": {\"description\": \"The value to be compared.\", \"type\": \"string\"}}, \"required\": [\"field\", \"operation\", \"value\"], \"type\": \"dict\"}, \"type\": \"array\"}, \"table\": {\"description\": \"Name of the table to query.\", \"type\": \"string\"}}, \"required\": [\"table\", \"conditions\"], \"type\": \"object\"}\nUser request: This sounds close to database.query, but I only want a checklist for how to Query the database based on certain conditions; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {\"conditions\": [null], \"table\": \"sample_table_4\"}}",
+        "parsed_prediction": {
+          "table": "sample_table_4",
+          "conditions": [
+            null
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0134_database_query_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "database.query",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with database.query.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "table": "sample_table_4",
+        "conditions": [
+          null
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0942,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: database.query\nTool description: Query the database based on certain conditions.\nSkill condition: multi_candidate_skill\nSkill summary: Query the database based on certain conditions. Provide all required fields: `table`, and `conditions`.\nWhen to use: [\"Use `database.query` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `table`, and `conditions`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"table\": \"sample_table_4\", \"conditions\": [null]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for database.query\", \"arguments\": {\"table\": \"sample_table_1\", \"conditions\": [null]}}, {\"scenario\": \"Richer invocation that uses optional controls for database.query\", \"arguments\": {\"table\": \"sample_table_2\", \"conditions\": [null]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"table\": \"sample_table_3\", \"conditions\": [null]}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"table\": \"sample_table_4\", \"conditions\": [null]}}]\nSchema: {\"properties\": {\"conditions\": {\"description\": \"Conditions for the query.\", \"items\": {\"properties\": {\"field\": {\"description\": \"The field to apply the condition.\", \"type\": \"string\"}, \"operation\": {\"description\": \"The operation to be performed.\", \"enum\": [\"<\", \">\", \"=\", \">=\", \"<=\"], \"type\": \"string\"}, \"value\": {\"description\": \"The value to be compared.\", \"type\": \"string\"}}, \"required\": [\"field\", \"operation\", \"value\"], \"type\": \"dict\"}, \"type\": \"array\"}, \"table\": {\"description\": \"Name of the table to query.\", \"type\": \"string\"}}, \"required\": [\"table\", \"conditions\"], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with database.query.\n",
+        "raw_model_output": "{\"arguments\": {\"conditions\": [null], \"table\": \"sample_table_4\"}}",
+        "parsed_prediction": {
+          "table": "sample_table_4",
+          "conditions": [
+            null
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0134_database_query_positive_easy_0",
+      "tool_name": "database.query",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use database.query to Query the database based on certain conditions. Set conditions=[\"item_0\"], table=\"table_0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "table": "sample_table_4",
+        "conditions": [
+          null
+        ]
+      },
+      "expected_arguments": {
+        "conditions": [
+          "item_0"
+        ],
+        "table": "table_0"
+      },
+      "prediction_latency_ms": 0.1469,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: database.query\nTool description: Query the database based on certain conditions.\nSkill condition: multi_candidate_skill\nSkill summary: Query the database based on certain conditions. Provide all required fields: `table`, and `conditions`.\nWhen to use: [\"Use `database.query` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `table`, and `conditions`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"table\": \"sample_table_4\", \"conditions\": [null]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for database.query\", \"arguments\": {\"table\": \"sample_table_1\", \"conditions\": [null]}}, {\"scenario\": \"Richer invocation that uses optional controls for database.query\", \"arguments\": {\"table\": \"sample_table_2\", \"conditions\": [null]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"table\": \"sample_table_3\", \"conditions\": [null]}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"table\": \"sample_table_4\", \"conditions\": [null]}}]\nSchema: {\"properties\": {\"conditions\": {\"description\": \"Conditions for the query.\", \"items\": {\"properties\": {\"field\": {\"description\": \"The field to apply the condition.\", \"type\": \"string\"}, \"operation\": {\"description\": \"The operation to be performed.\", \"enum\": [\"<\", \">\", \"=\", \">=\", \"<=\"], \"type\": \"string\"}, \"value\": {\"description\": \"The value to be compared.\", \"type\": \"string\"}}, \"required\": [\"field\", \"operation\", \"value\"], \"type\": \"dict\"}, \"type\": \"array\"}, \"table\": {\"description\": \"Name of the table to query.\", \"type\": \"string\"}}, \"required\": [\"table\", \"conditions\"], \"type\": \"object\"}\nUser request: Use database.query to Query the database based on certain conditions. Set conditions=[\"item_0\"], table=\"table_0\".\n",
+        "raw_model_output": "{\"arguments\": {\"conditions\": [null], \"table\": \"sample_table_4\"}}",
+        "parsed_prediction": {
+          "table": "sample_table_4",
+          "conditions": [
+            null
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0134_database_query_positive_medium_0",
+      "tool_name": "database.query",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Query the database based on certain conditions. The relevant details are conditions=[\"item_7\"], table=\"table_7\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "table": "sample_table_4",
+        "conditions": [
+          null
+        ]
+      },
+      "expected_arguments": {
+        "conditions": [
+          "item_7"
+        ],
+        "table": "table_7"
+      },
+      "prediction_latency_ms": 0.092,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: database.query\nTool description: Query the database based on certain conditions.\nSkill condition: multi_candidate_skill\nSkill summary: Query the database based on certain conditions. Provide all required fields: `table`, and `conditions`.\nWhen to use: [\"Use `database.query` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `table`, and `conditions`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"table\": \"sample_table_4\", \"conditions\": [null]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for database.query\", \"arguments\": {\"table\": \"sample_table_1\", \"conditions\": [null]}}, {\"scenario\": \"Richer invocation that uses optional controls for database.query\", \"arguments\": {\"table\": \"sample_table_2\", \"conditions\": [null]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"table\": \"sample_table_3\", \"conditions\": [null]}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"table\": \"sample_table_4\", \"conditions\": [null]}}]\nSchema: {\"properties\": {\"conditions\": {\"description\": \"Conditions for the query.\", \"items\": {\"properties\": {\"field\": {\"description\": \"The field to apply the condition.\", \"type\": \"string\"}, \"operation\": {\"description\": \"The operation to be performed.\", \"enum\": [\"<\", \">\", \"=\", \">=\", \"<=\"], \"type\": \"string\"}, \"value\": {\"description\": \"The value to be compared.\", \"type\": \"string\"}}, \"required\": [\"field\", \"operation\", \"value\"], \"type\": \"dict\"}, \"type\": \"array\"}, \"table\": {\"description\": \"Name of the table to query.\", \"type\": \"string\"}}, \"required\": [\"table\", \"conditions\"], \"type\": \"object\"}\nUser request: I need help with this task: Query the database based on certain conditions. The relevant details are conditions=[\"item_7\"], table=\"table_7\".\n",
+        "raw_model_output": "{\"arguments\": {\"conditions\": [null], \"table\": \"sample_table_4\"}}",
+        "parsed_prediction": {
+          "table": "sample_table_4",
+          "conditions": [
+            null
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.1058
+  }
+}

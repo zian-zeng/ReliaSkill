@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_derivative", "arguments": {"func": "sample_func_1", "x_value": 1}}
+{"scenario": "Richer invocation that uses optional controls for calculate_derivative", "arguments": {"func": "sample_func_2", "x_value": 2, "order": 1}}

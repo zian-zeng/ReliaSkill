@@ -1,0 +1,209 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0215_convert_time_negative_easy_0_out_of_domain_request",
+      "tool_name": "convert_time",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to convert time.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "source_timezone": "America/New_York",
+        "time": "sample_time_1",
+        "target_timezone": "America/New_York"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0774,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: convert_time\nTool description: Convert time between timezones\nSkill condition: multi_candidate_skill\nSkill summary: Convert time between timezones. Provide all required fields: `source_timezone`, `time`, and `target_timezone`.\nWhen to use: [\"Use `convert_time` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `source_timezone`, `time`, and `target_timezone`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"source_timezone\": \"America/New_York\", \"time\": \"sample_time_1\", \"target_timezone\": \"America/New_York\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for convert_time\", \"arguments\": {\"source_timezone\": \"America/New_York\", \"time\": \"sample_time_1\", \"target_timezone\": \"America/New_York\"}}, {\"scenario\": \"Richer invocation that uses optional controls for convert_time\", \"arguments\": {\"source_timezone\": \"America/New_York\", \"time\": \"sample_time_2\", \"target_timezone\": \"America/New_York\"}}]\nSchema: {\"properties\": {\"source_timezone\": {\"description\": \"Source IANA timezone name (e.g., 'America/New_York', 'Europe/London'). Use '<local_tz>' as local timezone if no source timezone provided by the user.\", \"type\": \"string\"}, \"target_timezone\": {\"description\": \"Target IANA timezone name (e.g., 'Asia/Tokyo', 'America/San_Francisco'). Use '<local_tz>' as local timezone if no target timezone provided by the user.\", \"type\": \"string\"}, \"time\": {\"description\": \"Time to convert in 24-hour format (HH:MM)\", \"type\": \"string\"}}, \"required\": [\"source_timezone\", \"time\", \"target_timezone\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to convert time.\n",
+        "raw_model_output": "{\"arguments\": {\"source_timezone\": \"America/New_York\", \"target_timezone\": \"America/New_York\", \"time\": \"sample_time_1\"}}",
+        "parsed_prediction": {
+          "source_timezone": "America/New_York",
+          "time": "sample_time_1",
+          "target_timezone": "America/New_York"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0215_convert_time_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "convert_time",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with convert time; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "source_timezone": "America/New_York",
+        "time": "sample_time_1",
+        "target_timezone": "America/New_York"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0669,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: convert_time\nTool description: Convert time between timezones\nSkill condition: multi_candidate_skill\nSkill summary: Convert time between timezones. Provide all required fields: `source_timezone`, `time`, and `target_timezone`.\nWhen to use: [\"Use `convert_time` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `source_timezone`, `time`, and `target_timezone`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"source_timezone\": \"America/New_York\", \"time\": \"sample_time_1\", \"target_timezone\": \"America/New_York\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for convert_time\", \"arguments\": {\"source_timezone\": \"America/New_York\", \"time\": \"sample_time_1\", \"target_timezone\": \"America/New_York\"}}, {\"scenario\": \"Richer invocation that uses optional controls for convert_time\", \"arguments\": {\"source_timezone\": \"America/New_York\", \"time\": \"sample_time_2\", \"target_timezone\": \"America/New_York\"}}]\nSchema: {\"properties\": {\"source_timezone\": {\"description\": \"Source IANA timezone name (e.g., 'America/New_York', 'Europe/London'). Use '<local_tz>' as local timezone if no source timezone provided by the user.\", \"type\": \"string\"}, \"target_timezone\": {\"description\": \"Target IANA timezone name (e.g., 'Asia/Tokyo', 'America/San_Francisco'). Use '<local_tz>' as local timezone if no target timezone provided by the user.\", \"type\": \"string\"}, \"time\": {\"description\": \"Time to convert in 24-hour format (HH:MM)\", \"type\": \"string\"}}, \"required\": [\"source_timezone\", \"time\", \"target_timezone\"], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with convert time; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {\"source_timezone\": \"America/New_York\", \"target_timezone\": \"America/New_York\", \"time\": \"sample_time_1\"}}",
+        "parsed_prediction": {
+          "source_timezone": "America/New_York",
+          "time": "sample_time_1",
+          "target_timezone": "America/New_York"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0215_convert_time_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "convert_time",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with convert time.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "source_timezone": "America/New_York",
+        "time": "sample_time_1",
+        "target_timezone": "America/New_York"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0637,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: convert_time\nTool description: Convert time between timezones\nSkill condition: multi_candidate_skill\nSkill summary: Convert time between timezones. Provide all required fields: `source_timezone`, `time`, and `target_timezone`.\nWhen to use: [\"Use `convert_time` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `source_timezone`, `time`, and `target_timezone`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"source_timezone\": \"America/New_York\", \"time\": \"sample_time_1\", \"target_timezone\": \"America/New_York\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for convert_time\", \"arguments\": {\"source_timezone\": \"America/New_York\", \"time\": \"sample_time_1\", \"target_timezone\": \"America/New_York\"}}, {\"scenario\": \"Richer invocation that uses optional controls for convert_time\", \"arguments\": {\"source_timezone\": \"America/New_York\", \"time\": \"sample_time_2\", \"target_timezone\": \"America/New_York\"}}]\nSchema: {\"properties\": {\"source_timezone\": {\"description\": \"Source IANA timezone name (e.g., 'America/New_York', 'Europe/London'). Use '<local_tz>' as local timezone if no source timezone provided by the user.\", \"type\": \"string\"}, \"target_timezone\": {\"description\": \"Target IANA timezone name (e.g., 'Asia/Tokyo', 'America/San_Francisco'). Use '<local_tz>' as local timezone if no target timezone provided by the user.\", \"type\": \"string\"}, \"time\": {\"description\": \"Time to convert in 24-hour format (HH:MM)\", \"type\": \"string\"}}, \"required\": [\"source_timezone\", \"time\", \"target_timezone\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with convert time.\n",
+        "raw_model_output": "{\"arguments\": {\"source_timezone\": \"America/New_York\", \"target_timezone\": \"America/New_York\", \"time\": \"sample_time_1\"}}",
+        "parsed_prediction": {
+          "source_timezone": "America/New_York",
+          "time": "sample_time_1",
+          "target_timezone": "America/New_York"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0215_convert_time_positive_easy_0",
+      "tool_name": "convert_time",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use convert time to Convert time between timezones. Set source_timezone=\"America/New_York\", target_timezone=\"America/New_York\", time=\"time_0\".",
+      "exact_match": false,
+      "argument_validity": 0.6667,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "source_timezone": "America/New_York",
+        "time": "sample_time_1",
+        "target_timezone": "America/New_York"
+      },
+      "expected_arguments": {
+        "source_timezone": "America/New_York",
+        "target_timezone": "America/New_York",
+        "time": "time_0"
+      },
+      "prediction_latency_ms": 0.0623,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: convert_time\nTool description: Convert time between timezones\nSkill condition: multi_candidate_skill\nSkill summary: Convert time between timezones. Provide all required fields: `source_timezone`, `time`, and `target_timezone`.\nWhen to use: [\"Use `convert_time` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `source_timezone`, `time`, and `target_timezone`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"source_timezone\": \"America/New_York\", \"time\": \"sample_time_1\", \"target_timezone\": \"America/New_York\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for convert_time\", \"arguments\": {\"source_timezone\": \"America/New_York\", \"time\": \"sample_time_1\", \"target_timezone\": \"America/New_York\"}}, {\"scenario\": \"Richer invocation that uses optional controls for convert_time\", \"arguments\": {\"source_timezone\": \"America/New_York\", \"time\": \"sample_time_2\", \"target_timezone\": \"America/New_York\"}}]\nSchema: {\"properties\": {\"source_timezone\": {\"description\": \"Source IANA timezone name (e.g., 'America/New_York', 'Europe/London'). Use '<local_tz>' as local timezone if no source timezone provided by the user.\", \"type\": \"string\"}, \"target_timezone\": {\"description\": \"Target IANA timezone name (e.g., 'Asia/Tokyo', 'America/San_Francisco'). Use '<local_tz>' as local timezone if no target timezone provided by the user.\", \"type\": \"string\"}, \"time\": {\"description\": \"Time to convert in 24-hour format (HH:MM)\", \"type\": \"string\"}}, \"required\": [\"source_timezone\", \"time\", \"target_timezone\"], \"type\": \"object\"}\nUser request: Use convert time to Convert time between timezones. Set source_timezone=\"America/New_York\", target_timezone=\"America/New_York\", time=\"time_0\".\n",
+        "raw_model_output": "{\"arguments\": {\"source_timezone\": \"America/New_York\", \"target_timezone\": \"America/New_York\", \"time\": \"sample_time_1\"}}",
+        "parsed_prediction": {
+          "source_timezone": "America/New_York",
+          "time": "sample_time_1",
+          "target_timezone": "America/New_York"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0215_convert_time_positive_medium_0",
+      "tool_name": "convert_time",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Convert time between timezones. The relevant details are source_timezone=\"America/New_York\", target_timezone=\"America/New_York\", time=\"time_7\".",
+      "exact_match": false,
+      "argument_validity": 0.6667,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "source_timezone": "America/New_York",
+        "time": "sample_time_1",
+        "target_timezone": "America/New_York"
+      },
+      "expected_arguments": {
+        "source_timezone": "America/New_York",
+        "target_timezone": "America/New_York",
+        "time": "time_7"
+      },
+      "prediction_latency_ms": 0.1239,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: convert_time\nTool description: Convert time between timezones\nSkill condition: multi_candidate_skill\nSkill summary: Convert time between timezones. Provide all required fields: `source_timezone`, `time`, and `target_timezone`.\nWhen to use: [\"Use `convert_time` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `source_timezone`, `time`, and `target_timezone`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"source_timezone\": \"America/New_York\", \"time\": \"sample_time_1\", \"target_timezone\": \"America/New_York\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for convert_time\", \"arguments\": {\"source_timezone\": \"America/New_York\", \"time\": \"sample_time_1\", \"target_timezone\": \"America/New_York\"}}, {\"scenario\": \"Richer invocation that uses optional controls for convert_time\", \"arguments\": {\"source_timezone\": \"America/New_York\", \"time\": \"sample_time_2\", \"target_timezone\": \"America/New_York\"}}]\nSchema: {\"properties\": {\"source_timezone\": {\"description\": \"Source IANA timezone name (e.g., 'America/New_York', 'Europe/London'). Use '<local_tz>' as local timezone if no source timezone provided by the user.\", \"type\": \"string\"}, \"target_timezone\": {\"description\": \"Target IANA timezone name (e.g., 'Asia/Tokyo', 'America/San_Francisco'). Use '<local_tz>' as local timezone if no target timezone provided by the user.\", \"type\": \"string\"}, \"time\": {\"description\": \"Time to convert in 24-hour format (HH:MM)\", \"type\": \"string\"}}, \"required\": [\"source_timezone\", \"time\", \"target_timezone\"], \"type\": \"object\"}\nUser request: I need help with this task: Convert time between timezones. The relevant details are source_timezone=\"America/New_York\", target_timezone=\"America/New_York\", time=\"time_7\".\n",
+        "raw_model_output": "{\"arguments\": {\"source_timezone\": \"America/New_York\", \"target_timezone\": \"America/New_York\", \"time\": \"sample_time_1\"}}",
+        "parsed_prediction": {
+          "source_timezone": "America/New_York",
+          "time": "sample_time_1",
+          "target_timezone": "America/New_York"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.6667,
+    "avg_prediction_latency_ms": 0.0788
+  }
+}

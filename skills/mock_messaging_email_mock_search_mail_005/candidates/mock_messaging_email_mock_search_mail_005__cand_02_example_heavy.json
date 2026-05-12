@@ -1,0 +1,130 @@
+{
+  "candidate_id": "mock_messaging_email_mock_search_mail_005__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Synthetic safe mock mailbox search tool over local fixture messages. Provide the required field `query`.\nWhen to use:\n- Use `mock_messaging_email_mock_search_mail_005` when the user's request directly matches this tool's purpose.\n- Provide the required field `query`.\n- Optional controls include `folder`, `limit`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `folder`: 'inbox', 'sent', 'archive'.\nArgument template:\n{\"folder\": \"inbox\", \"limit\": 4, \"query\": \"sample query\"}\nExamples:\nMinimal valid request that satisfies the required fields for mock_messaging_email_mock_search_mail_005\n{\"query\": \"sample query\"}\nRicher invocation that uses optional controls for mock_messaging_email_mock_search_mail_005\n{\"folder\": \"sent\", \"limit\": 2, \"query\": \"sample query\"}\nRequired-argument dev behavior example.\n{\"query\": \"sample query\"}\nOptional, enum, nested, or array argument example.\n{\"folder\": \"inbox\", \"limit\": 4, \"query\": \"sample query\"}",
+  "argument_template": {
+    "query": "sample query",
+    "folder": "inbox",
+    "limit": 4
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for mock_messaging_email_mock_search_mail_005",
+      "arguments": {
+        "query": "sample query"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for mock_messaging_email_mock_search_mail_005",
+      "arguments": {
+        "query": "sample query",
+        "folder": "sent",
+        "limit": 2
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "query": "sample query"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "query": "sample query",
+        "folder": "inbox",
+        "limit": 4
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `mock_messaging_email_mock_search_mail_005` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `query`.",
+    "Optional controls include `folder`, `limit`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `folder`: 'inbox', 'sent', 'archive'."
+  ],
+  "token_count": 287,
+  "skill_token_count": 287,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Synthetic safe mock mailbox search tool over local fixture messages. Provide the required field `query`.",
+    "when_to_use": [
+      "Use `mock_messaging_email_mock_search_mail_005` when the user's request directly matches this tool's purpose.",
+      "Provide the required field `query`.",
+      "Optional controls include `folder`, `limit`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `folder`: 'inbox', 'sent', 'archive'."
+    ],
+    "argument_template": {
+      "query": "sample query",
+      "folder": "inbox",
+      "limit": 4
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for mock_messaging_email_mock_search_mail_005",
+        "arguments": {
+          "query": "sample query"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for mock_messaging_email_mock_search_mail_005",
+        "arguments": {
+          "query": "sample query",
+          "folder": "sent",
+          "limit": 2
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "query": "sample query"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "query": "sample query",
+          "folder": "inbox",
+          "limit": 4
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "mock_messaging_email_mock_search_mail_005__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "mock_messaging_email_mock_search_mail_005__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

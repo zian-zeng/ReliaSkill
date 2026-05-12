@@ -1,0 +1,217 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0010_sql_run_readonly_query_negative_easy_0_out_of_domain_request",
+      "tool_name": "sql_run_readonly_query",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to sql run readonly query.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "database": "sample_database_1",
+        "query": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to sql run readonly query",
+        "parameters": {},
+        "limit": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.09,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: sql_run_readonly_query\nTool description: API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database. Provide all required fields: `database`, and `query`.\nWhen to use: [\"Use `sql_run_readonly_query` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `database`, and `query`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"database\": \"sample_database_1\", \"query\": \"sample query\", \"parameters\": {}, \"limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for sql_run_readonly_query\", \"arguments\": {\"database\": \"sample_database_1\", \"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for sql_run_readonly_query\", \"arguments\": {\"database\": \"sample_database_2\", \"query\": \"sample query\", \"parameters\": {}, \"limit\": 2}}]\nSchema: {\"properties\": {\"database\": {\"description\": \"Fixture database name.\", \"type\": \"string\"}, \"limit\": {\"description\": \"Maximum rows.\", \"type\": \"integer\"}, \"parameters\": {\"description\": \"Named query parameters.\", \"type\": \"object\"}, \"query\": {\"description\": \"Readonly SQL query.\", \"type\": \"string\"}}, \"required\": [\"database\", \"query\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to sql run readonly query.\n",
+        "raw_model_output": "{\"arguments\": {\"database\": \"sample_database_1\", \"limit\": 1, \"parameters\": {}, \"query\": \"Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to sql run readonly query\"}}",
+        "parsed_prediction": {
+          "database": "sample_database_1",
+          "query": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to sql run readonly query",
+          "parameters": {},
+          "limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0010_sql_run_readonly_query_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "sql_run_readonly_query",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Only inspect what would happen before using sql run readonly query; do not create, update, delete, send, execute, or mutate anything.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "database": "sample_database_1",
+        "query": "Only inspect what would happen before using sql run readonly query; do not create, update, delete, send, execute, or mutate anything",
+        "parameters": {},
+        "limit": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1962,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: sql_run_readonly_query\nTool description: API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database. Provide all required fields: `database`, and `query`.\nWhen to use: [\"Use `sql_run_readonly_query` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `database`, and `query`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"database\": \"sample_database_1\", \"query\": \"sample query\", \"parameters\": {}, \"limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for sql_run_readonly_query\", \"arguments\": {\"database\": \"sample_database_1\", \"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for sql_run_readonly_query\", \"arguments\": {\"database\": \"sample_database_2\", \"query\": \"sample query\", \"parameters\": {}, \"limit\": 2}}]\nSchema: {\"properties\": {\"database\": {\"description\": \"Fixture database name.\", \"type\": \"string\"}, \"limit\": {\"description\": \"Maximum rows.\", \"type\": \"integer\"}, \"parameters\": {\"description\": \"Named query parameters.\", \"type\": \"object\"}, \"query\": {\"description\": \"Readonly SQL query.\", \"type\": \"string\"}}, \"required\": [\"database\", \"query\"], \"type\": \"object\"}\nUser request: Only inspect what would happen before using sql run readonly query; do not create, update, delete, send, execute, or mutate anything.\n",
+        "raw_model_output": "{\"arguments\": {\"database\": \"sample_database_1\", \"limit\": 1, \"parameters\": {}, \"query\": \"Only inspect what would happen before using sql run readonly query; do not create, update, delete, send, execute, or mutate anything\"}}",
+        "parsed_prediction": {
+          "database": "sample_database_1",
+          "query": "Only inspect what would happen before using sql run readonly query; do not create, update, delete, send, execute, or mutate anything",
+          "parameters": {},
+          "limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0010_sql_run_readonly_query_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "sql_run_readonly_query",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with sql run readonly query.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "database": "sample_database_1",
+        "query": "I already know the exact path docs/known_file.md, so no search or discovery is needed with sql run readonly query",
+        "parameters": {},
+        "limit": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0709,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: sql_run_readonly_query\nTool description: API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database. Provide all required fields: `database`, and `query`.\nWhen to use: [\"Use `sql_run_readonly_query` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `database`, and `query`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"database\": \"sample_database_1\", \"query\": \"sample query\", \"parameters\": {}, \"limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for sql_run_readonly_query\", \"arguments\": {\"database\": \"sample_database_1\", \"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for sql_run_readonly_query\", \"arguments\": {\"database\": \"sample_database_2\", \"query\": \"sample query\", \"parameters\": {}, \"limit\": 2}}]\nSchema: {\"properties\": {\"database\": {\"description\": \"Fixture database name.\", \"type\": \"string\"}, \"limit\": {\"description\": \"Maximum rows.\", \"type\": \"integer\"}, \"parameters\": {\"description\": \"Named query parameters.\", \"type\": \"object\"}, \"query\": {\"description\": \"Readonly SQL query.\", \"type\": \"string\"}}, \"required\": [\"database\", \"query\"], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with sql run readonly query.\n",
+        "raw_model_output": "{\"arguments\": {\"database\": \"sample_database_1\", \"limit\": 1, \"parameters\": {}, \"query\": \"I already know the exact path docs/known_file.md, so no search or discovery is needed with sql run readonly query\"}}",
+        "parsed_prediction": {
+          "database": "sample_database_1",
+          "query": "I already know the exact path docs/known_file.md, so no search or discovery is needed with sql run readonly query",
+          "parameters": {},
+          "limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0010_sql_run_readonly_query_positive_easy_0",
+      "tool_name": "sql_run_readonly_query",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use sql run readonly query to API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database. Set database=\"database_0\", query=\"reliability evaluation\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "database": "sample_database_1",
+        "query": "database_0",
+        "parameters": {},
+        "limit": 1
+      },
+      "expected_arguments": {
+        "database": "database_0",
+        "query": "reliability evaluation"
+      },
+      "prediction_latency_ms": 0.0656,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: sql_run_readonly_query\nTool description: API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database. Provide all required fields: `database`, and `query`.\nWhen to use: [\"Use `sql_run_readonly_query` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `database`, and `query`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"database\": \"sample_database_1\", \"query\": \"sample query\", \"parameters\": {}, \"limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for sql_run_readonly_query\", \"arguments\": {\"database\": \"sample_database_1\", \"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for sql_run_readonly_query\", \"arguments\": {\"database\": \"sample_database_2\", \"query\": \"sample query\", \"parameters\": {}, \"limit\": 2}}]\nSchema: {\"properties\": {\"database\": {\"description\": \"Fixture database name.\", \"type\": \"string\"}, \"limit\": {\"description\": \"Maximum rows.\", \"type\": \"integer\"}, \"parameters\": {\"description\": \"Named query parameters.\", \"type\": \"object\"}, \"query\": {\"description\": \"Readonly SQL query.\", \"type\": \"string\"}}, \"required\": [\"database\", \"query\"], \"type\": \"object\"}\nUser request: Use sql run readonly query to API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database. Set database=\"database_0\", query=\"reliability evaluation\".\n",
+        "raw_model_output": "{\"arguments\": {\"database\": \"sample_database_1\", \"limit\": 1, \"parameters\": {}, \"query\": \"database_0\"}}",
+        "parsed_prediction": {
+          "database": "sample_database_1",
+          "query": "database_0",
+          "parameters": {},
+          "limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0010_sql_run_readonly_query_positive_medium_0",
+      "tool_name": "sql_run_readonly_query",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database. The relevant details are database=\"database_7\", query=\"reliability evaluation\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "database": "sample_database_1",
+        "query": "database_7",
+        "parameters": {},
+        "limit": 1
+      },
+      "expected_arguments": {
+        "database": "database_7",
+        "query": "reliability evaluation"
+      },
+      "prediction_latency_ms": 0.0667,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: sql_run_readonly_query\nTool description: API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database. Provide all required fields: `database`, and `query`.\nWhen to use: [\"Use `sql_run_readonly_query` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `database`, and `query`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"database\": \"sample_database_1\", \"query\": \"sample query\", \"parameters\": {}, \"limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for sql_run_readonly_query\", \"arguments\": {\"database\": \"sample_database_1\", \"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for sql_run_readonly_query\", \"arguments\": {\"database\": \"sample_database_2\", \"query\": \"sample query\", \"parameters\": {}, \"limit\": 2}}]\nSchema: {\"properties\": {\"database\": {\"description\": \"Fixture database name.\", \"type\": \"string\"}, \"limit\": {\"description\": \"Maximum rows.\", \"type\": \"integer\"}, \"parameters\": {\"description\": \"Named query parameters.\", \"type\": \"object\"}, \"query\": {\"description\": \"Readonly SQL query.\", \"type\": \"string\"}}, \"required\": [\"database\", \"query\"], \"type\": \"object\"}\nUser request: I need help with this task: API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database. The relevant details are database=\"database_7\", query=\"reliability evaluation\".\n",
+        "raw_model_output": "{\"arguments\": {\"database\": \"sample_database_1\", \"limit\": 1, \"parameters\": {}, \"query\": \"database_7\"}}",
+        "parsed_prediction": {
+          "database": "sample_database_1",
+          "query": "database_7",
+          "parameters": {},
+          "limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0979
+  }
+}

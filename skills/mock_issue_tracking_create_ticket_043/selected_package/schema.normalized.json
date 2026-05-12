@@ -1,0 +1,159 @@
+{
+  "tool_name": "mock_issue_tracking_create_ticket_043",
+  "server_name": "synthetic_issue_tracking",
+  "tool_purpose": "Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture.",
+  "input_schema_raw": {
+    "properties": {
+      "dry_run": {
+        "description": "When true, validate the request without changing the mock system.",
+        "type": "boolean"
+      },
+      "labels": {
+        "description": "Labels to attach.",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "priority": {
+        "description": "Ticket priority.",
+        "enum": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "type": "string"
+      },
+      "project_key": {
+        "description": "Mock project key.",
+        "type": "string"
+      },
+      "title": {
+        "description": "Ticket title.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "project_key",
+      "title"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "project_key",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Mock project key.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.project_key"
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Ticket title.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.title"
+    },
+    {
+      "name": "priority",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "description": "Ticket priority.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.priority"
+    },
+    {
+      "name": "labels",
+      "type": "array",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Labels to attach.",
+      "items_type": "string",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.labels"
+    },
+    {
+      "name": "dry_run",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "When true, validate the request without changing the mock system.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.dry_run"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture.",
+    "Mock Issue Tracking Create Ticket 043"
+  ],
+  "source_pointer": "synthetic_mock:issue-tracking:10",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 94,
+    "has_array_argument": true,
+    "has_boolean_flag": true,
+    "has_nested_object": false,
+    "has_side_effect": true,
+    "max_schema_depth": 3,
+    "num_arguments": 5,
+    "num_enum_arguments": 1,
+    "num_enum_fields": 1,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 3,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 5,
+    "side_effect_type": "write"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "mock_issue_tracking_create_ticket_043",
+    "server_name": "synthetic_issue_tracking",
+    "source_pointer": "synthetic_mock:issue-tracking:10"
+  },
+  "side_effect_hints": [
+    "creates_resource"
+  ],
+  "safety_hints": [
+    "review_side_effects_before_deployment"
+  ]
+}

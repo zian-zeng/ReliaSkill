@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for city_distance.find_shortest", "arguments": {"start_city": "New York", "end_city": "New York"}}
+{"scenario": "Richer invocation that uses optional controls for city_distance.find_shortest", "arguments": {"start_city": "New York", "end_city": "New York", "transportation": "sample_transportation_2", "allow_transfer": true}}

@@ -1,0 +1,196 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0145_playwright_assert_response_negative_easy_0_out_of_domain_request",
+      "tool_name": "playwright_assert_response",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to playwright assert response.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "id": "sample-id-001",
+        "value": "sample_value_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0624,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_assert_response\nTool description: Wait for and validate a previously initiated HTTP response wait operation.\nSkill condition: multi_candidate_skill\nSkill summary: Wait for and validate a previously initiated HTTP response wait operation. Provide the required field `id`.\nWhen to use: [\"Use `playwright_assert_response` when the user's request directly matches this tool's purpose.\", \"Provide the required field `id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"id\": \"sample-id-001\", \"value\": \"sample_value_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_assert_response\", \"arguments\": {\"id\": \"sample-id-001\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_assert_response\", \"arguments\": {\"id\": \"sample-id-001\", \"value\": \"sample_value_2\"}}]\nSchema: {\"properties\": {\"id\": {\"description\": \"Identifier of the HTTP response initially expected using `Playwright_expect_response`.\", \"type\": \"string\"}, \"value\": {\"description\": \"Data to expect in the body of the HTTP response. If provided, the assertion will fail if this value is not found in the response body.\", \"type\": \"string\"}}, \"required\": [\"id\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to playwright assert response.\n",
+        "raw_model_output": "{\"arguments\": {\"id\": \"sample-id-001\", \"value\": \"sample_value_1\"}}",
+        "parsed_prediction": {
+          "id": "sample-id-001",
+          "value": "sample_value_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0145_playwright_assert_response_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "playwright_assert_response",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with playwright assert response; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "id": "sample-id-001",
+        "value": "sample_value_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0564,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_assert_response\nTool description: Wait for and validate a previously initiated HTTP response wait operation.\nSkill condition: multi_candidate_skill\nSkill summary: Wait for and validate a previously initiated HTTP response wait operation. Provide the required field `id`.\nWhen to use: [\"Use `playwright_assert_response` when the user's request directly matches this tool's purpose.\", \"Provide the required field `id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"id\": \"sample-id-001\", \"value\": \"sample_value_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_assert_response\", \"arguments\": {\"id\": \"sample-id-001\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_assert_response\", \"arguments\": {\"id\": \"sample-id-001\", \"value\": \"sample_value_2\"}}]\nSchema: {\"properties\": {\"id\": {\"description\": \"Identifier of the HTTP response initially expected using `Playwright_expect_response`.\", \"type\": \"string\"}, \"value\": {\"description\": \"Data to expect in the body of the HTTP response. If provided, the assertion will fail if this value is not found in the response body.\", \"type\": \"string\"}}, \"required\": [\"id\"], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with playwright assert response; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {\"id\": \"sample-id-001\", \"value\": \"sample_value_1\"}}",
+        "parsed_prediction": {
+          "id": "sample-id-001",
+          "value": "sample_value_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0145_playwright_assert_response_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "playwright_assert_response",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use playwright assert response; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "id": "sample-id-001",
+        "value": "sample_value_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0537,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_assert_response\nTool description: Wait for and validate a previously initiated HTTP response wait operation.\nSkill condition: multi_candidate_skill\nSkill summary: Wait for and validate a previously initiated HTTP response wait operation. Provide the required field `id`.\nWhen to use: [\"Use `playwright_assert_response` when the user's request directly matches this tool's purpose.\", \"Provide the required field `id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"id\": \"sample-id-001\", \"value\": \"sample_value_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_assert_response\", \"arguments\": {\"id\": \"sample-id-001\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_assert_response\", \"arguments\": {\"id\": \"sample-id-001\", \"value\": \"sample_value_2\"}}]\nSchema: {\"properties\": {\"id\": {\"description\": \"Identifier of the HTTP response initially expected using `Playwright_expect_response`.\", \"type\": \"string\"}, \"value\": {\"description\": \"Data to expect in the body of the HTTP response. If provided, the assertion will fail if this value is not found in the response body.\", \"type\": \"string\"}}, \"required\": [\"id\"], \"type\": \"object\"}\nUser request: Explain when someone should use playwright assert response; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"id\": \"sample-id-001\", \"value\": \"sample_value_1\"}}",
+        "parsed_prediction": {
+          "id": "sample-id-001",
+          "value": "sample_value_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0145_playwright_assert_response_positive_easy_0",
+      "tool_name": "playwright_assert_response",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use playwright assert response to Wait for and validate a previously initiated HTTP response wait operation. Set id=\"item-0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "id": "sample-id-001",
+        "value": "sample_value_1"
+      },
+      "expected_arguments": {
+        "id": "item-0"
+      },
+      "prediction_latency_ms": 0.1115,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_assert_response\nTool description: Wait for and validate a previously initiated HTTP response wait operation.\nSkill condition: multi_candidate_skill\nSkill summary: Wait for and validate a previously initiated HTTP response wait operation. Provide the required field `id`.\nWhen to use: [\"Use `playwright_assert_response` when the user's request directly matches this tool's purpose.\", \"Provide the required field `id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"id\": \"sample-id-001\", \"value\": \"sample_value_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_assert_response\", \"arguments\": {\"id\": \"sample-id-001\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_assert_response\", \"arguments\": {\"id\": \"sample-id-001\", \"value\": \"sample_value_2\"}}]\nSchema: {\"properties\": {\"id\": {\"description\": \"Identifier of the HTTP response initially expected using `Playwright_expect_response`.\", \"type\": \"string\"}, \"value\": {\"description\": \"Data to expect in the body of the HTTP response. If provided, the assertion will fail if this value is not found in the response body.\", \"type\": \"string\"}}, \"required\": [\"id\"], \"type\": \"object\"}\nUser request: Use playwright assert response to Wait for and validate a previously initiated HTTP response wait operation. Set id=\"item-0\".\n",
+        "raw_model_output": "{\"arguments\": {\"id\": \"sample-id-001\", \"value\": \"sample_value_1\"}}",
+        "parsed_prediction": {
+          "id": "sample-id-001",
+          "value": "sample_value_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0145_playwright_assert_response_positive_medium_0",
+      "tool_name": "playwright_assert_response",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Wait for and validate a previously initiated HTTP response wait operation. The relevant details are id=\"item-7\", value=\"value_7\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "id": "sample-id-001",
+        "value": "sample_value_1"
+      },
+      "expected_arguments": {
+        "id": "item-7",
+        "value": "value_7"
+      },
+      "prediction_latency_ms": 0.0549,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_assert_response\nTool description: Wait for and validate a previously initiated HTTP response wait operation.\nSkill condition: multi_candidate_skill\nSkill summary: Wait for and validate a previously initiated HTTP response wait operation. Provide the required field `id`.\nWhen to use: [\"Use `playwright_assert_response` when the user's request directly matches this tool's purpose.\", \"Provide the required field `id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"id\": \"sample-id-001\", \"value\": \"sample_value_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_assert_response\", \"arguments\": {\"id\": \"sample-id-001\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_assert_response\", \"arguments\": {\"id\": \"sample-id-001\", \"value\": \"sample_value_2\"}}]\nSchema: {\"properties\": {\"id\": {\"description\": \"Identifier of the HTTP response initially expected using `Playwright_expect_response`.\", \"type\": \"string\"}, \"value\": {\"description\": \"Data to expect in the body of the HTTP response. If provided, the assertion will fail if this value is not found in the response body.\", \"type\": \"string\"}}, \"required\": [\"id\"], \"type\": \"object\"}\nUser request: I need help with this task: Wait for and validate a previously initiated HTTP response wait operation. The relevant details are id=\"item-7\", value=\"value_7\".\n",
+        "raw_model_output": "{\"arguments\": {\"id\": \"sample-id-001\", \"value\": \"sample_value_1\"}}",
+        "parsed_prediction": {
+          "id": "sample-id-001",
+          "value": "sample_value_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0678
+  }
+}

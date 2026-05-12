@@ -1,0 +1,216 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0226_git_log_negative_easy_0_out_of_domain_request",
+      "tool_name": "git_log",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to git log.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "max_count": 1,
+        "start_timestamp": "sample_start_timestamp_1",
+        "end_timestamp": "sample_end_timestamp_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0803,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_log\nTool description: Shows the commit logs\nSkill condition: multi_candidate_skill\nSkill summary: Shows the commit logs. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_log` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"max_count\": 1, \"start_timestamp\": \"sample_start_timestamp_1\", \"end_timestamp\": \"sample_end_timestamp_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_log\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_log\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"max_count\": 2, \"start_timestamp\": \"sample_start_timestamp_2\", \"end_timestamp\": \"sample_end_timestamp_2\"}}]\nSchema: {\"properties\": {\"end_timestamp\": {\"description\": \"End timestamp for filtering commits. Accepts: ISO 8601 format (e.g., '2024-01-15T14:30:25'), relative dates (e.g., '2 weeks ago', 'yesterday'), or absolute dates (e.g., '2024-01-15', 'Jan 15 2024')\", \"nullable\": true, \"type\": \"string\"}, \"max_count\": {\"type\": \"integer\"}, \"repo_path\": {\"type\": \"string\"}, \"start_timestamp\": {\"description\": \"Start timestamp for filtering commits. Accepts: ISO 8601 format (e.g., '2024-01-15T14:30:25'), relative dates (e.g., '2 weeks ago', 'yesterday'), or absolute dates (e.g., '2024-01-15', 'Jan 15 2024')\", \"nullable\": true, \"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to git log.\n",
+        "raw_model_output": "{\"arguments\": {\"end_timestamp\": \"sample_end_timestamp_1\", \"max_count\": 1, \"repo_path\": \"data/sample.txt\", \"start_timestamp\": \"sample_start_timestamp_1\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "max_count": 1,
+          "start_timestamp": "sample_start_timestamp_1",
+          "end_timestamp": "sample_end_timestamp_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0226_git_log_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "git_log",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with git log.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "max_count": 1,
+        "start_timestamp": "sample_start_timestamp_1",
+        "end_timestamp": "sample_end_timestamp_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1468,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_log\nTool description: Shows the commit logs\nSkill condition: multi_candidate_skill\nSkill summary: Shows the commit logs. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_log` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"max_count\": 1, \"start_timestamp\": \"sample_start_timestamp_1\", \"end_timestamp\": \"sample_end_timestamp_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_log\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_log\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"max_count\": 2, \"start_timestamp\": \"sample_start_timestamp_2\", \"end_timestamp\": \"sample_end_timestamp_2\"}}]\nSchema: {\"properties\": {\"end_timestamp\": {\"description\": \"End timestamp for filtering commits. Accepts: ISO 8601 format (e.g., '2024-01-15T14:30:25'), relative dates (e.g., '2 weeks ago', 'yesterday'), or absolute dates (e.g., '2024-01-15', 'Jan 15 2024')\", \"nullable\": true, \"type\": \"string\"}, \"max_count\": {\"type\": \"integer\"}, \"repo_path\": {\"type\": \"string\"}, \"start_timestamp\": {\"description\": \"Start timestamp for filtering commits. Accepts: ISO 8601 format (e.g., '2024-01-15T14:30:25'), relative dates (e.g., '2 weeks ago', 'yesterday'), or absolute dates (e.g., '2024-01-15', 'Jan 15 2024')\", \"nullable\": true, \"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with git log.\n",
+        "raw_model_output": "{\"arguments\": {\"end_timestamp\": \"sample_end_timestamp_1\", \"max_count\": 1, \"repo_path\": \"data/sample.txt\", \"start_timestamp\": \"sample_start_timestamp_1\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "max_count": 1,
+          "start_timestamp": "sample_start_timestamp_1",
+          "end_timestamp": "sample_end_timestamp_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0226_git_log_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "git_log",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use git branch to List Git branches; git log is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "max_count": 1,
+        "start_timestamp": "sample_start_timestamp_1",
+        "end_timestamp": "sample_end_timestamp_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0691,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_log\nTool description: Shows the commit logs\nSkill condition: multi_candidate_skill\nSkill summary: Shows the commit logs. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_log` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"max_count\": 1, \"start_timestamp\": \"sample_start_timestamp_1\", \"end_timestamp\": \"sample_end_timestamp_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_log\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_log\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"max_count\": 2, \"start_timestamp\": \"sample_start_timestamp_2\", \"end_timestamp\": \"sample_end_timestamp_2\"}}]\nSchema: {\"properties\": {\"end_timestamp\": {\"description\": \"End timestamp for filtering commits. Accepts: ISO 8601 format (e.g., '2024-01-15T14:30:25'), relative dates (e.g., '2 weeks ago', 'yesterday'), or absolute dates (e.g., '2024-01-15', 'Jan 15 2024')\", \"nullable\": true, \"type\": \"string\"}, \"max_count\": {\"type\": \"integer\"}, \"repo_path\": {\"type\": \"string\"}, \"start_timestamp\": {\"description\": \"Start timestamp for filtering commits. Accepts: ISO 8601 format (e.g., '2024-01-15T14:30:25'), relative dates (e.g., '2 weeks ago', 'yesterday'), or absolute dates (e.g., '2024-01-15', 'Jan 15 2024')\", \"nullable\": true, \"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: Use git branch to List Git branches; git log is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"end_timestamp\": \"sample_end_timestamp_1\", \"max_count\": 1, \"repo_path\": \"data/sample.txt\", \"start_timestamp\": \"sample_start_timestamp_1\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "max_count": 1,
+          "start_timestamp": "sample_start_timestamp_1",
+          "end_timestamp": "sample_end_timestamp_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0226_git_log_positive_easy_0",
+      "tool_name": "git_log",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use git log to Shows the commit logs. Set repo_path=\"docs/control_0.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "max_count": 1,
+        "start_timestamp": "sample_start_timestamp_1",
+        "end_timestamp": "sample_end_timestamp_1"
+      },
+      "expected_arguments": {
+        "repo_path": "docs/control_0.md"
+      },
+      "prediction_latency_ms": 0.0676,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_log\nTool description: Shows the commit logs\nSkill condition: multi_candidate_skill\nSkill summary: Shows the commit logs. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_log` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"max_count\": 1, \"start_timestamp\": \"sample_start_timestamp_1\", \"end_timestamp\": \"sample_end_timestamp_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_log\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_log\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"max_count\": 2, \"start_timestamp\": \"sample_start_timestamp_2\", \"end_timestamp\": \"sample_end_timestamp_2\"}}]\nSchema: {\"properties\": {\"end_timestamp\": {\"description\": \"End timestamp for filtering commits. Accepts: ISO 8601 format (e.g., '2024-01-15T14:30:25'), relative dates (e.g., '2 weeks ago', 'yesterday'), or absolute dates (e.g., '2024-01-15', 'Jan 15 2024')\", \"nullable\": true, \"type\": \"string\"}, \"max_count\": {\"type\": \"integer\"}, \"repo_path\": {\"type\": \"string\"}, \"start_timestamp\": {\"description\": \"Start timestamp for filtering commits. Accepts: ISO 8601 format (e.g., '2024-01-15T14:30:25'), relative dates (e.g., '2 weeks ago', 'yesterday'), or absolute dates (e.g., '2024-01-15', 'Jan 15 2024')\", \"nullable\": true, \"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: Use git log to Shows the commit logs. Set repo_path=\"docs/control_0.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"end_timestamp\": \"sample_end_timestamp_1\", \"max_count\": 1, \"repo_path\": \"data/sample.txt\", \"start_timestamp\": \"sample_start_timestamp_1\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "max_count": 1,
+          "start_timestamp": "sample_start_timestamp_1",
+          "end_timestamp": "sample_end_timestamp_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0226_git_log_positive_medium_0",
+      "tool_name": "git_log",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Shows the commit logs. The relevant details are max_count=10, repo_path=\"docs/control_7.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "max_count": 1,
+        "start_timestamp": "sample_start_timestamp_1",
+        "end_timestamp": "sample_end_timestamp_1"
+      },
+      "expected_arguments": {
+        "max_count": 10,
+        "repo_path": "docs/control_7.md"
+      },
+      "prediction_latency_ms": 0.0673,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_log\nTool description: Shows the commit logs\nSkill condition: multi_candidate_skill\nSkill summary: Shows the commit logs. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_log` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"max_count\": 1, \"start_timestamp\": \"sample_start_timestamp_1\", \"end_timestamp\": \"sample_end_timestamp_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_log\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_log\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"max_count\": 2, \"start_timestamp\": \"sample_start_timestamp_2\", \"end_timestamp\": \"sample_end_timestamp_2\"}}]\nSchema: {\"properties\": {\"end_timestamp\": {\"description\": \"End timestamp for filtering commits. Accepts: ISO 8601 format (e.g., '2024-01-15T14:30:25'), relative dates (e.g., '2 weeks ago', 'yesterday'), or absolute dates (e.g., '2024-01-15', 'Jan 15 2024')\", \"nullable\": true, \"type\": \"string\"}, \"max_count\": {\"type\": \"integer\"}, \"repo_path\": {\"type\": \"string\"}, \"start_timestamp\": {\"description\": \"Start timestamp for filtering commits. Accepts: ISO 8601 format (e.g., '2024-01-15T14:30:25'), relative dates (e.g., '2 weeks ago', 'yesterday'), or absolute dates (e.g., '2024-01-15', 'Jan 15 2024')\", \"nullable\": true, \"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: I need help with this task: Shows the commit logs. The relevant details are max_count=10, repo_path=\"docs/control_7.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"end_timestamp\": \"sample_end_timestamp_1\", \"max_count\": 1, \"repo_path\": \"data/sample.txt\", \"start_timestamp\": \"sample_start_timestamp_1\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "max_count": 1,
+          "start_timestamp": "sample_start_timestamp_1",
+          "end_timestamp": "sample_end_timestamp_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0862
+  }
+}

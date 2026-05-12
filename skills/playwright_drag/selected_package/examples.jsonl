@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for playwright_drag", "arguments": {"sourceSelector": "sample_sourceSelector_1", "targetSelector": "sample_targetSelector_1"}}
+{"scenario": "Richer invocation that uses optional controls for playwright_drag", "arguments": {"sourceSelector": "sample_sourceSelector_2", "targetSelector": "sample_targetSelector_2"}}

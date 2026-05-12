@@ -1,0 +1,124 @@
+{
+  "candidate_id": "search__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Perform a web search query. Provide all required fields: `query`, and `num`.\nWhen to use:\n- Use `search` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `query`, and `num`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"num\": 4.0, \"query\": \"sample query\"}\nExamples:\nMinimal valid request that satisfies the required fields for search\n{\"num\": 1.0, \"query\": \"sample query\"}\nRicher invocation that uses optional controls for search\n{\"num\": 2.0, \"query\": \"sample query\"}\nRequired-argument dev behavior example.\n{\"num\": 3.0, \"query\": \"sample query\"}\nOptional, enum, nested, or array argument example.\n{\"num\": 4.0, \"query\": \"sample query\"}",
+  "argument_template": {
+    "query": "sample query",
+    "num": 4.0
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for search",
+      "arguments": {
+        "query": "sample query",
+        "num": 1.0
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for search",
+      "arguments": {
+        "query": "sample query",
+        "num": 2.0
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "query": "sample query",
+        "num": 3.0
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "query": "sample query",
+        "num": 4.0
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `search` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `query`, and `num`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 244,
+  "skill_token_count": 244,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Perform a web search query. Provide all required fields: `query`, and `num`.",
+    "when_to_use": [
+      "Use `search` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `query`, and `num`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "query": "sample query",
+      "num": 4.0
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for search",
+        "arguments": {
+          "query": "sample query",
+          "num": 1.0
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for search",
+        "arguments": {
+          "query": "sample query",
+          "num": 2.0
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "query": "sample query",
+          "num": 3.0
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "query": "sample query",
+          "num": 4.0
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "search__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "search__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for puppeteer_screenshot", "arguments": {"name": "sample-name"}}
+{"scenario": "Richer invocation that uses optional controls for puppeteer_screenshot", "arguments": {"name": "sample-name", "selector": "sample_selector_2", "width": 2.0, "height": 2.0, "encoded": true}}

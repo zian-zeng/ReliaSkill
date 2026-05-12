@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for bank_search_transactions", "arguments": {"account_id": "sample-account-id-001"}}
+{"scenario": "Richer invocation that uses optional controls for bank_search_transactions", "arguments": {"account_id": "sample-account-id-001", "date_range": {"end": "2026-01-01", "start": "2026-01-01"}, "category": "travel", "limit": 2}}

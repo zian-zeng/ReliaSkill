@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for convert_time", "arguments": {"source_timezone": "America/New_York", "time": "sample_time_1", "target_timezone": "America/New_York"}}
+{"scenario": "Richer invocation that uses optional controls for convert_time", "arguments": {"source_timezone": "America/New_York", "time": "sample_time_2", "target_timezone": "America/New_York"}}

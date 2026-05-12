@@ -1,0 +1,4 @@
+{"scenario": "Minimal valid request that satisfies the required fields for playwright_custom_user_agent", "arguments": {"userAgent": "sample_userAgent_1"}}
+{"scenario": "Richer invocation that uses optional controls for playwright_custom_user_agent", "arguments": {"userAgent": "sample_userAgent_2"}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"userAgent": "sample_userAgent_3"}}
+{"scenario": "Optional, enum, nested, or array argument example.", "arguments": {"userAgent": "sample_userAgent_4"}}

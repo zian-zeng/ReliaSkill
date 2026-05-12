@@ -1,0 +1,145 @@
+{
+  "tool_name": "bank_transfer_between_accounts",
+  "server_name": "apibank_style_fixture",
+  "tool_purpose": "API-Bank-style local fixture tool that records a mock transfer between two fixture accounts.",
+  "input_schema_raw": {
+    "properties": {
+      "amount": {
+        "description": "Transfer amount.",
+        "type": "number"
+      },
+      "destination_account_id": {
+        "description": "Mock destination account identifier.",
+        "type": "string"
+      },
+      "dry_run": {
+        "description": "Validate without recording the transfer.",
+        "type": "boolean"
+      },
+      "memo": {
+        "description": "Optional transfer memo.",
+        "type": "string"
+      },
+      "source_account_id": {
+        "description": "Mock source account identifier.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "source_account_id",
+      "destination_account_id",
+      "amount"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "source_account_id",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Mock source account identifier.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.source_account_id"
+    },
+    {
+      "name": "destination_account_id",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Mock destination account identifier.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.destination_account_id"
+    },
+    {
+      "name": "amount",
+      "type": "number",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Transfer amount.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.amount"
+    },
+    {
+      "name": "memo",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Optional transfer memo.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.memo"
+    },
+    {
+      "name": "dry_run",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Validate without recording the transfer.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.dry_run"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "API-Bank-style local fixture tool that records a mock transfer between two fixture accounts.",
+    "Transfer Between Accounts",
+    "Create an offline fixture bank transfer."
+  ],
+  "source_pointer": "data/raw/apibank_style_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.35,
+    "auth_required": false,
+    "documentation_length": 92,
+    "has_array_argument": false,
+    "has_boolean_flag": true,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 5,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 2,
+    "num_required_arguments": 3,
+    "num_top_level_arguments": 5,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "bank_transfer_between_accounts",
+    "server_name": "apibank_style_fixture",
+    "source_pointer": "data/raw/apibank_style_tools.json"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

@@ -1,0 +1,195 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0096_biology_get_cell_info_negative_easy_0_out_of_domain_request",
+      "tool_name": "biology.get_cell_info",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to biology.get cell info.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "detailed": "false",
+        "cell_type": "sample_cell_type_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0831,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: biology.get_cell_info\nTool description: Retrieve information about the structure and functioning of a specified type of cell\nSkill condition: multi_candidate_skill\nSkill summary: Retrieve information about the structure and functioning of a specified type of cell. Provide the required field `cell_type`.\nWhen to use: [\"Use `biology.get_cell_info` when the user's request directly matches this tool's purpose.\", \"Provide the required field `cell_type`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"cell_type\": \"sample_cell_type_1\", \"detailed\": \"false\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for biology.get_cell_info\", \"arguments\": {\"cell_type\": \"sample_cell_type_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for biology.get_cell_info\", \"arguments\": {\"cell_type\": \"sample_cell_type_2\", \"detailed\": \"false\"}}]\nSchema: {\"properties\": {\"cell_type\": {\"description\": \"Type of cell you want information about\", \"type\": \"string\"}, \"detailed\": {\"default\": \"false\", \"description\": \"Indicate if you want a detailed description of the cell\", \"type\": \"boolean\"}}, \"required\": [\"cell_type\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to biology.get cell info.\n",
+        "raw_model_output": "{\"arguments\": {\"cell_type\": \"sample_cell_type_1\", \"detailed\": \"false\"}}",
+        "parsed_prediction": {
+          "detailed": "false",
+          "cell_type": "sample_cell_type_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0096_biology_get_cell_info_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "biology.get_cell_info",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. This is adjacent to biology.get cell info, but the intended capability is bank get account balance.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "detailed": "false",
+        "cell_type": "sample_cell_type_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0621,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: biology.get_cell_info\nTool description: Retrieve information about the structure and functioning of a specified type of cell\nSkill condition: multi_candidate_skill\nSkill summary: Retrieve information about the structure and functioning of a specified type of cell. Provide the required field `cell_type`.\nWhen to use: [\"Use `biology.get_cell_info` when the user's request directly matches this tool's purpose.\", \"Provide the required field `cell_type`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"cell_type\": \"sample_cell_type_1\", \"detailed\": \"false\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for biology.get_cell_info\", \"arguments\": {\"cell_type\": \"sample_cell_type_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for biology.get_cell_info\", \"arguments\": {\"cell_type\": \"sample_cell_type_2\", \"detailed\": \"false\"}}]\nSchema: {\"properties\": {\"cell_type\": {\"description\": \"Type of cell you want information about\", \"type\": \"string\"}, \"detailed\": {\"default\": \"false\", \"description\": \"Indicate if you want a detailed description of the cell\", \"type\": \"boolean\"}}, \"required\": [\"cell_type\"], \"type\": \"object\"}\nUser request: I need to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. This is adjacent to biology.get cell info, but the intended capability is bank get account balance.\n",
+        "raw_model_output": "{\"arguments\": {\"cell_type\": \"sample_cell_type_1\", \"detailed\": \"false\"}}",
+        "parsed_prediction": {
+          "detailed": "false",
+          "cell_type": "sample_cell_type_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0096_biology_get_cell_info_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "biology.get_cell_info",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use bank get account balance to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services; biology.get cell info is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "detailed": "false",
+        "cell_type": "sample_cell_type_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0572,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: biology.get_cell_info\nTool description: Retrieve information about the structure and functioning of a specified type of cell\nSkill condition: multi_candidate_skill\nSkill summary: Retrieve information about the structure and functioning of a specified type of cell. Provide the required field `cell_type`.\nWhen to use: [\"Use `biology.get_cell_info` when the user's request directly matches this tool's purpose.\", \"Provide the required field `cell_type`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"cell_type\": \"sample_cell_type_1\", \"detailed\": \"false\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for biology.get_cell_info\", \"arguments\": {\"cell_type\": \"sample_cell_type_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for biology.get_cell_info\", \"arguments\": {\"cell_type\": \"sample_cell_type_2\", \"detailed\": \"false\"}}]\nSchema: {\"properties\": {\"cell_type\": {\"description\": \"Type of cell you want information about\", \"type\": \"string\"}, \"detailed\": {\"default\": \"false\", \"description\": \"Indicate if you want a detailed description of the cell\", \"type\": \"boolean\"}}, \"required\": [\"cell_type\"], \"type\": \"object\"}\nUser request: Use bank get account balance to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services; biology.get cell info is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"cell_type\": \"sample_cell_type_1\", \"detailed\": \"false\"}}",
+        "parsed_prediction": {
+          "detailed": "false",
+          "cell_type": "sample_cell_type_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0096_biology_get_cell_info_positive_easy_0",
+      "tool_name": "biology.get_cell_info",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use biology.get cell info to Retrieve information about the structure and functioning of a specified type of cell. Set cell_type=\"cell_type_0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "cell_type": "sample_cell_type_1"
+      },
+      "expected_arguments": {
+        "cell_type": "cell_type_0"
+      },
+      "prediction_latency_ms": 0.0557,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: biology.get_cell_info\nTool description: Retrieve information about the structure and functioning of a specified type of cell\nSkill condition: multi_candidate_skill\nSkill summary: Retrieve information about the structure and functioning of a specified type of cell. Provide the required field `cell_type`.\nWhen to use: [\"Use `biology.get_cell_info` when the user's request directly matches this tool's purpose.\", \"Provide the required field `cell_type`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"cell_type\": \"sample_cell_type_1\", \"detailed\": \"false\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for biology.get_cell_info\", \"arguments\": {\"cell_type\": \"sample_cell_type_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for biology.get_cell_info\", \"arguments\": {\"cell_type\": \"sample_cell_type_2\", \"detailed\": \"false\"}}]\nSchema: {\"properties\": {\"cell_type\": {\"description\": \"Type of cell you want information about\", \"type\": \"string\"}, \"detailed\": {\"default\": \"false\", \"description\": \"Indicate if you want a detailed description of the cell\", \"type\": \"boolean\"}}, \"required\": [\"cell_type\"], \"type\": \"object\"}\nUser request: Use biology.get cell info to Retrieve information about the structure and functioning of a specified type of cell. Set cell_type=\"cell_type_0\".\n",
+        "raw_model_output": "{\"arguments\": {\"cell_type\": \"sample_cell_type_1\", \"detailed\": \"false\"}}",
+        "parsed_prediction": {
+          "detailed": "false",
+          "cell_type": "sample_cell_type_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0096_biology_get_cell_info_positive_medium_0",
+      "tool_name": "biology.get_cell_info",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Retrieve information about the structure and functioning of a specified type of cell. The relevant details are cell_type=\"cell_type_7\", detailed=false.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "detailed": "false",
+        "cell_type": "sample_cell_type_1"
+      },
+      "expected_arguments": {
+        "cell_type": "cell_type_7",
+        "detailed": false
+      },
+      "prediction_latency_ms": 0.0661,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: biology.get_cell_info\nTool description: Retrieve information about the structure and functioning of a specified type of cell\nSkill condition: multi_candidate_skill\nSkill summary: Retrieve information about the structure and functioning of a specified type of cell. Provide the required field `cell_type`.\nWhen to use: [\"Use `biology.get_cell_info` when the user's request directly matches this tool's purpose.\", \"Provide the required field `cell_type`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"cell_type\": \"sample_cell_type_1\", \"detailed\": \"false\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for biology.get_cell_info\", \"arguments\": {\"cell_type\": \"sample_cell_type_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for biology.get_cell_info\", \"arguments\": {\"cell_type\": \"sample_cell_type_2\", \"detailed\": \"false\"}}]\nSchema: {\"properties\": {\"cell_type\": {\"description\": \"Type of cell you want information about\", \"type\": \"string\"}, \"detailed\": {\"default\": \"false\", \"description\": \"Indicate if you want a detailed description of the cell\", \"type\": \"boolean\"}}, \"required\": [\"cell_type\"], \"type\": \"object\"}\nUser request: I need help with this task: Retrieve information about the structure and functioning of a specified type of cell. The relevant details are cell_type=\"cell_type_7\", detailed=false.\n",
+        "raw_model_output": "{\"arguments\": {\"cell_type\": \"sample_cell_type_1\", \"detailed\": \"false\"}}",
+        "parsed_prediction": {
+          "detailed": "false",
+          "cell_type": "sample_cell_type_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0648
+  }
+}

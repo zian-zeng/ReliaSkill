@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for playwright_save_as_pdf", "arguments": {"outputPath": "data/sample.txt"}}
+{"scenario": "Richer invocation that uses optional controls for playwright_save_as_pdf", "arguments": {"outputPath": "data/sample.txt", "filename": "data/sample.txt", "format": "sample_format_2", "printBackground": true, "margin": {"bottom": "sample_bottom_2", "left": "sample_left_2", "right": "sample_right_2", "top": "sample_top_2"}}}

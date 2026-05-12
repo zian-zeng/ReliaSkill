@@ -1,0 +1,137 @@
+{
+  "tool_name": "email_draft_message",
+  "server_name": "apibank_style_fixture",
+  "tool_purpose": "API-Bank-style local fixture tool that creates a draft email in an offline mailbox fixture.",
+  "input_schema_raw": {
+    "properties": {
+      "body": {
+        "description": "Draft body.",
+        "type": "string"
+      },
+      "cc": {
+        "description": "Optional cc recipients.",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "subject": {
+        "description": "Draft subject.",
+        "type": "string"
+      },
+      "to": {
+        "description": "Recipients.",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      }
+    },
+    "required": [
+      "to",
+      "subject",
+      "body"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "to",
+      "type": "array",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Recipients.",
+      "items_type": "string",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.to"
+    },
+    {
+      "name": "subject",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Draft subject.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.subject"
+    },
+    {
+      "name": "body",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Draft body.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.body"
+    },
+    {
+      "name": "cc",
+      "type": "array",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Optional cc recipients.",
+      "items_type": "string",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.cc"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "API-Bank-style local fixture tool that creates a draft email in an offline mailbox fixture.",
+    "Draft Email Message",
+    "Draft a mock email message."
+  ],
+  "source_pointer": "data/raw/apibank_style_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 91,
+    "has_array_argument": true,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": true,
+    "max_schema_depth": 3,
+    "num_arguments": 4,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 3,
+    "num_top_level_arguments": 4,
+    "side_effect_type": "external_communication"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "email_draft_message",
+    "server_name": "apibank_style_fixture",
+    "source_pointer": "data/raw/apibank_style_tools.json"
+  },
+  "side_effect_hints": [
+    "creates_resource"
+  ],
+  "safety_hints": [
+    "review_side_effects_before_deployment"
+  ]
+}

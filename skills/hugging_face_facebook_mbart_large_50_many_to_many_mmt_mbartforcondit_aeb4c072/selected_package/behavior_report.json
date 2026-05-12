@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0051_hugging_face_facebook_mbart_large_50_many_to_many_mmt_mbartforcondit_aeb4c072_negative_easy_0_out_of_domain_request",
+      "tool_name": "hugging_face__facebook_mbart_large_50_many_to_many_mmt__mbartforcondit_aeb4c072",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  facebook mbart large 50 many to many mmt  mbartforcondit aeb4c072.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.057,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__facebook_mbart_large_50_many_to_many_mmt__mbartforcondit_aeb4c072\nTool description: mBART-50 many-to-many multilingual machine translation model can translate directly between any pair of 50 languages. It was introduced in the Multilingual Translation with Extensible Multilingual Pretraining and Finetuning paper. Framework: Hugging Face. Functionality: Text2Text Generation. API call: MBartForConditionalGeneration.from_pretrained('facebook/mbart-large-50-many-to-many-mmt').\nSkill condition: multi_candidate_skill\nSkill summary: mBART-50 many-to-many multilingual machine translation model can translate directly between any pair of 50 languages. It was introduced in the Multilingual Translation with Extensible Multilingual Pretraining and Finetuning paper. Framework: Hugging Face. Functionality: Text2Text Generation. API call: MBartForConditionalGeneration.from_pretrained('facebook/mbart-large-50-many-to-many-mmt'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__facebook_mbart_large_50_many_to_many_mmt__mbartforcondit_aeb4c072` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  facebook mbart large 50 many to many mmt  mbartforcondit aeb4c072.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0051_hugging_face_facebook_mbart_large_50_many_to_many_mmt_mbartforcondit_aeb4c072_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "hugging_face__facebook_mbart_large_50_many_to_many_mmt__mbartforcondit_aeb4c072",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with hugging face  facebook mbart large 50 many to many mmt  mbartforcondit aeb4c072.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0519,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__facebook_mbart_large_50_many_to_many_mmt__mbartforcondit_aeb4c072\nTool description: mBART-50 many-to-many multilingual machine translation model can translate directly between any pair of 50 languages. It was introduced in the Multilingual Translation with Extensible Multilingual Pretraining and Finetuning paper. Framework: Hugging Face. Functionality: Text2Text Generation. API call: MBartForConditionalGeneration.from_pretrained('facebook/mbart-large-50-many-to-many-mmt').\nSkill condition: multi_candidate_skill\nSkill summary: mBART-50 many-to-many multilingual machine translation model can translate directly between any pair of 50 languages. It was introduced in the Multilingual Translation with Extensible Multilingual Pretraining and Finetuning paper. Framework: Hugging Face. Functionality: Text2Text Generation. API call: MBartForConditionalGeneration.from_pretrained('facebook/mbart-large-50-many-to-many-mmt'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__facebook_mbart_large_50_many_to_many_mmt__mbartforcondit_aeb4c072` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with hugging face  facebook mbart large 50 many to many mmt  mbartforcondit aeb4c072.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0051_hugging_face_facebook_mbart_large_50_many_to_many_mmt_mbartforcondit_aeb4c072_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "hugging_face__facebook_mbart_large_50_many_to_many_mmt__mbartforcondit_aeb4c072",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN; hugging face  facebook mbart large 50 many to many mmt  mbartforcondit aeb4c072 is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0552,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__facebook_mbart_large_50_many_to_many_mmt__mbartforcondit_aeb4c072\nTool description: mBART-50 many-to-many multilingual machine translation model can translate directly between any pair of 50 languages. It was introduced in the Multilingual Translation with Extensible Multilingual Pretraining and Finetuning paper. Framework: Hugging Face. Functionality: Text2Text Generation. API call: MBartForConditionalGeneration.from_pretrained('facebook/mbart-large-50-many-to-many-mmt').\nSkill condition: multi_candidate_skill\nSkill summary: mBART-50 many-to-many multilingual machine translation model can translate directly between any pair of 50 languages. It was introduced in the Multilingual Translation with Extensible Multilingual Pretraining and Finetuning paper. Framework: Hugging Face. Functionality: Text2Text Generation. API call: MBartForConditionalGeneration.from_pretrained('facebook/mbart-large-50-many-to-many-mmt'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__facebook_mbart_large_50_many_to_many_mmt__mbartforcondit_aeb4c072` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN; hugging face  facebook mbart large 50 many to many mmt  mbartforcondit aeb4c072 is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0051_hugging_face_facebook_mbart_large_50_many_to_many_mmt_mbartforcondit_aeb4c072_positive_easy_0",
+      "tool_name": "hugging_face__facebook_mbart_large_50_many_to_many_mmt__mbartforcondit_aeb4c072",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use hugging face  facebook mbart large 50 many to many mmt  mbartforcondit aeb4c072 to mBART-50 many-to-many multilingual machine translation model can translate directly between any pair of 50 languages. It was introduced in t. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0526,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__facebook_mbart_large_50_many_to_many_mmt__mbartforcondit_aeb4c072\nTool description: mBART-50 many-to-many multilingual machine translation model can translate directly between any pair of 50 languages. It was introduced in the Multilingual Translation with Extensible Multilingual Pretraining and Finetuning paper. Framework: Hugging Face. Functionality: Text2Text Generation. API call: MBartForConditionalGeneration.from_pretrained('facebook/mbart-large-50-many-to-many-mmt').\nSkill condition: multi_candidate_skill\nSkill summary: mBART-50 many-to-many multilingual machine translation model can translate directly between any pair of 50 languages. It was introduced in the Multilingual Translation with Extensible Multilingual Pretraining and Finetuning paper. Framework: Hugging Face. Functionality: Text2Text Generation. API call: MBartForConditionalGeneration.from_pretrained('facebook/mbart-large-50-many-to-many-mmt'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__facebook_mbart_large_50_many_to_many_mmt__mbartforcondit_aeb4c072` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use hugging face  facebook mbart large 50 many to many mmt  mbartforcondit aeb4c072 to mBART-50 many-to-many multilingual machine translation model can translate directly between any pair of 50 languages. It was introduced in t. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0051_hugging_face_facebook_mbart_large_50_many_to_many_mmt_mbartforcondit_aeb4c072_positive_medium_0",
+      "tool_name": "hugging_face__facebook_mbart_large_50_many_to_many_mmt__mbartforcondit_aeb4c072",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: mBART-50 many-to-many multilingual machine translation model can translate directly between any pair of 50 languages. It was introduced in t. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0539,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__facebook_mbart_large_50_many_to_many_mmt__mbartforcondit_aeb4c072\nTool description: mBART-50 many-to-many multilingual machine translation model can translate directly between any pair of 50 languages. It was introduced in the Multilingual Translation with Extensible Multilingual Pretraining and Finetuning paper. Framework: Hugging Face. Functionality: Text2Text Generation. API call: MBartForConditionalGeneration.from_pretrained('facebook/mbart-large-50-many-to-many-mmt').\nSkill condition: multi_candidate_skill\nSkill summary: mBART-50 many-to-many multilingual machine translation model can translate directly between any pair of 50 languages. It was introduced in the Multilingual Translation with Extensible Multilingual Pretraining and Finetuning paper. Framework: Hugging Face. Functionality: Text2Text Generation. API call: MBartForConditionalGeneration.from_pretrained('facebook/mbart-large-50-many-to-many-mmt'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__facebook_mbart_large_50_many_to_many_mmt__mbartforcondit_aeb4c072` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: mBART-50 many-to-many multilingual machine translation model can translate directly between any pair of 50 languages. It was introduced in t. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0541
+  }
+}

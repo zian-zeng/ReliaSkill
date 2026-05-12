@@ -1,0 +1,142 @@
+{
+  "candidate_id": "electromagnetic_force__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Calculate the electromagnetic force between two charges placed at a certain distance. Provide all required fields: `charge1`, `charge2`, and `distance`.\nWhen to use:\n- Use `electromagnetic_force` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `charge1`, `charge2`, and `distance`.\n- Optional control is available through `medium_permittivity` when the request needs extra specificity.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"charge1\": null, \"charge2\": null, \"distance\": null, \"medium_permittivity\": null}\nExamples:\nMinimal valid request that satisfies the required fields for electromagnetic_force\n{\"charge1\": null, \"charge2\": null, \"distance\": null}\nRicher invocation that uses optional controls for electromagnetic_force\n{\"charge1\": null, \"charge2\": null, \"distance\": null, \"medium_permittivity\": null}\nRequired-argument dev behavior example.\n{\"charge1\": null, \"charge2\": null, \"distance\": null}\nOptional, enum, nested, or array argument example.\n{\"charge1\": null, \"charge2\": null, \"distance\": null, \"medium_permittivity\": null}",
+  "argument_template": {
+    "charge1": null,
+    "charge2": null,
+    "distance": null,
+    "medium_permittivity": null
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for electromagnetic_force",
+      "arguments": {
+        "charge1": null,
+        "charge2": null,
+        "distance": null
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for electromagnetic_force",
+      "arguments": {
+        "charge1": null,
+        "charge2": null,
+        "distance": null,
+        "medium_permittivity": null
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "charge1": null,
+        "charge2": null,
+        "distance": null
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "charge1": null,
+        "charge2": null,
+        "distance": null,
+        "medium_permittivity": null
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `electromagnetic_force` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `charge1`, `charge2`, and `distance`.",
+    "Optional control is available through `medium_permittivity` when the request needs extra specificity.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 318,
+  "skill_token_count": 318,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Calculate the electromagnetic force between two charges placed at a certain distance. Provide all required fields: `charge1`, `charge2`, and `distance`.",
+    "when_to_use": [
+      "Use `electromagnetic_force` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `charge1`, `charge2`, and `distance`.",
+      "Optional control is available through `medium_permittivity` when the request needs extra specificity.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "charge1": null,
+      "charge2": null,
+      "distance": null,
+      "medium_permittivity": null
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for electromagnetic_force",
+        "arguments": {
+          "charge1": null,
+          "charge2": null,
+          "distance": null
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for electromagnetic_force",
+        "arguments": {
+          "charge1": null,
+          "charge2": null,
+          "distance": null,
+          "medium_permittivity": null
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "charge1": null,
+          "charge2": null,
+          "distance": null
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "charge1": null,
+          "charge2": null,
+          "distance": null,
+          "medium_permittivity": null
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "electromagnetic_force__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "electromagnetic_force__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

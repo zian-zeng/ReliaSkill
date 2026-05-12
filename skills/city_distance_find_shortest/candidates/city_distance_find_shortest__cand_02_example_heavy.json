@@ -1,0 +1,138 @@
+{
+  "candidate_id": "city_distance_find_shortest__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Calculates the shortest distance between two cities via available public transportation. Provide all required fields: `start_city`, and `end_city`.\nWhen to use:\n- Use `city_distance.find_shortest` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `start_city`, and `end_city`.\n- Optional controls include `transportation`, `allow_transfer`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"allow_transfer\": true, \"end_city\": \"New York\", \"start_city\": \"New York\", \"transportation\": \"sample_transportation_4\"}\nExamples:\nMinimal valid request that satisfies the required fields for city_distance.find_shortest\n{\"end_city\": \"New York\", \"start_city\": \"New York\"}\nRicher invocation that uses optional controls for city_distance.find_shortest\n{\"allow_transfer\": true, \"end_city\": \"New York\", \"start_city\": \"New York\", \"transportation\": \"sample_transportation_2\"}\nRequired-argument dev behavior example.\n{\"end_city\": \"New York\", \"start_city\": \"New York\"}\nOptional, enum, nested, or array argument example.\n{\"allow_transfer\": true, \"end_city\": \"New York\", \"start_city\": \"New York\", \"transportation\": \"sample_transportation_4\"}",
+  "argument_template": {
+    "start_city": "New York",
+    "end_city": "New York",
+    "transportation": "sample_transportation_4",
+    "allow_transfer": true
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for city_distance.find_shortest",
+      "arguments": {
+        "start_city": "New York",
+        "end_city": "New York"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for city_distance.find_shortest",
+      "arguments": {
+        "start_city": "New York",
+        "end_city": "New York",
+        "transportation": "sample_transportation_2",
+        "allow_transfer": true
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "start_city": "New York",
+        "end_city": "New York"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "start_city": "New York",
+        "end_city": "New York",
+        "transportation": "sample_transportation_4",
+        "allow_transfer": true
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `city_distance.find_shortest` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `start_city`, and `end_city`.",
+    "Optional controls include `transportation`, `allow_transfer`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 334,
+  "skill_token_count": 334,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Calculates the shortest distance between two cities via available public transportation. Provide all required fields: `start_city`, and `end_city`.",
+    "when_to_use": [
+      "Use `city_distance.find_shortest` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `start_city`, and `end_city`.",
+      "Optional controls include `transportation`, `allow_transfer`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "start_city": "New York",
+      "end_city": "New York",
+      "transportation": "sample_transportation_4",
+      "allow_transfer": true
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for city_distance.find_shortest",
+        "arguments": {
+          "start_city": "New York",
+          "end_city": "New York"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for city_distance.find_shortest",
+        "arguments": {
+          "start_city": "New York",
+          "end_city": "New York",
+          "transportation": "sample_transportation_2",
+          "allow_transfer": true
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "start_city": "New York",
+          "end_city": "New York"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "start_city": "New York",
+          "end_city": "New York",
+          "transportation": "sample_transportation_4",
+          "allow_transfer": true
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "city_distance_find_shortest__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "city_distance_find_shortest__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

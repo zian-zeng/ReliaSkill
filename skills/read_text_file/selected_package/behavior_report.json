@@ -1,0 +1,361 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0192_read_text_file_negative_easy_0_out_of_domain_request",
+      "tool_name": "read_text_file",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to read text file.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1406,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_text_file\nTool description: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a.\nWhen to use: [\"Use `read_text_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"tail\": 1.0, \"head\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0, \"head\": 2.0}}]\nSchema: {\"properties\": {\"head\": {\"description\": \"If provided, returns only the first N lines of the file.\", \"type\": \"number\"}, \"path\": {\"description\": \"Path to the file within an allowed directory.\", \"type\": \"string\"}, \"tail\": {\"description\": \"If provided, returns only the last N lines of the file.\", \"type\": \"number\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to read text file.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0197_read_text_file_negative_easy_0_out_of_domain_request",
+      "tool_name": "read_text_file",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to read text file.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.205,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_text_file\nTool description: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a.\nWhen to use: [\"Use `read_text_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"tail\": 1.0, \"head\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0, \"head\": 2.0}}]\nSchema: {\"properties\": {\"head\": {\"description\": \"If provided, returns only the first N lines of the file.\", \"type\": \"number\"}, \"path\": {\"description\": \"Path to the file within an allowed directory.\", \"type\": \"string\"}, \"tail\": {\"description\": \"If provided, returns only the last N lines of the file.\", \"type\": \"number\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to read text file.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0192_read_text_file_negative_hard_1_missing_required_info",
+      "tool_name": "read_text_file",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I may need read text file to Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if th, but I do not know path yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1407,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_text_file\nTool description: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a.\nWhen to use: [\"Use `read_text_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"tail\": 1.0, \"head\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0, \"head\": 2.0}}]\nSchema: {\"properties\": {\"head\": {\"description\": \"If provided, returns only the first N lines of the file.\", \"type\": \"number\"}, \"path\": {\"description\": \"Path to the file within an allowed directory.\", \"type\": \"string\"}, \"tail\": {\"description\": \"If provided, returns only the last N lines of the file.\", \"type\": \"number\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: I may need read text file to Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if th, but I do not know path yet.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0197_read_text_file_negative_hard_1_missing_required_info",
+      "tool_name": "read_text_file",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I may need read text file to Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if th, but I do not know path yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1347,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_text_file\nTool description: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a.\nWhen to use: [\"Use `read_text_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"tail\": 1.0, \"head\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0, \"head\": 2.0}}]\nSchema: {\"properties\": {\"head\": {\"description\": \"If provided, returns only the first N lines of the file.\", \"type\": \"number\"}, \"path\": {\"description\": \"Path to the file within an allowed directory.\", \"type\": \"string\"}, \"tail\": {\"description\": \"If provided, returns only the last N lines of the file.\", \"type\": \"number\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: I may need read text file to Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if th, but I do not know path yet.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0192_read_text_file_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "read_text_file",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to End a code generation session and generate the test file. This is adjacent to read text file, but the intended capability is end codegen session.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1247,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_text_file\nTool description: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a.\nWhen to use: [\"Use `read_text_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"tail\": 1.0, \"head\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0, \"head\": 2.0}}]\nSchema: {\"properties\": {\"head\": {\"description\": \"If provided, returns only the first N lines of the file.\", \"type\": \"number\"}, \"path\": {\"description\": \"Path to the file within an allowed directory.\", \"type\": \"string\"}, \"tail\": {\"description\": \"If provided, returns only the last N lines of the file.\", \"type\": \"number\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: I need to End a code generation session and generate the test file. This is adjacent to read text file, but the intended capability is end codegen session.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0197_read_text_file_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "read_text_file",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use read text file; do not actually call it or perform the action. Use trace id ctrl_0197_read_text_file_negative_medium_0_explanation_instead_of_action for this benchmark item.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1276,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_text_file\nTool description: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a.\nWhen to use: [\"Use `read_text_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"tail\": 1.0, \"head\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0, \"head\": 2.0}}]\nSchema: {\"properties\": {\"head\": {\"description\": \"If provided, returns only the first N lines of the file.\", \"type\": \"number\"}, \"path\": {\"description\": \"Path to the file within an allowed directory.\", \"type\": \"string\"}, \"tail\": {\"description\": \"If provided, returns only the last N lines of the file.\", \"type\": \"number\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Explain when someone should use read text file; do not actually call it or perform the action. Use trace id ctrl_0197_read_text_file_negative_medium_0_explanation_instead_of_action for this benchmark item.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0192_read_text_file_positive_easy_0",
+      "tool_name": "read_text_file",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use read text file to Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if th. Set head=3, path=\"docs/control_0.md\", tail=3.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "data/sample.txt",
+        "tail": 2.0
+      },
+      "expected_arguments": {
+        "head": 3,
+        "path": "docs/control_0.md",
+        "tail": 3
+      },
+      "prediction_latency_ms": 0.1247,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_text_file\nTool description: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a.\nWhen to use: [\"Use `read_text_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"tail\": 1.0, \"head\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0, \"head\": 2.0}}]\nSchema: {\"properties\": {\"head\": {\"description\": \"If provided, returns only the first N lines of the file.\", \"type\": \"number\"}, \"path\": {\"description\": \"Path to the file within an allowed directory.\", \"type\": \"string\"}, \"tail\": {\"description\": \"If provided, returns only the last N lines of the file.\", \"type\": \"number\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Use read text file to Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if th. Set head=3, path=\"docs/control_0.md\", tail=3.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt",
+          "tail": 2.0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0197_read_text_file_positive_easy_0",
+      "tool_name": "read_text_file",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use read text file to Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if th. Set path=\"docs/control_0.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {
+        "path": "docs/control_0.md"
+      },
+      "prediction_latency_ms": 0.1814,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_text_file\nTool description: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a.\nWhen to use: [\"Use `read_text_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"tail\": 1.0, \"head\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0, \"head\": 2.0}}]\nSchema: {\"properties\": {\"head\": {\"description\": \"If provided, returns only the first N lines of the file.\", \"type\": \"number\"}, \"path\": {\"description\": \"Path to the file within an allowed directory.\", \"type\": \"string\"}, \"tail\": {\"description\": \"If provided, returns only the last N lines of the file.\", \"type\": \"number\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Use read text file to Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if th. Set path=\"docs/control_0.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0192_read_text_file_positive_medium_0",
+      "tool_name": "read_text_file",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if th. The relevant details are head=10, path=\"docs/control_7.md\", tail=10.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "data/sample.txt",
+        "tail": 2.0
+      },
+      "expected_arguments": {
+        "head": 10,
+        "path": "docs/control_7.md",
+        "tail": 10
+      },
+      "prediction_latency_ms": 0.1282,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_text_file\nTool description: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a.\nWhen to use: [\"Use `read_text_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"tail\": 1.0, \"head\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0, \"head\": 2.0}}]\nSchema: {\"properties\": {\"head\": {\"description\": \"If provided, returns only the first N lines of the file.\", \"type\": \"number\"}, \"path\": {\"description\": \"Path to the file within an allowed directory.\", \"type\": \"string\"}, \"tail\": {\"description\": \"If provided, returns only the last N lines of the file.\", \"type\": \"number\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: I need help with this task: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if th. The relevant details are head=10, path=\"docs/control_7.md\", tail=10.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt",
+          "tail": 2.0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0197_read_text_file_positive_medium_0",
+      "tool_name": "read_text_file",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if th. The relevant details are path=\"docs/control_7.md\", tail=10.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "data/sample.txt",
+        "tail": 2.0
+      },
+      "expected_arguments": {
+        "path": "docs/control_7.md",
+        "tail": 10
+      },
+      "prediction_latency_ms": 0.1246,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_text_file\nTool description: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the head parameter to read only the first N lines of a file, or the tail parameter to read only the last N lines of a file. Operates on the file as text regardless of extension. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a.\nWhen to use: [\"Use `read_text_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"tail\": 1.0, \"head\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_text_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0, \"head\": 2.0}}]\nSchema: {\"properties\": {\"head\": {\"description\": \"If provided, returns only the first N lines of the file.\", \"type\": \"number\"}, \"path\": {\"description\": \"Path to the file within an allowed directory.\", \"type\": \"string\"}, \"tail\": {\"description\": \"If provided, returns only the last N lines of the file.\", \"type\": \"number\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: I need help with this task: Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if th. The relevant details are path=\"docs/control_7.md\", tail=10.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\", \"tail\": 2.0}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt",
+          "tail": 2.0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 10,
+    "positive_cases": 4,
+    "negative_cases": 6,
+    "trigger_true_positive": 4,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 6,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.1432
+  }
+}

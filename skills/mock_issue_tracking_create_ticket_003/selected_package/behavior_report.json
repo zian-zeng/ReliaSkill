@@ -1,0 +1,247 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0242_mock_issue_tracking_create_ticket_003_negative_easy_0_out_of_domain_request",
+      "tool_name": "mock_issue_tracking_create_ticket_003",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to mock issue tracking create ticket 003.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "project_key": "sample_project_key_1",
+        "title": "Sample Title",
+        "priority": "low",
+        "labels": [
+          "sample_labels_item_1"
+        ],
+        "dry_run": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1011,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: mock_issue_tracking_create_ticket_003\nTool description: Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture.\nSkill condition: multi_candidate_skill\nSkill summary: Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture. Provide all required fields: `project_key`, and `title`.\nWhen to use: [\"Use `mock_issue_tracking_create_ticket_003` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `project_key`, and `title`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `priority`: 'low', 'medium', 'high'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\", \"priority\": \"low\", \"labels\": [\"sample_labels_item_1\"], \"dry_run\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for mock_issue_tracking_create_ticket_003\", \"arguments\": {\"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\"}}, {\"scenario\": \"Richer invocation that uses optional controls for mock_issue_tracking_create_ticket_003\", \"arguments\": {\"project_key\": \"sample_project_key_2\", \"title\": \"Sample Title\", \"priority\": \"medium\", \"labels\": [\"sample_labels_item_2\"], \"dry_run\": true}}]\nSchema: {\"properties\": {\"dry_run\": {\"description\": \"When true, validate the request without changing the mock system.\", \"type\": \"boolean\"}, \"labels\": {\"description\": \"Labels to attach.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"priority\": {\"description\": \"Ticket priority.\", \"enum\": [\"low\", \"medium\", \"high\"], \"type\": \"string\"}, \"project_key\": {\"description\": \"Mock project key.\", \"type\": \"string\"}, \"title\": {\"description\": \"Ticket title.\", \"type\": \"string\"}}, \"required\": [\"project_key\", \"title\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to mock issue tracking create ticket 003.\n",
+        "raw_model_output": "{\"arguments\": {\"dry_run\": false, \"labels\": [\"sample_labels_item_1\"], \"priority\": \"low\", \"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\"}}",
+        "parsed_prediction": {
+          "project_key": "sample_project_key_1",
+          "title": "Sample Title",
+          "priority": "low",
+          "labels": [
+            "sample_labels_item_1"
+          ],
+          "dry_run": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0242_mock_issue_tracking_create_ticket_003_negative_hard_1_missing_required_info",
+      "tool_name": "mock_issue_tracking_create_ticket_003",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I may need mock issue tracking create ticket 003 to Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture, but I do not know project_key yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "project_key": "sample_project_key_1",
+        "title": "Sample Title",
+        "priority": "low",
+        "labels": [
+          "sample_labels_item_1"
+        ],
+        "dry_run": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0855,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: mock_issue_tracking_create_ticket_003\nTool description: Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture.\nSkill condition: multi_candidate_skill\nSkill summary: Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture. Provide all required fields: `project_key`, and `title`.\nWhen to use: [\"Use `mock_issue_tracking_create_ticket_003` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `project_key`, and `title`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `priority`: 'low', 'medium', 'high'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\", \"priority\": \"low\", \"labels\": [\"sample_labels_item_1\"], \"dry_run\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for mock_issue_tracking_create_ticket_003\", \"arguments\": {\"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\"}}, {\"scenario\": \"Richer invocation that uses optional controls for mock_issue_tracking_create_ticket_003\", \"arguments\": {\"project_key\": \"sample_project_key_2\", \"title\": \"Sample Title\", \"priority\": \"medium\", \"labels\": [\"sample_labels_item_2\"], \"dry_run\": true}}]\nSchema: {\"properties\": {\"dry_run\": {\"description\": \"When true, validate the request without changing the mock system.\", \"type\": \"boolean\"}, \"labels\": {\"description\": \"Labels to attach.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"priority\": {\"description\": \"Ticket priority.\", \"enum\": [\"low\", \"medium\", \"high\"], \"type\": \"string\"}, \"project_key\": {\"description\": \"Mock project key.\", \"type\": \"string\"}, \"title\": {\"description\": \"Ticket title.\", \"type\": \"string\"}}, \"required\": [\"project_key\", \"title\"], \"type\": \"object\"}\nUser request: I may need mock issue tracking create ticket 003 to Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture, but I do not know project_key yet.\n",
+        "raw_model_output": "{\"arguments\": {\"dry_run\": false, \"labels\": [\"sample_labels_item_1\"], \"priority\": \"low\", \"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\"}}",
+        "parsed_prediction": {
+          "project_key": "sample_project_key_1",
+          "title": "Sample Title",
+          "priority": "low",
+          "labels": [
+            "sample_labels_item_1"
+          ],
+          "dry_run": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0242_mock_issue_tracking_create_ticket_003_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "mock_issue_tracking_create_ticket_003",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with mock issue tracking create ticket 003.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "project_key": "sample_project_key_1",
+        "title": "Sample Title",
+        "priority": "low",
+        "labels": [
+          "sample_labels_item_1"
+        ],
+        "dry_run": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.08,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: mock_issue_tracking_create_ticket_003\nTool description: Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture.\nSkill condition: multi_candidate_skill\nSkill summary: Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture. Provide all required fields: `project_key`, and `title`.\nWhen to use: [\"Use `mock_issue_tracking_create_ticket_003` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `project_key`, and `title`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `priority`: 'low', 'medium', 'high'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\", \"priority\": \"low\", \"labels\": [\"sample_labels_item_1\"], \"dry_run\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for mock_issue_tracking_create_ticket_003\", \"arguments\": {\"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\"}}, {\"scenario\": \"Richer invocation that uses optional controls for mock_issue_tracking_create_ticket_003\", \"arguments\": {\"project_key\": \"sample_project_key_2\", \"title\": \"Sample Title\", \"priority\": \"medium\", \"labels\": [\"sample_labels_item_2\"], \"dry_run\": true}}]\nSchema: {\"properties\": {\"dry_run\": {\"description\": \"When true, validate the request without changing the mock system.\", \"type\": \"boolean\"}, \"labels\": {\"description\": \"Labels to attach.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"priority\": {\"description\": \"Ticket priority.\", \"enum\": [\"low\", \"medium\", \"high\"], \"type\": \"string\"}, \"project_key\": {\"description\": \"Mock project key.\", \"type\": \"string\"}, \"title\": {\"description\": \"Ticket title.\", \"type\": \"string\"}}, \"required\": [\"project_key\", \"title\"], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with mock issue tracking create ticket 003.\n",
+        "raw_model_output": "{\"arguments\": {\"dry_run\": false, \"labels\": [\"sample_labels_item_1\"], \"priority\": \"low\", \"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\"}}",
+        "parsed_prediction": {
+          "project_key": "sample_project_key_1",
+          "title": "Sample Title",
+          "priority": "low",
+          "labels": [
+            "sample_labels_item_1"
+          ],
+          "dry_run": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0242_mock_issue_tracking_create_ticket_003_positive_easy_0",
+      "tool_name": "mock_issue_tracking_create_ticket_003",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use mock issue tracking create ticket 003 to Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture. Set project_key=\"project_key_0\", title=\"title_0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "project_key": "sample_project_key_1",
+        "title": "Sample Title",
+        "priority": "low",
+        "labels": [
+          "sample_labels_item_1"
+        ],
+        "dry_run": false
+      },
+      "expected_arguments": {
+        "project_key": "project_key_0",
+        "title": "title_0"
+      },
+      "prediction_latency_ms": 0.0813,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: mock_issue_tracking_create_ticket_003\nTool description: Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture.\nSkill condition: multi_candidate_skill\nSkill summary: Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture. Provide all required fields: `project_key`, and `title`.\nWhen to use: [\"Use `mock_issue_tracking_create_ticket_003` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `project_key`, and `title`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `priority`: 'low', 'medium', 'high'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\", \"priority\": \"low\", \"labels\": [\"sample_labels_item_1\"], \"dry_run\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for mock_issue_tracking_create_ticket_003\", \"arguments\": {\"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\"}}, {\"scenario\": \"Richer invocation that uses optional controls for mock_issue_tracking_create_ticket_003\", \"arguments\": {\"project_key\": \"sample_project_key_2\", \"title\": \"Sample Title\", \"priority\": \"medium\", \"labels\": [\"sample_labels_item_2\"], \"dry_run\": true}}]\nSchema: {\"properties\": {\"dry_run\": {\"description\": \"When true, validate the request without changing the mock system.\", \"type\": \"boolean\"}, \"labels\": {\"description\": \"Labels to attach.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"priority\": {\"description\": \"Ticket priority.\", \"enum\": [\"low\", \"medium\", \"high\"], \"type\": \"string\"}, \"project_key\": {\"description\": \"Mock project key.\", \"type\": \"string\"}, \"title\": {\"description\": \"Ticket title.\", \"type\": \"string\"}}, \"required\": [\"project_key\", \"title\"], \"type\": \"object\"}\nUser request: Use mock issue tracking create ticket 003 to Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture. Set project_key=\"project_key_0\", title=\"title_0\".\n",
+        "raw_model_output": "{\"arguments\": {\"dry_run\": false, \"labels\": [\"sample_labels_item_1\"], \"priority\": \"low\", \"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\"}}",
+        "parsed_prediction": {
+          "project_key": "sample_project_key_1",
+          "title": "Sample Title",
+          "priority": "low",
+          "labels": [
+            "sample_labels_item_1"
+          ],
+          "dry_run": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0242_mock_issue_tracking_create_ticket_003_positive_medium_0",
+      "tool_name": "mock_issue_tracking_create_ticket_003",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture. The relevant details are project_key=\"project_key_7\", title=\"title_7\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "project_key": "sample_project_key_1",
+        "title": "Sample Title",
+        "priority": "low",
+        "labels": [
+          "sample_labels_item_1"
+        ],
+        "dry_run": false
+      },
+      "expected_arguments": {
+        "project_key": "project_key_7",
+        "title": "title_7"
+      },
+      "prediction_latency_ms": 0.1435,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: mock_issue_tracking_create_ticket_003\nTool description: Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture.\nSkill condition: multi_candidate_skill\nSkill summary: Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture. Provide all required fields: `project_key`, and `title`.\nWhen to use: [\"Use `mock_issue_tracking_create_ticket_003` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `project_key`, and `title`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `priority`: 'low', 'medium', 'high'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\", \"priority\": \"low\", \"labels\": [\"sample_labels_item_1\"], \"dry_run\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for mock_issue_tracking_create_ticket_003\", \"arguments\": {\"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\"}}, {\"scenario\": \"Richer invocation that uses optional controls for mock_issue_tracking_create_ticket_003\", \"arguments\": {\"project_key\": \"sample_project_key_2\", \"title\": \"Sample Title\", \"priority\": \"medium\", \"labels\": [\"sample_labels_item_2\"], \"dry_run\": true}}]\nSchema: {\"properties\": {\"dry_run\": {\"description\": \"When true, validate the request without changing the mock system.\", \"type\": \"boolean\"}, \"labels\": {\"description\": \"Labels to attach.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"priority\": {\"description\": \"Ticket priority.\", \"enum\": [\"low\", \"medium\", \"high\"], \"type\": \"string\"}, \"project_key\": {\"description\": \"Mock project key.\", \"type\": \"string\"}, \"title\": {\"description\": \"Ticket title.\", \"type\": \"string\"}}, \"required\": [\"project_key\", \"title\"], \"type\": \"object\"}\nUser request: I need help with this task: Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture. The relevant details are project_key=\"project_key_7\", title=\"title_7\".\n",
+        "raw_model_output": "{\"arguments\": {\"dry_run\": false, \"labels\": [\"sample_labels_item_1\"], \"priority\": \"low\", \"project_key\": \"sample_project_key_1\", \"title\": \"Sample Title\"}}",
+        "parsed_prediction": {
+          "project_key": "sample_project_key_1",
+          "title": "Sample Title",
+          "priority": "low",
+          "labels": [
+            "sample_labels_item_1"
+          ],
+          "dry_run": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0983
+  }
+}

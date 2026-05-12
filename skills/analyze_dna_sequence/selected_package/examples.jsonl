@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for analyze_dna_sequence", "arguments": {"sequence": "sample_sequence_1", "reference_sequence": "sample_reference_sequence_1"}}
+{"scenario": "Richer invocation that uses optional controls for analyze_dna_sequence", "arguments": {"sequence": "sample_sequence_2", "reference_sequence": "sample_reference_sequence_2", "mutation_type": "deletion"}}

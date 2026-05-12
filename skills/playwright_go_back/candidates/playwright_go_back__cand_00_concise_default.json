@@ -1,0 +1,62 @@
+{
+  "candidate_id": "playwright_go_back__cand_00_concise_default",
+  "generation_strategy": "concise_default",
+  "prompt_template_id": "heuristic_concise_default_v1",
+  "skill_text": "Navigate back in browser history. This tool has no required input fields.\nWhen to use:\n- Use `playwright_go_back` when the user's request directly matches this tool's purpose.\n- This tool has no required input fields.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Tool does not expose top-level input properties.\n- Do not use when required inputs are missing.",
+  "argument_template": {},
+  "examples": [],
+  "when_to_use": [
+    "Use `playwright_go_back` when the user's request directly matches this tool's purpose.",
+    "This tool has no required input fields."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Tool does not expose top-level input properties.",
+    "Do not use when required inputs are missing."
+  ],
+  "token_count": 93,
+  "skill_token_count": 93,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 0,
+  "nonuse_boundary_count": 4,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Navigate back in browser history. This tool has no required input fields.",
+    "when_to_use": [
+      "Use `playwright_go_back` when the user's request directly matches this tool's purpose.",
+      "This tool has no required input fields."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Tool does not expose top-level input properties.",
+      "Do not use when required inputs are missing."
+    ],
+    "argument_template": {},
+    "examples": [],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "playwright_go_back__cand_00_concise_default",
+        "generation_strategy": "concise_default",
+        "prompt_template_id": "heuristic_concise_default_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "playwright_go_back__cand_00_concise_default",
+      "generation_strategy": "concise_default",
+      "prompt_template_id": "heuristic_concise_default_v1"
+    }
+  }
+}

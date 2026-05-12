@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_triangle_area", "arguments": {"base": null, "height": null}}
+{"scenario": "Richer invocation that uses optional controls for calculate_triangle_area", "arguments": {"base": null, "height": null, "unit": "sample_unit_2"}}

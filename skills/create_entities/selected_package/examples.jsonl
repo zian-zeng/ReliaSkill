@@ -1,0 +1,3 @@
+{"scenario": "Minimal valid request that satisfies the required fields for create_entities", "arguments": {"entities": [{}]}}
+{"scenario": "Richer invocation that uses optional controls for create_entities", "arguments": {"entities": [{}]}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"entities": [{}]}}

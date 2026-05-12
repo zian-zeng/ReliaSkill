@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0019_espnet_mio_artoria_pipeline_text_to_speech_model_mio_artoria_negative_easy_0_out_of_domain_request",
+      "tool_name": "espnet__mio_artoria__pipeline_text_to_speech_model_mio_artoria",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to espnet  mio artoria  pipeline text to speech model mio artoria.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0332,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: espnet__mio_artoria__pipeline_text_to_speech_model_mio_artoria\nTool description: This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Framework: ESPnet. Functionality: Text-to-Speech. API call: pipeline('text-to-speech', model='mio/Artoria').\nSkill condition: multi_candidate_skill\nSkill summary: This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Framework: ESPnet. Functionality: Text-to-Speech. API call: pipeline('text-to-speech', model='mio/Artoria'). This tool has no required input fields.\nWhen to use: [\"Use `espnet__mio_artoria__pipeline_text_to_speech_model_mio_artoria` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to espnet  mio artoria  pipeline text to speech model mio artoria.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0019_espnet_mio_artoria_pipeline_text_to_speech_model_mio_artoria_negative_hard_1_near_miss_intent",
+      "tool_name": "espnet__mio_artoria__pipeline_text_to_speech_model_mio_artoria",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to espnet  mio artoria  pipeline text to speech model mio artoria, but I only want a checklist for how to This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Fram; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0292,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: espnet__mio_artoria__pipeline_text_to_speech_model_mio_artoria\nTool description: This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Framework: ESPnet. Functionality: Text-to-Speech. API call: pipeline('text-to-speech', model='mio/Artoria').\nSkill condition: multi_candidate_skill\nSkill summary: This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Framework: ESPnet. Functionality: Text-to-Speech. API call: pipeline('text-to-speech', model='mio/Artoria'). This tool has no required input fields.\nWhen to use: [\"Use `espnet__mio_artoria__pipeline_text_to_speech_model_mio_artoria` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: This sounds close to espnet  mio artoria  pipeline text to speech model mio artoria, but I only want a checklist for how to This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Fram; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0019_espnet_mio_artoria_pipeline_text_to_speech_model_mio_artoria_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "espnet__mio_artoria__pipeline_text_to_speech_model_mio_artoria",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with espnet  mio artoria  pipeline text to speech model mio artoria.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0283,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: espnet__mio_artoria__pipeline_text_to_speech_model_mio_artoria\nTool description: This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Framework: ESPnet. Functionality: Text-to-Speech. API call: pipeline('text-to-speech', model='mio/Artoria').\nSkill condition: multi_candidate_skill\nSkill summary: This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Framework: ESPnet. Functionality: Text-to-Speech. API call: pipeline('text-to-speech', model='mio/Artoria'). This tool has no required input fields.\nWhen to use: [\"Use `espnet__mio_artoria__pipeline_text_to_speech_model_mio_artoria` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with espnet  mio artoria  pipeline text to speech model mio artoria.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0019_espnet_mio_artoria_pipeline_text_to_speech_model_mio_artoria_positive_easy_0",
+      "tool_name": "espnet__mio_artoria__pipeline_text_to_speech_model_mio_artoria",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use espnet  mio artoria  pipeline text to speech model mio artoria to This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Fram. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0275,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: espnet__mio_artoria__pipeline_text_to_speech_model_mio_artoria\nTool description: This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Framework: ESPnet. Functionality: Text-to-Speech. API call: pipeline('text-to-speech', model='mio/Artoria').\nSkill condition: multi_candidate_skill\nSkill summary: This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Framework: ESPnet. Functionality: Text-to-Speech. API call: pipeline('text-to-speech', model='mio/Artoria'). This tool has no required input fields.\nWhen to use: [\"Use `espnet__mio_artoria__pipeline_text_to_speech_model_mio_artoria` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use espnet  mio artoria  pipeline text to speech model mio artoria to This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Fram. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0019_espnet_mio_artoria_pipeline_text_to_speech_model_mio_artoria_positive_medium_0",
+      "tool_name": "espnet__mio_artoria__pipeline_text_to_speech_model_mio_artoria",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Fram. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0283,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: espnet__mio_artoria__pipeline_text_to_speech_model_mio_artoria\nTool description: This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Framework: ESPnet. Functionality: Text-to-Speech. API call: pipeline('text-to-speech', model='mio/Artoria').\nSkill condition: multi_candidate_skill\nSkill summary: This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Framework: ESPnet. Functionality: Text-to-Speech. API call: pipeline('text-to-speech', model='mio/Artoria'). This tool has no required input fields.\nWhen to use: [\"Use `espnet__mio_artoria__pipeline_text_to_speech_model_mio_artoria` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: This model was trained by mio using fate recipe in espnet. It is a text-to-speech model that can convert text input into speech output. Fram. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0293
+  }
+}

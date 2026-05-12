@@ -1,0 +1,132 @@
+{
+  "candidate_id": "mock_messaging_email_mock_send_email_041__cand_01_boundary_heavy",
+  "generation_strategy": "boundary_heavy",
+  "prompt_template_id": "heuristic_boundary_heavy_v1",
+  "skill_text": "Synthetic safe mock email tool that records an outbound message without contacting any external service. Provide all required fields: `to`, `subject`, and `body`.\nWhen to use:\n- Use `mock_messaging_email_mock_send_email_041` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `to`, `subject`, and `body`.\n- Optional controls include `importance`, `dry_run`.\n- Use only when the request clearly needs `mock_messaging_email_mock_send_email_041`.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `importance`: 'normal', 'high'.\n- Do not use for adjacent tools with similar names, descriptions, or arguments.\n- Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.\n- If the request lacks required fields, abstain or ask for clarification.\nArgument template:\n{\"body\": \"sample_body_1\", \"dry_run\": false, \"importance\": \"normal\", \"subject\": \"sample_subject_1\", \"to\": [\"sample_to_item_1\"]}\nExamples:\nMinimal valid request that satisfies the required fields for mock_messaging_email_mock_send_email_041\n{\"body\": \"sample_body_1\", \"subject\": \"sample_subject_1\", \"to\": [\"sample_to_item_1\"]}\nRicher invocation that uses optional controls for mock_messaging_email_mock_send_email_041\n{\"body\": \"sample_body_2\", \"dry_run\": true, \"importance\": \"high\", \"subject\": \"sample_subject_2\", \"to\": [\"sample_to_item_2\"]}",
+  "argument_template": {
+    "to": [
+      "sample_to_item_1"
+    ],
+    "subject": "sample_subject_1",
+    "body": "sample_body_1",
+    "importance": "normal",
+    "dry_run": false
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for mock_messaging_email_mock_send_email_041",
+      "arguments": {
+        "to": [
+          "sample_to_item_1"
+        ],
+        "subject": "sample_subject_1",
+        "body": "sample_body_1"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for mock_messaging_email_mock_send_email_041",
+      "arguments": {
+        "to": [
+          "sample_to_item_2"
+        ],
+        "subject": "sample_subject_2",
+        "body": "sample_body_2",
+        "importance": "high",
+        "dry_run": true
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `mock_messaging_email_mock_send_email_041` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `to`, `subject`, and `body`.",
+    "Optional controls include `importance`, `dry_run`.",
+    "Use only when the request clearly needs `mock_messaging_email_mock_send_email_041`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `importance`: 'normal', 'high'.",
+    "Do not use for adjacent tools with similar names, descriptions, or arguments.",
+    "Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.",
+    "If the request lacks required fields, abstain or ask for clarification."
+  ],
+  "token_count": 374,
+  "skill_token_count": 374,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 2,
+  "nonuse_boundary_count": 6,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Synthetic safe mock email tool that records an outbound message without contacting any external service. Provide all required fields: `to`, `subject`, and `body`.",
+    "when_to_use": [
+      "Use `mock_messaging_email_mock_send_email_041` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `to`, `subject`, and `body`.",
+      "Optional controls include `importance`, `dry_run`.",
+      "Use only when the request clearly needs `mock_messaging_email_mock_send_email_041`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `importance`: 'normal', 'high'.",
+      "Do not use for adjacent tools with similar names, descriptions, or arguments.",
+      "Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.",
+      "If the request lacks required fields, abstain or ask for clarification."
+    ],
+    "argument_template": {
+      "to": [
+        "sample_to_item_1"
+      ],
+      "subject": "sample_subject_1",
+      "body": "sample_body_1",
+      "importance": "normal",
+      "dry_run": false
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for mock_messaging_email_mock_send_email_041",
+        "arguments": {
+          "to": [
+            "sample_to_item_1"
+          ],
+          "subject": "sample_subject_1",
+          "body": "sample_body_1"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for mock_messaging_email_mock_send_email_041",
+        "arguments": {
+          "to": [
+            "sample_to_item_2"
+          ],
+          "subject": "sample_subject_2",
+          "body": "sample_body_2",
+          "importance": "high",
+          "dry_run": true
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "mock_messaging_email_mock_send_email_041__cand_01_boundary_heavy",
+        "generation_strategy": "boundary_heavy",
+        "prompt_template_id": "heuristic_boundary_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "mock_messaging_email_mock_send_email_041__cand_01_boundary_heavy",
+      "generation_strategy": "boundary_heavy",
+      "prompt_template_id": "heuristic_boundary_heavy_v1"
+    }
+  }
+}

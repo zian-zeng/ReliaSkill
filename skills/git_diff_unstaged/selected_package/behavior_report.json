@@ -1,0 +1,196 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0225_git_diff_unstaged_negative_easy_0_out_of_domain_request",
+      "tool_name": "git_diff_unstaged",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to git diff unstaged.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "context_lines": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0697,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_diff_unstaged\nTool description: Shows changes in the working directory that are not yet staged\nSkill condition: multi_candidate_skill\nSkill summary: Shows changes in the working directory that are not yet staged. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_diff_unstaged` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"context_lines\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_diff_unstaged\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_diff_unstaged\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"context_lines\": 2}}]\nSchema: {\"properties\": {\"context_lines\": {\"type\": \"integer\"}, \"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to git diff unstaged.\n",
+        "raw_model_output": "{\"arguments\": {\"context_lines\": 1, \"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "context_lines": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0225_git_diff_unstaged_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "git_diff_unstaged",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with git diff unstaged; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "context_lines": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0569,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_diff_unstaged\nTool description: Shows changes in the working directory that are not yet staged\nSkill condition: multi_candidate_skill\nSkill summary: Shows changes in the working directory that are not yet staged. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_diff_unstaged` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"context_lines\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_diff_unstaged\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_diff_unstaged\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"context_lines\": 2}}]\nSchema: {\"properties\": {\"context_lines\": {\"type\": \"integer\"}, \"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with git diff unstaged; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {\"context_lines\": 1, \"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "context_lines": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0225_git_diff_unstaged_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "git_diff_unstaged",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use git diff unstaged; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "context_lines": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0531,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_diff_unstaged\nTool description: Shows changes in the working directory that are not yet staged\nSkill condition: multi_candidate_skill\nSkill summary: Shows changes in the working directory that are not yet staged. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_diff_unstaged` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"context_lines\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_diff_unstaged\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_diff_unstaged\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"context_lines\": 2}}]\nSchema: {\"properties\": {\"context_lines\": {\"type\": \"integer\"}, \"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: Explain when someone should use git diff unstaged; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"context_lines\": 1, \"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "context_lines": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0225_git_diff_unstaged_positive_easy_0",
+      "tool_name": "git_diff_unstaged",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use git diff unstaged to Shows changes in the working directory that are not yet staged. Set repo_path=\"docs/control_0.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "context_lines": 1
+      },
+      "expected_arguments": {
+        "repo_path": "docs/control_0.md"
+      },
+      "prediction_latency_ms": 0.0512,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_diff_unstaged\nTool description: Shows changes in the working directory that are not yet staged\nSkill condition: multi_candidate_skill\nSkill summary: Shows changes in the working directory that are not yet staged. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_diff_unstaged` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"context_lines\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_diff_unstaged\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_diff_unstaged\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"context_lines\": 2}}]\nSchema: {\"properties\": {\"context_lines\": {\"type\": \"integer\"}, \"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: Use git diff unstaged to Shows changes in the working directory that are not yet staged. Set repo_path=\"docs/control_0.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"context_lines\": 1, \"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "context_lines": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0225_git_diff_unstaged_positive_medium_0",
+      "tool_name": "git_diff_unstaged",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Shows changes in the working directory that are not yet staged. The relevant details are context_lines=8, repo_path=\"docs/control_7.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "context_lines": 1
+      },
+      "expected_arguments": {
+        "context_lines": 8,
+        "repo_path": "docs/control_7.md"
+      },
+      "prediction_latency_ms": 0.1123,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_diff_unstaged\nTool description: Shows changes in the working directory that are not yet staged\nSkill condition: multi_candidate_skill\nSkill summary: Shows changes in the working directory that are not yet staged. Provide the required field `repo_path`.\nWhen to use: [\"Use `git_diff_unstaged` when the user's request directly matches this tool's purpose.\", \"Provide the required field `repo_path`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"context_lines\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_diff_unstaged\", \"arguments\": {\"repo_path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_diff_unstaged\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"context_lines\": 2}}]\nSchema: {\"properties\": {\"context_lines\": {\"type\": \"integer\"}, \"repo_path\": {\"type\": \"string\"}}, \"required\": [\"repo_path\"], \"type\": \"object\"}\nUser request: I need help with this task: Shows changes in the working directory that are not yet staged. The relevant details are context_lines=8, repo_path=\"docs/control_7.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"context_lines\": 1, \"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "context_lines": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0686
+  }
+}

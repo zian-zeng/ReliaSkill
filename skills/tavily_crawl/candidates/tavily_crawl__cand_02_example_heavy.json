@@ -1,0 +1,178 @@
+{
+  "candidate_id": "tavily_crawl__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pages. You can control how deep and wide it goes, and guide it to focus on specific sections of the site. Provide the required field `url`.\nWhen to use:\n- Use `tavily-crawl` when the user's request directly matches this tool's purpose.\n- Provide the required field `url`.\n- Optional controls include `max_depth`, `max_breadth`, `limit`, `instructions`, and other optional fields.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `extract_depth`: 'basic', 'advanced'.\nArgument template:\n{\"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\", \"instructions\": \"sample_instructions_4\", \"limit\": 50, \"max_breadth\": 20, \"max_depth\": 1, \"select_domains\": [], \"select_paths\": [], \"url\": \"https://example.com/resource\"}\nExamples:\nMinimal valid request that satisfies the required fields for tavily-crawl\n{\"url\": \"https://example.com/resource\"}\nRicher invocation that uses optional controls for tavily-crawl\n{\"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\", \"instructions\": \"sample_instructions_2\", \"limit\": 50, \"max_breadth\": 20, \"max_depth\": 1, \"select_domains\": [], \"select_paths\": [], \"url\": \"https://example.com/resource\"}\nRequired-argument dev behavior example.\n{\"url\": \"https://example.com/resource\"}\nOptional, enum, nested, or array argument example.\n{\"allow_external\": false, \"categories\": [], \"extract_depth\": \"basic\", \"format\": \"markdown\", \"instructions\": \"sample_instructions_4\", \"limit\": 50, \"max_breadth\": 20, \"max_depth\": 1, \"select_domains\": [], \"select_paths\": [], \"url\": \"https://example.com/resource\"}",
+  "argument_template": {
+    "url": "https://example.com/resource",
+    "max_depth": 1,
+    "max_breadth": 20,
+    "limit": 50,
+    "instructions": "sample_instructions_4",
+    "select_paths": [],
+    "select_domains": [],
+    "allow_external": false,
+    "categories": [],
+    "extract_depth": "basic",
+    "format": "markdown"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for tavily-crawl",
+      "arguments": {
+        "url": "https://example.com/resource"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for tavily-crawl",
+      "arguments": {
+        "url": "https://example.com/resource",
+        "max_depth": 1,
+        "max_breadth": 20,
+        "limit": 50,
+        "instructions": "sample_instructions_2",
+        "select_paths": [],
+        "select_domains": [],
+        "allow_external": false,
+        "categories": [],
+        "extract_depth": "basic",
+        "format": "markdown"
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "url": "https://example.com/resource"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "url": "https://example.com/resource",
+        "max_depth": 1,
+        "max_breadth": 20,
+        "limit": 50,
+        "instructions": "sample_instructions_4",
+        "select_paths": [],
+        "select_domains": [],
+        "allow_external": false,
+        "categories": [],
+        "extract_depth": "basic",
+        "format": "markdown"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `tavily-crawl` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `url`.",
+    "Optional controls include `max_depth`, `max_breadth`, `limit`, `instructions`, and other optional fields.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `extract_depth`: 'basic', 'advanced'."
+  ],
+  "token_count": 501,
+  "skill_token_count": 501,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "A powerful web crawler that initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pages. You can control how deep and wide it goes, and guide it to focus on specific sections of the site. Provide the required field `url`.",
+    "when_to_use": [
+      "Use `tavily-crawl` when the user's request directly matches this tool's purpose.",
+      "Provide the required field `url`.",
+      "Optional controls include `max_depth`, `max_breadth`, `limit`, `instructions`, and other optional fields.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `extract_depth`: 'basic', 'advanced'."
+    ],
+    "argument_template": {
+      "url": "https://example.com/resource",
+      "max_depth": 1,
+      "max_breadth": 20,
+      "limit": 50,
+      "instructions": "sample_instructions_4",
+      "select_paths": [],
+      "select_domains": [],
+      "allow_external": false,
+      "categories": [],
+      "extract_depth": "basic",
+      "format": "markdown"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for tavily-crawl",
+        "arguments": {
+          "url": "https://example.com/resource"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for tavily-crawl",
+        "arguments": {
+          "url": "https://example.com/resource",
+          "max_depth": 1,
+          "max_breadth": 20,
+          "limit": 50,
+          "instructions": "sample_instructions_2",
+          "select_paths": [],
+          "select_domains": [],
+          "allow_external": false,
+          "categories": [],
+          "extract_depth": "basic",
+          "format": "markdown"
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "url": "https://example.com/resource"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "url": "https://example.com/resource",
+          "max_depth": 1,
+          "max_breadth": 20,
+          "limit": 50,
+          "instructions": "sample_instructions_4",
+          "select_paths": [],
+          "select_domains": [],
+          "allow_external": false,
+          "categories": [],
+          "extract_depth": "basic",
+          "format": "markdown"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "tavily_crawl__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "tavily_crawl__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

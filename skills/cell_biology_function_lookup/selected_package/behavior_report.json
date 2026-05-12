@@ -1,0 +1,209 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0130_cell_biology_function_lookup_negative_easy_0_out_of_domain_request",
+      "tool_name": "cell_biology.function_lookup",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to cell biology.function lookup.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "molecule": "sample_molecule_1",
+        "organelle": "sample_organelle_1",
+        "specific_function": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0917,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: cell_biology.function_lookup\nTool description: Look up the function of a given molecule in a specified organelle.\nSkill condition: multi_candidate_skill\nSkill summary: Look up the function of a given molecule in a specified organelle. Provide all required fields: `molecule`, `organelle`, and `specific_function`.\nWhen to use: [\"Use `cell_biology.function_lookup` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `molecule`, `organelle`, and `specific_function`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for cell_biology.function_lookup\", \"arguments\": {\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}}, {\"scenario\": \"Richer invocation that uses optional controls for cell_biology.function_lookup\", \"arguments\": {\"molecule\": \"sample_molecule_2\", \"organelle\": \"sample_organelle_2\", \"specific_function\": true}}]\nSchema: {\"properties\": {\"molecule\": {\"description\": \"The molecule of interest.\", \"type\": \"string\"}, \"organelle\": {\"description\": \"The organelle of interest.\", \"type\": \"string\"}, \"specific_function\": {\"description\": \"If set to true, a specific function of the molecule within the organelle will be provided, if such information exists.\", \"type\": \"boolean\"}}, \"required\": [\"molecule\", \"organelle\", \"specific_function\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to cell biology.function lookup.\n",
+        "raw_model_output": "{\"arguments\": {\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}}",
+        "parsed_prediction": {
+          "molecule": "sample_molecule_1",
+          "organelle": "sample_organelle_1",
+          "specific_function": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0130_cell_biology_function_lookup_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "cell_biology.function_lookup",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with cell biology.function lookup; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "molecule": "sample_molecule_1",
+        "organelle": "sample_organelle_1",
+        "specific_function": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1144,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: cell_biology.function_lookup\nTool description: Look up the function of a given molecule in a specified organelle.\nSkill condition: multi_candidate_skill\nSkill summary: Look up the function of a given molecule in a specified organelle. Provide all required fields: `molecule`, `organelle`, and `specific_function`.\nWhen to use: [\"Use `cell_biology.function_lookup` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `molecule`, `organelle`, and `specific_function`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for cell_biology.function_lookup\", \"arguments\": {\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}}, {\"scenario\": \"Richer invocation that uses optional controls for cell_biology.function_lookup\", \"arguments\": {\"molecule\": \"sample_molecule_2\", \"organelle\": \"sample_organelle_2\", \"specific_function\": true}}]\nSchema: {\"properties\": {\"molecule\": {\"description\": \"The molecule of interest.\", \"type\": \"string\"}, \"organelle\": {\"description\": \"The organelle of interest.\", \"type\": \"string\"}, \"specific_function\": {\"description\": \"If set to true, a specific function of the molecule within the organelle will be provided, if such information exists.\", \"type\": \"boolean\"}}, \"required\": [\"molecule\", \"organelle\", \"specific_function\"], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with cell biology.function lookup; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}}",
+        "parsed_prediction": {
+          "molecule": "sample_molecule_1",
+          "organelle": "sample_organelle_1",
+          "specific_function": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0130_cell_biology_function_lookup_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "cell_biology.function_lookup",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with cell biology.function lookup.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "molecule": "sample_molecule_1",
+        "organelle": "sample_organelle_1",
+        "specific_function": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1135,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: cell_biology.function_lookup\nTool description: Look up the function of a given molecule in a specified organelle.\nSkill condition: multi_candidate_skill\nSkill summary: Look up the function of a given molecule in a specified organelle. Provide all required fields: `molecule`, `organelle`, and `specific_function`.\nWhen to use: [\"Use `cell_biology.function_lookup` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `molecule`, `organelle`, and `specific_function`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for cell_biology.function_lookup\", \"arguments\": {\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}}, {\"scenario\": \"Richer invocation that uses optional controls for cell_biology.function_lookup\", \"arguments\": {\"molecule\": \"sample_molecule_2\", \"organelle\": \"sample_organelle_2\", \"specific_function\": true}}]\nSchema: {\"properties\": {\"molecule\": {\"description\": \"The molecule of interest.\", \"type\": \"string\"}, \"organelle\": {\"description\": \"The organelle of interest.\", \"type\": \"string\"}, \"specific_function\": {\"description\": \"If set to true, a specific function of the molecule within the organelle will be provided, if such information exists.\", \"type\": \"boolean\"}}, \"required\": [\"molecule\", \"organelle\", \"specific_function\"], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with cell biology.function lookup.\n",
+        "raw_model_output": "{\"arguments\": {\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}}",
+        "parsed_prediction": {
+          "molecule": "sample_molecule_1",
+          "organelle": "sample_organelle_1",
+          "specific_function": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0130_cell_biology_function_lookup_positive_easy_0",
+      "tool_name": "cell_biology.function_lookup",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use cell biology.function lookup to Look up the function of a given molecule in a specified organelle. Set molecule=\"molecule_0\", organelle=\"organelle_0\", specific_function=true.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "molecule": "sample_molecule_1",
+        "organelle": "sample_organelle_1",
+        "specific_function": false
+      },
+      "expected_arguments": {
+        "molecule": "molecule_0",
+        "organelle": "organelle_0",
+        "specific_function": true
+      },
+      "prediction_latency_ms": 0.111,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: cell_biology.function_lookup\nTool description: Look up the function of a given molecule in a specified organelle.\nSkill condition: multi_candidate_skill\nSkill summary: Look up the function of a given molecule in a specified organelle. Provide all required fields: `molecule`, `organelle`, and `specific_function`.\nWhen to use: [\"Use `cell_biology.function_lookup` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `molecule`, `organelle`, and `specific_function`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for cell_biology.function_lookup\", \"arguments\": {\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}}, {\"scenario\": \"Richer invocation that uses optional controls for cell_biology.function_lookup\", \"arguments\": {\"molecule\": \"sample_molecule_2\", \"organelle\": \"sample_organelle_2\", \"specific_function\": true}}]\nSchema: {\"properties\": {\"molecule\": {\"description\": \"The molecule of interest.\", \"type\": \"string\"}, \"organelle\": {\"description\": \"The organelle of interest.\", \"type\": \"string\"}, \"specific_function\": {\"description\": \"If set to true, a specific function of the molecule within the organelle will be provided, if such information exists.\", \"type\": \"boolean\"}}, \"required\": [\"molecule\", \"organelle\", \"specific_function\"], \"type\": \"object\"}\nUser request: Use cell biology.function lookup to Look up the function of a given molecule in a specified organelle. Set molecule=\"molecule_0\", organelle=\"organelle_0\", specific_function=true.\n",
+        "raw_model_output": "{\"arguments\": {\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}}",
+        "parsed_prediction": {
+          "molecule": "sample_molecule_1",
+          "organelle": "sample_organelle_1",
+          "specific_function": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0130_cell_biology_function_lookup_positive_medium_0",
+      "tool_name": "cell_biology.function_lookup",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Look up the function of a given molecule in a specified organelle. The relevant details are molecule=\"molecule_7\", organelle=\"organelle_7\", specific_function=false.",
+      "exact_match": false,
+      "argument_validity": 0.3333,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "molecule": "sample_molecule_1",
+        "organelle": "sample_organelle_1",
+        "specific_function": false
+      },
+      "expected_arguments": {
+        "molecule": "molecule_7",
+        "organelle": "organelle_7",
+        "specific_function": false
+      },
+      "prediction_latency_ms": 0.2305,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: cell_biology.function_lookup\nTool description: Look up the function of a given molecule in a specified organelle.\nSkill condition: multi_candidate_skill\nSkill summary: Look up the function of a given molecule in a specified organelle. Provide all required fields: `molecule`, `organelle`, and `specific_function`.\nWhen to use: [\"Use `cell_biology.function_lookup` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `molecule`, `organelle`, and `specific_function`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for cell_biology.function_lookup\", \"arguments\": {\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}}, {\"scenario\": \"Richer invocation that uses optional controls for cell_biology.function_lookup\", \"arguments\": {\"molecule\": \"sample_molecule_2\", \"organelle\": \"sample_organelle_2\", \"specific_function\": true}}]\nSchema: {\"properties\": {\"molecule\": {\"description\": \"The molecule of interest.\", \"type\": \"string\"}, \"organelle\": {\"description\": \"The organelle of interest.\", \"type\": \"string\"}, \"specific_function\": {\"description\": \"If set to true, a specific function of the molecule within the organelle will be provided, if such information exists.\", \"type\": \"boolean\"}}, \"required\": [\"molecule\", \"organelle\", \"specific_function\"], \"type\": \"object\"}\nUser request: I need help with this task: Look up the function of a given molecule in a specified organelle. The relevant details are molecule=\"molecule_7\", organelle=\"organelle_7\", specific_function=false.\n",
+        "raw_model_output": "{\"arguments\": {\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}}",
+        "parsed_prediction": {
+          "molecule": "sample_molecule_1",
+          "organelle": "sample_organelle_1",
+          "specific_function": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.1666,
+    "avg_prediction_latency_ms": 0.1322
+  }
+}

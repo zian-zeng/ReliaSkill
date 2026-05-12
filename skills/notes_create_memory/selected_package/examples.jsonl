@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for notes_create_memory", "arguments": {"workspace": "sample_workspace_1", "title": "Sample Title", "content": "sample_content_1"}}
+{"scenario": "Richer invocation that uses optional controls for notes_create_memory", "arguments": {"workspace": "sample_workspace_2", "title": "Sample Title", "content": "sample_content_2", "tags": ["sample_tags_item_2"]}}

@@ -1,0 +1,169 @@
+{
+  "tool_name": "playwright_save_as_pdf",
+  "server_name": "browser",
+  "tool_purpose": "Save the current page as a PDF file",
+  "input_schema_raw": {
+    "properties": {
+      "filename": {
+        "description": "Name of the PDF file (default: page.pdf)",
+        "type": "string"
+      },
+      "format": {
+        "description": "Page format (e.g. 'A4', 'Letter')",
+        "type": "string"
+      },
+      "margin": {
+        "description": "Page margins",
+        "properties": {
+          "bottom": {
+            "type": "string"
+          },
+          "left": {
+            "type": "string"
+          },
+          "right": {
+            "type": "string"
+          },
+          "top": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "outputPath": {
+        "description": "Directory path where PDF will be saved",
+        "type": "string"
+      },
+      "printBackground": {
+        "description": "Whether to print background graphics",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "outputPath"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "outputPath",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Directory path where PDF will be saved",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.outputPath"
+    },
+    {
+      "name": "filename",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Name of the PDF file (default: page.pdf)",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.filename"
+    },
+    {
+      "name": "format",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Page format (e.g. 'A4', 'Letter')",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.format"
+    },
+    {
+      "name": "printBackground",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Whether to print background graphics",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.printBackground"
+    },
+    {
+      "name": "margin",
+      "type": "object",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Page margins",
+      "items_type": null,
+      "properties": {
+        "bottom": {
+          "type": "string"
+        },
+        "left": {
+          "type": "string"
+        },
+        "right": {
+          "type": "string"
+        },
+        "top": {
+          "type": "string"
+        }
+      },
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.margin"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Save the current page as a PDF file",
+    "Playwright Save As Pdf"
+  ],
+  "source_pointer": "data/raw/mcptoolbenchpp_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.6,
+    "auth_required": false,
+    "documentation_length": 35,
+    "has_array_argument": false,
+    "has_boolean_flag": true,
+    "has_nested_object": true,
+    "has_side_effect": true,
+    "max_schema_depth": 3,
+    "num_arguments": 5,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 1,
+    "num_optional_arguments": 4,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 5,
+    "side_effect_type": "write"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "playwright_save_as_pdf",
+    "server_name": "browser",
+    "source_pointer": "data/raw/mcptoolbenchpp_tools.json"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

@@ -1,0 +1,169 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0139_electromagnetic_force_negative_easy_0_out_of_domain_request",
+      "tool_name": "electromagnetic_force",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to electromagnetic force.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.148,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: electromagnetic_force\nTool description: Calculate the electromagnetic force between two charges placed at a certain distance.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the electromagnetic force between two charges placed at a certain distance. Provide all required fields: `charge1`, `charge2`, and `distance`.\nWhen to use: [\"Use `electromagnetic_force` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `charge1`, `charge2`, and `distance`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"charge1\": null, \"charge2\": null, \"distance\": null, \"medium_permittivity\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for electromagnetic_force\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for electromagnetic_force\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null, \"medium_permittivity\": null}}]\nSchema: {\"properties\": {\"charge1\": {\"description\": \"The magnitude of the first charge in coulombs.\", \"type\": \"float\"}, \"charge2\": {\"description\": \"The magnitude of the second charge in coulombs.\", \"type\": \"float\"}, \"distance\": {\"description\": \"The distance between the two charges in meters.\", \"type\": \"float\"}, \"medium_permittivity\": {\"description\": \"The relative permittivity of the medium in which the charges are present. Default is 8.854 x 10^-12 F/m (vacuum permittivity).\", \"type\": \"float\"}}, \"required\": [\"charge1\", \"charge2\", \"distance\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to electromagnetic force.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0139_electromagnetic_force_negative_hard_1_near_miss_intent",
+      "tool_name": "electromagnetic_force",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to electromagnetic force, but I only want a checklist for how to Calculate the electromagnetic force between two charges placed at a certain distance; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1472,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: electromagnetic_force\nTool description: Calculate the electromagnetic force between two charges placed at a certain distance.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the electromagnetic force between two charges placed at a certain distance. Provide all required fields: `charge1`, `charge2`, and `distance`.\nWhen to use: [\"Use `electromagnetic_force` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `charge1`, `charge2`, and `distance`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"charge1\": null, \"charge2\": null, \"distance\": null, \"medium_permittivity\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for electromagnetic_force\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for electromagnetic_force\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null, \"medium_permittivity\": null}}]\nSchema: {\"properties\": {\"charge1\": {\"description\": \"The magnitude of the first charge in coulombs.\", \"type\": \"float\"}, \"charge2\": {\"description\": \"The magnitude of the second charge in coulombs.\", \"type\": \"float\"}, \"distance\": {\"description\": \"The distance between the two charges in meters.\", \"type\": \"float\"}, \"medium_permittivity\": {\"description\": \"The relative permittivity of the medium in which the charges are present. Default is 8.854 x 10^-12 F/m (vacuum permittivity).\", \"type\": \"float\"}}, \"required\": [\"charge1\", \"charge2\", \"distance\"], \"type\": \"object\"}\nUser request: This sounds close to electromagnetic force, but I only want a checklist for how to Calculate the electromagnetic force between two charges placed at a certain distance; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0139_electromagnetic_force_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "electromagnetic_force",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with electromagnetic force.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.2077,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: electromagnetic_force\nTool description: Calculate the electromagnetic force between two charges placed at a certain distance.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the electromagnetic force between two charges placed at a certain distance. Provide all required fields: `charge1`, `charge2`, and `distance`.\nWhen to use: [\"Use `electromagnetic_force` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `charge1`, `charge2`, and `distance`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"charge1\": null, \"charge2\": null, \"distance\": null, \"medium_permittivity\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for electromagnetic_force\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for electromagnetic_force\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null, \"medium_permittivity\": null}}]\nSchema: {\"properties\": {\"charge1\": {\"description\": \"The magnitude of the first charge in coulombs.\", \"type\": \"float\"}, \"charge2\": {\"description\": \"The magnitude of the second charge in coulombs.\", \"type\": \"float\"}, \"distance\": {\"description\": \"The distance between the two charges in meters.\", \"type\": \"float\"}, \"medium_permittivity\": {\"description\": \"The relative permittivity of the medium in which the charges are present. Default is 8.854 x 10^-12 F/m (vacuum permittivity).\", \"type\": \"float\"}}, \"required\": [\"charge1\", \"charge2\", \"distance\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with electromagnetic force.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0139_electromagnetic_force_positive_easy_0",
+      "tool_name": "electromagnetic_force",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use electromagnetic force to Calculate the electromagnetic force between two charges placed at a certain distance. Set charge1=1, charge2=1, distance=1.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {
+        "charge1": 1,
+        "charge2": 1,
+        "distance": 1
+      },
+      "prediction_latency_ms": 0.181,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: electromagnetic_force\nTool description: Calculate the electromagnetic force between two charges placed at a certain distance.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the electromagnetic force between two charges placed at a certain distance. Provide all required fields: `charge1`, `charge2`, and `distance`.\nWhen to use: [\"Use `electromagnetic_force` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `charge1`, `charge2`, and `distance`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"charge1\": null, \"charge2\": null, \"distance\": null, \"medium_permittivity\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for electromagnetic_force\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for electromagnetic_force\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null, \"medium_permittivity\": null}}]\nSchema: {\"properties\": {\"charge1\": {\"description\": \"The magnitude of the first charge in coulombs.\", \"type\": \"float\"}, \"charge2\": {\"description\": \"The magnitude of the second charge in coulombs.\", \"type\": \"float\"}, \"distance\": {\"description\": \"The distance between the two charges in meters.\", \"type\": \"float\"}, \"medium_permittivity\": {\"description\": \"The relative permittivity of the medium in which the charges are present. Default is 8.854 x 10^-12 F/m (vacuum permittivity).\", \"type\": \"float\"}}, \"required\": [\"charge1\", \"charge2\", \"distance\"], \"type\": \"object\"}\nUser request: Use electromagnetic force to Calculate the electromagnetic force between two charges placed at a certain distance. Set charge1=1, charge2=1, distance=1.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0139_electromagnetic_force_positive_medium_0",
+      "tool_name": "electromagnetic_force",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Calculate the electromagnetic force between two charges placed at a certain distance. The relevant details are charge1=8, charge2=8, distance=8.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {
+        "charge1": 8,
+        "charge2": 8,
+        "distance": 8
+      },
+      "prediction_latency_ms": 0.2497,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: electromagnetic_force\nTool description: Calculate the electromagnetic force between two charges placed at a certain distance.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the electromagnetic force between two charges placed at a certain distance. Provide all required fields: `charge1`, `charge2`, and `distance`.\nWhen to use: [\"Use `electromagnetic_force` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `charge1`, `charge2`, and `distance`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"charge1\": null, \"charge2\": null, \"distance\": null, \"medium_permittivity\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for electromagnetic_force\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for electromagnetic_force\", \"arguments\": {\"charge1\": null, \"charge2\": null, \"distance\": null, \"medium_permittivity\": null}}]\nSchema: {\"properties\": {\"charge1\": {\"description\": \"The magnitude of the first charge in coulombs.\", \"type\": \"float\"}, \"charge2\": {\"description\": \"The magnitude of the second charge in coulombs.\", \"type\": \"float\"}, \"distance\": {\"description\": \"The distance between the two charges in meters.\", \"type\": \"float\"}, \"medium_permittivity\": {\"description\": \"The relative permittivity of the medium in which the charges are present. Default is 8.854 x 10^-12 F/m (vacuum permittivity).\", \"type\": \"float\"}}, \"required\": [\"charge1\", \"charge2\", \"distance\"], \"type\": \"object\"}\nUser request: I need help with this task: Calculate the electromagnetic force between two charges placed at a certain distance. The relevant details are charge1=8, charge2=8, distance=8.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.1867
+  }
+}

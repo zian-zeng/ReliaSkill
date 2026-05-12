@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0085_pytorch_fcn_resnet50_torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet5_negative_easy_0_out_of_domain_request",
+      "tool_name": "pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to pytorch  fcn resnet50  torch hub load repo or dir pytorch vision model fcn resnet50 pretrained true.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0332,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true\nTool description: FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: Fully-Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='fcn_resnet50', pretrained=True).\nSkill condition: multi_candidate_skill\nSkill summary: FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: Fully-Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='fcn_resnet50', pretrained=True). This tool has no required input fields.\nWhen to use: [\"Use `pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to pytorch  fcn resnet50  torch hub load repo or dir pytorch vision model fcn resnet50 pretrained true.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0085_pytorch_fcn_resnet50_torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet5_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with pytorch  fcn resnet50  torch hub load repo or dir pytorch vision model fcn resnet50 pretrained true; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0294,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true\nTool description: FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: Fully-Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='fcn_resnet50', pretrained=True).\nSkill condition: multi_candidate_skill\nSkill summary: FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: Fully-Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='fcn_resnet50', pretrained=True). This tool has no required input fields.\nWhen to use: [\"Use `pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with pytorch  fcn resnet50  torch hub load repo or dir pytorch vision model fcn resnet50 pretrained true; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0085_pytorch_fcn_resnet50_torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet5_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use pytorch  fcn resnet50  torch hub load repo or dir pytorch vision model fcn resnet50 pretrained true; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0287,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true\nTool description: FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: Fully-Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='fcn_resnet50', pretrained=True).\nSkill condition: multi_candidate_skill\nSkill summary: FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: Fully-Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='fcn_resnet50', pretrained=True). This tool has no required input fields.\nWhen to use: [\"Use `pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Explain when someone should use pytorch  fcn resnet50  torch hub load repo or dir pytorch vision model fcn resnet50 pretrained true; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0085_pytorch_fcn_resnet50_torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet5_positive_easy_0",
+      "tool_name": "pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use pytorch  fcn resnet50  torch hub load repo or dir pytorch vision model fcn resnet50 pretrained true to FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0296,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true\nTool description: FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: Fully-Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='fcn_resnet50', pretrained=True).\nSkill condition: multi_candidate_skill\nSkill summary: FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: Fully-Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='fcn_resnet50', pretrained=True). This tool has no required input fields.\nWhen to use: [\"Use `pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use pytorch  fcn resnet50  torch hub load repo or dir pytorch vision model fcn resnet50 pretrained true to FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0085_pytorch_fcn_resnet50_torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet5_positive_medium_0",
+      "tool_name": "pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0292,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true\nTool description: FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: Fully-Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='fcn_resnet50', pretrained=True).\nSkill condition: multi_candidate_skill\nSkill summary: FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: Fully-Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='fcn_resnet50', pretrained=True). This tool has no required input fields.\nWhen to use: [\"Use `pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.03
+  }
+}

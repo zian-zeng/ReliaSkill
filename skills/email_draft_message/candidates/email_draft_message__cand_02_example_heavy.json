@@ -1,0 +1,174 @@
+{
+  "candidate_id": "email_draft_message__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "API-Bank-style local fixture tool that creates a draft email in an offline mailbox fixture. Provide all required fields: `to`, `subject`, and `body`.\nWhen to use:\n- Use `email_draft_message` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `to`, `subject`, and `body`.\n- Optional control is available through `cc` when the request needs extra specificity.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"body\": \"sample_body_4\", \"cc\": [\"sample_cc_item_4\"], \"subject\": \"sample_subject_4\", \"to\": [\"sample_to_item_4\"]}\nExamples:\nMinimal valid request that satisfies the required fields for email_draft_message\n{\"body\": \"sample_body_1\", \"subject\": \"sample_subject_1\", \"to\": [\"sample_to_item_1\"]}\nRicher invocation that uses optional controls for email_draft_message\n{\"body\": \"sample_body_2\", \"cc\": [\"sample_cc_item_2\"], \"subject\": \"sample_subject_2\", \"to\": [\"sample_to_item_2\"]}\nRequired-argument dev behavior example.\n{\"body\": \"sample_body_3\", \"subject\": \"sample_subject_3\", \"to\": [\"sample_to_item_3\"]}\nOptional, enum, nested, or array argument example.\n{\"body\": \"sample_body_4\", \"cc\": [\"sample_cc_item_4\"], \"subject\": \"sample_subject_4\", \"to\": [\"sample_to_item_4\"]}",
+  "argument_template": {
+    "to": [
+      "sample_to_item_4"
+    ],
+    "subject": "sample_subject_4",
+    "body": "sample_body_4",
+    "cc": [
+      "sample_cc_item_4"
+    ]
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for email_draft_message",
+      "arguments": {
+        "to": [
+          "sample_to_item_1"
+        ],
+        "subject": "sample_subject_1",
+        "body": "sample_body_1"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for email_draft_message",
+      "arguments": {
+        "to": [
+          "sample_to_item_2"
+        ],
+        "subject": "sample_subject_2",
+        "body": "sample_body_2",
+        "cc": [
+          "sample_cc_item_2"
+        ]
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "to": [
+          "sample_to_item_3"
+        ],
+        "subject": "sample_subject_3",
+        "body": "sample_body_3"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "to": [
+          "sample_to_item_4"
+        ],
+        "subject": "sample_subject_4",
+        "body": "sample_body_4",
+        "cc": [
+          "sample_cc_item_4"
+        ]
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `email_draft_message` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `to`, `subject`, and `body`.",
+    "Optional control is available through `cc` when the request needs extra specificity.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 382,
+  "skill_token_count": 382,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "API-Bank-style local fixture tool that creates a draft email in an offline mailbox fixture. Provide all required fields: `to`, `subject`, and `body`.",
+    "when_to_use": [
+      "Use `email_draft_message` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `to`, `subject`, and `body`.",
+      "Optional control is available through `cc` when the request needs extra specificity.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "to": [
+        "sample_to_item_4"
+      ],
+      "subject": "sample_subject_4",
+      "body": "sample_body_4",
+      "cc": [
+        "sample_cc_item_4"
+      ]
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for email_draft_message",
+        "arguments": {
+          "to": [
+            "sample_to_item_1"
+          ],
+          "subject": "sample_subject_1",
+          "body": "sample_body_1"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for email_draft_message",
+        "arguments": {
+          "to": [
+            "sample_to_item_2"
+          ],
+          "subject": "sample_subject_2",
+          "body": "sample_body_2",
+          "cc": [
+            "sample_cc_item_2"
+          ]
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "to": [
+            "sample_to_item_3"
+          ],
+          "subject": "sample_subject_3",
+          "body": "sample_body_3"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "to": [
+            "sample_to_item_4"
+          ],
+          "subject": "sample_subject_4",
+          "body": "sample_body_4",
+          "cc": [
+            "sample_cc_item_4"
+          ]
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "email_draft_message__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "email_draft_message__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

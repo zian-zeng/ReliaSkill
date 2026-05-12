@@ -1,0 +1,197 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0124_calculate_molecular_weight_negative_easy_0_out_of_domain_request",
+      "tool_name": "calculate_molecular_weight",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate molecular weight.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "compound": "sample_compound_1",
+        "to_unit": "sample_to_unit_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0703,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_molecular_weight\nTool description: Calculate the molecular weight of a compound given the compound formula.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the molecular weight of a compound given the compound formula. Provide all required fields: `compound`, and `to_unit`.\nWhen to use: [\"Use `calculate_molecular_weight` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `compound`, and `to_unit`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"compound\": \"sample_compound_1\", \"to_unit\": \"sample_to_unit_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_molecular_weight\", \"arguments\": {\"compound\": \"sample_compound_1\", \"to_unit\": \"sample_to_unit_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_molecular_weight\", \"arguments\": {\"compound\": \"sample_compound_2\", \"to_unit\": \"sample_to_unit_2\"}}]\nSchema: {\"properties\": {\"compound\": {\"description\": \"The molecular formula of the compound.\", \"type\": \"string\"}, \"to_unit\": {\"description\": \"The unit in which to return the result.\", \"type\": \"string\"}}, \"required\": [\"compound\", \"to_unit\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate molecular weight.\n",
+        "raw_model_output": "{\"arguments\": {\"compound\": \"sample_compound_1\", \"to_unit\": \"sample_to_unit_1\"}}",
+        "parsed_prediction": {
+          "compound": "sample_compound_1",
+          "to_unit": "sample_to_unit_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0124_calculate_molecular_weight_negative_hard_1_near_miss_intent",
+      "tool_name": "calculate_molecular_weight",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to calculate molecular weight, but I only want a checklist for how to Calculate the molecular weight of a compound given the compound formula; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "compound": "sample_compound_1",
+        "to_unit": "sample_to_unit_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0596,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_molecular_weight\nTool description: Calculate the molecular weight of a compound given the compound formula.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the molecular weight of a compound given the compound formula. Provide all required fields: `compound`, and `to_unit`.\nWhen to use: [\"Use `calculate_molecular_weight` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `compound`, and `to_unit`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"compound\": \"sample_compound_1\", \"to_unit\": \"sample_to_unit_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_molecular_weight\", \"arguments\": {\"compound\": \"sample_compound_1\", \"to_unit\": \"sample_to_unit_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_molecular_weight\", \"arguments\": {\"compound\": \"sample_compound_2\", \"to_unit\": \"sample_to_unit_2\"}}]\nSchema: {\"properties\": {\"compound\": {\"description\": \"The molecular formula of the compound.\", \"type\": \"string\"}, \"to_unit\": {\"description\": \"The unit in which to return the result.\", \"type\": \"string\"}}, \"required\": [\"compound\", \"to_unit\"], \"type\": \"object\"}\nUser request: This sounds close to calculate molecular weight, but I only want a checklist for how to Calculate the molecular weight of a compound given the compound formula; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {\"compound\": \"sample_compound_1\", \"to_unit\": \"sample_to_unit_1\"}}",
+        "parsed_prediction": {
+          "compound": "sample_compound_1",
+          "to_unit": "sample_to_unit_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0124_calculate_molecular_weight_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "calculate_molecular_weight",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to calculate molecular weight, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "compound": "sample_compound_1",
+        "to_unit": "sample_to_unit_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0567,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_molecular_weight\nTool description: Calculate the molecular weight of a compound given the compound formula.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the molecular weight of a compound given the compound formula. Provide all required fields: `compound`, and `to_unit`.\nWhen to use: [\"Use `calculate_molecular_weight` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `compound`, and `to_unit`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"compound\": \"sample_compound_1\", \"to_unit\": \"sample_to_unit_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_molecular_weight\", \"arguments\": {\"compound\": \"sample_compound_1\", \"to_unit\": \"sample_to_unit_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_molecular_weight\", \"arguments\": {\"compound\": \"sample_compound_2\", \"to_unit\": \"sample_to_unit_2\"}}]\nSchema: {\"properties\": {\"compound\": {\"description\": \"The molecular formula of the compound.\", \"type\": \"string\"}, \"to_unit\": {\"description\": \"The unit in which to return the result.\", \"type\": \"string\"}}, \"required\": [\"compound\", \"to_unit\"], \"type\": \"object\"}\nUser request: I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to calculate molecular weight, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.\n",
+        "raw_model_output": "{\"arguments\": {\"compound\": \"sample_compound_1\", \"to_unit\": \"sample_to_unit_1\"}}",
+        "parsed_prediction": {
+          "compound": "sample_compound_1",
+          "to_unit": "sample_to_unit_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0124_calculate_molecular_weight_positive_easy_0",
+      "tool_name": "calculate_molecular_weight",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use calculate molecular weight to Calculate the molecular weight of a compound given the compound formula. Set compound=\"compound_0\", to_unit=\"to_unit_0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "compound": "sample_compound_1",
+        "to_unit": "sample_to_unit_1"
+      },
+      "expected_arguments": {
+        "compound": "compound_0",
+        "to_unit": "to_unit_0"
+      },
+      "prediction_latency_ms": 0.0565,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_molecular_weight\nTool description: Calculate the molecular weight of a compound given the compound formula.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the molecular weight of a compound given the compound formula. Provide all required fields: `compound`, and `to_unit`.\nWhen to use: [\"Use `calculate_molecular_weight` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `compound`, and `to_unit`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"compound\": \"sample_compound_1\", \"to_unit\": \"sample_to_unit_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_molecular_weight\", \"arguments\": {\"compound\": \"sample_compound_1\", \"to_unit\": \"sample_to_unit_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_molecular_weight\", \"arguments\": {\"compound\": \"sample_compound_2\", \"to_unit\": \"sample_to_unit_2\"}}]\nSchema: {\"properties\": {\"compound\": {\"description\": \"The molecular formula of the compound.\", \"type\": \"string\"}, \"to_unit\": {\"description\": \"The unit in which to return the result.\", \"type\": \"string\"}}, \"required\": [\"compound\", \"to_unit\"], \"type\": \"object\"}\nUser request: Use calculate molecular weight to Calculate the molecular weight of a compound given the compound formula. Set compound=\"compound_0\", to_unit=\"to_unit_0\".\n",
+        "raw_model_output": "{\"arguments\": {\"compound\": \"sample_compound_1\", \"to_unit\": \"sample_to_unit_1\"}}",
+        "parsed_prediction": {
+          "compound": "sample_compound_1",
+          "to_unit": "sample_to_unit_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0124_calculate_molecular_weight_positive_medium_0",
+      "tool_name": "calculate_molecular_weight",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Calculate the molecular weight of a compound given the compound formula. The relevant details are compound=\"compound_7\", to_unit=\"to_unit_7\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "compound": "sample_compound_1",
+        "to_unit": "sample_to_unit_1"
+      },
+      "expected_arguments": {
+        "compound": "compound_7",
+        "to_unit": "to_unit_7"
+      },
+      "prediction_latency_ms": 0.116,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_molecular_weight\nTool description: Calculate the molecular weight of a compound given the compound formula.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the molecular weight of a compound given the compound formula. Provide all required fields: `compound`, and `to_unit`.\nWhen to use: [\"Use `calculate_molecular_weight` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `compound`, and `to_unit`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"compound\": \"sample_compound_1\", \"to_unit\": \"sample_to_unit_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_molecular_weight\", \"arguments\": {\"compound\": \"sample_compound_1\", \"to_unit\": \"sample_to_unit_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_molecular_weight\", \"arguments\": {\"compound\": \"sample_compound_2\", \"to_unit\": \"sample_to_unit_2\"}}]\nSchema: {\"properties\": {\"compound\": {\"description\": \"The molecular formula of the compound.\", \"type\": \"string\"}, \"to_unit\": {\"description\": \"The unit in which to return the result.\", \"type\": \"string\"}}, \"required\": [\"compound\", \"to_unit\"], \"type\": \"object\"}\nUser request: I need help with this task: Calculate the molecular weight of a compound given the compound formula. The relevant details are compound=\"compound_7\", to_unit=\"to_unit_7\".\n",
+        "raw_model_output": "{\"arguments\": {\"compound\": \"sample_compound_1\", \"to_unit\": \"sample_to_unit_1\"}}",
+        "parsed_prediction": {
+          "compound": "sample_compound_1",
+          "to_unit": "sample_to_unit_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0718
+  }
+}

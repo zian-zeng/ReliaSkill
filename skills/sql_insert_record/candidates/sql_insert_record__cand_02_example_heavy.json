@@ -1,0 +1,144 @@
+{
+  "candidate_id": "sql_insert_record__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "API-Bank-style local fixture database tool that inserts a structured record into a mock table. Provide all required fields: `database`, `table`, and `record`.\nWhen to use:\n- Use `sql_insert_record` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `database`, `table`, and `record`.\n- Optional control is available through `conflict_policy` when the request needs extra specificity.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `conflict_policy`: 'error', 'ignore', 'update'.\nArgument template:\n{\"conflict_policy\": \"error\", \"database\": \"sample_database_4\", \"record\": {}, \"table\": \"sample_table_4\"}\nExamples:\nMinimal valid request that satisfies the required fields for sql_insert_record\n{\"database\": \"sample_database_1\", \"record\": {}, \"table\": \"sample_table_1\"}\nRicher invocation that uses optional controls for sql_insert_record\n{\"conflict_policy\": \"ignore\", \"database\": \"sample_database_2\", \"record\": {}, \"table\": \"sample_table_2\"}\nRequired-argument dev behavior example.\n{\"database\": \"sample_database_3\", \"record\": {}, \"table\": \"sample_table_3\"}\nOptional, enum, nested, or array argument example.\n{\"conflict_policy\": \"error\", \"database\": \"sample_database_4\", \"record\": {}, \"table\": \"sample_table_4\"}",
+  "argument_template": {
+    "database": "sample_database_4",
+    "table": "sample_table_4",
+    "record": {},
+    "conflict_policy": "error"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for sql_insert_record",
+      "arguments": {
+        "database": "sample_database_1",
+        "table": "sample_table_1",
+        "record": {}
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for sql_insert_record",
+      "arguments": {
+        "database": "sample_database_2",
+        "table": "sample_table_2",
+        "record": {},
+        "conflict_policy": "ignore"
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "database": "sample_database_3",
+        "table": "sample_table_3",
+        "record": {}
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "database": "sample_database_4",
+        "table": "sample_table_4",
+        "record": {},
+        "conflict_policy": "error"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `sql_insert_record` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `database`, `table`, and `record`.",
+    "Optional control is available through `conflict_policy` when the request needs extra specificity.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `conflict_policy`: 'error', 'ignore', 'update'."
+  ],
+  "token_count": 364,
+  "skill_token_count": 364,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "API-Bank-style local fixture database tool that inserts a structured record into a mock table. Provide all required fields: `database`, `table`, and `record`.",
+    "when_to_use": [
+      "Use `sql_insert_record` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `database`, `table`, and `record`.",
+      "Optional control is available through `conflict_policy` when the request needs extra specificity.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `conflict_policy`: 'error', 'ignore', 'update'."
+    ],
+    "argument_template": {
+      "database": "sample_database_4",
+      "table": "sample_table_4",
+      "record": {},
+      "conflict_policy": "error"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for sql_insert_record",
+        "arguments": {
+          "database": "sample_database_1",
+          "table": "sample_table_1",
+          "record": {}
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for sql_insert_record",
+        "arguments": {
+          "database": "sample_database_2",
+          "table": "sample_table_2",
+          "record": {},
+          "conflict_policy": "ignore"
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "database": "sample_database_3",
+          "table": "sample_table_3",
+          "record": {}
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "database": "sample_database_4",
+          "table": "sample_table_4",
+          "record": {},
+          "conflict_policy": "error"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "sql_insert_record__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "sql_insert_record__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

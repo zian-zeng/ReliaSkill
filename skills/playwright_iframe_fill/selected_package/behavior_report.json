@@ -1,0 +1,209 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0163_playwright_iframe_fill_negative_easy_0_out_of_domain_request",
+      "tool_name": "playwright_iframe_fill",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to playwright iframe fill.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "iframeSelector": "sample_iframeSelector_1",
+        "selector": "sample_selector_1",
+        "value": "sample_value_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.3539,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_iframe_fill\nTool description: Fill an element in an iframe on the page\nSkill condition: multi_candidate_skill\nSkill summary: Fill an element in an iframe on the page. Provide all required fields: `iframeSelector`, `selector`, and `value`.\nWhen to use: [\"Use `playwright_iframe_fill` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `iframeSelector`, `selector`, and `value`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"iframeSelector\": \"sample_iframeSelector_1\", \"selector\": \"sample_selector_1\", \"value\": \"sample_value_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_iframe_fill\", \"arguments\": {\"iframeSelector\": \"sample_iframeSelector_1\", \"selector\": \"sample_selector_1\", \"value\": \"sample_value_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_iframe_fill\", \"arguments\": {\"iframeSelector\": \"sample_iframeSelector_2\", \"selector\": \"sample_selector_2\", \"value\": \"sample_value_2\"}}]\nSchema: {\"properties\": {\"iframeSelector\": {\"description\": \"CSS selector for the iframe containing the element to fill\", \"type\": \"string\"}, \"selector\": {\"description\": \"CSS selector for the element to fill\", \"type\": \"string\"}, \"value\": {\"description\": \"Value to fill\", \"type\": \"string\"}}, \"required\": [\"iframeSelector\", \"selector\", \"value\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to playwright iframe fill.\n",
+        "raw_model_output": "{\"arguments\": {\"iframeSelector\": \"sample_iframeSelector_1\", \"selector\": \"sample_selector_1\", \"value\": \"sample_value_1\"}}",
+        "parsed_prediction": {
+          "iframeSelector": "sample_iframeSelector_1",
+          "selector": "sample_selector_1",
+          "value": "sample_value_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0163_playwright_iframe_fill_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "playwright_iframe_fill",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with playwright iframe fill; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "iframeSelector": "sample_iframeSelector_1",
+        "selector": "sample_selector_1",
+        "value": "sample_value_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1112,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_iframe_fill\nTool description: Fill an element in an iframe on the page\nSkill condition: multi_candidate_skill\nSkill summary: Fill an element in an iframe on the page. Provide all required fields: `iframeSelector`, `selector`, and `value`.\nWhen to use: [\"Use `playwright_iframe_fill` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `iframeSelector`, `selector`, and `value`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"iframeSelector\": \"sample_iframeSelector_1\", \"selector\": \"sample_selector_1\", \"value\": \"sample_value_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_iframe_fill\", \"arguments\": {\"iframeSelector\": \"sample_iframeSelector_1\", \"selector\": \"sample_selector_1\", \"value\": \"sample_value_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_iframe_fill\", \"arguments\": {\"iframeSelector\": \"sample_iframeSelector_2\", \"selector\": \"sample_selector_2\", \"value\": \"sample_value_2\"}}]\nSchema: {\"properties\": {\"iframeSelector\": {\"description\": \"CSS selector for the iframe containing the element to fill\", \"type\": \"string\"}, \"selector\": {\"description\": \"CSS selector for the element to fill\", \"type\": \"string\"}, \"value\": {\"description\": \"Value to fill\", \"type\": \"string\"}}, \"required\": [\"iframeSelector\", \"selector\", \"value\"], \"type\": \"object\"}\nUser request: Maybe do something with playwright iframe fill; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {\"iframeSelector\": \"sample_iframeSelector_1\", \"selector\": \"sample_selector_1\", \"value\": \"sample_value_1\"}}",
+        "parsed_prediction": {
+          "iframeSelector": "sample_iframeSelector_1",
+          "selector": "sample_selector_1",
+          "value": "sample_value_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0163_playwright_iframe_fill_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "playwright_iframe_fill",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with playwright iframe fill.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "iframeSelector": "sample_iframeSelector_1",
+        "selector": "sample_selector_1",
+        "value": "sample_value_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1091,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_iframe_fill\nTool description: Fill an element in an iframe on the page\nSkill condition: multi_candidate_skill\nSkill summary: Fill an element in an iframe on the page. Provide all required fields: `iframeSelector`, `selector`, and `value`.\nWhen to use: [\"Use `playwright_iframe_fill` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `iframeSelector`, `selector`, and `value`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"iframeSelector\": \"sample_iframeSelector_1\", \"selector\": \"sample_selector_1\", \"value\": \"sample_value_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_iframe_fill\", \"arguments\": {\"iframeSelector\": \"sample_iframeSelector_1\", \"selector\": \"sample_selector_1\", \"value\": \"sample_value_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_iframe_fill\", \"arguments\": {\"iframeSelector\": \"sample_iframeSelector_2\", \"selector\": \"sample_selector_2\", \"value\": \"sample_value_2\"}}]\nSchema: {\"properties\": {\"iframeSelector\": {\"description\": \"CSS selector for the iframe containing the element to fill\", \"type\": \"string\"}, \"selector\": {\"description\": \"CSS selector for the element to fill\", \"type\": \"string\"}, \"value\": {\"description\": \"Value to fill\", \"type\": \"string\"}}, \"required\": [\"iframeSelector\", \"selector\", \"value\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with playwright iframe fill.\n",
+        "raw_model_output": "{\"arguments\": {\"iframeSelector\": \"sample_iframeSelector_1\", \"selector\": \"sample_selector_1\", \"value\": \"sample_value_1\"}}",
+        "parsed_prediction": {
+          "iframeSelector": "sample_iframeSelector_1",
+          "selector": "sample_selector_1",
+          "value": "sample_value_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0163_playwright_iframe_fill_positive_easy_0",
+      "tool_name": "playwright_iframe_fill",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use playwright iframe fill to Fill an element in an iframe on the page. Set iframeSelector=\"iframeselector_0\", selector=\"selector_0\", value=\"value_0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "iframeSelector": "sample_iframeSelector_1",
+        "selector": "sample_selector_1",
+        "value": "sample_value_1"
+      },
+      "expected_arguments": {
+        "iframeSelector": "iframeselector_0",
+        "selector": "selector_0",
+        "value": "value_0"
+      },
+      "prediction_latency_ms": 0.1097,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_iframe_fill\nTool description: Fill an element in an iframe on the page\nSkill condition: multi_candidate_skill\nSkill summary: Fill an element in an iframe on the page. Provide all required fields: `iframeSelector`, `selector`, and `value`.\nWhen to use: [\"Use `playwright_iframe_fill` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `iframeSelector`, `selector`, and `value`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"iframeSelector\": \"sample_iframeSelector_1\", \"selector\": \"sample_selector_1\", \"value\": \"sample_value_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_iframe_fill\", \"arguments\": {\"iframeSelector\": \"sample_iframeSelector_1\", \"selector\": \"sample_selector_1\", \"value\": \"sample_value_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_iframe_fill\", \"arguments\": {\"iframeSelector\": \"sample_iframeSelector_2\", \"selector\": \"sample_selector_2\", \"value\": \"sample_value_2\"}}]\nSchema: {\"properties\": {\"iframeSelector\": {\"description\": \"CSS selector for the iframe containing the element to fill\", \"type\": \"string\"}, \"selector\": {\"description\": \"CSS selector for the element to fill\", \"type\": \"string\"}, \"value\": {\"description\": \"Value to fill\", \"type\": \"string\"}}, \"required\": [\"iframeSelector\", \"selector\", \"value\"], \"type\": \"object\"}\nUser request: Use playwright iframe fill to Fill an element in an iframe on the page. Set iframeSelector=\"iframeselector_0\", selector=\"selector_0\", value=\"value_0\".\n",
+        "raw_model_output": "{\"arguments\": {\"iframeSelector\": \"sample_iframeSelector_1\", \"selector\": \"sample_selector_1\", \"value\": \"sample_value_1\"}}",
+        "parsed_prediction": {
+          "iframeSelector": "sample_iframeSelector_1",
+          "selector": "sample_selector_1",
+          "value": "sample_value_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0163_playwright_iframe_fill_positive_medium_0",
+      "tool_name": "playwright_iframe_fill",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Fill an element in an iframe on the page. The relevant details are iframeSelector=\"iframeselector_7\", selector=\"selector_7\", value=\"value_7\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "iframeSelector": "sample_iframeSelector_1",
+        "selector": "sample_selector_1",
+        "value": "sample_value_1"
+      },
+      "expected_arguments": {
+        "iframeSelector": "iframeselector_7",
+        "selector": "selector_7",
+        "value": "value_7"
+      },
+      "prediction_latency_ms": 0.1149,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_iframe_fill\nTool description: Fill an element in an iframe on the page\nSkill condition: multi_candidate_skill\nSkill summary: Fill an element in an iframe on the page. Provide all required fields: `iframeSelector`, `selector`, and `value`.\nWhen to use: [\"Use `playwright_iframe_fill` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `iframeSelector`, `selector`, and `value`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"iframeSelector\": \"sample_iframeSelector_1\", \"selector\": \"sample_selector_1\", \"value\": \"sample_value_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_iframe_fill\", \"arguments\": {\"iframeSelector\": \"sample_iframeSelector_1\", \"selector\": \"sample_selector_1\", \"value\": \"sample_value_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_iframe_fill\", \"arguments\": {\"iframeSelector\": \"sample_iframeSelector_2\", \"selector\": \"sample_selector_2\", \"value\": \"sample_value_2\"}}]\nSchema: {\"properties\": {\"iframeSelector\": {\"description\": \"CSS selector for the iframe containing the element to fill\", \"type\": \"string\"}, \"selector\": {\"description\": \"CSS selector for the element to fill\", \"type\": \"string\"}, \"value\": {\"description\": \"Value to fill\", \"type\": \"string\"}}, \"required\": [\"iframeSelector\", \"selector\", \"value\"], \"type\": \"object\"}\nUser request: I need help with this task: Fill an element in an iframe on the page. The relevant details are iframeSelector=\"iframeselector_7\", selector=\"selector_7\", value=\"value_7\".\n",
+        "raw_model_output": "{\"arguments\": {\"iframeSelector\": \"sample_iframeSelector_1\", \"selector\": \"sample_selector_1\", \"value\": \"sample_value_1\"}}",
+        "parsed_prediction": {
+          "iframeSelector": "sample_iframeSelector_1",
+          "selector": "sample_selector_1",
+          "value": "sample_value_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.1598
+  }
+}

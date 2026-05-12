@@ -1,0 +1,187 @@
+{
+  "tool_name": "playwright_navigate",
+  "server_name": "browser",
+  "tool_purpose": "Navigate to a URL",
+  "input_schema_raw": {
+    "properties": {
+      "browserType": {
+        "description": "Browser type to use (chromium, firefox, webkit). Defaults to chromium",
+        "enum": [
+          "chromium",
+          "firefox",
+          "webkit"
+        ],
+        "type": "string"
+      },
+      "headless": {
+        "description": "Run browser in headless mode (default: false)",
+        "type": "boolean"
+      },
+      "height": {
+        "description": "Viewport height in pixels (default: 720)",
+        "type": "number"
+      },
+      "timeout": {
+        "description": "Navigation timeout in milliseconds",
+        "type": "number"
+      },
+      "url": {
+        "description": "URL to navigate to the website specified",
+        "type": "string"
+      },
+      "waitUntil": {
+        "description": "Navigation wait condition",
+        "type": "string"
+      },
+      "width": {
+        "description": "Viewport width in pixels (default: 1280)",
+        "type": "number"
+      }
+    },
+    "required": [
+      "url"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "url",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "URL to navigate to the website specified",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.url"
+    },
+    {
+      "name": "browserType",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": [
+        "chromium",
+        "firefox",
+        "webkit"
+      ],
+      "description": "Browser type to use (chromium, firefox, webkit). Defaults to chromium",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.browserType"
+    },
+    {
+      "name": "width",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Viewport width in pixels (default: 1280)",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.width"
+    },
+    {
+      "name": "height",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Viewport height in pixels (default: 720)",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.height"
+    },
+    {
+      "name": "timeout",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Navigation timeout in milliseconds",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.timeout"
+    },
+    {
+      "name": "waitUntil",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Navigation wait condition",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.waitUntil"
+    },
+    {
+      "name": "headless",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Run browser in headless mode (default: false)",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.headless"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Navigate to a URL",
+    "Playwright Navigate"
+  ],
+  "source_pointer": "data/raw/mcptoolbenchpp_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 17,
+    "has_array_argument": false,
+    "has_boolean_flag": true,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 7,
+    "num_enum_arguments": 1,
+    "num_enum_fields": 1,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 6,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 7,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "playwright_navigate",
+    "server_name": "browser",
+    "source_pointer": "data/raw/mcptoolbenchpp_tools.json"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

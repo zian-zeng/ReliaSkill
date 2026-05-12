@@ -1,0 +1,127 @@
+{
+  "tool_name": "fetch",
+  "server_name": "src",
+  "tool_purpose": "Fetches a URL from the internet and optionally extracts its contents as markdown. Although originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that.",
+  "input_schema_raw": {
+    "properties": {
+      "max_length": {
+        "type": "string"
+      },
+      "raw": {
+        "type": "string"
+      },
+      "start_index": {
+        "type": "string"
+      },
+      "url": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "url",
+      "max_length",
+      "start_index",
+      "raw"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "url",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.url"
+    },
+    {
+      "name": "max_length",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.max_length"
+    },
+    {
+      "name": "start_index",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.start_index"
+    },
+    {
+      "name": "raw",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.raw"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Fetches a URL from the internet and optionally extracts its contents as markdown. Although originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that.",
+    "fetch"
+  ],
+  "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\fetch\\src\\mcp_server_fetch\\server.py",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.6,
+    "auth_required": false,
+    "documentation_length": 306,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 4,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 4,
+    "num_top_level_arguments": 4,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "missing_argument_description:url",
+    "missing_argument_description:max_length",
+    "missing_argument_description:start_index",
+    "missing_argument_description:raw",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "fetch",
+    "server_name": "src",
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\fetch\\src\\mcp_server_fetch\\server.py"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

@@ -1,0 +1,56 @@
+{
+  "tool_name": "espnet__kan_bayashi_jvs_tts_finetune_jvs001_jsut_vits_raw_phn_jaconv_p_dfb4be22",
+  "server_name": "bfcl_huggingface_eval_api",
+  "tool_purpose": "A Japanese text-to-speech model trained using the ESPnet framework. It is designed to convert text input into natural-sounding speech. Framework: ESPnet. Functionality: Text-to-Speech. API call: AutoModelForCausalLM.from_pretrained('espnet/kan-bayashi_jvs_tts_finetune_jvs001_jsut_vits_raw_phn_jaconv_pyopenjta-truncated-178804').",
+  "input_schema_raw": {
+    "properties": {},
+    "required": [],
+    "type": "object"
+  },
+  "arguments": [],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ],
+  "doc_snippets": [
+    "A Japanese text-to-speech model trained using the ESPnet framework. It is designed to convert text input into natural-sounding speech. Framework: ESPnet. Functionality: Text-to-Speech. API call: AutoModelForCausalLM.from_pretrained('espnet/kan-bayashi_jvs_tts_finetune_jvs001_jsut_vits_raw_phn_jaconv_pyopenjta-truncated-178804').",
+    "kan-bayashi_jvs_tts_finetune_jvs001_jsut_vits_raw_phn_jaconv_pyopenjta-truncated-178804",
+    "Text-to-Speech"
+  ],
+  "source_pointer": "bfcl",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 330,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 1,
+    "num_arguments": 0,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "num_top_level_arguments": 0,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "empty_input_schema",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "espnet__kan_bayashi_jvs_tts_finetune_jvs001_jsut_vits_raw_phn_jaconv_p_dfb4be22",
+    "server_name": "bfcl_huggingface_eval_api",
+    "source_pointer": "bfcl"
+  },
+  "side_effect_hints": [
+    "executes_code"
+  ],
+  "safety_hints": [
+    "review_side_effects_before_deployment"
+  ]
+}

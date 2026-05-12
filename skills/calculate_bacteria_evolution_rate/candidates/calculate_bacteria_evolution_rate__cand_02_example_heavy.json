@@ -1,0 +1,142 @@
+{
+  "candidate_id": "calculate_bacteria_evolution_rate__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration. Provide all required fields: `start_population`, `duplication_frequency`, and `duration`.\nWhen to use:\n- Use `calculate_bacteria_evolution_rate` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `start_population`, `duplication_frequency`, and `duration`.\n- Optional control is available through `generation_time` when the request needs extra specificity.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"duplication_frequency\": 4, \"duration\": 4, \"generation_time\": 4, \"start_population\": 4}\nExamples:\nMinimal valid request that satisfies the required fields for calculate_bacteria_evolution_rate\n{\"duplication_frequency\": 1, \"duration\": 1, \"start_population\": 1}\nRicher invocation that uses optional controls for calculate_bacteria_evolution_rate\n{\"duplication_frequency\": 2, \"duration\": 2, \"generation_time\": 2, \"start_population\": 2}\nRequired-argument dev behavior example.\n{\"duplication_frequency\": 3, \"duration\": 3, \"start_population\": 3}\nOptional, enum, nested, or array argument example.\n{\"duplication_frequency\": 4, \"duration\": 4, \"generation_time\": 4, \"start_population\": 4}",
+  "argument_template": {
+    "start_population": 4,
+    "duplication_frequency": 4,
+    "duration": 4,
+    "generation_time": 4
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for calculate_bacteria_evolution_rate",
+      "arguments": {
+        "start_population": 1,
+        "duplication_frequency": 1,
+        "duration": 1
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for calculate_bacteria_evolution_rate",
+      "arguments": {
+        "start_population": 2,
+        "duplication_frequency": 2,
+        "duration": 2,
+        "generation_time": 2
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "start_population": 3,
+        "duplication_frequency": 3,
+        "duration": 3
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "start_population": 4,
+        "duplication_frequency": 4,
+        "duration": 4,
+        "generation_time": 4
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `calculate_bacteria_evolution_rate` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `start_population`, `duplication_frequency`, and `duration`.",
+    "Optional control is available through `generation_time` when the request needs extra specificity.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 349,
+  "skill_token_count": 349,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration. Provide all required fields: `start_population`, `duplication_frequency`, and `duration`.",
+    "when_to_use": [
+      "Use `calculate_bacteria_evolution_rate` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `start_population`, `duplication_frequency`, and `duration`.",
+      "Optional control is available through `generation_time` when the request needs extra specificity.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "start_population": 4,
+      "duplication_frequency": 4,
+      "duration": 4,
+      "generation_time": 4
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for calculate_bacteria_evolution_rate",
+        "arguments": {
+          "start_population": 1,
+          "duplication_frequency": 1,
+          "duration": 1
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for calculate_bacteria_evolution_rate",
+        "arguments": {
+          "start_population": 2,
+          "duplication_frequency": 2,
+          "duration": 2,
+          "generation_time": 2
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "start_population": 3,
+          "duplication_frequency": 3,
+          "duration": 3
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "start_population": 4,
+          "duplication_frequency": 4,
+          "duration": 4,
+          "generation_time": 4
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "calculate_bacteria_evolution_rate__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "calculate_bacteria_evolution_rate__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

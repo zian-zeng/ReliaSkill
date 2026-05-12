@@ -1,0 +1,227 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0141_employee_fetch_data_negative_easy_0_out_of_domain_request",
+      "tool_name": "employee.fetch_data",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to employee.fetch data.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "company_name": "sample-name",
+        "employee_id": 1,
+        "data_field": [
+          "sample_data_field_item_1"
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.09,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: employee.fetch_data\nTool description: Fetches the detailed data for a specific employee in a given company.\nSkill condition: multi_candidate_skill\nSkill summary: Fetches the detailed data for a specific employee in a given company. Provide all required fields: `company_name`, and `employee_id`.\nWhen to use: [\"Use `employee.fetch_data` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `company_name`, and `employee_id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"company_name\": \"sample-name\", \"employee_id\": 1, \"data_field\": [\"sample_data_field_item_1\"]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for employee.fetch_data\", \"arguments\": {\"company_name\": \"sample-name\", \"employee_id\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for employee.fetch_data\", \"arguments\": {\"company_name\": \"sample-name\", \"employee_id\": 2, \"data_field\": [\"sample_data_field_item_2\"]}}]\nSchema: {\"properties\": {\"company_name\": {\"description\": \"The name of the company.\", \"type\": \"string\"}, \"data_field\": {\"description\": \"Fields of data to be fetched for the employee (Optional). Default is ['Personal Info']\", \"items\": {\"enum\": [\"Personal Info\", \"Job History\", \"Payroll\", \"Attendance\"], \"type\": \"string\"}, \"type\": \"array\"}, \"employee_id\": {\"description\": \"The unique ID of the employee.\", \"type\": \"integer\"}}, \"required\": [\"company_name\", \"employee_id\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to employee.fetch data.\n",
+        "raw_model_output": "{\"arguments\": {\"company_name\": \"sample-name\", \"data_field\": [\"sample_data_field_item_1\"], \"employee_id\": 1}}",
+        "parsed_prediction": {
+          "company_name": "sample-name",
+          "employee_id": 1,
+          "data_field": [
+            "sample_data_field_item_1"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0141_employee_fetch_data_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "employee.fetch_data",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use employee.fetch data; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "company_name": "sample-name",
+        "employee_id": 1,
+        "data_field": [
+          "sample_data_field_item_1"
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0783,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: employee.fetch_data\nTool description: Fetches the detailed data for a specific employee in a given company.\nSkill condition: multi_candidate_skill\nSkill summary: Fetches the detailed data for a specific employee in a given company. Provide all required fields: `company_name`, and `employee_id`.\nWhen to use: [\"Use `employee.fetch_data` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `company_name`, and `employee_id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"company_name\": \"sample-name\", \"employee_id\": 1, \"data_field\": [\"sample_data_field_item_1\"]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for employee.fetch_data\", \"arguments\": {\"company_name\": \"sample-name\", \"employee_id\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for employee.fetch_data\", \"arguments\": {\"company_name\": \"sample-name\", \"employee_id\": 2, \"data_field\": [\"sample_data_field_item_2\"]}}]\nSchema: {\"properties\": {\"company_name\": {\"description\": \"The name of the company.\", \"type\": \"string\"}, \"data_field\": {\"description\": \"Fields of data to be fetched for the employee (Optional). Default is ['Personal Info']\", \"items\": {\"enum\": [\"Personal Info\", \"Job History\", \"Payroll\", \"Attendance\"], \"type\": \"string\"}, \"type\": \"array\"}, \"employee_id\": {\"description\": \"The unique ID of the employee.\", \"type\": \"integer\"}}, \"required\": [\"company_name\", \"employee_id\"], \"type\": \"object\"}\nUser request: Explain when someone should use employee.fetch data; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"company_name\": \"sample-name\", \"data_field\": [\"sample_data_field_item_1\"], \"employee_id\": 1}}",
+        "parsed_prediction": {
+          "company_name": "sample-name",
+          "employee_id": 1,
+          "data_field": [
+            "sample_data_field_item_1"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0141_employee_fetch_data_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "employee.fetch_data",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use db fetch records to Fetch records from a specified database table based on certain conditions; employee.fetch data is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "company_name": "sample-name",
+        "employee_id": 1,
+        "data_field": [
+          "sample_data_field_item_1"
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0736,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: employee.fetch_data\nTool description: Fetches the detailed data for a specific employee in a given company.\nSkill condition: multi_candidate_skill\nSkill summary: Fetches the detailed data for a specific employee in a given company. Provide all required fields: `company_name`, and `employee_id`.\nWhen to use: [\"Use `employee.fetch_data` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `company_name`, and `employee_id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"company_name\": \"sample-name\", \"employee_id\": 1, \"data_field\": [\"sample_data_field_item_1\"]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for employee.fetch_data\", \"arguments\": {\"company_name\": \"sample-name\", \"employee_id\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for employee.fetch_data\", \"arguments\": {\"company_name\": \"sample-name\", \"employee_id\": 2, \"data_field\": [\"sample_data_field_item_2\"]}}]\nSchema: {\"properties\": {\"company_name\": {\"description\": \"The name of the company.\", \"type\": \"string\"}, \"data_field\": {\"description\": \"Fields of data to be fetched for the employee (Optional). Default is ['Personal Info']\", \"items\": {\"enum\": [\"Personal Info\", \"Job History\", \"Payroll\", \"Attendance\"], \"type\": \"string\"}, \"type\": \"array\"}, \"employee_id\": {\"description\": \"The unique ID of the employee.\", \"type\": \"integer\"}}, \"required\": [\"company_name\", \"employee_id\"], \"type\": \"object\"}\nUser request: Use db fetch records to Fetch records from a specified database table based on certain conditions; employee.fetch data is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"company_name\": \"sample-name\", \"data_field\": [\"sample_data_field_item_1\"], \"employee_id\": 1}}",
+        "parsed_prediction": {
+          "company_name": "sample-name",
+          "employee_id": 1,
+          "data_field": [
+            "sample_data_field_item_1"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0141_employee_fetch_data_positive_easy_0",
+      "tool_name": "employee.fetch_data",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use employee.fetch data to Fetches the detailed data for a specific employee in a given company. Set company_name=\"company_name_0\", employee_id=1.",
+      "exact_match": false,
+      "argument_validity": 0.5,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "company_name": "sample-name",
+        "employee_id": 1,
+        "data_field": [
+          "sample_data_field_item_1"
+        ]
+      },
+      "expected_arguments": {
+        "company_name": "company_name_0",
+        "employee_id": 1
+      },
+      "prediction_latency_ms": 0.0731,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: employee.fetch_data\nTool description: Fetches the detailed data for a specific employee in a given company.\nSkill condition: multi_candidate_skill\nSkill summary: Fetches the detailed data for a specific employee in a given company. Provide all required fields: `company_name`, and `employee_id`.\nWhen to use: [\"Use `employee.fetch_data` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `company_name`, and `employee_id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"company_name\": \"sample-name\", \"employee_id\": 1, \"data_field\": [\"sample_data_field_item_1\"]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for employee.fetch_data\", \"arguments\": {\"company_name\": \"sample-name\", \"employee_id\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for employee.fetch_data\", \"arguments\": {\"company_name\": \"sample-name\", \"employee_id\": 2, \"data_field\": [\"sample_data_field_item_2\"]}}]\nSchema: {\"properties\": {\"company_name\": {\"description\": \"The name of the company.\", \"type\": \"string\"}, \"data_field\": {\"description\": \"Fields of data to be fetched for the employee (Optional). Default is ['Personal Info']\", \"items\": {\"enum\": [\"Personal Info\", \"Job History\", \"Payroll\", \"Attendance\"], \"type\": \"string\"}, \"type\": \"array\"}, \"employee_id\": {\"description\": \"The unique ID of the employee.\", \"type\": \"integer\"}}, \"required\": [\"company_name\", \"employee_id\"], \"type\": \"object\"}\nUser request: Use employee.fetch data to Fetches the detailed data for a specific employee in a given company. Set company_name=\"company_name_0\", employee_id=1.\n",
+        "raw_model_output": "{\"arguments\": {\"company_name\": \"sample-name\", \"data_field\": [\"sample_data_field_item_1\"], \"employee_id\": 1}}",
+        "parsed_prediction": {
+          "company_name": "sample-name",
+          "employee_id": 1,
+          "data_field": [
+            "sample_data_field_item_1"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0141_employee_fetch_data_positive_medium_0",
+      "tool_name": "employee.fetch_data",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Fetches the detailed data for a specific employee in a given company. The relevant details are company_name=\"company_name_7\", employee_id=8.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "company_name": "sample-name",
+        "employee_id": 1,
+        "data_field": [
+          "sample_data_field_item_1"
+        ]
+      },
+      "expected_arguments": {
+        "company_name": "company_name_7",
+        "employee_id": 8
+      },
+      "prediction_latency_ms": 0.1343,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: employee.fetch_data\nTool description: Fetches the detailed data for a specific employee in a given company.\nSkill condition: multi_candidate_skill\nSkill summary: Fetches the detailed data for a specific employee in a given company. Provide all required fields: `company_name`, and `employee_id`.\nWhen to use: [\"Use `employee.fetch_data` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `company_name`, and `employee_id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"company_name\": \"sample-name\", \"employee_id\": 1, \"data_field\": [\"sample_data_field_item_1\"]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for employee.fetch_data\", \"arguments\": {\"company_name\": \"sample-name\", \"employee_id\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for employee.fetch_data\", \"arguments\": {\"company_name\": \"sample-name\", \"employee_id\": 2, \"data_field\": [\"sample_data_field_item_2\"]}}]\nSchema: {\"properties\": {\"company_name\": {\"description\": \"The name of the company.\", \"type\": \"string\"}, \"data_field\": {\"description\": \"Fields of data to be fetched for the employee (Optional). Default is ['Personal Info']\", \"items\": {\"enum\": [\"Personal Info\", \"Job History\", \"Payroll\", \"Attendance\"], \"type\": \"string\"}, \"type\": \"array\"}, \"employee_id\": {\"description\": \"The unique ID of the employee.\", \"type\": \"integer\"}}, \"required\": [\"company_name\", \"employee_id\"], \"type\": \"object\"}\nUser request: I need help with this task: Fetches the detailed data for a specific employee in a given company. The relevant details are company_name=\"company_name_7\", employee_id=8.\n",
+        "raw_model_output": "{\"arguments\": {\"company_name\": \"sample-name\", \"data_field\": [\"sample_data_field_item_1\"], \"employee_id\": 1}}",
+        "parsed_prediction": {
+          "company_name": "sample-name",
+          "employee_id": 1,
+          "data_field": [
+            "sample_data_field_item_1"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.25,
+    "avg_prediction_latency_ms": 0.0899
+  }
+}

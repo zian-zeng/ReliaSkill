@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calc_area_triangle", "arguments": {"base": 1, "height": 1}}
+{"scenario": "Richer invocation that uses optional controls for calc_area_triangle", "arguments": {"base": 2, "height": 2}}

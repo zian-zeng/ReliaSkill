@@ -1,0 +1,118 @@
+{
+  "candidate_id": "add_observations__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Add new observations to existing entities in the knowledge graph. Provide the required field `observations`.\nWhen to use:\n- Use `add_observations` when the user's request directly matches this tool's purpose.\n- Provide the required field `observations`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"observations\": [{}]}\nExamples:\nMinimal valid request that satisfies the required fields for add_observations\n{\"observations\": [{}]}\nRicher invocation that uses optional controls for add_observations\n{\"observations\": [{}]}\nRequired-argument dev behavior example.\n{\"observations\": [{}]}",
+  "argument_template": {
+    "observations": [
+      {}
+    ]
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for add_observations",
+      "arguments": {
+        "observations": [
+          {}
+        ]
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for add_observations",
+      "arguments": {
+        "observations": [
+          {}
+        ]
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "observations": [
+          {}
+        ]
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `add_observations` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `observations`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 175,
+  "skill_token_count": 175,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 3,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Add new observations to existing entities in the knowledge graph. Provide the required field `observations`.",
+    "when_to_use": [
+      "Use `add_observations` when the user's request directly matches this tool's purpose.",
+      "Provide the required field `observations`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "observations": [
+        {}
+      ]
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for add_observations",
+        "arguments": {
+          "observations": [
+            {}
+          ]
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for add_observations",
+        "arguments": {
+          "observations": [
+            {}
+          ]
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "observations": [
+            {}
+          ]
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "add_observations__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "add_observations__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

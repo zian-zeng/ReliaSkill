@@ -1,0 +1,62 @@
+{
+  "candidate_id": "hugging_face_compvis_stable_diffusion_v1_4_stablediffusionpipeline_f_4b93b3f5__cand_00_concise_default",
+  "generation_strategy": "concise_default",
+  "prompt_template_id": "heuristic_concise_default_v1",
+  "skill_text": "Stable Diffusion is a latent text-to-image diffusion model capable of generating photo-realistic images given any text input. The Stable-Diffusion-v1-4 checkpoint was fine-tuned on 225k steps at resolution 512x512 on laion-aesthetics v2 5+ and 10% dropping of the text-conditioning to improve.\nWhen to use:\n- Use `hugging_face__compvis_stable_diffusion_v1_4__stablediffusionpipeline_f_4b93b3f5` when the user's request directly matches this tool's purpose.\n- This tool has no required input fields.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Tool does not expose top-level input properties.\n- Do not use when required inputs are missing.",
+  "argument_template": {},
+  "examples": [],
+  "when_to_use": [
+    "Use `hugging_face__compvis_stable_diffusion_v1_4__stablediffusionpipeline_f_4b93b3f5` when the user's request directly matches this tool's purpose.",
+    "This tool has no required input fields."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Tool does not expose top-level input properties.",
+    "Do not use when required inputs are missing."
+  ],
+  "token_count": 177,
+  "skill_token_count": 177,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 0,
+  "nonuse_boundary_count": 4,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Stable Diffusion is a latent text-to-image diffusion model capable of generating photo-realistic images given any text input. The Stable-Diffusion-v1-4 checkpoint was fine-tuned on 225k steps at resolution 512x512 on laion-aesthetics v2 5+ and 10% dropping of the text-conditioning to improve.",
+    "when_to_use": [
+      "Use `hugging_face__compvis_stable_diffusion_v1_4__stablediffusionpipeline_f_4b93b3f5` when the user's request directly matches this tool's purpose.",
+      "This tool has no required input fields."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Tool does not expose top-level input properties.",
+      "Do not use when required inputs are missing."
+    ],
+    "argument_template": {},
+    "examples": [],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "hugging_face_compvis_stable_diffusion_v1_4_stablediffusionpipeline_f_4b93b3f5__cand_00_concise_default",
+        "generation_strategy": "concise_default",
+        "prompt_template_id": "heuristic_concise_default_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "hugging_face_compvis_stable_diffusion_v1_4_stablediffusionpipeline_f_4b93b3f5__cand_00_concise_default",
+      "generation_strategy": "concise_default",
+      "prompt_template_id": "heuristic_concise_default_v1"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_clock_angle", "arguments": {"hours": 1, "minutes": 1}}
+{"scenario": "Richer invocation that uses optional controls for calculate_clock_angle", "arguments": {"hours": 2, "minutes": 2, "round_to": 2}}

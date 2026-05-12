@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0035_flair_flair_ner_english_ontonotes_large_sequencetagger_load_flair_ne_9ba1c789_negative_easy_0_out_of_domain_request",
+      "tool_name": "flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to flair  flair ner english ontonotes large  sequencetagger load flair ne 9ba1c789.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.043,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789\nTool description: English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags such as cardinal value, date value, event name, building name, geo-political entity, language name, law name, location name, money name, affiliation, ordinal value, organization name, percent value, person name, product name, quantity value, time value, and name of work of art. The model is based on document-level XLM-R embeddings and FLERT. Framework: Flair. Functionality: Named Entity Recognition. API call: SequenceTagger.load('flair/ner-english-ontonotes-large').\nSkill condition: multi_candidate_skill\nSkill summary: English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags such as cardinal value, date value, event name, building name, geo-political entity, language name, law name.\nWhen to use: [\"Use `flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\", \"Do not use when required inputs are missing.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to flair  flair ner english ontonotes large  sequencetagger load flair ne 9ba1c789.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0035_flair_flair_ner_english_ontonotes_large_sequencetagger_load_flair_ne_9ba1c789_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with flair  flair ner english ontonotes large  sequencetagger load flair ne 9ba1c789; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0313,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789\nTool description: English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags such as cardinal value, date value, event name, building name, geo-political entity, language name, law name, location name, money name, affiliation, ordinal value, organization name, percent value, person name, product name, quantity value, time value, and name of work of art. The model is based on document-level XLM-R embeddings and FLERT. Framework: Flair. Functionality: Named Entity Recognition. API call: SequenceTagger.load('flair/ner-english-ontonotes-large').\nSkill condition: multi_candidate_skill\nSkill summary: English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags such as cardinal value, date value, event name, building name, geo-political entity, language name, law name.\nWhen to use: [\"Use `flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\", \"Do not use when required inputs are missing.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with flair  flair ner english ontonotes large  sequencetagger load flair ne 9ba1c789; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0035_flair_flair_ner_english_ontonotes_large_sequencetagger_load_flair_ne_9ba1c789_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with flair  flair ner english ontonotes large  sequencetagger load flair ne 9ba1c789.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0301,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789\nTool description: English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags such as cardinal value, date value, event name, building name, geo-political entity, language name, law name, location name, money name, affiliation, ordinal value, organization name, percent value, person name, product name, quantity value, time value, and name of work of art. The model is based on document-level XLM-R embeddings and FLERT. Framework: Flair. Functionality: Named Entity Recognition. API call: SequenceTagger.load('flair/ner-english-ontonotes-large').\nSkill condition: multi_candidate_skill\nSkill summary: English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags such as cardinal value, date value, event name, building name, geo-political entity, language name, law name.\nWhen to use: [\"Use `flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\", \"Do not use when required inputs are missing.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with flair  flair ner english ontonotes large  sequencetagger load flair ne 9ba1c789.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0035_flair_flair_ner_english_ontonotes_large_sequencetagger_load_flair_ne_9ba1c789_positive_easy_0",
+      "tool_name": "flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use flair  flair ner english ontonotes large  sequencetagger load flair ne 9ba1c789 to English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags su. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0292,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789\nTool description: English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags such as cardinal value, date value, event name, building name, geo-political entity, language name, law name, location name, money name, affiliation, ordinal value, organization name, percent value, person name, product name, quantity value, time value, and name of work of art. The model is based on document-level XLM-R embeddings and FLERT. Framework: Flair. Functionality: Named Entity Recognition. API call: SequenceTagger.load('flair/ner-english-ontonotes-large').\nSkill condition: multi_candidate_skill\nSkill summary: English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags such as cardinal value, date value, event name, building name, geo-political entity, language name, law name.\nWhen to use: [\"Use `flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\", \"Do not use when required inputs are missing.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use flair  flair ner english ontonotes large  sequencetagger load flair ne 9ba1c789 to English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags su. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0035_flair_flair_ner_english_ontonotes_large_sequencetagger_load_flair_ne_9ba1c789_positive_medium_0",
+      "tool_name": "flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags su. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0294,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789\nTool description: English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags such as cardinal value, date value, event name, building name, geo-political entity, language name, law name, location name, money name, affiliation, ordinal value, organization name, percent value, person name, product name, quantity value, time value, and name of work of art. The model is based on document-level XLM-R embeddings and FLERT. Framework: Flair. Functionality: Named Entity Recognition. API call: SequenceTagger.load('flair/ner-english-ontonotes-large').\nSkill condition: multi_candidate_skill\nSkill summary: English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags such as cardinal value, date value, event name, building name, geo-political entity, language name, law name.\nWhen to use: [\"Use `flair__flair_ner_english_ontonotes_large__sequencetagger_load_flair_ne_9ba1c789` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\", \"Do not use when required inputs are missing.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: English NER in Flair (Ontonotes large model). This is the large 18-class NER model for English that ships with Flair. It predicts 18 tags su. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0326
+  }
+}

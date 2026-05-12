@@ -1,0 +1,116 @@
+{
+  "candidate_id": "mock_cloud_storage_mock_put_object_008__cand_00_concise_default",
+  "generation_strategy": "concise_default",
+  "prompt_template_id": "heuristic_concise_default_v1",
+  "skill_text": "Synthetic safe mock cloud-storage write tool for an offline bucket fixture. Provide all required fields: `bucket`, and `key`.\nWhen to use:\n- Use `mock_cloud_storage_mock_put_object_008` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `bucket`, and `key`.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Do not use when required inputs are missing.\nArgument template:\n{\"bucket\": \"sample_bucket_1\", \"dry_run\": false, \"key\": \"sample_key_1\", \"metadata\": {\"cache_control\": \"sample_cache_control_1\", \"content_type\": \"sample_content_type_1\"}}\nExamples:\nMinimal valid request that satisfies the required fields for mock_cloud_storage_mock_put_object_008\n{\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}\nRicher invocation that uses optional controls for mock_cloud_storage_mock_put_object_008\n{\"bucket\": \"sample_bucket_2\", \"dry_run\": true, \"key\": \"sample_key_2\", \"metadata\": {\"cache_control\": \"sample_cache_control_2\", \"content_type\": \"sample_content_type_2\"}}",
+  "argument_template": {
+    "bucket": "sample_bucket_1",
+    "key": "sample_key_1",
+    "metadata": {
+      "cache_control": "sample_cache_control_1",
+      "content_type": "sample_content_type_1"
+    },
+    "dry_run": false
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for mock_cloud_storage_mock_put_object_008",
+      "arguments": {
+        "bucket": "sample_bucket_1",
+        "key": "sample_key_1"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for mock_cloud_storage_mock_put_object_008",
+      "arguments": {
+        "bucket": "sample_bucket_2",
+        "key": "sample_key_2",
+        "metadata": {
+          "cache_control": "sample_cache_control_2",
+          "content_type": "sample_content_type_2"
+        },
+        "dry_run": true
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `mock_cloud_storage_mock_put_object_008` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `bucket`, and `key`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Do not use when required inputs are missing."
+  ],
+  "token_count": 277,
+  "skill_token_count": 277,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 2,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Synthetic safe mock cloud-storage write tool for an offline bucket fixture. Provide all required fields: `bucket`, and `key`.",
+    "when_to_use": [
+      "Use `mock_cloud_storage_mock_put_object_008` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `bucket`, and `key`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Do not use when required inputs are missing."
+    ],
+    "argument_template": {
+      "bucket": "sample_bucket_1",
+      "key": "sample_key_1",
+      "metadata": {
+        "cache_control": "sample_cache_control_1",
+        "content_type": "sample_content_type_1"
+      },
+      "dry_run": false
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for mock_cloud_storage_mock_put_object_008",
+        "arguments": {
+          "bucket": "sample_bucket_1",
+          "key": "sample_key_1"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for mock_cloud_storage_mock_put_object_008",
+        "arguments": {
+          "bucket": "sample_bucket_2",
+          "key": "sample_key_2",
+          "metadata": {
+            "cache_control": "sample_cache_control_2",
+            "content_type": "sample_content_type_2"
+          },
+          "dry_run": true
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "mock_cloud_storage_mock_put_object_008__cand_00_concise_default",
+        "generation_strategy": "concise_default",
+        "prompt_template_id": "heuristic_concise_default_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "mock_cloud_storage_mock_put_object_008__cand_00_concise_default",
+      "generation_strategy": "concise_default",
+      "prompt_template_id": "heuristic_concise_default_v1"
+    }
+  }
+}

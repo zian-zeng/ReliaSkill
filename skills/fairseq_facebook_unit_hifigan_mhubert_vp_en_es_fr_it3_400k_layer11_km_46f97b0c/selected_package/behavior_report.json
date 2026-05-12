@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0024_fairseq_facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c_negative_easy_0_out_of_domain_request",
+      "tool_name": "fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 46f97b0c.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0492,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c\nTool description: Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopuli. Framework: Fairseq. Functionality: Speech-to-speech translation. API call: load_model_ensemble_and_task_from_hf_hub('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_lj_dur').\nSkill condition: multi_candidate_skill\nSkill summary: Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopuli. Framework: Fairseq. Functionality: Speech-to-speech translation. API call: load_model_ensemble_and_task_from_hf_hub('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_lj_dur'). This tool has no required input fields.\nWhen to use: [\"Use `fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 46f97b0c.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0024_fairseq_facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c_negative_hard_1_near_miss_intent",
+      "tool_name": "fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 46f97b0c, but I only want a checklist for how to Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopul; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0549,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c\nTool description: Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopuli. Framework: Fairseq. Functionality: Speech-to-speech translation. API call: load_model_ensemble_and_task_from_hf_hub('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_lj_dur').\nSkill condition: multi_candidate_skill\nSkill summary: Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopuli. Framework: Fairseq. Functionality: Speech-to-speech translation. API call: load_model_ensemble_and_task_from_hf_hub('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_lj_dur'). This tool has no required input fields.\nWhen to use: [\"Use `fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: This sounds close to fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 46f97b0c, but I only want a checklist for how to Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopul; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0024_fairseq_facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 46f97b0c, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1124,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c\nTool description: Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopuli. Framework: Fairseq. Functionality: Speech-to-speech translation. API call: load_model_ensemble_and_task_from_hf_hub('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_lj_dur').\nSkill condition: multi_candidate_skill\nSkill summary: Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopuli. Framework: Fairseq. Functionality: Speech-to-speech translation. API call: load_model_ensemble_and_task_from_hf_hub('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_lj_dur'). This tool has no required input fields.\nWhen to use: [\"Use `fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 46f97b0c, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0024_fairseq_facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c_positive_easy_0",
+      "tool_name": "fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 46f97b0c to Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopul. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0318,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c\nTool description: Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopuli. Framework: Fairseq. Functionality: Speech-to-speech translation. API call: load_model_ensemble_and_task_from_hf_hub('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_lj_dur').\nSkill condition: multi_candidate_skill\nSkill summary: Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopuli. Framework: Fairseq. Functionality: Speech-to-speech translation. API call: load_model_ensemble_and_task_from_hf_hub('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_lj_dur'). This tool has no required input fields.\nWhen to use: [\"Use `fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 46f97b0c to Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopul. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0024_fairseq_facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c_positive_medium_0",
+      "tool_name": "fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopul. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0299,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c\nTool description: Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopuli. Framework: Fairseq. Functionality: Speech-to-speech translation. API call: load_model_ensemble_and_task_from_hf_hub('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_lj_dur').\nSkill condition: multi_candidate_skill\nSkill summary: Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopuli. Framework: Fairseq. Functionality: Speech-to-speech translation. API call: load_model_ensemble_and_task_from_hf_hub('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_lj_dur'). This tool has no required input fields.\nWhen to use: [\"Use `fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_46f97b0c` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: Speech-to-speech translation model from fairseq S2UT (paper/code) for Spanish-English. Trained on mTEDx, CoVoST 2, Europarl-ST, and VoxPopul. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0556
+  }
+}

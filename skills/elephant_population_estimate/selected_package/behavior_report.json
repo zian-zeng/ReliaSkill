@@ -1,0 +1,199 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0140_elephant_population_estimate_negative_easy_0_out_of_domain_request",
+      "tool_name": "elephant_population_estimate",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to elephant population estimate.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "current_population": 1,
+        "years": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1153,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: elephant_population_estimate\nTool description: Estimate future population of elephants given current population and growth rate.\nSkill condition: multi_candidate_skill\nSkill summary: Estimate future population of elephants given current population and growth rate. Provide all required fields: `current_population`, `growth_rate`, and `years`.\nWhen to use: [\"Use `elephant_population_estimate` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `current_population`, `growth_rate`, and `years`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"current_population\": 1, \"growth_rate\": null, \"years\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for elephant_population_estimate\", \"arguments\": {\"current_population\": 1, \"growth_rate\": null, \"years\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for elephant_population_estimate\", \"arguments\": {\"current_population\": 2, \"growth_rate\": null, \"years\": 2}}]\nSchema: {\"properties\": {\"current_population\": {\"description\": \"The current number of elephants.\", \"type\": \"integer\"}, \"growth_rate\": {\"description\": \"The annual population growth rate of elephants.\", \"type\": \"float\"}, \"years\": {\"description\": \"The number of years to project the population.\", \"type\": \"integer\"}}, \"required\": [\"current_population\", \"growth_rate\", \"years\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to elephant population estimate.\n",
+        "raw_model_output": "{\"arguments\": {\"current_population\": 1, \"years\": 1}}",
+        "parsed_prediction": {
+          "current_population": 1,
+          "years": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0140_elephant_population_estimate_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "elephant_population_estimate",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with elephant population estimate; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "current_population": 1,
+        "years": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1014,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: elephant_population_estimate\nTool description: Estimate future population of elephants given current population and growth rate.\nSkill condition: multi_candidate_skill\nSkill summary: Estimate future population of elephants given current population and growth rate. Provide all required fields: `current_population`, `growth_rate`, and `years`.\nWhen to use: [\"Use `elephant_population_estimate` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `current_population`, `growth_rate`, and `years`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"current_population\": 1, \"growth_rate\": null, \"years\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for elephant_population_estimate\", \"arguments\": {\"current_population\": 1, \"growth_rate\": null, \"years\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for elephant_population_estimate\", \"arguments\": {\"current_population\": 2, \"growth_rate\": null, \"years\": 2}}]\nSchema: {\"properties\": {\"current_population\": {\"description\": \"The current number of elephants.\", \"type\": \"integer\"}, \"growth_rate\": {\"description\": \"The annual population growth rate of elephants.\", \"type\": \"float\"}, \"years\": {\"description\": \"The number of years to project the population.\", \"type\": \"integer\"}}, \"required\": [\"current_population\", \"growth_rate\", \"years\"], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with elephant population estimate; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {\"current_population\": 1, \"years\": 1}}",
+        "parsed_prediction": {
+          "current_population": 1,
+          "years": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0140_elephant_population_estimate_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "elephant_population_estimate",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. This is adjacent to elephant population estimate, but the intended capability is bank get account balance.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "current_population": 1,
+        "years": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0974,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: elephant_population_estimate\nTool description: Estimate future population of elephants given current population and growth rate.\nSkill condition: multi_candidate_skill\nSkill summary: Estimate future population of elephants given current population and growth rate. Provide all required fields: `current_population`, `growth_rate`, and `years`.\nWhen to use: [\"Use `elephant_population_estimate` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `current_population`, `growth_rate`, and `years`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"current_population\": 1, \"growth_rate\": null, \"years\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for elephant_population_estimate\", \"arguments\": {\"current_population\": 1, \"growth_rate\": null, \"years\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for elephant_population_estimate\", \"arguments\": {\"current_population\": 2, \"growth_rate\": null, \"years\": 2}}]\nSchema: {\"properties\": {\"current_population\": {\"description\": \"The current number of elephants.\", \"type\": \"integer\"}, \"growth_rate\": {\"description\": \"The annual population growth rate of elephants.\", \"type\": \"float\"}, \"years\": {\"description\": \"The number of years to project the population.\", \"type\": \"integer\"}}, \"required\": [\"current_population\", \"growth_rate\", \"years\"], \"type\": \"object\"}\nUser request: I need to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. This is adjacent to elephant population estimate, but the intended capability is bank get account balance.\n",
+        "raw_model_output": "{\"arguments\": {\"current_population\": 1, \"years\": 1}}",
+        "parsed_prediction": {
+          "current_population": 1,
+          "years": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0140_elephant_population_estimate_positive_easy_0",
+      "tool_name": "elephant_population_estimate",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use elephant population estimate to Estimate future population of elephants given current population and growth rate. Set current_population=1, growth_rate=1, years=2026.",
+      "exact_match": false,
+      "argument_validity": 0.3333,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "current_population": 1,
+        "years": 1
+      },
+      "expected_arguments": {
+        "current_population": 1,
+        "growth_rate": 1,
+        "years": 2026
+      },
+      "prediction_latency_ms": 0.0881,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: elephant_population_estimate\nTool description: Estimate future population of elephants given current population and growth rate.\nSkill condition: multi_candidate_skill\nSkill summary: Estimate future population of elephants given current population and growth rate. Provide all required fields: `current_population`, `growth_rate`, and `years`.\nWhen to use: [\"Use `elephant_population_estimate` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `current_population`, `growth_rate`, and `years`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"current_population\": 1, \"growth_rate\": null, \"years\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for elephant_population_estimate\", \"arguments\": {\"current_population\": 1, \"growth_rate\": null, \"years\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for elephant_population_estimate\", \"arguments\": {\"current_population\": 2, \"growth_rate\": null, \"years\": 2}}]\nSchema: {\"properties\": {\"current_population\": {\"description\": \"The current number of elephants.\", \"type\": \"integer\"}, \"growth_rate\": {\"description\": \"The annual population growth rate of elephants.\", \"type\": \"float\"}, \"years\": {\"description\": \"The number of years to project the population.\", \"type\": \"integer\"}}, \"required\": [\"current_population\", \"growth_rate\", \"years\"], \"type\": \"object\"}\nUser request: Use elephant population estimate to Estimate future population of elephants given current population and growth rate. Set current_population=1, growth_rate=1, years=2026.\n",
+        "raw_model_output": "{\"arguments\": {\"current_population\": 1, \"years\": 1}}",
+        "parsed_prediction": {
+          "current_population": 1,
+          "years": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0140_elephant_population_estimate_positive_medium_0",
+      "tool_name": "elephant_population_estimate",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Estimate future population of elephants given current population and growth rate. The relevant details are current_population=8, growth_rate=8, years=2026.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "current_population": 1,
+        "years": 1
+      },
+      "expected_arguments": {
+        "current_population": 8,
+        "growth_rate": 8,
+        "years": 2026
+      },
+      "prediction_latency_ms": 0.0883,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: elephant_population_estimate\nTool description: Estimate future population of elephants given current population and growth rate.\nSkill condition: multi_candidate_skill\nSkill summary: Estimate future population of elephants given current population and growth rate. Provide all required fields: `current_population`, `growth_rate`, and `years`.\nWhen to use: [\"Use `elephant_population_estimate` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `current_population`, `growth_rate`, and `years`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"current_population\": 1, \"growth_rate\": null, \"years\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for elephant_population_estimate\", \"arguments\": {\"current_population\": 1, \"growth_rate\": null, \"years\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for elephant_population_estimate\", \"arguments\": {\"current_population\": 2, \"growth_rate\": null, \"years\": 2}}]\nSchema: {\"properties\": {\"current_population\": {\"description\": \"The current number of elephants.\", \"type\": \"integer\"}, \"growth_rate\": {\"description\": \"The annual population growth rate of elephants.\", \"type\": \"float\"}, \"years\": {\"description\": \"The number of years to project the population.\", \"type\": \"integer\"}}, \"required\": [\"current_population\", \"growth_rate\", \"years\"], \"type\": \"object\"}\nUser request: I need help with this task: Estimate future population of elephants given current population and growth rate. The relevant details are current_population=8, growth_rate=8, years=2026.\n",
+        "raw_model_output": "{\"arguments\": {\"current_population\": 1, \"years\": 1}}",
+        "parsed_prediction": {
+          "current_population": 1,
+          "years": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.1666,
+    "avg_prediction_latency_ms": 0.0981
+  }
+}

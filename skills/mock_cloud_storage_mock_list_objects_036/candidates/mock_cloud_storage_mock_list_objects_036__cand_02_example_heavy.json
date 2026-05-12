@@ -1,0 +1,128 @@
+{
+  "candidate_id": "mock_cloud_storage_mock_list_objects_036__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Synthetic safe mock cloud-storage retrieval tool for listing fixture objects. Provide the required field `bucket`.\nWhen to use:\n- Use `mock_cloud_storage_mock_list_objects_036` when the user's request directly matches this tool's purpose.\n- Provide the required field `bucket`.\n- Optional controls include `prefix`, `include_metadata`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"bucket\": \"sample_bucket_4\", \"include_metadata\": true, \"prefix\": \"sample_prefix_4\"}\nExamples:\nMinimal valid request that satisfies the required fields for mock_cloud_storage_mock_list_objects_036\n{\"bucket\": \"sample_bucket_1\"}\nRicher invocation that uses optional controls for mock_cloud_storage_mock_list_objects_036\n{\"bucket\": \"sample_bucket_2\", \"include_metadata\": true, \"prefix\": \"sample_prefix_2\"}\nRequired-argument dev behavior example.\n{\"bucket\": \"sample_bucket_3\"}\nOptional, enum, nested, or array argument example.\n{\"bucket\": \"sample_bucket_4\", \"include_metadata\": true, \"prefix\": \"sample_prefix_4\"}",
+  "argument_template": {
+    "bucket": "sample_bucket_4",
+    "prefix": "sample_prefix_4",
+    "include_metadata": true
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for mock_cloud_storage_mock_list_objects_036",
+      "arguments": {
+        "bucket": "sample_bucket_1"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for mock_cloud_storage_mock_list_objects_036",
+      "arguments": {
+        "bucket": "sample_bucket_2",
+        "prefix": "sample_prefix_2",
+        "include_metadata": true
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "bucket": "sample_bucket_3"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "bucket": "sample_bucket_4",
+        "prefix": "sample_prefix_4",
+        "include_metadata": true
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `mock_cloud_storage_mock_list_objects_036` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `bucket`.",
+    "Optional controls include `prefix`, `include_metadata`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 287,
+  "skill_token_count": 287,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Synthetic safe mock cloud-storage retrieval tool for listing fixture objects. Provide the required field `bucket`.",
+    "when_to_use": [
+      "Use `mock_cloud_storage_mock_list_objects_036` when the user's request directly matches this tool's purpose.",
+      "Provide the required field `bucket`.",
+      "Optional controls include `prefix`, `include_metadata`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "bucket": "sample_bucket_4",
+      "prefix": "sample_prefix_4",
+      "include_metadata": true
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for mock_cloud_storage_mock_list_objects_036",
+        "arguments": {
+          "bucket": "sample_bucket_1"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for mock_cloud_storage_mock_list_objects_036",
+        "arguments": {
+          "bucket": "sample_bucket_2",
+          "prefix": "sample_prefix_2",
+          "include_metadata": true
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "bucket": "sample_bucket_3"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "bucket": "sample_bucket_4",
+          "prefix": "sample_prefix_4",
+          "include_metadata": true
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "mock_cloud_storage_mock_list_objects_036__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "mock_cloud_storage_mock_list_objects_036__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

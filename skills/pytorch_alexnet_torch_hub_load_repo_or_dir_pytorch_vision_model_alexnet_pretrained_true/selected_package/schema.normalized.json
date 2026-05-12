@@ -1,0 +1,52 @@
+{
+  "tool_name": "pytorch__alexnet__torch_hub_load_repo_or_dir_pytorch_vision_model_alexnet_pretrained_true",
+  "server_name": "bfcl_torchhub_api",
+  "tool_purpose": "AlexNet is a deep convolutional neural network that achieved a top-5 error of 15.3% in the 2012 ImageNet Large Scale Visual Recognition Challenge. The main contribution of the original paper was the depth of the model, which was computationally expensive but made feasible through the use of GPUs during training. The pretrained AlexNet model in PyTorch can be used for image classification tasks. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='alexnet', pretrained=True).",
+  "input_schema_raw": {
+    "properties": {},
+    "required": [],
+    "type": "object"
+  },
+  "arguments": [],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ],
+  "doc_snippets": [
+    "AlexNet is a deep convolutional neural network that achieved a top-5 error of 15.3% in the 2012 ImageNet Large Scale Visual Recognition Challenge. The main contribution of the original paper was the depth of the model, which was computationally expensive but made feasible through the use of GPUs during training. The pretrained AlexNet model in PyTorch can be used for image classification tasks. Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='alexnet', pretrained=True).",
+    "AlexNet",
+    "Image Classification"
+  ],
+  "source_pointer": "bfcl",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 544,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 1,
+    "num_arguments": 0,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "num_top_level_arguments": 0,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "empty_input_schema",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "pytorch__alexnet__torch_hub_load_repo_or_dir_pytorch_vision_model_alexnet_pretrained_true",
+    "server_name": "bfcl_torchhub_api",
+    "source_pointer": "bfcl"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

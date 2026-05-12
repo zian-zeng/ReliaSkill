@@ -1,0 +1,134 @@
+{
+  "candidate_id": "cell_biology_function_lookup__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Look up the function of a given molecule in a specified organelle. Provide all required fields: `molecule`, `organelle`, and `specific_function`.\nWhen to use:\n- Use `cell_biology.function_lookup` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `molecule`, `organelle`, and `specific_function`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"molecule\": \"sample_molecule_4\", \"organelle\": \"sample_organelle_4\", \"specific_function\": true}\nExamples:\nMinimal valid request that satisfies the required fields for cell_biology.function_lookup\n{\"molecule\": \"sample_molecule_1\", \"organelle\": \"sample_organelle_1\", \"specific_function\": false}\nRicher invocation that uses optional controls for cell_biology.function_lookup\n{\"molecule\": \"sample_molecule_2\", \"organelle\": \"sample_organelle_2\", \"specific_function\": true}\nRequired-argument dev behavior example.\n{\"molecule\": \"sample_molecule_3\", \"organelle\": \"sample_organelle_3\", \"specific_function\": false}\nOptional, enum, nested, or array argument example.\n{\"molecule\": \"sample_molecule_4\", \"organelle\": \"sample_organelle_4\", \"specific_function\": true}",
+  "argument_template": {
+    "molecule": "sample_molecule_4",
+    "organelle": "sample_organelle_4",
+    "specific_function": true
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for cell_biology.function_lookup",
+      "arguments": {
+        "molecule": "sample_molecule_1",
+        "organelle": "sample_organelle_1",
+        "specific_function": false
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for cell_biology.function_lookup",
+      "arguments": {
+        "molecule": "sample_molecule_2",
+        "organelle": "sample_organelle_2",
+        "specific_function": true
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "molecule": "sample_molecule_3",
+        "organelle": "sample_organelle_3",
+        "specific_function": false
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "molecule": "sample_molecule_4",
+        "organelle": "sample_organelle_4",
+        "specific_function": true
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `cell_biology.function_lookup` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `molecule`, `organelle`, and `specific_function`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 354,
+  "skill_token_count": 354,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Look up the function of a given molecule in a specified organelle. Provide all required fields: `molecule`, `organelle`, and `specific_function`.",
+    "when_to_use": [
+      "Use `cell_biology.function_lookup` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `molecule`, `organelle`, and `specific_function`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "molecule": "sample_molecule_4",
+      "organelle": "sample_organelle_4",
+      "specific_function": true
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for cell_biology.function_lookup",
+        "arguments": {
+          "molecule": "sample_molecule_1",
+          "organelle": "sample_organelle_1",
+          "specific_function": false
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for cell_biology.function_lookup",
+        "arguments": {
+          "molecule": "sample_molecule_2",
+          "organelle": "sample_organelle_2",
+          "specific_function": true
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "molecule": "sample_molecule_3",
+          "organelle": "sample_organelle_3",
+          "specific_function": false
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "molecule": "sample_molecule_4",
+          "organelle": "sample_organelle_4",
+          "specific_function": true
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "cell_biology_function_lookup__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "cell_biology_function_lookup__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

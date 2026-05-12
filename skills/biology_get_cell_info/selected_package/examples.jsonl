@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for biology.get_cell_info", "arguments": {"cell_type": "sample_cell_type_1"}}
+{"scenario": "Richer invocation that uses optional controls for biology.get_cell_info", "arguments": {"cell_type": "sample_cell_type_2", "detailed": "false"}}

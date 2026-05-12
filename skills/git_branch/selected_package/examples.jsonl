@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for git_branch", "arguments": {"repo_path": "data/sample.txt", "branch_type": "sample_branch_type_1"}}
+{"scenario": "Richer invocation that uses optional controls for git_branch", "arguments": {"repo_path": "data/sample.txt", "branch_type": "sample_branch_type_2", "contains": "sample_contains_2", "not_contains": "sample_not_contains_2"}}

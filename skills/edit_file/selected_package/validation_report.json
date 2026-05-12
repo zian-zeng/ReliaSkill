@@ -1,0 +1,77 @@
+{
+  "valid": false,
+  "issues": [
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "argument_template: missing required field `oldText` at $.edits[0]",
+      "location": "$.edits[0]",
+      "section": "argument_template",
+      "repairable": true,
+      "evidence": {
+        "code": "missing_required_argument",
+        "location": "$.edits[0]"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "argument_template: missing required field `newText` at $.edits[0]",
+      "location": "$.edits[0]",
+      "section": "argument_template",
+      "repairable": true,
+      "evidence": {
+        "code": "missing_required_argument",
+        "location": "$.edits[0]"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[0]: missing required field `oldText` at $.edits[0]",
+      "location": "$.edits[0]",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "missing_required_argument",
+        "location": "$.edits[0]"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[0]: missing required field `newText` at $.edits[0]",
+      "location": "$.edits[0]",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "missing_required_argument",
+        "location": "$.edits[0]"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[1]: missing required field `oldText` at $.edits[0]",
+      "location": "$.edits[0]",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "missing_required_argument",
+        "location": "$.edits[0]"
+      }
+    },
+    {
+      "severity": "error",
+      "code": "missing_required_argument",
+      "message": "example[1]: missing required field `newText` at $.edits[0]",
+      "location": "$.edits[0]",
+      "section": "schema",
+      "repairable": true,
+      "evidence": {
+        "code": "missing_required_argument",
+        "location": "$.edits[0]"
+      }
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "tool_name": "bank_get_account_balance",
+  "server_name": "apibank_style_fixture",
+  "tool_purpose": "API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services.",
+  "input_schema_raw": {
+    "properties": {
+      "account_id": {
+        "description": "Mock account identifier.",
+        "type": "string"
+      },
+      "include_pending": {
+        "description": "Whether pending transactions should be included.",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "account_id"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "account_id",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Mock account identifier.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.account_id"
+    },
+    {
+      "name": "include_pending",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Whether pending transactions should be included.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.include_pending"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services.",
+    "Get Account Balance",
+    "Retrieve an offline fixture account balance."
+  ],
+  "source_pointer": "data/raw/apibank_style_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 134,
+    "has_array_argument": false,
+    "has_boolean_flag": true,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 2,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 2,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "bank_get_account_balance",
+    "server_name": "apibank_style_fixture",
+    "source_pointer": "data/raw/apibank_style_tools.json"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

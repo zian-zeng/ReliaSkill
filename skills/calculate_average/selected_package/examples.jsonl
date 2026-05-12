@@ -1,0 +1,3 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_average", "arguments": {"gradeDict": null}}
+{"scenario": "Richer invocation that uses optional controls for calculate_average", "arguments": {"gradeDict": null}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"gradeDict": null}}

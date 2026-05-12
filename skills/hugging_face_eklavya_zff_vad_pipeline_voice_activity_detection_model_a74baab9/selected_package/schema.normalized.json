@@ -1,0 +1,52 @@
+{
+  "tool_name": "hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9",
+  "server_name": "bfcl_huggingface_eval_api",
+  "tool_purpose": "A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='Eklavya/ZFF_VAD').",
+  "input_schema_raw": {
+    "properties": {},
+    "required": [],
+    "type": "object"
+  },
+  "arguments": [],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ],
+  "doc_snippets": [
+    "A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='Eklavya/ZFF_VAD').",
+    "Eklavya/ZFF_VAD",
+    "Voice Activity Detection"
+  ],
+  "source_pointer": "bfcl",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 217,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 1,
+    "num_arguments": 0,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "num_top_level_arguments": 0,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "empty_input_schema",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9",
+    "server_name": "bfcl_huggingface_eval_api",
+    "source_pointer": "bfcl"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

@@ -1,0 +1,62 @@
+{
+  "candidate_id": "pytorch_hardnet_torch_hub_load_repo_or_dir_pingolh_pytorch_hardnet_model_hardnet39ds_pretrained_true__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Harmonic DenseNet (HarDNet) is a low memory traffic CNN model, which is fast and efficient. The basic concept is to minimize both computational cost and memory access cost at the same time, such that the HarDNet models are 35% faster than ResNet running on GPU comparing to models with the same accuracy (except the two DS models that were designed for comparing with MobileNet). Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='PingoLH/Pytorch-HarDNet', model='hardnet39ds', pretrained=True). This tool has no required input fields.\nWhen to use:\n- Use `pytorch__hardnet__torch_hub_load_repo_or_dir_pingolh_pytorch_hardnet_model_hardnet39ds_pretrained_true` when the user's request directly matches this tool's purpose.\n- This tool has no required input fields.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Tool does not expose top-level input properties.",
+  "argument_template": {},
+  "examples": [],
+  "when_to_use": [
+    "Use `pytorch__hardnet__torch_hub_load_repo_or_dir_pingolh_pytorch_hardnet_model_hardnet39ds_pretrained_true` when the user's request directly matches this tool's purpose.",
+    "This tool has no required input fields.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Tool does not expose top-level input properties."
+  ],
+  "token_count": 241,
+  "skill_token_count": 241,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 0,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Harmonic DenseNet (HarDNet) is a low memory traffic CNN model, which is fast and efficient. The basic concept is to minimize both computational cost and memory access cost at the same time, such that the HarDNet models are 35% faster than ResNet running on GPU comparing to models with the same accuracy (except the two DS models that were designed for comparing with MobileNet). Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='PingoLH/Pytorch-HarDNet', model='hardnet39ds', pretrained=True). This tool has no required input fields.",
+    "when_to_use": [
+      "Use `pytorch__hardnet__torch_hub_load_repo_or_dir_pingolh_pytorch_hardnet_model_hardnet39ds_pretrained_true` when the user's request directly matches this tool's purpose.",
+      "This tool has no required input fields.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Tool does not expose top-level input properties."
+    ],
+    "argument_template": {},
+    "examples": [],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "pytorch_hardnet_torch_hub_load_repo_or_dir_pingolh_pytorch_hardnet_model_hardnet39ds_pretrained_true__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "pytorch_hardnet_torch_hub_load_repo_or_dir_pingolh_pytorch_hardnet_model_hardnet39ds_pretrained_true__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

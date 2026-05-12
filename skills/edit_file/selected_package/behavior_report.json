@@ -1,0 +1,233 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0183_edit_file_negative_easy_0_out_of_domain_request",
+      "tool_name": "edit_file",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to edit file.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt",
+        "edits": [
+          {}
+        ],
+        "dryRun": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.146,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: edit_file\nTool description: Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories. Provide all required fields: `path`, `edits`, and `dryRun`.\nWhen to use: [\"Use `edit_file` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `path`, `edits`, and `dryRun`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"edits\": [{}], \"dryRun\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for edit_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"edits\": [{}], \"dryRun\": false}}, {\"scenario\": \"Richer invocation that uses optional controls for edit_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"edits\": [{}], \"dryRun\": true}}]\nSchema: {\"properties\": {\"dryRun\": {\"type\": \"boolean\"}, \"edits\": {\"items\": {\"properties\": {\"newText\": {\"type\": \"string\"}, \"oldText\": {\"type\": \"string\"}}, \"required\": [\"oldText\", \"newText\"], \"type\": \"object\"}, \"type\": \"array\"}, \"path\": {\"type\": \"string\"}}, \"required\": [\"path\", \"edits\", \"dryRun\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to edit file.\n",
+        "raw_model_output": "{\"arguments\": {\"dryRun\": false, \"edits\": [{}], \"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt",
+          "edits": [
+            {}
+          ],
+          "dryRun": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0183_edit_file_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "edit_file",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with edit file; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt",
+        "edits": [
+          {}
+        ],
+        "dryRun": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.242,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: edit_file\nTool description: Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories. Provide all required fields: `path`, `edits`, and `dryRun`.\nWhen to use: [\"Use `edit_file` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `path`, `edits`, and `dryRun`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"edits\": [{}], \"dryRun\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for edit_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"edits\": [{}], \"dryRun\": false}}, {\"scenario\": \"Richer invocation that uses optional controls for edit_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"edits\": [{}], \"dryRun\": true}}]\nSchema: {\"properties\": {\"dryRun\": {\"type\": \"boolean\"}, \"edits\": {\"items\": {\"properties\": {\"newText\": {\"type\": \"string\"}, \"oldText\": {\"type\": \"string\"}}, \"required\": [\"oldText\", \"newText\"], \"type\": \"object\"}, \"type\": \"array\"}, \"path\": {\"type\": \"string\"}}, \"required\": [\"path\", \"edits\", \"dryRun\"], \"type\": \"object\"}\nUser request: Maybe do something with edit file; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {\"dryRun\": false, \"edits\": [{}], \"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt",
+          "edits": [
+            {}
+          ],
+          "dryRun": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0183_edit_file_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "edit_file",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with edit file.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt",
+        "edits": [
+          {}
+        ],
+        "dryRun": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.124,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: edit_file\nTool description: Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories. Provide all required fields: `path`, `edits`, and `dryRun`.\nWhen to use: [\"Use `edit_file` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `path`, `edits`, and `dryRun`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"edits\": [{}], \"dryRun\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for edit_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"edits\": [{}], \"dryRun\": false}}, {\"scenario\": \"Richer invocation that uses optional controls for edit_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"edits\": [{}], \"dryRun\": true}}]\nSchema: {\"properties\": {\"dryRun\": {\"type\": \"boolean\"}, \"edits\": {\"items\": {\"properties\": {\"newText\": {\"type\": \"string\"}, \"oldText\": {\"type\": \"string\"}}, \"required\": [\"oldText\", \"newText\"], \"type\": \"object\"}, \"type\": \"array\"}, \"path\": {\"type\": \"string\"}}, \"required\": [\"path\", \"edits\", \"dryRun\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with edit file.\n",
+        "raw_model_output": "{\"arguments\": {\"dryRun\": false, \"edits\": [{}], \"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt",
+          "edits": [
+            {}
+          ],
+          "dryRun": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0183_edit_file_positive_easy_0",
+      "tool_name": "edit_file",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use edit file to Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes. Set dryRun=true, edits=[\"item_0\"], path=\"docs/control_0.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "data/sample.txt",
+        "edits": [
+          {}
+        ],
+        "dryRun": false
+      },
+      "expected_arguments": {
+        "dryRun": true,
+        "edits": [
+          "item_0"
+        ],
+        "path": "docs/control_0.md"
+      },
+      "prediction_latency_ms": 0.1382,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: edit_file\nTool description: Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories. Provide all required fields: `path`, `edits`, and `dryRun`.\nWhen to use: [\"Use `edit_file` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `path`, `edits`, and `dryRun`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"edits\": [{}], \"dryRun\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for edit_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"edits\": [{}], \"dryRun\": false}}, {\"scenario\": \"Richer invocation that uses optional controls for edit_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"edits\": [{}], \"dryRun\": true}}]\nSchema: {\"properties\": {\"dryRun\": {\"type\": \"boolean\"}, \"edits\": {\"items\": {\"properties\": {\"newText\": {\"type\": \"string\"}, \"oldText\": {\"type\": \"string\"}}, \"required\": [\"oldText\", \"newText\"], \"type\": \"object\"}, \"type\": \"array\"}, \"path\": {\"type\": \"string\"}}, \"required\": [\"path\", \"edits\", \"dryRun\"], \"type\": \"object\"}\nUser request: Use edit file to Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes. Set dryRun=true, edits=[\"item_0\"], path=\"docs/control_0.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"dryRun\": false, \"edits\": [{}], \"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt",
+          "edits": [
+            {}
+          ],
+          "dryRun": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0183_edit_file_positive_medium_0",
+      "tool_name": "edit_file",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes. The relevant details are dryRun=false, edits=[\"item_7\"], path=\"docs/control_7.md\".",
+      "exact_match": false,
+      "argument_validity": 0.3333,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "data/sample.txt",
+        "edits": [
+          {}
+        ],
+        "dryRun": false
+      },
+      "expected_arguments": {
+        "dryRun": false,
+        "edits": [
+          "item_7"
+        ],
+        "path": "docs/control_7.md"
+      },
+      "prediction_latency_ms": 0.1397,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: edit_file\nTool description: Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories. Provide all required fields: `path`, `edits`, and `dryRun`.\nWhen to use: [\"Use `edit_file` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `path`, `edits`, and `dryRun`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"path\": \"data/sample.txt\", \"edits\": [{}], \"dryRun\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for edit_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"edits\": [{}], \"dryRun\": false}}, {\"scenario\": \"Richer invocation that uses optional controls for edit_file\", \"arguments\": {\"path\": \"data/sample.txt\", \"edits\": [{}], \"dryRun\": true}}]\nSchema: {\"properties\": {\"dryRun\": {\"type\": \"boolean\"}, \"edits\": {\"items\": {\"properties\": {\"newText\": {\"type\": \"string\"}, \"oldText\": {\"type\": \"string\"}}, \"required\": [\"oldText\", \"newText\"], \"type\": \"object\"}, \"type\": \"array\"}, \"path\": {\"type\": \"string\"}}, \"required\": [\"path\", \"edits\", \"dryRun\"], \"type\": \"object\"}\nUser request: I need help with this task: Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes. The relevant details are dryRun=false, edits=[\"item_7\"], path=\"docs/control_7.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"dryRun\": false, \"edits\": [{}], \"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt",
+          "edits": [
+            {}
+          ],
+          "dryRun": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.1666,
+    "avg_prediction_latency_ms": 0.158
+  }
+}

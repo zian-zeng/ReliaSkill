@@ -1,0 +1,3 @@
+{"scenario": "Minimal valid request that satisfies the required fields for playwright_get", "arguments": {"url": "https://example.com/resource"}}
+{"scenario": "Richer invocation that uses optional controls for playwright_get", "arguments": {"url": "https://example.com/resource"}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"url": "https://example.com/resource"}}

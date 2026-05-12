@@ -1,0 +1,3 @@
+{"scenario": "Minimal valid request that satisfies the required fields for read_multiple_files", "arguments": {"paths": ["data/sample.txt"]}}
+{"scenario": "Richer invocation that uses optional controls for read_multiple_files", "arguments": {"paths": ["data/sample.txt"]}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"paths": ["data/sample.txt"]}}

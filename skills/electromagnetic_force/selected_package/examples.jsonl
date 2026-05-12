@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for electromagnetic_force", "arguments": {"charge1": null, "charge2": null, "distance": null}}
+{"scenario": "Richer invocation that uses optional controls for electromagnetic_force", "arguments": {"charge1": null, "charge2": null, "distance": null, "medium_permittivity": null}}

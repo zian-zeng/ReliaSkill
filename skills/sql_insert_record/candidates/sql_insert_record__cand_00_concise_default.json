@@ -1,0 +1,108 @@
+{
+  "candidate_id": "sql_insert_record__cand_00_concise_default",
+  "generation_strategy": "concise_default",
+  "prompt_template_id": "heuristic_concise_default_v1",
+  "skill_text": "API-Bank-style local fixture database tool that inserts a structured record into a mock table. Provide all required fields: `database`, `table`, and `record`.\nWhen to use:\n- Use `sql_insert_record` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `database`, `table`, and `record`.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `conflict_policy`: 'error', 'ignore', 'update'.\n- Do not use when required inputs are missing.\nArgument template:\n{\"conflict_policy\": \"error\", \"database\": \"sample_database_1\", \"record\": {}, \"table\": \"sample_table_1\"}\nExamples:\nMinimal valid request that satisfies the required fields for sql_insert_record\n{\"database\": \"sample_database_1\", \"record\": {}, \"table\": \"sample_table_1\"}\nRicher invocation that uses optional controls for sql_insert_record\n{\"conflict_policy\": \"ignore\", \"database\": \"sample_database_2\", \"record\": {}, \"table\": \"sample_table_2\"}",
+  "argument_template": {
+    "database": "sample_database_1",
+    "table": "sample_table_1",
+    "record": {},
+    "conflict_policy": "error"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for sql_insert_record",
+      "arguments": {
+        "database": "sample_database_1",
+        "table": "sample_table_1",
+        "record": {}
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for sql_insert_record",
+      "arguments": {
+        "database": "sample_database_2",
+        "table": "sample_table_2",
+        "record": {},
+        "conflict_policy": "ignore"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `sql_insert_record` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `database`, `table`, and `record`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `conflict_policy`: 'error', 'ignore', 'update'.",
+    "Do not use when required inputs are missing."
+  ],
+  "token_count": 257,
+  "skill_token_count": 257,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 2,
+  "nonuse_boundary_count": 4,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "API-Bank-style local fixture database tool that inserts a structured record into a mock table. Provide all required fields: `database`, `table`, and `record`.",
+    "when_to_use": [
+      "Use `sql_insert_record` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `database`, `table`, and `record`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `conflict_policy`: 'error', 'ignore', 'update'.",
+      "Do not use when required inputs are missing."
+    ],
+    "argument_template": {
+      "database": "sample_database_1",
+      "table": "sample_table_1",
+      "record": {},
+      "conflict_policy": "error"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for sql_insert_record",
+        "arguments": {
+          "database": "sample_database_1",
+          "table": "sample_table_1",
+          "record": {}
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for sql_insert_record",
+        "arguments": {
+          "database": "sample_database_2",
+          "table": "sample_table_2",
+          "record": {},
+          "conflict_policy": "ignore"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "sql_insert_record__cand_00_concise_default",
+        "generation_strategy": "concise_default",
+        "prompt_template_id": "heuristic_concise_default_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "sql_insert_record__cand_00_concise_default",
+      "generation_strategy": "concise_default",
+      "prompt_template_id": "heuristic_concise_default_v1"
+    }
+  }
+}

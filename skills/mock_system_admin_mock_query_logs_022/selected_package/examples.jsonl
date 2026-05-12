@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for mock_system_admin_mock_query_logs_022", "arguments": {"service_name": "sample-name"}}
+{"scenario": "Richer invocation that uses optional controls for mock_system_admin_mock_query_logs_022", "arguments": {"service_name": "sample-name", "level": "warning", "window_minutes": 2}}

@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_cell_density", "arguments": {"optical_density": null, "dilution": 1}}
+{"scenario": "Richer invocation that uses optional controls for calculate_cell_density", "arguments": {"optical_density": null, "dilution": 2, "calibration_factor": null}}

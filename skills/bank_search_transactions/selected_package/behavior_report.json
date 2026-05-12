@@ -1,0 +1,249 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0001_bank_search_transactions_negative_easy_0_out_of_domain_request",
+      "tool_name": "bank_search_transactions",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to bank search transactions.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "account_id": "sample-account-id-001",
+        "date_range": {
+          "end": "2026-01-01",
+          "start": "2026-01-01"
+        },
+        "category": "food",
+        "limit": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1468,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: bank_search_transactions\nTool description: API-Bank-style local fixture tool for searching transactions by date, category, and amount range.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture tool for searching transactions by date, category, and amount range. Provide the required field `account_id`.\nWhen to use: [\"Use `bank_search_transactions` when the user's request directly matches this tool's purpose.\", \"Provide the required field `account_id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `category`: 'food', 'travel', 'utilities', 'income'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"account_id\": \"sample-account-id-001\", \"date_range\": {\"end\": \"2026-01-01\", \"start\": \"2026-01-01\"}, \"category\": \"food\", \"limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for bank_search_transactions\", \"arguments\": {\"account_id\": \"sample-account-id-001\"}}, {\"scenario\": \"Richer invocation that uses optional controls for bank_search_transactions\", \"arguments\": {\"account_id\": \"sample-account-id-001\", \"date_range\": {\"end\": \"2026-01-01\", \"start\": \"2026-01-01\"}, \"category\": \"travel\", \"limit\": 2}}]\nSchema: {\"properties\": {\"account_id\": {\"description\": \"Mock account identifier.\", \"type\": \"string\"}, \"category\": {\"description\": \"Transaction category.\", \"enum\": [\"food\", \"travel\", \"utilities\", \"income\"], \"type\": \"string\"}, \"date_range\": {\"description\": \"Inclusive date range.\", \"properties\": {\"end\": {\"format\": \"date\", \"type\": \"string\"}, \"start\": {\"format\": \"date\", \"type\": \"string\"}}, \"required\": [\"start\", \"end\"], \"type\": \"object\"}, \"limit\": {\"description\": \"Maximum results.\", \"type\": \"integer\"}}, \"required\": [\"account_id\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to bank search transactions.\n",
+        "raw_model_output": "{\"arguments\": {\"account_id\": \"sample-account-id-001\", \"category\": \"food\", \"date_range\": {\"end\": \"2026-01-01\", \"start\": \"2026-01-01\"}, \"limit\": 1}}",
+        "parsed_prediction": {
+          "account_id": "sample-account-id-001",
+          "date_range": {
+            "end": "2026-01-01",
+            "start": "2026-01-01"
+          },
+          "category": "food",
+          "limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0001_bank_search_transactions_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "bank_search_transactions",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use bank search transactions; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "account_id": "sample-account-id-001",
+        "date_range": {
+          "end": "2026-01-01",
+          "start": "2026-01-01"
+        },
+        "category": "food",
+        "limit": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1274,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: bank_search_transactions\nTool description: API-Bank-style local fixture tool for searching transactions by date, category, and amount range.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture tool for searching transactions by date, category, and amount range. Provide the required field `account_id`.\nWhen to use: [\"Use `bank_search_transactions` when the user's request directly matches this tool's purpose.\", \"Provide the required field `account_id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `category`: 'food', 'travel', 'utilities', 'income'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"account_id\": \"sample-account-id-001\", \"date_range\": {\"end\": \"2026-01-01\", \"start\": \"2026-01-01\"}, \"category\": \"food\", \"limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for bank_search_transactions\", \"arguments\": {\"account_id\": \"sample-account-id-001\"}}, {\"scenario\": \"Richer invocation that uses optional controls for bank_search_transactions\", \"arguments\": {\"account_id\": \"sample-account-id-001\", \"date_range\": {\"end\": \"2026-01-01\", \"start\": \"2026-01-01\"}, \"category\": \"travel\", \"limit\": 2}}]\nSchema: {\"properties\": {\"account_id\": {\"description\": \"Mock account identifier.\", \"type\": \"string\"}, \"category\": {\"description\": \"Transaction category.\", \"enum\": [\"food\", \"travel\", \"utilities\", \"income\"], \"type\": \"string\"}, \"date_range\": {\"description\": \"Inclusive date range.\", \"properties\": {\"end\": {\"format\": \"date\", \"type\": \"string\"}, \"start\": {\"format\": \"date\", \"type\": \"string\"}}, \"required\": [\"start\", \"end\"], \"type\": \"object\"}, \"limit\": {\"description\": \"Maximum results.\", \"type\": \"integer\"}}, \"required\": [\"account_id\"], \"type\": \"object\"}\nUser request: Explain when someone should use bank search transactions; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"account_id\": \"sample-account-id-001\", \"category\": \"food\", \"date_range\": {\"end\": \"2026-01-01\", \"start\": \"2026-01-01\"}, \"limit\": 1}}",
+        "parsed_prediction": {
+          "account_id": "sample-account-id-001",
+          "date_range": {
+            "end": "2026-01-01",
+            "start": "2026-01-01"
+          },
+          "category": "food",
+          "limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0001_bank_search_transactions_positive_easy_0",
+      "tool_name": "bank_search_transactions",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use bank search transactions to API-Bank-style local fixture tool for searching transactions by date, category, and amount range. Set account_id=\"item-0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "account_id": "sample-account-id-001",
+        "date_range": {
+          "end": "2026-01-01",
+          "start": "2026-01-01"
+        },
+        "category": "food",
+        "limit": 1
+      },
+      "expected_arguments": {
+        "account_id": "item-0"
+      },
+      "prediction_latency_ms": 0.1979,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: bank_search_transactions\nTool description: API-Bank-style local fixture tool for searching transactions by date, category, and amount range.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture tool for searching transactions by date, category, and amount range. Provide the required field `account_id`.\nWhen to use: [\"Use `bank_search_transactions` when the user's request directly matches this tool's purpose.\", \"Provide the required field `account_id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `category`: 'food', 'travel', 'utilities', 'income'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"account_id\": \"sample-account-id-001\", \"date_range\": {\"end\": \"2026-01-01\", \"start\": \"2026-01-01\"}, \"category\": \"food\", \"limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for bank_search_transactions\", \"arguments\": {\"account_id\": \"sample-account-id-001\"}}, {\"scenario\": \"Richer invocation that uses optional controls for bank_search_transactions\", \"arguments\": {\"account_id\": \"sample-account-id-001\", \"date_range\": {\"end\": \"2026-01-01\", \"start\": \"2026-01-01\"}, \"category\": \"travel\", \"limit\": 2}}]\nSchema: {\"properties\": {\"account_id\": {\"description\": \"Mock account identifier.\", \"type\": \"string\"}, \"category\": {\"description\": \"Transaction category.\", \"enum\": [\"food\", \"travel\", \"utilities\", \"income\"], \"type\": \"string\"}, \"date_range\": {\"description\": \"Inclusive date range.\", \"properties\": {\"end\": {\"format\": \"date\", \"type\": \"string\"}, \"start\": {\"format\": \"date\", \"type\": \"string\"}}, \"required\": [\"start\", \"end\"], \"type\": \"object\"}, \"limit\": {\"description\": \"Maximum results.\", \"type\": \"integer\"}}, \"required\": [\"account_id\"], \"type\": \"object\"}\nUser request: Use bank search transactions to API-Bank-style local fixture tool for searching transactions by date, category, and amount range. Set account_id=\"item-0\".\n",
+        "raw_model_output": "{\"arguments\": {\"account_id\": \"sample-account-id-001\", \"category\": \"food\", \"date_range\": {\"end\": \"2026-01-01\", \"start\": \"2026-01-01\"}, \"limit\": 1}}",
+        "parsed_prediction": {
+          "account_id": "sample-account-id-001",
+          "date_range": {
+            "end": "2026-01-01",
+            "start": "2026-01-01"
+          },
+          "category": "food",
+          "limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0001_bank_search_transactions_positive_medium_0",
+      "tool_name": "bank_search_transactions",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: API-Bank-style local fixture tool for searching transactions by date, category, and amount range. The relevant details are account_id=\"item-7\", date_range={\"end\": \"end_7\", \"start\": \"start_7\"}.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "account_id": "sample-account-id-001",
+        "date_range": {
+          "end": "2026-01-01",
+          "start": "2026-01-01"
+        },
+        "category": "food",
+        "limit": 1
+      },
+      "expected_arguments": {
+        "account_id": "item-7",
+        "date_range": {
+          "end": "end_7",
+          "start": "start_7"
+        }
+      },
+      "prediction_latency_ms": 0.1107,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: bank_search_transactions\nTool description: API-Bank-style local fixture tool for searching transactions by date, category, and amount range.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture tool for searching transactions by date, category, and amount range. Provide the required field `account_id`.\nWhen to use: [\"Use `bank_search_transactions` when the user's request directly matches this tool's purpose.\", \"Provide the required field `account_id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `category`: 'food', 'travel', 'utilities', 'income'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"account_id\": \"sample-account-id-001\", \"date_range\": {\"end\": \"2026-01-01\", \"start\": \"2026-01-01\"}, \"category\": \"food\", \"limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for bank_search_transactions\", \"arguments\": {\"account_id\": \"sample-account-id-001\"}}, {\"scenario\": \"Richer invocation that uses optional controls for bank_search_transactions\", \"arguments\": {\"account_id\": \"sample-account-id-001\", \"date_range\": {\"end\": \"2026-01-01\", \"start\": \"2026-01-01\"}, \"category\": \"travel\", \"limit\": 2}}]\nSchema: {\"properties\": {\"account_id\": {\"description\": \"Mock account identifier.\", \"type\": \"string\"}, \"category\": {\"description\": \"Transaction category.\", \"enum\": [\"food\", \"travel\", \"utilities\", \"income\"], \"type\": \"string\"}, \"date_range\": {\"description\": \"Inclusive date range.\", \"properties\": {\"end\": {\"format\": \"date\", \"type\": \"string\"}, \"start\": {\"format\": \"date\", \"type\": \"string\"}}, \"required\": [\"start\", \"end\"], \"type\": \"object\"}, \"limit\": {\"description\": \"Maximum results.\", \"type\": \"integer\"}}, \"required\": [\"account_id\"], \"type\": \"object\"}\nUser request: I need help with this task: API-Bank-style local fixture tool for searching transactions by date, category, and amount range. The relevant details are account_id=\"item-7\", date_range={\"end\": \"end_7\", \"start\": \"start_7\"}.\n",
+        "raw_model_output": "{\"arguments\": {\"account_id\": \"sample-account-id-001\", \"category\": \"food\", \"date_range\": {\"end\": \"2026-01-01\", \"start\": \"2026-01-01\"}, \"limit\": 1}}",
+        "parsed_prediction": {
+          "account_id": "sample-account-id-001",
+          "date_range": {
+            "end": "2026-01-01",
+            "start": "2026-01-01"
+          },
+          "category": "food",
+          "limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0001_bank_search_transactions_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "bank_search_transactions",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use calendar find free slots to API-Bank-style local fixture retrieval tool for finding free slots across calendars; bank search transactions is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "account_id": "sample-account-id-001",
+        "date_range": {
+          "end": "2026-01-01",
+          "start": "2026-01-01"
+        },
+        "category": "food",
+        "limit": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1056,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: bank_search_transactions\nTool description: API-Bank-style local fixture tool for searching transactions by date, category, and amount range.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture tool for searching transactions by date, category, and amount range. Provide the required field `account_id`.\nWhen to use: [\"Use `bank_search_transactions` when the user's request directly matches this tool's purpose.\", \"Provide the required field `account_id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `category`: 'food', 'travel', 'utilities', 'income'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"account_id\": \"sample-account-id-001\", \"date_range\": {\"end\": \"2026-01-01\", \"start\": \"2026-01-01\"}, \"category\": \"food\", \"limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for bank_search_transactions\", \"arguments\": {\"account_id\": \"sample-account-id-001\"}}, {\"scenario\": \"Richer invocation that uses optional controls for bank_search_transactions\", \"arguments\": {\"account_id\": \"sample-account-id-001\", \"date_range\": {\"end\": \"2026-01-01\", \"start\": \"2026-01-01\"}, \"category\": \"travel\", \"limit\": 2}}]\nSchema: {\"properties\": {\"account_id\": {\"description\": \"Mock account identifier.\", \"type\": \"string\"}, \"category\": {\"description\": \"Transaction category.\", \"enum\": [\"food\", \"travel\", \"utilities\", \"income\"], \"type\": \"string\"}, \"date_range\": {\"description\": \"Inclusive date range.\", \"properties\": {\"end\": {\"format\": \"date\", \"type\": \"string\"}, \"start\": {\"format\": \"date\", \"type\": \"string\"}}, \"required\": [\"start\", \"end\"], \"type\": \"object\"}, \"limit\": {\"description\": \"Maximum results.\", \"type\": \"integer\"}}, \"required\": [\"account_id\"], \"type\": \"object\"}\nUser request: Use calendar find free slots to API-Bank-style local fixture retrieval tool for finding free slots across calendars; bank search transactions is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"account_id\": \"sample-account-id-001\", \"category\": \"food\", \"date_range\": {\"end\": \"2026-01-01\", \"start\": \"2026-01-01\"}, \"limit\": 1}}",
+        "parsed_prediction": {
+          "account_id": "sample-account-id-001",
+          "date_range": {
+            "end": "2026-01-01",
+            "start": "2026-01-01"
+          },
+          "category": "food",
+          "limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.1377
+  }
+}

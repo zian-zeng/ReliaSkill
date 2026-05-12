@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for bank_transfer_between_accounts", "arguments": {"source_account_id": "sample-source-account-id-001", "destination_account_id": "sample-destination-account-id-001", "amount": 1.0}}
+{"scenario": "Richer invocation that uses optional controls for bank_transfer_between_accounts", "arguments": {"source_account_id": "sample-source-account-id-001", "destination_account_id": "sample-destination-account-id-001", "amount": 2.0, "memo": "sample_memo_2", "dry_run": true}}

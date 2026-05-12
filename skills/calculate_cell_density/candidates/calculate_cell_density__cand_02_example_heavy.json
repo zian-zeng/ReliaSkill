@@ -1,0 +1,132 @@
+{
+  "candidate_id": "calculate_cell_density__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Calculate the cell density of a biological sample based on its optical density and the experiment dilution. Provide all required fields: `optical_density`, and `dilution`.\nWhen to use:\n- Use `calculate_cell_density` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `optical_density`, and `dilution`.\n- Optional control is available through `calibration_factor` when the request needs extra specificity.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"calibration_factor\": null, \"dilution\": 4, \"optical_density\": null}\nExamples:\nMinimal valid request that satisfies the required fields for calculate_cell_density\n{\"dilution\": 1, \"optical_density\": null}\nRicher invocation that uses optional controls for calculate_cell_density\n{\"calibration_factor\": null, \"dilution\": 2, \"optical_density\": null}\nRequired-argument dev behavior example.\n{\"dilution\": 3, \"optical_density\": null}\nOptional, enum, nested, or array argument example.\n{\"calibration_factor\": null, \"dilution\": 4, \"optical_density\": null}",
+  "argument_template": {
+    "optical_density": null,
+    "dilution": 4,
+    "calibration_factor": null
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for calculate_cell_density",
+      "arguments": {
+        "optical_density": null,
+        "dilution": 1
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for calculate_cell_density",
+      "arguments": {
+        "optical_density": null,
+        "dilution": 2,
+        "calibration_factor": null
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "optical_density": null,
+        "dilution": 3
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "optical_density": null,
+        "dilution": 4,
+        "calibration_factor": null
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `calculate_cell_density` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `optical_density`, and `dilution`.",
+    "Optional control is available through `calibration_factor` when the request needs extra specificity.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 309,
+  "skill_token_count": 309,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Calculate the cell density of a biological sample based on its optical density and the experiment dilution. Provide all required fields: `optical_density`, and `dilution`.",
+    "when_to_use": [
+      "Use `calculate_cell_density` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `optical_density`, and `dilution`.",
+      "Optional control is available through `calibration_factor` when the request needs extra specificity.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "optical_density": null,
+      "dilution": 4,
+      "calibration_factor": null
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for calculate_cell_density",
+        "arguments": {
+          "optical_density": null,
+          "dilution": 1
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for calculate_cell_density",
+        "arguments": {
+          "optical_density": null,
+          "dilution": 2,
+          "calibration_factor": null
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "optical_density": null,
+          "dilution": 3
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "optical_density": null,
+          "dilution": 4,
+          "calibration_factor": null
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "calculate_cell_density__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "calculate_cell_density__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

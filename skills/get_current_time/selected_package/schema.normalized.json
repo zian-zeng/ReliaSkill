@@ -1,0 +1,70 @@
+{
+  "tool_name": "get_current_time",
+  "server_name": "src",
+  "tool_purpose": "Get current time in a specific timezones",
+  "input_schema_raw": {
+    "properties": {
+      "timezone": {
+        "description": "IANA timezone name (e.g., 'America/New_York', 'Europe/London'). Use '<local_tz>' as local timezone if no timezone provided by the user.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "timezone"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "timezone",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "IANA timezone name (e.g., 'America/New_York', 'Europe/London'). Use '<local_tz>' as local timezone if no timezone provided by the user.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.timezone"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Get current time in a specific timezones",
+    "get_current_time"
+  ],
+  "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\time\\src\\mcp_server_time\\server.py",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 40,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 1,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 1,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "get_current_time",
+    "server_name": "src",
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\time\\src\\mcp_server_time\\server.py"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

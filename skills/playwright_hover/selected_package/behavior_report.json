@@ -1,0 +1,185 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0161_playwright_hover_negative_easy_0_out_of_domain_request",
+      "tool_name": "playwright_hover",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to playwright hover.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "selector": "sample_selector_4"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0626,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_hover\nTool description: Hover an element on the page\nSkill condition: multi_candidate_skill\nSkill summary: Hover an element on the page. Provide the required field `selector`.\nWhen to use: [\"Use `playwright_hover` when the user's request directly matches this tool's purpose.\", \"Provide the required field `selector`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"selector\": \"sample_selector_4\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_hover\", \"arguments\": {\"selector\": \"sample_selector_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_hover\", \"arguments\": {\"selector\": \"sample_selector_2\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"selector\": \"sample_selector_3\"}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"selector\": \"sample_selector_4\"}}]\nSchema: {\"properties\": {\"selector\": {\"description\": \"CSS selector for element to hover\", \"type\": \"string\"}}, \"required\": [\"selector\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to playwright hover.\n",
+        "raw_model_output": "{\"arguments\": {\"selector\": \"sample_selector_4\"}}",
+        "parsed_prediction": {
+          "selector": "sample_selector_4"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0161_playwright_hover_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "playwright_hover",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use playwright hover; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "selector": "sample_selector_4"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.107,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_hover\nTool description: Hover an element on the page\nSkill condition: multi_candidate_skill\nSkill summary: Hover an element on the page. Provide the required field `selector`.\nWhen to use: [\"Use `playwright_hover` when the user's request directly matches this tool's purpose.\", \"Provide the required field `selector`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"selector\": \"sample_selector_4\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_hover\", \"arguments\": {\"selector\": \"sample_selector_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_hover\", \"arguments\": {\"selector\": \"sample_selector_2\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"selector\": \"sample_selector_3\"}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"selector\": \"sample_selector_4\"}}]\nSchema: {\"properties\": {\"selector\": {\"description\": \"CSS selector for element to hover\", \"type\": \"string\"}}, \"required\": [\"selector\"], \"type\": \"object\"}\nUser request: Explain when someone should use playwright hover; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"selector\": \"sample_selector_4\"}}",
+        "parsed_prediction": {
+          "selector": "sample_selector_4"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0161_playwright_hover_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "playwright_hover",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use db fetch records to Fetch records from a specified database table based on certain conditions; playwright hover is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "selector": "sample_selector_4"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0551,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_hover\nTool description: Hover an element on the page\nSkill condition: multi_candidate_skill\nSkill summary: Hover an element on the page. Provide the required field `selector`.\nWhen to use: [\"Use `playwright_hover` when the user's request directly matches this tool's purpose.\", \"Provide the required field `selector`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"selector\": \"sample_selector_4\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_hover\", \"arguments\": {\"selector\": \"sample_selector_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_hover\", \"arguments\": {\"selector\": \"sample_selector_2\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"selector\": \"sample_selector_3\"}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"selector\": \"sample_selector_4\"}}]\nSchema: {\"properties\": {\"selector\": {\"description\": \"CSS selector for element to hover\", \"type\": \"string\"}}, \"required\": [\"selector\"], \"type\": \"object\"}\nUser request: Use db fetch records to Fetch records from a specified database table based on certain conditions; playwright hover is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"selector\": \"sample_selector_4\"}}",
+        "parsed_prediction": {
+          "selector": "sample_selector_4"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0161_playwright_hover_positive_easy_0",
+      "tool_name": "playwright_hover",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use playwright hover to Hover an element on the page. Set selector=\"selector_0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "selector": "sample_selector_4"
+      },
+      "expected_arguments": {
+        "selector": "selector_0"
+      },
+      "prediction_latency_ms": 0.0547,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_hover\nTool description: Hover an element on the page\nSkill condition: multi_candidate_skill\nSkill summary: Hover an element on the page. Provide the required field `selector`.\nWhen to use: [\"Use `playwright_hover` when the user's request directly matches this tool's purpose.\", \"Provide the required field `selector`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"selector\": \"sample_selector_4\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_hover\", \"arguments\": {\"selector\": \"sample_selector_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_hover\", \"arguments\": {\"selector\": \"sample_selector_2\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"selector\": \"sample_selector_3\"}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"selector\": \"sample_selector_4\"}}]\nSchema: {\"properties\": {\"selector\": {\"description\": \"CSS selector for element to hover\", \"type\": \"string\"}}, \"required\": [\"selector\"], \"type\": \"object\"}\nUser request: Use playwright hover to Hover an element on the page. Set selector=\"selector_0\".\n",
+        "raw_model_output": "{\"arguments\": {\"selector\": \"sample_selector_4\"}}",
+        "parsed_prediction": {
+          "selector": "sample_selector_4"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0161_playwright_hover_positive_medium_0",
+      "tool_name": "playwright_hover",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Hover an element on the page. The relevant details are selector=\"selector_7\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "selector": "sample_selector_4"
+      },
+      "expected_arguments": {
+        "selector": "selector_7"
+      },
+      "prediction_latency_ms": 0.0559,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_hover\nTool description: Hover an element on the page\nSkill condition: multi_candidate_skill\nSkill summary: Hover an element on the page. Provide the required field `selector`.\nWhen to use: [\"Use `playwright_hover` when the user's request directly matches this tool's purpose.\", \"Provide the required field `selector`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"selector\": \"sample_selector_4\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_hover\", \"arguments\": {\"selector\": \"sample_selector_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_hover\", \"arguments\": {\"selector\": \"sample_selector_2\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"selector\": \"sample_selector_3\"}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"selector\": \"sample_selector_4\"}}]\nSchema: {\"properties\": {\"selector\": {\"description\": \"CSS selector for element to hover\", \"type\": \"string\"}}, \"required\": [\"selector\"], \"type\": \"object\"}\nUser request: I need help with this task: Hover an element on the page. The relevant details are selector=\"selector_7\".\n",
+        "raw_model_output": "{\"arguments\": {\"selector\": \"sample_selector_4\"}}",
+        "parsed_prediction": {
+          "selector": "sample_selector_4"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0671
+  }
+}

@@ -1,0 +1,269 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0004_calendar_find_free_slots_negative_easy_0_out_of_domain_request",
+      "tool_name": "calendar_find_free_slots",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calendar find free slots.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "calendar_ids": [
+          "sample_calendar_ids_item_1"
+        ],
+        "duration_minutes": 1,
+        "window": {
+          "end": "2026-01-01T09:00:00Z",
+          "start": "2026-01-01T09:00:00Z"
+        }
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1365,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calendar_find_free_slots\nTool description: API-Bank-style local fixture retrieval tool for finding free slots across calendars.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture retrieval tool for finding free slots across calendars. Provide all required fields: `calendar_ids`, `duration_minutes`, and `window`.\nWhen to use: [\"Use `calendar_find_free_slots` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `calendar_ids`, `duration_minutes`, and `window`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calendar_find_free_slots\", \"arguments\": {\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}}, {\"scenario\": \"Richer invocation that uses optional controls for calendar_find_free_slots\", \"arguments\": {\"calendar_ids\": [\"sample_calendar_ids_item_2\"], \"duration_minutes\": 2, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}}]\nSchema: {\"properties\": {\"calendar_ids\": {\"description\": \"Calendars to inspect.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"duration_minutes\": {\"description\": \"Required slot duration.\", \"type\": \"integer\"}, \"window\": {\"description\": \"Search window.\", \"properties\": {\"end\": {\"format\": \"date-time\", \"type\": \"string\"}, \"start\": {\"format\": \"date-time\", \"type\": \"string\"}}, \"required\": [\"start\", \"end\"], \"type\": \"object\"}}, \"required\": [\"calendar_ids\", \"duration_minutes\", \"window\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calendar find free slots.\n",
+        "raw_model_output": "{\"arguments\": {\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}}",
+        "parsed_prediction": {
+          "calendar_ids": [
+            "sample_calendar_ids_item_1"
+          ],
+          "duration_minutes": 1,
+          "window": {
+            "end": "2026-01-01T09:00:00Z",
+            "start": "2026-01-01T09:00:00Z"
+          }
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0004_calendar_find_free_slots_negative_hard_1_near_miss_intent",
+      "tool_name": "calendar_find_free_slots",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to calendar find free slots, but I only want a checklist for how to API-Bank-style local fixture retrieval tool for finding free slots across calendars; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "calendar_ids": [
+          "sample_calendar_ids_item_1"
+        ],
+        "duration_minutes": 1,
+        "window": {
+          "end": "2026-01-01T09:00:00Z",
+          "start": "2026-01-01T09:00:00Z"
+        }
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1406,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calendar_find_free_slots\nTool description: API-Bank-style local fixture retrieval tool for finding free slots across calendars.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture retrieval tool for finding free slots across calendars. Provide all required fields: `calendar_ids`, `duration_minutes`, and `window`.\nWhen to use: [\"Use `calendar_find_free_slots` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `calendar_ids`, `duration_minutes`, and `window`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calendar_find_free_slots\", \"arguments\": {\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}}, {\"scenario\": \"Richer invocation that uses optional controls for calendar_find_free_slots\", \"arguments\": {\"calendar_ids\": [\"sample_calendar_ids_item_2\"], \"duration_minutes\": 2, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}}]\nSchema: {\"properties\": {\"calendar_ids\": {\"description\": \"Calendars to inspect.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"duration_minutes\": {\"description\": \"Required slot duration.\", \"type\": \"integer\"}, \"window\": {\"description\": \"Search window.\", \"properties\": {\"end\": {\"format\": \"date-time\", \"type\": \"string\"}, \"start\": {\"format\": \"date-time\", \"type\": \"string\"}}, \"required\": [\"start\", \"end\"], \"type\": \"object\"}}, \"required\": [\"calendar_ids\", \"duration_minutes\", \"window\"], \"type\": \"object\"}\nUser request: This sounds close to calendar find free slots, but I only want a checklist for how to API-Bank-style local fixture retrieval tool for finding free slots across calendars; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}}",
+        "parsed_prediction": {
+          "calendar_ids": [
+            "sample_calendar_ids_item_1"
+          ],
+          "duration_minutes": 1,
+          "window": {
+            "end": "2026-01-01T09:00:00Z",
+            "start": "2026-01-01T09:00:00Z"
+          }
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0004_calendar_find_free_slots_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "calendar_find_free_slots",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to API-Bank-style local fixture tool for searching transactions by date, category, and amount range. This is adjacent to calendar find free slots, but the intended capability is bank search transactions.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "calendar_ids": [
+          "sample_calendar_ids_item_1"
+        ],
+        "duration_minutes": 1,
+        "window": {
+          "end": "2026-01-01T09:00:00Z",
+          "start": "2026-01-01T09:00:00Z"
+        }
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1003,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calendar_find_free_slots\nTool description: API-Bank-style local fixture retrieval tool for finding free slots across calendars.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture retrieval tool for finding free slots across calendars. Provide all required fields: `calendar_ids`, `duration_minutes`, and `window`.\nWhen to use: [\"Use `calendar_find_free_slots` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `calendar_ids`, `duration_minutes`, and `window`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calendar_find_free_slots\", \"arguments\": {\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}}, {\"scenario\": \"Richer invocation that uses optional controls for calendar_find_free_slots\", \"arguments\": {\"calendar_ids\": [\"sample_calendar_ids_item_2\"], \"duration_minutes\": 2, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}}]\nSchema: {\"properties\": {\"calendar_ids\": {\"description\": \"Calendars to inspect.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"duration_minutes\": {\"description\": \"Required slot duration.\", \"type\": \"integer\"}, \"window\": {\"description\": \"Search window.\", \"properties\": {\"end\": {\"format\": \"date-time\", \"type\": \"string\"}, \"start\": {\"format\": \"date-time\", \"type\": \"string\"}}, \"required\": [\"start\", \"end\"], \"type\": \"object\"}}, \"required\": [\"calendar_ids\", \"duration_minutes\", \"window\"], \"type\": \"object\"}\nUser request: I need to API-Bank-style local fixture tool for searching transactions by date, category, and amount range. This is adjacent to calendar find free slots, but the intended capability is bank search transactions.\n",
+        "raw_model_output": "{\"arguments\": {\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}}",
+        "parsed_prediction": {
+          "calendar_ids": [
+            "sample_calendar_ids_item_1"
+          ],
+          "duration_minutes": 1,
+          "window": {
+            "end": "2026-01-01T09:00:00Z",
+            "start": "2026-01-01T09:00:00Z"
+          }
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0004_calendar_find_free_slots_positive_easy_0",
+      "tool_name": "calendar_find_free_slots",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use calendar find free slots to API-Bank-style local fixture retrieval tool for finding free slots across calendars. Set calendar_ids=[\"item_0\"], duration_minutes=1, window={\"end\": \"end_0\", \"start\": \"start_0\"}.",
+      "exact_match": false,
+      "argument_validity": 0.3333,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "calendar_ids": [
+          "sample_calendar_ids_item_1"
+        ],
+        "duration_minutes": 1,
+        "window": {
+          "end": "2026-01-01T09:00:00Z",
+          "start": "2026-01-01T09:00:00Z"
+        }
+      },
+      "expected_arguments": {
+        "calendar_ids": [
+          "item_0"
+        ],
+        "duration_minutes": 1,
+        "window": {
+          "end": "end_0",
+          "start": "start_0"
+        }
+      },
+      "prediction_latency_ms": 0.0926,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calendar_find_free_slots\nTool description: API-Bank-style local fixture retrieval tool for finding free slots across calendars.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture retrieval tool for finding free slots across calendars. Provide all required fields: `calendar_ids`, `duration_minutes`, and `window`.\nWhen to use: [\"Use `calendar_find_free_slots` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `calendar_ids`, `duration_minutes`, and `window`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calendar_find_free_slots\", \"arguments\": {\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}}, {\"scenario\": \"Richer invocation that uses optional controls for calendar_find_free_slots\", \"arguments\": {\"calendar_ids\": [\"sample_calendar_ids_item_2\"], \"duration_minutes\": 2, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}}]\nSchema: {\"properties\": {\"calendar_ids\": {\"description\": \"Calendars to inspect.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"duration_minutes\": {\"description\": \"Required slot duration.\", \"type\": \"integer\"}, \"window\": {\"description\": \"Search window.\", \"properties\": {\"end\": {\"format\": \"date-time\", \"type\": \"string\"}, \"start\": {\"format\": \"date-time\", \"type\": \"string\"}}, \"required\": [\"start\", \"end\"], \"type\": \"object\"}}, \"required\": [\"calendar_ids\", \"duration_minutes\", \"window\"], \"type\": \"object\"}\nUser request: Use calendar find free slots to API-Bank-style local fixture retrieval tool for finding free slots across calendars. Set calendar_ids=[\"item_0\"], duration_minutes=1, window={\"end\": \"end_0\", \"start\": \"start_0\"}.\n",
+        "raw_model_output": "{\"arguments\": {\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}}",
+        "parsed_prediction": {
+          "calendar_ids": [
+            "sample_calendar_ids_item_1"
+          ],
+          "duration_minutes": 1,
+          "window": {
+            "end": "2026-01-01T09:00:00Z",
+            "start": "2026-01-01T09:00:00Z"
+          }
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0004_calendar_find_free_slots_positive_medium_0",
+      "tool_name": "calendar_find_free_slots",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: API-Bank-style local fixture retrieval tool for finding free slots across calendars. The relevant details are calendar_ids=[\"item_7\"], duration_minutes=8, window={\"end\": \"end_7\", \"start\": \"start_7\"}.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "calendar_ids": [
+          "sample_calendar_ids_item_1"
+        ],
+        "duration_minutes": 1,
+        "window": {
+          "end": "2026-01-01T09:00:00Z",
+          "start": "2026-01-01T09:00:00Z"
+        }
+      },
+      "expected_arguments": {
+        "calendar_ids": [
+          "item_7"
+        ],
+        "duration_minutes": 8,
+        "window": {
+          "end": "end_7",
+          "start": "start_7"
+        }
+      },
+      "prediction_latency_ms": 0.1572,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calendar_find_free_slots\nTool description: API-Bank-style local fixture retrieval tool for finding free slots across calendars.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture retrieval tool for finding free slots across calendars. Provide all required fields: `calendar_ids`, `duration_minutes`, and `window`.\nWhen to use: [\"Use `calendar_find_free_slots` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `calendar_ids`, `duration_minutes`, and `window`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calendar_find_free_slots\", \"arguments\": {\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}}, {\"scenario\": \"Richer invocation that uses optional controls for calendar_find_free_slots\", \"arguments\": {\"calendar_ids\": [\"sample_calendar_ids_item_2\"], \"duration_minutes\": 2, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}}]\nSchema: {\"properties\": {\"calendar_ids\": {\"description\": \"Calendars to inspect.\", \"items\": {\"type\": \"string\"}, \"type\": \"array\"}, \"duration_minutes\": {\"description\": \"Required slot duration.\", \"type\": \"integer\"}, \"window\": {\"description\": \"Search window.\", \"properties\": {\"end\": {\"format\": \"date-time\", \"type\": \"string\"}, \"start\": {\"format\": \"date-time\", \"type\": \"string\"}}, \"required\": [\"start\", \"end\"], \"type\": \"object\"}}, \"required\": [\"calendar_ids\", \"duration_minutes\", \"window\"], \"type\": \"object\"}\nUser request: I need help with this task: API-Bank-style local fixture retrieval tool for finding free slots across calendars. The relevant details are calendar_ids=[\"item_7\"], duration_minutes=8, window={\"end\": \"end_7\", \"start\": \"start_7\"}.\n",
+        "raw_model_output": "{\"arguments\": {\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}}",
+        "parsed_prediction": {
+          "calendar_ids": [
+            "sample_calendar_ids_item_1"
+          ],
+          "duration_minutes": 1,
+          "window": {
+            "end": "2026-01-01T09:00:00Z",
+            "start": "2026-01-01T09:00:00Z"
+          }
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.1666,
+    "avg_prediction_latency_ms": 0.1254
+  }
+}

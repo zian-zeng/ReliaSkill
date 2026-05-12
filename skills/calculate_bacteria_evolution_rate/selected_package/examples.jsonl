@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_bacteria_evolution_rate", "arguments": {"start_population": 1, "duplication_frequency": 1, "duration": 1}}
+{"scenario": "Richer invocation that uses optional controls for calculate_bacteria_evolution_rate", "arguments": {"start_population": 2, "duplication_frequency": 2, "duration": 2, "generation_time": 2}}

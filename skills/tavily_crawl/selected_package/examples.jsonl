@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for tavily-crawl", "arguments": {"url": "https://example.com/resource"}}
+{"scenario": "Richer invocation that uses optional controls for tavily-crawl", "arguments": {"url": "https://example.com/resource", "max_depth": 1, "max_breadth": 20, "limit": 50, "instructions": "sample_instructions_2", "select_paths": [], "select_domains": [], "allow_external": false, "categories": [], "extract_depth": "basic", "format": "markdown"}}

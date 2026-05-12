@@ -1,0 +1,144 @@
+{
+  "candidate_id": "calculate_final_temperature__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Calculate the final temperature when different quantities of the same gas at different temperatures are mixed. Provide all required fields: `quantity1`, `temperature1`, `quantity2`, and `temperature2`.\nWhen to use:\n- Use `calculate_final_temperature` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `quantity1`, `temperature1`, `quantity2`, and `temperature2`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"quantity1\": 4, \"quantity2\": 4, \"temperature1\": 4, \"temperature2\": 4}\nExamples:\nMinimal valid request that satisfies the required fields for calculate_final_temperature\n{\"quantity1\": 1, \"quantity2\": 1, \"temperature1\": 1, \"temperature2\": 1}\nRicher invocation that uses optional controls for calculate_final_temperature\n{\"quantity1\": 2, \"quantity2\": 2, \"temperature1\": 2, \"temperature2\": 2}\nRequired-argument dev behavior example.\n{\"quantity1\": 3, \"quantity2\": 3, \"temperature1\": 3, \"temperature2\": 3}\nOptional, enum, nested, or array argument example.\n{\"quantity1\": 4, \"quantity2\": 4, \"temperature1\": 4, \"temperature2\": 4}",
+  "argument_template": {
+    "quantity1": 4,
+    "temperature1": 4,
+    "quantity2": 4,
+    "temperature2": 4
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for calculate_final_temperature",
+      "arguments": {
+        "quantity1": 1,
+        "temperature1": 1,
+        "quantity2": 1,
+        "temperature2": 1
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for calculate_final_temperature",
+      "arguments": {
+        "quantity1": 2,
+        "temperature1": 2,
+        "quantity2": 2,
+        "temperature2": 2
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "quantity1": 3,
+        "temperature1": 3,
+        "quantity2": 3,
+        "temperature2": 3
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "quantity1": 4,
+        "temperature1": 4,
+        "quantity2": 4,
+        "temperature2": 4
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `calculate_final_temperature` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `quantity1`, `temperature1`, `quantity2`, and `temperature2`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 346,
+  "skill_token_count": 346,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Calculate the final temperature when different quantities of the same gas at different temperatures are mixed. Provide all required fields: `quantity1`, `temperature1`, `quantity2`, and `temperature2`.",
+    "when_to_use": [
+      "Use `calculate_final_temperature` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `quantity1`, `temperature1`, `quantity2`, and `temperature2`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "quantity1": 4,
+      "temperature1": 4,
+      "quantity2": 4,
+      "temperature2": 4
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for calculate_final_temperature",
+        "arguments": {
+          "quantity1": 1,
+          "temperature1": 1,
+          "quantity2": 1,
+          "temperature2": 1
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for calculate_final_temperature",
+        "arguments": {
+          "quantity1": 2,
+          "temperature1": 2,
+          "quantity2": 2,
+          "temperature2": 2
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "quantity1": 3,
+          "temperature1": 3,
+          "quantity2": 3,
+          "temperature2": 3
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "quantity1": 4,
+          "temperature1": 4,
+          "quantity2": 4,
+          "temperature2": 4
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "calculate_final_temperature__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "calculate_final_temperature__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "candidate_id": "get_resource_links__cand_00_concise_default",
+  "generation_strategy": "concise_default",
+  "prompt_template_id": "heuristic_concise_default_v1",
+  "skill_text": "Returns up to ten resource links that reference different types of resources. This tool has no required input fields.\nWhen to use:\n- Use `get-resource-links` when the user's request directly matches this tool's purpose.\n- This tool has no required input fields.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Do not use when required inputs are missing.\nArgument template:\n{\"count\": \"sample_count_1\"}\nExamples:\nRicher invocation that uses optional controls for get-resource-links\n{\"count\": \"sample_count_2\"}",
+  "argument_template": {
+    "count": "sample_count_1"
+  },
+  "examples": [
+    {
+      "scenario": "Richer invocation that uses optional controls for get-resource-links",
+      "arguments": {
+        "count": "sample_count_2"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `get-resource-links` when the user's request directly matches this tool's purpose.",
+    "This tool has no required input fields."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Do not use when required inputs are missing."
+  ],
+  "token_count": 134,
+  "skill_token_count": 134,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 1,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Returns up to ten resource links that reference different types of resources. This tool has no required input fields.",
+    "when_to_use": [
+      "Use `get-resource-links` when the user's request directly matches this tool's purpose.",
+      "This tool has no required input fields."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Do not use when required inputs are missing."
+    ],
+    "argument_template": {
+      "count": "sample_count_1"
+    },
+    "examples": [
+      {
+        "scenario": "Richer invocation that uses optional controls for get-resource-links",
+        "arguments": {
+          "count": "sample_count_2"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "get_resource_links__cand_00_concise_default",
+        "generation_strategy": "concise_default",
+        "prompt_template_id": "heuristic_concise_default_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "get_resource_links__cand_00_concise_default",
+      "generation_strategy": "concise_default",
+      "prompt_template_id": "heuristic_concise_default_v1"
+    }
+  }
+}

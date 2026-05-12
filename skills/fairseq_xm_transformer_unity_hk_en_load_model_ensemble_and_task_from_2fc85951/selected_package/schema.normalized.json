@@ -1,0 +1,52 @@
+{
+  "tool_name": "fairseq__xm_transformer_unity_hk_en__load_model_ensemble_and_task_from_2fc85951",
+  "server_name": "bfcl_huggingface_eval_api",
+  "tool_purpose": "A speech-to-speech translation model with two-pass decoder (UnitY) trained on Hokkien-English data from TED, drama, and TAT domains. It uses Facebook's Unit HiFiGAN for speech synthesis. Framework: Fairseq. Functionality: Speech-to-speech translation. API call: load_model_ensemble_and_task_from_hf_hub('facebook/xm_transformer_unity_hk-en').",
+  "input_schema_raw": {
+    "properties": {},
+    "required": [],
+    "type": "object"
+  },
+  "arguments": [],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ],
+  "doc_snippets": [
+    "A speech-to-speech translation model with two-pass decoder (UnitY) trained on Hokkien-English data from TED, drama, and TAT domains. It uses Facebook's Unit HiFiGAN for speech synthesis. Framework: Fairseq. Functionality: Speech-to-speech translation. API call: load_model_ensemble_and_task_from_hf_hub('facebook/xm_transformer_unity_hk-en').",
+    "xm_transformer_unity_hk-en",
+    "Speech-to-speech translation"
+  ],
+  "source_pointer": "bfcl",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 342,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 1,
+    "num_arguments": 0,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "num_top_level_arguments": 0,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "empty_input_schema",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "fairseq__xm_transformer_unity_hk_en__load_model_ensemble_and_task_from_2fc85951",
+    "server_name": "bfcl_huggingface_eval_api",
+    "source_pointer": "bfcl"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

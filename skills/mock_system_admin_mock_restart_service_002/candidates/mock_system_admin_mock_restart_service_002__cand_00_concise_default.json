@@ -1,0 +1,108 @@
+{
+  "candidate_id": "mock_system_admin_mock_restart_service_002__cand_00_concise_default",
+  "generation_strategy": "concise_default",
+  "prompt_template_id": "heuristic_concise_default_v1",
+  "skill_text": "Synthetic safe mock system-admin tool that simulates a service restart in an offline fixture. Provide all required fields: `service_name`, `environment`, and `reason`.\nWhen to use:\n- Use `mock_system_admin_mock_restart_service_002` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `service_name`, `environment`, and `reason`.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `environment`: 'dev', 'staging'.\n- Do not use when required inputs are missing.\nArgument template:\n{\"dry_run\": false, \"environment\": \"dev\", \"reason\": \"sample_reason_1\", \"service_name\": \"sample-name\"}\nExamples:\nMinimal valid request that satisfies the required fields for mock_system_admin_mock_restart_service_002\n{\"environment\": \"dev\", \"reason\": \"sample_reason_1\", \"service_name\": \"sample-name\"}\nRicher invocation that uses optional controls for mock_system_admin_mock_restart_service_002\n{\"dry_run\": true, \"environment\": \"staging\", \"reason\": \"sample_reason_2\", \"service_name\": \"sample-name\"}",
+  "argument_template": {
+    "service_name": "sample-name",
+    "environment": "dev",
+    "reason": "sample_reason_1",
+    "dry_run": false
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for mock_system_admin_mock_restart_service_002",
+      "arguments": {
+        "service_name": "sample-name",
+        "environment": "dev",
+        "reason": "sample_reason_1"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for mock_system_admin_mock_restart_service_002",
+      "arguments": {
+        "service_name": "sample-name",
+        "environment": "staging",
+        "reason": "sample_reason_2",
+        "dry_run": true
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `mock_system_admin_mock_restart_service_002` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `service_name`, `environment`, and `reason`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `environment`: 'dev', 'staging'.",
+    "Do not use when required inputs are missing."
+  ],
+  "token_count": 270,
+  "skill_token_count": 270,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 2,
+  "nonuse_boundary_count": 4,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Synthetic safe mock system-admin tool that simulates a service restart in an offline fixture. Provide all required fields: `service_name`, `environment`, and `reason`.",
+    "when_to_use": [
+      "Use `mock_system_admin_mock_restart_service_002` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `service_name`, `environment`, and `reason`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `environment`: 'dev', 'staging'.",
+      "Do not use when required inputs are missing."
+    ],
+    "argument_template": {
+      "service_name": "sample-name",
+      "environment": "dev",
+      "reason": "sample_reason_1",
+      "dry_run": false
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for mock_system_admin_mock_restart_service_002",
+        "arguments": {
+          "service_name": "sample-name",
+          "environment": "dev",
+          "reason": "sample_reason_1"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for mock_system_admin_mock_restart_service_002",
+        "arguments": {
+          "service_name": "sample-name",
+          "environment": "staging",
+          "reason": "sample_reason_2",
+          "dry_run": true
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "mock_system_admin_mock_restart_service_002__cand_00_concise_default",
+        "generation_strategy": "concise_default",
+        "prompt_template_id": "heuristic_concise_default_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "mock_system_admin_mock_restart_service_002__cand_00_concise_default",
+      "generation_strategy": "concise_default",
+      "prompt_template_id": "heuristic_concise_default_v1"
+    }
+  }
+}

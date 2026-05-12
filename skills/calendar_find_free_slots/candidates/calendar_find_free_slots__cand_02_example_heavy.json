@@ -1,0 +1,184 @@
+{
+  "candidate_id": "calendar_find_free_slots__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "API-Bank-style local fixture retrieval tool for finding free slots across calendars. Provide all required fields: `calendar_ids`, `duration_minutes`, and `window`.\nWhen to use:\n- Use `calendar_find_free_slots` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `calendar_ids`, `duration_minutes`, and `window`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"calendar_ids\": [\"sample_calendar_ids_item_4\"], \"duration_minutes\": 4, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}\nExamples:\nMinimal valid request that satisfies the required fields for calendar_find_free_slots\n{\"calendar_ids\": [\"sample_calendar_ids_item_1\"], \"duration_minutes\": 1, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}\nRicher invocation that uses optional controls for calendar_find_free_slots\n{\"calendar_ids\": [\"sample_calendar_ids_item_2\"], \"duration_minutes\": 2, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}\nRequired-argument dev behavior example.\n{\"calendar_ids\": [\"sample_calendar_ids_item_3\"], \"duration_minutes\": 3, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}\nOptional, enum, nested, or array argument example.\n{\"calendar_ids\": [\"sample_calendar_ids_item_4\"], \"duration_minutes\": 4, \"window\": {\"end\": \"2026-01-01T09:00:00Z\", \"start\": \"2026-01-01T09:00:00Z\"}}",
+  "argument_template": {
+    "calendar_ids": [
+      "sample_calendar_ids_item_4"
+    ],
+    "duration_minutes": 4,
+    "window": {
+      "end": "2026-01-01T09:00:00Z",
+      "start": "2026-01-01T09:00:00Z"
+    }
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for calendar_find_free_slots",
+      "arguments": {
+        "calendar_ids": [
+          "sample_calendar_ids_item_1"
+        ],
+        "duration_minutes": 1,
+        "window": {
+          "end": "2026-01-01T09:00:00Z",
+          "start": "2026-01-01T09:00:00Z"
+        }
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for calendar_find_free_slots",
+      "arguments": {
+        "calendar_ids": [
+          "sample_calendar_ids_item_2"
+        ],
+        "duration_minutes": 2,
+        "window": {
+          "end": "2026-01-01T09:00:00Z",
+          "start": "2026-01-01T09:00:00Z"
+        }
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "calendar_ids": [
+          "sample_calendar_ids_item_3"
+        ],
+        "duration_minutes": 3,
+        "window": {
+          "end": "2026-01-01T09:00:00Z",
+          "start": "2026-01-01T09:00:00Z"
+        }
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "calendar_ids": [
+          "sample_calendar_ids_item_4"
+        ],
+        "duration_minutes": 4,
+        "window": {
+          "end": "2026-01-01T09:00:00Z",
+          "start": "2026-01-01T09:00:00Z"
+        }
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `calendar_find_free_slots` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `calendar_ids`, `duration_minutes`, and `window`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 491,
+  "skill_token_count": 491,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "API-Bank-style local fixture retrieval tool for finding free slots across calendars. Provide all required fields: `calendar_ids`, `duration_minutes`, and `window`.",
+    "when_to_use": [
+      "Use `calendar_find_free_slots` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `calendar_ids`, `duration_minutes`, and `window`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "calendar_ids": [
+        "sample_calendar_ids_item_4"
+      ],
+      "duration_minutes": 4,
+      "window": {
+        "end": "2026-01-01T09:00:00Z",
+        "start": "2026-01-01T09:00:00Z"
+      }
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for calendar_find_free_slots",
+        "arguments": {
+          "calendar_ids": [
+            "sample_calendar_ids_item_1"
+          ],
+          "duration_minutes": 1,
+          "window": {
+            "end": "2026-01-01T09:00:00Z",
+            "start": "2026-01-01T09:00:00Z"
+          }
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for calendar_find_free_slots",
+        "arguments": {
+          "calendar_ids": [
+            "sample_calendar_ids_item_2"
+          ],
+          "duration_minutes": 2,
+          "window": {
+            "end": "2026-01-01T09:00:00Z",
+            "start": "2026-01-01T09:00:00Z"
+          }
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "calendar_ids": [
+            "sample_calendar_ids_item_3"
+          ],
+          "duration_minutes": 3,
+          "window": {
+            "end": "2026-01-01T09:00:00Z",
+            "start": "2026-01-01T09:00:00Z"
+          }
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "calendar_ids": [
+            "sample_calendar_ids_item_4"
+          ],
+          "duration_minutes": 4,
+          "window": {
+            "end": "2026-01-01T09:00:00Z",
+            "start": "2026-01-01T09:00:00Z"
+          }
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "calendar_find_free_slots__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "calendar_find_free_slots__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

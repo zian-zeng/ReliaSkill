@@ -1,0 +1,217 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0219_git_branch_negative_easy_0_out_of_domain_request",
+      "tool_name": "git_branch",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to git branch.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "branch_type": "sample_branch_type_1",
+        "contains": "sample_contains_1",
+        "not_contains": "sample_not_contains_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0809,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_branch\nTool description: List Git branches\nSkill condition: multi_candidate_skill\nSkill summary: List Git branches. Provide all required fields: `repo_path`, and `branch_type`.\nWhen to use: [\"Use `git_branch` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `repo_path`, and `branch_type`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"branch_type\": \"sample_branch_type_1\", \"contains\": \"sample_contains_1\", \"not_contains\": \"sample_not_contains_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_branch\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_type\": \"sample_branch_type_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_branch\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_type\": \"sample_branch_type_2\", \"contains\": \"sample_contains_2\", \"not_contains\": \"sample_not_contains_2\"}}]\nSchema: {\"properties\": {\"branch_type\": {\"description\": \"Whether to list local branches ('local'), remote branches ('remote') or all branches('all').\", \"type\": \"string\"}, \"contains\": {\"description\": \"The commit sha that branch should contain. Do not pass anything to this param if no commit sha is specified\", \"nullable\": true, \"type\": \"string\"}, \"not_contains\": {\"description\": \"The commit sha that branch should NOT contain. Do not pass anything to this param if no commit sha is specified\", \"nullable\": true, \"type\": \"string\"}, \"repo_path\": {\"description\": \"The path to the Git repository.\", \"type\": \"string\"}}, \"required\": [\"repo_path\", \"branch_type\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to git branch.\n",
+        "raw_model_output": "{\"arguments\": {\"branch_type\": \"sample_branch_type_1\", \"contains\": \"sample_contains_1\", \"not_contains\": \"sample_not_contains_1\", \"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "branch_type": "sample_branch_type_1",
+          "contains": "sample_contains_1",
+          "not_contains": "sample_not_contains_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0219_git_branch_negative_hard_1_near_miss_intent",
+      "tool_name": "git_branch",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to git branch, but I only want a checklist for how to List Git branches; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "branch_type": "sample_branch_type_1",
+        "contains": "sample_contains_1",
+        "not_contains": "sample_not_contains_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0726,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_branch\nTool description: List Git branches\nSkill condition: multi_candidate_skill\nSkill summary: List Git branches. Provide all required fields: `repo_path`, and `branch_type`.\nWhen to use: [\"Use `git_branch` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `repo_path`, and `branch_type`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"branch_type\": \"sample_branch_type_1\", \"contains\": \"sample_contains_1\", \"not_contains\": \"sample_not_contains_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_branch\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_type\": \"sample_branch_type_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_branch\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_type\": \"sample_branch_type_2\", \"contains\": \"sample_contains_2\", \"not_contains\": \"sample_not_contains_2\"}}]\nSchema: {\"properties\": {\"branch_type\": {\"description\": \"Whether to list local branches ('local'), remote branches ('remote') or all branches('all').\", \"type\": \"string\"}, \"contains\": {\"description\": \"The commit sha that branch should contain. Do not pass anything to this param if no commit sha is specified\", \"nullable\": true, \"type\": \"string\"}, \"not_contains\": {\"description\": \"The commit sha that branch should NOT contain. Do not pass anything to this param if no commit sha is specified\", \"nullable\": true, \"type\": \"string\"}, \"repo_path\": {\"description\": \"The path to the Git repository.\", \"type\": \"string\"}}, \"required\": [\"repo_path\", \"branch_type\"], \"type\": \"object\"}\nUser request: This sounds close to git branch, but I only want a checklist for how to List Git branches; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {\"branch_type\": \"sample_branch_type_1\", \"contains\": \"sample_contains_1\", \"not_contains\": \"sample_not_contains_1\", \"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "branch_type": "sample_branch_type_1",
+          "contains": "sample_contains_1",
+          "not_contains": "sample_not_contains_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0219_git_branch_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "git_branch",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with git branch.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "branch_type": "sample_branch_type_1",
+        "contains": "sample_contains_1",
+        "not_contains": "sample_not_contains_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0695,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_branch\nTool description: List Git branches\nSkill condition: multi_candidate_skill\nSkill summary: List Git branches. Provide all required fields: `repo_path`, and `branch_type`.\nWhen to use: [\"Use `git_branch` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `repo_path`, and `branch_type`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"branch_type\": \"sample_branch_type_1\", \"contains\": \"sample_contains_1\", \"not_contains\": \"sample_not_contains_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_branch\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_type\": \"sample_branch_type_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_branch\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_type\": \"sample_branch_type_2\", \"contains\": \"sample_contains_2\", \"not_contains\": \"sample_not_contains_2\"}}]\nSchema: {\"properties\": {\"branch_type\": {\"description\": \"Whether to list local branches ('local'), remote branches ('remote') or all branches('all').\", \"type\": \"string\"}, \"contains\": {\"description\": \"The commit sha that branch should contain. Do not pass anything to this param if no commit sha is specified\", \"nullable\": true, \"type\": \"string\"}, \"not_contains\": {\"description\": \"The commit sha that branch should NOT contain. Do not pass anything to this param if no commit sha is specified\", \"nullable\": true, \"type\": \"string\"}, \"repo_path\": {\"description\": \"The path to the Git repository.\", \"type\": \"string\"}}, \"required\": [\"repo_path\", \"branch_type\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with git branch.\n",
+        "raw_model_output": "{\"arguments\": {\"branch_type\": \"sample_branch_type_1\", \"contains\": \"sample_contains_1\", \"not_contains\": \"sample_not_contains_1\", \"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "branch_type": "sample_branch_type_1",
+          "contains": "sample_contains_1",
+          "not_contains": "sample_not_contains_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0219_git_branch_positive_easy_0",
+      "tool_name": "git_branch",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use git branch to List Git branches. Set branch_type=\"branch_type_0\", repo_path=\"docs/control_0.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "branch_type": "sample_branch_type_1",
+        "contains": "sample_contains_1",
+        "not_contains": "sample_not_contains_1"
+      },
+      "expected_arguments": {
+        "branch_type": "branch_type_0",
+        "repo_path": "docs/control_0.md"
+      },
+      "prediction_latency_ms": 0.0733,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_branch\nTool description: List Git branches\nSkill condition: multi_candidate_skill\nSkill summary: List Git branches. Provide all required fields: `repo_path`, and `branch_type`.\nWhen to use: [\"Use `git_branch` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `repo_path`, and `branch_type`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"branch_type\": \"sample_branch_type_1\", \"contains\": \"sample_contains_1\", \"not_contains\": \"sample_not_contains_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_branch\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_type\": \"sample_branch_type_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_branch\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_type\": \"sample_branch_type_2\", \"contains\": \"sample_contains_2\", \"not_contains\": \"sample_not_contains_2\"}}]\nSchema: {\"properties\": {\"branch_type\": {\"description\": \"Whether to list local branches ('local'), remote branches ('remote') or all branches('all').\", \"type\": \"string\"}, \"contains\": {\"description\": \"The commit sha that branch should contain. Do not pass anything to this param if no commit sha is specified\", \"nullable\": true, \"type\": \"string\"}, \"not_contains\": {\"description\": \"The commit sha that branch should NOT contain. Do not pass anything to this param if no commit sha is specified\", \"nullable\": true, \"type\": \"string\"}, \"repo_path\": {\"description\": \"The path to the Git repository.\", \"type\": \"string\"}}, \"required\": [\"repo_path\", \"branch_type\"], \"type\": \"object\"}\nUser request: Use git branch to List Git branches. Set branch_type=\"branch_type_0\", repo_path=\"docs/control_0.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"branch_type\": \"sample_branch_type_1\", \"contains\": \"sample_contains_1\", \"not_contains\": \"sample_not_contains_1\", \"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "branch_type": "sample_branch_type_1",
+          "contains": "sample_contains_1",
+          "not_contains": "sample_not_contains_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0219_git_branch_positive_medium_0",
+      "tool_name": "git_branch",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: List Git branches. The relevant details are branch_type=\"branch_type_7\", repo_path=\"docs/control_7.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "repo_path": "data/sample.txt",
+        "branch_type": "sample_branch_type_1",
+        "contains": "sample_contains_1",
+        "not_contains": "sample_not_contains_1"
+      },
+      "expected_arguments": {
+        "branch_type": "branch_type_7",
+        "repo_path": "docs/control_7.md"
+      },
+      "prediction_latency_ms": 0.0691,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: git_branch\nTool description: List Git branches\nSkill condition: multi_candidate_skill\nSkill summary: List Git branches. Provide all required fields: `repo_path`, and `branch_type`.\nWhen to use: [\"Use `git_branch` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `repo_path`, and `branch_type`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"repo_path\": \"data/sample.txt\", \"branch_type\": \"sample_branch_type_1\", \"contains\": \"sample_contains_1\", \"not_contains\": \"sample_not_contains_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for git_branch\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_type\": \"sample_branch_type_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for git_branch\", \"arguments\": {\"repo_path\": \"data/sample.txt\", \"branch_type\": \"sample_branch_type_2\", \"contains\": \"sample_contains_2\", \"not_contains\": \"sample_not_contains_2\"}}]\nSchema: {\"properties\": {\"branch_type\": {\"description\": \"Whether to list local branches ('local'), remote branches ('remote') or all branches('all').\", \"type\": \"string\"}, \"contains\": {\"description\": \"The commit sha that branch should contain. Do not pass anything to this param if no commit sha is specified\", \"nullable\": true, \"type\": \"string\"}, \"not_contains\": {\"description\": \"The commit sha that branch should NOT contain. Do not pass anything to this param if no commit sha is specified\", \"nullable\": true, \"type\": \"string\"}, \"repo_path\": {\"description\": \"The path to the Git repository.\", \"type\": \"string\"}}, \"required\": [\"repo_path\", \"branch_type\"], \"type\": \"object\"}\nUser request: I need help with this task: List Git branches. The relevant details are branch_type=\"branch_type_7\", repo_path=\"docs/control_7.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"branch_type\": \"sample_branch_type_1\", \"contains\": \"sample_contains_1\", \"not_contains\": \"sample_not_contains_1\", \"repo_path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "repo_path": "data/sample.txt",
+          "branch_type": "sample_branch_type_1",
+          "contains": "sample_contains_1",
+          "not_contains": "sample_not_contains_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0731
+  }
+}

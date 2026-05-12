@@ -1,0 +1,197 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0209_search_negative_easy_0_out_of_domain_request",
+      "tool_name": "search",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to search.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "query": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to search",
+        "num": 1.0
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1251,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search\nTool description: Perform a web search query\nSkill condition: multi_candidate_skill\nSkill summary: Perform a web search query. Provide all required fields: `query`, and `num`.\nWhen to use: [\"Use `search` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `query`, and `num`.\", \"Use only when the request clearly needs `search`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use for adjacent tools with similar names, descriptions, or arguments.\", \"Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.\", \"If the request lacks required fields, abstain or ask for clarification.\"]\nArgument template: {\"query\": \"sample query\", \"num\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search\", \"arguments\": {\"query\": \"sample query\", \"num\": 1.0}}, {\"scenario\": \"Richer invocation that uses optional controls for search\", \"arguments\": {\"query\": \"sample query\", \"num\": 2.0}}]\nSchema: {\"properties\": {\"num\": {\"description\": \"Number of results (1-10)\", \"maximum\": 10, \"minimum\": 1, \"type\": \"number\"}, \"query\": {\"description\": \"Search query\", \"type\": \"string\"}}, \"required\": [\"query\", \"num\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to search.\n",
+        "raw_model_output": "{\"arguments\": {\"num\": 1.0, \"query\": \"Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to search\"}}",
+        "parsed_prediction": {
+          "query": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to search",
+          "num": 1.0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0209_search_negative_hard_1_near_miss_intent",
+      "tool_name": "search",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to search, but I only want a checklist for how to Perform a web search query; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "query": "how to Perform a web search query; no tool call yet",
+        "num": 1.0
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0668,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search\nTool description: Perform a web search query\nSkill condition: multi_candidate_skill\nSkill summary: Perform a web search query. Provide all required fields: `query`, and `num`.\nWhen to use: [\"Use `search` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `query`, and `num`.\", \"Use only when the request clearly needs `search`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use for adjacent tools with similar names, descriptions, or arguments.\", \"Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.\", \"If the request lacks required fields, abstain or ask for clarification.\"]\nArgument template: {\"query\": \"sample query\", \"num\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search\", \"arguments\": {\"query\": \"sample query\", \"num\": 1.0}}, {\"scenario\": \"Richer invocation that uses optional controls for search\", \"arguments\": {\"query\": \"sample query\", \"num\": 2.0}}]\nSchema: {\"properties\": {\"num\": {\"description\": \"Number of results (1-10)\", \"maximum\": 10, \"minimum\": 1, \"type\": \"number\"}, \"query\": {\"description\": \"Search query\", \"type\": \"string\"}}, \"required\": [\"query\", \"num\"], \"type\": \"object\"}\nUser request: This sounds close to search, but I only want a checklist for how to Perform a web search query; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {\"num\": 1.0, \"query\": \"how to Perform a web search query; no tool call yet\"}}",
+        "parsed_prediction": {
+          "query": "how to Perform a web search query; no tool call yet",
+          "num": 1.0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0209_search_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "search",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use search; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "query": "Explain when someone should use search; do not actually call it or perform the action",
+        "num": 1.0
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0632,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search\nTool description: Perform a web search query\nSkill condition: multi_candidate_skill\nSkill summary: Perform a web search query. Provide all required fields: `query`, and `num`.\nWhen to use: [\"Use `search` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `query`, and `num`.\", \"Use only when the request clearly needs `search`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use for adjacent tools with similar names, descriptions, or arguments.\", \"Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.\", \"If the request lacks required fields, abstain or ask for clarification.\"]\nArgument template: {\"query\": \"sample query\", \"num\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search\", \"arguments\": {\"query\": \"sample query\", \"num\": 1.0}}, {\"scenario\": \"Richer invocation that uses optional controls for search\", \"arguments\": {\"query\": \"sample query\", \"num\": 2.0}}]\nSchema: {\"properties\": {\"num\": {\"description\": \"Number of results (1-10)\", \"maximum\": 10, \"minimum\": 1, \"type\": \"number\"}, \"query\": {\"description\": \"Search query\", \"type\": \"string\"}}, \"required\": [\"query\", \"num\"], \"type\": \"object\"}\nUser request: Explain when someone should use search; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"num\": 1.0, \"query\": \"Explain when someone should use search; do not actually call it or perform the action\"}}",
+        "parsed_prediction": {
+          "query": "Explain when someone should use search; do not actually call it or perform the action",
+          "num": 1.0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0209_search_positive_easy_0",
+      "tool_name": "search",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use search to Perform a web search query. Set num=1, query=\"reliability evaluation\".",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "query": "reliability evaluation",
+        "num": 1.0
+      },
+      "expected_arguments": {
+        "num": 1,
+        "query": "reliability evaluation"
+      },
+      "prediction_latency_ms": 0.061,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search\nTool description: Perform a web search query\nSkill condition: multi_candidate_skill\nSkill summary: Perform a web search query. Provide all required fields: `query`, and `num`.\nWhen to use: [\"Use `search` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `query`, and `num`.\", \"Use only when the request clearly needs `search`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use for adjacent tools with similar names, descriptions, or arguments.\", \"Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.\", \"If the request lacks required fields, abstain or ask for clarification.\"]\nArgument template: {\"query\": \"sample query\", \"num\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search\", \"arguments\": {\"query\": \"sample query\", \"num\": 1.0}}, {\"scenario\": \"Richer invocation that uses optional controls for search\", \"arguments\": {\"query\": \"sample query\", \"num\": 2.0}}]\nSchema: {\"properties\": {\"num\": {\"description\": \"Number of results (1-10)\", \"maximum\": 10, \"minimum\": 1, \"type\": \"number\"}, \"query\": {\"description\": \"Search query\", \"type\": \"string\"}}, \"required\": [\"query\", \"num\"], \"type\": \"object\"}\nUser request: Use search to Perform a web search query. Set num=1, query=\"reliability evaluation\".\n",
+        "raw_model_output": "{\"arguments\": {\"num\": 1.0, \"query\": \"reliability evaluation\"}}",
+        "parsed_prediction": {
+          "query": "reliability evaluation",
+          "num": 1.0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0209_search_positive_medium_0",
+      "tool_name": "search",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Perform a web search query. The relevant details are num=8, query=\"reliability evaluation\".",
+      "exact_match": false,
+      "argument_validity": 0.5,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "query": "reliability evaluation",
+        "num": 1.0
+      },
+      "expected_arguments": {
+        "num": 8,
+        "query": "reliability evaluation"
+      },
+      "prediction_latency_ms": 0.0597,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: search\nTool description: Perform a web search query\nSkill condition: multi_candidate_skill\nSkill summary: Perform a web search query. Provide all required fields: `query`, and `num`.\nWhen to use: [\"Use `search` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `query`, and `num`.\", \"Use only when the request clearly needs `search`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use for adjacent tools with similar names, descriptions, or arguments.\", \"Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.\", \"If the request lacks required fields, abstain or ask for clarification.\"]\nArgument template: {\"query\": \"sample query\", \"num\": 1.0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for search\", \"arguments\": {\"query\": \"sample query\", \"num\": 1.0}}, {\"scenario\": \"Richer invocation that uses optional controls for search\", \"arguments\": {\"query\": \"sample query\", \"num\": 2.0}}]\nSchema: {\"properties\": {\"num\": {\"description\": \"Number of results (1-10)\", \"maximum\": 10, \"minimum\": 1, \"type\": \"number\"}, \"query\": {\"description\": \"Search query\", \"type\": \"string\"}}, \"required\": [\"query\", \"num\"], \"type\": \"object\"}\nUser request: I need help with this task: Perform a web search query. The relevant details are num=8, query=\"reliability evaluation\".\n",
+        "raw_model_output": "{\"arguments\": {\"num\": 1.0, \"query\": \"reliability evaluation\"}}",
+        "parsed_prediction": {
+          "query": "reliability evaluation",
+          "num": 1.0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.5,
+    "avg_argument_validity": 0.75,
+    "avg_prediction_latency_ms": 0.0752
+  }
+}

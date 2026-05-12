@@ -1,0 +1,104 @@
+{
+  "candidate_id": "ecology_data_precipitation_stats__cand_01_boundary_heavy",
+  "generation_strategy": "boundary_heavy",
+  "prompt_template_id": "heuristic_boundary_heavy_v1",
+  "skill_text": "Retrieve precipitation data for a specified location and time period. Provide all required fields: `location`, and `time_frame`.\nWhen to use:\n- Use `ecology_data.precipitation_stats` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `location`, and `time_frame`.\n- Use only when the request clearly needs `ecology_data.precipitation_stats`.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `time_frame`: 'six_months', 'year', 'five_years'.\n- Do not use for adjacent tools with similar names, descriptions, or arguments.\n- Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.\n- If the request lacks required fields, abstain or ask for clarification.\nArgument template:\n{\"location\": \"sample_location_1\", \"time_frame\": \"six_months\"}\nExamples:\nMinimal valid request that satisfies the required fields for ecology_data.precipitation_stats\n{\"location\": \"sample_location_1\", \"time_frame\": \"six_months\"}\nRicher invocation that uses optional controls for ecology_data.precipitation_stats\n{\"location\": \"sample_location_2\", \"time_frame\": \"year\"}",
+  "argument_template": {
+    "location": "sample_location_1",
+    "time_frame": "six_months"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for ecology_data.precipitation_stats",
+      "arguments": {
+        "location": "sample_location_1",
+        "time_frame": "six_months"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for ecology_data.precipitation_stats",
+      "arguments": {
+        "location": "sample_location_2",
+        "time_frame": "year"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `ecology_data.precipitation_stats` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `location`, and `time_frame`.",
+    "Use only when the request clearly needs `ecology_data.precipitation_stats`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `time_frame`: 'six_months', 'year', 'five_years'.",
+    "Do not use for adjacent tools with similar names, descriptions, or arguments.",
+    "Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.",
+    "If the request lacks required fields, abstain or ask for clarification."
+  ],
+  "token_count": 290,
+  "skill_token_count": 290,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 2,
+  "nonuse_boundary_count": 6,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Retrieve precipitation data for a specified location and time period. Provide all required fields: `location`, and `time_frame`.",
+    "when_to_use": [
+      "Use `ecology_data.precipitation_stats` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `location`, and `time_frame`.",
+      "Use only when the request clearly needs `ecology_data.precipitation_stats`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `time_frame`: 'six_months', 'year', 'five_years'.",
+      "Do not use for adjacent tools with similar names, descriptions, or arguments.",
+      "Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.",
+      "If the request lacks required fields, abstain or ask for clarification."
+    ],
+    "argument_template": {
+      "location": "sample_location_1",
+      "time_frame": "six_months"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for ecology_data.precipitation_stats",
+        "arguments": {
+          "location": "sample_location_1",
+          "time_frame": "six_months"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for ecology_data.precipitation_stats",
+        "arguments": {
+          "location": "sample_location_2",
+          "time_frame": "year"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "ecology_data_precipitation_stats__cand_01_boundary_heavy",
+        "generation_strategy": "boundary_heavy",
+        "prompt_template_id": "heuristic_boundary_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "ecology_data_precipitation_stats__cand_01_boundary_heavy",
+      "generation_strategy": "boundary_heavy",
+      "prompt_template_id": "heuristic_boundary_heavy_v1"
+    }
+  }
+}

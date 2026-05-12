@@ -1,0 +1,221 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0133_create_histogram_negative_easy_0_out_of_domain_request",
+      "tool_name": "create_histogram",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to create histogram.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "data": [
+          null
+        ],
+        "bins": 4
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0793,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: create_histogram\nTool description: Create a histogram based on provided data.\nSkill condition: multi_candidate_skill\nSkill summary: Create a histogram based on provided data. Provide all required fields: `data`, and `bins`.\nWhen to use: [\"Use `create_histogram` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `data`, and `bins`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"data\": [null], \"bins\": 4}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for create_histogram\", \"arguments\": {\"data\": [null], \"bins\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for create_histogram\", \"arguments\": {\"data\": [null], \"bins\": 2}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"data\": [null], \"bins\": 3}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"data\": [null], \"bins\": 4}}]\nSchema: {\"properties\": {\"bins\": {\"description\": \"The number of equal-width bins in the range. Default is 10.\", \"type\": \"integer\"}, \"data\": {\"description\": \"The data for which histogram needs to be plotted.\", \"items\": {\"type\": \"float\"}, \"type\": \"array\"}}, \"required\": [\"data\", \"bins\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to create histogram.\n",
+        "raw_model_output": "{\"arguments\": {\"bins\": 4, \"data\": [null]}}",
+        "parsed_prediction": {
+          "data": [
+            null
+          ],
+          "bins": 4
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0133_create_histogram_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "create_histogram",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with create histogram; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "data": [
+          null
+        ],
+        "bins": 4
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1291,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: create_histogram\nTool description: Create a histogram based on provided data.\nSkill condition: multi_candidate_skill\nSkill summary: Create a histogram based on provided data. Provide all required fields: `data`, and `bins`.\nWhen to use: [\"Use `create_histogram` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `data`, and `bins`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"data\": [null], \"bins\": 4}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for create_histogram\", \"arguments\": {\"data\": [null], \"bins\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for create_histogram\", \"arguments\": {\"data\": [null], \"bins\": 2}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"data\": [null], \"bins\": 3}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"data\": [null], \"bins\": 4}}]\nSchema: {\"properties\": {\"bins\": {\"description\": \"The number of equal-width bins in the range. Default is 10.\", \"type\": \"integer\"}, \"data\": {\"description\": \"The data for which histogram needs to be plotted.\", \"items\": {\"type\": \"float\"}, \"type\": \"array\"}}, \"required\": [\"data\", \"bins\"], \"type\": \"object\"}\nUser request: Maybe do something with create histogram; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {\"bins\": 4, \"data\": [null]}}",
+        "parsed_prediction": {
+          "data": [
+            null
+          ],
+          "bins": 4
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0133_create_histogram_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "create_histogram",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use create histogram; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "data": [
+          null
+        ],
+        "bins": 4
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0732,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: create_histogram\nTool description: Create a histogram based on provided data.\nSkill condition: multi_candidate_skill\nSkill summary: Create a histogram based on provided data. Provide all required fields: `data`, and `bins`.\nWhen to use: [\"Use `create_histogram` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `data`, and `bins`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"data\": [null], \"bins\": 4}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for create_histogram\", \"arguments\": {\"data\": [null], \"bins\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for create_histogram\", \"arguments\": {\"data\": [null], \"bins\": 2}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"data\": [null], \"bins\": 3}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"data\": [null], \"bins\": 4}}]\nSchema: {\"properties\": {\"bins\": {\"description\": \"The number of equal-width bins in the range. Default is 10.\", \"type\": \"integer\"}, \"data\": {\"description\": \"The data for which histogram needs to be plotted.\", \"items\": {\"type\": \"float\"}, \"type\": \"array\"}}, \"required\": [\"data\", \"bins\"], \"type\": \"object\"}\nUser request: Explain when someone should use create histogram; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"bins\": 4, \"data\": [null]}}",
+        "parsed_prediction": {
+          "data": [
+            null
+          ],
+          "bins": 4
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0133_create_histogram_positive_easy_0",
+      "tool_name": "create_histogram",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use create histogram to Create a histogram based on provided data. Set bins=1, data=[1].",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "data": [
+          null
+        ],
+        "bins": 4
+      },
+      "expected_arguments": {
+        "bins": 1,
+        "data": [
+          1
+        ]
+      },
+      "prediction_latency_ms": 0.0714,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: create_histogram\nTool description: Create a histogram based on provided data.\nSkill condition: multi_candidate_skill\nSkill summary: Create a histogram based on provided data. Provide all required fields: `data`, and `bins`.\nWhen to use: [\"Use `create_histogram` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `data`, and `bins`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"data\": [null], \"bins\": 4}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for create_histogram\", \"arguments\": {\"data\": [null], \"bins\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for create_histogram\", \"arguments\": {\"data\": [null], \"bins\": 2}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"data\": [null], \"bins\": 3}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"data\": [null], \"bins\": 4}}]\nSchema: {\"properties\": {\"bins\": {\"description\": \"The number of equal-width bins in the range. Default is 10.\", \"type\": \"integer\"}, \"data\": {\"description\": \"The data for which histogram needs to be plotted.\", \"items\": {\"type\": \"float\"}, \"type\": \"array\"}}, \"required\": [\"data\", \"bins\"], \"type\": \"object\"}\nUser request: Use create histogram to Create a histogram based on provided data. Set bins=1, data=[1].\n",
+        "raw_model_output": "{\"arguments\": {\"bins\": 4, \"data\": [null]}}",
+        "parsed_prediction": {
+          "data": [
+            null
+          ],
+          "bins": 4
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0133_create_histogram_positive_medium_0",
+      "tool_name": "create_histogram",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Create a histogram based on provided data. The relevant details are bins=8, data=[8].",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "data": [
+          null
+        ],
+        "bins": 4
+      },
+      "expected_arguments": {
+        "bins": 8,
+        "data": [
+          8
+        ]
+      },
+      "prediction_latency_ms": 0.073,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: create_histogram\nTool description: Create a histogram based on provided data.\nSkill condition: multi_candidate_skill\nSkill summary: Create a histogram based on provided data. Provide all required fields: `data`, and `bins`.\nWhen to use: [\"Use `create_histogram` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `data`, and `bins`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"data\": [null], \"bins\": 4}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for create_histogram\", \"arguments\": {\"data\": [null], \"bins\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for create_histogram\", \"arguments\": {\"data\": [null], \"bins\": 2}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"data\": [null], \"bins\": 3}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"data\": [null], \"bins\": 4}}]\nSchema: {\"properties\": {\"bins\": {\"description\": \"The number of equal-width bins in the range. Default is 10.\", \"type\": \"integer\"}, \"data\": {\"description\": \"The data for which histogram needs to be plotted.\", \"items\": {\"type\": \"float\"}, \"type\": \"array\"}}, \"required\": [\"data\", \"bins\"], \"type\": \"object\"}\nUser request: I need help with this task: Create a histogram based on provided data. The relevant details are bins=8, data=[8].\n",
+        "raw_model_output": "{\"arguments\": {\"bins\": 4, \"data\": [null]}}",
+        "parsed_prediction": {
+          "data": [
+            null
+          ],
+          "bins": 4
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0852
+  }
+}

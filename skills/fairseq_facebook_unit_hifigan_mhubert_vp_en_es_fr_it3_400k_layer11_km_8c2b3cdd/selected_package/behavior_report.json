@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0025_fairseq_facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd_negative_easy_0_out_of_domain_request",
+      "tool_name": "fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 8c2b3cdd.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0331,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd\nTool description: A text-to-speech model trained on multiple datasets including mtedx, covost2, europarl_st, and voxpopuli. Supports English, Spanish, French, and Italian languages. Framework: Fairseq. Functionality: Text-to-Speech. API call: unit.TTS.from_pretrained('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_es_css10').\nSkill condition: multi_candidate_skill\nSkill summary: A text-to-speech model trained on multiple datasets including mtedx, covost2, europarl_st, and voxpopuli. Supports English, Spanish, French, and Italian languages. Framework: Fairseq. Functionality: Text-to-Speech. API call: unit.TTS.from_pretrained('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_es_css10'). This tool has no required input fields.\nWhen to use: [\"Use `fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 8c2b3cdd.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0025_fairseq_facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 8c2b3cdd; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0301,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd\nTool description: A text-to-speech model trained on multiple datasets including mtedx, covost2, europarl_st, and voxpopuli. Supports English, Spanish, French, and Italian languages. Framework: Fairseq. Functionality: Text-to-Speech. API call: unit.TTS.from_pretrained('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_es_css10').\nSkill condition: multi_candidate_skill\nSkill summary: A text-to-speech model trained on multiple datasets including mtedx, covost2, europarl_st, and voxpopuli. Supports English, Spanish, French, and Italian languages. Framework: Fairseq. Functionality: Text-to-Speech. API call: unit.TTS.from_pretrained('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_es_css10'). This tool has no required input fields.\nWhen to use: [\"Use `fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 8c2b3cdd; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0025_fairseq_facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 8c2b3cdd; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0293,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd\nTool description: A text-to-speech model trained on multiple datasets including mtedx, covost2, europarl_st, and voxpopuli. Supports English, Spanish, French, and Italian languages. Framework: Fairseq. Functionality: Text-to-Speech. API call: unit.TTS.from_pretrained('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_es_css10').\nSkill condition: multi_candidate_skill\nSkill summary: A text-to-speech model trained on multiple datasets including mtedx, covost2, europarl_st, and voxpopuli. Supports English, Spanish, French, and Italian languages. Framework: Fairseq. Functionality: Text-to-Speech. API call: unit.TTS.from_pretrained('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_es_css10'). This tool has no required input fields.\nWhen to use: [\"Use `fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Explain when someone should use fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 8c2b3cdd; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0025_fairseq_facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd_positive_easy_0",
+      "tool_name": "fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 8c2b3cdd to A text-to-speech model trained on multiple datasets including mtedx, covost2, europarl_st, and voxpopuli. Supports English, Spanish, French. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0285,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd\nTool description: A text-to-speech model trained on multiple datasets including mtedx, covost2, europarl_st, and voxpopuli. Supports English, Spanish, French, and Italian languages. Framework: Fairseq. Functionality: Text-to-Speech. API call: unit.TTS.from_pretrained('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_es_css10').\nSkill condition: multi_candidate_skill\nSkill summary: A text-to-speech model trained on multiple datasets including mtedx, covost2, europarl_st, and voxpopuli. Supports English, Spanish, French, and Italian languages. Framework: Fairseq. Functionality: Text-to-Speech. API call: unit.TTS.from_pretrained('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_es_css10'). This tool has no required input fields.\nWhen to use: [\"Use `fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use fairseq  facebook unit hifigan mhubert vp en es fr it3 400k layer11 km 8c2b3cdd to A text-to-speech model trained on multiple datasets including mtedx, covost2, europarl_st, and voxpopuli. Supports English, Spanish, French. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0025_fairseq_facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd_positive_medium_0",
+      "tool_name": "fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: A text-to-speech model trained on multiple datasets including mtedx, covost2, europarl_st, and voxpopuli. Supports English, Spanish, French. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0285,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd\nTool description: A text-to-speech model trained on multiple datasets including mtedx, covost2, europarl_st, and voxpopuli. Supports English, Spanish, French, and Italian languages. Framework: Fairseq. Functionality: Text-to-Speech. API call: unit.TTS.from_pretrained('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_es_css10').\nSkill condition: multi_candidate_skill\nSkill summary: A text-to-speech model trained on multiple datasets including mtedx, covost2, europarl_st, and voxpopuli. Supports English, Spanish, French, and Italian languages. Framework: Fairseq. Functionality: Text-to-Speech. API call: unit.TTS.from_pretrained('facebook/unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km1000_es_css10'). This tool has no required input fields.\nWhen to use: [\"Use `fairseq__facebook_unit_hifigan_mhubert_vp_en_es_fr_it3_400k_layer11_km_8c2b3cdd` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: A text-to-speech model trained on multiple datasets including mtedx, covost2, europarl_st, and voxpopuli. Supports English, Spanish, French. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0299
+  }
+}

@@ -1,0 +1,494 @@
+% This must be in the first 5 lines to tell arXiv to use pdfLaTeX, which is strongly recommended.
+\pdfoutput=1
+
+\documentclass[11pt]{article}
+
+% Remove the "review" option to generate the final version.
+% \usepackage[review]{EMNLP2023}
+\usepackage{EMNLP2023}
+
+% Standard package includes
+\usepackage{times}
+\usepackage{latexsym}
+
+% For proper rendering and hyphenation of words containing Latin characters
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% Microtypography
+\usepackage{microtype}
+
+% Typewriter font
+\usepackage{inconsolata}
+
+% Additional useful packages
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{xspace}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{caption}
+
+\usepackage[disable]{todonotes}
+
+\definecolor{PaperRed}{RGB}{180,0,0}
+\definecolor{PaperBlue}{RGB}{0,70,180}
+\definecolor{PaperGreen}{RGB}{0,120,40}
+
+\newif\ifshowtodos
+% \showtodosfalse % final PDF: hide todo text
+\showtodosfalse % draft PDF: show todo text
+
+\ifshowtodos
+  \newcommand{\todoexp}[1]{{\color{PaperRed}#1}}
+  \newcommand{\todofig}[1]{{\color{PaperBlue}#1}}
+  \newcommand{\todoimpl}[1]{{\color{PaperGreen}#1}}
+\else
+  \newcommand{\todoexp}[1]{}
+  \newcommand{\todofig}[1]{}
+  \newcommand{\todoimpl}[1]{}
+\fi
+
+% If title/author block gets crowded
+% \setlength\titlebox{6cm}
+
+\newcommand{\method}{ReliaSkill}
+\newcommand{\skill}{\textsc{Skill}\xspace}
+
+\title{ReliaSkill: From Raw MCP Schemas to Reliable Skills for Tool-Using LLM Agents}
+
+\author{
+    % Anonymous EMNLP submission
+  Zian Zeng \\
+  University of Maryland \\
+  \And
+  Mu Yuan \\
+  University of Maryland \\
+}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Tool-using LLM agents increasingly receive new capabilities through raw tool schemas, but a schema only specifies what arguments a tool accepts, not when an agent should invoke the tool or abstain. We study \emph{MCP skill cold-start}: preparing newly exposed MCP-like tools for reliable agent use before substantial execution traces, user feedback, or deployment history are available. We introduce \method{}, a pre-deployment pipeline that converts raw schemas and sparse documentation into compact skill artifacts with explicit use boundaries, canonical argument templates, schema-faithful examples, validation reports, repair traces, and deployability decisions. \method{} normalizes tools into ToolIR++, validates generated skills against the source schema, evaluates positive and adjacent negative controls, repairs localized failures, and gates artifacts before downstream exposure. Holding the downstream predictor fixed, \method{} improves Joint Exact Match from 17.15\% to 21.12\% and Argument Validity from 43.66\% to 52.78\% over raw MCP exposure with Qwen2.5-7B, while observing no harmful activation on held-out negative controls. These results show that reliable tool use requires a governed representation layer between protocol-level tool exposure and downstream agent invocation.
+\end{abstract}
+
+
+\section{Introduction}
+
+LLM agents increasingly extend their capabilities by invoking external tools rather than relying only on parametric knowledge \citep{yao2023react,schick2023toolformer,wu2023autogen}. In practice, however, a tool is not exposed to an agent as an executable capability alone. It is exposed through a representation: a name, a description, an input schema, sparse documentation, examples, or a richer skill. When this representation is incomplete or unfaithful, the agent may fail even if the underlying tool is correctly implemented.
+
+This problem is especially visible in Model Context Protocol (MCP) ecosystems, where tools are commonly described through structured schemas and short natural-language descriptions. A schema specifies the formal interface of a tool, including argument names, types, required fields, enum values, nested objects, and constraints. Sparse documentation may add short usage notes or metadata. These materials define what the tool accepts, but they often do not define the agent-facing decision boundary: when the tool should be selected, when it should be avoided, how arguments should be assembled, and which nearby requests should trigger abstention.
+
+Consider a filesystem search tool described only as ``search files under a directory,'' with arguments for a root directory, filename pattern, and maximum result count. The schema may be formally valid, but it may not tell the agent that the tool should not answer conceptual questions such as ``What is a \texttt{.tex} file?'', perform destructive cleanup, or search outside an allowed root. Conversely, a naive generated skill may look helpful while inventing unsupported options such as recursive search flags, hidden-file filters, or sorting arguments. Raw schemas can therefore be too thin to guide reliable use, while unconstrained skill generation can be fluent but unfaithful.
+
+We call this setting \emph{MCP skill cold-start}: preparing a newly exposed MCP-like tool for reliable agent use before substantial execution traces, user feedback, or deployment history are available. The key challenge is not simply to generate more documentation. The challenge is to construct a compact, schema-faithful, behavior-tested representation that can be deployed, repaired, or rejected before the tool enters the agent's action space.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.98\textwidth]{figures/ReliaSkill_Figure_1.png}
+    \caption{
+    Overview of \method{} in the MCP skill cold-start setting. A sparse filesystem-search schema leaves usage boundaries implicit, while naive skill generation can introduce unsupported options. \method{} constructs a compact skill artifact, validates it with positive and negative controls, repairs localized failures, and gates deployment.
+    }
+    \label{fig:teaser}
+\end{figure*}
+
+We present \method{}, a reliability-centered pipeline for MCP skill cold-start. Given a raw MCP-like tool record, \method{} first normalizes the schema and available documentation into ToolIR++, a shared intermediate representation for generation, validation, repair, and scoring. It then generates compact candidate skill artifacts containing when-to-use guidance, when-not-to-use guidance, canonical argument templates, and schema-faithful examples. Crucially, these artifacts are treated as candidates rather than deployable products: \method{} validates structural faithfulness against the source schema, evaluates behavior on positive and adjacent negative controls, repairs localized failures, and gates the final artifact before downstream exposure.
+
+This design targets both utility and risk. Positive controls test whether the representation helps the model select the correct tool and construct valid arguments. Adjacent negative controls test whether the representation expands the tool's trigger boundary to requests where the tool should not be used. This distinction matters because a skill that improves in-scope invocation while increasing inappropriate activation is not reliably better. \method{} therefore evaluates skill construction as a joint problem of activation, argument construction, schema faithfulness, and abstention.
+
+Our evaluation keeps the downstream predictor fixed and varies only the representation exposed to it. Under Qwen2.5-7B, \method{} improves Joint Exact Match from 17.15\% to 21.12\%, a 23.1\% relative gain over raw MCP exposure, and improves Argument Validity from 43.66\% to 52.78\%. We observe no harmful activation on held-out negative controls in the reported evaluation. These results suggest that reliable tool use depends not only on stronger models or better execution environments, but also on the quality of the intermediate representation placed between tool protocols and agent decisions.
+
+Our contributions are threefold. First, we formulate MCP skill cold-start as a tool-representation reliability problem. Second, we introduce \method{}, a low-compute pipeline that constructs compact, validated, repaired, and gated skill artifacts from raw MCP-like schemas. Third, we provide a utility- and harm-aware evaluation protocol that measures tool selection, argument validity, joint exact match, structural faithfulness, and abstention on adjacent negative controls.
+
+\section{Related Work}
+\label{sec:related_work}
+
+\textbf{Tool-using LLM agents and function calling.}
+A large body of work studies LLMs that reason and act through external tools. ReAct interleaves reasoning traces with environment actions \citep{yao2023react}, Toolformer learns API-use behaviors from self-supervised signals \citep{schick2023toolformer}, and AutoGen places tool use inside multi-agent workflows \citep{wu2023autogen}. Related systems such as MRKL and Voyager further show how external capabilities can extend model behavior when tools are reusable across tasks \citep{karpas2022mrkl,wang2023voyager}. Another line of work studies structured API invocation over large tool inventories. Gorilla grounds models in API documentation \citep{patil2024gorilla}, ToolLLM evaluates multi-step API use with retrieval and argument construction \citep{qin2024toolllm}, API-Bank provides executable tool-augmented dialogue tasks \citep{li2023apibank}, and ToolSandbox emphasizes stateful and interactive evaluation beyond surface-form call matching \citep{lu2025toolsandbox}. These works primarily evaluate downstream tool selection, argument generation, execution, or multi-step planning. \method{} targets an earlier preparation layer: how a raw MCP-like schema should be transformed into a reliable agent-facing representation before the downstream model is asked to invoke it.
+
+\textbf{Agent skills as reusable representations.}
+Recent work increasingly treats skills as reusable artifacts that package procedural guidance, examples, and task-facing knowledge between a general-purpose model and a concrete capability. \citet{xu2026agentskillslargelanguage} describe agent skills as an abstraction for portability, progressive disclosure, and tool connectivity. SkillsBench further studies skills as first-class evaluation objects and reports an important asymmetry: curated skills can improve agent performance, while self-generated skills may provide limited benefit or degrade behavior \citep{li2026skillsbenchbenchmarkingagentskills}. This observation motivates our reliability-centered framing. If generated skills can help or harm, schema-to-skill construction should not be treated as one-shot prompt generation. \method{} instead treats each generated skill as a candidate artifact that must pass schema validation, behavior-grounded controls, repair, and deployment gating.
+
+\textbf{Skill learning from experience and feedback.}
+Several recent systems improve skills using richer evidence than is available in our setting. Trace2Skill distills lessons from execution trajectories into transferable skills \citep{ni2026trace2skilldistilltrajectorylocallessons}. SkillForge studies domain-specific self-evolving skills through failure analysis and iterative optimization \citep{liu2026skillforgeforgingdomainspecificselfevolving}. CoEvoSkills improves multi-file skill packages through feedback from a surrogate verifier \citep{zhang2026coevoskillsselfevolvingagentskills}. AutoSkill accumulates personalized skills from repeated user interactions across sessions \citep{yang2026autoskillexperiencedrivenlifelonglearning}. These methods address experience-rich regimes with trajectories, deployment feedback, domain corpora, or long-horizon user history. \method{} addresses the complementary cold-start regime, where a newly exposed tool may provide only a schema and sparse documentation. This setting requires validation and gating before substantial execution evidence exists.
+
+\textbf{Compositional and environment-specific skills.}
+Other work studies skills in specialized agent environments. SkillCraft investigates test-time discovery, caching, and reuse of higher-level tool compositions across structurally similar long-horizon tasks \citep{chen2026skillcraftllmagentslearn}. CUA-Skill develops a structured skill substrate for computer-using agents in GUI environments, including retrieval, parameterization, and execution graphs tailored to desktop interaction \citep{chen2026cuaskilldevelopskillscomputer}. These approaches focus on compositional reuse or environment-specific execution substrates. \method{} focuses instead on upstream MCP schema-to-skill construction under limited initial evidence.
+
+\textbf{Positioning.}
+Prior work shows that tool-using agents benefit from stronger reasoning, better API grounding, executable evaluation, and reusable skill abstractions. However, MCP-style schemas specify interfaces rather than reliable agent-facing usage boundaries. They do not by themselves provide canonical argument templates, schema-faithful examples, non-use guidance, validation reports, repair traces, or deployability decisions. \method{} fills this gap by treating tool onboarding as a pre-deployment reliability problem: raw schemas are converted into compact, auditable, behavior-tested skill artifacts before tools enter the agent's action space.
+
+\section{Problem Formulation}
+\label{sec:problem_formulation}
+
+We study the upstream problem of preparing newly exposed MCP-like tools for reliable use by downstream LLM agents. Unlike experience-rich skill-learning settings, the initial evidence for each tool is limited to a raw interface specification and sparse documentation. The goal is to construct an agent-facing skill artifact that improves tool invocation while preserving abstention on adjacent out-of-scope requests.
+
+Let a raw MCP-like tool record be
+\begin{equation}
+M = (n, d, \sigma, c),
+\end{equation}
+where $n$ is the tool name, $d$ is a short natural-language description, $\sigma$ is the structured input schema, and $c$ contains any auxiliary documentation or usage notes. The schema specifies the formal interface of the tool, including argument names, types, required fields, enum values, nested objects, and constraints.
+
+\method{} maps $M$ into a normalized intermediate representation,
+\begin{equation}
+T = N(M),
+\end{equation}
+where $T$ denotes ToolIR++. ToolIR++ preserves the source schema while adding reliability-relevant metadata such as provenance, documentation completeness, schema complexity, ambiguity indicators, side-effect labels, and safety hints. This representation is shared by skill generation, validation, repair, scoring, and analysis.
+
+A candidate skill artifact is represented as
+\begin{equation}
+S = (g^{+}, g^{-}, a, e, m),
+\end{equation}
+where $g^{+}$ is when-to-use guidance, $g^{-}$ is when-not-to-use guidance, $a$ is a canonical argument template, $e$ is a set of schema-faithful examples, and $m$ stores metadata such as validation reports, behavior reports, repair traces, and deployability information. This definition makes the skill an inspectable artifact rather than free-form prompt text.
+
+Given a candidate skill $S$, ToolIR++ record $T$, and development controls $C_{\mathrm{dev}}$, \method{} computes reliability evidence
+\begin{equation}
+z = E(S, T, C_{\mathrm{dev}}),
+\end{equation}
+where $z$ summarizes structural validation, positive-control behavior, adjacent negative-control behavior, repairability, compactness, and risk-sensitive metadata. A deployability function then maps this evidence to a score and an operational decision:
+\begin{equation}
+(r, y) = D(z),
+\quad
+y \in \{\textsc{Deploy}, \textsc{Repair}, \textsc{Reject}\}.
+\end{equation}
+Here $r$ is an auditable reliability score, not a calibrated probability of correctness. The action $y$ reflects the available pre-deployment choices: expose the skill, repair it, or withhold it.
+
+The cold-start construction problem is therefore:
+\begin{equation}
+G(M, C_{\mathrm{dev}}) \rightarrow (S, r, y),
+\end{equation}
+where $G$ denotes the full preparation pipeline. Held-out controls $C_{\mathrm{test}}$ are not used for generation, candidate selection, repair, thresholding, or gating; they are reserved for final reporting.
+
+This formulation isolates representation quality from model quality. Within each comparison, the downstream predictor is fixed, and only the tool-facing representation changes. A successful representation should improve correct tool selection and argument construction on positive controls without increasing activation on adjacent negative controls. We therefore evaluate MCP skill cold-start as a joint problem of utility, schema faithfulness, and abstention.
+
+\section{Method}
+\label{sec:method}
+
+Figure~\ref{fig:method} shows the \method{} pipeline. Given a raw MCP-like tool record, \method{} constructs an agent-facing skill artifact through six stages: normalization, compact skill generation, structural validation, behavior testing, targeted repair, and deployability gating. The central design choice is that generated skills are never treated as deployable by default. Each skill is an artifact that must remain faithful to the source schema and must improve in-scope tool use without broadening activation on adjacent out-of-scope requests.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.98\textwidth]{figures/ReliaSkill_Figure_2.png}
+    \caption{
+    Method overview. \method{} normalizes a raw MCP-like tool into ToolIR++, generates compact candidate skills, validates schema faithfulness, evaluates positive and adjacent negative controls, repairs localized failures, and gates the artifact as deploy, repair, or reject. The repair path patches unsupported arguments or over-broad trigger boundaries without regenerating the entire skill.
+    }
+    \label{fig:method}
+\end{figure*}
+
+\begin{figure}[t]
+\centering
+\setlength{\fboxsep}{5pt}
+\fbox{
+\begin{minipage}{0.92\columnwidth}
+\small
+\textbf{Algorithm 1: \method{} construction}
+
+\textbf{Input:} raw tool record $M$, development controls $C_{\mathrm{dev}}$ \\
+\textbf{Output:} skill artifact $S$, reliability score $r$, decision $y$
+
+\begin{enumerate}[leftmargin=*,nosep]
+    \item Normalize $M$ into ToolIR++ record $T$.
+    \item Generate candidate skill $S$ from $T$.
+    \item Validate $S$ against the source schema in $T$.
+    \item Evaluate $S$ on positive and adjacent negative controls in $C_{\mathrm{dev}}$.
+    \item If failures are localized and repairable, patch only the failing section and revalidate.
+    \item Compute reliability evidence $z$ and score $r$.
+    \item Return $y \in \{\textsc{Deploy}, \textsc{Repair}, \textsc{Reject}\}$.
+\end{enumerate}
+\end{minipage}
+}
+\caption{Operational view of the \method{} pipeline. Held-out test controls are not used during generation, repair, scoring, or gating.}
+\label{fig:algorithm}
+\end{figure}
+
+\subsection{ToolIR++ Normalization}
+
+The first stage converts each raw tool record $M=(n,d,\sigma,c)$ into ToolIR++, a normalized representation shared by all later stages. The parser extracts the tool name, description, schema fields, required and optional arguments, enum constraints, nested objects, arrays, default values, and available documentation snippets. It also records provenance, side-effect hints, authentication hints, and source metadata.
+
+ToolIR++ augments the normalized schema with reliability-relevant features, including documentation completeness, argument count, required-field count, enum count, nested-structure indicators, optional-field burden, ambiguity indicators, side-effect labels, and safety hints. These features are not used as standalone performance claims. They provide a common substrate for generation, validation, repair, gating, and slice analysis.
+
+\subsection{Compact Skill Generation}
+
+Given ToolIR++, \method{} generates a compact skill artifact with four human-readable components: a purpose summary, when-to-use guidance, when-not-to-use guidance, and a canonical argument template. The artifact also includes schema-faithful examples and machine-readable metadata for validation and downstream comparison.
+
+The generation prompt is constrained by the source schema. A candidate skill may explain how to use the tool, but it may not introduce unsupported arguments, enum values, side effects, hidden capabilities, or output guarantees that are absent from the raw record. This constraint addresses a central cold-start failure mode: naive skill generation can make a tool easier to invoke while also inventing behavior that the tool does not support.
+
+\subsection{Structural Validation}
+
+Generated skills can be fluent but invalid. \method{} therefore validates each candidate against ToolIR++ before deployment. The validator checks that argument templates and examples use only supported fields, include required arguments, respect enum constraints, remain parseable as structured calls, and avoid contradictions with the source schema. It also checks that the skill contains non-use guidance when the tool has likely adjacent or risky uses.
+
+The validator returns a structured report rather than only a binary label. Each failure is assigned a section, failure type, evidence span, and repairability flag. Common failure types include unsupported arguments, missing required fields, invalid enum values, malformed examples, contradictory guidance, unsafe side-effect boundaries, and missing non-use boundaries. These reports determine whether the artifact can be repaired or must be rejected.
+
+\subsection{Behavior-Grounded Controls}
+
+Structural validity does not guarantee reliable behavior. A schema-faithful skill can still make the model over-trigger on adjacent requests. \method{} therefore evaluates each candidate on development controls. Positive controls are in-scope requests for which the target tool should be selected and invoked with valid arguments. Adjacent negative controls are nearby requests for which the tool should not be activated, such as conceptual explanation requests, destructive/read-only mismatches, missing-information cases, ambiguous requests, or similar-tool distractors.
+
+Only development controls are used for candidate selection, repair, and gating. Held-out test controls are reserved for final reporting. This separation prevents the pipeline from tuning skill text or deployment decisions on final evaluation cases.
+
+\subsection{Targeted Repair}
+
+When validation or development controls identify a localized failure, \method{} repairs only the failing section. For example, if a filesystem-search skill introduces an unsupported argument such as \texttt{sort\_by}, the repair step patches the argument template or affected example while preserving the rest of the skill. If a negative control such as ``What is a \texttt{.tex} file?'' causes inappropriate activation, the repair step patches the non-use guidance rather than regenerating the full artifact.
+
+This localized strategy is deliberately conservative. Full regeneration can remove useful guidance while introducing new schema errors. Targeted repair instead uses the validation report and behavior report as edit constraints. Each repair trace records the original artifact hash, repaired artifact hash, failure type, modified section, patch summary, validation outcome, and repair round.
+
+\subsection{Reliability Scoring and Gating}
+
+After validation, behavior testing, and optional repair, \method{} computes reliability evidence $z$ and assigns a score $r$. The evidence includes structural validity, positive-control success, adjacent negative-control precision, compactness, side-effect sensitivity, ambiguity indicators, and repair history. The score is rule-based and auditable; it is not a calibrated probability of correctness.
+
+The deployment decision uses explicit vetoes before score-based selection. A skill is not deployable if it contains unsupported arguments, missing required fields, invalid enum values, malformed examples, contradictory guidance, or unresolved non-use-boundary failures. A skill is also withheld if it activates on development negative controls. If the failure is localized and repairable, the decision is \textsc{Repair}; if repair fails or the artifact remains invalid, the decision is \textsc{Reject}. A skill receives \textsc{Deploy} only when it passes structural validation, satisfies development behavior checks, and remains within the configured compactness budget.
+
+This gate turns skill generation into a pre-deployment reliability process. The pipeline does not ask whether a generated skill sounds useful; it asks whether the artifact has enough evidence to enter the downstream agent's action space.
+
+\subsection{Standardized Artifact Package}
+
+A deployed \method{} artifact is written as a standardized package containing the skill text, normalized schema, schema-faithful examples, validation report, behavior report, repair trace, reliability score, and metadata. This package format supports inspection and reproducibility. It also ensures that downstream experiments differ only in the representation shown to the same predictor, rather than in hidden preprocessing or manual edits.
+
+
+\section{Experimental Setup}
+\label{sec:experimental_setup}
+
+Our evaluation isolates the effect of tool-facing representation under a fixed downstream predictor. For each tool, we vary only the representation shown to the model while keeping the predictor, decoding configuration, evaluation prompts, and gold targets fixed. The main question is whether compact, validated, repaired, and gated skill artifacts improve tool selection and argument construction over raw MCP-like schema exposure, without increasing activation on adjacent out-of-scope requests.
+
+\subsection{Tool Corpus and Controls}
+\label{subsec:tool_corpus_controls}
+
+The primary benchmark contains 295 MCP-like tools spanning 10 source categories and 14 domains. Each tool is represented by a normalized schema, available descriptive text, and metadata for provenance, domain, side-effect label, difficulty tier, and schema complexity. The corpus includes 63 side-effect tools, 261 tools marked as hard by the benchmark metadata, and 48 explicitly marked synthetic tools. Tools are deduplicated by normalized tool name and schema hash.
+
+Each tool is paired with behavior-grounded controls. A \emph{positive control} is an in-scope request for which the target tool should be selected and invoked with valid arguments. An \emph{adjacent negative control} is a nearby, unsafe, underspecified, or out-of-scope request for which the target tool should not be activated, even when it shares vocabulary with the tool description. Examples include conceptual explanation requests, destructive/read-only mismatches, missing-information cases, ambiguous requests, and similar-tool distractors.
+
+The benchmark contains 2,950 controls over the 295 tools. We split them deterministically into 1,475 development controls and 1,475 held-out test controls. Development controls are used for candidate selection, repair, and gating. Held-out test controls are used only for final reporting and are not used for generation, repair, thresholding, or deployment decisions.
+
+\subsection{Representation Conditions}
+\label{subsec:conditions}
+
+We compare five tool-facing representation conditions. All conditions are evaluated under the same downstream predictor with identical prompt slots; only the representation shown to the predictor changes. Table~\ref{tab:setup_conditions} summarizes the conditions.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{@{}p{0.30\columnwidth}X@{}}
+\toprule
+\textbf{Condition} & \textbf{Representation exposed to the predictor} \\
+\midrule
+\texttt{raw\_mcp}
+  & The original MCP-like tool record: tool name, short description, and the structured input schema. No agent-facing skill is constructed. Represents the default ``ship the schema as-is'' exposure. \\
+\addlinespace[2pt]
+\texttt{generated\_skill\_base}
+  & A skill artifact produced by the configured \method{} generator, or loaded from a cached package when one is available. The base artifact contains a purpose summary, when-to-use guidance, when-not-to-use guidance, an argument template, and schema-faithful examples; a multi-candidate selection step then enriches the chosen artifact with semantic hints using validation-aware scoring, and uses a retrieve-then-semantic-rerank path for hidden-tool routing. This is the generator's base output: it is neither the full \method{} reliability pipeline nor an external AutoSkill baseline. \\
+\addlinespace[2pt]
+\texttt{curated\_schema\_reference}
+  & A human-written reference skill produced by carefully authoring when-to-use, when-not-to-use, and example invocations from the same ToolIR++ source. Captures what a careful manual MCP authoring effort produces under the same structural conventions; used as a comparison point rather than as a topline target. \\
+\addlinespace[2pt]
+\texttt{skill\_prompt\_boundary\_first}
+  & A \method{} artifact rendered with a prompt-template variant that surfaces non-use boundaries before use guidance, keeps the artifact compact, and emphasizes adjacent-out-of-scope abstention. \\
+\addlinespace[2pt]
+\texttt{skill\_prompt\_verbose\_docs}
+  & A \method{} artifact rendered with a prompt-template variant that adds extensive documentation-style narrative, additional examples, and informational notes. Emphasizes thoroughness of agent-facing context. \\
+\bottomrule
+\end{tabularx}
+\caption{
+Representation conditions evaluated in this work. The same downstream predictor is held fixed across all conditions; only the tool-facing representation changes.
+}
+\label{tab:setup_conditions}
+\end{table}
+
+The two \texttt{skill\_prompt\_*} conditions in Table~\ref{tab:setup_conditions} warrant additional specification, as they share an underlying skill artifact and differ only in how that artifact is exposed to the predictor. Both conditions are \emph{prompt-template variants} rendered from the same ToolIR++ source, with identical schema-faithful examples and identical when-to-use and when-not-to-use content; the variants differ only in the prompt template applied at exposure time. The \texttt{skill\_prompt\_boundary\_first} variant reorders sections to surface non-use guidance before use guidance and keeps the rendered artifact compact, prioritizing abstention boundary clarity. The \texttt{skill\_prompt\_verbose\_docs} variant retains the canonical section order, introduces an additional documentation-notes section, and expands narrative descriptions, prioritizing informational thoroughness. This construction isolates \emph{rendering policy} from skill content: any performance difference between the two variants is attributable to prompt-template structure rather than to differences in the underlying skill knowledge. Section~\ref{subsec:main_results} reports the empirical comparison across seven predictor models.
+
+All five conditions have complete saved prediction logs and are reported as main results. We do not report additional compactness, repair-strategy, or live-execution variants here.
+
+\subsection{Evaluation Tasks}
+\label{subsec:evaluation_tasks}
+
+We evaluate two aspects of tool-use reliability.
+
+\textbf{Structured-call prediction.}
+For positive controls, the model must select the target tool and generate schema-faithful arguments. This setting measures whether the representation helps the model construct the correct structured call when the request is in scope.
+
+\textbf{Adjacent negative-control abstention.}
+For negative controls, the model should avoid activating the target tool. This setting measures whether a representation broadens the tool's trigger boundary to nearby but inappropriate requests. A representation is therefore not considered reliable if it improves positive-call accuracy while increasing harmful or inappropriate activation on adjacent negatives.
+
+Together, these tasks evaluate the central reliability trade-off in MCP skill cold-start: the representation should improve correct invocation without weakening abstention.
+
+\subsection{Predictor and Decoding}
+\label{subsec:predictor_compute}
+
+All main results use Qwen2.5-7B-Instruct with 4-bit quantization as the downstream predictor. Decoding is deterministic, with temperature 0.0 and a maximum generation budget of 256 new tokens. The experiments are designed for a RTX 5070 Ti GPU with a 12GB VRAM. This setting reflects our focus on representation-level reliability: \method{} aims to improve tool onboarding through artifact construction, validation, repair, and gating rather than through model scaling or expensive trajectory collection.
+
+\subsection{Metrics}
+\label{subsec:metrics}
+
+We report metrics that distinguish invocation utility from over-triggering risk. \emph{Tool Selection Accuracy} measures whether the predicted tool is correct. \emph{Argument Validity} measures whether predicted arguments are parseable, schema-faithful, and satisfy required-field and enum constraints. \emph{Exact Match} measures whether the predicted structured call matches the gold call. \emph{Joint Exact Match} requires both correct tool selection and correct arguments.
+
+For adjacent negative controls, we report whether the model avoids inappropriate activation. We describe perfect negative-control performance as \emph{no observed harmful activation} rather than as a guarantee of safety. Structural validation metrics are reported separately from downstream prediction metrics: validation checks the generated skill artifacts, while Argument Validity measures the model's generated calls.
+
+\subsection{Reproducibility}
+\label{subsec:reproducibility}
+
+For each tool and representation condition, the pipeline records the generated skill text, normalized schema, example invocations, validation report, behavior report, repair report, reliability score, and metadata. Run-level summaries aggregate these records into condition-level tables. The default seed is 42, and final results are generated from saved logs rather than manual aggregation.
+
+
+\section{Results}
+\label{sec:results}
+
+We evaluate whether reliability-centered skill construction improves downstream tool use under a fixed Qwen2.5-7B predictor. The results show that raw schema exposure is a weak interface for agentic tool use, that one-shot skill generation helps but leaves reliability headroom, and that validation, repair, and gating improve the joint tool-use objective while preserving abstention on adjacent negative controls.
+
+\subsection{Tool-Facing Representations across Predictors}
+\label{subsec:main_results}
+
+We compare the five conditions of Section~\ref{subsec:conditions} under seven open-weight predictor models spanning roughly 1B to 9B parameters: Llama-3.2-1B-Instruct, Qwen2.5-1.5B-Instruct, Gemma-2-2B-it, Phi-3.5-mini-instruct, Qwen2.5-7B-Instruct, Llama-3.1-8B-Instruct, and Gemma-2-9B-it. All predictors use 4-bit quantization, deterministic decoding (temperature 0.0), and the same 1{,}475-control held-out test set; within each (predictor, condition) cell, only the tool-facing representation changes. Table~\ref{tab:main_results} reports structured-call Exact Match and hidden-tool routing Joint Exact for all 70 (predictor, condition, metric) combinations.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.1}
+
+\textbf{(a) Structured-call Exact Match (\%)} \\[2pt]
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+\textbf{Condition} & \textbf{Llama3.2-1B} & \textbf{Qwen2.5-1.5B} & \textbf{Gemma2-2B} & \textbf{Phi-3.5-mini} & \textbf{Qwen2.5-7B} & \textbf{Llama3.1-8B} & \textbf{Gemma2-9B} & \textbf{Mean} \\
+\midrule
+\texttt{raw\_mcp}                       & 33.42 & 38.58 & 43.80 & 33.97 & 53.02 & 39.93 & 48.88 & 41.66 \\
+\texttt{generated\_skill\_base}         & 37.76 & 34.31 & 43.93 & 42.44 & 63.32 & 56.81 & 56.75 & 47.90 \\
+\texttt{curated\_schema\_reference}     & 38.71 & 37.29 & 30.37 & 32.61 & 53.83 & 37.69 & 46.78 & 39.61 \\
+\texttt{skill\_prompt\_boundary\_first} & \textbf{52.81} & \textbf{61.63} & 52.07          & \textbf{63.73} & \textbf{70.37} & \textbf{58.37} & \textbf{63.39} & \textbf{60.34} \\
+\texttt{skill\_prompt\_verbose\_docs}   & 52.20          & 56.14          & \textbf{52.54} & 62.17          & 67.86          & 57.90          & 60.07          & 58.41 \\
+\bottomrule
+\end{tabular}
+
+\vspace{6pt}
+
+\textbf{(b) Hidden-tool Routing Joint Exact (\%)} \\[2pt]
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+\textbf{Condition} & \textbf{Llama3.2-1B} & \textbf{Qwen2.5-1.5B} & \textbf{Gemma2-2B} & \textbf{Phi-3.5-mini} & \textbf{Qwen2.5-7B} & \textbf{Llama3.1-8B} & \textbf{Gemma2-9B} & \textbf{Mean} \\
+\midrule
+\texttt{raw\_mcp}                       & 22.24          & 14.44          & 21.02          & 25.22          & 34.31          & 27.86          & 34.03          & 25.59 \\
+\texttt{generated\_skill\_base}         & 26.24          & 17.02          & 26.98          & 31.32          & 42.24          & 39.39          & 38.71          & 31.70 \\
+\texttt{curated\_schema\_reference}     & 24.00          & 13.69          & 15.19          & 23.73          & 32.20          & 26.64          & 33.69          & 24.16 \\
+\texttt{skill\_prompt\_boundary\_first} & \textbf{37.76} & 31.53          & 31.80          & \textbf{45.29} & \textbf{45.42} & \textbf{42.03} & \textbf{44.07} & \textbf{39.70} \\
+\texttt{skill\_prompt\_verbose\_docs}   & 35.19          & \textbf{33.02} & \textbf{34.03} & 42.71          & 44.75          & 40.07          & 41.29          & 38.72 \\
+\bottomrule
+\end{tabular}
+
+\caption{
+Main results across seven predictor models and the five tool-facing representation conditions of Section~\ref{subsec:conditions}. Values are percentages on the 1{,}475-control held-out test set; predictor columns are ordered by parameter count. \textbf{Bold} marks the best condition within each (predictor, metric) column. The two prompt-template variants share identical underlying skill content and differ only in rendering policy.
+}
+\label{tab:main_results}
+\end{table*}
+
+The data support a consistent ordering across predictor scales. Raw schema exposure (\texttt{raw\_mcp}) is the weakest interface, with 7-model means of 41.66\% structured Exact Match and 25.59\% routing Joint Exact. Generator-produced skills (\texttt{generated\_skill\_base}) improve both metric means by 6.24 and 6.11 absolute points respectively, although the improvement is not uniform across predictors; most notably, structured-call Exact Match on Qwen2.5-1.5B drops from 38.58\% to 34.31\%. Manual schema-based authoring (\texttt{curated\_schema\_reference}) does not match the generator output: its 7-model means (39.61\% / 24.16\%) fall below \texttt{generated\_skill\_base} (47.90\% / 31.70\%) on both metrics, with the largest per-predictor gaps on Gemma2-2B ($-13.56$ absolute structured EM) and Qwen2.5-7B ($-9.49$). This indicates that the value of a \method{} skill lies in the systematic combination of canonical sections, schema-faithful examples, and semantic hints rather than in the section template that a careful human author would reproduce.
+
+The two prompt-template variants substantially outperform the preceding three conditions on both metrics. \texttt{skill\_prompt\_boundary\_first} reaches 7-model means of 60.34\% structured Exact Match and 39.70\% routing Joint Exact---relative improvements of 44.8\% and 55.1\% over \texttt{raw\_mcp}, and 12.44 and 8.00 absolute points over \texttt{generated\_skill\_base}---while \texttt{skill\_prompt\_verbose\_docs} reaches 58.41\% / 38.72\%. As specified in Section~\ref{subsec:conditions}, these two variants share identical underlying skill content and differ only in the prompt template applied at exposure time. Their consistent advantage over \texttt{generated\_skill\_base}, combined with their relative ordering, indicates that rendering policy is a substantial source of downstream variation that is distinct from skill construction itself.
+
+Within the two prompt-template variants, \texttt{skill\_prompt\_boundary\_first} achieves the higher structured-call Exact Match on six of seven predictors and the higher routing Joint Exact on five of seven, the latter including all four mid-to-large predictors (Phi-3.5-mini, Qwen2.5-7B, Llama3.1-8B, Gemma2-9B) and Llama3.2-1B. \texttt{skill\_prompt\_verbose\_docs} overtakes the boundary-first variant on routing only for Qwen2.5-1.5B and Gemma2-2B. These two cases share a small-model profile but not a clean parameter-count threshold---Llama3.2-1B is comparable in scale yet prefers the boundary-first rendering---suggesting that additional documentation context compensates for limited intrinsic abstention behavior in specific models rather than as a monotone function of predictor capacity. We accordingly adopt \texttt{skill\_prompt\_boundary\_first} as the primary \method{} variant in subsequent analyses and report \texttt{skill\_prompt\_verbose\_docs} as an informative secondary variant documenting the trade-off between rendering compactness and informational thoroughness.
+
+\subsection{Component Ablation}
+\label{subsec:component_ablation_results}
+
+Table~\ref{tab:ablation_results} isolates the contribution of the main reliability components. Removing examples gives the weakest result, with 15.73\% Joint Exact Match and 41.22\% Argument Validity. Removing validation yields 18.85\% Joint Exact Match and 50.07\% Argument Validity, matching the naive skill condition. This confirms that one-shot skill generation improves over raw exposure but does not close the reliability gap.
+
+Full \method{} achieves the strongest Joint Exact Match and Tool Selection Accuracy. The only non-monotonic metric is Argument Validity: the w/o Repair condition reaches 53.05\%, slightly above the full gated artifact at 52.78\%. This trade-off is informative rather than contradictory. The final gate does not optimize local schema validity alone; it selects artifacts that better balance tool selection, argument construction, and abstention. The small decrease in Argument Validity is accompanied by a higher Joint Exact Match and a larger Selection Accuracy gain, from 27.39\% to 31.39\%.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Condition} & \textbf{Joint EM} & \textbf{Arg. Validity} & \textbf{Selection Acc.} \\
+\midrule
+Full \method{}  & \textbf{21.12\%} & 52.78\% & \textbf{31.39\%} \\
+w/o Repair      & 20.41\% & \textbf{53.05\%} & 27.39\% \\
+w/o Validation  & 18.85\% & 50.07\% & 27.36\% \\
+w/o Examples    & 15.73\% & 41.22\% & 25.80\% \\
+\bottomrule
+\end{tabular}
+\caption{
+Component ablation. Full \method{} gives the best Joint EM and Selection Accuracy. The w/o Repair condition has slightly higher Argument Validity, indicating a trade-off between local schema validity and the broader joint reliability objective.
+}
+\label{tab:ablation_results}
+\end{table}
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.98\textwidth]{figures/ReliaSkill_Figure_4.png}
+    \caption{
+    Quantitative analysis of \method{} reliability components.
+    (A) Joint Exact Match improves from \texttt{raw\_mcp} (17.15\%) to \texttt{naive\_skill} (18.85\%), w/o Repair (20.41\%), and full \method{} (21.12\%), a 23.1\% relative gain over raw exposure.
+    (B) Component ablation shows that full \method{} achieves the best Joint Exact Match and Selection Accuracy.
+    (C) Argument Validity improves substantially over raw exposure but is not strictly monotonic across components: w/o Repair reaches 53.05\%, while full \method{} reaches 52.78\%. Negative-control precision remains 100\%.
+    }
+    \label{fig:results_overview}
+\end{figure*}
+
+\subsection{Negative Controls and Structural Faithfulness}
+\label{subsec:safety_results}
+
+\method{} improves positive-case tool use without observed degradation on adjacent negative controls. In the reported evaluation, negative-control precision remains 100\%, corresponding to no observed harmful activation among the reported deployed artifacts. We interpret this as a benchmark observation rather than a production-safety guarantee: the result shows that the gated skill artifacts did not broaden the tool trigger boundary on the held-out negative controls used in this evaluation.
+
+Structural validation provides a separate artifact-level check. After validation and repair, the reported artifact set has no residual checker-level failures: unsupported arguments, missing required fields, invalid enum values, malformed JSON examples, contradictory guidance, and missing non-use boundaries are all recorded as 0 / 2950. This does not imply that downstream calls are always valid. Structural validation checks the generated skill artifacts and examples before prediction, while Argument Validity measures the model's generated calls at evaluation time.
+
+\subsection{Error Patterns}
+\label{subsec:error_patterns}
+
+The validation and repair logs indicate that naive skills most often fail through localized inconsistencies rather than wholly unusable generations. Common failure modes include unsupported arguments in templates, schema-inconsistent examples, missing required fields, and over-broad use boundaries. These errors are easy for a generated skill to introduce because the skill is written in natural language but must remain faithful to a formal schema.
+
+Targeted repair addresses these failures by editing the failing section instead of regenerating the entire artifact. For example, an unsupported argument in a canonical template can be removed while preserving the valid purpose summary and use boundary. Similarly, an over-broad trigger boundary can be patched by strengthening the non-use guidance without rewriting schema-faithful examples. This explains why repair and gating improve the joint objective: they preserve useful skill guidance while filtering or patching the parts most likely to distort downstream behavior.
+
+\subsection{Summary}
+\label{subsec:results_summary}
+
+Overall, the results support the central claim that tool reliability is partly a representation problem. Raw MCP-like schemas expose formal interfaces, but they do not reliably communicate when to use a tool, when to abstain, or how to assemble arguments. Naive generated skills improve over raw exposure, but validation, repair, and gating are needed to make the representation dependable. \method{} achieves the best Joint Exact Match and Tool Selection Accuracy while maintaining observed abstention behavior on adjacent negative controls, showing that schema-to-skill construction should be treated as a pre-deployment reliability process rather than a one-shot documentation-generation step.
+
+\section{Discussion}
+\label{sec:discussion}
+
+The results support the view that reliable tool use is not only a model-selection or execution problem; it is also a representation problem. MCP-style schemas expose tool interfaces, but they often leave the agent-facing decision boundary implicit. A model may know that a tool exists and still fail because the representation does not clearly specify when the tool should be used, when it should be avoided, or how arguments should be assembled.
+
+This helps explain why one-shot skill generation is not sufficient. A generated skill can make a tool easier to invoke while also introducing unsupported arguments, schema-inconsistent examples, or over-broad use boundaries. \method{} reduces this risk by treating generated skills as candidates that must be validated, behavior-tested, repaired, and gated before deployment. The ablation results show that these steps contribute differently: examples improve argument construction, validation improves schema faithfulness, repair fixes localized failures, and gating selects artifacts that better optimize the joint objective.
+
+The non-monotonic Argument Validity result further illustrates the need for a joint reliability objective. The w/o Repair condition obtains slightly higher Argument Validity than the full gated artifact, but full \method{} achieves better Joint Exact Match and Tool Selection Accuracy. This suggests that deployability should not be judged by local schema validity alone. A reliable representation must balance tool selection, argument construction, abstention, and artifact faithfulness.
+
+More broadly, \method{} suggests a preparation layer between protocol-level tool exposure and downstream agent invocation. Protocols such as MCP define how tools are exposed, and downstream predictors decide how to invoke them. Between these layers lies a practical onboarding problem: converting sparse tool interfaces into compact, auditable, behavior-tested representations. This layer is especially important in cold-start settings, where newly exposed tools lack substantial execution traces or deployment feedback.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+We introduced \method{}, a reliability-centered pipeline for MCP skill cold-start. Starting from raw MCP-like schemas and sparse documentation, \method{} constructs compact skill artifacts, validates schema faithfulness, evaluates positive and adjacent negative controls, repairs localized failures, and gates artifacts before downstream exposure.
+
+Under a fixed Qwen2.5-7B predictor, \method{} improves Joint Exact Match from 17.15\% to 21.12\% and Argument Validity from 43.66\% to 52.78\% over raw MCP exposure, with no observed harmful activation on held-out negative controls in the reported evaluation. The ablations show that generated skills are useful but insufficient by themselves: validation, repair, and gating are needed to convert fluent skill text into a more reliable tool-facing representation.
+
+These findings point to a missing layer in tool-using agents. Dependable tool onboarding requires more than exposing a schema or generating a helpful description. It requires compact, schema-faithful, behavior-tested artifacts that can be deployed, repaired, or rejected based on explicit reliability evidence.
+
+\section{Limitations}
+\label{sec:limitations}
+
+This work focuses on MCP skill cold-start: preparing newly exposed structured tools from schemas and sparse documentation before substantial execution traces or deployment feedback are available. It does not address experience-rich settings such as long-horizon skill evolution, trajectory distillation, personalized skill memory, GUI-oriented computer use, or large multi-file executable skill ecosystems.
+
+The evaluation corpus combines MCP-like tools, converted benchmark-style schemas, and explicitly marked synthetic tools. This supports controlled analysis of schema-to-skill construction, but it should not be interpreted as a representative sample of all production MCP deployments. Converted records are not live MCP servers, and synthetic tools broaden coverage without establishing real-world frequency or deployment risk.
+
+The main reported results are limited to a fixed Qwen2.5-7B predictor under a local low-compute setting. Broader generalization to other open models, proprietary models, production agent stacks, and live external APIs remains future work. The current evaluation also emphasizes structured-call prediction and adjacent negative-control abstention; live execution success and end-to-end task completion require additional study.
+
+Finally, \method{} uses a rule-based deployability score rather than a learned or calibrated reliability predictor. This makes the decision process auditable in cold-start settings, but it does not support claims about probabilistic correctness, calibration, or production safety. Validation and negative controls reduce observed failure modes, but they cannot guarantee safety under hidden permissions, changing backends, undocumented side effects, or deployment-specific policies.
+
+\section{Ethics Statement}
+\label{sec:ethics}
+
+Improving tool representations can make LLM agents more reliable, but it can also make external capabilities easier to invoke. This is especially consequential for tools that affect files, databases, communications, operational systems, or other resources with side effects. \method{} mitigates part of this risk by validating schema faithfulness, testing adjacent negative controls, repairing localized failures, and gating generated skills before exposure.
+
+These safeguards are not a complete safety solution. Production systems should combine skill preparation with least-privilege tool access, sandboxing, audit logs, rate limits, monitoring, and human approval for high-impact actions. Converted benchmark schemas and synthetic tools should remain clearly marked by provenance, and results on these artifacts should not be overstated as evidence of safety across production MCP deployments.
+
+\bibliographystyle{acl_natbib}
+\bibliography{custom}
+
+\end{document}

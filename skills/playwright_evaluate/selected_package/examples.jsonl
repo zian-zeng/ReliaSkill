@@ -1,0 +1,4 @@
+{"scenario": "Minimal valid request that satisfies the required fields for playwright_evaluate", "arguments": {"script": "sample_script_1"}}
+{"scenario": "Richer invocation that uses optional controls for playwright_evaluate", "arguments": {"script": "sample_script_2"}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"script": "sample_script_3"}}
+{"scenario": "Optional, enum, nested, or array argument example.", "arguments": {"script": "sample_script_4"}}

@@ -1,0 +1,118 @@
+{
+  "tool_name": "database.query",
+  "server_name": "bfcl_v3",
+  "tool_purpose": "Query the database based on certain conditions.",
+  "input_schema_raw": {
+    "properties": {
+      "conditions": {
+        "description": "Conditions for the query.",
+        "items": {
+          "properties": {
+            "field": {
+              "description": "The field to apply the condition.",
+              "type": "string"
+            },
+            "operation": {
+              "description": "The operation to be performed.",
+              "enum": [
+                "<",
+                ">",
+                "=",
+                ">=",
+                "<="
+              ],
+              "type": "string"
+            },
+            "value": {
+              "description": "The value to be compared.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "field",
+            "operation",
+            "value"
+          ],
+          "type": "dict"
+        },
+        "type": "array"
+      },
+      "table": {
+        "description": "Name of the table to query.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "table",
+      "conditions"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "table",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Name of the table to query.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.table"
+    },
+    {
+      "name": "conditions",
+      "type": "array",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Conditions for the query.",
+      "items_type": "dict",
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.conditions"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Query the database based on certain conditions.",
+    "database.query"
+  ],
+  "source_pointer": "bfcl_v3",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.4,
+    "auth_required": false,
+    "documentation_length": 47,
+    "has_array_argument": true,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 4,
+    "num_arguments": 2,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 1,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 2,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "database.query",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

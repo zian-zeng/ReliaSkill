@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for cellbio.get_proteins", "arguments": {"cell_compartment": "sample_cell_compartment_1"}}
+{"scenario": "Richer invocation that uses optional controls for cellbio.get_proteins", "arguments": {"cell_compartment": "sample_cell_compartment_2", "include_description": "false"}}

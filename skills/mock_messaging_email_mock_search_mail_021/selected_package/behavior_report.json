@@ -1,0 +1,206 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0256_mock_messaging_email_mock_search_mail_021_negative_easy_0_out_of_domain_request",
+      "tool_name": "mock_messaging_email_mock_search_mail_021",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to mock messaging email mock search mail 021.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "query": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to mock messaging email mock search mail 021",
+        "folder": "inbox",
+        "limit": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0882,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: mock_messaging_email_mock_search_mail_021\nTool description: Synthetic safe mock mailbox search tool over local fixture messages.\nSkill condition: multi_candidate_skill\nSkill summary: Synthetic safe mock mailbox search tool over local fixture messages. Provide the required field `query`.\nWhen to use: [\"Use `mock_messaging_email_mock_search_mail_021` when the user's request directly matches this tool's purpose.\", \"Provide the required field `query`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `folder`: 'inbox', 'sent', 'archive'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"query\": \"sample query\", \"folder\": \"inbox\", \"limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for mock_messaging_email_mock_search_mail_021\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for mock_messaging_email_mock_search_mail_021\", \"arguments\": {\"query\": \"sample query\", \"folder\": \"sent\", \"limit\": 2}}]\nSchema: {\"properties\": {\"folder\": {\"description\": \"Mailbox folder.\", \"enum\": [\"inbox\", \"sent\", \"archive\"], \"type\": \"string\"}, \"limit\": {\"description\": \"Maximum mock messages to return.\", \"type\": \"integer\"}, \"query\": {\"description\": \"Mailbox search query.\", \"type\": \"string\"}}, \"required\": [\"query\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to mock messaging email mock search mail 021.\n",
+        "raw_model_output": "{\"arguments\": {\"folder\": \"inbox\", \"limit\": 1, \"query\": \"Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to mock messaging email mock search mail 021\"}}",
+        "parsed_prediction": {
+          "query": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to mock messaging email mock search mail 021",
+          "folder": "inbox",
+          "limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0256_mock_messaging_email_mock_search_mail_021_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "mock_messaging_email_mock_search_mail_021",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to API-Bank-style local fixture tool that creates a draft email in an offline mailbox fixture. This is adjacent to mock messaging email mock search mail 021, but the intended capability is email draft message.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "query": "I need to API-Bank-style local fixture tool that creates a draft email in an offline mailbox fixture. This is adjacent to mock messaging email mock search mail 021, but the intended capability is email draft message",
+        "folder": "inbox",
+        "limit": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0772,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: mock_messaging_email_mock_search_mail_021\nTool description: Synthetic safe mock mailbox search tool over local fixture messages.\nSkill condition: multi_candidate_skill\nSkill summary: Synthetic safe mock mailbox search tool over local fixture messages. Provide the required field `query`.\nWhen to use: [\"Use `mock_messaging_email_mock_search_mail_021` when the user's request directly matches this tool's purpose.\", \"Provide the required field `query`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `folder`: 'inbox', 'sent', 'archive'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"query\": \"sample query\", \"folder\": \"inbox\", \"limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for mock_messaging_email_mock_search_mail_021\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for mock_messaging_email_mock_search_mail_021\", \"arguments\": {\"query\": \"sample query\", \"folder\": \"sent\", \"limit\": 2}}]\nSchema: {\"properties\": {\"folder\": {\"description\": \"Mailbox folder.\", \"enum\": [\"inbox\", \"sent\", \"archive\"], \"type\": \"string\"}, \"limit\": {\"description\": \"Maximum mock messages to return.\", \"type\": \"integer\"}, \"query\": {\"description\": \"Mailbox search query.\", \"type\": \"string\"}}, \"required\": [\"query\"], \"type\": \"object\"}\nUser request: I need to API-Bank-style local fixture tool that creates a draft email in an offline mailbox fixture. This is adjacent to mock messaging email mock search mail 021, but the intended capability is email draft message.\n",
+        "raw_model_output": "{\"arguments\": {\"folder\": \"inbox\", \"limit\": 1, \"query\": \"I need to API-Bank-style local fixture tool that creates a draft email in an offline mailbox fixture. This is adjacent to mock messaging email mock search mail 021, but the intended capability is email draft message\"}}",
+        "parsed_prediction": {
+          "query": "I need to API-Bank-style local fixture tool that creates a draft email in an offline mailbox fixture. This is adjacent to mock messaging email mock search mail 021, but the intended capability is email draft message",
+          "folder": "inbox",
+          "limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0256_mock_messaging_email_mock_search_mail_021_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "mock_messaging_email_mock_search_mail_021",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use email draft message to API-Bank-style local fixture tool that creates a draft email in an offline mailbox fixture; mock messaging email mock search mail 021 is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "query": "Use email draft message to API-Bank-style local fixture tool that creates a draft email in an offline mailbox fixture; mock messaging email mock search mail 021 is a distractor and should not be called",
+        "folder": "inbox",
+        "limit": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0913,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: mock_messaging_email_mock_search_mail_021\nTool description: Synthetic safe mock mailbox search tool over local fixture messages.\nSkill condition: multi_candidate_skill\nSkill summary: Synthetic safe mock mailbox search tool over local fixture messages. Provide the required field `query`.\nWhen to use: [\"Use `mock_messaging_email_mock_search_mail_021` when the user's request directly matches this tool's purpose.\", \"Provide the required field `query`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `folder`: 'inbox', 'sent', 'archive'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"query\": \"sample query\", \"folder\": \"inbox\", \"limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for mock_messaging_email_mock_search_mail_021\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for mock_messaging_email_mock_search_mail_021\", \"arguments\": {\"query\": \"sample query\", \"folder\": \"sent\", \"limit\": 2}}]\nSchema: {\"properties\": {\"folder\": {\"description\": \"Mailbox folder.\", \"enum\": [\"inbox\", \"sent\", \"archive\"], \"type\": \"string\"}, \"limit\": {\"description\": \"Maximum mock messages to return.\", \"type\": \"integer\"}, \"query\": {\"description\": \"Mailbox search query.\", \"type\": \"string\"}}, \"required\": [\"query\"], \"type\": \"object\"}\nUser request: Use email draft message to API-Bank-style local fixture tool that creates a draft email in an offline mailbox fixture; mock messaging email mock search mail 021 is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"folder\": \"inbox\", \"limit\": 1, \"query\": \"Use email draft message to API-Bank-style local fixture tool that creates a draft email in an offline mailbox fixture; mock messaging email mock search mail 021 is a distractor and should not be called\"}}",
+        "parsed_prediction": {
+          "query": "Use email draft message to API-Bank-style local fixture tool that creates a draft email in an offline mailbox fixture; mock messaging email mock search mail 021 is a distractor and should not be called",
+          "folder": "inbox",
+          "limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0256_mock_messaging_email_mock_search_mail_021_positive_easy_0",
+      "tool_name": "mock_messaging_email_mock_search_mail_021",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use mock messaging email mock search mail 021 to Synthetic safe mock mailbox search tool over local fixture messages. Set query=\"reliability evaluation\".",
+      "exact_match": false,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "query": "reliability evaluation",
+        "folder": "inbox",
+        "limit": 1
+      },
+      "expected_arguments": {
+        "query": "reliability evaluation"
+      },
+      "prediction_latency_ms": 0.0723,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: mock_messaging_email_mock_search_mail_021\nTool description: Synthetic safe mock mailbox search tool over local fixture messages.\nSkill condition: multi_candidate_skill\nSkill summary: Synthetic safe mock mailbox search tool over local fixture messages. Provide the required field `query`.\nWhen to use: [\"Use `mock_messaging_email_mock_search_mail_021` when the user's request directly matches this tool's purpose.\", \"Provide the required field `query`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `folder`: 'inbox', 'sent', 'archive'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"query\": \"sample query\", \"folder\": \"inbox\", \"limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for mock_messaging_email_mock_search_mail_021\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for mock_messaging_email_mock_search_mail_021\", \"arguments\": {\"query\": \"sample query\", \"folder\": \"sent\", \"limit\": 2}}]\nSchema: {\"properties\": {\"folder\": {\"description\": \"Mailbox folder.\", \"enum\": [\"inbox\", \"sent\", \"archive\"], \"type\": \"string\"}, \"limit\": {\"description\": \"Maximum mock messages to return.\", \"type\": \"integer\"}, \"query\": {\"description\": \"Mailbox search query.\", \"type\": \"string\"}}, \"required\": [\"query\"], \"type\": \"object\"}\nUser request: Use mock messaging email mock search mail 021 to Synthetic safe mock mailbox search tool over local fixture messages. Set query=\"reliability evaluation\".\n",
+        "raw_model_output": "{\"arguments\": {\"folder\": \"inbox\", \"limit\": 1, \"query\": \"reliability evaluation\"}}",
+        "parsed_prediction": {
+          "query": "reliability evaluation",
+          "folder": "inbox",
+          "limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0256_mock_messaging_email_mock_search_mail_021_positive_medium_0",
+      "tool_name": "mock_messaging_email_mock_search_mail_021",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Synthetic safe mock mailbox search tool over local fixture messages. The relevant details are folder=\"sent\", query=\"reliability evaluation\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "query": "sent",
+        "folder": "inbox",
+        "limit": 1
+      },
+      "expected_arguments": {
+        "folder": "sent",
+        "query": "reliability evaluation"
+      },
+      "prediction_latency_ms": 0.1329,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: mock_messaging_email_mock_search_mail_021\nTool description: Synthetic safe mock mailbox search tool over local fixture messages.\nSkill condition: multi_candidate_skill\nSkill summary: Synthetic safe mock mailbox search tool over local fixture messages. Provide the required field `query`.\nWhen to use: [\"Use `mock_messaging_email_mock_search_mail_021` when the user's request directly matches this tool's purpose.\", \"Provide the required field `query`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `folder`: 'inbox', 'sent', 'archive'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"query\": \"sample query\", \"folder\": \"inbox\", \"limit\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for mock_messaging_email_mock_search_mail_021\", \"arguments\": {\"query\": \"sample query\"}}, {\"scenario\": \"Richer invocation that uses optional controls for mock_messaging_email_mock_search_mail_021\", \"arguments\": {\"query\": \"sample query\", \"folder\": \"sent\", \"limit\": 2}}]\nSchema: {\"properties\": {\"folder\": {\"description\": \"Mailbox folder.\", \"enum\": [\"inbox\", \"sent\", \"archive\"], \"type\": \"string\"}, \"limit\": {\"description\": \"Maximum mock messages to return.\", \"type\": \"integer\"}, \"query\": {\"description\": \"Mailbox search query.\", \"type\": \"string\"}}, \"required\": [\"query\"], \"type\": \"object\"}\nUser request: I need help with this task: Synthetic safe mock mailbox search tool over local fixture messages. The relevant details are folder=\"sent\", query=\"reliability evaluation\".\n",
+        "raw_model_output": "{\"arguments\": {\"folder\": \"inbox\", \"limit\": 1, \"query\": \"sent\"}}",
+        "parsed_prediction": {
+          "query": "sent",
+          "folder": "inbox",
+          "limit": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.5,
+    "avg_prediction_latency_ms": 0.0924
+  }
+}

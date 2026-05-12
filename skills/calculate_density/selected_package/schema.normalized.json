@@ -1,0 +1,127 @@
+{
+  "tool_name": "calculate_density",
+  "server_name": "bfcl_v3",
+  "tool_purpose": "Calculate the population density of a specific country in a specific year.",
+  "input_schema_raw": {
+    "properties": {
+      "country": {
+        "description": "The country for which the density needs to be calculated.",
+        "type": "string"
+      },
+      "land_area": {
+        "description": "The land area of the country in square kilometers.",
+        "type": "float"
+      },
+      "population": {
+        "description": "The population of the country.",
+        "type": "integer"
+      },
+      "year": {
+        "description": "The year in which the density is to be calculated.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "country",
+      "year",
+      "population",
+      "land_area"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "country",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The country for which the density needs to be calculated.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.country"
+    },
+    {
+      "name": "year",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The year in which the density is to be calculated.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.year"
+    },
+    {
+      "name": "population",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The population of the country.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.population"
+    },
+    {
+      "name": "land_area",
+      "type": "float",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The land area of the country in square kilometers.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.land_area"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Calculate the population density of a specific country in a specific year.",
+    "calculate_density"
+  ],
+  "source_pointer": "bfcl_v3",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 74,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 4,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 4,
+    "num_top_level_arguments": 4,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "calculate_density",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

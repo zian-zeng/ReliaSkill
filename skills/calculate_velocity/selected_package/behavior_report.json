@@ -1,0 +1,207 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0128_calculate_velocity_negative_easy_0_out_of_domain_request",
+      "tool_name": "calculate_velocity",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate velocity.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "distance": 1,
+        "duration": 1,
+        "unit": "sample_unit_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0729,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_velocity\nTool description: Calculate the velocity for a certain distance travelled within a specific duration.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the velocity for a certain distance travelled within a specific duration. Provide all required fields: `distance`, and `duration`.\nWhen to use: [\"Use `calculate_velocity` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `distance`, and `duration`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"distance\": 1, \"duration\": 1, \"unit\": \"sample_unit_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_velocity\", \"arguments\": {\"distance\": 1, \"duration\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_velocity\", \"arguments\": {\"distance\": 2, \"duration\": 2, \"unit\": \"sample_unit_2\"}}]\nSchema: {\"properties\": {\"distance\": {\"description\": \"The distance travelled by the object, typically in kilometers.\", \"type\": \"integer\"}, \"duration\": {\"description\": \"The duration of the journey, typically in hours.\", \"type\": \"integer\"}, \"unit\": {\"description\": \"Optional parameter. The unit to return the velocity in. If not provided, the default is km/h.\", \"type\": \"string\"}}, \"required\": [\"distance\", \"duration\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate velocity.\n",
+        "raw_model_output": "{\"arguments\": {\"distance\": 1, \"duration\": 1, \"unit\": \"sample_unit_1\"}}",
+        "parsed_prediction": {
+          "distance": 1,
+          "duration": 1,
+          "unit": "sample_unit_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0128_calculate_velocity_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "calculate_velocity",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with calculate velocity; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "distance": 1,
+        "duration": 1,
+        "unit": "sample_unit_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0648,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_velocity\nTool description: Calculate the velocity for a certain distance travelled within a specific duration.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the velocity for a certain distance travelled within a specific duration. Provide all required fields: `distance`, and `duration`.\nWhen to use: [\"Use `calculate_velocity` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `distance`, and `duration`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"distance\": 1, \"duration\": 1, \"unit\": \"sample_unit_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_velocity\", \"arguments\": {\"distance\": 1, \"duration\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_velocity\", \"arguments\": {\"distance\": 2, \"duration\": 2, \"unit\": \"sample_unit_2\"}}]\nSchema: {\"properties\": {\"distance\": {\"description\": \"The distance travelled by the object, typically in kilometers.\", \"type\": \"integer\"}, \"duration\": {\"description\": \"The duration of the journey, typically in hours.\", \"type\": \"integer\"}, \"unit\": {\"description\": \"Optional parameter. The unit to return the velocity in. If not provided, the default is km/h.\", \"type\": \"string\"}}, \"required\": [\"distance\", \"duration\"], \"type\": \"object\"}\nUser request: Maybe do something with calculate velocity; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {\"distance\": 1, \"duration\": 1, \"unit\": \"sample_unit_1\"}}",
+        "parsed_prediction": {
+          "distance": 1,
+          "duration": 1,
+          "unit": "sample_unit_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0128_calculate_velocity_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "calculate_velocity",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to calculate velocity, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "distance": 1,
+        "duration": 1,
+        "unit": "sample_unit_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0646,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_velocity\nTool description: Calculate the velocity for a certain distance travelled within a specific duration.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the velocity for a certain distance travelled within a specific duration. Provide all required fields: `distance`, and `duration`.\nWhen to use: [\"Use `calculate_velocity` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `distance`, and `duration`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"distance\": 1, \"duration\": 1, \"unit\": \"sample_unit_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_velocity\", \"arguments\": {\"distance\": 1, \"duration\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_velocity\", \"arguments\": {\"distance\": 2, \"duration\": 2, \"unit\": \"sample_unit_2\"}}]\nSchema: {\"properties\": {\"distance\": {\"description\": \"The distance travelled by the object, typically in kilometers.\", \"type\": \"integer\"}, \"duration\": {\"description\": \"The duration of the journey, typically in hours.\", \"type\": \"integer\"}, \"unit\": {\"description\": \"Optional parameter. The unit to return the velocity in. If not provided, the default is km/h.\", \"type\": \"string\"}}, \"required\": [\"distance\", \"duration\"], \"type\": \"object\"}\nUser request: I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to calculate velocity, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.\n",
+        "raw_model_output": "{\"arguments\": {\"distance\": 1, \"duration\": 1, \"unit\": \"sample_unit_1\"}}",
+        "parsed_prediction": {
+          "distance": 1,
+          "duration": 1,
+          "unit": "sample_unit_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0128_calculate_velocity_positive_easy_0",
+      "tool_name": "calculate_velocity",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use calculate velocity to Calculate the velocity for a certain distance travelled within a specific duration. Set distance=1, duration=1.",
+      "exact_match": false,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "distance": 1,
+        "duration": 1,
+        "unit": "sample_unit_1"
+      },
+      "expected_arguments": {
+        "distance": 1,
+        "duration": 1
+      },
+      "prediction_latency_ms": 0.0618,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_velocity\nTool description: Calculate the velocity for a certain distance travelled within a specific duration.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the velocity for a certain distance travelled within a specific duration. Provide all required fields: `distance`, and `duration`.\nWhen to use: [\"Use `calculate_velocity` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `distance`, and `duration`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"distance\": 1, \"duration\": 1, \"unit\": \"sample_unit_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_velocity\", \"arguments\": {\"distance\": 1, \"duration\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_velocity\", \"arguments\": {\"distance\": 2, \"duration\": 2, \"unit\": \"sample_unit_2\"}}]\nSchema: {\"properties\": {\"distance\": {\"description\": \"The distance travelled by the object, typically in kilometers.\", \"type\": \"integer\"}, \"duration\": {\"description\": \"The duration of the journey, typically in hours.\", \"type\": \"integer\"}, \"unit\": {\"description\": \"Optional parameter. The unit to return the velocity in. If not provided, the default is km/h.\", \"type\": \"string\"}}, \"required\": [\"distance\", \"duration\"], \"type\": \"object\"}\nUser request: Use calculate velocity to Calculate the velocity for a certain distance travelled within a specific duration. Set distance=1, duration=1.\n",
+        "raw_model_output": "{\"arguments\": {\"distance\": 1, \"duration\": 1, \"unit\": \"sample_unit_1\"}}",
+        "parsed_prediction": {
+          "distance": 1,
+          "duration": 1,
+          "unit": "sample_unit_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0128_calculate_velocity_positive_medium_0",
+      "tool_name": "calculate_velocity",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Calculate the velocity for a certain distance travelled within a specific duration. The relevant details are distance=8, duration=8.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "distance": 1,
+        "duration": 1,
+        "unit": "sample_unit_1"
+      },
+      "expected_arguments": {
+        "distance": 8,
+        "duration": 8
+      },
+      "prediction_latency_ms": 0.1218,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_velocity\nTool description: Calculate the velocity for a certain distance travelled within a specific duration.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the velocity for a certain distance travelled within a specific duration. Provide all required fields: `distance`, and `duration`.\nWhen to use: [\"Use `calculate_velocity` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `distance`, and `duration`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"distance\": 1, \"duration\": 1, \"unit\": \"sample_unit_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_velocity\", \"arguments\": {\"distance\": 1, \"duration\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_velocity\", \"arguments\": {\"distance\": 2, \"duration\": 2, \"unit\": \"sample_unit_2\"}}]\nSchema: {\"properties\": {\"distance\": {\"description\": \"The distance travelled by the object, typically in kilometers.\", \"type\": \"integer\"}, \"duration\": {\"description\": \"The duration of the journey, typically in hours.\", \"type\": \"integer\"}, \"unit\": {\"description\": \"Optional parameter. The unit to return the velocity in. If not provided, the default is km/h.\", \"type\": \"string\"}}, \"required\": [\"distance\", \"duration\"], \"type\": \"object\"}\nUser request: I need help with this task: Calculate the velocity for a certain distance travelled within a specific duration. The relevant details are distance=8, duration=8.\n",
+        "raw_model_output": "{\"arguments\": {\"distance\": 1, \"duration\": 1, \"unit\": \"sample_unit_1\"}}",
+        "parsed_prediction": {
+          "distance": 1,
+          "duration": 1,
+          "unit": "sample_unit_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.5,
+    "avg_prediction_latency_ms": 0.0772
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "tool_name": "mock_system_admin_mock_query_logs_022",
+  "server_name": "synthetic_system_admin_mock",
+  "tool_purpose": "Synthetic safe mock system-admin retrieval tool for querying offline service logs.",
+  "input_schema_raw": {
+    "properties": {
+      "level": {
+        "description": "Log level.",
+        "enum": [
+          "info",
+          "warning",
+          "error"
+        ],
+        "type": "string"
+      },
+      "service_name": {
+        "description": "Mock service name.",
+        "type": "string"
+      },
+      "window_minutes": {
+        "description": "Lookback window.",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "service_name"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "service_name",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Mock service name.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.service_name"
+    },
+    {
+      "name": "level",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": [
+        "info",
+        "warning",
+        "error"
+      ],
+      "description": "Log level.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.level"
+    },
+    {
+      "name": "window_minutes",
+      "type": "integer",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Lookback window.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.window_minutes"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Synthetic safe mock system-admin retrieval tool for querying offline service logs.",
+    "Mock System Admin Mock Query Logs 022"
+  ],
+  "source_pointer": "synthetic_mock:system/admin mock:5",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.15,
+    "auth_required": false,
+    "documentation_length": 82,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 1,
+    "num_enum_fields": 1,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 2,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "mock_system_admin_mock_query_logs_022",
+    "server_name": "synthetic_system_admin_mock",
+    "source_pointer": "synthetic_mock:system/admin mock:5"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

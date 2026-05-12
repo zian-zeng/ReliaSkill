@@ -1,0 +1,195 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0131_cellbio_get_proteins_negative_easy_0_out_of_domain_request",
+      "tool_name": "cellbio.get_proteins",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to cellbio.get proteins.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "include_description": "false",
+        "cell_compartment": "sample_cell_compartment_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0699,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: cellbio.get_proteins\nTool description: Get the list of proteins in a specific cell compartment.\nSkill condition: multi_candidate_skill\nSkill summary: Get the list of proteins in a specific cell compartment. Provide the required field `cell_compartment`.\nWhen to use: [\"Use `cellbio.get_proteins` when the user's request directly matches this tool's purpose.\", \"Provide the required field `cell_compartment`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"cell_compartment\": \"sample_cell_compartment_1\", \"include_description\": \"false\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for cellbio.get_proteins\", \"arguments\": {\"cell_compartment\": \"sample_cell_compartment_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for cellbio.get_proteins\", \"arguments\": {\"cell_compartment\": \"sample_cell_compartment_2\", \"include_description\": \"false\"}}]\nSchema: {\"properties\": {\"cell_compartment\": {\"description\": \"The specific cell compartment.\", \"type\": \"string\"}, \"include_description\": {\"default\": \"false\", \"description\": \"Set true if you want a brief description of each protein.\", \"type\": \"boolean\"}}, \"required\": [\"cell_compartment\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to cellbio.get proteins.\n",
+        "raw_model_output": "{\"arguments\": {\"cell_compartment\": \"sample_cell_compartment_1\", \"include_description\": \"false\"}}",
+        "parsed_prediction": {
+          "include_description": "false",
+          "cell_compartment": "sample_cell_compartment_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0131_cellbio_get_proteins_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "cellbio.get_proteins",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with cellbio.get proteins.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "include_description": "false",
+        "cell_compartment": "sample_cell_compartment_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1398,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: cellbio.get_proteins\nTool description: Get the list of proteins in a specific cell compartment.\nSkill condition: multi_candidate_skill\nSkill summary: Get the list of proteins in a specific cell compartment. Provide the required field `cell_compartment`.\nWhen to use: [\"Use `cellbio.get_proteins` when the user's request directly matches this tool's purpose.\", \"Provide the required field `cell_compartment`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"cell_compartment\": \"sample_cell_compartment_1\", \"include_description\": \"false\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for cellbio.get_proteins\", \"arguments\": {\"cell_compartment\": \"sample_cell_compartment_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for cellbio.get_proteins\", \"arguments\": {\"cell_compartment\": \"sample_cell_compartment_2\", \"include_description\": \"false\"}}]\nSchema: {\"properties\": {\"cell_compartment\": {\"description\": \"The specific cell compartment.\", \"type\": \"string\"}, \"include_description\": {\"default\": \"false\", \"description\": \"Set true if you want a brief description of each protein.\", \"type\": \"boolean\"}}, \"required\": [\"cell_compartment\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with cellbio.get proteins.\n",
+        "raw_model_output": "{\"arguments\": {\"cell_compartment\": \"sample_cell_compartment_1\", \"include_description\": \"false\"}}",
+        "parsed_prediction": {
+          "include_description": "false",
+          "cell_compartment": "sample_cell_compartment_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0131_cellbio_get_proteins_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "cellbio.get_proteins",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use bank get account balance to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services; cellbio.get proteins is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "include_description": "false",
+        "cell_compartment": "sample_cell_compartment_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0569,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: cellbio.get_proteins\nTool description: Get the list of proteins in a specific cell compartment.\nSkill condition: multi_candidate_skill\nSkill summary: Get the list of proteins in a specific cell compartment. Provide the required field `cell_compartment`.\nWhen to use: [\"Use `cellbio.get_proteins` when the user's request directly matches this tool's purpose.\", \"Provide the required field `cell_compartment`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"cell_compartment\": \"sample_cell_compartment_1\", \"include_description\": \"false\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for cellbio.get_proteins\", \"arguments\": {\"cell_compartment\": \"sample_cell_compartment_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for cellbio.get_proteins\", \"arguments\": {\"cell_compartment\": \"sample_cell_compartment_2\", \"include_description\": \"false\"}}]\nSchema: {\"properties\": {\"cell_compartment\": {\"description\": \"The specific cell compartment.\", \"type\": \"string\"}, \"include_description\": {\"default\": \"false\", \"description\": \"Set true if you want a brief description of each protein.\", \"type\": \"boolean\"}}, \"required\": [\"cell_compartment\"], \"type\": \"object\"}\nUser request: Use bank get account balance to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services; cellbio.get proteins is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"cell_compartment\": \"sample_cell_compartment_1\", \"include_description\": \"false\"}}",
+        "parsed_prediction": {
+          "include_description": "false",
+          "cell_compartment": "sample_cell_compartment_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0131_cellbio_get_proteins_positive_easy_0",
+      "tool_name": "cellbio.get_proteins",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use cellbio.get proteins to Get the list of proteins in a specific cell compartment. Set cell_compartment=\"cell_compartment_0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "cell_compartment": "sample_cell_compartment_1"
+      },
+      "expected_arguments": {
+        "cell_compartment": "cell_compartment_0"
+      },
+      "prediction_latency_ms": 0.0543,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: cellbio.get_proteins\nTool description: Get the list of proteins in a specific cell compartment.\nSkill condition: multi_candidate_skill\nSkill summary: Get the list of proteins in a specific cell compartment. Provide the required field `cell_compartment`.\nWhen to use: [\"Use `cellbio.get_proteins` when the user's request directly matches this tool's purpose.\", \"Provide the required field `cell_compartment`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"cell_compartment\": \"sample_cell_compartment_1\", \"include_description\": \"false\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for cellbio.get_proteins\", \"arguments\": {\"cell_compartment\": \"sample_cell_compartment_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for cellbio.get_proteins\", \"arguments\": {\"cell_compartment\": \"sample_cell_compartment_2\", \"include_description\": \"false\"}}]\nSchema: {\"properties\": {\"cell_compartment\": {\"description\": \"The specific cell compartment.\", \"type\": \"string\"}, \"include_description\": {\"default\": \"false\", \"description\": \"Set true if you want a brief description of each protein.\", \"type\": \"boolean\"}}, \"required\": [\"cell_compartment\"], \"type\": \"object\"}\nUser request: Use cellbio.get proteins to Get the list of proteins in a specific cell compartment. Set cell_compartment=\"cell_compartment_0\".\n",
+        "raw_model_output": "{\"arguments\": {\"cell_compartment\": \"sample_cell_compartment_1\", \"include_description\": \"false\"}}",
+        "parsed_prediction": {
+          "include_description": "false",
+          "cell_compartment": "sample_cell_compartment_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0131_cellbio_get_proteins_positive_medium_0",
+      "tool_name": "cellbio.get_proteins",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Get the list of proteins in a specific cell compartment. The relevant details are cell_compartment=\"cell_compartment_7\", include_description=false.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "include_description": "false",
+        "cell_compartment": "sample_cell_compartment_1"
+      },
+      "expected_arguments": {
+        "cell_compartment": "cell_compartment_7",
+        "include_description": false
+      },
+      "prediction_latency_ms": 0.0548,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: cellbio.get_proteins\nTool description: Get the list of proteins in a specific cell compartment.\nSkill condition: multi_candidate_skill\nSkill summary: Get the list of proteins in a specific cell compartment. Provide the required field `cell_compartment`.\nWhen to use: [\"Use `cellbio.get_proteins` when the user's request directly matches this tool's purpose.\", \"Provide the required field `cell_compartment`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"cell_compartment\": \"sample_cell_compartment_1\", \"include_description\": \"false\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for cellbio.get_proteins\", \"arguments\": {\"cell_compartment\": \"sample_cell_compartment_1\"}}, {\"scenario\": \"Richer invocation that uses optional controls for cellbio.get_proteins\", \"arguments\": {\"cell_compartment\": \"sample_cell_compartment_2\", \"include_description\": \"false\"}}]\nSchema: {\"properties\": {\"cell_compartment\": {\"description\": \"The specific cell compartment.\", \"type\": \"string\"}, \"include_description\": {\"default\": \"false\", \"description\": \"Set true if you want a brief description of each protein.\", \"type\": \"boolean\"}}, \"required\": [\"cell_compartment\"], \"type\": \"object\"}\nUser request: I need help with this task: Get the list of proteins in a specific cell compartment. The relevant details are cell_compartment=\"cell_compartment_7\", include_description=false.\n",
+        "raw_model_output": "{\"arguments\": {\"cell_compartment\": \"sample_cell_compartment_1\", \"include_description\": \"false\"}}",
+        "parsed_prediction": {
+          "include_description": "false",
+          "cell_compartment": "sample_cell_compartment_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0751
+  }
+}

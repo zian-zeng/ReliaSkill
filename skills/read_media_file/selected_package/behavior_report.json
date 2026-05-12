@@ -1,0 +1,185 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0190_read_media_file_negative_easy_0_out_of_domain_request",
+      "tool_name": "read_media_file",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to read media file.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1493,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_media_file\nTool description: Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories. Provide the required field `path`.\nWhen to use: [\"Use `read_media_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_media_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_media_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"path\": {\"type\": \"string\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to read media file.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0190_read_media_file_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "read_media_file",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with read media file; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0975,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_media_file\nTool description: Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories. Provide the required field `path`.\nWhen to use: [\"Use `read_media_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_media_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_media_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"path\": {\"type\": \"string\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with read media file; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0190_read_media_file_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "read_media_file",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with read media file.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0927,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_media_file\nTool description: Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories. Provide the required field `path`.\nWhen to use: [\"Use `read_media_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_media_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_media_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"path\": {\"type\": \"string\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with read media file.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0190_read_media_file_positive_easy_0",
+      "tool_name": "read_media_file",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use read media file to Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories. Set path=\"docs/control_0.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {
+        "path": "docs/control_0.md"
+      },
+      "prediction_latency_ms": 0.1068,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_media_file\nTool description: Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories. Provide the required field `path`.\nWhen to use: [\"Use `read_media_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_media_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_media_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"path\": {\"type\": \"string\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Use read media file to Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories. Set path=\"docs/control_0.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0190_read_media_file_positive_medium_0",
+      "tool_name": "read_media_file",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories. The relevant details are path=\"docs/control_7.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {
+        "path": "docs/control_7.md"
+      },
+      "prediction_latency_ms": 0.1589,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: read_media_file\nTool description: Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories. Provide the required field `path`.\nWhen to use: [\"Use `read_media_file` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for read_media_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for read_media_file\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"path\": {\"type\": \"string\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: I need help with this task: Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories. The relevant details are path=\"docs/control_7.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.121
+  }
+}

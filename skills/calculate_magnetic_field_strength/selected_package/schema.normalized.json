@@ -1,0 +1,108 @@
+{
+  "tool_name": "calculate_magnetic_field_strength",
+  "server_name": "bfcl_v3",
+  "tool_purpose": "Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current.",
+  "input_schema_raw": {
+    "properties": {
+      "current": {
+        "description": "The current flowing through the wire in Amperes.",
+        "type": "integer"
+      },
+      "distance": {
+        "description": "The perpendicular distance from the wire to the point where the magnetic field is being calculated.",
+        "type": "integer"
+      },
+      "permeability": {
+        "description": "The permeability of the medium. Default is 12.57e-7 (Vacuum Permeability).",
+        "type": "float"
+      }
+    },
+    "required": [
+      "current",
+      "distance"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "current",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The current flowing through the wire in Amperes.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.current"
+    },
+    {
+      "name": "distance",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The perpendicular distance from the wire to the point where the magnetic field is being calculated.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.distance"
+    },
+    {
+      "name": "permeability",
+      "type": "float",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "The permeability of the medium. Default is 12.57e-7 (Vacuum Permeability).",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.permeability"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a current.",
+    "calculate_magnetic_field_strength",
+    "Calculate the magnetic field strength at a point a certain distance away from a long wire carrying a"
+  ],
+  "source_pointer": "bfcl_v3",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.15,
+    "auth_required": false,
+    "documentation_length": 109,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "calculate_magnetic_field_strength",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

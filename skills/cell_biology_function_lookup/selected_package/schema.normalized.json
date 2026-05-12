@@ -1,0 +1,108 @@
+{
+  "tool_name": "cell_biology.function_lookup",
+  "server_name": "bfcl_v3",
+  "tool_purpose": "Look up the function of a given molecule in a specified organelle.",
+  "input_schema_raw": {
+    "properties": {
+      "molecule": {
+        "description": "The molecule of interest.",
+        "type": "string"
+      },
+      "organelle": {
+        "description": "The organelle of interest.",
+        "type": "string"
+      },
+      "specific_function": {
+        "description": "If set to true, a specific function of the molecule within the organelle will be provided, if such information exists.",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "molecule",
+      "organelle",
+      "specific_function"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "molecule",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The molecule of interest.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.molecule"
+    },
+    {
+      "name": "organelle",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The organelle of interest.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.organelle"
+    },
+    {
+      "name": "specific_function",
+      "type": "boolean",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "If set to true, a specific function of the molecule within the organelle will be provided, if such information exists.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.specific_function"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Look up the function of a given molecule in a specified organelle.",
+    "cell_biology.function_lookup"
+  ],
+  "source_pointer": "bfcl_v3",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 66,
+    "has_array_argument": false,
+    "has_boolean_flag": true,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 3,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "cell_biology.function_lookup",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

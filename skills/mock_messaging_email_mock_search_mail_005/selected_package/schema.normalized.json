@@ -1,0 +1,115 @@
+{
+  "tool_name": "mock_messaging_email_mock_search_mail_005",
+  "server_name": "synthetic_messaging_email_mock",
+  "tool_purpose": "Synthetic safe mock mailbox search tool over local fixture messages.",
+  "input_schema_raw": {
+    "properties": {
+      "folder": {
+        "description": "Mailbox folder.",
+        "enum": [
+          "inbox",
+          "sent",
+          "archive"
+        ],
+        "type": "string"
+      },
+      "limit": {
+        "description": "Maximum mock messages to return.",
+        "type": "integer"
+      },
+      "query": {
+        "description": "Mailbox search query.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "query"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Mailbox search query.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.query"
+    },
+    {
+      "name": "folder",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": [
+        "inbox",
+        "sent",
+        "archive"
+      ],
+      "description": "Mailbox folder.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.folder"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Maximum mock messages to return.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.limit"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Synthetic safe mock mailbox search tool over local fixture messages.",
+    "Mock Messaging Email Mock Search Mail 005"
+  ],
+  "source_pointer": "synthetic_mock:messaging/email mock:1",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.4,
+    "auth_required": false,
+    "documentation_length": 68,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": true,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 1,
+    "num_enum_fields": 1,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 2,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "external_communication"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "mock_messaging_email_mock_search_mail_005",
+    "server_name": "synthetic_messaging_email_mock",
+    "source_pointer": "synthetic_mock:messaging/email mock:1"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

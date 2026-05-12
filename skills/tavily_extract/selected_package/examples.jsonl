@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for tavily-extract", "arguments": {"urls": ["https://example.com/resource"]}}
+{"scenario": "Richer invocation that uses optional controls for tavily-extract", "arguments": {"urls": ["https://example.com/resource"], "extract_depth": "basic", "include_images": false, "format": "markdown"}}

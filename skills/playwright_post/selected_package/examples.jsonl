@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for playwright_post", "arguments": {"url": "https://example.com/resource", "value": "sample_value_1"}}
+{"scenario": "Richer invocation that uses optional controls for playwright_post", "arguments": {"url": "https://example.com/resource", "value": "sample_value_2", "token": "sample_token_2", "headers": {}}}

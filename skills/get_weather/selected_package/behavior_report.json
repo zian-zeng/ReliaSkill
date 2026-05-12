@@ -1,0 +1,205 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0294_get_weather_negative_easy_0_out_of_domain_request",
+      "tool_name": "get_weather",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to get weather.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "include_forecast": false,
+        "city": "New York",
+        "unit": "C"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1426,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: get_weather\nTool description: Fetch the current weather for a given city.\nSkill condition: multi_candidate_skill\nSkill summary: Fetch the current weather for a given city. Provide all required fields: `city`, and `unit`.\nWhen to use: [\"Use `get_weather` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `city`, and `unit`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `unit`: 'C', 'F'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"city\": \"New York\", \"unit\": \"C\", \"include_forecast\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for get_weather\", \"arguments\": {\"city\": \"New York\", \"unit\": \"C\"}}, {\"scenario\": \"Richer invocation that uses optional controls for get_weather\", \"arguments\": {\"city\": \"New York\", \"unit\": \"F\", \"include_forecast\": false}}]\nSchema: {\"properties\": {\"city\": {\"description\": \"City name to query.\", \"type\": \"string\"}, \"include_forecast\": {\"default\": false, \"description\": \"Whether to include a short forecast.\", \"type\": \"boolean\"}, \"unit\": {\"description\": \"Temperature unit.\", \"enum\": [\"C\", \"F\"], \"type\": \"string\"}}, \"required\": [\"city\", \"unit\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to get weather.\n",
+        "raw_model_output": "{\"arguments\": {\"city\": \"New York\", \"include_forecast\": false, \"unit\": \"C\"}}",
+        "parsed_prediction": {
+          "include_forecast": false,
+          "city": "New York",
+          "unit": "C"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0294_get_weather_negative_hard_1_near_miss_intent",
+      "tool_name": "get_weather",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to get weather, but I only want a checklist for how to Fetch the current weather for a given city; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "include_forecast": false,
+        "city": "New York",
+        "unit": "C"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1189,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: get_weather\nTool description: Fetch the current weather for a given city.\nSkill condition: multi_candidate_skill\nSkill summary: Fetch the current weather for a given city. Provide all required fields: `city`, and `unit`.\nWhen to use: [\"Use `get_weather` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `city`, and `unit`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `unit`: 'C', 'F'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"city\": \"New York\", \"unit\": \"C\", \"include_forecast\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for get_weather\", \"arguments\": {\"city\": \"New York\", \"unit\": \"C\"}}, {\"scenario\": \"Richer invocation that uses optional controls for get_weather\", \"arguments\": {\"city\": \"New York\", \"unit\": \"F\", \"include_forecast\": false}}]\nSchema: {\"properties\": {\"city\": {\"description\": \"City name to query.\", \"type\": \"string\"}, \"include_forecast\": {\"default\": false, \"description\": \"Whether to include a short forecast.\", \"type\": \"boolean\"}, \"unit\": {\"description\": \"Temperature unit.\", \"enum\": [\"C\", \"F\"], \"type\": \"string\"}}, \"required\": [\"city\", \"unit\"], \"type\": \"object\"}\nUser request: This sounds close to get weather, but I only want a checklist for how to Fetch the current weather for a given city; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {\"city\": \"New York\", \"include_forecast\": false, \"unit\": \"C\"}}",
+        "parsed_prediction": {
+          "include_forecast": false,
+          "city": "New York",
+          "unit": "C"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0294_get_weather_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "get_weather",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with get weather.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "include_forecast": false,
+        "city": "New York",
+        "unit": "C"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.097,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: get_weather\nTool description: Fetch the current weather for a given city.\nSkill condition: multi_candidate_skill\nSkill summary: Fetch the current weather for a given city. Provide all required fields: `city`, and `unit`.\nWhen to use: [\"Use `get_weather` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `city`, and `unit`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `unit`: 'C', 'F'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"city\": \"New York\", \"unit\": \"C\", \"include_forecast\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for get_weather\", \"arguments\": {\"city\": \"New York\", \"unit\": \"C\"}}, {\"scenario\": \"Richer invocation that uses optional controls for get_weather\", \"arguments\": {\"city\": \"New York\", \"unit\": \"F\", \"include_forecast\": false}}]\nSchema: {\"properties\": {\"city\": {\"description\": \"City name to query.\", \"type\": \"string\"}, \"include_forecast\": {\"default\": false, \"description\": \"Whether to include a short forecast.\", \"type\": \"boolean\"}, \"unit\": {\"description\": \"Temperature unit.\", \"enum\": [\"C\", \"F\"], \"type\": \"string\"}}, \"required\": [\"city\", \"unit\"], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with get weather.\n",
+        "raw_model_output": "{\"arguments\": {\"city\": \"New York\", \"include_forecast\": false, \"unit\": \"C\"}}",
+        "parsed_prediction": {
+          "include_forecast": false,
+          "city": "New York",
+          "unit": "C"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0294_get_weather_positive_easy_0",
+      "tool_name": "get_weather",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use get weather to Fetch the current weather for a given city. Set city=\"Boston\", unit=\"C\".",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "city": "Boston",
+        "unit": "C"
+      },
+      "expected_arguments": {
+        "city": "Boston",
+        "unit": "C"
+      },
+      "prediction_latency_ms": 0.0691,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: get_weather\nTool description: Fetch the current weather for a given city.\nSkill condition: multi_candidate_skill\nSkill summary: Fetch the current weather for a given city. Provide all required fields: `city`, and `unit`.\nWhen to use: [\"Use `get_weather` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `city`, and `unit`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `unit`: 'C', 'F'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"city\": \"New York\", \"unit\": \"C\", \"include_forecast\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for get_weather\", \"arguments\": {\"city\": \"New York\", \"unit\": \"C\"}}, {\"scenario\": \"Richer invocation that uses optional controls for get_weather\", \"arguments\": {\"city\": \"New York\", \"unit\": \"F\", \"include_forecast\": false}}]\nSchema: {\"properties\": {\"city\": {\"description\": \"City name to query.\", \"type\": \"string\"}, \"include_forecast\": {\"default\": false, \"description\": \"Whether to include a short forecast.\", \"type\": \"boolean\"}, \"unit\": {\"description\": \"Temperature unit.\", \"enum\": [\"C\", \"F\"], \"type\": \"string\"}}, \"required\": [\"city\", \"unit\"], \"type\": \"object\"}\nUser request: Use get weather to Fetch the current weather for a given city. Set city=\"Boston\", unit=\"C\".\n",
+        "raw_model_output": "{\"arguments\": {\"city\": \"Boston\", \"include_forecast\": false, \"unit\": \"C\"}}",
+        "parsed_prediction": {
+          "include_forecast": false,
+          "city": "Boston",
+          "unit": "C"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0294_get_weather_positive_medium_0",
+      "tool_name": "get_weather",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Fetch the current weather for a given city. The relevant details are city=\"Boston\", unit=\"F\".",
+      "exact_match": false,
+      "argument_validity": 0.5,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "city": "Boston",
+        "unit": "C"
+      },
+      "expected_arguments": {
+        "city": "Boston",
+        "unit": "F"
+      },
+      "prediction_latency_ms": 0.1417,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: get_weather\nTool description: Fetch the current weather for a given city.\nSkill condition: multi_candidate_skill\nSkill summary: Fetch the current weather for a given city. Provide all required fields: `city`, and `unit`.\nWhen to use: [\"Use `get_weather` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `city`, and `unit`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `unit`: 'C', 'F'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"city\": \"New York\", \"unit\": \"C\", \"include_forecast\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for get_weather\", \"arguments\": {\"city\": \"New York\", \"unit\": \"C\"}}, {\"scenario\": \"Richer invocation that uses optional controls for get_weather\", \"arguments\": {\"city\": \"New York\", \"unit\": \"F\", \"include_forecast\": false}}]\nSchema: {\"properties\": {\"city\": {\"description\": \"City name to query.\", \"type\": \"string\"}, \"include_forecast\": {\"default\": false, \"description\": \"Whether to include a short forecast.\", \"type\": \"boolean\"}, \"unit\": {\"description\": \"Temperature unit.\", \"enum\": [\"C\", \"F\"], \"type\": \"string\"}}, \"required\": [\"city\", \"unit\"], \"type\": \"object\"}\nUser request: I need help with this task: Fetch the current weather for a given city. The relevant details are city=\"Boston\", unit=\"F\".\n",
+        "raw_model_output": "{\"arguments\": {\"city\": \"Boston\", \"include_forecast\": false, \"unit\": \"C\"}}",
+        "parsed_prediction": {
+          "include_forecast": false,
+          "city": "Boston",
+          "unit": "C"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.5,
+    "avg_argument_validity": 0.75,
+    "avg_prediction_latency_ms": 0.1139
+  }
+}

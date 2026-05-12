@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for directory_tree", "arguments": {"path": "data/sample.txt", "excludePatterns": ["sample_excludePatterns_item_1"]}}
+{"scenario": "Richer invocation that uses optional controls for directory_tree", "arguments": {"path": "data/sample.txt", "excludePatterns": ["sample_excludePatterns_item_2"]}}

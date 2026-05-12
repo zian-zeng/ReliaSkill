@@ -1,0 +1,164 @@
+{
+  "candidate_id": "tavily_map__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "A powerful web mapping tool that creates a structured map of website URLs, allowing you to discover and analyze site structure, content organization, and navigation paths. Perfect for site audits, content discovery, and understanding website architecture. Provide the required field `url`.\nWhen to use:\n- Use `tavily-map` when the user's request directly matches this tool's purpose.\n- Provide the required field `url`.\n- Optional controls include `max_depth`, `max_breadth`, `limit`, `instructions`, and other optional fields.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"allow_external\": false, \"categories\": [], \"instructions\": \"sample_instructions_4\", \"limit\": 50, \"max_breadth\": 20, \"max_depth\": 1, \"select_domains\": [], \"select_paths\": [], \"url\": \"https://example.com/resource\"}\nExamples:\nMinimal valid request that satisfies the required fields for tavily-map\n{\"url\": \"https://example.com/resource\"}\nRicher invocation that uses optional controls for tavily-map\n{\"allow_external\": false, \"categories\": [], \"instructions\": \"sample_instructions_2\", \"limit\": 50, \"max_breadth\": 20, \"max_depth\": 1, \"select_domains\": [], \"select_paths\": [], \"url\": \"https://example.com/resource\"}\nRequired-argument dev behavior example.\n{\"url\": \"https://example.com/resource\"}\nOptional, enum, nested, or array argument example.\n{\"allow_external\": false, \"categories\": [], \"instructions\": \"sample_instructions_4\", \"limit\": 50, \"max_breadth\": 20, \"max_depth\": 1, \"select_domains\": [], \"select_paths\": [], \"url\": \"https://example.com/resource\"}",
+  "argument_template": {
+    "url": "https://example.com/resource",
+    "max_depth": 1,
+    "max_breadth": 20,
+    "limit": 50,
+    "instructions": "sample_instructions_4",
+    "select_paths": [],
+    "select_domains": [],
+    "allow_external": false,
+    "categories": []
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for tavily-map",
+      "arguments": {
+        "url": "https://example.com/resource"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for tavily-map",
+      "arguments": {
+        "url": "https://example.com/resource",
+        "max_depth": 1,
+        "max_breadth": 20,
+        "limit": 50,
+        "instructions": "sample_instructions_2",
+        "select_paths": [],
+        "select_domains": [],
+        "allow_external": false,
+        "categories": []
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "url": "https://example.com/resource"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "url": "https://example.com/resource",
+        "max_depth": 1,
+        "max_breadth": 20,
+        "limit": 50,
+        "instructions": "sample_instructions_4",
+        "select_paths": [],
+        "select_domains": [],
+        "allow_external": false,
+        "categories": []
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `tavily-map` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `url`.",
+    "Optional controls include `max_depth`, `max_breadth`, `limit`, `instructions`, and other optional fields.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 430,
+  "skill_token_count": 430,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "A powerful web mapping tool that creates a structured map of website URLs, allowing you to discover and analyze site structure, content organization, and navigation paths. Perfect for site audits, content discovery, and understanding website architecture. Provide the required field `url`.",
+    "when_to_use": [
+      "Use `tavily-map` when the user's request directly matches this tool's purpose.",
+      "Provide the required field `url`.",
+      "Optional controls include `max_depth`, `max_breadth`, `limit`, `instructions`, and other optional fields.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "url": "https://example.com/resource",
+      "max_depth": 1,
+      "max_breadth": 20,
+      "limit": 50,
+      "instructions": "sample_instructions_4",
+      "select_paths": [],
+      "select_domains": [],
+      "allow_external": false,
+      "categories": []
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for tavily-map",
+        "arguments": {
+          "url": "https://example.com/resource"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for tavily-map",
+        "arguments": {
+          "url": "https://example.com/resource",
+          "max_depth": 1,
+          "max_breadth": 20,
+          "limit": 50,
+          "instructions": "sample_instructions_2",
+          "select_paths": [],
+          "select_domains": [],
+          "allow_external": false,
+          "categories": []
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "url": "https://example.com/resource"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "url": "https://example.com/resource",
+          "max_depth": 1,
+          "max_breadth": 20,
+          "limit": 50,
+          "instructions": "sample_instructions_4",
+          "select_paths": [],
+          "select_domains": [],
+          "allow_external": false,
+          "categories": []
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "tavily_map__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "tavily_map__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

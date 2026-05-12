@@ -1,0 +1,350 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0181_create_directory_negative_easy_0_out_of_domain_request",
+      "tool_name": "create_directory",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to create directory.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1045,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: create_directory\nTool description: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories. Provide the required field `path`.\nWhen to use: [\"Use `create_directory` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"path\": {\"description\": \"Directory path to create within an allowed directory.\", \"type\": \"string\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to create directory.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0195_create_directory_negative_easy_0_out_of_domain_request",
+      "tool_name": "create_directory",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to create directory.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0948,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: create_directory\nTool description: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories. Provide the required field `path`.\nWhen to use: [\"Use `create_directory` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"path\": {\"description\": \"Directory path to create within an allowed directory.\", \"type\": \"string\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to create directory.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0195_create_directory_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "create_directory",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Only inspect what would happen before using create directory; do not create, update, delete, send, execute, or mutate anything. Use trace id ctrl_0195_create_directory_negative_hard_1_destructive_vs_readonly_mismatch for this benchmark item.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1114,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: create_directory\nTool description: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories. Provide the required field `path`.\nWhen to use: [\"Use `create_directory` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"path\": {\"description\": \"Directory path to create within an allowed directory.\", \"type\": \"string\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Only inspect what would happen before using create directory; do not create, update, delete, send, execute, or mutate anything. Use trace id ctrl_0195_create_directory_negative_hard_1_destructive_vs_readonly_mismatch for this benchmark item.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0181_create_directory_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "create_directory",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use create directory; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1412,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: create_directory\nTool description: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories. Provide the required field `path`.\nWhen to use: [\"Use `create_directory` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"path\": {\"description\": \"Directory path to create within an allowed directory.\", \"type\": \"string\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Explain when someone should use create directory; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0195_create_directory_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "create_directory",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with create directory.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0926,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: create_directory\nTool description: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories. Provide the required field `path`.\nWhen to use: [\"Use `create_directory` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"path\": {\"description\": \"Directory path to create within an allowed directory.\", \"type\": \"string\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with create directory.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0181_create_directory_positive_easy_0",
+      "tool_name": "create_directory",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use create directory to Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exist. Set path=\"docs/control_0.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "to"
+      },
+      "expected_arguments": {
+        "path": "docs/control_0.md"
+      },
+      "prediction_latency_ms": 0.0655,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: create_directory\nTool description: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories. Provide the required field `path`.\nWhen to use: [\"Use `create_directory` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"path\": {\"description\": \"Directory path to create within an allowed directory.\", \"type\": \"string\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Use create directory to Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exist. Set path=\"docs/control_0.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"to\"}}",
+        "parsed_prediction": {
+          "path": "to"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0195_create_directory_positive_easy_0",
+      "tool_name": "create_directory",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use create directory to Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exist. Set path=\"docs/control_0.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "to"
+      },
+      "expected_arguments": {
+        "path": "docs/control_0.md"
+      },
+      "prediction_latency_ms": 0.0645,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: create_directory\nTool description: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories. Provide the required field `path`.\nWhen to use: [\"Use `create_directory` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"path\": {\"description\": \"Directory path to create within an allowed directory.\", \"type\": \"string\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Use create directory to Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exist. Set path=\"docs/control_0.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"to\"}}",
+        "parsed_prediction": {
+          "path": "to"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0181_create_directory_positive_medium_0",
+      "tool_name": "create_directory",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exist. The relevant details are path=\"docs/control_7.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {
+        "path": "docs/control_7.md"
+      },
+      "prediction_latency_ms": 0.1156,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: create_directory\nTool description: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories. Provide the required field `path`.\nWhen to use: [\"Use `create_directory` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"path\": {\"description\": \"Directory path to create within an allowed directory.\", \"type\": \"string\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: I need help with this task: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exist. The relevant details are path=\"docs/control_7.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0195_create_directory_positive_medium_0",
+      "tool_name": "create_directory",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exist. The relevant details are path=\"docs/control_7.md\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "path": "data/sample.txt"
+      },
+      "expected_arguments": {
+        "path": "docs/control_7.md"
+      },
+      "prediction_latency_ms": 0.1603,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: create_directory\nTool description: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories. Provide the required field `path`.\nWhen to use: [\"Use `create_directory` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"path\": {\"description\": \"Directory path to create within an allowed directory.\", \"type\": \"string\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: I need help with this task: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exist. The relevant details are path=\"docs/control_7.md\".\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"data/sample.txt\"}}",
+        "parsed_prediction": {
+          "path": "data/sample.txt"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0181_create_directory_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "create_directory",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use end codegen session to End a code generation session and generate the test file; create directory is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "path": "is"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0632,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: create_directory\nTool description: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories.\nSkill condition: multi_candidate_skill\nSkill summary: Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed directories. Provide the required field `path`.\nWhen to use: [\"Use `create_directory` when the user's request directly matches this tool's purpose.\", \"Provide the required field `path`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"path\": \"data/sample.txt\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Richer invocation that uses optional controls for create_directory\", \"arguments\": {\"path\": \"data/sample.txt\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"path\": \"data/sample.txt\"}}]\nSchema: {\"properties\": {\"path\": {\"description\": \"Directory path to create within an allowed directory.\", \"type\": \"string\"}}, \"required\": [\"path\"], \"type\": \"object\"}\nUser request: Use end codegen session to End a code generation session and generate the test file; create directory is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"path\": \"is\"}}",
+        "parsed_prediction": {
+          "path": "is"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 10,
+    "positive_cases": 4,
+    "negative_cases": 6,
+    "trigger_true_positive": 4,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 6,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.1014
+  }
+}

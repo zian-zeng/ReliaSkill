@@ -1,0 +1,185 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0151_playwright_delete_negative_easy_0_out_of_domain_request",
+      "tool_name": "playwright_delete",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to playwright delete.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "url": "https://example.com/resource"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0584,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_delete\nTool description: Perform an HTTP DELETE request\nSkill condition: multi_candidate_skill\nSkill summary: Perform an HTTP DELETE request. Provide the required field `url`.\nWhen to use: [\"Use `playwright_delete` when the user's request directly matches this tool's purpose.\", \"Provide the required field `url`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"url\": \"https://example.com/resource\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_delete\", \"arguments\": {\"url\": \"https://example.com/resource\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_delete\", \"arguments\": {\"url\": \"https://example.com/resource\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"url\": \"https://example.com/resource\"}}]\nSchema: {\"properties\": {\"url\": {\"description\": \"URL to perform DELETE operation\", \"type\": \"string\"}}, \"required\": [\"url\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to playwright delete.\n",
+        "raw_model_output": "{\"arguments\": {\"url\": \"https://example.com/resource\"}}",
+        "parsed_prediction": {
+          "url": "https://example.com/resource"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0151_playwright_delete_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "playwright_delete",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with playwright delete.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "url": "https://example.com/resource"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.053,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_delete\nTool description: Perform an HTTP DELETE request\nSkill condition: multi_candidate_skill\nSkill summary: Perform an HTTP DELETE request. Provide the required field `url`.\nWhen to use: [\"Use `playwright_delete` when the user's request directly matches this tool's purpose.\", \"Provide the required field `url`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"url\": \"https://example.com/resource\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_delete\", \"arguments\": {\"url\": \"https://example.com/resource\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_delete\", \"arguments\": {\"url\": \"https://example.com/resource\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"url\": \"https://example.com/resource\"}}]\nSchema: {\"properties\": {\"url\": {\"description\": \"URL to perform DELETE operation\", \"type\": \"string\"}}, \"required\": [\"url\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with playwright delete.\n",
+        "raw_model_output": "{\"arguments\": {\"url\": \"https://example.com/resource\"}}",
+        "parsed_prediction": {
+          "url": "https://example.com/resource"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0151_playwright_delete_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "playwright_delete",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use db fetch records to Fetch records from a specified database table based on certain conditions; playwright delete is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "url": "https://example.com/resource"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0499,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_delete\nTool description: Perform an HTTP DELETE request\nSkill condition: multi_candidate_skill\nSkill summary: Perform an HTTP DELETE request. Provide the required field `url`.\nWhen to use: [\"Use `playwright_delete` when the user's request directly matches this tool's purpose.\", \"Provide the required field `url`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"url\": \"https://example.com/resource\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_delete\", \"arguments\": {\"url\": \"https://example.com/resource\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_delete\", \"arguments\": {\"url\": \"https://example.com/resource\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"url\": \"https://example.com/resource\"}}]\nSchema: {\"properties\": {\"url\": {\"description\": \"URL to perform DELETE operation\", \"type\": \"string\"}}, \"required\": [\"url\"], \"type\": \"object\"}\nUser request: Use db fetch records to Fetch records from a specified database table based on certain conditions; playwright delete is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"url\": \"https://example.com/resource\"}}",
+        "parsed_prediction": {
+          "url": "https://example.com/resource"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0151_playwright_delete_positive_easy_0",
+      "tool_name": "playwright_delete",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use playwright delete to Perform an HTTP DELETE request. Set url=\"https://example.com/resource\".",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "url": "https://example.com/resource"
+      },
+      "expected_arguments": {
+        "url": "https://example.com/resource"
+      },
+      "prediction_latency_ms": 0.0507,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_delete\nTool description: Perform an HTTP DELETE request\nSkill condition: multi_candidate_skill\nSkill summary: Perform an HTTP DELETE request. Provide the required field `url`.\nWhen to use: [\"Use `playwright_delete` when the user's request directly matches this tool's purpose.\", \"Provide the required field `url`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"url\": \"https://example.com/resource\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_delete\", \"arguments\": {\"url\": \"https://example.com/resource\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_delete\", \"arguments\": {\"url\": \"https://example.com/resource\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"url\": \"https://example.com/resource\"}}]\nSchema: {\"properties\": {\"url\": {\"description\": \"URL to perform DELETE operation\", \"type\": \"string\"}}, \"required\": [\"url\"], \"type\": \"object\"}\nUser request: Use playwright delete to Perform an HTTP DELETE request. Set url=\"https://example.com/resource\".\n",
+        "raw_model_output": "{\"arguments\": {\"url\": \"https://example.com/resource\"}}",
+        "parsed_prediction": {
+          "url": "https://example.com/resource"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0151_playwright_delete_positive_medium_0",
+      "tool_name": "playwright_delete",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Perform an HTTP DELETE request. The relevant details are url=\"https://example.com/resource\".",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "url": "https://example.com/resource"
+      },
+      "expected_arguments": {
+        "url": "https://example.com/resource"
+      },
+      "prediction_latency_ms": 0.1037,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: playwright_delete\nTool description: Perform an HTTP DELETE request\nSkill condition: multi_candidate_skill\nSkill summary: Perform an HTTP DELETE request. Provide the required field `url`.\nWhen to use: [\"Use `playwright_delete` when the user's request directly matches this tool's purpose.\", \"Provide the required field `url`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"url\": \"https://example.com/resource\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for playwright_delete\", \"arguments\": {\"url\": \"https://example.com/resource\"}}, {\"scenario\": \"Richer invocation that uses optional controls for playwright_delete\", \"arguments\": {\"url\": \"https://example.com/resource\"}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"url\": \"https://example.com/resource\"}}]\nSchema: {\"properties\": {\"url\": {\"description\": \"URL to perform DELETE operation\", \"type\": \"string\"}}, \"required\": [\"url\"], \"type\": \"object\"}\nUser request: I need help with this task: Perform an HTTP DELETE request. The relevant details are url=\"https://example.com/resource\".\n",
+        "raw_model_output": "{\"arguments\": {\"url\": \"https://example.com/resource\"}}",
+        "parsed_prediction": {
+          "url": "https://example.com/resource"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0631
+  }
+}

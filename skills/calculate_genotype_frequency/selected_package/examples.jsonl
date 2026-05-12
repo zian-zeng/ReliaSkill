@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_genotype_frequency", "arguments": {"allele_frequency": null, "genotype": "AA"}}
+{"scenario": "Richer invocation that uses optional controls for calculate_genotype_frequency", "arguments": {"allele_frequency": null, "genotype": "Aa"}}

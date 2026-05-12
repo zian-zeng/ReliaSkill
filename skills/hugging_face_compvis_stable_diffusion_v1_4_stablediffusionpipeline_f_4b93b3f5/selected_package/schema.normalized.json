@@ -1,0 +1,52 @@
+{
+  "tool_name": "hugging_face__compvis_stable_diffusion_v1_4__stablediffusionpipeline_f_4b93b3f5",
+  "server_name": "bfcl_huggingface_eval_api",
+  "tool_purpose": "Stable Diffusion is a latent text-to-image diffusion model capable of generating photo-realistic images given any text input. The Stable-Diffusion-v1-4 checkpoint was fine-tuned on 225k steps at resolution 512x512 on laion-aesthetics v2 5+ and 10% dropping of the text-conditioning to improve classifier-free guidance sampling. This model is intended for research purposes and can be used for generating artworks, design, educational or creative tools, and research on generative models. Framework: Hugging Face. Functionality: Text-to-Image Generation. API call: StableDiffusionPipeline.from_pretrained('CompVis/stable-diffusion-v1-4').",
+  "input_schema_raw": {
+    "properties": {},
+    "required": [],
+    "type": "object"
+  },
+  "arguments": [],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ],
+  "doc_snippets": [
+    "Stable Diffusion is a latent text-to-image diffusion model capable of generating photo-realistic images given any text input. The Stable-Diffusion-v1-4 checkpoint was fine-tuned on 225k steps at resolution 512x512 on laion-aesthetics v2 5+ and 10% dropping of the text-conditioning to improve classifier-free guidance sampling. This model is intended for research purposes and can be used for generating artworks, design, educational or creative tools, and research on generative models. Framework: Hugging Face. Functionality: Text-to-Image Generation. API call: StableDiffusionPipeline.from_pretrained('CompVis/stable-diffusion-v1-4').",
+    "CompVis/stable-diffusion-v1-4",
+    "Text-to-Image Generation"
+  ],
+  "source_pointer": "bfcl",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 637,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 1,
+    "num_arguments": 0,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "num_top_level_arguments": 0,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "empty_input_schema",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "hugging_face__compvis_stable_diffusion_v1_4__stablediffusionpipeline_f_4b93b3f5",
+    "server_name": "bfcl_huggingface_eval_api",
+    "source_pointer": "bfcl"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

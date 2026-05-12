@@ -1,0 +1,112 @@
+{
+  "candidate_id": "playwright_console_logs__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Retrieve console logs from the browser with filtering options. This tool has no required input fields.\nWhen to use:\n- Use `playwright_console_logs` when the user's request directly matches this tool's purpose.\n- This tool has no required input fields.\n- Optional controls include `type`, `search`, `limit`, `clear`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `type`: 'all', 'error', 'warning', 'log'.\nArgument template:\n{\"clear\": true, \"limit\": 4.0, \"search\": \"sample query\", \"type\": \"log\"}\nExamples:\nRicher invocation that uses optional controls for playwright_console_logs\n{\"clear\": true, \"limit\": 2.0, \"search\": \"sample query\", \"type\": \"error\"}\nOptional, enum, nested, or array argument example.\n{\"clear\": true, \"limit\": 4.0, \"search\": \"sample query\", \"type\": \"log\"}",
+  "argument_template": {
+    "type": "log",
+    "search": "sample query",
+    "limit": 4.0,
+    "clear": true
+  },
+  "examples": [
+    {
+      "scenario": "Richer invocation that uses optional controls for playwright_console_logs",
+      "arguments": {
+        "type": "error",
+        "search": "sample query",
+        "limit": 2.0,
+        "clear": true
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "type": "log",
+        "search": "sample query",
+        "limit": 4.0,
+        "clear": true
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `playwright_console_logs` when the user's request directly matches this tool's purpose.",
+    "This tool has no required input fields.",
+    "Optional controls include `type`, `search`, `limit`, `clear`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `type`: 'all', 'error', 'warning', 'log'."
+  ],
+  "token_count": 251,
+  "skill_token_count": 251,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 2,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Retrieve console logs from the browser with filtering options. This tool has no required input fields.",
+    "when_to_use": [
+      "Use `playwright_console_logs` when the user's request directly matches this tool's purpose.",
+      "This tool has no required input fields.",
+      "Optional controls include `type`, `search`, `limit`, `clear`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `type`: 'all', 'error', 'warning', 'log'."
+    ],
+    "argument_template": {
+      "type": "log",
+      "search": "sample query",
+      "limit": 4.0,
+      "clear": true
+    },
+    "examples": [
+      {
+        "scenario": "Richer invocation that uses optional controls for playwright_console_logs",
+        "arguments": {
+          "type": "error",
+          "search": "sample query",
+          "limit": 2.0,
+          "clear": true
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "type": "log",
+          "search": "sample query",
+          "limit": 4.0,
+          "clear": true
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "playwright_console_logs__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "playwright_console_logs__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

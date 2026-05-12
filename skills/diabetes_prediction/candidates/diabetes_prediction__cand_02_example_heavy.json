@@ -1,0 +1,136 @@
+{
+  "candidate_id": "diabetes_prediction__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Predict the likelihood of diabetes type 2 based on a person's weight and height. Provide all required fields: `weight`, `height`, and `activity_level`.\nWhen to use:\n- Use `diabetes_prediction` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `weight`, `height`, and `activity_level`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `activity_level`: 'sedentary', 'lightly active', 'moderately active', 'very active'.\nArgument template:\n{\"activity_level\": \"very active\", \"height\": null, \"weight\": null}\nExamples:\nMinimal valid request that satisfies the required fields for diabetes_prediction\n{\"activity_level\": \"sedentary\", \"height\": null, \"weight\": null}\nRicher invocation that uses optional controls for diabetes_prediction\n{\"activity_level\": \"lightly active\", \"height\": null, \"weight\": null}\nRequired-argument dev behavior example.\n{\"activity_level\": \"moderately active\", \"height\": null, \"weight\": null}\nOptional, enum, nested, or array argument example.\n{\"activity_level\": \"very active\", \"height\": null, \"weight\": null}",
+  "argument_template": {
+    "weight": null,
+    "height": null,
+    "activity_level": "very active"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for diabetes_prediction",
+      "arguments": {
+        "weight": null,
+        "height": null,
+        "activity_level": "sedentary"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for diabetes_prediction",
+      "arguments": {
+        "weight": null,
+        "height": null,
+        "activity_level": "lightly active"
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "weight": null,
+        "height": null,
+        "activity_level": "moderately active"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "weight": null,
+        "height": null,
+        "activity_level": "very active"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `diabetes_prediction` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `weight`, `height`, and `activity_level`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `activity_level`: 'sedentary', 'lightly active', 'moderately active', 'very active'."
+  ],
+  "token_count": 314,
+  "skill_token_count": 314,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Predict the likelihood of diabetes type 2 based on a person's weight and height. Provide all required fields: `weight`, `height`, and `activity_level`.",
+    "when_to_use": [
+      "Use `diabetes_prediction` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `weight`, `height`, and `activity_level`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `activity_level`: 'sedentary', 'lightly active', 'moderately active', 'very active'."
+    ],
+    "argument_template": {
+      "weight": null,
+      "height": null,
+      "activity_level": "very active"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for diabetes_prediction",
+        "arguments": {
+          "weight": null,
+          "height": null,
+          "activity_level": "sedentary"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for diabetes_prediction",
+        "arguments": {
+          "weight": null,
+          "height": null,
+          "activity_level": "lightly active"
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "weight": null,
+          "height": null,
+          "activity_level": "moderately active"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "weight": null,
+          "height": null,
+          "activity_level": "very active"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "diabetes_prediction__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "diabetes_prediction__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

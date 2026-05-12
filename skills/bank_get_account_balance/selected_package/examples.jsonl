@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for bank_get_account_balance", "arguments": {"account_id": "sample-account-id-001"}}
+{"scenario": "Richer invocation that uses optional controls for bank_get_account_balance", "arguments": {"account_id": "sample-account-id-001", "include_pending": true}}

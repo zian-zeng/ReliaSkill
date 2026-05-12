@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_density", "arguments": {"country": "sample_country_1", "year": "sample_year_1", "population": 1, "land_area": null}}
+{"scenario": "Richer invocation that uses optional controls for calculate_density", "arguments": {"country": "sample_country_2", "year": "sample_year_2", "population": 2, "land_area": null}}

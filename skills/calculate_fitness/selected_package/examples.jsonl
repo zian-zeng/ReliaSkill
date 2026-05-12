@@ -1,0 +1,3 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_fitness", "arguments": {"trait_values": [null], "trait_contributions": [null]}}
+{"scenario": "Richer invocation that uses optional controls for calculate_fitness", "arguments": {"trait_values": [null], "trait_contributions": [null]}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"trait_values": [null], "trait_contributions": [null]}}

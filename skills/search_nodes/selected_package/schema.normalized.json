@@ -1,0 +1,70 @@
+{
+  "tool_name": "search_nodes",
+  "server_name": "memory",
+  "tool_purpose": "Search for nodes in the knowledge graph based on a query",
+  "input_schema_raw": {
+    "properties": {
+      "query": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "query"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": null,
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.query"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Search for nodes in the knowledge graph based on a query",
+    "Search Nodes"
+  ],
+  "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\memory\\index.ts",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.85,
+    "auth_required": false,
+    "documentation_length": 56,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 1,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 1,
+    "num_top_level_arguments": 1,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "missing_argument_description:query",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "search_nodes",
+    "server_name": "memory",
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\memory\\index.ts"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

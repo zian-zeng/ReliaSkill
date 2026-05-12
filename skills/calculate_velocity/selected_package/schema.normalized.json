@@ -1,0 +1,107 @@
+{
+  "tool_name": "calculate_velocity",
+  "server_name": "bfcl_v3",
+  "tool_purpose": "Calculate the velocity for a certain distance travelled within a specific duration.",
+  "input_schema_raw": {
+    "properties": {
+      "distance": {
+        "description": "The distance travelled by the object, typically in kilometers.",
+        "type": "integer"
+      },
+      "duration": {
+        "description": "The duration of the journey, typically in hours.",
+        "type": "integer"
+      },
+      "unit": {
+        "description": "Optional parameter. The unit to return the velocity in. If not provided, the default is km/h.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "distance",
+      "duration"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "distance",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The distance travelled by the object, typically in kilometers.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.distance"
+    },
+    {
+      "name": "duration",
+      "type": "integer",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The duration of the journey, typically in hours.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.duration"
+    },
+    {
+      "name": "unit",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Optional parameter. The unit to return the velocity in. If not provided, the default is km/h.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.unit"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Calculate the velocity for a certain distance travelled within a specific duration.",
+    "calculate_velocity"
+  ],
+  "source_pointer": "bfcl_v3",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 83,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "calculate_velocity",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

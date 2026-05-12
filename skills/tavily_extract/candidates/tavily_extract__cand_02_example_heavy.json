@@ -1,0 +1,156 @@
+{
+  "candidate_id": "tavily_extract__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content analysis, and research tasks. Provide the required field `urls`.\nWhen to use:\n- Use `tavily-extract` when the user's request directly matches this tool's purpose.\n- Provide the required field `urls`.\n- Optional controls include `extract_depth`, `include_images`, `format`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `extract_depth`: 'basic', 'advanced'.\nArgument template:\n{\"extract_depth\": \"basic\", \"format\": \"markdown\", \"include_images\": false, \"urls\": [\"https://example.com/resource\"]}\nExamples:\nMinimal valid request that satisfies the required fields for tavily-extract\n{\"urls\": [\"https://example.com/resource\"]}\nRicher invocation that uses optional controls for tavily-extract\n{\"extract_depth\": \"basic\", \"format\": \"markdown\", \"include_images\": false, \"urls\": [\"https://example.com/resource\"]}\nRequired-argument dev behavior example.\n{\"urls\": [\"https://example.com/resource\"]}\nOptional, enum, nested, or array argument example.\n{\"extract_depth\": \"basic\", \"format\": \"markdown\", \"include_images\": false, \"urls\": [\"https://example.com/resource\"]}",
+  "argument_template": {
+    "urls": [
+      "https://example.com/resource"
+    ],
+    "extract_depth": "basic",
+    "include_images": false,
+    "format": "markdown"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for tavily-extract",
+      "arguments": {
+        "urls": [
+          "https://example.com/resource"
+        ]
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for tavily-extract",
+      "arguments": {
+        "urls": [
+          "https://example.com/resource"
+        ],
+        "extract_depth": "basic",
+        "include_images": false,
+        "format": "markdown"
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "urls": [
+          "https://example.com/resource"
+        ]
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "urls": [
+          "https://example.com/resource"
+        ],
+        "extract_depth": "basic",
+        "include_images": false,
+        "format": "markdown"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `tavily-extract` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `urls`.",
+    "Optional controls include `extract_depth`, `include_images`, `format`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `extract_depth`: 'basic', 'advanced'."
+  ],
+  "token_count": 332,
+  "skill_token_count": 332,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "A powerful web content extraction tool that retrieves and processes raw content from specified URLs, ideal for data collection, content analysis, and research tasks. Provide the required field `urls`.",
+    "when_to_use": [
+      "Use `tavily-extract` when the user's request directly matches this tool's purpose.",
+      "Provide the required field `urls`.",
+      "Optional controls include `extract_depth`, `include_images`, `format`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `extract_depth`: 'basic', 'advanced'."
+    ],
+    "argument_template": {
+      "urls": [
+        "https://example.com/resource"
+      ],
+      "extract_depth": "basic",
+      "include_images": false,
+      "format": "markdown"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for tavily-extract",
+        "arguments": {
+          "urls": [
+            "https://example.com/resource"
+          ]
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for tavily-extract",
+        "arguments": {
+          "urls": [
+            "https://example.com/resource"
+          ],
+          "extract_depth": "basic",
+          "include_images": false,
+          "format": "markdown"
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "urls": [
+            "https://example.com/resource"
+          ]
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "urls": [
+            "https://example.com/resource"
+          ],
+          "extract_depth": "basic",
+          "include_images": false,
+          "format": "markdown"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "tavily_extract__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "tavily_extract__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "candidate_id": "mock_system_admin_mock_query_logs_022__cand_01_boundary_heavy",
+  "generation_strategy": "boundary_heavy",
+  "prompt_template_id": "heuristic_boundary_heavy_v1",
+  "skill_text": "Synthetic safe mock system-admin retrieval tool for querying offline service logs. Provide the required field `service_name`.\nWhen to use:\n- Use `mock_system_admin_mock_query_logs_022` when the user's request directly matches this tool's purpose.\n- Provide the required field `service_name`.\n- Optional controls include `level`, `window_minutes`.\n- Use only when the request clearly needs `mock_system_admin_mock_query_logs_022`.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `level`: 'info', 'warning', 'error'.\n- Do not use for adjacent tools with similar names, descriptions, or arguments.\n- Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.\n- If the request lacks required fields, abstain or ask for clarification.\nArgument template:\n{\"level\": \"info\", \"service_name\": \"sample-name\", \"window_minutes\": 1}\nExamples:\nMinimal valid request that satisfies the required fields for mock_system_admin_mock_query_logs_022\n{\"service_name\": \"sample-name\"}\nRicher invocation that uses optional controls for mock_system_admin_mock_query_logs_022\n{\"level\": \"warning\", \"service_name\": \"sample-name\", \"window_minutes\": 2}",
+  "argument_template": {
+    "service_name": "sample-name",
+    "level": "info",
+    "window_minutes": 1
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for mock_system_admin_mock_query_logs_022",
+      "arguments": {
+        "service_name": "sample-name"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for mock_system_admin_mock_query_logs_022",
+      "arguments": {
+        "service_name": "sample-name",
+        "level": "warning",
+        "window_minutes": 2
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `mock_system_admin_mock_query_logs_022` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `service_name`.",
+    "Optional controls include `level`, `window_minutes`.",
+    "Use only when the request clearly needs `mock_system_admin_mock_query_logs_022`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `level`: 'info', 'warning', 'error'.",
+    "Do not use for adjacent tools with similar names, descriptions, or arguments.",
+    "Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.",
+    "If the request lacks required fields, abstain or ask for clarification."
+  ],
+  "token_count": 292,
+  "skill_token_count": 292,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 2,
+  "nonuse_boundary_count": 6,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Synthetic safe mock system-admin retrieval tool for querying offline service logs. Provide the required field `service_name`.",
+    "when_to_use": [
+      "Use `mock_system_admin_mock_query_logs_022` when the user's request directly matches this tool's purpose.",
+      "Provide the required field `service_name`.",
+      "Optional controls include `level`, `window_minutes`.",
+      "Use only when the request clearly needs `mock_system_admin_mock_query_logs_022`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `level`: 'info', 'warning', 'error'.",
+      "Do not use for adjacent tools with similar names, descriptions, or arguments.",
+      "Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.",
+      "If the request lacks required fields, abstain or ask for clarification."
+    ],
+    "argument_template": {
+      "service_name": "sample-name",
+      "level": "info",
+      "window_minutes": 1
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for mock_system_admin_mock_query_logs_022",
+        "arguments": {
+          "service_name": "sample-name"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for mock_system_admin_mock_query_logs_022",
+        "arguments": {
+          "service_name": "sample-name",
+          "level": "warning",
+          "window_minutes": 2
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "mock_system_admin_mock_query_logs_022__cand_01_boundary_heavy",
+        "generation_strategy": "boundary_heavy",
+        "prompt_template_id": "heuristic_boundary_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "mock_system_admin_mock_query_logs_022__cand_01_boundary_heavy",
+      "generation_strategy": "boundary_heavy",
+      "prompt_template_id": "heuristic_boundary_heavy_v1"
+    }
+  }
+}

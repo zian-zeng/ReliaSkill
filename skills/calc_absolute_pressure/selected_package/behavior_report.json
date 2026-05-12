@@ -1,0 +1,166 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0097_calc_absolute_pressure_negative_easy_0_out_of_domain_request",
+      "tool_name": "calc_absolute_pressure",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calc absolute pressure.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1228,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calc_absolute_pressure\nTool description: Calculates the absolute pressure from gauge and atmospheric pressures.\nSkill condition: multi_candidate_skill\nSkill summary: Calculates the absolute pressure from gauge and atmospheric pressures. Provide the required field `gauge_pressure`.\nWhen to use: [\"Use `calc_absolute_pressure` when the user's request directly matches this tool's purpose.\", \"Provide the required field `gauge_pressure`.\", \"Optional control is available through `atm_pressure` when the request needs extra specificity.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"atm_pressure\": null, \"gauge_pressure\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calc_absolute_pressure\", \"arguments\": {\"gauge_pressure\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calc_absolute_pressure\", \"arguments\": {\"atm_pressure\": null, \"gauge_pressure\": null}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"gauge_pressure\": null}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"atm_pressure\": null, \"gauge_pressure\": null}}]\nSchema: {\"properties\": {\"atm_pressure\": {\"description\": \"The atmospheric pressure in atmospheres (atm). Default is 1 atm if not provided.\", \"type\": \"float\"}, \"gauge_pressure\": {\"description\": \"The gauge pressure in atmospheres (atm). Must be provided.\", \"type\": \"float\"}}, \"required\": [\"gauge_pressure\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calc absolute pressure.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0097_calc_absolute_pressure_negative_hard_1_missing_required_info",
+      "tool_name": "calc_absolute_pressure",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I may need calc absolute pressure to Calculates the absolute pressure from gauge and atmospheric pressures, but I do not know gauge_pressure yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1675,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calc_absolute_pressure\nTool description: Calculates the absolute pressure from gauge and atmospheric pressures.\nSkill condition: multi_candidate_skill\nSkill summary: Calculates the absolute pressure from gauge and atmospheric pressures. Provide the required field `gauge_pressure`.\nWhen to use: [\"Use `calc_absolute_pressure` when the user's request directly matches this tool's purpose.\", \"Provide the required field `gauge_pressure`.\", \"Optional control is available through `atm_pressure` when the request needs extra specificity.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"atm_pressure\": null, \"gauge_pressure\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calc_absolute_pressure\", \"arguments\": {\"gauge_pressure\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calc_absolute_pressure\", \"arguments\": {\"atm_pressure\": null, \"gauge_pressure\": null}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"gauge_pressure\": null}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"atm_pressure\": null, \"gauge_pressure\": null}}]\nSchema: {\"properties\": {\"atm_pressure\": {\"description\": \"The atmospheric pressure in atmospheres (atm). Default is 1 atm if not provided.\", \"type\": \"float\"}, \"gauge_pressure\": {\"description\": \"The gauge pressure in atmospheres (atm). Must be provided.\", \"type\": \"float\"}}, \"required\": [\"gauge_pressure\"], \"type\": \"object\"}\nUser request: I may need calc absolute pressure to Calculates the absolute pressure from gauge and atmospheric pressures, but I do not know gauge_pressure yet.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0097_calc_absolute_pressure_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "calc_absolute_pressure",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use calc absolute pressure; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1144,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calc_absolute_pressure\nTool description: Calculates the absolute pressure from gauge and atmospheric pressures.\nSkill condition: multi_candidate_skill\nSkill summary: Calculates the absolute pressure from gauge and atmospheric pressures. Provide the required field `gauge_pressure`.\nWhen to use: [\"Use `calc_absolute_pressure` when the user's request directly matches this tool's purpose.\", \"Provide the required field `gauge_pressure`.\", \"Optional control is available through `atm_pressure` when the request needs extra specificity.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"atm_pressure\": null, \"gauge_pressure\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calc_absolute_pressure\", \"arguments\": {\"gauge_pressure\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calc_absolute_pressure\", \"arguments\": {\"atm_pressure\": null, \"gauge_pressure\": null}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"gauge_pressure\": null}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"atm_pressure\": null, \"gauge_pressure\": null}}]\nSchema: {\"properties\": {\"atm_pressure\": {\"description\": \"The atmospheric pressure in atmospheres (atm). Default is 1 atm if not provided.\", \"type\": \"float\"}, \"gauge_pressure\": {\"description\": \"The gauge pressure in atmospheres (atm). Must be provided.\", \"type\": \"float\"}}, \"required\": [\"gauge_pressure\"], \"type\": \"object\"}\nUser request: Explain when someone should use calc absolute pressure; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0097_calc_absolute_pressure_positive_easy_0",
+      "tool_name": "calc_absolute_pressure",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use calc absolute pressure to Calculates the absolute pressure from gauge and atmospheric pressures. Set gauge_pressure=1.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {
+        "gauge_pressure": 1
+      },
+      "prediction_latency_ms": 0.1094,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calc_absolute_pressure\nTool description: Calculates the absolute pressure from gauge and atmospheric pressures.\nSkill condition: multi_candidate_skill\nSkill summary: Calculates the absolute pressure from gauge and atmospheric pressures. Provide the required field `gauge_pressure`.\nWhen to use: [\"Use `calc_absolute_pressure` when the user's request directly matches this tool's purpose.\", \"Provide the required field `gauge_pressure`.\", \"Optional control is available through `atm_pressure` when the request needs extra specificity.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"atm_pressure\": null, \"gauge_pressure\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calc_absolute_pressure\", \"arguments\": {\"gauge_pressure\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calc_absolute_pressure\", \"arguments\": {\"atm_pressure\": null, \"gauge_pressure\": null}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"gauge_pressure\": null}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"atm_pressure\": null, \"gauge_pressure\": null}}]\nSchema: {\"properties\": {\"atm_pressure\": {\"description\": \"The atmospheric pressure in atmospheres (atm). Default is 1 atm if not provided.\", \"type\": \"float\"}, \"gauge_pressure\": {\"description\": \"The gauge pressure in atmospheres (atm). Must be provided.\", \"type\": \"float\"}}, \"required\": [\"gauge_pressure\"], \"type\": \"object\"}\nUser request: Use calc absolute pressure to Calculates the absolute pressure from gauge and atmospheric pressures. Set gauge_pressure=1.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0097_calc_absolute_pressure_positive_medium_0",
+      "tool_name": "calc_absolute_pressure",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Calculates the absolute pressure from gauge and atmospheric pressures. The relevant details are atm_pressure=8, gauge_pressure=8.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {
+        "atm_pressure": 8,
+        "gauge_pressure": 8
+      },
+      "prediction_latency_ms": 0.115,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calc_absolute_pressure\nTool description: Calculates the absolute pressure from gauge and atmospheric pressures.\nSkill condition: multi_candidate_skill\nSkill summary: Calculates the absolute pressure from gauge and atmospheric pressures. Provide the required field `gauge_pressure`.\nWhen to use: [\"Use `calc_absolute_pressure` when the user's request directly matches this tool's purpose.\", \"Provide the required field `gauge_pressure`.\", \"Optional control is available through `atm_pressure` when the request needs extra specificity.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"atm_pressure\": null, \"gauge_pressure\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calc_absolute_pressure\", \"arguments\": {\"gauge_pressure\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calc_absolute_pressure\", \"arguments\": {\"atm_pressure\": null, \"gauge_pressure\": null}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"gauge_pressure\": null}}, {\"scenario\": \"Optional, enum, nested, or array argument example.\", \"arguments\": {\"atm_pressure\": null, \"gauge_pressure\": null}}]\nSchema: {\"properties\": {\"atm_pressure\": {\"description\": \"The atmospheric pressure in atmospheres (atm). Default is 1 atm if not provided.\", \"type\": \"float\"}, \"gauge_pressure\": {\"description\": \"The gauge pressure in atmospheres (atm). Must be provided.\", \"type\": \"float\"}}, \"required\": [\"gauge_pressure\"], \"type\": \"object\"}\nUser request: I need help with this task: Calculates the absolute pressure from gauge and atmospheric pressures. The relevant details are atm_pressure=8, gauge_pressure=8.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.1258
+  }
+}

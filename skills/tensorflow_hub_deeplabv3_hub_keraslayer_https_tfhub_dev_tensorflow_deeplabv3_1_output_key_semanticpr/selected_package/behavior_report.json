@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0064_tensorflow_hub_deeplabv3_hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_o_negative_easy_0_out_of_domain_request",
+      "tool_name": "tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to tensorflow hub  deeplabv3  hub keraslayer https tfhub dev tensorflow deeplabv3 1 output key semanticpredictions.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0325,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions\nTool description: DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on the DeepLabv3 architecture and trained on the PASCAL VOC 2012 dataset. Framework: TensorFlow Hub. Functionality: Semantic image segmentation. API call: hub.KerasLayer('https://tfhub.dev/tensorflow/deeplabv3/1', output_key='SemanticPredictions').\nSkill condition: multi_candidate_skill\nSkill summary: DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on the DeepLabv3 architecture and trained on the PASCAL VOC 2012 dataset. Framework: TensorFlow Hub. Functionality: Semantic image segmentation. API call: hub.KerasLayer('https://tfhub.dev/tensorflow/deeplabv3/1', output_key='SemanticPredictions'). This tool has no required input fields.\nWhen to use: [\"Use `tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to tensorflow hub  deeplabv3  hub keraslayer https tfhub dev tensorflow deeplabv3 1 output key semanticpredictions.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0064_tensorflow_hub_deeplabv3_hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_o_negative_hard_1_near_miss_intent",
+      "tool_name": "tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to tensorflow hub  deeplabv3  hub keraslayer https tfhub dev tensorflow deeplabv3 1 output key semanticpredictions, but I only want a checklist for how to DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on th; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0286,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions\nTool description: DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on the DeepLabv3 architecture and trained on the PASCAL VOC 2012 dataset. Framework: TensorFlow Hub. Functionality: Semantic image segmentation. API call: hub.KerasLayer('https://tfhub.dev/tensorflow/deeplabv3/1', output_key='SemanticPredictions').\nSkill condition: multi_candidate_skill\nSkill summary: DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on the DeepLabv3 architecture and trained on the PASCAL VOC 2012 dataset. Framework: TensorFlow Hub. Functionality: Semantic image segmentation. API call: hub.KerasLayer('https://tfhub.dev/tensorflow/deeplabv3/1', output_key='SemanticPredictions'). This tool has no required input fields.\nWhen to use: [\"Use `tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: This sounds close to tensorflow hub  deeplabv3  hub keraslayer https tfhub dev tensorflow deeplabv3 1 output key semanticpredictions, but I only want a checklist for how to DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on th; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0064_tensorflow_hub_deeplabv3_hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_o_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to tensorflow hub  deeplabv3  hub keraslayer https tfhub dev tensorflow deeplabv3 1 output key semanticpredictions, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0774,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions\nTool description: DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on the DeepLabv3 architecture and trained on the PASCAL VOC 2012 dataset. Framework: TensorFlow Hub. Functionality: Semantic image segmentation. API call: hub.KerasLayer('https://tfhub.dev/tensorflow/deeplabv3/1', output_key='SemanticPredictions').\nSkill condition: multi_candidate_skill\nSkill summary: DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on the DeepLabv3 architecture and trained on the PASCAL VOC 2012 dataset. Framework: TensorFlow Hub. Functionality: Semantic image segmentation. API call: hub.KerasLayer('https://tfhub.dev/tensorflow/deeplabv3/1', output_key='SemanticPredictions'). This tool has no required input fields.\nWhen to use: [\"Use `tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to tensorflow hub  deeplabv3  hub keraslayer https tfhub dev tensorflow deeplabv3 1 output key semanticpredictions, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0064_tensorflow_hub_deeplabv3_hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_o_positive_easy_0",
+      "tool_name": "tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use tensorflow hub  deeplabv3  hub keraslayer https tfhub dev tensorflow deeplabv3 1 output key semanticpredictions to DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on th. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0292,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions\nTool description: DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on the DeepLabv3 architecture and trained on the PASCAL VOC 2012 dataset. Framework: TensorFlow Hub. Functionality: Semantic image segmentation. API call: hub.KerasLayer('https://tfhub.dev/tensorflow/deeplabv3/1', output_key='SemanticPredictions').\nSkill condition: multi_candidate_skill\nSkill summary: DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on the DeepLabv3 architecture and trained on the PASCAL VOC 2012 dataset. Framework: TensorFlow Hub. Functionality: Semantic image segmentation. API call: hub.KerasLayer('https://tfhub.dev/tensorflow/deeplabv3/1', output_key='SemanticPredictions'). This tool has no required input fields.\nWhen to use: [\"Use `tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use tensorflow hub  deeplabv3  hub keraslayer https tfhub dev tensorflow deeplabv3 1 output key semanticpredictions to DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on th. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0064_tensorflow_hub_deeplabv3_hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_o_positive_medium_0",
+      "tool_name": "tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on th. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0287,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions\nTool description: DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on the DeepLabv3 architecture and trained on the PASCAL VOC 2012 dataset. Framework: TensorFlow Hub. Functionality: Semantic image segmentation. API call: hub.KerasLayer('https://tfhub.dev/tensorflow/deeplabv3/1', output_key='SemanticPredictions').\nSkill condition: multi_candidate_skill\nSkill summary: DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on the DeepLabv3 architecture and trained on the PASCAL VOC 2012 dataset. Framework: TensorFlow Hub. Functionality: Semantic image segmentation. API call: hub.KerasLayer('https://tfhub.dev/tensorflow/deeplabv3/1', output_key='SemanticPredictions'). This tool has no required input fields.\nWhen to use: [\"Use `tensorflow_hub__deeplabv3__hub_keraslayer_https_tfhub_dev_tensorflow_deeplabv3_1_output_key_semanticpredictions` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: DeepLabv3 is an image segmentation model for TensorFlow Hub that assigns semantic labels to every pixel of an input image. It is based on th. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0393
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "candidate_id": "list_directory_with_sizes__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Get a detailed listing of all files and directories in a specified path, including sizes. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is useful for understanding directory structure and finding specific files within a directory. Only works within allowed directories. Provide all required fields: `path`, and `sortBy`.\nWhen to use:\n- Use `list_directory_with_sizes` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `path`, and `sortBy`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Respect the allowed values for `sortBy`: 'name', 'size'.\nArgument template:\n{\"path\": \"data/sample.txt\", \"sortBy\": \"size\"}\nExamples:\nMinimal valid request that satisfies the required fields for list_directory_with_sizes\n{\"path\": \"data/sample.txt\", \"sortBy\": \"name\"}\nRicher invocation that uses optional controls for list_directory_with_sizes\n{\"path\": \"data/sample.txt\", \"sortBy\": \"size\"}\nRequired-argument dev behavior example.\n{\"path\": \"data/sample.txt\", \"sortBy\": \"name\"}\nOptional, enum, nested, or array argument example.\n{\"path\": \"data/sample.txt\", \"sortBy\": \"size\"}",
+  "argument_template": {
+    "path": "data/sample.txt",
+    "sortBy": "size"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for list_directory_with_sizes",
+      "arguments": {
+        "path": "data/sample.txt",
+        "sortBy": "name"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for list_directory_with_sizes",
+      "arguments": {
+        "path": "data/sample.txt",
+        "sortBy": "size"
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "path": "data/sample.txt",
+        "sortBy": "name"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "path": "data/sample.txt",
+        "sortBy": "size"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `list_directory_with_sizes` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `path`, and `sortBy`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Respect the allowed values for `sortBy`: 'name', 'size'."
+  ],
+  "token_count": 313,
+  "skill_token_count": 313,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Get a detailed listing of all files and directories in a specified path, including sizes. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is useful for understanding directory structure and finding specific files within a directory. Only works within allowed directories. Provide all required fields: `path`, and `sortBy`.",
+    "when_to_use": [
+      "Use `list_directory_with_sizes` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `path`, and `sortBy`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Respect the allowed values for `sortBy`: 'name', 'size'."
+    ],
+    "argument_template": {
+      "path": "data/sample.txt",
+      "sortBy": "size"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for list_directory_with_sizes",
+        "arguments": {
+          "path": "data/sample.txt",
+          "sortBy": "name"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for list_directory_with_sizes",
+        "arguments": {
+          "path": "data/sample.txt",
+          "sortBy": "size"
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "path": "data/sample.txt",
+          "sortBy": "name"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "path": "data/sample.txt",
+          "sortBy": "size"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "list_directory_with_sizes__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "list_directory_with_sizes__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

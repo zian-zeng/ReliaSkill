@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0026_fairseq_fastspeech2_en_ljspeech_ttshubinterface_get_prediction_faceb_d67bc803_negative_easy_0_out_of_domain_request",
+      "tool_name": "fairseq__fastspeech2_en_ljspeech__ttshubinterface_get_prediction_faceb_d67bc803",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to fairseq  fastspeech2 en ljspeech  ttshubinterface get prediction faceb d67bc803.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0315,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__fastspeech2_en_ljspeech__ttshubinterface_get_prediction_faceb_d67bc803\nTool description: FastSpeech 2 text-to-speech model from fairseq S^2. English single-speaker female voice trained on LJSpeech. Framework: Fairseq. Functionality: Text-to-Speech. API call: 'TTSHubInterface.get_prediction('facebook/fastspeech2-en-ljspeech')'.\nSkill condition: multi_candidate_skill\nSkill summary: FastSpeech 2 text-to-speech model from fairseq S^2. English single-speaker female voice trained on LJSpeech. Framework: Fairseq. Functionality: Text-to-Speech. API call: 'TTSHubInterface.get_prediction('facebook/fastspeech2-en-ljspeech')'. This tool has no required input fields.\nWhen to use: [\"Use `fairseq__fastspeech2_en_ljspeech__ttshubinterface_get_prediction_faceb_d67bc803` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to fairseq  fastspeech2 en ljspeech  ttshubinterface get prediction faceb d67bc803.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0026_fairseq_fastspeech2_en_ljspeech_ttshubinterface_get_prediction_faceb_d67bc803_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "fairseq__fastspeech2_en_ljspeech__ttshubinterface_get_prediction_faceb_d67bc803",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with fairseq  fastspeech2 en ljspeech  ttshubinterface get prediction faceb d67bc803.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0282,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__fastspeech2_en_ljspeech__ttshubinterface_get_prediction_faceb_d67bc803\nTool description: FastSpeech 2 text-to-speech model from fairseq S^2. English single-speaker female voice trained on LJSpeech. Framework: Fairseq. Functionality: Text-to-Speech. API call: 'TTSHubInterface.get_prediction('facebook/fastspeech2-en-ljspeech')'.\nSkill condition: multi_candidate_skill\nSkill summary: FastSpeech 2 text-to-speech model from fairseq S^2. English single-speaker female voice trained on LJSpeech. Framework: Fairseq. Functionality: Text-to-Speech. API call: 'TTSHubInterface.get_prediction('facebook/fastspeech2-en-ljspeech')'. This tool has no required input fields.\nWhen to use: [\"Use `fairseq__fastspeech2_en_ljspeech__ttshubinterface_get_prediction_faceb_d67bc803` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with fairseq  fastspeech2 en ljspeech  ttshubinterface get prediction faceb d67bc803.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0026_fairseq_fastspeech2_en_ljspeech_ttshubinterface_get_prediction_faceb_d67bc803_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "fairseq__fastspeech2_en_ljspeech__ttshubinterface_get_prediction_faceb_d67bc803",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN; fairseq  fastspeech2 en ljspeech  ttshubinterface get prediction faceb d67bc803 is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0282,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__fastspeech2_en_ljspeech__ttshubinterface_get_prediction_faceb_d67bc803\nTool description: FastSpeech 2 text-to-speech model from fairseq S^2. English single-speaker female voice trained on LJSpeech. Framework: Fairseq. Functionality: Text-to-Speech. API call: 'TTSHubInterface.get_prediction('facebook/fastspeech2-en-ljspeech')'.\nSkill condition: multi_candidate_skill\nSkill summary: FastSpeech 2 text-to-speech model from fairseq S^2. English single-speaker female voice trained on LJSpeech. Framework: Fairseq. Functionality: Text-to-Speech. API call: 'TTSHubInterface.get_prediction('facebook/fastspeech2-en-ljspeech')'. This tool has no required input fields.\nWhen to use: [\"Use `fairseq__fastspeech2_en_ljspeech__ttshubinterface_get_prediction_faceb_d67bc803` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN; fairseq  fastspeech2 en ljspeech  ttshubinterface get prediction faceb d67bc803 is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0026_fairseq_fastspeech2_en_ljspeech_ttshubinterface_get_prediction_faceb_d67bc803_positive_easy_0",
+      "tool_name": "fairseq__fastspeech2_en_ljspeech__ttshubinterface_get_prediction_faceb_d67bc803",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use fairseq  fastspeech2 en ljspeech  ttshubinterface get prediction faceb d67bc803 to FastSpeech 2 text-to-speech model from fairseq S^2. English single-speaker female voice trained on LJSpeech. Framework: Fairseq. Functionali. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0272,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__fastspeech2_en_ljspeech__ttshubinterface_get_prediction_faceb_d67bc803\nTool description: FastSpeech 2 text-to-speech model from fairseq S^2. English single-speaker female voice trained on LJSpeech. Framework: Fairseq. Functionality: Text-to-Speech. API call: 'TTSHubInterface.get_prediction('facebook/fastspeech2-en-ljspeech')'.\nSkill condition: multi_candidate_skill\nSkill summary: FastSpeech 2 text-to-speech model from fairseq S^2. English single-speaker female voice trained on LJSpeech. Framework: Fairseq. Functionality: Text-to-Speech. API call: 'TTSHubInterface.get_prediction('facebook/fastspeech2-en-ljspeech')'. This tool has no required input fields.\nWhen to use: [\"Use `fairseq__fastspeech2_en_ljspeech__ttshubinterface_get_prediction_faceb_d67bc803` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use fairseq  fastspeech2 en ljspeech  ttshubinterface get prediction faceb d67bc803 to FastSpeech 2 text-to-speech model from fairseq S^2. English single-speaker female voice trained on LJSpeech. Framework: Fairseq. Functionali. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0026_fairseq_fastspeech2_en_ljspeech_ttshubinterface_get_prediction_faceb_d67bc803_positive_medium_0",
+      "tool_name": "fairseq__fastspeech2_en_ljspeech__ttshubinterface_get_prediction_faceb_d67bc803",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: FastSpeech 2 text-to-speech model from fairseq S^2. English single-speaker female voice trained on LJSpeech. Framework: Fairseq. Functionali. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0272,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: fairseq__fastspeech2_en_ljspeech__ttshubinterface_get_prediction_faceb_d67bc803\nTool description: FastSpeech 2 text-to-speech model from fairseq S^2. English single-speaker female voice trained on LJSpeech. Framework: Fairseq. Functionality: Text-to-Speech. API call: 'TTSHubInterface.get_prediction('facebook/fastspeech2-en-ljspeech')'.\nSkill condition: multi_candidate_skill\nSkill summary: FastSpeech 2 text-to-speech model from fairseq S^2. English single-speaker female voice trained on LJSpeech. Framework: Fairseq. Functionality: Text-to-Speech. API call: 'TTSHubInterface.get_prediction('facebook/fastspeech2-en-ljspeech')'. This tool has no required input fields.\nWhen to use: [\"Use `fairseq__fastspeech2_en_ljspeech__ttshubinterface_get_prediction_faceb_d67bc803` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: FastSpeech 2 text-to-speech model from fairseq S^2. English single-speaker female voice trained on LJSpeech. Framework: Fairseq. Functionali. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0285
+  }
+}

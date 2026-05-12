@@ -1,0 +1,52 @@
+{
+  "tool_name": "hugging_face__camenduru_text2_video_zero__pipeline_text_to_video_model_be24b1d6",
+  "server_name": "bfcl_huggingface_eval_api",
+  "tool_purpose": "This model is used for generating videos from text inputs. It is based on the Hugging Face framework and can be used with the transformers library. The model is trained on a variety of text and video datasets, and can be used for tasks such as video summarization, video generation from text prompts, and more. Framework: Hugging Face. Functionality: Text-to-Video. API call: pipeline('text-to-video', model='camenduru/text2-video-zero').",
+  "input_schema_raw": {
+    "properties": {},
+    "required": [],
+    "type": "object"
+  },
+  "arguments": [],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ],
+  "doc_snippets": [
+    "This model is used for generating videos from text inputs. It is based on the Hugging Face framework and can be used with the transformers library. The model is trained on a variety of text and video datasets, and can be used for tasks such as video summarization, video generation from text prompts, and more. Framework: Hugging Face. Functionality: Text-to-Video. API call: pipeline('text-to-video', model='camenduru/text2-video-zero').",
+    "camenduru/text2-video-zero",
+    "Text-to-Video"
+  ],
+  "source_pointer": "bfcl",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 438,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 1,
+    "num_arguments": 0,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "num_top_level_arguments": 0,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "empty_input_schema",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "hugging_face__camenduru_text2_video_zero__pipeline_text_to_video_model_be24b1d6",
+    "server_name": "bfcl_huggingface_eval_api",
+    "source_pointer": "bfcl"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

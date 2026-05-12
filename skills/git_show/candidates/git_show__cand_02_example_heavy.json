@@ -1,0 +1,124 @@
+{
+  "candidate_id": "git_show__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Shows the contents of a commit. Provide all required fields: `repo_path`, and `revision`.\nWhen to use:\n- Use `git_show` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `repo_path`, and `revision`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"repo_path\": \"data/sample.txt\", \"revision\": \"sample_revision_4\"}\nExamples:\nMinimal valid request that satisfies the required fields for git_show\n{\"repo_path\": \"data/sample.txt\", \"revision\": \"sample_revision_1\"}\nRicher invocation that uses optional controls for git_show\n{\"repo_path\": \"data/sample.txt\", \"revision\": \"sample_revision_2\"}\nRequired-argument dev behavior example.\n{\"repo_path\": \"data/sample.txt\", \"revision\": \"sample_revision_3\"}\nOptional, enum, nested, or array argument example.\n{\"repo_path\": \"data/sample.txt\", \"revision\": \"sample_revision_4\"}",
+  "argument_template": {
+    "repo_path": "data/sample.txt",
+    "revision": "sample_revision_4"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for git_show",
+      "arguments": {
+        "repo_path": "data/sample.txt",
+        "revision": "sample_revision_1"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for git_show",
+      "arguments": {
+        "repo_path": "data/sample.txt",
+        "revision": "sample_revision_2"
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "repo_path": "data/sample.txt",
+        "revision": "sample_revision_3"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "repo_path": "data/sample.txt",
+        "revision": "sample_revision_4"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `git_show` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `repo_path`, and `revision`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 265,
+  "skill_token_count": 265,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Shows the contents of a commit. Provide all required fields: `repo_path`, and `revision`.",
+    "when_to_use": [
+      "Use `git_show` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `repo_path`, and `revision`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "repo_path": "data/sample.txt",
+      "revision": "sample_revision_4"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for git_show",
+        "arguments": {
+          "repo_path": "data/sample.txt",
+          "revision": "sample_revision_1"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for git_show",
+        "arguments": {
+          "repo_path": "data/sample.txt",
+          "revision": "sample_revision_2"
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "repo_path": "data/sample.txt",
+          "revision": "sample_revision_3"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "repo_path": "data/sample.txt",
+          "revision": "sample_revision_4"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "git_show__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "git_show__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0068_tensorflow_hub_feature_vector_hub_keraslayer_https_tfhub_dev_google_imagenet_mob_negative_easy_0_out_of_domain_request",
+      "tool_name": "tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to tensorflow hub  feature vector  hub keraslayer https tfhub dev google imagenet mobilenet v2 100 224 feature vector 4.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0328,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4\nTool description: This API allows you to extract image feature vectors using TensorFlow Hub's pre-trained models. The feature vectors can be used in various applications, such as image classification, object detection, and image similarity. Framework: TensorFlow Hub. Functionality: Feature extraction. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4').\nSkill condition: multi_candidate_skill\nSkill summary: This API allows you to extract image feature vectors using TensorFlow Hub's pre-trained models. The feature vectors can be used in various applications, such as image classification, object detection, and image similarity. Framework: TensorFlow Hub. Functionality: Feature extraction. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4'). This tool has no required input fields.\nWhen to use: [\"Use `tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to tensorflow hub  feature vector  hub keraslayer https tfhub dev google imagenet mobilenet v2 100 224 feature vector 4.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0068_tensorflow_hub_feature_vector_hub_keraslayer_https_tfhub_dev_google_imagenet_mob_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with tensorflow hub  feature vector  hub keraslayer https tfhub dev google imagenet mobilenet v2 100 224 feature vector 4; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0292,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4\nTool description: This API allows you to extract image feature vectors using TensorFlow Hub's pre-trained models. The feature vectors can be used in various applications, such as image classification, object detection, and image similarity. Framework: TensorFlow Hub. Functionality: Feature extraction. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4').\nSkill condition: multi_candidate_skill\nSkill summary: This API allows you to extract image feature vectors using TensorFlow Hub's pre-trained models. The feature vectors can be used in various applications, such as image classification, object detection, and image similarity. Framework: TensorFlow Hub. Functionality: Feature extraction. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4'). This tool has no required input fields.\nWhen to use: [\"Use `tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Maybe do something with tensorflow hub  feature vector  hub keraslayer https tfhub dev google imagenet mobilenet v2 100 224 feature vector 4; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0068_tensorflow_hub_feature_vector_hub_keraslayer_https_tfhub_dev_google_imagenet_mob_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to tensorflow hub  feature vector  hub keraslayer https tfhub dev google imagenet mobilenet v2 100 224 feature vector 4, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0789,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4\nTool description: This API allows you to extract image feature vectors using TensorFlow Hub's pre-trained models. The feature vectors can be used in various applications, such as image classification, object detection, and image similarity. Framework: TensorFlow Hub. Functionality: Feature extraction. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4').\nSkill condition: multi_candidate_skill\nSkill summary: This API allows you to extract image feature vectors using TensorFlow Hub's pre-trained models. The feature vectors can be used in various applications, such as image classification, object detection, and image similarity. Framework: TensorFlow Hub. Functionality: Feature extraction. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4'). This tool has no required input fields.\nWhen to use: [\"Use `tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to tensorflow hub  feature vector  hub keraslayer https tfhub dev google imagenet mobilenet v2 100 224 feature vector 4, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0068_tensorflow_hub_feature_vector_hub_keraslayer_https_tfhub_dev_google_imagenet_mob_positive_easy_0",
+      "tool_name": "tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use tensorflow hub  feature vector  hub keraslayer https tfhub dev google imagenet mobilenet v2 100 224 feature vector 4 to This API allows you to extract image feature vectors using TensorFlow Hub's pre-trained models. The feature vectors can be used in various a. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0293,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4\nTool description: This API allows you to extract image feature vectors using TensorFlow Hub's pre-trained models. The feature vectors can be used in various applications, such as image classification, object detection, and image similarity. Framework: TensorFlow Hub. Functionality: Feature extraction. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4').\nSkill condition: multi_candidate_skill\nSkill summary: This API allows you to extract image feature vectors using TensorFlow Hub's pre-trained models. The feature vectors can be used in various applications, such as image classification, object detection, and image similarity. Framework: TensorFlow Hub. Functionality: Feature extraction. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4'). This tool has no required input fields.\nWhen to use: [\"Use `tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use tensorflow hub  feature vector  hub keraslayer https tfhub dev google imagenet mobilenet v2 100 224 feature vector 4 to This API allows you to extract image feature vectors using TensorFlow Hub's pre-trained models. The feature vectors can be used in various a. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0068_tensorflow_hub_feature_vector_hub_keraslayer_https_tfhub_dev_google_imagenet_mob_positive_medium_0",
+      "tool_name": "tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: This API allows you to extract image feature vectors using TensorFlow Hub's pre-trained models. The feature vectors can be used in various a. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0283,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4\nTool description: This API allows you to extract image feature vectors using TensorFlow Hub's pre-trained models. The feature vectors can be used in various applications, such as image classification, object detection, and image similarity. Framework: TensorFlow Hub. Functionality: Feature extraction. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4').\nSkill condition: multi_candidate_skill\nSkill summary: This API allows you to extract image feature vectors using TensorFlow Hub's pre-trained models. The feature vectors can be used in various applications, such as image classification, object detection, and image similarity. Framework: TensorFlow Hub. Functionality: Feature extraction. API call: hub.KerasLayer('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/feature_vector/4'). This tool has no required input fields.\nWhen to use: [\"Use `tensorflow_hub__feature_vector__hub_keraslayer_https_tfhub_dev_google_imagenet_mobilenet_v2_100_224_feature_vector_4` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: This API allows you to extract image feature vectors using TensorFlow Hub's pre-trained models. The feature vectors can be used in various a. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0397
+  }
+}

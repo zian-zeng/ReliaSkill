@@ -1,0 +1,209 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0206_open_nodes_negative_easy_0_out_of_domain_request",
+      "tool_name": "open_nodes",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to open nodes.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "names": [
+          "sample-name"
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.113,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: open_nodes\nTool description: Open specific nodes in the knowledge graph by their names\nSkill condition: multi_candidate_skill\nSkill summary: Open specific nodes in the knowledge graph by their names. Provide the required field `names`.\nWhen to use: [\"Use `open_nodes` when the user's request directly matches this tool's purpose.\", \"Provide the required field `names`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"names\": [\"sample-name\"]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for open_nodes\", \"arguments\": {\"names\": [\"sample-name\"]}}, {\"scenario\": \"Richer invocation that uses optional controls for open_nodes\", \"arguments\": {\"names\": [\"sample-name\"]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"names\": [\"sample-name\"]}}]\nSchema: {\"properties\": {\"names\": {\"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"names\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to open nodes.\n",
+        "raw_model_output": "{\"arguments\": {\"names\": [\"sample-name\"]}}",
+        "parsed_prediction": {
+          "names": [
+            "sample-name"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0206_open_nodes_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "open_nodes",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with open nodes.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "names": [
+          "sample-name"
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0586,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: open_nodes\nTool description: Open specific nodes in the knowledge graph by their names\nSkill condition: multi_candidate_skill\nSkill summary: Open specific nodes in the knowledge graph by their names. Provide the required field `names`.\nWhen to use: [\"Use `open_nodes` when the user's request directly matches this tool's purpose.\", \"Provide the required field `names`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"names\": [\"sample-name\"]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for open_nodes\", \"arguments\": {\"names\": [\"sample-name\"]}}, {\"scenario\": \"Richer invocation that uses optional controls for open_nodes\", \"arguments\": {\"names\": [\"sample-name\"]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"names\": [\"sample-name\"]}}]\nSchema: {\"properties\": {\"names\": {\"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"names\"], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with open nodes.\n",
+        "raw_model_output": "{\"arguments\": {\"names\": [\"sample-name\"]}}",
+        "parsed_prediction": {
+          "names": [
+            "sample-name"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0206_open_nodes_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "open_nodes",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use notes create memory to API-Bank-style local fixture tool for saving a note to an offline memory store; open nodes is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "names": [
+          "sample-name"
+        ]
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0578,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: open_nodes\nTool description: Open specific nodes in the knowledge graph by their names\nSkill condition: multi_candidate_skill\nSkill summary: Open specific nodes in the knowledge graph by their names. Provide the required field `names`.\nWhen to use: [\"Use `open_nodes` when the user's request directly matches this tool's purpose.\", \"Provide the required field `names`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"names\": [\"sample-name\"]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for open_nodes\", \"arguments\": {\"names\": [\"sample-name\"]}}, {\"scenario\": \"Richer invocation that uses optional controls for open_nodes\", \"arguments\": {\"names\": [\"sample-name\"]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"names\": [\"sample-name\"]}}]\nSchema: {\"properties\": {\"names\": {\"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"names\"], \"type\": \"object\"}\nUser request: Use notes create memory to API-Bank-style local fixture tool for saving a note to an offline memory store; open nodes is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"names\": [\"sample-name\"]}}",
+        "parsed_prediction": {
+          "names": [
+            "sample-name"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0206_open_nodes_positive_easy_0",
+      "tool_name": "open_nodes",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use open nodes to Open specific nodes in the knowledge graph by their names. Set names=[\"item_0\"].",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "names": [
+          "sample-name"
+        ]
+      },
+      "expected_arguments": {
+        "names": [
+          "item_0"
+        ]
+      },
+      "prediction_latency_ms": 0.0564,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: open_nodes\nTool description: Open specific nodes in the knowledge graph by their names\nSkill condition: multi_candidate_skill\nSkill summary: Open specific nodes in the knowledge graph by their names. Provide the required field `names`.\nWhen to use: [\"Use `open_nodes` when the user's request directly matches this tool's purpose.\", \"Provide the required field `names`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"names\": [\"sample-name\"]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for open_nodes\", \"arguments\": {\"names\": [\"sample-name\"]}}, {\"scenario\": \"Richer invocation that uses optional controls for open_nodes\", \"arguments\": {\"names\": [\"sample-name\"]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"names\": [\"sample-name\"]}}]\nSchema: {\"properties\": {\"names\": {\"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"names\"], \"type\": \"object\"}\nUser request: Use open nodes to Open specific nodes in the knowledge graph by their names. Set names=[\"item_0\"].\n",
+        "raw_model_output": "{\"arguments\": {\"names\": [\"sample-name\"]}}",
+        "parsed_prediction": {
+          "names": [
+            "sample-name"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0206_open_nodes_positive_medium_0",
+      "tool_name": "open_nodes",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Open specific nodes in the knowledge graph by their names. The relevant details are names=[\"item_7\"].",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "names": [
+          "sample-name"
+        ]
+      },
+      "expected_arguments": {
+        "names": [
+          "item_7"
+        ]
+      },
+      "prediction_latency_ms": 0.1067,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: open_nodes\nTool description: Open specific nodes in the knowledge graph by their names\nSkill condition: multi_candidate_skill\nSkill summary: Open specific nodes in the knowledge graph by their names. Provide the required field `names`.\nWhen to use: [\"Use `open_nodes` when the user's request directly matches this tool's purpose.\", \"Provide the required field `names`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"names\": [\"sample-name\"]}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for open_nodes\", \"arguments\": {\"names\": [\"sample-name\"]}}, {\"scenario\": \"Richer invocation that uses optional controls for open_nodes\", \"arguments\": {\"names\": [\"sample-name\"]}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"names\": [\"sample-name\"]}}]\nSchema: {\"properties\": {\"names\": {\"items\": {\"type\": \"string\"}, \"type\": \"array\"}}, \"required\": [\"names\"], \"type\": \"object\"}\nUser request: I need help with this task: Open specific nodes in the knowledge graph by their names. The relevant details are names=[\"item_7\"].\n",
+        "raw_model_output": "{\"arguments\": {\"names\": [\"sample-name\"]}}",
+        "parsed_prediction": {
+          "names": [
+            "sample-name"
+          ]
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0785
+  }
+}

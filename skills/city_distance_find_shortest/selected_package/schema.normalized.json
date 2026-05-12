@@ -1,0 +1,125 @@
+{
+  "tool_name": "city_distance.find_shortest",
+  "server_name": "bfcl_v3",
+  "tool_purpose": "Calculates the shortest distance between two cities via available public transportation.",
+  "input_schema_raw": {
+    "properties": {
+      "allow_transfer": {
+        "description": "Allows transfer between different transportation if true. Default is false.",
+        "type": "boolean"
+      },
+      "end_city": {
+        "description": "The city you are heading to.The parameter is in the format of city name.",
+        "type": "string"
+      },
+      "start_city": {
+        "description": "The city you are starting from. The parameter is in the format of city name.",
+        "type": "string"
+      },
+      "transportation": {
+        "description": "Preferred mode of public transportation. Default is 'bus'.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "start_city",
+      "end_city"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "start_city",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The city you are starting from. The parameter is in the format of city name.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.start_city"
+    },
+    {
+      "name": "end_city",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The city you are heading to.The parameter is in the format of city name.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.end_city"
+    },
+    {
+      "name": "transportation",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Preferred mode of public transportation. Default is 'bus'.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.transportation"
+    },
+    {
+      "name": "allow_transfer",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "enum": null,
+      "description": "Allows transfer between different transportation if true. Default is false.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.allow_transfer"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Calculates the shortest distance between two cities via available public transportation.",
+    "city_distance.find_shortest"
+  ],
+  "source_pointer": "bfcl_v3",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.25,
+    "auth_required": false,
+    "documentation_length": 88,
+    "has_array_argument": false,
+    "has_boolean_flag": true,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 4,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 2,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 4,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "city_distance.find_shortest",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

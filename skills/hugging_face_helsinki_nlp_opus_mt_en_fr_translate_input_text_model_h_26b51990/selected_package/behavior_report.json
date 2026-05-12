@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0055_hugging_face_helsinki_nlp_opus_mt_en_fr_translate_input_text_model_h_26b51990_negative_easy_0_out_of_domain_request",
+      "tool_name": "hugging_face__helsinki_nlp_opus_mt_en_fr__translate_input_text_model_h_26b51990",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  helsinki nlp opus mt en fr  translate input text model h 26b51990.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0335,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__helsinki_nlp_opus_mt_en_fr__translate_input_text_model_h_26b51990\nTool description: Helsinki-NLP/opus-mt-en-fr is a translation model that translates English text to French using the Hugging Face Transformers library. It is based on the OPUS dataset and uses a transformer-align architecture with normalization and SentencePiece pre-processing. Framework: Hugging Face. Functionality: Translation. API call: translate('input_text', model='Helsinki-NLP/opus-mt-en-fr').\nSkill condition: multi_candidate_skill\nSkill summary: Helsinki-NLP/opus-mt-en-fr is a translation model that translates English text to French using the Hugging Face Transformers library. It is based on the OPUS dataset and uses a transformer-align architecture with normalization and SentencePiece pre-processing. Framework: Hugging Face. Functionality: Translation. API call: translate('input_text', model='Helsinki-NLP/opus-mt-en-fr'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__helsinki_nlp_opus_mt_en_fr__translate_input_text_model_h_26b51990` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  helsinki nlp opus mt en fr  translate input text model h 26b51990.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0055_hugging_face_helsinki_nlp_opus_mt_en_fr_translate_input_text_model_h_26b51990_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "hugging_face__helsinki_nlp_opus_mt_en_fr__translate_input_text_model_h_26b51990",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with hugging face  helsinki nlp opus mt en fr  translate input text model h 26b51990; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0304,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__helsinki_nlp_opus_mt_en_fr__translate_input_text_model_h_26b51990\nTool description: Helsinki-NLP/opus-mt-en-fr is a translation model that translates English text to French using the Hugging Face Transformers library. It is based on the OPUS dataset and uses a transformer-align architecture with normalization and SentencePiece pre-processing. Framework: Hugging Face. Functionality: Translation. API call: translate('input_text', model='Helsinki-NLP/opus-mt-en-fr').\nSkill condition: multi_candidate_skill\nSkill summary: Helsinki-NLP/opus-mt-en-fr is a translation model that translates English text to French using the Hugging Face Transformers library. It is based on the OPUS dataset and uses a transformer-align architecture with normalization and SentencePiece pre-processing. Framework: Hugging Face. Functionality: Translation. API call: translate('input_text', model='Helsinki-NLP/opus-mt-en-fr'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__helsinki_nlp_opus_mt_en_fr__translate_input_text_model_h_26b51990` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with hugging face  helsinki nlp opus mt en fr  translate input text model h 26b51990; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0055_hugging_face_helsinki_nlp_opus_mt_en_fr_translate_input_text_model_h_26b51990_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "hugging_face__helsinki_nlp_opus_mt_en_fr__translate_input_text_model_h_26b51990",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with hugging face  helsinki nlp opus mt en fr  translate input text model h 26b51990.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0285,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__helsinki_nlp_opus_mt_en_fr__translate_input_text_model_h_26b51990\nTool description: Helsinki-NLP/opus-mt-en-fr is a translation model that translates English text to French using the Hugging Face Transformers library. It is based on the OPUS dataset and uses a transformer-align architecture with normalization and SentencePiece pre-processing. Framework: Hugging Face. Functionality: Translation. API call: translate('input_text', model='Helsinki-NLP/opus-mt-en-fr').\nSkill condition: multi_candidate_skill\nSkill summary: Helsinki-NLP/opus-mt-en-fr is a translation model that translates English text to French using the Hugging Face Transformers library. It is based on the OPUS dataset and uses a transformer-align architecture with normalization and SentencePiece pre-processing. Framework: Hugging Face. Functionality: Translation. API call: translate('input_text', model='Helsinki-NLP/opus-mt-en-fr'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__helsinki_nlp_opus_mt_en_fr__translate_input_text_model_h_26b51990` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with hugging face  helsinki nlp opus mt en fr  translate input text model h 26b51990.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0055_hugging_face_helsinki_nlp_opus_mt_en_fr_translate_input_text_model_h_26b51990_positive_easy_0",
+      "tool_name": "hugging_face__helsinki_nlp_opus_mt_en_fr__translate_input_text_model_h_26b51990",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use hugging face  helsinki nlp opus mt en fr  translate input text model h 26b51990 to Helsinki-NLP/opus-mt-en-fr is a translation model that translates English text to French using the Hugging Face Transformers library. It is. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0286,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__helsinki_nlp_opus_mt_en_fr__translate_input_text_model_h_26b51990\nTool description: Helsinki-NLP/opus-mt-en-fr is a translation model that translates English text to French using the Hugging Face Transformers library. It is based on the OPUS dataset and uses a transformer-align architecture with normalization and SentencePiece pre-processing. Framework: Hugging Face. Functionality: Translation. API call: translate('input_text', model='Helsinki-NLP/opus-mt-en-fr').\nSkill condition: multi_candidate_skill\nSkill summary: Helsinki-NLP/opus-mt-en-fr is a translation model that translates English text to French using the Hugging Face Transformers library. It is based on the OPUS dataset and uses a transformer-align architecture with normalization and SentencePiece pre-processing. Framework: Hugging Face. Functionality: Translation. API call: translate('input_text', model='Helsinki-NLP/opus-mt-en-fr'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__helsinki_nlp_opus_mt_en_fr__translate_input_text_model_h_26b51990` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use hugging face  helsinki nlp opus mt en fr  translate input text model h 26b51990 to Helsinki-NLP/opus-mt-en-fr is a translation model that translates English text to French using the Hugging Face Transformers library. It is. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0055_hugging_face_helsinki_nlp_opus_mt_en_fr_translate_input_text_model_h_26b51990_positive_medium_0",
+      "tool_name": "hugging_face__helsinki_nlp_opus_mt_en_fr__translate_input_text_model_h_26b51990",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Helsinki-NLP/opus-mt-en-fr is a translation model that translates English text to French using the Hugging Face Transformers library. It is. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0275,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__helsinki_nlp_opus_mt_en_fr__translate_input_text_model_h_26b51990\nTool description: Helsinki-NLP/opus-mt-en-fr is a translation model that translates English text to French using the Hugging Face Transformers library. It is based on the OPUS dataset and uses a transformer-align architecture with normalization and SentencePiece pre-processing. Framework: Hugging Face. Functionality: Translation. API call: translate('input_text', model='Helsinki-NLP/opus-mt-en-fr').\nSkill condition: multi_candidate_skill\nSkill summary: Helsinki-NLP/opus-mt-en-fr is a translation model that translates English text to French using the Hugging Face Transformers library. It is based on the OPUS dataset and uses a transformer-align architecture with normalization and SentencePiece pre-processing. Framework: Hugging Face. Functionality: Translation. API call: translate('input_text', model='Helsinki-NLP/opus-mt-en-fr'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__helsinki_nlp_opus_mt_en_fr__translate_input_text_model_h_26b51990` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: Helsinki-NLP/opus-mt-en-fr is a translation model that translates English text to French using the Hugging Face Transformers library. It is. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0297
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0103_calculate_average_negative_easy_0_out_of_domain_request",
+      "tool_name": "calculate_average",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate average.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0817,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_average\nTool description: This function calculates the average grade across different subjects for a specific student.\nSkill condition: multi_candidate_skill\nSkill summary: This function calculates the average grade across different subjects for a specific student. Provide the required field `gradeDict`.\nWhen to use: [\"Use `calculate_average` when the user's request directly matches this tool's purpose.\", \"Provide the required field `gradeDict`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"gradeDict\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_average\", \"arguments\": {\"gradeDict\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_average\", \"arguments\": {\"gradeDict\": null}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"gradeDict\": null}}]\nSchema: {\"properties\": {\"gradeDict\": {\"description\": \"A dictionary where keys represent subjects and values represent scores\", \"type\": \"dict\"}}, \"required\": [\"gradeDict\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate average.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0103_calculate_average_negative_hard_1_ambiguous_abstain_safer",
+      "tool_name": "calculate_average",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Maybe do something with calculate average; actually, I am not sure what input or action is intended.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1264,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_average\nTool description: This function calculates the average grade across different subjects for a specific student.\nSkill condition: multi_candidate_skill\nSkill summary: This function calculates the average grade across different subjects for a specific student. Provide the required field `gradeDict`.\nWhen to use: [\"Use `calculate_average` when the user's request directly matches this tool's purpose.\", \"Provide the required field `gradeDict`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"gradeDict\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_average\", \"arguments\": {\"gradeDict\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_average\", \"arguments\": {\"gradeDict\": null}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"gradeDict\": null}}]\nSchema: {\"properties\": {\"gradeDict\": {\"description\": \"A dictionary where keys represent subjects and values represent scores\", \"type\": \"dict\"}}, \"required\": [\"gradeDict\"], \"type\": \"object\"}\nUser request: Maybe do something with calculate average; actually, I am not sure what input or action is intended.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0103_calculate_average_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "calculate_average",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with calculate average.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0844,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_average\nTool description: This function calculates the average grade across different subjects for a specific student.\nSkill condition: multi_candidate_skill\nSkill summary: This function calculates the average grade across different subjects for a specific student. Provide the required field `gradeDict`.\nWhen to use: [\"Use `calculate_average` when the user's request directly matches this tool's purpose.\", \"Provide the required field `gradeDict`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"gradeDict\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_average\", \"arguments\": {\"gradeDict\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_average\", \"arguments\": {\"gradeDict\": null}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"gradeDict\": null}}]\nSchema: {\"properties\": {\"gradeDict\": {\"description\": \"A dictionary where keys represent subjects and values represent scores\", \"type\": \"dict\"}}, \"required\": [\"gradeDict\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with calculate average.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0103_calculate_average_positive_easy_0",
+      "tool_name": "calculate_average",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use calculate average to This function calculates the average grade across different subjects for a specific student. Set gradeDict=\"gradedict_0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {
+        "gradeDict": "gradedict_0"
+      },
+      "prediction_latency_ms": 0.0783,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_average\nTool description: This function calculates the average grade across different subjects for a specific student.\nSkill condition: multi_candidate_skill\nSkill summary: This function calculates the average grade across different subjects for a specific student. Provide the required field `gradeDict`.\nWhen to use: [\"Use `calculate_average` when the user's request directly matches this tool's purpose.\", \"Provide the required field `gradeDict`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"gradeDict\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_average\", \"arguments\": {\"gradeDict\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_average\", \"arguments\": {\"gradeDict\": null}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"gradeDict\": null}}]\nSchema: {\"properties\": {\"gradeDict\": {\"description\": \"A dictionary where keys represent subjects and values represent scores\", \"type\": \"dict\"}}, \"required\": [\"gradeDict\"], \"type\": \"object\"}\nUser request: Use calculate average to This function calculates the average grade across different subjects for a specific student. Set gradeDict=\"gradedict_0\".\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0103_calculate_average_positive_medium_0",
+      "tool_name": "calculate_average",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: This function calculates the average grade across different subjects for a specific student. The relevant details are gradeDict=\"gradedict_7\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {
+        "gradeDict": "gradedict_7"
+      },
+      "prediction_latency_ms": 0.08,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_average\nTool description: This function calculates the average grade across different subjects for a specific student.\nSkill condition: multi_candidate_skill\nSkill summary: This function calculates the average grade across different subjects for a specific student. Provide the required field `gradeDict`.\nWhen to use: [\"Use `calculate_average` when the user's request directly matches this tool's purpose.\", \"Provide the required field `gradeDict`.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\"]\nArgument template: {\"gradeDict\": null}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_average\", \"arguments\": {\"gradeDict\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_average\", \"arguments\": {\"gradeDict\": null}}, {\"scenario\": \"Required-argument dev behavior example.\", \"arguments\": {\"gradeDict\": null}}]\nSchema: {\"properties\": {\"gradeDict\": {\"description\": \"A dictionary where keys represent subjects and values represent scores\", \"type\": \"dict\"}}, \"required\": [\"gradeDict\"], \"type\": \"object\"}\nUser request: I need help with this task: This function calculates the average grade across different subjects for a specific student. The relevant details are gradeDict=\"gradedict_7\".\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.0902
+  }
+}

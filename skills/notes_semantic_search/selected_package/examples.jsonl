@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for notes_semantic_search", "arguments": {"query": "sample query"}}
+{"scenario": "Richer invocation that uses optional controls for notes_semantic_search", "arguments": {"query": "sample query", "tags": ["sample_tags_item_2"], "limit": 2}}

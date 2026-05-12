@@ -1,0 +1,207 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0105_calculate_bmi_negative_easy_0_out_of_domain_request",
+      "tool_name": "calculate_bmi",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate bmi.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "weight": 1,
+        "height": 1,
+        "system": "sample_system_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.078,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_bmi\nTool description: Calculate the Body Mass Index (BMI) for a person based on their weight and height.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the Body Mass Index (BMI) for a person based on their weight and height. Provide all required fields: `weight`, and `height`.\nWhen to use: [\"Use `calculate_bmi` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `weight`, and `height`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"weight\": 1, \"height\": 1, \"system\": \"sample_system_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_bmi\", \"arguments\": {\"weight\": 1, \"height\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_bmi\", \"arguments\": {\"weight\": 2, \"height\": 2, \"system\": \"sample_system_2\"}}]\nSchema: {\"properties\": {\"height\": {\"description\": \"The height of the person in centimeters.\", \"type\": \"integer\"}, \"system\": {\"description\": \"The system of units to be used, 'metric' or 'imperial'. Default is 'metric'.\", \"type\": \"string\"}, \"weight\": {\"description\": \"The weight of the person in kilograms.\", \"type\": \"integer\"}}, \"required\": [\"weight\", \"height\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate bmi.\n",
+        "raw_model_output": "{\"arguments\": {\"height\": 1, \"system\": \"sample_system_1\", \"weight\": 1}}",
+        "parsed_prediction": {
+          "weight": 1,
+          "height": 1,
+          "system": "sample_system_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0105_calculate_bmi_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "calculate_bmi",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with calculate bmi; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "weight": 1,
+        "height": 1,
+        "system": "sample_system_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.2038,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_bmi\nTool description: Calculate the Body Mass Index (BMI) for a person based on their weight and height.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the Body Mass Index (BMI) for a person based on their weight and height. Provide all required fields: `weight`, and `height`.\nWhen to use: [\"Use `calculate_bmi` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `weight`, and `height`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"weight\": 1, \"height\": 1, \"system\": \"sample_system_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_bmi\", \"arguments\": {\"weight\": 1, \"height\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_bmi\", \"arguments\": {\"weight\": 2, \"height\": 2, \"system\": \"sample_system_2\"}}]\nSchema: {\"properties\": {\"height\": {\"description\": \"The height of the person in centimeters.\", \"type\": \"integer\"}, \"system\": {\"description\": \"The system of units to be used, 'metric' or 'imperial'. Default is 'metric'.\", \"type\": \"string\"}, \"weight\": {\"description\": \"The weight of the person in kilograms.\", \"type\": \"integer\"}}, \"required\": [\"weight\", \"height\"], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with calculate bmi; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {\"height\": 1, \"system\": \"sample_system_1\", \"weight\": 1}}",
+        "parsed_prediction": {
+          "weight": 1,
+          "height": 1,
+          "system": "sample_system_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0105_calculate_bmi_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "calculate_bmi",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use calculate bmi; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "weight": 1,
+        "height": 1,
+        "system": "sample_system_1"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0721,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_bmi\nTool description: Calculate the Body Mass Index (BMI) for a person based on their weight and height.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the Body Mass Index (BMI) for a person based on their weight and height. Provide all required fields: `weight`, and `height`.\nWhen to use: [\"Use `calculate_bmi` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `weight`, and `height`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"weight\": 1, \"height\": 1, \"system\": \"sample_system_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_bmi\", \"arguments\": {\"weight\": 1, \"height\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_bmi\", \"arguments\": {\"weight\": 2, \"height\": 2, \"system\": \"sample_system_2\"}}]\nSchema: {\"properties\": {\"height\": {\"description\": \"The height of the person in centimeters.\", \"type\": \"integer\"}, \"system\": {\"description\": \"The system of units to be used, 'metric' or 'imperial'. Default is 'metric'.\", \"type\": \"string\"}, \"weight\": {\"description\": \"The weight of the person in kilograms.\", \"type\": \"integer\"}}, \"required\": [\"weight\", \"height\"], \"type\": \"object\"}\nUser request: Explain when someone should use calculate bmi; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"height\": 1, \"system\": \"sample_system_1\", \"weight\": 1}}",
+        "parsed_prediction": {
+          "weight": 1,
+          "height": 1,
+          "system": "sample_system_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0105_calculate_bmi_positive_easy_0",
+      "tool_name": "calculate_bmi",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use calculate bmi to Calculate the Body Mass Index (BMI) for a person based on their weight and height. Set height=1, weight=1.",
+      "exact_match": false,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "weight": 1,
+        "height": 1,
+        "system": "sample_system_1"
+      },
+      "expected_arguments": {
+        "height": 1,
+        "weight": 1
+      },
+      "prediction_latency_ms": 0.0645,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_bmi\nTool description: Calculate the Body Mass Index (BMI) for a person based on their weight and height.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the Body Mass Index (BMI) for a person based on their weight and height. Provide all required fields: `weight`, and `height`.\nWhen to use: [\"Use `calculate_bmi` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `weight`, and `height`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"weight\": 1, \"height\": 1, \"system\": \"sample_system_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_bmi\", \"arguments\": {\"weight\": 1, \"height\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_bmi\", \"arguments\": {\"weight\": 2, \"height\": 2, \"system\": \"sample_system_2\"}}]\nSchema: {\"properties\": {\"height\": {\"description\": \"The height of the person in centimeters.\", \"type\": \"integer\"}, \"system\": {\"description\": \"The system of units to be used, 'metric' or 'imperial'. Default is 'metric'.\", \"type\": \"string\"}, \"weight\": {\"description\": \"The weight of the person in kilograms.\", \"type\": \"integer\"}}, \"required\": [\"weight\", \"height\"], \"type\": \"object\"}\nUser request: Use calculate bmi to Calculate the Body Mass Index (BMI) for a person based on their weight and height. Set height=1, weight=1.\n",
+        "raw_model_output": "{\"arguments\": {\"height\": 1, \"system\": \"sample_system_1\", \"weight\": 1}}",
+        "parsed_prediction": {
+          "weight": 1,
+          "height": 1,
+          "system": "sample_system_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0105_calculate_bmi_positive_medium_0",
+      "tool_name": "calculate_bmi",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Calculate the Body Mass Index (BMI) for a person based on their weight and height. The relevant details are height=8, weight=8.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "weight": 1,
+        "height": 1,
+        "system": "sample_system_1"
+      },
+      "expected_arguments": {
+        "height": 8,
+        "weight": 8
+      },
+      "prediction_latency_ms": 0.0623,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_bmi\nTool description: Calculate the Body Mass Index (BMI) for a person based on their weight and height.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the Body Mass Index (BMI) for a person based on their weight and height. Provide all required fields: `weight`, and `height`.\nWhen to use: [\"Use `calculate_bmi` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `weight`, and `height`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"weight\": 1, \"height\": 1, \"system\": \"sample_system_1\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_bmi\", \"arguments\": {\"weight\": 1, \"height\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_bmi\", \"arguments\": {\"weight\": 2, \"height\": 2, \"system\": \"sample_system_2\"}}]\nSchema: {\"properties\": {\"height\": {\"description\": \"The height of the person in centimeters.\", \"type\": \"integer\"}, \"system\": {\"description\": \"The system of units to be used, 'metric' or 'imperial'. Default is 'metric'.\", \"type\": \"string\"}, \"weight\": {\"description\": \"The weight of the person in kilograms.\", \"type\": \"integer\"}}, \"required\": [\"weight\", \"height\"], \"type\": \"object\"}\nUser request: I need help with this task: Calculate the Body Mass Index (BMI) for a person based on their weight and height. The relevant details are height=8, weight=8.\n",
+        "raw_model_output": "{\"arguments\": {\"height\": 1, \"system\": \"sample_system_1\", \"weight\": 1}}",
+        "parsed_prediction": {
+          "weight": 1,
+          "height": 1,
+          "system": "sample_system_1"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.5,
+    "avg_prediction_latency_ms": 0.0961
+  }
+}

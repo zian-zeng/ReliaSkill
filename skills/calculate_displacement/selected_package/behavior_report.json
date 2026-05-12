@@ -1,0 +1,183 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0111_calculate_displacement_negative_easy_0_out_of_domain_request",
+      "tool_name": "calculate_displacement",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate displacement.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "acceleration": 0
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1219,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_displacement\nTool description: Calculates the displacement of an object in motion given initial velocity, time, and acceleration.\nSkill condition: multi_candidate_skill\nSkill summary: Calculates the displacement of an object in motion given initial velocity, time, and acceleration. Provide all required fields: `initial_velocity`, and `time`.\nWhen to use: [\"Use `calculate_displacement` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `initial_velocity`, and `time`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"initial_velocity\": null, \"time\": null, \"acceleration\": 0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_displacement\", \"arguments\": {\"initial_velocity\": null, \"time\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_displacement\", \"arguments\": {\"initial_velocity\": null, \"time\": null, \"acceleration\": 0}}]\nSchema: {\"properties\": {\"acceleration\": {\"default\": 0, \"description\": \"The acceleration of the object in m/s^2.\", \"type\": \"float\"}, \"initial_velocity\": {\"description\": \"The initial velocity of the object in m/s.\", \"type\": \"float\"}, \"time\": {\"description\": \"The time in seconds that the object has been in motion.\", \"type\": \"float\"}}, \"required\": [\"initial_velocity\", \"time\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate displacement.\n",
+        "raw_model_output": "{\"arguments\": {\"acceleration\": 0}}",
+        "parsed_prediction": {
+          "acceleration": 0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0111_calculate_displacement_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "calculate_displacement",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with calculate displacement.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "acceleration": 0
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.237,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_displacement\nTool description: Calculates the displacement of an object in motion given initial velocity, time, and acceleration.\nSkill condition: multi_candidate_skill\nSkill summary: Calculates the displacement of an object in motion given initial velocity, time, and acceleration. Provide all required fields: `initial_velocity`, and `time`.\nWhen to use: [\"Use `calculate_displacement` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `initial_velocity`, and `time`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"initial_velocity\": null, \"time\": null, \"acceleration\": 0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_displacement\", \"arguments\": {\"initial_velocity\": null, \"time\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_displacement\", \"arguments\": {\"initial_velocity\": null, \"time\": null, \"acceleration\": 0}}]\nSchema: {\"properties\": {\"acceleration\": {\"default\": 0, \"description\": \"The acceleration of the object in m/s^2.\", \"type\": \"float\"}, \"initial_velocity\": {\"description\": \"The initial velocity of the object in m/s.\", \"type\": \"float\"}, \"time\": {\"description\": \"The time in seconds that the object has been in motion.\", \"type\": \"float\"}}, \"required\": [\"initial_velocity\", \"time\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with calculate displacement.\n",
+        "raw_model_output": "{\"arguments\": {\"acceleration\": 0}}",
+        "parsed_prediction": {
+          "acceleration": 0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0111_calculate_displacement_positive_easy_0",
+      "tool_name": "calculate_displacement",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use calculate displacement to Calculates the displacement of an object in motion given initial velocity, time, and acceleration. Set initial_velocity=1, time=1.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {
+        "initial_velocity": 1,
+        "time": 1
+      },
+      "prediction_latency_ms": 0.1264,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_displacement\nTool description: Calculates the displacement of an object in motion given initial velocity, time, and acceleration.\nSkill condition: multi_candidate_skill\nSkill summary: Calculates the displacement of an object in motion given initial velocity, time, and acceleration. Provide all required fields: `initial_velocity`, and `time`.\nWhen to use: [\"Use `calculate_displacement` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `initial_velocity`, and `time`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"initial_velocity\": null, \"time\": null, \"acceleration\": 0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_displacement\", \"arguments\": {\"initial_velocity\": null, \"time\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_displacement\", \"arguments\": {\"initial_velocity\": null, \"time\": null, \"acceleration\": 0}}]\nSchema: {\"properties\": {\"acceleration\": {\"default\": 0, \"description\": \"The acceleration of the object in m/s^2.\", \"type\": \"float\"}, \"initial_velocity\": {\"description\": \"The initial velocity of the object in m/s.\", \"type\": \"float\"}, \"time\": {\"description\": \"The time in seconds that the object has been in motion.\", \"type\": \"float\"}}, \"required\": [\"initial_velocity\", \"time\"], \"type\": \"object\"}\nUser request: Use calculate displacement to Calculates the displacement of an object in motion given initial velocity, time, and acceleration. Set initial_velocity=1, time=1.\n",
+        "raw_model_output": "{\"arguments\": {\"acceleration\": 0}}",
+        "parsed_prediction": {
+          "acceleration": 0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0111_calculate_displacement_positive_medium_0",
+      "tool_name": "calculate_displacement",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Calculates the displacement of an object in motion given initial velocity, time, and acceleration. The relevant details are initial_velocity=8, time=8.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {
+        "initial_velocity": 8,
+        "time": 8
+      },
+      "prediction_latency_ms": 0.1124,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_displacement\nTool description: Calculates the displacement of an object in motion given initial velocity, time, and acceleration.\nSkill condition: multi_candidate_skill\nSkill summary: Calculates the displacement of an object in motion given initial velocity, time, and acceleration. Provide all required fields: `initial_velocity`, and `time`.\nWhen to use: [\"Use `calculate_displacement` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `initial_velocity`, and `time`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"initial_velocity\": null, \"time\": null, \"acceleration\": 0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_displacement\", \"arguments\": {\"initial_velocity\": null, \"time\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_displacement\", \"arguments\": {\"initial_velocity\": null, \"time\": null, \"acceleration\": 0}}]\nSchema: {\"properties\": {\"acceleration\": {\"default\": 0, \"description\": \"The acceleration of the object in m/s^2.\", \"type\": \"float\"}, \"initial_velocity\": {\"description\": \"The initial velocity of the object in m/s.\", \"type\": \"float\"}, \"time\": {\"description\": \"The time in seconds that the object has been in motion.\", \"type\": \"float\"}}, \"required\": [\"initial_velocity\", \"time\"], \"type\": \"object\"}\nUser request: I need help with this task: Calculates the displacement of an object in motion given initial velocity, time, and acceleration. The relevant details are initial_velocity=8, time=8.\n",
+        "raw_model_output": "{\"arguments\": {\"acceleration\": 0}}",
+        "parsed_prediction": {
+          "acceleration": 0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0111_calculate_displacement_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "calculate_displacement",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use calendar create event to API-Bank-style local fixture tool that creates a mock calendar event with attendees and reminders; calculate displacement is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "acceleration": 0
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1062,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_displacement\nTool description: Calculates the displacement of an object in motion given initial velocity, time, and acceleration.\nSkill condition: multi_candidate_skill\nSkill summary: Calculates the displacement of an object in motion given initial velocity, time, and acceleration. Provide all required fields: `initial_velocity`, and `time`.\nWhen to use: [\"Use `calculate_displacement` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `initial_velocity`, and `time`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"initial_velocity\": null, \"time\": null, \"acceleration\": 0}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_displacement\", \"arguments\": {\"initial_velocity\": null, \"time\": null}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_displacement\", \"arguments\": {\"initial_velocity\": null, \"time\": null, \"acceleration\": 0}}]\nSchema: {\"properties\": {\"acceleration\": {\"default\": 0, \"description\": \"The acceleration of the object in m/s^2.\", \"type\": \"float\"}, \"initial_velocity\": {\"description\": \"The initial velocity of the object in m/s.\", \"type\": \"float\"}, \"time\": {\"description\": \"The time in seconds that the object has been in motion.\", \"type\": \"float\"}}, \"required\": [\"initial_velocity\", \"time\"], \"type\": \"object\"}\nUser request: Use calendar create event to API-Bank-style local fixture tool that creates a mock calendar event with attendees and reminders; calculate displacement is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"acceleration\": 0}}",
+        "parsed_prediction": {
+          "acceleration": 0
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.1408
+  }
+}

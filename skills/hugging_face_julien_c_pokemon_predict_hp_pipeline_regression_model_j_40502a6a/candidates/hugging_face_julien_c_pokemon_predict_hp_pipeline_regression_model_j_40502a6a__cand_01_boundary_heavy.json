@@ -1,0 +1,68 @@
+{
+  "candidate_id": "hugging_face_julien_c_pokemon_predict_hp_pipeline_regression_model_j_40502a6a__cand_01_boundary_heavy",
+  "generation_strategy": "boundary_heavy",
+  "prompt_template_id": "heuristic_boundary_heavy_v1",
+  "skill_text": "A tabular regression model trained on the julien-c/kaggle-rounakbanik-pokemon dataset to predict the HP of Pokemon. Framework: Hugging Face. Functionality: Predicting Pokemon HP. API call: pipeline('regression', model='julien-c/pokemon-predict-hp'). This tool has no required input fields.\nWhen to use:\n- Use `hugging_face__julien_c_pokemon_predict_hp__pipeline_regression_model_j_40502a6a` when the user's request directly matches this tool's purpose.\n- This tool has no required input fields.\n- Use only when the request clearly needs `hugging_face__julien_c_pokemon_predict_hp__pipeline_regression_model_j_40502a6a`.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Tool does not expose top-level input properties.\n- Do not use for adjacent tools with similar names, descriptions, or arguments.\n- Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.\n- If the request lacks required fields, abstain or ask for clarification.",
+  "argument_template": {},
+  "examples": [],
+  "when_to_use": [
+    "Use `hugging_face__julien_c_pokemon_predict_hp__pipeline_regression_model_j_40502a6a` when the user's request directly matches this tool's purpose.",
+    "This tool has no required input fields.",
+    "Use only when the request clearly needs `hugging_face__julien_c_pokemon_predict_hp__pipeline_regression_model_j_40502a6a`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Tool does not expose top-level input properties.",
+    "Do not use for adjacent tools with similar names, descriptions, or arguments.",
+    "Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.",
+    "If the request lacks required fields, abstain or ask for clarification."
+  ],
+  "token_count": 247,
+  "skill_token_count": 247,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 0,
+  "nonuse_boundary_count": 6,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "A tabular regression model trained on the julien-c/kaggle-rounakbanik-pokemon dataset to predict the HP of Pokemon. Framework: Hugging Face. Functionality: Predicting Pokemon HP. API call: pipeline('regression', model='julien-c/pokemon-predict-hp'). This tool has no required input fields.",
+    "when_to_use": [
+      "Use `hugging_face__julien_c_pokemon_predict_hp__pipeline_regression_model_j_40502a6a` when the user's request directly matches this tool's purpose.",
+      "This tool has no required input fields.",
+      "Use only when the request clearly needs `hugging_face__julien_c_pokemon_predict_hp__pipeline_regression_model_j_40502a6a`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Tool does not expose top-level input properties.",
+      "Do not use for adjacent tools with similar names, descriptions, or arguments.",
+      "Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.",
+      "If the request lacks required fields, abstain or ask for clarification."
+    ],
+    "argument_template": {},
+    "examples": [],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "hugging_face_julien_c_pokemon_predict_hp_pipeline_regression_model_j_40502a6a__cand_01_boundary_heavy",
+        "generation_strategy": "boundary_heavy",
+        "prompt_template_id": "heuristic_boundary_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "hugging_face_julien_c_pokemon_predict_hp_pipeline_regression_model_j_40502a6a__cand_01_boundary_heavy",
+      "generation_strategy": "boundary_heavy",
+      "prompt_template_id": "heuristic_boundary_heavy_v1"
+    }
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0046_hugging_face_dreamlike_art_dreamlike_anime_1_0_stablediffusionpipeli_5e92a311_negative_easy_0_out_of_domain_request",
+      "tool_name": "hugging_face__dreamlike_art_dreamlike_anime_1_0__stablediffusionpipeli_5e92a311",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  dreamlike art dreamlike anime 1 0  stablediffusionpipeli 5e92a311.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0359,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__dreamlike_art_dreamlike_anime_1_0__stablediffusionpipeli_5e92a311\nTool description: Dreamlike Anime 1.0 is a high quality anime model, made by dreamlike.art. It can be used to generate anime-style images based on text prompts. The model is trained on 768x768px images and works best with prompts that include 'photo anime, masterpiece, high quality, absurdres'. It can be used with the Stable Diffusion Pipeline from the diffusers library. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-anime-1.0', torch_dtype=torch.float16)(prompt, negative_prompt=negative_prompt).\nSkill condition: multi_candidate_skill\nSkill summary: Dreamlike Anime 1.0 is a high quality anime model, made by dreamlike.art. It can be used to generate anime-style images based on text prompts. The model is trained on 768x768px images and works best with prompts that include 'photo anime, masterpiece, high quality, absurdres'. It can be used with the Stable Diffusion Pipeline from the diffusers library. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-anime-1.0', torch_dtype=torch.float16)(prompt, negative_prompt=negative_prompt). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__dreamlike_art_dreamlike_anime_1_0__stablediffusionpipeli_5e92a311` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  dreamlike art dreamlike anime 1 0  stablediffusionpipeli 5e92a311.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0046_hugging_face_dreamlike_art_dreamlike_anime_1_0_stablediffusionpipeli_5e92a311_negative_medium_0_known_path_no_search_needed",
+      "tool_name": "hugging_face__dreamlike_art_dreamlike_anime_1_0__stablediffusionpipeli_5e92a311",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I already know the exact path docs/known_file.md, so no search or discovery is needed with hugging face  dreamlike art dreamlike anime 1 0  stablediffusionpipeli 5e92a311.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0317,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__dreamlike_art_dreamlike_anime_1_0__stablediffusionpipeli_5e92a311\nTool description: Dreamlike Anime 1.0 is a high quality anime model, made by dreamlike.art. It can be used to generate anime-style images based on text prompts. The model is trained on 768x768px images and works best with prompts that include 'photo anime, masterpiece, high quality, absurdres'. It can be used with the Stable Diffusion Pipeline from the diffusers library. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-anime-1.0', torch_dtype=torch.float16)(prompt, negative_prompt=negative_prompt).\nSkill condition: multi_candidate_skill\nSkill summary: Dreamlike Anime 1.0 is a high quality anime model, made by dreamlike.art. It can be used to generate anime-style images based on text prompts. The model is trained on 768x768px images and works best with prompts that include 'photo anime, masterpiece, high quality, absurdres'. It can be used with the Stable Diffusion Pipeline from the diffusers library. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-anime-1.0', torch_dtype=torch.float16)(prompt, negative_prompt=negative_prompt). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__dreamlike_art_dreamlike_anime_1_0__stablediffusionpipeli_5e92a311` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I already know the exact path docs/known_file.md, so no search or discovery is needed with hugging face  dreamlike art dreamlike anime 1 0  stablediffusionpipeli 5e92a311.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0046_hugging_face_dreamlike_art_dreamlike_anime_1_0_stablediffusionpipeli_5e92a311_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "hugging_face__dreamlike_art_dreamlike_anime_1_0__stablediffusionpipeli_5e92a311",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN; hugging face  dreamlike art dreamlike anime 1 0  stablediffusionpipeli 5e92a311 is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0296,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__dreamlike_art_dreamlike_anime_1_0__stablediffusionpipeli_5e92a311\nTool description: Dreamlike Anime 1.0 is a high quality anime model, made by dreamlike.art. It can be used to generate anime-style images based on text prompts. The model is trained on 768x768px images and works best with prompts that include 'photo anime, masterpiece, high quality, absurdres'. It can be used with the Stable Diffusion Pipeline from the diffusers library. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-anime-1.0', torch_dtype=torch.float16)(prompt, negative_prompt=negative_prompt).\nSkill condition: multi_candidate_skill\nSkill summary: Dreamlike Anime 1.0 is a high quality anime model, made by dreamlike.art. It can be used to generate anime-style images based on text prompts. The model is trained on 768x768px images and works best with prompts that include 'photo anime, masterpiece, high quality, absurdres'. It can be used with the Stable Diffusion Pipeline from the diffusers library. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-anime-1.0', torch_dtype=torch.float16)(prompt, negative_prompt=negative_prompt). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__dreamlike_art_dreamlike_anime_1_0__stablediffusionpipeli_5e92a311` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN; hugging face  dreamlike art dreamlike anime 1 0  stablediffusionpipeli 5e92a311 is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0046_hugging_face_dreamlike_art_dreamlike_anime_1_0_stablediffusionpipeli_5e92a311_positive_easy_0",
+      "tool_name": "hugging_face__dreamlike_art_dreamlike_anime_1_0__stablediffusionpipeli_5e92a311",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use hugging face  dreamlike art dreamlike anime 1 0  stablediffusionpipeli 5e92a311 to Dreamlike Anime 1.0 is a high quality anime model, made by dreamlike.art. It can be used to generate anime-style images based on text prompt. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0288,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__dreamlike_art_dreamlike_anime_1_0__stablediffusionpipeli_5e92a311\nTool description: Dreamlike Anime 1.0 is a high quality anime model, made by dreamlike.art. It can be used to generate anime-style images based on text prompts. The model is trained on 768x768px images and works best with prompts that include 'photo anime, masterpiece, high quality, absurdres'. It can be used with the Stable Diffusion Pipeline from the diffusers library. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-anime-1.0', torch_dtype=torch.float16)(prompt, negative_prompt=negative_prompt).\nSkill condition: multi_candidate_skill\nSkill summary: Dreamlike Anime 1.0 is a high quality anime model, made by dreamlike.art. It can be used to generate anime-style images based on text prompts. The model is trained on 768x768px images and works best with prompts that include 'photo anime, masterpiece, high quality, absurdres'. It can be used with the Stable Diffusion Pipeline from the diffusers library. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-anime-1.0', torch_dtype=torch.float16)(prompt, negative_prompt=negative_prompt). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__dreamlike_art_dreamlike_anime_1_0__stablediffusionpipeli_5e92a311` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use hugging face  dreamlike art dreamlike anime 1 0  stablediffusionpipeli 5e92a311 to Dreamlike Anime 1.0 is a high quality anime model, made by dreamlike.art. It can be used to generate anime-style images based on text prompt. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0046_hugging_face_dreamlike_art_dreamlike_anime_1_0_stablediffusionpipeli_5e92a311_positive_medium_0",
+      "tool_name": "hugging_face__dreamlike_art_dreamlike_anime_1_0__stablediffusionpipeli_5e92a311",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Dreamlike Anime 1.0 is a high quality anime model, made by dreamlike.art. It can be used to generate anime-style images based on text prompt. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0293,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__dreamlike_art_dreamlike_anime_1_0__stablediffusionpipeli_5e92a311\nTool description: Dreamlike Anime 1.0 is a high quality anime model, made by dreamlike.art. It can be used to generate anime-style images based on text prompts. The model is trained on 768x768px images and works best with prompts that include 'photo anime, masterpiece, high quality, absurdres'. It can be used with the Stable Diffusion Pipeline from the diffusers library. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-anime-1.0', torch_dtype=torch.float16)(prompt, negative_prompt=negative_prompt).\nSkill condition: multi_candidate_skill\nSkill summary: Dreamlike Anime 1.0 is a high quality anime model, made by dreamlike.art. It can be used to generate anime-style images based on text prompts. The model is trained on 768x768px images and works best with prompts that include 'photo anime, masterpiece, high quality, absurdres'. It can be used with the Stable Diffusion Pipeline from the diffusers library. Framework: Hugging Face. Functionality: Text-to-Image. API call: StableDiffusionPipeline.from_pretrained('dreamlike-art/dreamlike-anime-1.0', torch_dtype=torch.float16)(prompt, negative_prompt=negative_prompt). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__dreamlike_art_dreamlike_anime_1_0__stablediffusionpipeli_5e92a311` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: Dreamlike Anime 1.0 is a high quality anime model, made by dreamlike.art. It can be used to generate anime-style images based on text prompt. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0311
+  }
+}

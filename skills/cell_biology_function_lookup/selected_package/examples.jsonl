@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for cell_biology.function_lookup", "arguments": {"molecule": "sample_molecule_1", "organelle": "sample_organelle_1", "specific_function": false}}
+{"scenario": "Richer invocation that uses optional controls for cell_biology.function_lookup", "arguments": {"molecule": "sample_molecule_2", "organelle": "sample_organelle_2", "specific_function": true}}

@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for mock_cloud_storage_mock_list_objects_012", "arguments": {"bucket": "sample_bucket_1"}}
+{"scenario": "Richer invocation that uses optional controls for mock_cloud_storage_mock_list_objects_012", "arguments": {"bucket": "sample_bucket_2", "prefix": "sample_prefix_2", "include_metadata": true}}

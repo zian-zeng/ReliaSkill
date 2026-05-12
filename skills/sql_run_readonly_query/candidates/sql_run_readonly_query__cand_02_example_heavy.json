@@ -1,0 +1,138 @@
+{
+  "candidate_id": "sql_run_readonly_query__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database. Provide all required fields: `database`, and `query`.\nWhen to use:\n- Use `sql_run_readonly_query` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `database`, and `query`.\n- Optional controls include `parameters`, `limit`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"database\": \"sample_database_4\", \"limit\": 4, \"parameters\": {}, \"query\": \"sample query\"}\nExamples:\nMinimal valid request that satisfies the required fields for sql_run_readonly_query\n{\"database\": \"sample_database_1\", \"query\": \"sample query\"}\nRicher invocation that uses optional controls for sql_run_readonly_query\n{\"database\": \"sample_database_2\", \"limit\": 2, \"parameters\": {}, \"query\": \"sample query\"}\nRequired-argument dev behavior example.\n{\"database\": \"sample_database_3\", \"query\": \"sample query\"}\nOptional, enum, nested, or array argument example.\n{\"database\": \"sample_database_4\", \"limit\": 4, \"parameters\": {}, \"query\": \"sample query\"}",
+  "argument_template": {
+    "database": "sample_database_4",
+    "query": "sample query",
+    "parameters": {},
+    "limit": 4
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for sql_run_readonly_query",
+      "arguments": {
+        "database": "sample_database_1",
+        "query": "sample query"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for sql_run_readonly_query",
+      "arguments": {
+        "database": "sample_database_2",
+        "query": "sample query",
+        "parameters": {},
+        "limit": 2
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "database": "sample_database_3",
+        "query": "sample query"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "database": "sample_database_4",
+        "query": "sample query",
+        "parameters": {},
+        "limit": 4
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `sql_run_readonly_query` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `database`, and `query`.",
+    "Optional controls include `parameters`, `limit`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 313,
+  "skill_token_count": 313,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "API-Bank-style local fixture database tool that executes a readonly SQL query against a mock database. Provide all required fields: `database`, and `query`.",
+    "when_to_use": [
+      "Use `sql_run_readonly_query` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `database`, and `query`.",
+      "Optional controls include `parameters`, `limit`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "database": "sample_database_4",
+      "query": "sample query",
+      "parameters": {},
+      "limit": 4
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for sql_run_readonly_query",
+        "arguments": {
+          "database": "sample_database_1",
+          "query": "sample query"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for sql_run_readonly_query",
+        "arguments": {
+          "database": "sample_database_2",
+          "query": "sample query",
+          "parameters": {},
+          "limit": 2
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "database": "sample_database_3",
+          "query": "sample query"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "database": "sample_database_4",
+          "query": "sample query",
+          "parameters": {},
+          "limit": 4
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "sql_run_readonly_query__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "sql_run_readonly_query__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

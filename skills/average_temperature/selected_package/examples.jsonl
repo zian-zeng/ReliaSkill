@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for average_temperature", "arguments": {"location": "sample_location_1", "days": 1}}
+{"scenario": "Richer invocation that uses optional controls for average_temperature", "arguments": {"location": "sample_location_2", "days": 2, "temp_unit": "sample_temp_unit_2"}}

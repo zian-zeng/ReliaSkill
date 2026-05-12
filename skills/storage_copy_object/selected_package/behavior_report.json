@@ -1,0 +1,279 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0011_storage_copy_object_negative_easy_0_out_of_domain_request",
+      "tool_name": "storage_copy_object",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to storage copy object.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "source": {
+          "bucket": "sample_bucket_1",
+          "key": "sample_key_1"
+        },
+        "destination": {
+          "bucket": "sample_bucket_1",
+          "key": "sample_key_1"
+        },
+        "overwrite": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1159,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: storage_copy_object\nTool description: API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets. Provide all required fields: `source`, and `destination`.\nWhen to use: [\"Use `storage_copy_object` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `source`, and `destination`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"overwrite\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for storage_copy_object\", \"arguments\": {\"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}}}, {\"scenario\": \"Richer invocation that uses optional controls for storage_copy_object\", \"arguments\": {\"source\": {\"bucket\": \"sample_bucket_2\", \"key\": \"sample_key_2\"}, \"destination\": {\"bucket\": \"sample_bucket_2\", \"key\": \"sample_key_2\"}, \"overwrite\": true}}]\nSchema: {\"properties\": {\"destination\": {\"description\": \"Destination object.\", \"properties\": {\"bucket\": {\"type\": \"string\"}, \"key\": {\"type\": \"string\"}}, \"required\": [\"bucket\", \"key\"], \"type\": \"object\"}, \"overwrite\": {\"description\": \"Whether to overwrite an existing mock object.\", \"type\": \"boolean\"}, \"source\": {\"description\": \"Source object.\", \"properties\": {\"bucket\": {\"type\": \"string\"}, \"key\": {\"type\": \"string\"}}, \"required\": [\"bucket\", \"key\"], \"type\": \"object\"}}, \"required\": [\"source\", \"destination\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to storage copy object.\n",
+        "raw_model_output": "{\"arguments\": {\"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"overwrite\": false, \"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}}}",
+        "parsed_prediction": {
+          "source": {
+            "bucket": "sample_bucket_1",
+            "key": "sample_key_1"
+          },
+          "destination": {
+            "bucket": "sample_bucket_1",
+            "key": "sample_key_1"
+          },
+          "overwrite": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0011_storage_copy_object_negative_medium_0_read_vs_search_mismatch",
+      "tool_name": "storage_copy_object",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Read the exact item I named directly; do not search, retrieve candidates, or browse with storage copy object.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "source": {
+          "bucket": "sample_bucket_1",
+          "key": "sample_key_1"
+        },
+        "destination": {
+          "bucket": "sample_bucket_1",
+          "key": "sample_key_1"
+        },
+        "overwrite": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1038,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: storage_copy_object\nTool description: API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets. Provide all required fields: `source`, and `destination`.\nWhen to use: [\"Use `storage_copy_object` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `source`, and `destination`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"overwrite\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for storage_copy_object\", \"arguments\": {\"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}}}, {\"scenario\": \"Richer invocation that uses optional controls for storage_copy_object\", \"arguments\": {\"source\": {\"bucket\": \"sample_bucket_2\", \"key\": \"sample_key_2\"}, \"destination\": {\"bucket\": \"sample_bucket_2\", \"key\": \"sample_key_2\"}, \"overwrite\": true}}]\nSchema: {\"properties\": {\"destination\": {\"description\": \"Destination object.\", \"properties\": {\"bucket\": {\"type\": \"string\"}, \"key\": {\"type\": \"string\"}}, \"required\": [\"bucket\", \"key\"], \"type\": \"object\"}, \"overwrite\": {\"description\": \"Whether to overwrite an existing mock object.\", \"type\": \"boolean\"}, \"source\": {\"description\": \"Source object.\", \"properties\": {\"bucket\": {\"type\": \"string\"}, \"key\": {\"type\": \"string\"}}, \"required\": [\"bucket\", \"key\"], \"type\": \"object\"}}, \"required\": [\"source\", \"destination\"], \"type\": \"object\"}\nUser request: Read the exact item I named directly; do not search, retrieve candidates, or browse with storage copy object.\n",
+        "raw_model_output": "{\"arguments\": {\"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"overwrite\": false, \"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}}}",
+        "parsed_prediction": {
+          "source": {
+            "bucket": "sample_bucket_1",
+            "key": "sample_key_1"
+          },
+          "destination": {
+            "bucket": "sample_bucket_1",
+            "key": "sample_key_1"
+          },
+          "overwrite": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0011_storage_copy_object_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "storage_copy_object",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use mock cloud storage mock list objects 004 to Synthetic safe mock cloud-storage retrieval tool for listing fixture objects; storage copy object is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "source": {
+          "bucket": "sample_bucket_1",
+          "key": "sample_key_1"
+        },
+        "destination": {
+          "bucket": "sample_bucket_1",
+          "key": "sample_key_1"
+        },
+        "overwrite": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.163,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: storage_copy_object\nTool description: API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets. Provide all required fields: `source`, and `destination`.\nWhen to use: [\"Use `storage_copy_object` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `source`, and `destination`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"overwrite\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for storage_copy_object\", \"arguments\": {\"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}}}, {\"scenario\": \"Richer invocation that uses optional controls for storage_copy_object\", \"arguments\": {\"source\": {\"bucket\": \"sample_bucket_2\", \"key\": \"sample_key_2\"}, \"destination\": {\"bucket\": \"sample_bucket_2\", \"key\": \"sample_key_2\"}, \"overwrite\": true}}]\nSchema: {\"properties\": {\"destination\": {\"description\": \"Destination object.\", \"properties\": {\"bucket\": {\"type\": \"string\"}, \"key\": {\"type\": \"string\"}}, \"required\": [\"bucket\", \"key\"], \"type\": \"object\"}, \"overwrite\": {\"description\": \"Whether to overwrite an existing mock object.\", \"type\": \"boolean\"}, \"source\": {\"description\": \"Source object.\", \"properties\": {\"bucket\": {\"type\": \"string\"}, \"key\": {\"type\": \"string\"}}, \"required\": [\"bucket\", \"key\"], \"type\": \"object\"}}, \"required\": [\"source\", \"destination\"], \"type\": \"object\"}\nUser request: Use mock cloud storage mock list objects 004 to Synthetic safe mock cloud-storage retrieval tool for listing fixture objects; storage copy object is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"overwrite\": false, \"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}}}",
+        "parsed_prediction": {
+          "source": {
+            "bucket": "sample_bucket_1",
+            "key": "sample_key_1"
+          },
+          "destination": {
+            "bucket": "sample_bucket_1",
+            "key": "sample_key_1"
+          },
+          "overwrite": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0011_storage_copy_object_positive_easy_0",
+      "tool_name": "storage_copy_object",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use storage copy object to API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets. Set destination={\"bucket\": \"bucket_0\", \"key\": \"key_0\"}, source={\"bucket\": \"bucket_0\", \"key\": \"key_0\"}.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "source": {
+          "bucket": "sample_bucket_1",
+          "key": "sample_key_1"
+        },
+        "destination": {
+          "bucket": "sample_bucket_1",
+          "key": "sample_key_1"
+        },
+        "overwrite": false
+      },
+      "expected_arguments": {
+        "destination": {
+          "bucket": "bucket_0",
+          "key": "key_0"
+        },
+        "source": {
+          "bucket": "bucket_0",
+          "key": "key_0"
+        }
+      },
+      "prediction_latency_ms": 0.156,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: storage_copy_object\nTool description: API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets. Provide all required fields: `source`, and `destination`.\nWhen to use: [\"Use `storage_copy_object` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `source`, and `destination`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"overwrite\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for storage_copy_object\", \"arguments\": {\"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}}}, {\"scenario\": \"Richer invocation that uses optional controls for storage_copy_object\", \"arguments\": {\"source\": {\"bucket\": \"sample_bucket_2\", \"key\": \"sample_key_2\"}, \"destination\": {\"bucket\": \"sample_bucket_2\", \"key\": \"sample_key_2\"}, \"overwrite\": true}}]\nSchema: {\"properties\": {\"destination\": {\"description\": \"Destination object.\", \"properties\": {\"bucket\": {\"type\": \"string\"}, \"key\": {\"type\": \"string\"}}, \"required\": [\"bucket\", \"key\"], \"type\": \"object\"}, \"overwrite\": {\"description\": \"Whether to overwrite an existing mock object.\", \"type\": \"boolean\"}, \"source\": {\"description\": \"Source object.\", \"properties\": {\"bucket\": {\"type\": \"string\"}, \"key\": {\"type\": \"string\"}}, \"required\": [\"bucket\", \"key\"], \"type\": \"object\"}}, \"required\": [\"source\", \"destination\"], \"type\": \"object\"}\nUser request: Use storage copy object to API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets. Set destination={\"bucket\": \"bucket_0\", \"key\": \"key_0\"}, source={\"bucket\": \"bucket_0\", \"key\": \"key_0\"}.\n",
+        "raw_model_output": "{\"arguments\": {\"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"overwrite\": false, \"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}}}",
+        "parsed_prediction": {
+          "source": {
+            "bucket": "sample_bucket_1",
+            "key": "sample_key_1"
+          },
+          "destination": {
+            "bucket": "sample_bucket_1",
+            "key": "sample_key_1"
+          },
+          "overwrite": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0011_storage_copy_object_positive_medium_0",
+      "tool_name": "storage_copy_object",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets. The relevant details are destination={\"bucket\": \"bucket_7\", \"key\": \"key_7\"}, source={\"bucket\": \"bucket_7\", \"key\": \"key_7\"}.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "source": {
+          "bucket": "sample_bucket_1",
+          "key": "sample_key_1"
+        },
+        "destination": {
+          "bucket": "sample_bucket_1",
+          "key": "sample_key_1"
+        },
+        "overwrite": false
+      },
+      "expected_arguments": {
+        "destination": {
+          "bucket": "bucket_7",
+          "key": "key_7"
+        },
+        "source": {
+          "bucket": "bucket_7",
+          "key": "key_7"
+        }
+      },
+      "prediction_latency_ms": 0.2611,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: storage_copy_object\nTool description: API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets. Provide all required fields: `source`, and `destination`.\nWhen to use: [\"Use `storage_copy_object` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `source`, and `destination`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"overwrite\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for storage_copy_object\", \"arguments\": {\"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}}}, {\"scenario\": \"Richer invocation that uses optional controls for storage_copy_object\", \"arguments\": {\"source\": {\"bucket\": \"sample_bucket_2\", \"key\": \"sample_key_2\"}, \"destination\": {\"bucket\": \"sample_bucket_2\", \"key\": \"sample_key_2\"}, \"overwrite\": true}}]\nSchema: {\"properties\": {\"destination\": {\"description\": \"Destination object.\", \"properties\": {\"bucket\": {\"type\": \"string\"}, \"key\": {\"type\": \"string\"}}, \"required\": [\"bucket\", \"key\"], \"type\": \"object\"}, \"overwrite\": {\"description\": \"Whether to overwrite an existing mock object.\", \"type\": \"boolean\"}, \"source\": {\"description\": \"Source object.\", \"properties\": {\"bucket\": {\"type\": \"string\"}, \"key\": {\"type\": \"string\"}}, \"required\": [\"bucket\", \"key\"], \"type\": \"object\"}}, \"required\": [\"source\", \"destination\"], \"type\": \"object\"}\nUser request: I need help with this task: API-Bank-style local fixture cloud-storage tool for copying an object between offline buckets. The relevant details are destination={\"bucket\": \"bucket_7\", \"key\": \"key_7\"}, source={\"bucket\": \"bucket_7\", \"key\": \"key_7\"}.\n",
+        "raw_model_output": "{\"arguments\": {\"destination\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}, \"overwrite\": false, \"source\": {\"bucket\": \"sample_bucket_1\", \"key\": \"sample_key_1\"}}}",
+        "parsed_prediction": {
+          "source": {
+            "bucket": "sample_bucket_1",
+            "key": "sample_key_1"
+          },
+          "destination": {
+            "bucket": "sample_bucket_1",
+            "key": "sample_key_1"
+          },
+          "overwrite": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.16
+  }
+}

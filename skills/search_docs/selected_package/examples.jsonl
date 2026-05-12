@@ -1,0 +1,4 @@
+{"scenario": "Minimal valid request that satisfies the required fields for search_docs", "arguments": {"query": "sample query"}}
+{"scenario": "Richer invocation that uses optional controls for search_docs", "arguments": {"query": "sample query", "top_k": 5}}
+{"scenario": "Required-argument dev behavior example.", "arguments": {"query": "sample query"}}
+{"scenario": "Optional, enum, nested, or array argument example.", "arguments": {"query": "sample query", "top_k": 5}}

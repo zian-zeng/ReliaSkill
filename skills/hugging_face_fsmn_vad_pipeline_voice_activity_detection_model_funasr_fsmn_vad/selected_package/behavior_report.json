@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0052_hugging_face_fsmn_vad_pipeline_voice_activity_detection_model_funasr_fsmn_vad_negative_easy_0_out_of_domain_request",
+      "tool_name": "hugging_face__fsmn_vad__pipeline_voice_activity_detection_model_funasr_fsmn_vad",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  fsmn vad  pipeline voice activity detection model funasr fsmn vad.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0324,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__fsmn_vad__pipeline_voice_activity_detection_model_funasr_fsmn_vad\nTool description: FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='funasr/FSMN-VAD').\nSkill condition: multi_candidate_skill\nSkill summary: FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='funasr/FSMN-VAD'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__fsmn_vad__pipeline_voice_activity_detection_model_funasr_fsmn_vad` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  fsmn vad  pipeline voice activity detection model funasr fsmn vad.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0052_hugging_face_fsmn_vad_pipeline_voice_activity_detection_model_funasr_fsmn_vad_negative_hard_1_missing_required_info",
+      "tool_name": "hugging_face__fsmn_vad__pipeline_voice_activity_detection_model_funasr_fsmn_vad",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I may need hugging face  fsmn vad  pipeline voice activity detection model funasr fsmn vad to FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity, but I do not know the required input yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0298,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__fsmn_vad__pipeline_voice_activity_detection_model_funasr_fsmn_vad\nTool description: FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='funasr/FSMN-VAD').\nSkill condition: multi_candidate_skill\nSkill summary: FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='funasr/FSMN-VAD'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__fsmn_vad__pipeline_voice_activity_detection_model_funasr_fsmn_vad` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I may need hugging face  fsmn vad  pipeline voice activity detection model funasr fsmn vad to FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity, but I do not know the required input yet.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0052_hugging_face_fsmn_vad_pipeline_voice_activity_detection_model_funasr_fsmn_vad_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "hugging_face__fsmn_vad__pipeline_voice_activity_detection_model_funasr_fsmn_vad",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to hugging face  fsmn vad  pipeline voice activity detection model funasr fsmn vad, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0782,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__fsmn_vad__pipeline_voice_activity_detection_model_funasr_fsmn_vad\nTool description: FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='funasr/FSMN-VAD').\nSkill condition: multi_candidate_skill\nSkill summary: FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='funasr/FSMN-VAD'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__fsmn_vad__pipeline_voice_activity_detection_model_funasr_fsmn_vad` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to hugging face  fsmn vad  pipeline voice activity detection model funasr fsmn vad, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0052_hugging_face_fsmn_vad_pipeline_voice_activity_detection_model_funasr_fsmn_vad_positive_easy_0",
+      "tool_name": "hugging_face__fsmn_vad__pipeline_voice_activity_detection_model_funasr_fsmn_vad",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use hugging face  fsmn vad  pipeline voice activity detection model funasr fsmn vad to FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0299,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__fsmn_vad__pipeline_voice_activity_detection_model_funasr_fsmn_vad\nTool description: FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='funasr/FSMN-VAD').\nSkill condition: multi_candidate_skill\nSkill summary: FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='funasr/FSMN-VAD'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__fsmn_vad__pipeline_voice_activity_detection_model_funasr_fsmn_vad` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use hugging face  fsmn vad  pipeline voice activity detection model funasr fsmn vad to FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0052_hugging_face_fsmn_vad_pipeline_voice_activity_detection_model_funasr_fsmn_vad_positive_medium_0",
+      "tool_name": "hugging_face__fsmn_vad__pipeline_voice_activity_detection_model_funasr_fsmn_vad",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0287,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__fsmn_vad__pipeline_voice_activity_detection_model_funasr_fsmn_vad\nTool description: FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='funasr/FSMN-VAD').\nSkill condition: multi_candidate_skill\nSkill summary: FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='funasr/FSMN-VAD'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__fsmn_vad__pipeline_voice_activity_detection_model_funasr_fsmn_vad` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: FSMN-VAD model for Voice Activity Detection using Hugging Face Transformers library. Framework: Hugging Face. Functionality: Voice Activity. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0398
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "candidate_id": "cellbio_get_proteins__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Get the list of proteins in a specific cell compartment. Provide the required field `cell_compartment`.\nWhen to use:\n- Use `cellbio.get_proteins` when the user's request directly matches this tool's purpose.\n- Provide the required field `cell_compartment`.\n- Optional control is available through `include_description` when the request needs extra specificity.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"cell_compartment\": \"sample_cell_compartment_4\", \"include_description\": \"false\"}\nExamples:\nMinimal valid request that satisfies the required fields for cellbio.get_proteins\n{\"cell_compartment\": \"sample_cell_compartment_1\"}\nRicher invocation that uses optional controls for cellbio.get_proteins\n{\"cell_compartment\": \"sample_cell_compartment_2\", \"include_description\": \"false\"}\nRequired-argument dev behavior example.\n{\"cell_compartment\": \"sample_cell_compartment_3\"}\nOptional, enum, nested, or array argument example.\n{\"cell_compartment\": \"sample_cell_compartment_4\", \"include_description\": \"false\"}",
+  "argument_template": {
+    "cell_compartment": "sample_cell_compartment_4",
+    "include_description": "false"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for cellbio.get_proteins",
+      "arguments": {
+        "cell_compartment": "sample_cell_compartment_1"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for cellbio.get_proteins",
+      "arguments": {
+        "cell_compartment": "sample_cell_compartment_2",
+        "include_description": "false"
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "cell_compartment": "sample_cell_compartment_3"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "cell_compartment": "sample_cell_compartment_4",
+        "include_description": "false"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `cellbio.get_proteins` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `cell_compartment`.",
+    "Optional control is available through `include_description` when the request needs extra specificity.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 285,
+  "skill_token_count": 285,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Get the list of proteins in a specific cell compartment. Provide the required field `cell_compartment`.",
+    "when_to_use": [
+      "Use `cellbio.get_proteins` when the user's request directly matches this tool's purpose.",
+      "Provide the required field `cell_compartment`.",
+      "Optional control is available through `include_description` when the request needs extra specificity.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "cell_compartment": "sample_cell_compartment_4",
+      "include_description": "false"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for cellbio.get_proteins",
+        "arguments": {
+          "cell_compartment": "sample_cell_compartment_1"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for cellbio.get_proteins",
+        "arguments": {
+          "cell_compartment": "sample_cell_compartment_2",
+          "include_description": "false"
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "cell_compartment": "sample_cell_compartment_3"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "cell_compartment": "sample_cell_compartment_4",
+          "include_description": "false"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "cellbio_get_proteins__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "cellbio_get_proteins__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "candidate_id": "calculate_final_velocity__cand_00_concise_default",
+  "generation_strategy": "concise_default",
+  "prompt_template_id": "heuristic_concise_default_v1",
+  "skill_text": "Calculate the final velocity of an object under constant acceleration, knowing its initial velocity, acceleration, and time of acceleration. Provide all required fields: `initial_velocity`, `acceleration`, and `time`.\nWhen to use:\n- Use `calculate_final_velocity` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `initial_velocity`, `acceleration`, and `time`.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Do not use when required inputs are missing.\nArgument template:\n{\"acceleration\": null, \"initial_velocity\": 1, \"time\": 1}\nExamples:\nMinimal valid request that satisfies the required fields for calculate_final_velocity\n{\"acceleration\": null, \"initial_velocity\": 1, \"time\": 1}\nRicher invocation that uses optional controls for calculate_final_velocity\n{\"acceleration\": null, \"initial_velocity\": 2, \"time\": 2}",
+  "argument_template": {
+    "initial_velocity": 1,
+    "acceleration": null,
+    "time": 1
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for calculate_final_velocity",
+      "arguments": {
+        "initial_velocity": 1,
+        "acceleration": null,
+        "time": 1
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for calculate_final_velocity",
+      "arguments": {
+        "initial_velocity": 2,
+        "acceleration": null,
+        "time": 2
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `calculate_final_velocity` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `initial_velocity`, `acceleration`, and `time`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Do not use when required inputs are missing."
+  ],
+  "token_count": 221,
+  "skill_token_count": 221,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 2,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Calculate the final velocity of an object under constant acceleration, knowing its initial velocity, acceleration, and time of acceleration. Provide all required fields: `initial_velocity`, `acceleration`, and `time`.",
+    "when_to_use": [
+      "Use `calculate_final_velocity` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `initial_velocity`, `acceleration`, and `time`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Do not use when required inputs are missing."
+    ],
+    "argument_template": {
+      "initial_velocity": 1,
+      "acceleration": null,
+      "time": 1
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for calculate_final_velocity",
+        "arguments": {
+          "initial_velocity": 1,
+          "acceleration": null,
+          "time": 1
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for calculate_final_velocity",
+        "arguments": {
+          "initial_velocity": 2,
+          "acceleration": null,
+          "time": 2
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "calculate_final_velocity__cand_00_concise_default",
+        "generation_strategy": "concise_default",
+        "prompt_template_id": "heuristic_concise_default_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "calculate_final_velocity__cand_00_concise_default",
+      "generation_strategy": "concise_default",
+      "prompt_template_id": "heuristic_concise_default_v1"
+    }
+  }
+}

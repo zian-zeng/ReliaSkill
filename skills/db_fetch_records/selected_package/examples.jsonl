@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for db_fetch_records", "arguments": {"database_name": "sample-name", "table_name": "sample-name", "conditions": null}}
+{"scenario": "Richer invocation that uses optional controls for db_fetch_records", "arguments": {"database_name": "sample-name", "table_name": "sample-name", "conditions": null, "fetch_limit": 2}}

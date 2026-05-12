@@ -1,0 +1,189 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0136_diabetes_prediction_negative_easy_0_out_of_domain_request",
+      "tool_name": "diabetes_prediction",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to diabetes prediction.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "activity_level": "sedentary"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1199,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: diabetes_prediction\nTool description: Predict the likelihood of diabetes type 2 based on a person's weight and height.\nSkill condition: multi_candidate_skill\nSkill summary: Predict the likelihood of diabetes type 2 based on a person's weight and height. Provide all required fields: `weight`, `height`, and `activity_level`.\nWhen to use: [\"Use `diabetes_prediction` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `weight`, `height`, and `activity_level`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `activity_level`: 'sedentary', 'lightly active', 'moderately active', 'very active'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"weight\": null, \"height\": null, \"activity_level\": \"sedentary\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for diabetes_prediction\", \"arguments\": {\"weight\": null, \"height\": null, \"activity_level\": \"sedentary\"}}, {\"scenario\": \"Richer invocation that uses optional controls for diabetes_prediction\", \"arguments\": {\"weight\": null, \"height\": null, \"activity_level\": \"lightly active\"}}]\nSchema: {\"properties\": {\"activity_level\": {\"description\": \"Physical activity level of the person.\", \"enum\": [\"sedentary\", \"lightly active\", \"moderately active\", \"very active\", \"extra active\"], \"type\": \"string\"}, \"height\": {\"description\": \"Height of the person in inches.\", \"type\": \"float\"}, \"weight\": {\"description\": \"Weight of the person in lbs.\", \"type\": \"float\"}}, \"required\": [\"weight\", \"height\", \"activity_level\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to diabetes prediction.\n",
+        "raw_model_output": "{\"arguments\": {\"activity_level\": \"sedentary\"}}",
+        "parsed_prediction": {
+          "activity_level": "sedentary"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0136_diabetes_prediction_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "diabetes_prediction",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. This is adjacent to diabetes prediction, but the intended capability is bank get account balance.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "activity_level": "sedentary"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1796,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: diabetes_prediction\nTool description: Predict the likelihood of diabetes type 2 based on a person's weight and height.\nSkill condition: multi_candidate_skill\nSkill summary: Predict the likelihood of diabetes type 2 based on a person's weight and height. Provide all required fields: `weight`, `height`, and `activity_level`.\nWhen to use: [\"Use `diabetes_prediction` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `weight`, `height`, and `activity_level`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `activity_level`: 'sedentary', 'lightly active', 'moderately active', 'very active'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"weight\": null, \"height\": null, \"activity_level\": \"sedentary\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for diabetes_prediction\", \"arguments\": {\"weight\": null, \"height\": null, \"activity_level\": \"sedentary\"}}, {\"scenario\": \"Richer invocation that uses optional controls for diabetes_prediction\", \"arguments\": {\"weight\": null, \"height\": null, \"activity_level\": \"lightly active\"}}]\nSchema: {\"properties\": {\"activity_level\": {\"description\": \"Physical activity level of the person.\", \"enum\": [\"sedentary\", \"lightly active\", \"moderately active\", \"very active\", \"extra active\"], \"type\": \"string\"}, \"height\": {\"description\": \"Height of the person in inches.\", \"type\": \"float\"}, \"weight\": {\"description\": \"Weight of the person in lbs.\", \"type\": \"float\"}}, \"required\": [\"weight\", \"height\", \"activity_level\"], \"type\": \"object\"}\nUser request: I need to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. This is adjacent to diabetes prediction, but the intended capability is bank get account balance.\n",
+        "raw_model_output": "{\"arguments\": {\"activity_level\": \"sedentary\"}}",
+        "parsed_prediction": {
+          "activity_level": "sedentary"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0136_diabetes_prediction_negative_hard_1_similar_tool_should_be_used",
+      "tool_name": "diabetes_prediction",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Use bank get account balance to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services; diabetes prediction is a distractor and should not be called.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "activity_level": "sedentary"
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1232,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: diabetes_prediction\nTool description: Predict the likelihood of diabetes type 2 based on a person's weight and height.\nSkill condition: multi_candidate_skill\nSkill summary: Predict the likelihood of diabetes type 2 based on a person's weight and height. Provide all required fields: `weight`, `height`, and `activity_level`.\nWhen to use: [\"Use `diabetes_prediction` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `weight`, `height`, and `activity_level`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `activity_level`: 'sedentary', 'lightly active', 'moderately active', 'very active'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"weight\": null, \"height\": null, \"activity_level\": \"sedentary\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for diabetes_prediction\", \"arguments\": {\"weight\": null, \"height\": null, \"activity_level\": \"sedentary\"}}, {\"scenario\": \"Richer invocation that uses optional controls for diabetes_prediction\", \"arguments\": {\"weight\": null, \"height\": null, \"activity_level\": \"lightly active\"}}]\nSchema: {\"properties\": {\"activity_level\": {\"description\": \"Physical activity level of the person.\", \"enum\": [\"sedentary\", \"lightly active\", \"moderately active\", \"very active\", \"extra active\"], \"type\": \"string\"}, \"height\": {\"description\": \"Height of the person in inches.\", \"type\": \"float\"}, \"weight\": {\"description\": \"Weight of the person in lbs.\", \"type\": \"float\"}}, \"required\": [\"weight\", \"height\", \"activity_level\"], \"type\": \"object\"}\nUser request: Use bank get account balance to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services; diabetes prediction is a distractor and should not be called.\n",
+        "raw_model_output": "{\"arguments\": {\"activity_level\": \"sedentary\"}}",
+        "parsed_prediction": {
+          "activity_level": "sedentary"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0136_diabetes_prediction_positive_easy_0",
+      "tool_name": "diabetes_prediction",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use diabetes prediction to Predict the likelihood of diabetes type 2 based on a person's weight and height. Set activity_level=\"sedentary\", height=1, weight=1.",
+      "exact_match": false,
+      "argument_validity": 0.3333,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "activity_level": "sedentary"
+      },
+      "expected_arguments": {
+        "activity_level": "sedentary",
+        "height": 1,
+        "weight": 1
+      },
+      "prediction_latency_ms": 0.1114,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: diabetes_prediction\nTool description: Predict the likelihood of diabetes type 2 based on a person's weight and height.\nSkill condition: multi_candidate_skill\nSkill summary: Predict the likelihood of diabetes type 2 based on a person's weight and height. Provide all required fields: `weight`, `height`, and `activity_level`.\nWhen to use: [\"Use `diabetes_prediction` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `weight`, `height`, and `activity_level`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `activity_level`: 'sedentary', 'lightly active', 'moderately active', 'very active'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"weight\": null, \"height\": null, \"activity_level\": \"sedentary\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for diabetes_prediction\", \"arguments\": {\"weight\": null, \"height\": null, \"activity_level\": \"sedentary\"}}, {\"scenario\": \"Richer invocation that uses optional controls for diabetes_prediction\", \"arguments\": {\"weight\": null, \"height\": null, \"activity_level\": \"lightly active\"}}]\nSchema: {\"properties\": {\"activity_level\": {\"description\": \"Physical activity level of the person.\", \"enum\": [\"sedentary\", \"lightly active\", \"moderately active\", \"very active\", \"extra active\"], \"type\": \"string\"}, \"height\": {\"description\": \"Height of the person in inches.\", \"type\": \"float\"}, \"weight\": {\"description\": \"Weight of the person in lbs.\", \"type\": \"float\"}}, \"required\": [\"weight\", \"height\", \"activity_level\"], \"type\": \"object\"}\nUser request: Use diabetes prediction to Predict the likelihood of diabetes type 2 based on a person's weight and height. Set activity_level=\"sedentary\", height=1, weight=1.\n",
+        "raw_model_output": "{\"arguments\": {\"activity_level\": \"sedentary\"}}",
+        "parsed_prediction": {
+          "activity_level": "sedentary"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0136_diabetes_prediction_positive_medium_0",
+      "tool_name": "diabetes_prediction",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Predict the likelihood of diabetes type 2 based on a person's weight and height. The relevant details are activity_level=\"moderately active\", height=8, weight=8.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "activity_level": "sedentary"
+      },
+      "expected_arguments": {
+        "activity_level": "moderately active",
+        "height": 8,
+        "weight": 8
+      },
+      "prediction_latency_ms": 0.1104,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: diabetes_prediction\nTool description: Predict the likelihood of diabetes type 2 based on a person's weight and height.\nSkill condition: multi_candidate_skill\nSkill summary: Predict the likelihood of diabetes type 2 based on a person's weight and height. Provide all required fields: `weight`, `height`, and `activity_level`.\nWhen to use: [\"Use `diabetes_prediction` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `weight`, `height`, and `activity_level`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Respect the allowed values for `activity_level`: 'sedentary', 'lightly active', 'moderately active', 'very active'.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"weight\": null, \"height\": null, \"activity_level\": \"sedentary\"}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for diabetes_prediction\", \"arguments\": {\"weight\": null, \"height\": null, \"activity_level\": \"sedentary\"}}, {\"scenario\": \"Richer invocation that uses optional controls for diabetes_prediction\", \"arguments\": {\"weight\": null, \"height\": null, \"activity_level\": \"lightly active\"}}]\nSchema: {\"properties\": {\"activity_level\": {\"description\": \"Physical activity level of the person.\", \"enum\": [\"sedentary\", \"lightly active\", \"moderately active\", \"very active\", \"extra active\"], \"type\": \"string\"}, \"height\": {\"description\": \"Height of the person in inches.\", \"type\": \"float\"}, \"weight\": {\"description\": \"Weight of the person in lbs.\", \"type\": \"float\"}}, \"required\": [\"weight\", \"height\", \"activity_level\"], \"type\": \"object\"}\nUser request: I need help with this task: Predict the likelihood of diabetes type 2 based on a person's weight and height. The relevant details are activity_level=\"moderately active\", height=8, weight=8.\n",
+        "raw_model_output": "{\"arguments\": {\"activity_level\": \"sedentary\"}}",
+        "parsed_prediction": {
+          "activity_level": "sedentary"
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.1666,
+    "avg_prediction_latency_ms": 0.1289
+  }
+}

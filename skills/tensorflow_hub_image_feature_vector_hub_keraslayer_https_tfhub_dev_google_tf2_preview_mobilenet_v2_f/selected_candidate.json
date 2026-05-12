@@ -1,0 +1,62 @@
+{
+  "candidate_id": "tensorflow_hub_image_feature_vector_hub_keraslayer_https_tfhub_dev_google_tf2_preview_mobilenet_v2_f__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "This API allows you to extract a 1280-dimensional feature vector from an image using the MobileNetV2 architecture, which is pre-trained on the ImageNet dataset. The feature vector can be used for various tasks, such as image classification, object detection, and transfer learning. Framework: TensorFlow Hub. Functionality: Extract feature vector from images. API call: hub.KerasLayer('https://tfhub.dev/google/tf2-preview/mobilenet_v2/feature_vector/4', output_shape=[1280]). This tool has no required input fields.\nWhen to use:\n- Use `tensorflow_hub__image_feature_vector__hub_keraslayer_https_tfhub_dev_google_tf2_preview_mobilenet_v2_feature_vector_4_output_shape_1280` when the user's request directly matches this tool's purpose.\n- This tool has no required input fields.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Tool does not expose top-level input properties.",
+  "argument_template": {},
+  "examples": [],
+  "when_to_use": [
+    "Use `tensorflow_hub__image_feature_vector__hub_keraslayer_https_tfhub_dev_google_tf2_preview_mobilenet_v2_feature_vector_4_output_shape_1280` when the user's request directly matches this tool's purpose.",
+    "This tool has no required input fields.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Tool does not expose top-level input properties."
+  ],
+  "token_count": 227,
+  "skill_token_count": 227,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 0,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "This API allows you to extract a 1280-dimensional feature vector from an image using the MobileNetV2 architecture, which is pre-trained on the ImageNet dataset. The feature vector can be used for various tasks, such as image classification, object detection, and transfer learning. Framework: TensorFlow Hub. Functionality: Extract feature vector from images. API call: hub.KerasLayer('https://tfhub.dev/google/tf2-preview/mobilenet_v2/feature_vector/4', output_shape=[1280]). This tool has no required input fields.",
+    "when_to_use": [
+      "Use `tensorflow_hub__image_feature_vector__hub_keraslayer_https_tfhub_dev_google_tf2_preview_mobilenet_v2_feature_vector_4_output_shape_1280` when the user's request directly matches this tool's purpose.",
+      "This tool has no required input fields.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Tool does not expose top-level input properties."
+    ],
+    "argument_template": {},
+    "examples": [],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "tensorflow_hub_image_feature_vector_hub_keraslayer_https_tfhub_dev_google_tf2_preview_mobilenet_v2_f__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "tensorflow_hub_image_feature_vector_hub_keraslayer_https_tfhub_dev_google_tf2_preview_mobilenet_v2_f__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

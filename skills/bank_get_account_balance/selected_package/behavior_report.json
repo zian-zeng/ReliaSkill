@@ -1,0 +1,196 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0000_bank_get_account_balance_negative_easy_0_out_of_domain_request",
+      "tool_name": "bank_get_account_balance",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to bank get account balance.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "account_id": "sample-account-id-001",
+        "include_pending": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0849,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: bank_get_account_balance\nTool description: API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. Provide the required field `account_id`.\nWhen to use: [\"Use `bank_get_account_balance` when the user's request directly matches this tool's purpose.\", \"Provide the required field `account_id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"account_id\": \"sample-account-id-001\", \"include_pending\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for bank_get_account_balance\", \"arguments\": {\"account_id\": \"sample-account-id-001\"}}, {\"scenario\": \"Richer invocation that uses optional controls for bank_get_account_balance\", \"arguments\": {\"account_id\": \"sample-account-id-001\", \"include_pending\": true}}]\nSchema: {\"properties\": {\"account_id\": {\"description\": \"Mock account identifier.\", \"type\": \"string\"}, \"include_pending\": {\"description\": \"Whether pending transactions should be included.\", \"type\": \"boolean\"}}, \"required\": [\"account_id\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to bank get account balance.\n",
+        "raw_model_output": "{\"arguments\": {\"account_id\": \"sample-account-id-001\", \"include_pending\": false}}",
+        "parsed_prediction": {
+          "account_id": "sample-account-id-001",
+          "include_pending": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0000_bank_get_account_balance_negative_hard_1_destructive_vs_readonly_mismatch",
+      "tool_name": "bank_get_account_balance",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need a change made, not a read-only lookup with bank get account balance; do not satisfy this with a read/search tool.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "account_id": "sample-account-id-001",
+        "include_pending": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0634,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: bank_get_account_balance\nTool description: API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. Provide the required field `account_id`.\nWhen to use: [\"Use `bank_get_account_balance` when the user's request directly matches this tool's purpose.\", \"Provide the required field `account_id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"account_id\": \"sample-account-id-001\", \"include_pending\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for bank_get_account_balance\", \"arguments\": {\"account_id\": \"sample-account-id-001\"}}, {\"scenario\": \"Richer invocation that uses optional controls for bank_get_account_balance\", \"arguments\": {\"account_id\": \"sample-account-id-001\", \"include_pending\": true}}]\nSchema: {\"properties\": {\"account_id\": {\"description\": \"Mock account identifier.\", \"type\": \"string\"}, \"include_pending\": {\"description\": \"Whether pending transactions should be included.\", \"type\": \"boolean\"}}, \"required\": [\"account_id\"], \"type\": \"object\"}\nUser request: I need a change made, not a read-only lookup with bank get account balance; do not satisfy this with a read/search tool.\n",
+        "raw_model_output": "{\"arguments\": {\"account_id\": \"sample-account-id-001\", \"include_pending\": false}}",
+        "parsed_prediction": {
+          "account_id": "sample-account-id-001",
+          "include_pending": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0000_bank_get_account_balance_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "bank_get_account_balance",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to API-Bank-style local fixture tool that records a mock transfer between two fixture accounts. This is adjacent to bank get account balance, but the intended capability is bank transfer between accounts.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "account_id": "sample-account-id-001",
+        "include_pending": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1024,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: bank_get_account_balance\nTool description: API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. Provide the required field `account_id`.\nWhen to use: [\"Use `bank_get_account_balance` when the user's request directly matches this tool's purpose.\", \"Provide the required field `account_id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"account_id\": \"sample-account-id-001\", \"include_pending\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for bank_get_account_balance\", \"arguments\": {\"account_id\": \"sample-account-id-001\"}}, {\"scenario\": \"Richer invocation that uses optional controls for bank_get_account_balance\", \"arguments\": {\"account_id\": \"sample-account-id-001\", \"include_pending\": true}}]\nSchema: {\"properties\": {\"account_id\": {\"description\": \"Mock account identifier.\", \"type\": \"string\"}, \"include_pending\": {\"description\": \"Whether pending transactions should be included.\", \"type\": \"boolean\"}}, \"required\": [\"account_id\"], \"type\": \"object\"}\nUser request: I need to API-Bank-style local fixture tool that records a mock transfer between two fixture accounts. This is adjacent to bank get account balance, but the intended capability is bank transfer between accounts.\n",
+        "raw_model_output": "{\"arguments\": {\"account_id\": \"sample-account-id-001\", \"include_pending\": false}}",
+        "parsed_prediction": {
+          "account_id": "sample-account-id-001",
+          "include_pending": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0000_bank_get_account_balance_positive_easy_0",
+      "tool_name": "bank_get_account_balance",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use bank get account balance to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. Set account_id=\"item-0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "account_id": "sample-account-id-001",
+        "include_pending": false
+      },
+      "expected_arguments": {
+        "account_id": "item-0"
+      },
+      "prediction_latency_ms": 0.0571,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: bank_get_account_balance\nTool description: API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. Provide the required field `account_id`.\nWhen to use: [\"Use `bank_get_account_balance` when the user's request directly matches this tool's purpose.\", \"Provide the required field `account_id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"account_id\": \"sample-account-id-001\", \"include_pending\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for bank_get_account_balance\", \"arguments\": {\"account_id\": \"sample-account-id-001\"}}, {\"scenario\": \"Richer invocation that uses optional controls for bank_get_account_balance\", \"arguments\": {\"account_id\": \"sample-account-id-001\", \"include_pending\": true}}]\nSchema: {\"properties\": {\"account_id\": {\"description\": \"Mock account identifier.\", \"type\": \"string\"}, \"include_pending\": {\"description\": \"Whether pending transactions should be included.\", \"type\": \"boolean\"}}, \"required\": [\"account_id\"], \"type\": \"object\"}\nUser request: Use bank get account balance to API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. Set account_id=\"item-0\".\n",
+        "raw_model_output": "{\"arguments\": {\"account_id\": \"sample-account-id-001\", \"include_pending\": false}}",
+        "parsed_prediction": {
+          "account_id": "sample-account-id-001",
+          "include_pending": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0000_bank_get_account_balance_positive_medium_0",
+      "tool_name": "bank_get_account_balance",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. The relevant details are account_id=\"item-7\", include_pending=false.",
+      "exact_match": false,
+      "argument_validity": 0.5,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "account_id": "sample-account-id-001",
+        "include_pending": false
+      },
+      "expected_arguments": {
+        "account_id": "item-7",
+        "include_pending": false
+      },
+      "prediction_latency_ms": 0.0586,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: bank_get_account_balance\nTool description: API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services.\nSkill condition: multi_candidate_skill\nSkill summary: API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. Provide the required field `account_id`.\nWhen to use: [\"Use `bank_get_account_balance` when the user's request directly matches this tool's purpose.\", \"Provide the required field `account_id`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"account_id\": \"sample-account-id-001\", \"include_pending\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for bank_get_account_balance\", \"arguments\": {\"account_id\": \"sample-account-id-001\"}}, {\"scenario\": \"Richer invocation that uses optional controls for bank_get_account_balance\", \"arguments\": {\"account_id\": \"sample-account-id-001\", \"include_pending\": true}}]\nSchema: {\"properties\": {\"account_id\": {\"description\": \"Mock account identifier.\", \"type\": \"string\"}, \"include_pending\": {\"description\": \"Whether pending transactions should be included.\", \"type\": \"boolean\"}}, \"required\": [\"account_id\"], \"type\": \"object\"}\nUser request: I need help with this task: API-Bank-style local fixture tool for retrieving the balance and currency of a mock bank account without contacting external services. The relevant details are account_id=\"item-7\", include_pending=false.\n",
+        "raw_model_output": "{\"arguments\": {\"account_id\": \"sample-account-id-001\", \"include_pending\": false}}",
+        "parsed_prediction": {
+          "account_id": "sample-account-id-001",
+          "include_pending": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.25,
+    "avg_prediction_latency_ms": 0.0733
+  }
+}

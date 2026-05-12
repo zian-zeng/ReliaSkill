@@ -1,0 +1,2 @@
+{"scenario": "Richer invocation that uses optional controls for get-resource-links", "arguments": {"count": "sample_count_2"}}
+{"scenario": "Optional, enum, nested, or array argument example.", "arguments": {"count": "sample_count_4"}}

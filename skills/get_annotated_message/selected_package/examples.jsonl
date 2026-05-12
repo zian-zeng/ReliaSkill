@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for get-annotated-message", "arguments": {"messageType": "sample_messageType_1"}}
+{"scenario": "Richer invocation that uses optional controls for get-annotated-message", "arguments": {"messageType": "sample_messageType_2", "includeImage": "sample_includeImage_2"}}

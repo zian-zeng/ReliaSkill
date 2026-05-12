@@ -1,0 +1,52 @@
+{
+  "tool_name": "pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true",
+  "server_name": "bfcl_torchhub_api",
+  "tool_purpose": "FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: Fully-Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='fcn_resnet50', pretrained=True).",
+  "input_schema_raw": {
+    "properties": {},
+    "required": [],
+    "type": "object"
+  },
+  "arguments": [],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ],
+  "doc_snippets": [
+    "FCN-ResNet is a Fully-Convolutional Network model using a ResNet-50 or a ResNet-101 backbone. The pre-trained models have been trained on a subset of COCO train2017, on the 20 categories that are present in the Pascal VOC dataset. Framework: PyTorch. Functionality: Fully-Convolutional Network. API call: torch.hub.load(repo_or_dir='pytorch/vision', model='fcn_resnet50', pretrained=True).",
+    "fcn_resnet50",
+    "Fully-Convolutional Network"
+  ],
+  "source_pointer": "bfcl",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 389,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 1,
+    "num_arguments": 0,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "num_top_level_arguments": 0,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "empty_input_schema",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "pytorch__fcn_resnet50__torch_hub_load_repo_or_dir_pytorch_vision_model_fcn_resnet50_pretrained_true",
+    "server_name": "bfcl_torchhub_api",
+    "source_pointer": "bfcl"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

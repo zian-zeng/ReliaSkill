@@ -1,0 +1,124 @@
+{
+  "candidate_id": "playwright_drag__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Drag an element to a target location. Provide all required fields: `sourceSelector`, and `targetSelector`.\nWhen to use:\n- Use `playwright_drag` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `sourceSelector`, and `targetSelector`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"sourceSelector\": \"sample_sourceSelector_4\", \"targetSelector\": \"sample_targetSelector_4\"}\nExamples:\nMinimal valid request that satisfies the required fields for playwright_drag\n{\"sourceSelector\": \"sample_sourceSelector_1\", \"targetSelector\": \"sample_targetSelector_1\"}\nRicher invocation that uses optional controls for playwright_drag\n{\"sourceSelector\": \"sample_sourceSelector_2\", \"targetSelector\": \"sample_targetSelector_2\"}\nRequired-argument dev behavior example.\n{\"sourceSelector\": \"sample_sourceSelector_3\", \"targetSelector\": \"sample_targetSelector_3\"}\nOptional, enum, nested, or array argument example.\n{\"sourceSelector\": \"sample_sourceSelector_4\", \"targetSelector\": \"sample_targetSelector_4\"}",
+  "argument_template": {
+    "sourceSelector": "sample_sourceSelector_4",
+    "targetSelector": "sample_targetSelector_4"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for playwright_drag",
+      "arguments": {
+        "sourceSelector": "sample_sourceSelector_1",
+        "targetSelector": "sample_targetSelector_1"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for playwright_drag",
+      "arguments": {
+        "sourceSelector": "sample_sourceSelector_2",
+        "targetSelector": "sample_targetSelector_2"
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "sourceSelector": "sample_sourceSelector_3",
+        "targetSelector": "sample_targetSelector_3"
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "sourceSelector": "sample_sourceSelector_4",
+        "targetSelector": "sample_targetSelector_4"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `playwright_drag` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `sourceSelector`, and `targetSelector`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 289,
+  "skill_token_count": 289,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Drag an element to a target location. Provide all required fields: `sourceSelector`, and `targetSelector`.",
+    "when_to_use": [
+      "Use `playwright_drag` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `sourceSelector`, and `targetSelector`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "sourceSelector": "sample_sourceSelector_4",
+      "targetSelector": "sample_targetSelector_4"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for playwright_drag",
+        "arguments": {
+          "sourceSelector": "sample_sourceSelector_1",
+          "targetSelector": "sample_targetSelector_1"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for playwright_drag",
+        "arguments": {
+          "sourceSelector": "sample_sourceSelector_2",
+          "targetSelector": "sample_targetSelector_2"
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "sourceSelector": "sample_sourceSelector_3",
+          "targetSelector": "sample_targetSelector_3"
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "sourceSelector": "sample_sourceSelector_4",
+          "targetSelector": "sample_targetSelector_4"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "playwright_drag__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "playwright_drag__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

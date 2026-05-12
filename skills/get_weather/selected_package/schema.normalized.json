@@ -1,0 +1,115 @@
+{
+  "tool_name": "get_weather",
+  "server_name": "weather_server",
+  "tool_purpose": "Fetch the current weather for a given city.",
+  "input_schema_raw": {
+    "properties": {
+      "city": {
+        "description": "City name to query.",
+        "type": "string"
+      },
+      "include_forecast": {
+        "default": false,
+        "description": "Whether to include a short forecast.",
+        "type": "boolean"
+      },
+      "unit": {
+        "description": "Temperature unit.",
+        "enum": [
+          "C",
+          "F"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "city",
+      "unit"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "city",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "City name to query.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.city"
+    },
+    {
+      "name": "unit",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": [
+        "C",
+        "F"
+      ],
+      "description": "Temperature unit.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.unit"
+    },
+    {
+      "name": "include_forecast",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "enum": null,
+      "description": "Whether to include a short forecast.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.include_forecast"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Fetch the current weather for a given city.",
+    "Get Weather"
+  ],
+  "source_pointer": "data/raw/sample_tools.json",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.4,
+    "auth_required": false,
+    "documentation_length": 43,
+    "has_array_argument": false,
+    "has_boolean_flag": true,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 1,
+    "num_enum_fields": 1,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 1,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "read"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "get_weather",
+    "server_name": "weather_server",
+    "source_pointer": "data/raw/sample_tools.json"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

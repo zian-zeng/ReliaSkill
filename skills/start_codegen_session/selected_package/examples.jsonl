@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for start_codegen_session", "arguments": {"options": {"includeComments": false, "outputPath": "data/sample.txt", "testNamePrefix": "sample-name"}}}
+{"scenario": "Richer invocation that uses optional controls for start_codegen_session", "arguments": {"options": {"includeComments": true, "outputPath": "data/sample.txt", "testNamePrefix": "sample-name"}}}

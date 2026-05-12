@@ -1,0 +1,56 @@
+{
+  "tool_name": "pytorch__hardnet__torch_hub_load_repo_or_dir_pingolh_pytorch_hardnet_model_hardnet85_pretrained_true",
+  "server_name": "bfcl_torchhub_api",
+  "tool_purpose": "Harmonic DenseNet (HarDNet) is a low memory traffic CNN model, which is fast and efficient. The basic concept is to minimize both computational cost and memory access cost at the same time, such that the HarDNet models are 35% faster than ResNet running on GPU comparing to models with the same accuracy (except the two DS models that were designed for comparing with MobileNet). Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='PingoLH/Pytorch-HarDNet', model='hardnet85', pretrained=True).",
+  "input_schema_raw": {
+    "properties": {},
+    "required": [],
+    "type": "object"
+  },
+  "arguments": [],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [
+    "Tool does not expose top-level input properties."
+  ],
+  "doc_snippets": [
+    "Harmonic DenseNet (HarDNet) is a low memory traffic CNN model, which is fast and efficient. The basic concept is to minimize both computational cost and memory access cost at the same time, such that the HarDNet models are 35% faster than ResNet running on GPU comparing to models with the same accuracy (except the two DS models that were designed for comparing with MobileNet). Framework: PyTorch. Functionality: Image Classification. API call: torch.hub.load(repo_or_dir='PingoLH/Pytorch-HarDNet', model='hardnet85', pretrained=True).",
+    "HarDNet",
+    "Image Classification"
+  ],
+  "source_pointer": "bfcl",
+  "doc_completeness": 0.6,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 537,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 1,
+    "num_arguments": 0,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 0,
+    "num_top_level_arguments": 0,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "empty_input_schema",
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "pytorch__hardnet__torch_hub_load_repo_or_dir_pingolh_pytorch_hardnet_model_hardnet85_pretrained_true",
+    "server_name": "bfcl_torchhub_api",
+    "source_pointer": "bfcl"
+  },
+  "side_effect_hints": [
+    "executes_code"
+  ],
+  "safety_hints": [
+    "review_side_effects_before_deployment"
+  ]
+}

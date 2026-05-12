@@ -1,0 +1,161 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0049_hugging_face_eklavya_zff_vad_pipeline_voice_activity_detection_model_a74baab9_negative_easy_0_out_of_domain_request",
+      "tool_name": "hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  eklavya zff vad  pipeline voice activity detection model a74baab9.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0313,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9\nTool description: A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='Eklavya/ZFF_VAD').\nSkill condition: multi_candidate_skill\nSkill summary: A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='Eklavya/ZFF_VAD'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to hugging face  eklavya zff vad  pipeline voice activity detection model a74baab9.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0049_hugging_face_eklavya_zff_vad_pipeline_voice_activity_detection_model_a74baab9_negative_hard_1_near_miss_intent",
+      "tool_name": "hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to hugging face  eklavya zff vad  pipeline voice activity detection model a74baab9, but I only want a checklist for how to A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detect; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0279,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9\nTool description: A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='Eklavya/ZFF_VAD').\nSkill condition: multi_candidate_skill\nSkill summary: A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='Eklavya/ZFF_VAD'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: This sounds close to hugging face  eklavya zff vad  pipeline voice activity detection model a74baab9, but I only want a checklist for how to A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detect; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0049_hugging_face_eklavya_zff_vad_pipeline_voice_activity_detection_model_a74baab9_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use hugging face  eklavya zff vad  pipeline voice activity detection model a74baab9; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0274,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9\nTool description: A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='Eklavya/ZFF_VAD').\nSkill condition: multi_candidate_skill\nSkill summary: A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='Eklavya/ZFF_VAD'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Explain when someone should use hugging face  eklavya zff vad  pipeline voice activity detection model a74baab9; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0049_hugging_face_eklavya_zff_vad_pipeline_voice_activity_detection_model_a74baab9_positive_easy_0",
+      "tool_name": "hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use hugging face  eklavya zff vad  pipeline voice activity detection model a74baab9 to A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detect. Set no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0286,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9\nTool description: A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='Eklavya/ZFF_VAD').\nSkill condition: multi_candidate_skill\nSkill summary: A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='Eklavya/ZFF_VAD'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: Use hugging face  eklavya zff vad  pipeline voice activity detection model a74baab9 to A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detect. Set no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0049_hugging_face_eklavya_zff_vad_pipeline_voice_activity_detection_model_a74baab9_positive_medium_0",
+      "tool_name": "hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detect. The relevant details are no arguments.",
+      "exact_match": true,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {},
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.028,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9\nTool description: A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='Eklavya/ZFF_VAD').\nSkill condition: multi_candidate_skill\nSkill summary: A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detection. API call: pipeline('voice-activity-detection', model='Eklavya/ZFF_VAD'). This tool has no required input fields.\nWhen to use: [\"Use `hugging_face__eklavya_zff_vad__pipeline_voice_activity_detection_model_a74baab9` when the user's request directly matches this tool's purpose.\", \"This tool has no required input fields.\", \"Use examples to map paraphrases into schema-faithful arguments.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Tool does not expose top-level input properties.\"]\nArgument template: {}\nExamples: []\nSchema: {\"properties\": {}, \"required\": [], \"type\": \"object\"}\nUser request: I need help with this task: A Voice Activity Detection model by Eklavya, using the Hugging Face framework. Framework: Hugging Face. Functionality: Voice Activity Detect. The relevant details are no arguments.\n",
+        "raw_model_output": "{\"arguments\": {}}",
+        "parsed_prediction": {},
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 1.0,
+    "avg_argument_validity": 1.0,
+    "avg_prediction_latency_ms": 0.0286
+  }
+}

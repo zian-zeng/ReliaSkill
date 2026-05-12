@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculus.derivative", "arguments": {"function": "sample_function_1", "value": 1}}
+{"scenario": "Richer invocation that uses optional controls for calculus.derivative", "arguments": {"function": "sample_function_2", "value": 2, "function_variable": "sample_function_variable_2"}}

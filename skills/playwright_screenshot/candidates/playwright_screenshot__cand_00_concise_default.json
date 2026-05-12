@@ -1,0 +1,118 @@
+{
+  "candidate_id": "playwright_screenshot__cand_00_concise_default",
+  "generation_strategy": "concise_default",
+  "prompt_template_id": "heuristic_concise_default_v1",
+  "skill_text": "Take a screenshot of the current page or a specific element. Provide the required field `name`.\nWhen to use:\n- Use `playwright_screenshot` when the user's request directly matches this tool's purpose.\n- Provide the required field `name`.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Do not use when required inputs are missing.\nArgument template:\n{\"downloadsDir\": \"sample_downloadsDir_1\", \"fullPage\": false, \"height\": 1.0, \"name\": \"sample-name\", \"savePng\": false, \"selector\": \"sample_selector_1\", \"storeBase64\": false, \"width\": 1.0}\nExamples:\nMinimal valid request that satisfies the required fields for playwright_screenshot\n{\"name\": \"sample-name\"}\nRicher invocation that uses optional controls for playwright_screenshot\n{\"downloadsDir\": \"sample_downloadsDir_2\", \"fullPage\": true, \"height\": 2.0, \"name\": \"sample-name\", \"savePng\": true, \"selector\": \"sample_selector_2\", \"storeBase64\": true, \"width\": 2.0}",
+  "argument_template": {
+    "name": "sample-name",
+    "selector": "sample_selector_1",
+    "width": 1.0,
+    "height": 1.0,
+    "storeBase64": false,
+    "fullPage": false,
+    "savePng": false,
+    "downloadsDir": "sample_downloadsDir_1"
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for playwright_screenshot",
+      "arguments": {
+        "name": "sample-name"
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for playwright_screenshot",
+      "arguments": {
+        "name": "sample-name",
+        "selector": "sample_selector_2",
+        "width": 2.0,
+        "height": 2.0,
+        "storeBase64": true,
+        "fullPage": true,
+        "savePng": true,
+        "downloadsDir": "sample_downloadsDir_2"
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `playwright_screenshot` when the user's request directly matches this tool's purpose.",
+    "Provide the required field `name`."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Do not use when required inputs are missing."
+  ],
+  "token_count": 269,
+  "skill_token_count": 269,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 2,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Take a screenshot of the current page or a specific element. Provide the required field `name`.",
+    "when_to_use": [
+      "Use `playwright_screenshot` when the user's request directly matches this tool's purpose.",
+      "Provide the required field `name`."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Do not use when required inputs are missing."
+    ],
+    "argument_template": {
+      "name": "sample-name",
+      "selector": "sample_selector_1",
+      "width": 1.0,
+      "height": 1.0,
+      "storeBase64": false,
+      "fullPage": false,
+      "savePng": false,
+      "downloadsDir": "sample_downloadsDir_1"
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for playwright_screenshot",
+        "arguments": {
+          "name": "sample-name"
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for playwright_screenshot",
+        "arguments": {
+          "name": "sample-name",
+          "selector": "sample_selector_2",
+          "width": 2.0,
+          "height": 2.0,
+          "storeBase64": true,
+          "fullPage": true,
+          "savePng": true,
+          "downloadsDir": "sample_downloadsDir_2"
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "playwright_screenshot__cand_00_concise_default",
+        "generation_strategy": "concise_default",
+        "prompt_template_id": "heuristic_concise_default_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "playwright_screenshot__cand_00_concise_default",
+      "generation_strategy": "concise_default",
+      "prompt_template_id": "heuristic_concise_default_v1"
+    }
+  }
+}

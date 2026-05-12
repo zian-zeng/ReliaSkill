@@ -1,0 +1,1 @@
+{"scenario": "Richer invocation that uses optional controls for gzip-file-as-resource", "arguments": {"name": "sample-name", "data": "sample_data_2", "outputType": "sample_outputType_2"}}

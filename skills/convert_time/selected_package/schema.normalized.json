@@ -1,0 +1,108 @@
+{
+  "tool_name": "convert_time",
+  "server_name": "src",
+  "tool_purpose": "Convert time between timezones",
+  "input_schema_raw": {
+    "properties": {
+      "source_timezone": {
+        "description": "Source IANA timezone name (e.g., 'America/New_York', 'Europe/London'). Use '<local_tz>' as local timezone if no source timezone provided by the user.",
+        "type": "string"
+      },
+      "target_timezone": {
+        "description": "Target IANA timezone name (e.g., 'Asia/Tokyo', 'America/San_Francisco'). Use '<local_tz>' as local timezone if no target timezone provided by the user.",
+        "type": "string"
+      },
+      "time": {
+        "description": "Time to convert in 24-hour format (HH:MM)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "source_timezone",
+      "time",
+      "target_timezone"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "source_timezone",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Source IANA timezone name (e.g., 'America/New_York', 'Europe/London'). Use '<local_tz>' as local timezone if no source timezone provided by the user.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.source_timezone"
+    },
+    {
+      "name": "time",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Time to convert in 24-hour format (HH:MM)",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.time"
+    },
+    {
+      "name": "target_timezone",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "Target IANA timezone name (e.g., 'Asia/Tokyo', 'America/San_Francisco'). Use '<local_tz>' as local timezone if no target timezone provided by the user.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.target_timezone"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Convert time between timezones",
+    "convert_time"
+  ],
+  "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\time\\src\\mcp_server_time\\server.py",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.5,
+    "auth_required": false,
+    "documentation_length": 30,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 3,
+    "num_enum_arguments": 0,
+    "num_enum_fields": 0,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 3,
+    "num_top_level_arguments": 3,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "convert_time",
+    "server_name": "src",
+    "source_pointer": "data\\external\\modelcontextprotocol-servers\\src\\time\\src\\mcp_server_time\\server.py"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

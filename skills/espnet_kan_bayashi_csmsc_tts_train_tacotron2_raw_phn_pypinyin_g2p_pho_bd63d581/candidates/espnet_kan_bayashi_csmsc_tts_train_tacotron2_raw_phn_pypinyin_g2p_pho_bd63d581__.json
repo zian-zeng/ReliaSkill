@@ -1,0 +1,62 @@
+{
+  "candidate_id": "espnet_kan_bayashi_csmsc_tts_train_tacotron2_raw_phn_pypinyin_g2p_pho_bd63d581__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "A pre-trained Text-to-Speech model for Chinese language using ESPnet framework. It can be used to convert text input into speech output in Chinese. Framework: ESPnet. Functionality: Text-to-Speech. API call: Text2Speech.from_pretrained('espnet/kan-bayashi_csmsc_tts_train_tacotron2_raw_phn_pypinyin_g2p_phone_train.loss.best'). This tool has no required input fields.\nWhen to use:\n- Use `espnet__kan_bayashi_csmsc_tts_train_tacotron2_raw_phn_pypinyin_g2p_pho_bd63d581` when the user's request directly matches this tool's purpose.\n- This tool has no required input fields.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\n- Tool does not expose top-level input properties.",
+  "argument_template": {},
+  "examples": [],
+  "when_to_use": [
+    "Use `espnet__kan_bayashi_csmsc_tts_train_tacotron2_raw_phn_pypinyin_g2p_pho_bd63d581` when the user's request directly matches this tool's purpose.",
+    "This tool has no required input fields.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values.",
+    "Tool does not expose top-level input properties."
+  ],
+  "token_count": 202,
+  "skill_token_count": 202,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 0,
+  "nonuse_boundary_count": 3,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "A pre-trained Text-to-Speech model for Chinese language using ESPnet framework. It can be used to convert text input into speech output in Chinese. Framework: ESPnet. Functionality: Text-to-Speech. API call: Text2Speech.from_pretrained('espnet/kan-bayashi_csmsc_tts_train_tacotron2_raw_phn_pypinyin_g2p_phone_train.loss.best'). This tool has no required input fields.",
+    "when_to_use": [
+      "Use `espnet__kan_bayashi_csmsc_tts_train_tacotron2_raw_phn_pypinyin_g2p_pho_bd63d581` when the user's request directly matches this tool's purpose.",
+      "This tool has no required input fields.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values.",
+      "Tool does not expose top-level input properties."
+    ],
+    "argument_template": {},
+    "examples": [],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "espnet_kan_bayashi_csmsc_tts_train_tacotron2_raw_phn_pypinyin_g2p_pho_bd63d581__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "espnet_kan_bayashi_csmsc_tts_train_tacotron2_raw_phn_pypinyin_g2p_pho_bd63d581__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0104_calculate_bacteria_evolution_rate_negative_easy_0_out_of_domain_request",
+      "tool_name": "calculate_bacteria_evolution_rate",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate bacteria evolution rate.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "start_population": 1,
+        "duplication_frequency": 1,
+        "duration": 1,
+        "generation_time": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1004,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_bacteria_evolution_rate\nTool description: Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration. Provide all required fields: `start_population`, `duplication_frequency`, and `duration`.\nWhen to use: [\"Use `calculate_bacteria_evolution_rate` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `start_population`, `duplication_frequency`, and `duration`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"start_population\": 1, \"duplication_frequency\": 1, \"duration\": 1, \"generation_time\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_bacteria_evolution_rate\", \"arguments\": {\"start_population\": 1, \"duplication_frequency\": 1, \"duration\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_bacteria_evolution_rate\", \"arguments\": {\"start_population\": 2, \"duplication_frequency\": 2, \"duration\": 2, \"generation_time\": 2}}]\nSchema: {\"properties\": {\"duplication_frequency\": {\"description\": \"The frequency of bacteria duplication per hour.\", \"type\": \"integer\"}, \"duration\": {\"description\": \"Total duration in hours.\", \"type\": \"integer\"}, \"generation_time\": {\"description\": \"The average generation time of the bacteria in minutes. Default is 20 minutes\", \"type\": \"integer\"}, \"start_population\": {\"description\": \"The starting population of bacteria.\", \"type\": \"integer\"}}, \"required\": [\"start_population\", \"duplication_frequency\", \"duration\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to calculate bacteria evolution rate.\n",
+        "raw_model_output": "{\"arguments\": {\"duplication_frequency\": 1, \"duration\": 1, \"generation_time\": 1, \"start_population\": 1}}",
+        "parsed_prediction": {
+          "start_population": 1,
+          "duplication_frequency": 1,
+          "duration": 1,
+          "generation_time": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0104_calculate_bacteria_evolution_rate_negative_hard_1_near_miss_intent",
+      "tool_name": "calculate_bacteria_evolution_rate",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "This sounds close to calculate bacteria evolution rate, but I only want a checklist for how to Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration; no tool call yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "start_population": 1,
+        "duplication_frequency": 1,
+        "duration": 1,
+        "generation_time": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0893,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_bacteria_evolution_rate\nTool description: Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration. Provide all required fields: `start_population`, `duplication_frequency`, and `duration`.\nWhen to use: [\"Use `calculate_bacteria_evolution_rate` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `start_population`, `duplication_frequency`, and `duration`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"start_population\": 1, \"duplication_frequency\": 1, \"duration\": 1, \"generation_time\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_bacteria_evolution_rate\", \"arguments\": {\"start_population\": 1, \"duplication_frequency\": 1, \"duration\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_bacteria_evolution_rate\", \"arguments\": {\"start_population\": 2, \"duplication_frequency\": 2, \"duration\": 2, \"generation_time\": 2}}]\nSchema: {\"properties\": {\"duplication_frequency\": {\"description\": \"The frequency of bacteria duplication per hour.\", \"type\": \"integer\"}, \"duration\": {\"description\": \"Total duration in hours.\", \"type\": \"integer\"}, \"generation_time\": {\"description\": \"The average generation time of the bacteria in minutes. Default is 20 minutes\", \"type\": \"integer\"}, \"start_population\": {\"description\": \"The starting population of bacteria.\", \"type\": \"integer\"}}, \"required\": [\"start_population\", \"duplication_frequency\", \"duration\"], \"type\": \"object\"}\nUser request: This sounds close to calculate bacteria evolution rate, but I only want a checklist for how to Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration; no tool call yet.\n",
+        "raw_model_output": "{\"arguments\": {\"duplication_frequency\": 1, \"duration\": 1, \"generation_time\": 1, \"start_population\": 1}}",
+        "parsed_prediction": {
+          "start_population": 1,
+          "duplication_frequency": 1,
+          "duration": 1,
+          "generation_time": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0104_calculate_bacteria_evolution_rate_negative_medium_0_adjacent_wrong_intent",
+      "tool_name": "calculate_bacteria_evolution_rate",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to calculate bacteria evolution rate, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "start_population": 1,
+        "duplication_frequency": 1,
+        "duration": 1,
+        "generation_time": 1
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.0804,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_bacteria_evolution_rate\nTool description: Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration. Provide all required fields: `start_population`, `duplication_frequency`, and `duration`.\nWhen to use: [\"Use `calculate_bacteria_evolution_rate` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `start_population`, `duplication_frequency`, and `duration`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"start_population\": 1, \"duplication_frequency\": 1, \"duration\": 1, \"generation_time\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_bacteria_evolution_rate\", \"arguments\": {\"start_population\": 1, \"duplication_frequency\": 1, \"duration\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_bacteria_evolution_rate\", \"arguments\": {\"start_population\": 2, \"duplication_frequency\": 2, \"duration\": 2, \"generation_time\": 2}}]\nSchema: {\"properties\": {\"duplication_frequency\": {\"description\": \"The frequency of bacteria duplication per hour.\", \"type\": \"integer\"}, \"duration\": {\"description\": \"Total duration in hours.\", \"type\": \"integer\"}, \"generation_time\": {\"description\": \"The average generation time of the bacteria in minutes. Default is 20 minutes\", \"type\": \"integer\"}, \"start_population\": {\"description\": \"The starting population of bacteria.\", \"type\": \"integer\"}}, \"required\": [\"start_population\", \"duplication_frequency\", \"duration\"], \"type\": \"object\"}\nUser request: I need to ControlNet is a neural network structure to control diffusion models by adding extra conditions. This checkpoint corresponds to the ControlN. This is adjacent to calculate bacteria evolution rate, but the intended capability is diffusers  lllyasviel control v11p sd15 openpose  controlnetmodel from 4b8fa44a.\n",
+        "raw_model_output": "{\"arguments\": {\"duplication_frequency\": 1, \"duration\": 1, \"generation_time\": 1, \"start_population\": 1}}",
+        "parsed_prediction": {
+          "start_population": 1,
+          "duplication_frequency": 1,
+          "duration": 1,
+          "generation_time": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0104_calculate_bacteria_evolution_rate_positive_easy_0",
+      "tool_name": "calculate_bacteria_evolution_rate",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use calculate bacteria evolution rate to Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration. Set duplication_frequency=1, duration=1, start_population=1.",
+      "exact_match": false,
+      "argument_validity": 1.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "start_population": 1,
+        "duplication_frequency": 1,
+        "duration": 1,
+        "generation_time": 1
+      },
+      "expected_arguments": {
+        "duplication_frequency": 1,
+        "duration": 1,
+        "start_population": 1
+      },
+      "prediction_latency_ms": 0.0656,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_bacteria_evolution_rate\nTool description: Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration. Provide all required fields: `start_population`, `duplication_frequency`, and `duration`.\nWhen to use: [\"Use `calculate_bacteria_evolution_rate` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `start_population`, `duplication_frequency`, and `duration`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"start_population\": 1, \"duplication_frequency\": 1, \"duration\": 1, \"generation_time\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_bacteria_evolution_rate\", \"arguments\": {\"start_population\": 1, \"duplication_frequency\": 1, \"duration\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_bacteria_evolution_rate\", \"arguments\": {\"start_population\": 2, \"duplication_frequency\": 2, \"duration\": 2, \"generation_time\": 2}}]\nSchema: {\"properties\": {\"duplication_frequency\": {\"description\": \"The frequency of bacteria duplication per hour.\", \"type\": \"integer\"}, \"duration\": {\"description\": \"Total duration in hours.\", \"type\": \"integer\"}, \"generation_time\": {\"description\": \"The average generation time of the bacteria in minutes. Default is 20 minutes\", \"type\": \"integer\"}, \"start_population\": {\"description\": \"The starting population of bacteria.\", \"type\": \"integer\"}}, \"required\": [\"start_population\", \"duplication_frequency\", \"duration\"], \"type\": \"object\"}\nUser request: Use calculate bacteria evolution rate to Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration. Set duplication_frequency=1, duration=1, start_population=1.\n",
+        "raw_model_output": "{\"arguments\": {\"duplication_frequency\": 1, \"duration\": 1, \"generation_time\": 1, \"start_population\": 1}}",
+        "parsed_prediction": {
+          "start_population": 1,
+          "duplication_frequency": 1,
+          "duration": 1,
+          "generation_time": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0104_calculate_bacteria_evolution_rate_positive_medium_0",
+      "tool_name": "calculate_bacteria_evolution_rate",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration. The relevant details are duplication_frequency=8, duration=8, start_population=8.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "start_population": 1,
+        "duplication_frequency": 1,
+        "duration": 1,
+        "generation_time": 1
+      },
+      "expected_arguments": {
+        "duplication_frequency": 8,
+        "duration": 8,
+        "start_population": 8
+      },
+      "prediction_latency_ms": 0.1249,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: calculate_bacteria_evolution_rate\nTool description: Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration.\nSkill condition: multi_candidate_skill\nSkill summary: Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration. Provide all required fields: `start_population`, `duplication_frequency`, and `duration`.\nWhen to use: [\"Use `calculate_bacteria_evolution_rate` when the user's request directly matches this tool's purpose.\", \"Provide all required fields: `start_population`, `duplication_frequency`, and `duration`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"start_population\": 1, \"duplication_frequency\": 1, \"duration\": 1, \"generation_time\": 1}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for calculate_bacteria_evolution_rate\", \"arguments\": {\"start_population\": 1, \"duplication_frequency\": 1, \"duration\": 1}}, {\"scenario\": \"Richer invocation that uses optional controls for calculate_bacteria_evolution_rate\", \"arguments\": {\"start_population\": 2, \"duplication_frequency\": 2, \"duration\": 2, \"generation_time\": 2}}]\nSchema: {\"properties\": {\"duplication_frequency\": {\"description\": \"The frequency of bacteria duplication per hour.\", \"type\": \"integer\"}, \"duration\": {\"description\": \"Total duration in hours.\", \"type\": \"integer\"}, \"generation_time\": {\"description\": \"The average generation time of the bacteria in minutes. Default is 20 minutes\", \"type\": \"integer\"}, \"start_population\": {\"description\": \"The starting population of bacteria.\", \"type\": \"integer\"}}, \"required\": [\"start_population\", \"duplication_frequency\", \"duration\"], \"type\": \"object\"}\nUser request: I need help with this task: Calculate the evolution rate of bacteria given the starting number, duplication frequency and total duration. The relevant details are duplication_frequency=8, duration=8, start_population=8.\n",
+        "raw_model_output": "{\"arguments\": {\"duplication_frequency\": 1, \"duration\": 1, \"generation_time\": 1, \"start_population\": 1}}",
+        "parsed_prediction": {
+          "start_population": 1,
+          "duplication_frequency": 1,
+          "duration": 1,
+          "generation_time": 1
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.5,
+    "avg_prediction_latency_ms": 0.0921
+  }
+}

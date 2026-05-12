@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_area_under_curve", "arguments": {"function": "sample_function_1", "interval": [null]}}
+{"scenario": "Richer invocation that uses optional controls for calculate_area_under_curve", "arguments": {"function": "sample_function_2", "interval": [null], "method": "sample_method_2"}}

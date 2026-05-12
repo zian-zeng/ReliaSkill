@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_final_velocity", "arguments": {"initial_velocity": 1, "acceleration": null, "time": 1}}
+{"scenario": "Richer invocation that uses optional controls for calculate_final_velocity", "arguments": {"initial_velocity": 2, "acceleration": null, "time": 2}}

@@ -1,0 +1,226 @@
+{
+  "valid": false,
+  "results": [
+    {
+      "case_id": "ctrl_0177_puppeteer_screenshot_negative_easy_0_out_of_domain_request",
+      "tool_name": "puppeteer_screenshot",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to puppeteer screenshot.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "name": "sample-name",
+        "selector": "sample_selector_1",
+        "width": 1.0,
+        "height": 1.0,
+        "encoded": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1201,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: puppeteer_screenshot\nTool description: Take a screenshot of the current page or a specific element\nSkill condition: multi_candidate_skill\nSkill summary: Take a screenshot of the current page or a specific element. Provide the required field `name`.\nWhen to use: [\"Use `puppeteer_screenshot` when the user's request directly matches this tool's purpose.\", \"Provide the required field `name`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"name\": \"sample-name\", \"selector\": \"sample_selector_1\", \"width\": 1.0, \"height\": 1.0, \"encoded\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for puppeteer_screenshot\", \"arguments\": {\"name\": \"sample-name\"}}, {\"scenario\": \"Richer invocation that uses optional controls for puppeteer_screenshot\", \"arguments\": {\"name\": \"sample-name\", \"selector\": \"sample_selector_2\", \"width\": 2.0, \"height\": 2.0, \"encoded\": true}}]\nSchema: {\"properties\": {\"encoded\": {\"description\": \"If true, capture the screenshot as a base64-encoded data URI (as text) instead of binary image content. Default false.\", \"type\": \"boolean\"}, \"height\": {\"description\": \"Height in pixels (default: 600)\", \"type\": \"number\"}, \"name\": {\"description\": \"Name for the screenshot\", \"type\": \"string\"}, \"selector\": {\"description\": \"CSS selector for element to screenshot\", \"type\": \"string\"}, \"width\": {\"description\": \"Width in pixels (default: 800)\", \"type\": \"number\"}}, \"required\": [\"name\"], \"type\": \"object\"}\nUser request: Plan a three-day museum itinerary in Chicago and estimate ticket costs; this is unrelated to puppeteer screenshot.\n",
+        "raw_model_output": "{\"arguments\": {\"encoded\": false, \"height\": 1.0, \"name\": \"sample-name\", \"selector\": \"sample_selector_1\", \"width\": 1.0}}",
+        "parsed_prediction": {
+          "name": "sample-name",
+          "selector": "sample_selector_1",
+          "width": 1.0,
+          "height": 1.0,
+          "encoded": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0177_puppeteer_screenshot_negative_hard_1_missing_required_info",
+      "tool_name": "puppeteer_screenshot",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "I may need puppeteer screenshot to Take a screenshot of the current page or a specific element, but I do not know name yet.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "name": "sample-name",
+        "selector": "sample_selector_1",
+        "width": 1.0,
+        "height": 1.0,
+        "encoded": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.2431,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: puppeteer_screenshot\nTool description: Take a screenshot of the current page or a specific element\nSkill condition: multi_candidate_skill\nSkill summary: Take a screenshot of the current page or a specific element. Provide the required field `name`.\nWhen to use: [\"Use `puppeteer_screenshot` when the user's request directly matches this tool's purpose.\", \"Provide the required field `name`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"name\": \"sample-name\", \"selector\": \"sample_selector_1\", \"width\": 1.0, \"height\": 1.0, \"encoded\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for puppeteer_screenshot\", \"arguments\": {\"name\": \"sample-name\"}}, {\"scenario\": \"Richer invocation that uses optional controls for puppeteer_screenshot\", \"arguments\": {\"name\": \"sample-name\", \"selector\": \"sample_selector_2\", \"width\": 2.0, \"height\": 2.0, \"encoded\": true}}]\nSchema: {\"properties\": {\"encoded\": {\"description\": \"If true, capture the screenshot as a base64-encoded data URI (as text) instead of binary image content. Default false.\", \"type\": \"boolean\"}, \"height\": {\"description\": \"Height in pixels (default: 600)\", \"type\": \"number\"}, \"name\": {\"description\": \"Name for the screenshot\", \"type\": \"string\"}, \"selector\": {\"description\": \"CSS selector for element to screenshot\", \"type\": \"string\"}, \"width\": {\"description\": \"Width in pixels (default: 800)\", \"type\": \"number\"}}, \"required\": [\"name\"], \"type\": \"object\"}\nUser request: I may need puppeteer screenshot to Take a screenshot of the current page or a specific element, but I do not know name yet.\n",
+        "raw_model_output": "{\"arguments\": {\"encoded\": false, \"height\": 1.0, \"name\": \"sample-name\", \"selector\": \"sample_selector_1\", \"width\": 1.0}}",
+        "parsed_prediction": {
+          "name": "sample-name",
+          "selector": "sample_selector_1",
+          "width": 1.0,
+          "height": 1.0,
+          "encoded": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0177_puppeteer_screenshot_negative_medium_0_explanation_instead_of_action",
+      "tool_name": "puppeteer_screenshot",
+      "should_trigger": false,
+      "triggered": true,
+      "user_request": "Explain when someone should use puppeteer screenshot; do not actually call it or perform the action.",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": true,
+      "predicted_arguments": {
+        "name": "sample-name",
+        "selector": "sample_selector_1",
+        "width": 1.0,
+        "height": 1.0,
+        "encoded": false
+      },
+      "expected_arguments": {},
+      "prediction_latency_ms": 0.1071,
+      "notes": [
+        "negative_control_triggered"
+      ],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: puppeteer_screenshot\nTool description: Take a screenshot of the current page or a specific element\nSkill condition: multi_candidate_skill\nSkill summary: Take a screenshot of the current page or a specific element. Provide the required field `name`.\nWhen to use: [\"Use `puppeteer_screenshot` when the user's request directly matches this tool's purpose.\", \"Provide the required field `name`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"name\": \"sample-name\", \"selector\": \"sample_selector_1\", \"width\": 1.0, \"height\": 1.0, \"encoded\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for puppeteer_screenshot\", \"arguments\": {\"name\": \"sample-name\"}}, {\"scenario\": \"Richer invocation that uses optional controls for puppeteer_screenshot\", \"arguments\": {\"name\": \"sample-name\", \"selector\": \"sample_selector_2\", \"width\": 2.0, \"height\": 2.0, \"encoded\": true}}]\nSchema: {\"properties\": {\"encoded\": {\"description\": \"If true, capture the screenshot as a base64-encoded data URI (as text) instead of binary image content. Default false.\", \"type\": \"boolean\"}, \"height\": {\"description\": \"Height in pixels (default: 600)\", \"type\": \"number\"}, \"name\": {\"description\": \"Name for the screenshot\", \"type\": \"string\"}, \"selector\": {\"description\": \"CSS selector for element to screenshot\", \"type\": \"string\"}, \"width\": {\"description\": \"Width in pixels (default: 800)\", \"type\": \"number\"}}, \"required\": [\"name\"], \"type\": \"object\"}\nUser request: Explain when someone should use puppeteer screenshot; do not actually call it or perform the action.\n",
+        "raw_model_output": "{\"arguments\": {\"encoded\": false, \"height\": 1.0, \"name\": \"sample-name\", \"selector\": \"sample_selector_1\", \"width\": 1.0}}",
+        "parsed_prediction": {
+          "name": "sample-name",
+          "selector": "sample_selector_1",
+          "width": 1.0,
+          "height": 1.0,
+          "encoded": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0177_puppeteer_screenshot_positive_easy_0",
+      "tool_name": "puppeteer_screenshot",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "Use puppeteer screenshot to Take a screenshot of the current page or a specific element. Set name=\"name_0\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "name": "sample-name",
+        "selector": "sample_selector_1",
+        "width": 1.0,
+        "height": 1.0,
+        "encoded": false
+      },
+      "expected_arguments": {
+        "name": "name_0"
+      },
+      "prediction_latency_ms": 0.1153,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: puppeteer_screenshot\nTool description: Take a screenshot of the current page or a specific element\nSkill condition: multi_candidate_skill\nSkill summary: Take a screenshot of the current page or a specific element. Provide the required field `name`.\nWhen to use: [\"Use `puppeteer_screenshot` when the user's request directly matches this tool's purpose.\", \"Provide the required field `name`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"name\": \"sample-name\", \"selector\": \"sample_selector_1\", \"width\": 1.0, \"height\": 1.0, \"encoded\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for puppeteer_screenshot\", \"arguments\": {\"name\": \"sample-name\"}}, {\"scenario\": \"Richer invocation that uses optional controls for puppeteer_screenshot\", \"arguments\": {\"name\": \"sample-name\", \"selector\": \"sample_selector_2\", \"width\": 2.0, \"height\": 2.0, \"encoded\": true}}]\nSchema: {\"properties\": {\"encoded\": {\"description\": \"If true, capture the screenshot as a base64-encoded data URI (as text) instead of binary image content. Default false.\", \"type\": \"boolean\"}, \"height\": {\"description\": \"Height in pixels (default: 600)\", \"type\": \"number\"}, \"name\": {\"description\": \"Name for the screenshot\", \"type\": \"string\"}, \"selector\": {\"description\": \"CSS selector for element to screenshot\", \"type\": \"string\"}, \"width\": {\"description\": \"Width in pixels (default: 800)\", \"type\": \"number\"}}, \"required\": [\"name\"], \"type\": \"object\"}\nUser request: Use puppeteer screenshot to Take a screenshot of the current page or a specific element. Set name=\"name_0\".\n",
+        "raw_model_output": "{\"arguments\": {\"encoded\": false, \"height\": 1.0, \"name\": \"sample-name\", \"selector\": \"sample_selector_1\", \"width\": 1.0}}",
+        "parsed_prediction": {
+          "name": "sample-name",
+          "selector": "sample_selector_1",
+          "width": 1.0,
+          "height": 1.0,
+          "encoded": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    },
+    {
+      "case_id": "ctrl_0177_puppeteer_screenshot_positive_medium_0",
+      "tool_name": "puppeteer_screenshot",
+      "should_trigger": true,
+      "triggered": true,
+      "user_request": "I need help with this task: Take a screenshot of the current page or a specific element. The relevant details are name=\"name_7\", selector=\"selector_7\".",
+      "exact_match": false,
+      "argument_validity": 0.0,
+      "harmful_injection": false,
+      "predicted_arguments": {
+        "name": "sample-name",
+        "selector": "sample_selector_1",
+        "width": 1.0,
+        "height": 1.0,
+        "encoded": false
+      },
+      "expected_arguments": {
+        "name": "name_7",
+        "selector": "selector_7"
+      },
+      "prediction_latency_ms": 0.1038,
+      "notes": [],
+      "prediction_metadata": {
+        "prompt_template": "build_prediction_prompt/v1",
+        "raw_prompt": "You are selecting arguments for a single MCP tool call.\nReturn valid JSON only with a single top-level object named `arguments`.\nUse only fields allowed by the schema.\nInclude all required arguments.\nDo not include explanations.\n\nTool name: puppeteer_screenshot\nTool description: Take a screenshot of the current page or a specific element\nSkill condition: multi_candidate_skill\nSkill summary: Take a screenshot of the current page or a specific element. Provide the required field `name`.\nWhen to use: [\"Use `puppeteer_screenshot` when the user's request directly matches this tool's purpose.\", \"Provide the required field `name`.\"]\nWhen not to use: [\"Do not call this tool when required inputs are missing or ambiguous.\", \"Do not invent unsupported parameters or unsupported enum values.\", \"Do not use when required inputs are missing.\"]\nArgument template: {\"name\": \"sample-name\", \"selector\": \"sample_selector_1\", \"width\": 1.0, \"height\": 1.0, \"encoded\": false}\nExamples: [{\"scenario\": \"Minimal valid request that satisfies the required fields for puppeteer_screenshot\", \"arguments\": {\"name\": \"sample-name\"}}, {\"scenario\": \"Richer invocation that uses optional controls for puppeteer_screenshot\", \"arguments\": {\"name\": \"sample-name\", \"selector\": \"sample_selector_2\", \"width\": 2.0, \"height\": 2.0, \"encoded\": true}}]\nSchema: {\"properties\": {\"encoded\": {\"description\": \"If true, capture the screenshot as a base64-encoded data URI (as text) instead of binary image content. Default false.\", \"type\": \"boolean\"}, \"height\": {\"description\": \"Height in pixels (default: 600)\", \"type\": \"number\"}, \"name\": {\"description\": \"Name for the screenshot\", \"type\": \"string\"}, \"selector\": {\"description\": \"CSS selector for element to screenshot\", \"type\": \"string\"}, \"width\": {\"description\": \"Width in pixels (default: 800)\", \"type\": \"number\"}}, \"required\": [\"name\"], \"type\": \"object\"}\nUser request: I need help with this task: Take a screenshot of the current page or a specific element. The relevant details are name=\"name_7\", selector=\"selector_7\".\n",
+        "raw_model_output": "{\"arguments\": {\"encoded\": false, \"height\": 1.0, \"name\": \"sample-name\", \"selector\": \"sample_selector_1\", \"width\": 1.0}}",
+        "parsed_prediction": {
+          "name": "sample-name",
+          "selector": "sample_selector_1",
+          "width": 1.0,
+          "height": 1.0,
+          "encoded": false
+        },
+        "model_name": "heuristic",
+        "quantization": "none",
+        "predictor_backend": "heuristic",
+        "configured_predictor_backend": "heuristic",
+        "actual_predictor_backend": "heuristic",
+        "predictor_fallback_used": false,
+        "predictor_fallback_reason": null
+      }
+    }
+  ],
+  "metrics": {
+    "num_cases": 5,
+    "positive_cases": 2,
+    "negative_cases": 3,
+    "trigger_true_positive": 2,
+    "trigger_false_negative": 0,
+    "trigger_false_positive": 3,
+    "trigger_true_negative": 0,
+    "trigger_precision": 0.4,
+    "trigger_recall": 1.0,
+    "harmful_skill_injection_rate": 1.0,
+    "exact_match_rate": 0.0,
+    "avg_argument_validity": 0.0,
+    "avg_prediction_latency_ms": 0.1379
+  }
+}

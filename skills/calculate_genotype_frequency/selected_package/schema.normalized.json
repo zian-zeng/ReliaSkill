@@ -1,0 +1,99 @@
+{
+  "tool_name": "calculate_genotype_frequency",
+  "server_name": "bfcl_v3",
+  "tool_purpose": "Calculate the frequency of homozygous dominant genotype based on the allele frequency using Hardy Weinberg Principle.",
+  "input_schema_raw": {
+    "properties": {
+      "allele_frequency": {
+        "description": "The frequency of the dominant allele in the population.",
+        "type": "float"
+      },
+      "genotype": {
+        "description": "The genotype which frequency is needed, default is homozygous dominant. ",
+        "enum": [
+          "AA",
+          "Aa",
+          "aa"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "allele_frequency",
+      "genotype"
+    ],
+    "type": "object"
+  },
+  "arguments": [
+    {
+      "name": "allele_frequency",
+      "type": "float",
+      "required": true,
+      "default": null,
+      "enum": null,
+      "description": "The frequency of the dominant allele in the population.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.allele_frequency"
+    },
+    {
+      "name": "genotype",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "enum": [
+        "AA",
+        "Aa",
+        "aa"
+      ],
+      "description": "The genotype which frequency is needed, default is homozygous dominant.",
+      "items_type": null,
+      "properties": null,
+      "required_properties": [],
+      "nullable": false,
+      "format": null,
+      "schema_path": "$.properties.genotype"
+    }
+  ],
+  "output_hint": null,
+  "auth_or_env_notes": null,
+  "usage_warnings": [],
+  "doc_snippets": [
+    "Calculate the frequency of homozygous dominant genotype based on the allele frequency using Hardy Weinberg Principle.",
+    "calculate_genotype_frequency",
+    "Calculate the frequency of homozygous dominant genotype based on the allele frequency using Hardy We"
+  ],
+  "source_pointer": "bfcl_v3",
+  "doc_completeness": 1.0,
+  "schema_complexity": {
+    "ambiguity_score_heuristic": 0.15,
+    "auth_required": false,
+    "documentation_length": 117,
+    "has_array_argument": false,
+    "has_boolean_flag": false,
+    "has_nested_object": false,
+    "has_side_effect": false,
+    "max_schema_depth": 2,
+    "num_arguments": 2,
+    "num_enum_arguments": 1,
+    "num_enum_fields": 1,
+    "num_nested_object_arguments": 0,
+    "num_optional_arguments": 0,
+    "num_required_arguments": 2,
+    "num_top_level_arguments": 2,
+    "side_effect_type": "unknown"
+  },
+  "ambiguity_flags": [
+    "allows_or_omits_unknown_argument_policy"
+  ],
+  "provenance": {
+    "raw_name": "calculate_genotype_frequency",
+    "server_name": "bfcl_v3",
+    "source_pointer": "bfcl_v3"
+  },
+  "side_effect_hints": [],
+  "safety_hints": []
+}

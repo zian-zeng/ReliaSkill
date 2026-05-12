@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for elephant_population_estimate", "arguments": {"current_population": 1, "growth_rate": null, "years": 1}}
+{"scenario": "Richer invocation that uses optional controls for elephant_population_estimate", "arguments": {"current_population": 2, "growth_rate": null, "years": 2}}

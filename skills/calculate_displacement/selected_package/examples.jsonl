@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for calculate_displacement", "arguments": {"initial_velocity": null, "time": null}}
+{"scenario": "Richer invocation that uses optional controls for calculate_displacement", "arguments": {"initial_velocity": null, "time": null, "acceleration": 0}}

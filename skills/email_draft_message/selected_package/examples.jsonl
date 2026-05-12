@@ -1,0 +1,2 @@
+{"scenario": "Minimal valid request that satisfies the required fields for email_draft_message", "arguments": {"to": ["sample_to_item_1"], "subject": "sample_subject_1", "body": "sample_body_1"}}
+{"scenario": "Richer invocation that uses optional controls for email_draft_message", "arguments": {"to": ["sample_to_item_2"], "subject": "sample_subject_2", "body": "sample_body_2", "cc": ["sample_cc_item_2"]}}

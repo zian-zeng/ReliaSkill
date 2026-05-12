@@ -1,0 +1,144 @@
+{
+  "candidate_id": "create_histogram__cand_02_example_heavy",
+  "generation_strategy": "example_heavy",
+  "prompt_template_id": "heuristic_example_heavy_v1",
+  "skill_text": "Create a histogram based on provided data. Provide all required fields: `data`, and `bins`.\nWhen to use:\n- Use `create_histogram` when the user's request directly matches this tool's purpose.\n- Provide all required fields: `data`, and `bins`.\n- Use examples to map paraphrases into schema-faithful arguments.\nWhen not to use:\n- Do not call this tool when required inputs are missing or ambiguous.\n- Do not invent unsupported parameters or unsupported enum values.\nArgument template:\n{\"bins\": 4, \"data\": [null]}\nExamples:\nMinimal valid request that satisfies the required fields for create_histogram\n{\"bins\": 1, \"data\": [null]}\nRicher invocation that uses optional controls for create_histogram\n{\"bins\": 2, \"data\": [null]}\nRequired-argument dev behavior example.\n{\"bins\": 3, \"data\": [null]}\nOptional, enum, nested, or array argument example.\n{\"bins\": 4, \"data\": [null]}",
+  "argument_template": {
+    "data": [
+      null
+    ],
+    "bins": 4
+  },
+  "examples": [
+    {
+      "scenario": "Minimal valid request that satisfies the required fields for create_histogram",
+      "arguments": {
+        "data": [
+          null
+        ],
+        "bins": 1
+      }
+    },
+    {
+      "scenario": "Richer invocation that uses optional controls for create_histogram",
+      "arguments": {
+        "data": [
+          null
+        ],
+        "bins": 2
+      }
+    },
+    {
+      "scenario": "Required-argument dev behavior example.",
+      "arguments": {
+        "data": [
+          null
+        ],
+        "bins": 3
+      }
+    },
+    {
+      "scenario": "Optional, enum, nested, or array argument example.",
+      "arguments": {
+        "data": [
+          null
+        ],
+        "bins": 4
+      }
+    }
+  ],
+  "when_to_use": [
+    "Use `create_histogram` when the user's request directly matches this tool's purpose.",
+    "Provide all required fields: `data`, and `bins`.",
+    "Use examples to map paraphrases into schema-faithful arguments."
+  ],
+  "when_not_to_use": [
+    "Do not call this tool when required inputs are missing or ambiguous.",
+    "Do not invent unsupported parameters or unsupported enum values."
+  ],
+  "token_count": 234,
+  "skill_token_count": 234,
+  "prompt_token_count": null,
+  "total_representation_tokens": null,
+  "sections_included": null,
+  "examples_count": 4,
+  "nonuse_boundary_count": 2,
+  "skill": {
+    "baseline_name": "multi_candidate_skill",
+    "skill_summary": "Create a histogram based on provided data. Provide all required fields: `data`, and `bins`.",
+    "when_to_use": [
+      "Use `create_histogram` when the user's request directly matches this tool's purpose.",
+      "Provide all required fields: `data`, and `bins`.",
+      "Use examples to map paraphrases into schema-faithful arguments."
+    ],
+    "when_not_to_use": [
+      "Do not call this tool when required inputs are missing or ambiguous.",
+      "Do not invent unsupported parameters or unsupported enum values."
+    ],
+    "argument_template": {
+      "data": [
+        null
+      ],
+      "bins": 4
+    },
+    "examples": [
+      {
+        "scenario": "Minimal valid request that satisfies the required fields for create_histogram",
+        "arguments": {
+          "data": [
+            null
+          ],
+          "bins": 1
+        }
+      },
+      {
+        "scenario": "Richer invocation that uses optional controls for create_histogram",
+        "arguments": {
+          "data": [
+            null
+          ],
+          "bins": 2
+        }
+      },
+      {
+        "scenario": "Required-argument dev behavior example.",
+        "arguments": {
+          "data": [
+            null
+          ],
+          "bins": 3
+        }
+      },
+      {
+        "scenario": "Optional, enum, nested, or array argument example.",
+        "arguments": {
+          "data": [
+            null
+          ],
+          "bins": 4
+        }
+      }
+    ],
+    "semantic_hints": {},
+    "method_trace": [
+      {
+        "trace_type": "generation_backend",
+        "configured_generation_backend": "heuristic",
+        "actual_generation_backend": "heuristic",
+        "generation_fallback_used": false,
+        "generation_fallback_reason": null
+      },
+      {
+        "trace_type": "multi_candidate_generation",
+        "candidate_id": "create_histogram__cand_02_example_heavy",
+        "generation_strategy": "example_heavy",
+        "prompt_template_id": "heuristic_example_heavy_v1"
+      }
+    ],
+    "metadata": {
+      "candidate_id": "create_histogram__cand_02_example_heavy",
+      "generation_strategy": "example_heavy",
+      "prompt_template_id": "heuristic_example_heavy_v1"
+    }
+  }
+}
