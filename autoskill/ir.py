@@ -48,7 +48,7 @@ class ToolIR:
 
 @dataclass
 class GeneratedSkill:
-    baseline_name: str = "autoskill_base"
+    baseline_name: str = "generated_skill_base"
     skill_summary: str = ""
     when_to_use: List[str] = field(default_factory=list)
     when_not_to_use: List[str] = field(default_factory=list)

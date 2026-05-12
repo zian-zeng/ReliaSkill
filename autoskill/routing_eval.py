@@ -6,6 +6,7 @@ import re
 from typing import Any, Dict, Iterable, List, Tuple
 
 from autoskill.eval_types import EvalTask
+from autoskill.conditions import GENERATED_SKILL_BASE, normalize_condition_name
 from autoskill.ir import GeneratedSkill, ToolIR
 from autoskill.predictor import PredictorBackend, safe_predict
 from autoskill.retrieval_runtime import (
@@ -53,7 +54,7 @@ def _router_overlap_score(query: str, text: str) -> int:
     return score
 
 
-def _autoskill_routing_bonus(query: str, tool: ToolIR, skill: GeneratedSkill) -> int:
+def _generated_skill_routing_bonus(query: str, tool: ToolIR, skill: GeneratedSkill) -> int:
     lowered = query.lower()
     bonus = 0
     for arg_name, spec in skill.semantic_hints.items():
@@ -78,6 +79,7 @@ def select_tool_for_task(
     skill_bank: Dict[str, GeneratedSkill],
     top_k: int = 3,
 ) -> Dict[str, Any]:
+    normalized_baseline_name = normalize_condition_name(baseline_name)
     if baseline_name == "retrieved_docs":
         candidates = retrieve_doc_tool_rankings(task.user_request, tools, top_k=top_k)["candidates"]
         return {
@@ -105,7 +107,7 @@ def select_tool_for_task(
             "candidate_rows": candidates,
         }
 
-    if baseline_name == "autoskill_base":
+    if normalized_baseline_name == GENERATED_SKILL_BASE:
         retrieval_rows = retrieve_candidate_tools(task.user_request, tools, top_k=max(len(tools), top_k))["candidates"]
         reranked: List[Dict[str, Any]] = []
         for row in retrieval_rows:
@@ -113,7 +115,7 @@ def select_tool_for_task(
             tool = tools[tool_name]
             skill = skill_bank[tool_name]
             rerank_score = (2 * int(row.get("score", 0))) + _router_overlap_score(task.user_request, _skill_router_text(tool, skill))
-            rerank_score += _autoskill_routing_bonus(task.user_request, tool, skill)
+            rerank_score += _generated_skill_routing_bonus(task.user_request, tool, skill)
             reranked.append(
                 {
                     "tool_name": tool_name,
@@ -135,8 +137,8 @@ def select_tool_for_task(
     for tool_name, tool in tools.items():
         skill = skill_bank[tool_name]
         score = _router_overlap_score(task.user_request, _skill_router_text(tool, skill))
-        if baseline_name == "autoskill_base":
-            score += _autoskill_routing_bonus(task.user_request, tool, skill)
+        if normalized_baseline_name == GENERATED_SKILL_BASE:
+            score += _generated_skill_routing_bonus(task.user_request, tool, skill)
         ranked.append((tool_name, score))
     ranked.sort(key=lambda item: (-item[1], item[0]))
     top_rows = [{"tool_name": tool_name, "score": score} for tool_name, score in ranked[: max(top_k, 1)]]

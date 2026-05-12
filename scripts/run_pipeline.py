@@ -21,7 +21,7 @@ def main() -> None:
     for tool_name in tools:
         condition_text = ", ".join(
             f"{baseline} valid={summary[baseline]['valid_rate'] > 0}"
-            for baseline in ("raw_mcp", "schema_only", "retrieved_docs", "retrieved_candidates", "retrieved_memory", "autoskill_base")
+            for baseline in ("raw_mcp", "schema_only", "retrieved_docs", "retrieved_candidates", "retrieved_memory", "generated_skill_base")
             if baseline in summary
         )
         print(f"{tool_name}: {condition_text}")

@@ -8,7 +8,14 @@ from typing import Any, Dict, List, Tuple
 from autoskill.benchmark import load_benchmark_tasks
 from autoskill.analysis import summarize_error_taxonomy, summarize_method_wins
 from autoskill.config import load_json_config, merge_experiment_config
-from autoskill.conditions import build_reviewer_baseline_skills, condition_prompt_text
+from autoskill.conditions import (
+    AUTOSKILL_BASE,
+    GENERATED_SKILL_BASE,
+    build_reviewer_baseline_skills,
+    condition_prompt_text,
+    normalize_condition_name,
+    normalize_condition_names,
+)
 from autoskill.conversion import load_json_or_jsonl
 from autoskill.evaluation import summarize_records, summarize_records_by_tool, write_summary
 from autoskill.generator import SkillGenerator
@@ -118,14 +125,19 @@ def load_tools(raw_path: str | Path) -> Dict[str, Any]:
 def build_skill_variants(tool: Any, tools: Dict[str, Any], generator: SkillGenerator, package_manager_dir: Path | None = None) -> List[Any]:
     llm_skill = None
     if package_manager_dir:
-        # Check primary package dir
-        candidate_path = package_manager_dir / _safe_dir_name(tool.tool_name) / "autoskill_base"
+        # Check primary package dir, then the legacy autoskill_base cache.
+        candidate_path = package_manager_dir / _safe_dir_name(tool.tool_name) / GENERATED_SKILL_BASE
         # Fallback to benchmark dir if primary is missing
         if not candidate_path.exists():
-            parent_root = package_manager_dir.parent
-            fallback_path = parent_root / "benchmark" / _safe_dir_name(tool.tool_name) / "autoskill_base"
-            if fallback_path.exists():
-                candidate_path = fallback_path
+            candidates = [
+                package_manager_dir / _safe_dir_name(tool.tool_name) / AUTOSKILL_BASE,
+                package_manager_dir.parent / "benchmark" / _safe_dir_name(tool.tool_name) / GENERATED_SKILL_BASE,
+                package_manager_dir.parent / "benchmark" / _safe_dir_name(tool.tool_name) / AUTOSKILL_BASE,
+            ]
+            for fallback_path in candidates:
+                if fallback_path.exists():
+                    candidate_path = fallback_path
+                    break
 
         if candidate_path.exists():
             try:
@@ -147,7 +159,7 @@ def build_skill_variants(tool: Any, tools: Dict[str, Any], generator: SkillGener
                             summary = content.split("## Summary\n")[1].split("## When to use")[0].strip()
                         
                         llm_skill = GeneratedSkill(
-                            baseline_name=meta.get("baseline_name", "autoskill_llm"),
+                            baseline_name=meta.get("baseline_name", GENERATED_SKILL_BASE),
                             skill_summary=summary,
                             when_to_use=[], # Fallback
                             when_not_to_use=[], # Fallback
@@ -163,13 +175,14 @@ def build_skill_variants(tool: Any, tools: Dict[str, Any], generator: SkillGener
         llm_skill = generator.generate(tool)
         if package_manager_dir:
             # SAVE FOR FUTURE
-            save_path = package_manager_dir / _safe_dir_name(tool.tool_name) / "autoskill_base" / "skill.json"
+            save_path = package_manager_dir / _safe_dir_name(tool.tool_name) / GENERATED_SKILL_BASE / "skill.json"
             save_path.parent.mkdir(parents=True, exist_ok=True)
             with save_path.open("w", encoding="utf-8") as f:
                 json.dump(llm_skill.model_dump(), f, indent=2, ensure_ascii=False)
     
     if llm_skill is None:
         llm_skill = generator.generate(tool)
+    llm_skill.baseline_name = normalize_condition_name(llm_skill.baseline_name)
 
     historical = [
         build_raw_mcp_skill(tool),
@@ -188,6 +201,7 @@ def build_skill_variants(tool: Any, tools: Dict[str, Any], generator: SkillGener
 def build_skill_variant_map(tool: Any, tools: Dict[str, Any], generator: SkillGenerator, allowed_conditions: List[str] | None = None, package_manager_dir: Path | None = None) -> Dict[str, Any]:
     variants = {skill.baseline_name: skill for skill in build_skill_variants(tool, tools, generator, package_manager_dir=package_manager_dir)}
     if allowed_conditions is not None:
+        allowed_conditions = normalize_condition_names(allowed_conditions)
         variants = {k: v for k, v in variants.items() if k in allowed_conditions}
     return variants
 

@@ -19,6 +19,7 @@ DEFAULT_CONDITION_TOKEN_OVERHEAD = {
     "raw_mcp": 900,
     "schema_only": 450,
     "docs_only": 350,
+    "generated_skill_base": 300,
     "autoskill_base": 300,
     "skill_ultra_compact": 150,
     "skill_compact": 300,
@@ -168,7 +169,7 @@ def build_run_plan(
     tools = load_tools(tools_path)
     raw_domain_map = _load_tool_domain_map(tools_path)
     tasks = load_benchmark_tasks(tasks_path)
-    conditions = [str(item) for item in config.get("conditions") or scheduler_config.get("conditions") or ["autoskill_base"]]
+    conditions = [str(item) for item in config.get("conditions") or scheduler_config.get("conditions") or ["generated_skill_base"]]
     tool_names = sorted(tools)
     configured_max_tools = _configured_max_tools(config)
     if configured_max_tools:

@@ -34,6 +34,36 @@ class ConditionsTests(unittest.TestCase):
             variants = build_skill_variant_map(tool, tools, generator)
             self.assertTrue(expected.issubset(variants))
 
+    def test_legacy_human_written_alias_maps_to_curated_schema_reference(self) -> None:
+        tools = load_tools("data/raw/public_mcp_filesystem_subset.json")
+        generator = SkillGenerator(backend_config={"type": "heuristic"})
+        tool = next(iter(tools.values()))
+
+        variants = build_skill_variant_map(
+            tool,
+            tools,
+            generator,
+            allowed_conditions=["human_written_skill_upper_bound"],
+        )
+
+        self.assertEqual(set(variants), {"curated_schema_reference"})
+        self.assertEqual(variants["curated_schema_reference"].baseline_name, "curated_schema_reference")
+
+    def test_legacy_autoskill_alias_maps_to_generated_skill_base(self) -> None:
+        tools = load_tools("data/raw/public_mcp_filesystem_subset.json")
+        generator = SkillGenerator(backend_config={"type": "heuristic"})
+        tool = next(iter(tools.values()))
+
+        variants = build_skill_variant_map(
+            tool,
+            tools,
+            generator,
+            allowed_conditions=["autoskill_base"],
+        )
+
+        self.assertEqual(set(variants), {"generated_skill_base"})
+        self.assertEqual(variants["generated_skill_base"].baseline_name, "generated_skill_base")
+
     def test_baselines_smoke_experiment_outputs_results_and_prompts(self) -> None:
         subprocess.run(
             [sys.executable, "scripts/run_experiment.py", "--config", "configs/experiments/baselines_smoke.yaml"],

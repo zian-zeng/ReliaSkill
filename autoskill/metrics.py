@@ -368,7 +368,7 @@ def build_stat_test_rows(records: Sequence[Dict[str, Any]]) -> List[Dict[str, An
     baselines = sorted({str(record.get("baseline_name", "default")) for record in records})
     if len(baselines) < 2:
         return []
-    anchor = "autoskill_base" if "autoskill_base" in baselines else baselines[-1]
+    anchor = "generated_skill_base" if "generated_skill_base" in baselines else baselines[-1]
     rows: List[Dict[str, Any]] = []
     for baseline in baselines:
         if baseline == anchor:

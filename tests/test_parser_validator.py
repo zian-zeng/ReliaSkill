@@ -541,7 +541,7 @@ class ParserValidatorTests(unittest.TestCase):
                         "generator_backend": "heuristic",
                         "predictor_backend": "heuristic",
                         "benchmark_summary": {
-                            "autoskill_base": {"exact_match_rate": 1.0},
+                            "generated_skill_base": {"exact_match_rate": 1.0},
                             "raw_mcp": {"exact_match_rate": 0.6},
                             "schema_only": {"exact_match_rate": 0.7},
                         },
@@ -549,7 +549,7 @@ class ParserValidatorTests(unittest.TestCase):
                 }
             ]
         )
-        self.assertEqual(summary["runs"][0]["autoskill_vs_raw_delta"], 0.4)
+        self.assertEqual(summary["runs"][0]["generated_skill_vs_raw_delta"], 0.4)
 
     def test_packaging_writes_expected_files(self) -> None:
         tools = _load_tools()
@@ -642,7 +642,7 @@ class ParserValidatorTests(unittest.TestCase):
         }
         pairwise = {
             "raw_mcp": {
-                "anchor_baseline": "autoskill_base",
+                "anchor_baseline": "generated_skill_base",
                 "comparison_baseline": "raw_mcp",
                 "num_paired_tasks": 2,
                 "win_count": 1,
@@ -748,7 +748,7 @@ class ParserValidatorTests(unittest.TestCase):
             {
                 "task_id": "t1",
                 "tool_name": "search_files",
-                "baseline_name": "autoskill_base",
+                "baseline_name": "generated_skill_base",
                 "split": "dev",
                 "exact_match": True,
                 "argument_validity": 1.0,
@@ -768,7 +768,7 @@ class ParserValidatorTests(unittest.TestCase):
             {
                 "task_id": "t2",
                 "tool_name": "read_text_file",
-                "baseline_name": "autoskill_base",
+                "baseline_name": "generated_skill_base",
                 "split": "test",
                 "exact_match": True,
                 "argument_validity": 1.0,
@@ -780,7 +780,7 @@ class ParserValidatorTests(unittest.TestCase):
         pairwise = summarize_pairwise_comparisons(scores, comparison_baselines=["raw_mcp"])
 
         self.assertIn("dev", by_split)
-        self.assertEqual(by_split["dev"]["autoskill_base"]["num_tasks"], 1)
+        self.assertEqual(by_split["dev"]["generated_skill_base"]["num_tasks"], 1)
         self.assertEqual(pairwise["raw_mcp"]["win_count"], 1)
         self.assertEqual(pairwise["raw_mcp"]["tie_count"], 1)
 
@@ -803,7 +803,7 @@ class ParserValidatorTests(unittest.TestCase):
             {
                 "task_id": "t1",
                 "tool_name": "search_files",
-                "baseline_name": "autoskill_base",
+                "baseline_name": "generated_skill_base",
                 "split": "test",
                 "tags": ["semantic", "search"],
                 "exact_match": True,

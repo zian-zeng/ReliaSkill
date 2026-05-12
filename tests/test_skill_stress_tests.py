@@ -125,7 +125,7 @@ def _tool() -> ToolIR:
 
 def _skill() -> GeneratedSkill:
     return GeneratedSkill(
-        baseline_name="autoskill_base",
+        baseline_name="generated_skill_base",
         skill_summary="Update an issue only when the issue id and status are explicit.",
         when_to_use=["Use when issue_id and status are provided."],
         when_not_to_use=["Do not update issues for preview-only or missing-information requests."],

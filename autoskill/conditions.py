@@ -19,7 +19,10 @@ RAW_SCHEMA_PLUS_EXAMPLES = "raw_schema_plus_examples"
 GENERATED_DOCS_NO_VALIDATION = "generated_docs_no_validation"
 GENERIC_VALIDATOR_NO_BEHAVIOR_TESTS = "generic_validator_no_behavior_tests"
 FULL_REGENERATION_REPAIR = "full_regeneration_repair"
+CURATED_SCHEMA_REFERENCE = "curated_schema_reference"
 HUMAN_WRITTEN_SKILL_UPPER_BOUND = "human_written_skill_upper_bound"
+GENERATED_SKILL_BASE = "generated_skill_base"
+AUTOSKILL_BASE = "autoskill_base"
 RETRIEVAL_TOOL_CARD = "retrieval_tool_card"
 LARGER_MODEL_NAIVE_SKILL = "larger_model_naive_skill"
 ADVERSARIAL_DISTRACTOR_INVENTORY = "adversarial_distractor_inventory"
@@ -50,7 +53,7 @@ REVIEWER_BASELINES = [
     GENERATED_DOCS_NO_VALIDATION,
     GENERIC_VALIDATOR_NO_BEHAVIOR_TESTS,
     FULL_REGENERATION_REPAIR,
-    HUMAN_WRITTEN_SKILL_UPPER_BOUND,
+    CURATED_SCHEMA_REFERENCE,
     RETRIEVAL_TOOL_CARD,
     LARGER_MODEL_NAIVE_SKILL,
     ADVERSARIAL_DISTRACTOR_INVENTORY,
@@ -75,6 +78,21 @@ REVIEWER_BASELINES = [
     SKILL_PROMPT_SAFETY_AWARE,
     SKILL_PROMPT_VERBOSE_DOCS,
 ]
+
+CONDITION_ALIASES = {
+    HUMAN_WRITTEN_SKILL_UPPER_BOUND: CURATED_SCHEMA_REFERENCE,
+    AUTOSKILL_BASE: GENERATED_SKILL_BASE,
+}
+
+
+def normalize_condition_name(condition: str) -> str:
+    return CONDITION_ALIASES.get(condition, condition)
+
+
+def normalize_condition_names(conditions: Iterable[str] | None) -> List[str] | None:
+    if conditions is None:
+        return None
+    return [normalize_condition_name(condition) for condition in conditions]
 
 
 def build_prompt_only_careful_tool_use(tool: ToolIR) -> GeneratedSkill:
@@ -158,23 +176,32 @@ def build_full_regeneration_repair(tool: ToolIR, generated_skill: GeneratedSkill
     return regenerated
 
 
-def build_human_written_skill_upper_bound(tool: ToolIR) -> GeneratedSkill:
-    curated = _human_upper_bound_by_tool(tool)
+def build_curated_schema_reference(tool: ToolIR) -> GeneratedSkill:
+    curated = _curated_schema_reference_by_tool(tool)
     if curated is not None:
         return curated
     schema_skill = build_schema_only_skill(tool)
-    schema_skill.baseline_name = HUMAN_WRITTEN_SKILL_UPPER_BOUND
+    schema_skill.baseline_name = CURATED_SCHEMA_REFERENCE
     schema_skill.when_to_use = [
         f"Use `{tool.tool_name}` for direct, fully specified requests matching the schema.",
-        "Treat this as a human-written upper-bound fallback for tools outside the curated subset.",
+        "Treat this as the schema-reference fallback for tools outside the manually curated filesystem subset.",
         *schema_skill.when_to_use,
     ]
     schema_skill.when_not_to_use = [
         "Do not use for adjacent tools, missing required inputs, or unsafe side-effect mismatches.",
         *schema_skill.when_not_to_use,
     ]
-    schema_skill.metadata = {"condition_family": "human_written_skill_upper_bound", "curated": False}
+    schema_skill.metadata = {
+        "condition_family": CURATED_SCHEMA_REFERENCE,
+        "curated": False,
+        "source": "schema_only_fallback",
+        "legacy_condition_alias": HUMAN_WRITTEN_SKILL_UPPER_BOUND,
+    }
     return schema_skill
+
+
+def build_human_written_skill_upper_bound(tool: ToolIR) -> GeneratedSkill:
+    return build_curated_schema_reference(tool)
 
 
 def build_retrieval_tool_card(tool: ToolIR, tools: Dict[str, ToolIR]) -> GeneratedSkill:
@@ -298,7 +325,7 @@ def build_reviewer_baseline_skills(tool: ToolIR, tools: Dict[str, ToolIR], gener
         build_generated_docs_no_validation(tool, generated_skill),
         build_generic_validator_no_behavior_tests(tool, generated_skill),
         build_full_regeneration_repair(tool, generated_skill),
-        build_human_written_skill_upper_bound(tool),
+        build_curated_schema_reference(tool),
         build_retrieval_tool_card(tool, tools),
         build_larger_model_naive_skill(generated_skill),
         build_adversarial_distractor_inventory(tool, tools),
@@ -344,58 +371,83 @@ def condition_prompt_text(tool: ToolIR, skill: GeneratedSkill) -> str:
     )
 
 
-def _human_upper_bound_by_tool(tool: ToolIR) -> GeneratedSkill | None:
+def _curated_schema_reference_by_tool(tool: ToolIR) -> GeneratedSkill | None:
     name = tool.tool_name
     if name == "read_text_file":
         return GeneratedSkill(
-            baseline_name=HUMAN_WRITTEN_SKILL_UPPER_BOUND,
+            baseline_name=CURATED_SCHEMA_REFERENCE,
             skill_summary="Read a known text file, optionally limiting to the first or last N lines.",
             when_to_use=["Use when the user gives a concrete file path and asks to read or show text content."],
             when_not_to_use=["Do not use for searching unknown paths, writing files, listing directories, or binary/media reads."],
             argument_template={"path": "docs/example.md"},
             examples=[{"scenario": "Show the first lines of a known file.", "arguments": {"path": "docs/example.md", "head": 10}}],
-            metadata={"condition_family": "human_written_skill_upper_bound", "curated": True},
+            metadata={
+                "condition_family": CURATED_SCHEMA_REFERENCE,
+                "curated": True,
+                "source": "manual_filesystem_curation",
+                "legacy_condition_alias": HUMAN_WRITTEN_SKILL_UPPER_BOUND,
+            },
         )
     if name == "write_file":
         return GeneratedSkill(
-            baseline_name=HUMAN_WRITTEN_SKILL_UPPER_BOUND,
+            baseline_name=CURATED_SCHEMA_REFERENCE,
             skill_summary="Write explicit text content to a specified file path.",
             when_to_use=["Use only when both destination path and content are provided or unambiguous."],
             when_not_to_use=["Do not use for search, read-only, preview-only, or missing-content requests."],
             argument_template={"path": "docs/out.txt", "content": "text"},
             examples=[{"scenario": "Save quoted content to a named file.", "arguments": {"path": "docs/out.txt", "content": "text"}}],
-            metadata={"condition_family": "human_written_skill_upper_bound", "curated": True},
+            metadata={
+                "condition_family": CURATED_SCHEMA_REFERENCE,
+                "curated": True,
+                "source": "manual_filesystem_curation",
+                "legacy_condition_alias": HUMAN_WRITTEN_SKILL_UPPER_BOUND,
+            },
         )
     if name == "search_files":
         return GeneratedSkill(
-            baseline_name=HUMAN_WRITTEN_SKILL_UPPER_BOUND,
+            baseline_name=CURATED_SCHEMA_REFERENCE,
             skill_summary="Search under a directory for paths matching a glob pattern.",
             when_to_use=["Use when the user asks to find files and gives a search root or file pattern."],
             when_not_to_use=["Do not use when the exact path is already known or the user asks to read/write/list directly."],
             argument_template={"path": "docs", "pattern": "**/*.md"},
             examples=[{"scenario": "Find markdown files under docs.", "arguments": {"path": "docs", "pattern": "**/*.md"}}],
             semantic_hints={"pattern": {"markdown": "**/*.md", "python": "**/*.py", "json": "**/*.json"}},
-            metadata={"condition_family": "human_written_skill_upper_bound", "curated": True},
+            metadata={
+                "condition_family": CURATED_SCHEMA_REFERENCE,
+                "curated": True,
+                "source": "manual_filesystem_curation",
+                "legacy_condition_alias": HUMAN_WRITTEN_SKILL_UPPER_BOUND,
+            },
         )
     if name == "list_directory":
         return GeneratedSkill(
-            baseline_name=HUMAN_WRITTEN_SKILL_UPPER_BOUND,
+            baseline_name=CURATED_SCHEMA_REFERENCE,
             skill_summary="List the contents of a known directory path.",
             when_to_use=["Use when the user asks to inspect or list a directory and provides the directory path."],
             when_not_to_use=["Do not use for recursive search, file reading, writing, or directory creation."],
             argument_template={"path": "docs"},
             examples=[{"scenario": "List the docs directory.", "arguments": {"path": "docs"}}],
-            metadata={"condition_family": "human_written_skill_upper_bound", "curated": True},
+            metadata={
+                "condition_family": CURATED_SCHEMA_REFERENCE,
+                "curated": True,
+                "source": "manual_filesystem_curation",
+                "legacy_condition_alias": HUMAN_WRITTEN_SKILL_UPPER_BOUND,
+            },
         )
     if name == "create_directory":
         return GeneratedSkill(
-            baseline_name=HUMAN_WRITTEN_SKILL_UPPER_BOUND,
+            baseline_name=CURATED_SCHEMA_REFERENCE,
             skill_summary="Create or ensure a directory exists at a specified path.",
             when_to_use=["Use when the user explicitly asks to create or ensure a directory."],
             when_not_to_use=["Do not use for listing directory contents, searching files, reading files, or writing file content."],
             argument_template={"path": "docs/new-folder"},
             examples=[{"scenario": "Ensure an output directory exists.", "arguments": {"path": "docs/new-folder"}}],
-            metadata={"condition_family": "human_written_skill_upper_bound", "curated": True},
+            metadata={
+                "condition_family": CURATED_SCHEMA_REFERENCE,
+                "curated": True,
+                "source": "manual_filesystem_curation",
+                "legacy_condition_alias": HUMAN_WRITTEN_SKILL_UPPER_BOUND,
+            },
         )
     return None
 

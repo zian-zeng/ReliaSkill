@@ -30,7 +30,7 @@ def main() -> None:
             f"{row['run_name']}: "
             f"status={row['status']}, "
             f"valid_config={row['valid_config']}, "
-            f"autoskill_exact_match={row['autoskill_exact_match']}"
+            f"generated_skill_exact_match={row['generated_skill_exact_match']}"
         )
 
 

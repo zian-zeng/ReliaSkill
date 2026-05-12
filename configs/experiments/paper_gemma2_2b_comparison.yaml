@@ -34,7 +34,7 @@ conditions:
   - generated_docs_no_validation
   - generated_docs_verbose
   - generic_validator_no_behavior_tests
-  - human_written_skill_upper_bound
+  - curated_schema_reference
   - larger_model_naive_skill
   - adversarial_distractor_inventory
   - naive_skill_k1
@@ -47,7 +47,7 @@ conditions:
   - repaired_example_only
   - repaired_taxonomy_conditioned
   - full_regeneration_repair
-  - autoskill_base
+  - generated_skill_base
   - skill_ultra_compact
   - skill_compact
   - skill_medium

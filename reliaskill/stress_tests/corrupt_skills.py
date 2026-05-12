@@ -189,7 +189,7 @@ def build_stress_test_inventory(
     inventory_path: str | Path = "outputs/tables/stress_test_inventory.csv",
     detection_path: str | Path = "outputs/tables/stress_test_detection_results.csv",
     max_tools: int | None = None,
-    source_condition: str = "autoskill_base",
+    source_condition: str = "generated_skill_base",
     condition_filter: Sequence[str] | None = None,
     dev_controls_path: str | Path | None = None,
 ) -> List[Dict[str, Any]]:
