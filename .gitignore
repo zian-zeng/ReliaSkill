@@ -181,6 +181,7 @@ cython_debug/
 .cursorindexingignore
 
 # Project-specific ignores
+.claude/
 outputs/
 data/external/
 data/converted_external/bfcl_records.jsonl
