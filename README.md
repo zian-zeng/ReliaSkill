@@ -10,7 +10,6 @@
 
 Paper: **"ReliaSkill: From Raw MCP Schemas to Reliable Skills for Tool-Using LLM Agents"**
 
-A public paper link will be added when available.
 
 ## Research Snapshot
 
