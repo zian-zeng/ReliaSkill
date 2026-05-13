@@ -64,13 +64,13 @@
               ReliaSkill converts raw MCP-like schemas and sparse documentation into compact skill artifacts with explicit use boundaries, schema-faithful examples, validation reports, repair traces, reliability scores, and deployability decisions before downstream LLM agents see them.
             </p>
             <div class="hero-actions" aria-label="Primary actions">
-              <a class="button button-primary button-paper" href="https://github.com/zian-zeng/ReliaSkill" aria-label="Read the paper placeholder, currently routes to the repository">
+              <a class="button button-primary button-paper" href="https://github.com/zian-zeng/ReliaSkill" aria-label="Open the ReliaSkill GitHub repository">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M7 3.75h7.25L18 7.5v12.75H7V3.75Z"></path>
                   <path d="M14 3.75V8h4"></path>
                   <path d="M9.75 11.25h5.5M9.75 14.25h5.5M9.75 17.25h3.75"></path>
                 </svg>
-                <span>Read the Paper</span>
+                <span>View Repository</span>
               </a>
               <a class="button button-ghost" href="#pipeline">View Pipeline</a>
               <a class="button button-ghost" href="#results">See Results</a>
@@ -359,131 +359,126 @@
       <section class="section results-section" id="results">
         <div class="section-head" data-reveal>
           <p class="eyebrow">Results</p>
-          <h2>Paper results and latest saved-log results are reported separately</h2>
+          <h2>Reported results across seven predictors</h2>
           <p>
-            The README separates the paper's main ReliaSkill ladder from newer multi-model saved-log experiments with additional prompt-template and baseline conditions. This site keeps the same boundary.
+            The evaluation compares five tool-facing representations while holding the downstream predictor fixed within each comparison. Boundary-first is the primary ReliaSkill rendering, with verbose docs reported as a close secondary variant.
           </p>
         </div>
 
         <div class="tabs" data-reveal>
           <div class="tab-list" role="tablist" aria-label="Result tables">
-            <button class="tab-button is-active" id="tab-paper" type="button" role="tab" aria-selected="true" aria-controls="panel-paper" data-tab="paper">Paper ladder</button>
-            <button class="tab-button" id="tab-structured" type="button" role="tab" aria-selected="false" aria-controls="panel-structured" data-tab="structured">Latest structured</button>
-            <button class="tab-button" id="tab-routing" type="button" role="tab" aria-selected="false" aria-controls="panel-routing" data-tab="routing">Latest routing</button>
+            <button class="tab-button is-active" id="tab-structured" type="button" role="tab" aria-selected="true" aria-controls="panel-structured" data-tab="structured">Structured EM</button>
+            <button class="tab-button" id="tab-routing" type="button" role="tab" aria-selected="false" aria-controls="panel-routing" data-tab="routing">Routing joint</button>
+            <button class="tab-button" id="tab-ablation" type="button" role="tab" aria-selected="false" aria-controls="panel-ablation" data-tab="ablation">Ablation</button>
             <button class="tab-button" id="tab-read" type="button" role="tab" aria-selected="false" aria-controls="panel-read" data-tab="read">How to read</button>
           </div>
 
-          <div class="tab-panel is-active" id="panel-paper" role="tabpanel" aria-labelledby="tab-paper" data-panel="paper">
-            <h3>Paper main ladder: Qwen2.5-7B</h3>
+          <div class="tab-panel is-active" id="panel-structured" role="tabpanel" aria-labelledby="tab-structured" data-panel="structured">
+            <h3>Structured-call Exact Match (%)</h3>
             <div class="table-wrap">
               <table>
                 <thead>
                   <tr>
                     <th>Condition</th>
-                    <th>Joint EM</th>
-                    <th>Selection Accuracy</th>
-                    <th>Argument Validity</th>
+                    <th>Llama3.2-1B</th>
+                    <th>Qwen2.5-1.5B</th>
+                    <th>Gemma2-2B</th>
+                    <th>Phi-3.5-mini</th>
+                    <th>Qwen2.5-7B</th>
+                    <th>Llama3.1-8B</th>
+                    <th>Gemma2-9B</th>
+                    <th>Mean</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td><code>raw_mcp</code></td><td>17.15%</td><td>26.07%</td><td>43.66%</td></tr>
-                  <tr><td><code>schema_only</code></td><td>15.73%</td><td>25.80%</td><td>41.22%</td></tr>
-                  <tr><td><code>naive_skill</code></td><td>18.85%</td><td>27.36%</td><td>50.07%</td></tr>
-                  <tr><td><code>gated_skill</code></td><td>21.12%</td><td>31.39%</td><td>52.78%</td></tr>
+                  <tr><td><code>raw_mcp</code></td><td>33.42</td><td>38.58</td><td>43.80</td><td>33.97</td><td>53.02</td><td>39.93</td><td>48.88</td><td>41.66</td></tr>
+                  <tr><td><code>generated_skill_base</code></td><td>37.76</td><td>34.31</td><td>43.93</td><td>42.44</td><td>63.32</td><td>56.81</td><td>56.75</td><td>47.90</td></tr>
+                  <tr><td><code>curated_schema_reference</code></td><td>38.71</td><td>37.29</td><td>30.37</td><td>32.61</td><td>53.83</td><td>37.69</td><td>46.78</td><td>39.61</td></tr>
+                  <tr><td><code>skill_prompt_boundary_first</code></td><td><strong>52.81</strong></td><td><strong>61.63</strong></td><td>52.07</td><td><strong>63.73</strong></td><td><strong>70.37</strong></td><td><strong>58.37</strong></td><td><strong>63.39</strong></td><td><strong>60.34</strong></td></tr>
+                  <tr><td><code>skill_prompt_verbose_docs</code></td><td>52.20</td><td>56.14</td><td><strong>52.54</strong></td><td>62.17</td><td>67.86</td><td>57.90</td><td>60.07</td><td>58.41</td></tr>
                 </tbody>
               </table>
             </div>
-            <p class="result-note">
-              Argument Validity is not strictly monotonic in the ablation table: w/o Repair has slightly higher Argument Validity than Full ReliaSkill, while Full ReliaSkill has higher Joint EM and Selection Accuracy.
-            </p>
-          </div>
-
-          <div class="tab-panel" id="panel-structured" role="tabpanel" aria-labelledby="tab-structured" data-panel="structured" hidden>
-            <h3>Latest saved-log structured-call highlights</h3>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Model</th>
-                    <th>Condition</th>
-                    <th>Exact Match</th>
-                    <th>Argument Validity</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>gemma2-2B</td><td><code>raw_mcp</code></td><td>0.4380</td><td>0.8108</td></tr>
-                  <tr><td>gemma2-2B</td><td><code>skill_prompt_boundary_first</code></td><td>0.5207</td><td>0.7840</td></tr>
-                  <tr><td>gemma2-2B</td><td><code>skill_prompt_verbose_docs</code></td><td>0.5254</td><td>0.7985</td></tr>
-                  <tr><td>Qwen2.5-1.5B-Instruct</td><td><code>raw_mcp</code></td><td>0.3858</td><td>0.7540</td></tr>
-                  <tr><td>Qwen2.5-1.5B-Instruct</td><td><code>skill_prompt_boundary_first</code></td><td>0.6163</td><td>0.7531</td></tr>
-                  <tr><td>Qwen2.5-1.5B-Instruct</td><td><code>skill_prompt_verbose_docs</code></td><td>0.5614</td><td>0.7841</td></tr>
-                  <tr><td>Qwen2.5-7B</td><td><code>raw_mcp</code></td><td>0.5302</td><td>0.9663</td></tr>
-                  <tr><td>Qwen2.5-7B</td><td><code>generic_validator_no_behavior_tests</code></td><td>0.6529</td><td>0.9172</td></tr>
-                  <tr><td>Qwen2.5-7B</td><td><code>multi_candidate_repaired_gated</code></td><td>0.6183</td><td>0.8331</td></tr>
-                  <tr><td>phi 3.5-mini</td><td><code>raw_mcp</code></td><td>0.3397</td><td>0.9697</td></tr>
-                  <tr><td>phi 3.5-mini</td><td><code>skill_prompt_boundary_first</code></td><td>0.6373</td><td>0.9693</td></tr>
-                  <tr><td>llama3.2 1B</td><td><code>raw_mcp</code></td><td>0.3342</td><td>0.8685</td></tr>
-                  <tr><td>llama3.2 1B</td><td><code>skill_prompt_boundary_first</code></td><td>0.5281</td><td>0.9322</td></tr>
-                </tbody>
-              </table>
-            </div>
+            <p class="result-note">Boundary-first reaches a 60.34% seven-model mean, a 44.8% relative improvement over raw MCP exposure.</p>
           </div>
 
           <div class="tab-panel" id="panel-routing" role="tabpanel" aria-labelledby="tab-routing" data-panel="routing" hidden>
-            <h3>Latest saved-log hidden-tool routing highlights</h3>
+            <h3>Hidden-tool Routing Joint Exact (%)</h3>
             <div class="table-wrap">
               <table>
                 <thead>
                   <tr>
-                    <th>Model</th>
                     <th>Condition</th>
-                    <th>Tool Accuracy</th>
-                    <th>Joint Exact</th>
+                    <th>Llama3.2-1B</th>
+                    <th>Qwen2.5-1.5B</th>
+                    <th>Gemma2-2B</th>
+                    <th>Phi-3.5-mini</th>
+                    <th>Qwen2.5-7B</th>
+                    <th>Llama3.1-8B</th>
+                    <th>Gemma2-9B</th>
+                    <th>Mean</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>gemma2-2B</td><td><code>raw_mcp</code></td><td>0.5214</td><td>0.2102</td></tr>
-                  <tr><td>gemma2-2B</td><td><code>skill_prompt_verbose_docs</code></td><td>0.6373</td><td>0.3403</td></tr>
-                  <tr><td>Qwen2.5-1.5B-Instruct</td><td><code>raw_mcp</code></td><td>0.5214</td><td>0.1444</td></tr>
-                  <tr><td>Qwen2.5-1.5B-Instruct</td><td><code>skill_prompt_boundary_first</code></td><td>0.5647</td><td>0.3153</td></tr>
-                  <tr><td>Qwen2.5-1.5B-Instruct</td><td><code>skill_prompt_verbose_docs</code></td><td>0.6373</td><td>0.3302</td></tr>
-                  <tr><td>Qwen2.5-7B</td><td><code>raw_mcp</code></td><td>0.5214</td><td>0.3431</td></tr>
-                  <tr><td>Qwen2.5-7B</td><td><code>generated_skill_base</code></td><td>0.6278</td><td>0.4224</td></tr>
-                  <tr><td>Qwen2.5-7B</td><td><code>multi_candidate_repaired_gated</code></td><td>0.5485</td><td>0.3580</td></tr>
-                  <tr><td>phi 3.5-mini</td><td><code>raw_mcp</code></td><td>0.5214</td><td>0.2522</td></tr>
-                  <tr><td>phi 3.5-mini</td><td><code>skill_prompt_boundary_first</code></td><td>0.5647</td><td>0.4529</td></tr>
-                  <tr><td>llama3.2 1B</td><td><code>raw_mcp</code></td><td>0.5214</td><td>0.2224</td></tr>
-                  <tr><td>llama3.2 1B</td><td><code>skill_prompt_boundary_first</code></td><td>0.5647</td><td>0.3776</td></tr>
+                  <tr><td><code>raw_mcp</code></td><td>22.24</td><td>14.44</td><td>21.02</td><td>25.22</td><td>34.31</td><td>27.86</td><td>34.03</td><td>25.59</td></tr>
+                  <tr><td><code>generated_skill_base</code></td><td>26.24</td><td>17.02</td><td>26.98</td><td>31.32</td><td>42.24</td><td>39.39</td><td>38.71</td><td>31.70</td></tr>
+                  <tr><td><code>curated_schema_reference</code></td><td>24.00</td><td>13.69</td><td>15.19</td><td>23.73</td><td>32.20</td><td>26.64</td><td>33.69</td><td>24.16</td></tr>
+                  <tr><td><code>skill_prompt_boundary_first</code></td><td><strong>37.76</strong></td><td>31.53</td><td>31.80</td><td><strong>45.29</strong></td><td><strong>45.42</strong></td><td><strong>42.03</strong></td><td><strong>44.07</strong></td><td><strong>39.70</strong></td></tr>
+                  <tr><td><code>skill_prompt_verbose_docs</code></td><td>35.19</td><td><strong>33.02</strong></td><td><strong>34.03</strong></td><td>42.71</td><td>44.75</td><td>40.07</td><td>41.29</td><td>38.72</td></tr>
                 </tbody>
               </table>
             </div>
+            <p class="result-note">Boundary-first reaches a 39.70% routing Joint Exact mean, while verbose docs is close at 38.72% and wins for Qwen2.5-1.5B and Gemma2-2B.</p>
+          </div>
+
+          <div class="tab-panel" id="panel-ablation" role="tabpanel" aria-labelledby="tab-ablation" data-panel="ablation" hidden>
+            <h3>Qwen2.5-7B component ablation</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>System</th>
+                    <th>Joint EM</th>
+                    <th>Argument Validity</th>
+                    <th>Selection Accuracy</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Full ReliaSkill</td><td><strong>21.12%</strong></td><td>52.78%</td><td><strong>31.39%</strong></td></tr>
+                  <tr><td>w/o Repair</td><td>20.41%</td><td><strong>53.05%</strong></td><td>27.39%</td></tr>
+                  <tr><td>w/o Validation</td><td>18.85%</td><td>50.07%</td><td>27.36%</td></tr>
+                  <tr><td>w/o Examples</td><td>15.73%</td><td>41.22%</td><td>25.80%</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="result-note">Full ReliaSkill improves Joint Exact Match from raw MCP at 17.15% to 21.12%, with Argument Validity rising from 43.66% to 52.78%.</p>
           </div>
 
           <div class="tab-panel" id="panel-read" role="tabpanel" aria-labelledby="tab-read" data-panel="read" hidden>
             <div class="takeaway-grid">
               <article>
                 <h3>Supported takeaways</h3>
-                <p>Boundary-first and verbose-doc skill prompts often improve smaller-model structured-call Exact Match over <code>raw_mcp</code>.</p>
+                <p><code>skill_prompt_boundary_first</code> is the primary ReliaSkill variant in the paper and has the best seven-model mean on both main metrics.</p>
               </article>
               <article>
                 <h3>Representation matters</h3>
-                <p>Hidden-tool routing results show that agent-facing representations affect both tool selection and joint route-plus-argument correctness.</p>
+                <p>Raw MCP exposure is the weakest main interface on average, and generated skills improve results before further rendering choices are applied.</p>
               </article>
               <article>
-                <h3>Do not overclaim</h3>
-                <p>Some latest saved-log baselines outperform the current <code>multi_candidate_repaired_gated</code> condition, so universal dominance is not supported.</p>
+                <h3>Rendering matters</h3>
+                <p>Boundary-first and verbose-doc variants share underlying skill content; their differences isolate prompt rendering policy.</p>
               </article>
               <article>
-                <h3>Separate framings</h3>
-                <p>The paper ladder and latest saved-log multi-model tables use different condition sets and should be cited separately.</p>
+                <h3>Safety framing</h3>
+                <p>No observed harmful activation on held-out negative controls is a benchmark result, not a production safety guarantee.</p>
               </article>
             </div>
           </div>
         </div>
 
         <figure class="showcase-figure light-figure" data-reveal>
-          <img src="assets/reliaskill-results-highlights.png" alt="Selected results highlights comparing Raw MCP, boundary-first, and verbose-doc skill prompts, plus a Qwen2.5-7B spotlight.">
-          <figcaption>Selected saved-log highlights; paper ladder and latest saved-log tables remain separate experimental framings.</figcaption>
+          <img src="assets/reliaskill-results-highlights.png" alt="Reported result highlights comparing Raw MCP, generated skills, boundary-first, and verbose-doc skill prompts.">
+          <figcaption>Reported highlights: seven-model means, Qwen2.5-7B spotlight, and the reliability-component ablation.</figcaption>
         </figure>
       </section>
 

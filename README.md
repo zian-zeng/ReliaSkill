@@ -8,11 +8,11 @@
 
 **ReliaSkill** is a pre-deployment reliability pipeline for MCP-style tool-use skills. It turns raw MCP-like schemas and sparse documentation into compact, schema-faithful, behavior-tested skill artifacts before downstream LLM agents ever see them.
 
-Manuscript: **"ReliaSkill: From Raw MCP Schemas to Reliable Skills for Tool-Using LLM Agents"**
+Paper: **"ReliaSkill: From Raw MCP Schemas to Reliable Skills for Tool-Using LLM Agents"**
 
-The paper is currently an internal draft. A public manuscript link will be added here when it is ready.
+A public paper link will be added when available.
 
-## 鉁?Research Snapshot
+## Research Snapshot
 
 Most tool-use failures do not begin when an agent emits malformed JSON. They begin earlier, when a tool is exposed through a representation that is **syntactically valid but operationally underspecified**. A raw MCP schema may list fields and types, yet still leave the model guessing about intent, scope, abstention, side effects, and argument construction.
 
@@ -30,12 +30,12 @@ ReliaSkill studies this missing layer. It treats each generated skill as a **can
 
 | Explore | What you will find |
 | --- | --- |
-| 馃Л [Pipeline](#-pipeline-schema--skill--gate) | Six-stage normalization, generation, validation, behavior testing, repair, and gating. |
-| 馃И [Datasets and controls](#-datasets-and-controls) | MCP-like tools, converted benchmark schemas, synthetic tools, positive controls, and adjacent negatives. |
-| 馃搳 [Latest results](#-latest-results) | Paper ladder plus newer saved-log multi-model results. |
-| 馃殌 [Quick start](#-quick-start) | Minimal commands for local packaging, reliability evaluation, routing, and tests. |
+| [Pipeline](#pipeline) | Six-stage normalization, generation, validation, behavior testing, repair, and gating. |
+| [Datasets and controls](#datasets-and-controls) | MCP-like tools, converted benchmark schemas, synthetic tools, positive controls, and adjacent negatives. |
+| [Reported results](#reported-results) | Seven-predictor evaluation results plus Qwen2.5-7B reliability ablations. |
+| [Quick start](#quick-start) | Minimal commands for local packaging, reliability evaluation, routing, and tests. |
 
-## 鈿?The Short Version
+## The Short Version
 
 Raw MCP schemas expose tool interfaces, but they rarely encode the agent-facing policy that matters in deployment:
 
@@ -46,7 +46,7 @@ Raw MCP schemas expose tool interfaces, but they rarely encode the agent-facing 
 
 ReliaSkill inserts a governed layer between protocol-level tool exposure and LLM tool invocation:
 
-**Mental model:** `raw_mcp` 鈫?`ToolIR++` 鈫?`candidate skill` 鈫?**validate** 鈫?**test** 鈫?**repair** 鈫?**gate**
+**Mental model:** `raw_mcp` -> `ToolIR++` -> `candidate skill` -> **validate** -> **test** -> **repair** -> **gate**
 
 In practical terms, ReliaSkill asks: **what should happen before a new tool representation becomes visible to an agent?** The answer is not "generate a prettier prompt and hope." The answer is to treat the representation like a release candidate: inspect it, test it against real tool-use situations, try adjacent negative cases, repair localized failures, and only then decide whether it should be deployed.
 
@@ -62,7 +62,7 @@ In practical terms, ReliaSkill asks: **what should happen before a new tool repr
 
 ReliaSkill is intentionally focused. It is **not** a generic agent framework, an experience-rich skill-learning system, a GUI-agent skill ecosystem, or a trajectory distillation system.
 
-## 馃Л Why Raw Schemas Are Not Enough
+## Why Raw Schemas Are Not Enough
 
 The MCP ecosystem makes it easy to expose tools. That is powerful, but it creates a cold-start reliability problem: a newly exposed tool can be syntactically valid while still being a poor agent-facing representation. A schema can say that a `pattern` argument exists, but not whether the model should search for files, explain a file extension, abstain because the request is underspecified, or avoid a side-effecting action.
 
@@ -74,15 +74,15 @@ This project begins from a simple observation in the paper: **the boundary betwe
 - **Over-triggering is a reliability bug.** A tool that fires on adjacent out-of-scope requests can be worse than no tool at all.
 - **Tool onboarding should happen before deployment.** Generated skills are candidates that must pass validation, behavior tests, repair, and gating.
 
-## 馃洝锔?The ReliaSkill Reliability Contract
+## The ReliaSkill Reliability Contract
 
 A ReliaSkill artifact should be compact enough for an agent context, but explicit enough to be inspected. The pipeline tries to enforce a small reliability contract:
 
-- 鉁?**Schema-faithful:** no invented arguments, malformed examples, or unsupported enum values.
-- 鉁?**Boundary-aware:** clear when-to-use and when-not-to-use guidance.
-- 鉁?**Behavior-tested:** positive controls measure utility; adjacent negative controls measure over-triggering risk.
-- 鉁?**Repairable:** failures are localized into sections that can be patched without regenerating everything.
-- 鉁?**Gateable:** every candidate receives explicit evidence and a `DEPLOY`, `REPAIR`, or `REJECT` decision.
+- **Schema-faithful:** no invented arguments, malformed examples, or unsupported enum values.
+- **Boundary-aware:** clear when-to-use and when-not-to-use guidance.
+- **Behavior-tested:** positive controls measure utility; adjacent negative controls measure over-triggering risk.
+- **Repairable:** failures are localized into sections that can be patched without regenerating everything.
+- **Gateable:** every candidate receives explicit evidence and a `DEPLOY`, `REPAIR`, or `REJECT` decision.
 
 ```mermaid
 flowchart LR
@@ -99,7 +99,7 @@ flowchart LR
   G -- REJECT --> X[Hold back]
 ```
 
-## 馃柤锔?Visual Overview
+## Visual Overview
 
 | Why Raw Schemas Fail | ReliaSkill Pipeline |
 | --- | --- |
@@ -107,9 +107,9 @@ flowchart LR
 
 | Artifact Anatomy | Selected Result Highlights |
 | --- | --- |
-| <img src="docs/assets/reliaskill-artifact-anatomy.png" alt="Anatomy of a ReliaSkill artifact with use boundaries, argument template, examples, reports, repair trace, score, and deployment decision."> | <img src="docs/assets/reliaskill-results-highlights.png" alt="Selected result highlights comparing raw MCP, boundary-first, and verbose-doc conditions."> |
+| <img src="docs/assets/reliaskill-artifact-anatomy.png" alt="Anatomy of a ReliaSkill artifact with use boundaries, argument template, examples, reports, repair trace, score, and deployment decision."> | <img src="docs/assets/reliaskill-results-highlights.png" alt="Reported result highlights comparing raw MCP, generated skills, boundary-first, and verbose-doc conditions."> |
 
-## 馃攣 Pipeline: Schema 鈫?Skill 鈫?Gate
+## Pipeline
 
 Generated skills are **not trusted by default**. ReliaSkill treats each skill as an artifact that must accumulate evidence before deployment.
 
@@ -124,7 +124,7 @@ Generated skills are **not trusted by default**. ReliaSkill treats each skill as
 
 The most important design choice is the **repair loop**. ReliaSkill does not assume one-shot skill generation is reliable. It records validation failures, behavior failures, repair traces, and scores so that artifacts can be compared, audited, and rejected when needed.
 
-## 馃О What This Repository Implements
+## What This Repository Implements
 
 | Area | Implemented support |
 | --- | --- |
@@ -136,7 +136,7 @@ The most important design choice is the **repair loop**. ReliaSkill does not ass
 | **Execution and analysis** | Sandbox live-execution subset, slice analysis, scientific comparison extraction, and low-compute scheduling. |
 | **Backends** | `heuristic`, `openai_compatible`, and `local_hf` modes. |
 
-## 馃憖 Who Should Care?
+## Who Should Care?
 
 ReliaSkill is useful if you are studying or building:
 
@@ -146,7 +146,7 @@ ReliaSkill is useful if you are studying or building:
 - **Agent reliability research** that cares about abstention, adjacent negatives, routing, and side effects.
 - **Low-compute experimentation** where smaller models need better representations rather than only larger checkpoints.
 
-## 馃搧 Repository Layout
+## Repository Layout
 
 | Path | Purpose |
 | --- | --- |
@@ -166,7 +166,7 @@ ReliaSkill is useful if you are studying or building:
 | `docs/` | Additional runbooks and setup notes. |
 | `tests/` | Unit and regression tests. |
 
-## 鈿欙笍 Installation
+## Installation
 
 ReliaSkill is a Python project. The code uses modern typing syntax, so Python 3.10 or newer is recommended.
 
@@ -191,7 +191,7 @@ python -m pip install -r requirements-local.txt
 
 This installs `transformers`, `torch`, `accelerate`, and `sentencepiece`. Quantized loading may require additional hardware-specific packages such as `bitsandbytes`; it is not installed by default.
 
-## 馃殌 Quick Start
+## Quick Start
 
 The default commands use small local fixtures and the heuristic backend unless a model-backed config is supplied.
 
@@ -225,7 +225,7 @@ Run tests:
 python -m unittest discover -s tests -v
 ```
 
-## 馃И Reproducing The Main Experiments
+## Reproducing The Main Experiments
 
 The full experiment path is designed to regenerate evidence from saved logs rather than hand-edited tables. A complete run can be expensive; start with planning and smoke tests before launching model-backed evaluation.
 
@@ -277,9 +277,9 @@ python scripts\extract_scientific_comparisons.py --tables-dir outputs\tables
 
 The complete command chain and runbook are in [docs/FULL_EXPERIMENT_RUN.md](docs/FULL_EXPERIMENT_RUN.md).
 
-## 馃К Datasets And Controls
+## Datasets And Controls
 
-The current local prepared state includes:
+The prepared benchmark state includes:
 
 | Quantity | Value |
 | --- | ---: |
@@ -301,178 +301,78 @@ Controls are split into development and held-out test sets. Development controls
 
 Converted benchmark schemas and synthetic tools are marked by provenance. They should be described as MCP-like or converted benchmark records, not as production MCP deployments.
 
-## 馃З Representation Conditions
+## Representation Conditions
 
-The paper reports the main ReliaSkill ladder. The current saved-log experiments also include newer prompt-template and reviewer-baseline condition names. These names should not be collapsed unless the underlying artifact construction is identical.
+The paper reports five main tool-facing representation conditions. Additional legacy and diagnostic conditions exist in saved logs and configs, but they are not part of the main paper framing.
 
-| Condition | Description |
+| Condition | Representation exposed to the predictor |
 | --- | --- |
-| `raw_mcp` | Raw schema and sparse documentation exposed directly. |
-| `schema_only` | Deterministically cleaned schema package. |
-| `docs_only` | Sparse documentation-only control. |
-| `retrieved_docs` | Runtime retrieved documentation snippets. |
-| `retrieved_candidates` | Candidate-tool retrieval baseline for routing. |
-| `retrieved_memory` | Skill-memory retrieval baseline. |
-| `naive_skill` | One-shot compact generated skill in the paper ladder. |
-| `naive_skill_k1` | Single-candidate generated skill in the newer saved-log condition set. |
-| `validated_skill` | Generated skill plus deterministic structural validation report. |
-| `repaired_skill` | Validated skill after conservative targeted repair. |
-| `gated_skill` | Paper-ladder repaired skill with reliability score and deploy/repair/reject decision. |
-| `multi_candidate_repaired_gated` | Newer saved-log multi-candidate, repaired, gated condition. It is related to but not identical to the paper's `gated_skill` condition name. |
-| `generated_skill_base` | Base generated skill package produced by the configured generator or loaded from cached packages. In the current heuristic setup, candidates are selected by validation-aware scoring. Previously logged as `autoskill_base`; it is not a separate external AutoSkill method. |
-| `raw_schema_plus_examples` | Raw schema augmented with examples. |
-| `generated_docs_no_validation` | Generated documentation without the full validation and behavior-test pipeline. |
-| `generic_validator_no_behavior_tests` | Structural validator baseline without behavior-grounded tests. |
-| `full_regeneration_repair` | Repair by regenerating the whole artifact. |
-| `skill_prompt_compact_default` | Compact default prompt-template skill condition. |
-| `skill_prompt_boundary_first` | Prompt-template condition that foregrounds use and non-use boundaries. |
-| `skill_prompt_example_rich` | Prompt-template condition with more examples. |
-| `skill_prompt_safety_aware` | Prompt-template condition emphasizing side effects and safety. |
-| `skill_prompt_verbose_docs` | Verbose-docs-style prompt-template condition. |
-| `skill_ultra_compact`, `skill_compact`, `skill_medium`, `skill_verbose` | Compactness-controlled skill variants. |
-| `raw_docs_full`, `generated_docs_verbose` | Verbose documentation baselines. |
-| `curated_schema_reference` | Manually curated filesystem-tool reference skills, with schema-only fallback for tools outside that subset. Previously logged as `human_written_skill_upper_bound`; it is not a human-written dataset condition. |
+| `raw_mcp` | The original MCP-like tool record: tool name, short description, and structured input schema. This is the "ship the schema as-is" baseline. |
+| `generated_skill_base` | A generated skill artifact with purpose, use boundaries, non-use boundaries, an argument template, schema-faithful examples, semantic hints, and validation-aware candidate selection. It is the generator's base output, not an external AutoSkill baseline. |
+| `curated_schema_reference` | A manually authored schema-reference skill from the same ToolIR++ source. This is a comparison point for careful manual authoring under the same structural conventions. |
+| `skill_prompt_boundary_first` | The primary ReliaSkill rendering in the paper. It surfaces non-use boundaries before use guidance and keeps the exposed artifact compact. |
+| `skill_prompt_verbose_docs` | A ReliaSkill rendering with more documentation-style narrative, additional examples, and informational notes. |
 
-## 馃搳 Latest Results
+The two `skill_prompt_*` variants share the same underlying skill content and differ only in prompt rendering policy.
 
-The results should be read as a representation study, not a generic leaderboard. The question is not only "which model is strongest?" but **which representation helps a model call the right tool, assemble valid arguments, and avoid firing on adjacent negative controls?**
+## Reported Results
 
-ReliaSkill reports two result views:
+The results should be read as a representation study, not a generic model leaderboard. Within each comparison, the downstream predictor is fixed and only the tool-facing representation changes.
 
-- **Paper main ladder:** the clean paper framing for the core ReliaSkill pipeline.
-- **Latest saved-log multi-model results:** newer runs with additional prompt-template and baseline condition names.
+### Main Results Across Seven Predictors
 
-These are intentionally separated below.
+The evaluation compares five representation conditions under seven open-weight predictors on the same 1,475-control held-out test set. Values below are percentages.
 
-### Paper Result: Main ReliaSkill Ladder
+#### Structured-Call Exact Match
 
-The paper's main Qwen2.5-7B result set reports the following ladder:
+| Condition | Llama3.2-1B | Qwen2.5-1.5B | Gemma2-2B | Phi-3.5-mini | Qwen2.5-7B | Llama3.1-8B | Gemma2-9B | Mean |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `raw_mcp` | 33.42 | 38.58 | 43.80 | 33.97 | 53.02 | 39.93 | 48.88 | 41.66 |
+| `generated_skill_base` | 37.76 | 34.31 | 43.93 | 42.44 | 63.32 | 56.81 | 56.75 | 47.90 |
+| `curated_schema_reference` | 38.71 | 37.29 | 30.37 | 32.61 | 53.83 | 37.69 | 46.78 | 39.61 |
+| `skill_prompt_boundary_first` | **52.81** | **61.63** | 52.07 | **63.73** | **70.37** | **58.37** | **63.39** | **60.34** |
+| `skill_prompt_verbose_docs` | 52.20 | 56.14 | **52.54** | 62.17 | 67.86 | 57.90 | 60.07 | 58.41 |
 
-| Condition | Joint EM | Selection Accuracy | Argument Validity |
-| --- | ---: | ---: | ---: |
-| `raw_mcp` | 17.15% | 26.07% | 43.66% |
-| `schema_only` | 15.73% | 25.80% | 41.22% |
-| `naive_skill` | 18.85% | 27.36% | 50.07% |
-| `gated_skill` | 21.12% | 31.39% | 52.78% |
+#### Hidden-Tool Routing Joint Exact
 
-Ablation results from the paper:
+| Condition | Llama3.2-1B | Qwen2.5-1.5B | Gemma2-2B | Phi-3.5-mini | Qwen2.5-7B | Llama3.1-8B | Gemma2-9B | Mean |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `raw_mcp` | 22.24 | 14.44 | 21.02 | 25.22 | 34.31 | 27.86 | 34.03 | 25.59 |
+| `generated_skill_base` | 26.24 | 17.02 | 26.98 | 31.32 | 42.24 | 39.39 | 38.71 | 31.70 |
+| `curated_schema_reference` | 24.00 | 13.69 | 15.19 | 23.73 | 32.20 | 26.64 | 33.69 | 24.16 |
+| `skill_prompt_boundary_first` | **37.76** | 31.53 | 31.80 | **45.29** | **45.42** | **42.03** | **44.07** | **39.70** |
+| `skill_prompt_verbose_docs` | 35.19 | **33.02** | **34.03** | 42.71 | 44.75 | 40.07 | 41.29 | 38.72 |
+
+### Qwen2.5-7B Component Ablation
+
+The paper also isolates the Qwen2.5-7B reliability components. Full ReliaSkill gives the best Joint EM and Selection Accuracy. Argument Validity is not strictly monotonic: w/o Repair is slightly higher on local argument validity, while Full ReliaSkill is better on the joint objective.
 
 | System | Joint EM | Argument Validity | Selection Accuracy |
 | --- | ---: | ---: | ---: |
-| Full ReliaSkill | 21.12% | 52.78% | 31.39% |
-| w/o Repair | 20.41% | 53.05% | 27.39% |
+| Full ReliaSkill | **21.12%** | 52.78% | **31.39%** |
+| w/o Repair | 20.41% | **53.05%** | 27.39% |
 | w/o Validation | 18.85% | 50.07% | 27.36% |
 | w/o Examples | 15.73% | 41.22% | 25.80% |
 
-Argument Validity is not strictly monotonic: w/o Repair has slightly higher Argument Validity than Full ReliaSkill, but Full ReliaSkill has higher Joint EM and Selection Accuracy.
+The Qwen2.5-7B reliability ladder improves Joint Exact Match from `raw_mcp` at 17.15% to Full ReliaSkill at 21.12%, a 23.1% relative gain over raw MCP exposure. Argument Validity improves from 43.66% to 52.78%.
 
-### Latest Saved-Log Multi-Model Results
+## Key Takeaways From Current Results
 
-The tables below use the latest saved-log condition names and the latest pasted multi-model results. They are not identical to the paper's main ReliaSkill ladder because they include additional prompt-template and baseline conditions.
+- Raw schema exposure is the weakest main interface on average: 41.66% structured-call Exact Match and 25.59% routing Joint Exact.
+- `generated_skill_base` improves the seven-model means by 6.24 and 6.11 absolute points, but the gain is not uniform across all predictors.
+- `skill_prompt_boundary_first` is the primary ReliaSkill variant in the paper, reaching 60.34% structured-call Exact Match and 39.70% routing Joint Exact on average.
+- `skill_prompt_verbose_docs` is close behind at 58.41% / 38.72%, and it wins routing Joint Exact for Qwen2.5-1.5B and Gemma2-2B.
+- The ablation supports the paper's main claim: generated skills help, but validation, repair, and gating are needed to turn fluent skill text into a more reliable tool-facing representation.
 
-#### Structured-Call Results
-
-| Model | Condition | Exact Match | Argument Validity |
-| --- | --- | ---: | ---: |
-| gemma2-2B | `raw_mcp` | 0.4380 | 0.8108 |
-| gemma2-2B | `generated_skill_base` | 0.4393 | 0.6963 |
-| gemma2-2B | `curated_schema_reference` | 0.3037 | 0.7538 |
-| gemma2-2B | `skill_prompt_boundary_first` | 0.5207 | 0.7840 |
-| gemma2-2B | `skill_prompt_verbose_docs` | 0.5254 | 0.7985 |
-| Qwen2.5-1.5B-Instruct | `raw_mcp` | 0.3858 | 0.7540 |
-| Qwen2.5-1.5B-Instruct | `schema_only` | 0.3424 | 0.7301 |
-| Qwen2.5-1.5B-Instruct | `retrieved_docs` | 0.4034 | 0.8266 |
-| Qwen2.5-1.5B-Instruct | `generated_skill_base` | 0.3431 | 0.6736 |
-| Qwen2.5-1.5B-Instruct | `full_regeneration_repair` | 0.4380 | 0.6927 |
-| Qwen2.5-1.5B-Instruct | `skill_prompt_compact_default` | 0.5851 | 0.7242 |
-| Qwen2.5-1.5B-Instruct | `skill_prompt_boundary_first` | 0.6163 | 0.7531 |
-| Qwen2.5-1.5B-Instruct | `skill_prompt_example_rich` | 0.5681 | 0.7384 |
-| Qwen2.5-1.5B-Instruct | `skill_prompt_safety_aware` | 0.6007 | 0.7363 |
-| Qwen2.5-1.5B-Instruct | `skill_prompt_verbose_docs` | 0.5614 | 0.7841 |
-| Qwen2.5-7B | `raw_mcp` | 0.5302 | 0.9663 |
-| Qwen2.5-7B | `schema_only` | 0.5098 | 0.9526 |
-| Qwen2.5-7B | `generated_skill_base` | 0.6332 | 0.9066 |
-| Qwen2.5-7B | `raw_schema_plus_examples` | 0.5980 | 0.9593 |
-| Qwen2.5-7B | `generated_docs_no_validation` | 0.6190 | 0.9260 |
-| Qwen2.5-7B | `generic_validator_no_behavior_tests` | 0.6529 | 0.9172 |
-| Qwen2.5-7B | `full_regeneration_repair` | 0.6285 | 0.9528 |
-| Qwen2.5-7B | `naive_skill_k1` | 0.6244 | 0.8924 |
-| Qwen2.5-7B | `multi_candidate_repaired_gated` | 0.6183 | 0.8331 |
-| Qwen2.5-7B | `curated_schema_reference` | 0.5383 | 0.9478 |
-| Qwen2.5-7B | `skill_prompt_boundary_first` | 0.7037 | 0.9442 |
-| Qwen2.5-7B | `skill_prompt_verbose_docs` | 0.6786 | 0.9530 |
-| phi 3.5-mini | `raw_mcp` | 0.3397 | 0.9697 |
-| phi 3.5-mini | `generated_skill_base` | 0.4244 | 0.9602 |
-| phi 3.5-mini | `curated_schema_reference` | 0.3261 | 0.9649 |
-| phi 3.5-mini | `skill_prompt_boundary_first` | 0.6373 | 0.9693 |
-| phi 3.5-mini | `skill_prompt_verbose_docs` | 0.6217 | 0.9681 |
-| llama3.2 1B | `raw_mcp` | 0.3342 | 0.8685 |
-| llama3.2 1B | `generated_skill_base` | 0.3776 | 0.9224 |
-| llama3.2 1B | `curated_schema_reference` | 0.3871 | 0.9288 |
-| llama3.2 1B | `skill_prompt_boundary_first` | 0.5281 | 0.9322 |
-| llama3.2 1B | `skill_prompt_verbose_docs` | 0.5220 | 0.9307 |
-
-#### Hidden-Tool Routing Results
-
-| Model | Condition | Tool Accuracy | Joint Exact |
-| --- | --- | ---: | ---: |
-| gemma2-2B | `raw_mcp` | 0.5214 | 0.2102 |
-| gemma2-2B | `generated_skill_base` | 0.6278 | 0.2698 |
-| gemma2-2B | `curated_schema_reference` | 0.5241 | 0.1519 |
-| gemma2-2B | `skill_prompt_boundary_first` | 0.5647 | 0.3180 |
-| gemma2-2B | `skill_prompt_verbose_docs` | 0.6373 | 0.3403 |
-| Qwen2.5-1.5B-Instruct | `raw_mcp` | 0.5214 | 0.1444 |
-| Qwen2.5-1.5B-Instruct | `schema_only` | 0.5159 | 0.1376 |
-| Qwen2.5-1.5B-Instruct | `retrieved_docs` | 0.5498 | 0.1980 |
-| Qwen2.5-1.5B-Instruct | `retrieved_candidates` | 0.6359 | 0.2176 |
-| Qwen2.5-1.5B-Instruct | `generated_skill_base` | 0.6278 | 0.1702 |
-| Qwen2.5-1.5B-Instruct | `generated_docs_verbose` | 0.6576 | 0.2725 |
-| Qwen2.5-1.5B-Instruct | `raw_docs_full` | 0.5769 | 0.2149 |
-| Qwen2.5-1.5B-Instruct | `skill_prompt_compact_default` | 0.5424 | 0.2637 |
-| Qwen2.5-1.5B-Instruct | `skill_prompt_boundary_first` | 0.5647 | 0.3153 |
-| Qwen2.5-1.5B-Instruct | `skill_prompt_safety_aware` | 0.5580 | 0.3010 |
-| Qwen2.5-1.5B-Instruct | `skill_prompt_verbose_docs` | 0.6373 | 0.3302 |
-| Qwen2.5-7B | `raw_mcp` | 0.5214 | 0.3431 |
-| Qwen2.5-7B | `schema_only` | 0.5159 | 0.3146 |
-| Qwen2.5-7B | `generated_skill_base` | 0.6278 | 0.4224 |
-| Qwen2.5-7B | `raw_schema_plus_examples` | 0.5186 | 0.3756 |
-| Qwen2.5-7B | `generated_docs_no_validation` | 0.5458 | 0.3912 |
-| Qwen2.5-7B | `generic_validator_no_behavior_tests` | 0.5478 | 0.4081 |
-| Qwen2.5-7B | `full_regeneration_repair` | 0.5451 | 0.4088 |
-| Qwen2.5-7B | `naive_skill_k1` | 0.5471 | 0.3769 |
-| Qwen2.5-7B | `multi_candidate_repaired_gated` | 0.5485 | 0.3580 |
-| Qwen2.5-7B | `curated_schema_reference` | 0.5241 | 0.3220 |
-| Qwen2.5-7B | `skill_prompt_boundary_first` | 0.5647 | 0.4542 |
-| Qwen2.5-7B | `skill_prompt_verbose_docs` | 0.6373 | 0.4475 |
-| phi 3.5-mini | `raw_mcp` | 0.5214 | 0.2522 |
-| phi 3.5-mini | `generated_skill_base` | 0.6278 | 0.3132 |
-| phi 3.5-mini | `curated_schema_reference` | 0.5241 | 0.2373 |
-| phi 3.5-mini | `skill_prompt_boundary_first` | 0.5647 | 0.4529 |
-| phi 3.5-mini | `skill_prompt_verbose_docs` | 0.6373 | 0.4271 |
-| llama3.2 1B | `raw_mcp` | 0.5214 | 0.2224 |
-| llama3.2 1B | `generated_skill_base` | 0.6278 | 0.2624 |
-| llama3.2 1B | `curated_schema_reference` | 0.5241 | 0.2400 |
-| llama3.2 1B | `skill_prompt_boundary_first` | 0.5647 | 0.3776 |
-| llama3.2 1B | `skill_prompt_verbose_docs` | 0.6373 | 0.3519 |
-
-Structured-call Exact Match evaluates whether the produced call matches the gold call. Argument Validity checks whether produced arguments are parseable and schema-faithful. Hidden-tool routing Tool Accuracy checks whether the model selects the right tool from candidates. Hidden-tool routing Joint Exact requires both routing and argument correctness. The latest saved-log tables are not identical to the paper's main ReliaSkill ladder because they include additional prompt-template and baseline conditions.
-
-## 馃攷 Key Takeaways From Current Results
-
-- Across several smaller models, `skill_prompt_boundary_first` and `skill_prompt_verbose_docs` often improve structured-call Exact Match over `raw_mcp`.
-- In hidden-tool routing, verbose-doc or boundary-first representations often improve Joint Exact over `raw_mcp`.
-- On Qwen2.5-7B, `skill_prompt_boundary_first` has the highest structured-call Exact Match among the listed saved-log conditions.
-- On Qwen2.5-7B routing, `skill_prompt_boundary_first` has the highest hidden-tool routing Joint Exact among the listed routing conditions.
-- The latest saved-log table does **not** support a claim that `multi_candidate_repaired_gated` dominates all baselines. The paper's main ReliaSkill ladder should be reported separately from the newer saved-log multi-model table.
-
-## 鈿狅笍 Reliability And Safety Notes
+## Reliability And Safety Notes
 
 - Negative-control precision in the paper result should be interpreted as no observed harmful activation on the held-out negative controls, not as a production safety guarantee.
+- After validation and repair, the reported artifact set has no residual checker-level failures: unsupported arguments, missing required fields, invalid enum values, malformed JSON examples, contradictory guidance, and missing non-use boundaries are all recorded as 0 / 2950.
 - Structural validation checks skill artifacts. Argument Validity measures model-generated calls.
 - Production deployment still needs least-privilege permissions, sandboxing, audit logs, rate limits, monitoring, and human approval for high-impact actions.
 - Converted benchmark schemas and synthetic tools should not be overstated as real production MCP deployments.
 
-## 馃П Limitations
+## Limitations
 
 - ReliaSkill focuses on MCP skill cold-start, not experience-rich skill evolution.
 - The corpus combines MCP-like tools, converted benchmark schemas, and explicitly marked synthetic tools.
@@ -480,7 +380,7 @@ Structured-call Exact Match evaluates whether the produced call matches the gold
 - Current evaluation emphasizes structured-call prediction and adjacent negative-control abstention; live execution and end-to-end task completion need further work.
 - The reliability score is rule-based and auditable, not a learned calibrated probability of correctness.
 
-## 馃摎 Additional Documentation
+## Additional Documentation
 
 - [Full experiment runbook](docs/FULL_EXPERIMENT_RUN.md)
 - [Local model setup](docs/LOCAL_MODELS.md)
@@ -490,7 +390,7 @@ Structured-call Exact Match evaluates whether the produced call matches the gold
 - [Larger MCP negative-control benchmark](docs/LARGER_MCP_NEGATIVE_CONTROL_BENCHMARK.md)
 - [Related-work baselines](docs/RELATED_WORK_BASELINES.md)
 
-## 馃摑 Citation
+## Citation
 
 ```bibtex
 @misc{zeng2026reliaskill,
