@@ -1,5 +1,7 @@
 # ReliaSkill Full Experiment Runbook
 
+> Maintainer note: this is an archival run-planning note from an earlier experiment buildout. It is retained for reproducibility context, but the README is the canonical public summary of the reported evaluation.
+
 This runbook describes the intended full evaluation path for ReliaSkill after the code and data-preparation updates. It is written for a single-machine, single-GPU workflow, with an RTX 5070 Ti-style 12 GB VRAM budget as the reference constraint.
 
 The goal is to produce reproducible evidence from saved logs, prediction records, and deterministic analysis scripts.

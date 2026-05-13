@@ -162,7 +162,7 @@ ReliaSkill is useful if you are studying or building:
 | `data/converted_external/` | Converted external benchmark records when local sources are available. |
 | `data/human_skills/` | Human-skill authoring packets and submitted human skills. |
 | `outputs/` | Generated packages, logs, tables, reports, plans, and experiment artifacts. |
-| `docs/` | Additional runbooks and setup notes. |
+| `docs/` | Website assets, setup notes, and archival maintainer documentation. |
 | `tests/` | Unit and regression tests. |
 
 ## Installation
@@ -274,7 +274,7 @@ python scripts\analyze_result_slices.py --run outputs\strong --tools data\proces
 python scripts\extract_scientific_comparisons.py --tables-dir outputs\tables
 ```
 
-The complete command chain and runbook are in [docs/FULL_EXPERIMENT_RUN.md](docs/FULL_EXPERIMENT_RUN.md).
+The full paper-scale run is computationally expensive. For development, local smoke tests and cached-result regeneration are usually sufficient; paper-scale experiment notes are kept as maintainer references rather than public result summaries.
 
 ## Datasets And Controls
 
@@ -379,15 +379,15 @@ The Qwen2.5-7B reliability ladder improves Joint Exact Match from `raw_mcp` at 1
 - Current evaluation emphasizes structured-call prediction and adjacent negative-control abstention; live execution and end-to-end task completion need further work.
 - The reliability score is rule-based and auditable, not a learned calibrated probability of correctness.
 
-## Additional Documentation
+## Documentation
 
-- [Full experiment runbook](docs/FULL_EXPERIMENT_RUN.md)
+Public-facing notes aligned with the reported paper framing:
+
 - [Local model setup](docs/LOCAL_MODELS.md)
-- [Dataset and model notes](docs/DATASETS_AND_MODELS.md)
-- [MCP cold-start reliability architecture](docs/MCP_COLD_START_RELIABILITY.md)
-- [Low-compute experiments](docs/LOW_COMPUTE_EXPERIMENTS.md)
-- [Larger MCP negative-control benchmark](docs/LARGER_MCP_NEGATIVE_CONTROL_BENCHMARK.md)
-- [Related-work baselines](docs/RELATED_WORK_BASELINES.md)
+- [Related-work and baseline mapping](docs/RELATED_WORK_BASELINES.md)
+- [MCPToolBench++ conversion notes](docs/LARGER_MCP_NEGATIVE_CONTROL_BENCHMARK.md)
+
+Older run-planning notes such as `docs/FULL_EXPERIMENT_RUN.md`, `docs/DATASETS_AND_MODELS.md`, `docs/MCP_COLD_START_RELIABILITY.md`, and `docs/LOW_COMPUTE_EXPERIMENTS.md` are intentionally not linked here because they reflect earlier experiment-planning states.
 
 ## Citation
 

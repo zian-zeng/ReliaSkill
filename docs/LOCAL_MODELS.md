@@ -4,7 +4,7 @@
 
 `local_hf` runs the generator and predictor directly through local Hugging Face model loading. It does not require an HTTP server.
 
-The current code lazily imports `transformers` and `torch`, so the rest of the repo still works even if those packages are not installed.
+The code lazily imports `transformers` and `torch`, so the rest of the repo still works even if those packages are not installed.
 
 ## Minimum requirements
 
@@ -36,14 +36,14 @@ Common practical variants:
 
 ## Example config
 
-Use [configs/experiment.local_hf.sample.json](configs/experiment.local_hf.sample.json) as a starting point.
+Use [configs/experiment.local_hf.sample.json](../configs/experiment.local_hf.sample.json) as a starting point.
 
 Recommended ready-made presets:
 
-- [experiment.local_hf.qwen25_3b.sample.json](configs/experiment.local_hf.qwen25_3b.sample.json)
-- [experiment.local_hf.qwen25_7b.sample.json](configs/experiment.local_hf.qwen25_7b.sample.json)
-- [experiment.local_hf.qwen25_14b_4bit.sample.json](configs/experiment.local_hf.qwen25_14b_4bit.sample.json)
-- [experiment.local_hf.qwen25_32b_4bit.sample.json](configs/experiment.local_hf.qwen25_32b_4bit.sample.json)
+- [experiment.local_hf.qwen25_3b.sample.json](../configs/experiment.local_hf.qwen25_3b.sample.json)
+- [experiment.local_hf.qwen25_7b.sample.json](../configs/experiment.local_hf.qwen25_7b.sample.json)
+- [experiment.local_hf.qwen25_14b_4bit.sample.json](../configs/experiment.local_hf.qwen25_14b_4bit.sample.json)
+- [experiment.local_hf.qwen25_32b_4bit.sample.json](../configs/experiment.local_hf.qwen25_32b_4bit.sample.json)
 
 Example:
 
@@ -106,10 +106,10 @@ python scripts\run_experiment.py --config configs\experiment.local_hf.sample.jso
 
 If your cluster serves the model behind an OpenAI-style endpoint, use:
 
-- [experiment.openai_compatible.qwen25_14b.sample.json](configs/experiment.openai_compatible.qwen25_14b.sample.json)
-- [experiment.openai_compatible.qwen25_32b.sample.json](configs/experiment.openai_compatible.qwen25_32b.sample.json)
+- [experiment.openai_compatible.qwen25_14b.sample.json](../configs/experiment.openai_compatible.qwen25_14b.sample.json)
+- [experiment.openai_compatible.qwen25_32b.sample.json](../configs/experiment.openai_compatible.qwen25_32b.sample.json)
 
 If your cluster runs direct `transformers` inference, use:
 
-- [experiment.local_hf.qwen25_14b_4bit.sample.json](configs/experiment.local_hf.qwen25_14b_4bit.sample.json)
-- [experiment.local_hf.qwen25_32b_4bit.sample.json](configs/experiment.local_hf.qwen25_32b_4bit.sample.json)
+- [experiment.local_hf.qwen25_14b_4bit.sample.json](../configs/experiment.local_hf.qwen25_14b_4bit.sample.json)
+- [experiment.local_hf.qwen25_32b_4bit.sample.json](../configs/experiment.local_hf.qwen25_32b_4bit.sample.json)

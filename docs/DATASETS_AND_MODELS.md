@@ -1,6 +1,8 @@
 # Datasets And Models
 
-## Current datasets on disk
+> Maintainer note: this is an archival planning note from an earlier experiment buildout. It is retained for reproducibility context, but the README is the canonical public summary of the reported evaluation.
+
+## Dataset Notes From Earlier Buildout
 
 ### Default experiment dataset
 

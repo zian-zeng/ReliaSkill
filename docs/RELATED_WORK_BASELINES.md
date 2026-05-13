@@ -1,21 +1,32 @@
 # Related Work And Baseline Mapping
 
-This note maps the current ReliaSkill comparison ladder to prior work that is closest in spirit.
+This note maps the ReliaSkill paper conditions and auxiliary codebase baselines to nearby tool-use and skill-library research.
 
-## Current Ladder
+## Reported Conditions
 
 - `raw_mcp`
-  Raw schema and documentation exposure with no normalization.
-- `schema_only`
-  Deterministic normalized schema package with no retrieval or semantic enrichment.
-- `retrieved_docs`
-  Retrieved documentation snippets baseline, closest to a lightweight Gorilla-style docs exposure.
-- `retrieved_candidates`
-  Candidate-tool retrieval baseline, closest to ToolLLM-style shortlist-and-route retrieval.
-- `retrieved_memory`
-  Skill-memory retrieval baseline inspired by HELPER and Voyager style example reuse.
+  Raw MCP-style tool record with schema and sparse documentation.
 - `generated_skill_base`
-  Base generated skill package with semantic hints, richer examples, and validation-aware candidate selection. This is a comparison condition, not the full ReliaSkill method.
+  Generated skill artifact with semantic guidance but without the stronger boundary-first reliability contract.
+- `curated_schema_reference`
+  Schema-normalized reference condition used to isolate the effect of faithful schemas from skill-style guidance.
+- `skill_prompt_boundary_first`
+  Boundary-first ReliaSkill condition emphasizing when-to-use, when-not-to-use, valid arguments, and abstention behavior.
+- `skill_prompt_verbose_docs`
+  Verbose ReliaSkill condition with expanded documentation and examples.
+
+## Auxiliary Baselines In The Codebase
+
+Some scripts also support retrieval- and memory-style variants that are useful for ablations but are not the headline five-condition result table:
+
+- `schema_only`
+  Deterministic normalized schema package with no semantic enrichment.
+- `retrieved_docs`
+  Retrieved documentation snippets, closest to a lightweight Gorilla-style documentation exposure.
+- `retrieved_candidates`
+  Candidate-tool retrieval, closest to ToolLLM / ToolBench-style shortlist-and-route evaluation.
+- `retrieved_memory`
+  Retrieved skill-memory examples, inspired by HELPER and Voyager-style example reuse.
 
 ## Closest Papers
 
@@ -23,43 +34,32 @@ This note maps the current ReliaSkill comparison ladder to prior work that is cl
 
 - Citation target: Li et al., EMNLP 2023
 - Link: https://aclanthology.org/2023.emnlp-main.187/
-- Why it matters:
-  Strong benchmark framing for tool-augmented LLMs and useful for evaluation discussion.
+- Relevance: benchmark framing for tool-augmented LLM evaluation.
 
 ### Gorilla
 
 - Link: https://arxiv.org/abs/2305.15334
-- Why it matters:
-  Closest prior baseline for retrieved raw API documentation at inference time.
-- Current repo mapping:
-  `retrieved_docs`
+- Relevance: retrieved raw API documentation at inference time.
+- Codebase mapping: `retrieved_docs`
 
 ### ToolLLM / ToolBench
 
 - Link: https://arxiv.org/abs/2307.16789
-- Why it matters:
-  Strong prior work on large tool corpora, candidate retrieval, and tool-use decision making.
-- Current repo mapping:
-  `retrieved_candidates`
+- Relevance: large tool corpora, candidate retrieval, and tool-use decision making.
+- Codebase mapping: `retrieved_candidates`
 
 ### HELPER / Memory-Augmented Instructable Agents
 
 - Link: https://openreview.net/forum?id=ogh9vskMDH
-- Why it matters:
-  Closest memory-style precedent for retrieving language-program or skill memories.
-- Current repo mapping:
-  `retrieved_memory`
+- Relevance: retrieving language-program or skill memories.
+- Codebase mapping: `retrieved_memory`
 
 ### Voyager
 
 - Link: https://openreview.net/forum?id=ehfRiF0R3a
-- Why it matters:
-  Important inspiration for persistent skill libraries and example reuse, even though it is not an MCP tool benchmark paper.
-- Current repo mapping:
-  `retrieved_memory`
+- Relevance: persistent skill libraries and example reuse, although it is not an MCP tool benchmark.
+- Codebase mapping: `retrieved_memory`
 
-## What Is Still Missing For A Stronger Paper
+## Extensions
 
-- A larger and more diverse MCP tool benchmark (in progress with external harvested corpus).
-- More exhaustive ablations across different model families (Llama 3, Mistral, etc.).
-- Significance-aware comparison on larger test splits.
+The main paper emphasizes cold-start reliability before live server execution. Natural extensions include larger live-MCP server execution studies, broader proprietary and open-model coverage, and significance analysis over larger benchmark slices.

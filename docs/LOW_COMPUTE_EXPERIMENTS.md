@@ -1,15 +1,17 @@
 # ReliaSkill Low-Compute Experimental Story
 
-The revised paper should explicitly frame ReliaSkill as a low-compute reliability method. The system does not rely on trajectory pools, lifelong memory accumulation, multi-agent co-evolution, or full executable skill-package search. The intended claim is narrower and stronger: deterministic validation, behavior-grounded negative controls, targeted repair, and deployment gating can make compact MCP skill artifacts safer and more useful before an agent sees them.
+> Maintainer note: this is an archival planning note from an earlier experiment buildout. It is retained for development context, but the README is the canonical public summary of the reported evaluation.
 
-## Paper Updates To Make
+This note records an earlier low-compute framing for ReliaSkill. The system does not rely on trajectory pools, lifelong memory accumulation, multi-agent co-evolution, or full executable skill-package search. The intended claim is narrower: deterministic validation, behavior-grounded negative controls, targeted repair, and deployment gating can make compact MCP skill artifacts safer and more useful before an agent sees them.
 
-Add this story in these places:
+## Earlier Draft Notes
+
+The earlier planning note targeted these sections:
 
 1. **Abstract / Introduction**: state that the method is designed for cold-start MCP settings with limited compute and sparse documentation. Mention that core verification is deterministic and that repair is section-level rather than full skill regeneration.
 2. **Method**: add a paragraph after the pipeline overview explaining that validation, scoring, and gating are intentionally rule-based in the first version. This is a design choice for reproducibility and low compute, not a limitation hidden in implementation.
 3. **Experimental Setup**: report the hardware budget: one workstation-class setup with RTX A5000 / RTX 5070 Ti-class GPUs. Say experiments use small local instruction models first, with larger local models only as optional baselines.
-4. **Baselines**: include “smaller model + reliable/gated skill” versus “larger model + raw MCP schema” as a main comparison. This directly tests whether verifier-backed skill artifacts can substitute for scaling the downstream model.
+4. **Baselines**: include "smaller model + reliable/gated skill" versus "larger model + raw MCP schema" as a main comparison. This directly tests whether verifier-backed skill artifacts can substitute for scaling the downstream model.
 5. **Limitations**: say that the current benchmark emphasizes pre-deployment skill reliability and tool-call structure, not full live MCP server execution. Larger server-execution studies such as MCP-Atlas are complementary.
 
 Suggested wording:

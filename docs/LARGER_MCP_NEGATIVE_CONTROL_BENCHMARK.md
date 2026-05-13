@@ -1,4 +1,6 @@
-# Larger MCP Negative-Control Benchmark
+# MCPToolBench++ Conversion Notes
+
+This note records the optional larger-benchmark path used to convert MCPToolBench++ records into ReliaSkill-style positive cases and adjacent negative controls.
 
 The recommended larger benchmark source is **MCPToolBench++**:
 
