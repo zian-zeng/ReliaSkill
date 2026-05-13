@@ -19,8 +19,13 @@ DEFAULT_CONDITION_TOKEN_OVERHEAD = {
     "raw_mcp": 900,
     "schema_only": 450,
     "docs_only": 350,
+    "prompt_only_careful_tool_use": 300,
+    "retrieval_tool_card": 450,
     "generated_skill_base": 300,
     "autoskill_base": 300,
+    "generic_validator_no_behavior_tests": 350,
+    "naive_skill": 300,
+    "validated_skill": 350,
     "skill_ultra_compact": 150,
     "skill_compact": 300,
     "skill_medium": 600,
@@ -176,7 +181,8 @@ def build_run_plan(
         tool_names = tool_names[:configured_max_tools]
     selected_tools = _select_sharded_tools(tool_names, shard_index, num_shards)
     selected_tool_set = set(selected_tools)
-    selected_tasks = [task for task in tasks if task.tool_name in selected_tool_set]
+    balanced_tasks = _balanced_tasks_for_tools(config, tasks, tool_names)
+    selected_tasks = [task for task in balanced_tasks if task.tool_name in selected_tool_set]
     model_configs = _load_models(config, base_dir=config_path.resolve().parent if config_path else Path.cwd())
     examples_per_second_default = float(scheduler_config.get("examples_per_second") or 0.25)
     max_batch_size = int(scheduler_config.get("max_batch_size") or 2)
@@ -188,10 +194,10 @@ def build_run_plan(
     runs: List[Dict[str, Any]] = []
     target_tools = _optional_int(config.get("target_tools"))
     target_domains = _optional_int(config.get("target_domains"))
-    if target_tools and len(selected_tools) < target_tools:
-        warnings.append(f"Configured target_tools={target_tools}, but current tools_path provides {len(selected_tools)} selected tools.")
+    if target_tools and len(tool_names) < target_tools:
+        warnings.append(f"Configured target_tools={target_tools}, but current tools_path provides {len(tool_names)} selected tools.")
     if target_domains:
-        observed_domains = _observed_domains(tools, selected_tools, raw_domain_map)
+        observed_domains = _observed_domains(tools, tool_names, raw_domain_map)
         if len(observed_domains) < target_domains:
             warnings.append(
                 f"Configured target_domains={target_domains}, but current tools_path provides {len(observed_domains)} selected domains."
@@ -417,6 +423,28 @@ def _select_sharded_tools(tool_names: List[str], shard_index: int | None, num_sh
     if shard_index < 0 or shard_index >= num_shards:
         raise ValueError("shard_index must be in [0, num_shards).")
     return [name for index, name in enumerate(tool_names) if index % num_shards == shard_index]
+
+
+def _balanced_tasks_for_tools(config: Dict[str, Any], tasks: Sequence[Any], tool_names: Sequence[str]) -> List[Any]:
+    tool_set = set(tool_names)
+    controls = config.get("controls") if isinstance(config.get("controls"), dict) else {}
+    pos_limit = _optional_int(controls.get("positives_per_tool_total") or config.get("positives_per_tool"))
+    neg_limit = _optional_int(controls.get("negatives_per_tool_total") or config.get("negatives_per_tool"))
+    filtered = [task for task in tasks if task.tool_name in tool_set]
+    if pos_limit is None and neg_limit is None:
+        return filtered
+
+    grouped: Dict[str, Dict[str, List[Any]]] = {}
+    for task in sorted(filtered, key=lambda item: str(item.task_id)):
+        bucket = "positive" if getattr(task, "should_trigger", True) else "negative"
+        grouped.setdefault(task.tool_name, {"positive": [], "negative": []})[bucket].append(task)
+
+    selected: List[Any] = []
+    for tool_name in sorted(tool_set):
+        buckets = grouped.get(tool_name, {"positive": [], "negative": []})
+        selected.extend(buckets["positive"][:pos_limit] if pos_limit is not None else buckets["positive"])
+        selected.extend(buckets["negative"][:neg_limit] if neg_limit is not None else buckets["negative"])
+    return sorted(selected, key=lambda item: str(item.task_id))
 
 
 def _model_guard_messages(model: ModelConfig, *, gpu_budget_gb: float, max_batch_size: int) -> tuple[List[str], List[str]]:

@@ -44,6 +44,7 @@ def write_skill_package(
     reliability_score_json = out / "reliability_score.json"
     repair_report_json = out / "repair_report.json"
     metadata_json = out / "metadata.json"
+    skill_json = out / "skill.json"
 
     with skill_md.open("w", encoding="utf-8") as f:
         f.write(f"# {tool.tool_name}\n\n")
@@ -137,3 +138,6 @@ def write_skill_package(
     }
     with metadata_json.open("w", encoding="utf-8") as f:
         json.dump(metadata, f, indent=2, ensure_ascii=False)
+
+    with skill_json.open("w", encoding="utf-8") as f:
+        json.dump(skill.model_dump(), f, indent=2, ensure_ascii=False)

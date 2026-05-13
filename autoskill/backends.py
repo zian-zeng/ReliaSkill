@@ -298,7 +298,7 @@ def build_backend_from_config(config: Dict[str, Any] | None) -> GenerationBacken
     raise ValueError(f"Unsupported generation backend type: {backend_type}")
 
 
-def safe_generate_skill(tool: ToolIR, backend: GenerationBackend) -> GeneratedSkill:
+def safe_generate_skill(tool: ToolIR, backend: GenerationBackend, *, allow_fallback: bool = True) -> GeneratedSkill:
     try:
         skill = backend.generate_skill(tool)
         return _append_generation_backend_trace(
@@ -317,6 +317,8 @@ def safe_generate_skill(tool: ToolIR, backend: GenerationBackend) -> GeneratedSk
         urllib.error.HTTPError,
         TimeoutError,
     ) as exc:
+        if not allow_fallback:
+            raise
         fallback_skill = HeuristicBackend().generate_skill(tool)
         return _append_generation_backend_trace(
             fallback_skill,

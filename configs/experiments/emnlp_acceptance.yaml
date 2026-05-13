@@ -1,0 +1,114 @@
+experiment_scale: emnlp_acceptance
+description: Claim-ready EMNLP experiment plan with seven predictors, reviewer-critical baselines, negative controls, routing, slices, and live-execution hooks.
+seed: 42
+tools_path: data/raw_mcp/tools.jsonl
+tasks_path: data/controls/test.jsonl
+output_root: outputs/emnlp_acceptance
+generator:
+  type: local_hf
+  model_name_or_path: Qwen/Qwen2.5-14B-Instruct
+  load_in_4bit: true
+  torch_dtype: bfloat16
+  device_map: auto
+  max_new_tokens: 768
+  generation_kwargs:
+    temperature: 0.0
+    repetition_penalty: 1.05
+runtime:
+  strict_backends: true
+
+target_tools: 290
+target_domains: 10
+positives_per_tool: 3
+negatives_per_tool: 2
+routing_candidate_sizes: [4, 8]
+live_execution:
+  enabled: true
+  subset_size: 100
+  domains: [filesystem, database/sql, git/version-control]
+shared_skill_packages:
+  root: outputs/emnlp_acceptance/shared_packages
+  dev_controls_path: data/controls/dev.jsonl
+  reliability_predictor:
+    type: heuristic
+  max_repair_rounds: 2
+  deploy_threshold: 85.0
+
+models:
+  - config: configs/models/llama_3_2_1b_instruct_4bit.yaml
+    batch_size: 2
+  - config: configs/models/qwen2_5_1_5b_instruct_4bit.yaml
+    batch_size: 2
+  - config: configs/models/gemma_2_2b_it_4bit.yaml
+    batch_size: 2
+  - config: configs/models/phi_3_5_mini_instruct_4bit.yaml
+    batch_size: 2
+  - config: configs/models/qwen2_5_7b_instruct_4bit.yaml
+    batch_size: 1
+  - config: configs/models/llama_3_1_8b_instruct_4bit.yaml
+    batch_size: 1
+  - config: configs/models/gemma_2_9b_it_4bit.yaml
+    batch_size: 1
+
+conditions:
+  - raw_mcp
+  - schema_only
+  - raw_schema_plus_examples
+  - prompt_only_careful_tool_use
+  - retrieval_tool_card
+  - generated_docs_no_validation
+  - generic_validator_no_behavior_tests
+  - generated_skill_base
+  - validated_skill
+  - repaired_skill
+  - gated_skill
+  - generated_docs_verbose
+  - raw_docs_full
+  - skill_prompt_boundary_first
+  - skill_prompt_verbose_docs
+
+data:
+  config: configs/data/emnlp_scale.yaml
+  max_tools: 290
+  min_domains_required: 10
+controls:
+  config: configs/controls/emnlp_scale.yaml
+  positives_per_tool_total: 3
+  negatives_per_tool_total: 2
+routing:
+  config: configs/routing/distractor_inventory.yaml
+  candidate_set_sizes: [4, 8]
+skills:
+  multi_candidate_config: configs/skills/multi_candidate.yaml
+  candidate_k: 3
+  compactness_config: configs/skills/compactness_variants.yaml
+repair:
+  config: configs/repair/repair_strategies.yaml
+
+scheduler:
+  one_gpu: true
+  resume: true
+  group_by_model: true
+  run_all_conditions_before_unload: true
+  max_batch_size: 2
+  prompt_safety_margin_tokens: 256
+  include_routing: true
+  examples_per_second: 0.20
+  estimated_bytes_per_call: 5120
+  estimated_bytes_per_token: 1.5
+  condition_token_overheads:
+    raw_mcp: 900
+    schema_only: 450
+    raw_schema_plus_examples: 950
+    prompt_only_careful_tool_use: 300
+    retrieval_tool_card: 450
+    generated_docs_no_validation: 900
+    generic_validator_no_behavior_tests: 350
+    generated_skill_base: 300
+    validated_skill: 350
+    repaired_skill: 450
+    gated_skill: 475
+    generated_docs_verbose: 1200
+    raw_docs_full: 1600
+    skill_prompt_boundary_first: 350
+    skill_prompt_verbose_docs: 1200

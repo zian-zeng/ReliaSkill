@@ -219,6 +219,8 @@ def _prediction_audit_metadata(
     backend_name: str,
     model_name: str,
     quantization: str = "none",
+    should_call: bool = True,
+    abstention_reason: str | None = None,
 ) -> Dict[str, Any]:
     return {
         **_collect_prediction_metadata(skill),
@@ -226,10 +228,48 @@ def _prediction_audit_metadata(
         "raw_prompt": prompt,
         "raw_model_output": raw_model_output,
         "parsed_prediction": dict(parsed_arguments),
+        "should_call": bool(should_call),
+        "abstention_reason": abstention_reason,
         "model_name": model_name,
         "quantization": quantization,
         "predictor_backend": backend_name,
     }
+
+
+def _parse_should_call(data: Dict[str, Any]) -> tuple[bool, str | None]:
+    raw = data.get("should_call", data.get("triggered", True))
+    if isinstance(raw, str):
+        should_call = raw.strip().lower() not in {"false", "0", "no", "abstain", "do_not_call"}
+    else:
+        should_call = bool(raw)
+    reason = data.get("abstention_reason")
+    return should_call, str(reason) if reason is not None else None
+
+
+def _heuristic_abstention_reason(user_request: str, skill: GeneratedSkill) -> str | None:
+    lowered = user_request.lower()
+    explicit_markers = (
+        "no tool call",
+        "do not call",
+        "don't call",
+        "without using",
+        "planning only",
+        "checklist",
+        "no tool yet",
+        "unrelated to",
+        "do not satisfy this",
+        "should not trigger",
+        "ask for clarification",
+    )
+    if any(marker in lowered for marker in explicit_markers):
+        return "request_explicitly_asks_not_to_call"
+    for line in skill.when_not_to_use:
+        line_lower = line.lower()
+        if "missing" in line_lower and any(marker in lowered for marker in ("do not know", "don't know", "missing", "not sure")):
+            return "missing_required_information"
+        if "adjacent" in line_lower and "not" in lowered:
+            return "adjacent_or_boundary_mismatch"
+    return None
 
 
 class PredictorBackend(ABC):
@@ -245,53 +285,64 @@ class HeuristicPredictorBackend(PredictorBackend):
 
     def predict(self, tool: ToolIR, skill: GeneratedSkill, task: EvalTask) -> EvalPrediction:
         prompt = build_prediction_prompt(tool, skill, task.user_request)
+        abstention_reason = _heuristic_abstention_reason(task.user_request, skill)
+        should_call = abstention_reason is None
         predicted = {}
-        for arg in tool.arguments:
-            if arg.default is not None:
-                predicted[arg.name] = arg.default
+        if should_call:
+            for arg in tool.arguments:
+                if arg.default is not None:
+                    predicted[arg.name] = arg.default
 
-        for arg in tool.arguments:
-            value = _infer_argument_value(arg.name, task.user_request, skill)
-            if value is None and skill.semantic_hints:
-                value = _infer_semantic_hint_value(tool, arg.name, task.user_request, skill)
-            if value is None:
-                if not _should_skip_example_inference(arg.name, task.user_request, skill) and not (
-                    (arg.name == "head" and "tail" in predicted) or (arg.name == "tail" and "head" in predicted)
-                ):
-                    value = _infer_from_examples(arg.name, task.user_request, skill)
-            if value is None:
-                if arg.required and arg.name not in predicted:
-                    fallback = skill.argument_template.get(arg.name)
-                    if fallback is None:
+            for arg in tool.arguments:
+                value = _infer_argument_value(arg.name, task.user_request, skill)
+                if value is None and skill.semantic_hints:
+                    value = _infer_semantic_hint_value(tool, arg.name, task.user_request, skill)
+                if value is None:
+                    if not _should_skip_example_inference(arg.name, task.user_request, skill) and not (
+                        (arg.name == "head" and "tail" in predicted) or (arg.name == "tail" and "head" in predicted)
+                    ):
+                        value = _infer_from_examples(arg.name, task.user_request, skill)
+                if value is None:
+                    if arg.required and arg.name not in predicted:
+                        fallback = skill.argument_template.get(arg.name)
+                        if fallback is None:
+                            continue
+                        predicted[arg.name] = fallback
                         continue
-                    predicted[arg.name] = fallback
-                    continue
-                if not arg.required:
-                    continue
-            else:
-                predicted[arg.name] = value
+                    if not arg.required:
+                        continue
+                else:
+                    predicted[arg.name] = value
 
-        if skill.baseline_name == "raw_mcp":
-            optional_names = {arg.name for arg in tool.arguments if not arg.required}
-            predicted = {
-                key: value
-                for key, value in predicted.items()
-                if key not in optional_names or value not in (None, False)
-            }
+            if skill.baseline_name == "raw_mcp":
+                optional_names = {arg.name for arg in tool.arguments if not arg.required}
+                predicted = {
+                    key: value
+                    for key, value in predicted.items()
+                    if key not in optional_names or value not in (None, False)
+                }
 
         return EvalPrediction(
             task_id=task.task_id,
             tool_name=task.tool_name,
             baseline_name=skill.baseline_name,
             predicted_arguments=predicted,
+            should_call=should_call,
+            abstention_reason=abstention_reason,
             exposure_text=render_exposure(tool, skill),
             metadata=_prediction_audit_metadata(
                 skill=skill,
                 prompt=prompt,
-                raw_model_output=json.dumps({"arguments": predicted}, ensure_ascii=False, sort_keys=True),
+                raw_model_output=json.dumps(
+                    {"should_call": should_call, "arguments": predicted, "abstention_reason": abstention_reason},
+                    ensure_ascii=False,
+                    sort_keys=True,
+                ),
                 parsed_arguments=predicted,
                 backend_name=self.backend_name,
                 model_name="heuristic",
+                should_call=should_call,
+                abstention_reason=abstention_reason,
             ),
         )
 
@@ -330,7 +381,7 @@ class OpenAICompatiblePredictorBackend(PredictorBackend):
         payload = {
             "model": self.model,
             "messages": [
-                {"role": "system", "content": "You produce only JSON tool arguments for MCP tool calls."},
+                {"role": "system", "content": "You produce only JSON tool-call decisions and arguments for MCP tools."},
                 {"role": "user", "content": prompt},
             ],
             "temperature": 0.0,
@@ -339,12 +390,17 @@ class OpenAICompatiblePredictorBackend(PredictorBackend):
         response = self._post_json(payload)
         content = response["choices"][0]["message"]["content"]
         data = parse_json_object_output(content)
+        should_call, abstention_reason = _parse_should_call(data)
         predicted_arguments = dict(data.get("arguments", {}))
+        if not should_call:
+            predicted_arguments = {}
         return EvalPrediction(
             task_id=task.task_id,
             tool_name=task.tool_name,
             baseline_name=skill.baseline_name,
             predicted_arguments=predicted_arguments,
+            should_call=should_call,
+            abstention_reason=abstention_reason,
             exposure_text=render_exposure(tool, skill),
             metadata=_prediction_audit_metadata(
                 skill=skill,
@@ -354,6 +410,8 @@ class OpenAICompatiblePredictorBackend(PredictorBackend):
                 backend_name=self.backend_name,
                 model_name=self.model,
                 quantization=self.quantization,
+                should_call=should_call,
+                abstention_reason=abstention_reason,
             ),
         )
 
@@ -393,18 +451,23 @@ class LocalHFPredictorBackend(PredictorBackend):
         prompt = build_prediction_prompt(tool, skill, task.user_request)
         content = self.runner.generate_chat(
             [
-                {"role": "system", "content": "You produce only JSON tool arguments for MCP tool calls."},
+                {"role": "system", "content": "You produce only JSON tool-call decisions and arguments for MCP tools."},
                 {"role": "user", "content": prompt},
             ],
             temperature=0.0,
         )
         data = parse_json_object_output(content)
+        should_call, abstention_reason = _parse_should_call(data)
         predicted_arguments = dict(data.get("arguments", {}))
+        if not should_call:
+            predicted_arguments = {}
         return EvalPrediction(
             task_id=task.task_id,
             tool_name=task.tool_name,
             baseline_name=skill.baseline_name,
             predicted_arguments=predicted_arguments,
+            should_call=should_call,
+            abstention_reason=abstention_reason,
             exposure_text=render_exposure(tool, skill),
             metadata=_prediction_audit_metadata(
                 skill=skill,
@@ -414,6 +477,8 @@ class LocalHFPredictorBackend(PredictorBackend):
                 backend_name=self.backend_name,
                 model_name=self.model_name_or_path,
                 quantization=self.quantization,
+                should_call=should_call,
+                abstention_reason=abstention_reason,
             ),
         )
 
@@ -461,7 +526,14 @@ def build_predictor_from_config(config: Dict[str, Any] | None) -> PredictorBacke
     raise ValueError(f"Unsupported predictor backend type: {backend_type}")
 
 
-def safe_predict(tool: ToolIR, skill: GeneratedSkill, task: EvalTask, backend: PredictorBackend) -> EvalPrediction:
+def safe_predict(
+    tool: ToolIR,
+    skill: GeneratedSkill,
+    task: EvalTask,
+    backend: PredictorBackend,
+    *,
+    allow_fallback: bool = True,
+) -> EvalPrediction:
     try:
         prediction = backend.predict(tool, skill, task)
         prediction.metadata = {
@@ -482,6 +554,8 @@ def safe_predict(tool: ToolIR, skill: GeneratedSkill, task: EvalTask, backend: P
         urllib.error.HTTPError,
         TimeoutError,
     ) as exc:
+        if not allow_fallback:
+            raise
         prediction = HeuristicPredictorBackend().predict(tool, skill, task)
         prediction.metadata = {
             **prediction.metadata,

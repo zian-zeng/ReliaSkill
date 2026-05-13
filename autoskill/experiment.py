@@ -3,7 +3,7 @@ from tqdm import tqdm
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Sequence, Tuple
 
 from autoskill.benchmark import load_benchmark_tasks
 from autoskill.analysis import summarize_error_taxonomy, summarize_method_wins
@@ -122,56 +122,77 @@ def load_tools(raw_path: str | Path) -> Dict[str, Any]:
     }
 
 
-def build_skill_variants(tool: Any, tools: Dict[str, Any], generator: SkillGenerator, package_manager_dir: Path | None = None) -> List[Any]:
+def _load_packaged_skill(package_dir: Path) -> Any | None:
+    from autoskill.ir import GeneratedSkill
+
+    skill_json = package_dir / "skill.json"
+    if skill_json.exists():
+        with skill_json.open("r", encoding="utf-8") as f:
+            return GeneratedSkill(**json.load(f))
+
+    metadata_path = package_dir / "metadata.json"
+    skill_md_path = package_dir / "SKILL.md"
+    if not metadata_path.exists() or not skill_md_path.exists():
+        return None
+    with metadata_path.open("r", encoding="utf-8") as f:
+        meta = json.load(f)
+    content = skill_md_path.read_text(encoding="utf-8")
+    summary = ""
+    if "## Summary\n" in content:
+        summary = content.split("## Summary\n", 1)[1].split("## When to use", 1)[0].strip()
+    return GeneratedSkill(
+        baseline_name=meta.get("baseline_name", package_dir.name),
+        skill_summary=summary,
+        when_to_use=[],
+        when_not_to_use=[],
+        argument_template={},
+        semantic_hints=meta.get("semantic_hints", {}),
+        examples=[],
+        method_trace=meta.get("method_trace", []),
+        metadata=meta.get("skill_metadata", {}),
+    )
+
+
+def _packaged_condition_path(package_root: Path, tool_name: str, condition: str) -> Path:
+    return package_root / _safe_dir_name(tool_name) / _safe_dir_name(condition)
+
+
+def _find_packaged_skill(package_root: Path, tool: Any, condition: str) -> Any | None:
+    candidates = [_packaged_condition_path(package_root, tool.tool_name, condition)]
+    if condition == GENERATED_SKILL_BASE:
+        candidates.extend(
+            [
+                _packaged_condition_path(package_root, tool.tool_name, AUTOSKILL_BASE),
+                package_root.parent / "benchmark" / _safe_dir_name(tool.tool_name) / GENERATED_SKILL_BASE,
+                package_root.parent / "benchmark" / _safe_dir_name(tool.tool_name) / AUTOSKILL_BASE,
+            ]
+        )
+    for candidate in candidates:
+        if candidate.exists():
+            skill = _load_packaged_skill(candidate)
+            if skill is not None:
+                skill.baseline_name = normalize_condition_name(skill.baseline_name)
+                return skill
+    return None
+
+
+def build_skill_variants(
+    tool: Any,
+    tools: Dict[str, Any],
+    generator: SkillGenerator,
+    package_manager_dir: Path | None = None,
+    *,
+    allow_package_generation: bool = True,
+) -> List[Any]:
     llm_skill = None
     if package_manager_dir:
-        # Check primary package dir, then the legacy autoskill_base cache.
-        candidate_path = package_manager_dir / _safe_dir_name(tool.tool_name) / GENERATED_SKILL_BASE
-        # Fallback to benchmark dir if primary is missing
-        if not candidate_path.exists():
-            candidates = [
-                package_manager_dir / _safe_dir_name(tool.tool_name) / AUTOSKILL_BASE,
-                package_manager_dir.parent / "benchmark" / _safe_dir_name(tool.tool_name) / GENERATED_SKILL_BASE,
-                package_manager_dir.parent / "benchmark" / _safe_dir_name(tool.tool_name) / AUTOSKILL_BASE,
-            ]
-            for fallback_path in candidates:
-                if fallback_path.exists():
-                    candidate_path = fallback_path
-                    break
-
-        if candidate_path.exists():
-            try:
-                from autoskill.ir import GeneratedSkill
-                skill_json = candidate_path / "skill.json"
-                if skill_json.exists():
-                    with skill_json.open("r", encoding="utf-8") as f:
-                        llm_skill = GeneratedSkill(**json.load(f))
-                else:
-                    # RECONSTRUCT from metadata and SKILL.md
-                    metadata_path = candidate_path / "metadata.json"
-                    skill_md_path = candidate_path / "SKILL.md"
-                    if metadata_path.exists() and skill_md_path.exists():
-                        with metadata_path.open("r", encoding="utf-8") as f:
-                            meta = json.load(f)
-                        content = skill_md_path.read_text(encoding="utf-8")
-                        summary = ""
-                        if "## Summary\n" in content:
-                            summary = content.split("## Summary\n")[1].split("## When to use")[0].strip()
-                        
-                        llm_skill = GeneratedSkill(
-                            baseline_name=meta.get("baseline_name", GENERATED_SKILL_BASE),
-                            skill_summary=summary,
-                            when_to_use=[], # Fallback
-                            when_not_to_use=[], # Fallback
-                            argument_template={},
-                            semantic_hints=meta.get("semantic_hints", {}),
-                            examples=[], # Loaded separately if needed
-                            method_trace=meta.get("method_trace", [])
-                        )
-            except:
-                pass
+        llm_skill = _find_packaged_skill(package_manager_dir, tool, GENERATED_SKILL_BASE)
     
     if llm_skill is None:
+        if not allow_package_generation:
+            raise FileNotFoundError(
+                f"Missing shared `{GENERATED_SKILL_BASE}` package for tool `{tool.tool_name}` in {package_manager_dir}."
+            )
         llm_skill = generator.generate(tool)
         if package_manager_dir:
             # SAVE FOR FUTURE
@@ -198,11 +219,40 @@ def build_skill_variants(tool: Any, tools: Dict[str, Any], generator: SkillGener
     ]
 
 
-def build_skill_variant_map(tool: Any, tools: Dict[str, Any], generator: SkillGenerator, allowed_conditions: List[str] | None = None, package_manager_dir: Path | None = None) -> Dict[str, Any]:
-    variants = {skill.baseline_name: skill for skill in build_skill_variants(tool, tools, generator, package_manager_dir=package_manager_dir)}
+def build_skill_variant_map(
+    tool: Any,
+    tools: Dict[str, Any],
+    generator: SkillGenerator,
+    allowed_conditions: List[str] | None = None,
+    package_manager_dir: Path | None = None,
+    *,
+    allow_package_generation: bool = True,
+) -> Dict[str, Any]:
+    normalized_allowed = normalize_condition_names(allowed_conditions)
+    variants = {
+        skill.baseline_name: skill
+        for skill in build_skill_variants(
+            tool,
+            tools,
+            generator,
+            package_manager_dir=package_manager_dir,
+            allow_package_generation=allow_package_generation,
+        )
+    }
+    if package_manager_dir and normalized_allowed:
+        for condition in normalized_allowed:
+            packaged = _find_packaged_skill(package_manager_dir, tool, condition)
+            if packaged is not None:
+                packaged.baseline_name = condition
+                variants[condition] = packaged
     if allowed_conditions is not None:
-        allowed_conditions = normalize_condition_names(allowed_conditions)
-        variants = {k: v for k, v in variants.items() if k in allowed_conditions}
+        variants = {k: v for k, v in variants.items() if k in set(normalized_allowed or [])}
+        if not allow_package_generation:
+            missing = sorted(set(normalized_allowed or []) - set(variants))
+            if missing:
+                raise FileNotFoundError(
+                    f"Missing read-only shared packages for tool `{tool.tool_name}`: {', '.join(missing)}"
+                )
     return variants
 
 
@@ -290,18 +340,34 @@ def run_benchmark_pipeline(
     generator: SkillGenerator | None = None,
     predictor: PredictorBackend | None = None,
     allowed_conditions: List[str] | None = None,
+    tasks: List[Any] | None = None,
+    package_manager_dir: str | Path | None = None,
+    allow_package_generation: bool = True,
+    allow_predictor_fallback: bool = True,
+    model_name: str | None = None,
+    model_slug: str | None = None,
+    shard_index: int | None = None,
+    num_shards: int | None = None,
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, Any]]:
     out_dir = Path(output_dir)
     generator = generator or SkillGenerator()
     predictor = predictor or build_predictor_from_env()
-    tasks = load_benchmark_tasks(tasks_path)
+    tasks = tasks if tasks is not None else load_benchmark_tasks(tasks_path)
+    package_root = Path(package_manager_dir) if package_manager_dir is not None else out_dir.parent / "packages"
     all_scores: List[Dict[str, Any]] = []
 
     for task in tqdm(tasks, desc="[AutoSkill] Running benchmark"):
         if task.tool_name not in tools:
             continue
         tool = tools[task.tool_name]
-        variants = build_skill_variant_map(tool, tools, generator, allowed_conditions=allowed_conditions, package_manager_dir=out_dir.parent / "packages")
+        variants = build_skill_variant_map(
+            tool,
+            tools,
+            generator,
+            allowed_conditions=allowed_conditions,
+            package_manager_dir=package_root,
+            allow_package_generation=allow_package_generation,
+        )
         for skill in variants.values():
             report = validate_skill(tool, skill)
             target_dir = out_dir / _safe_dir_name(task.tool_name) / _safe_dir_name(skill.baseline_name)
@@ -312,6 +378,7 @@ def run_benchmark_pipeline(
                 try:
                     with result_path.open("r", encoding="utf-8") as f:
                         score = json.load(f)
+                        _annotate_run_record(score, model_name=model_name, model_slug=model_slug, shard_index=shard_index, num_shards=num_shards)
                         all_scores.append(score)
                         continue
                 except:
@@ -320,7 +387,7 @@ def run_benchmark_pipeline(
             write_skill_package(target_dir, tool, skill, report)
             _write_condition_prompt(out_dir.parent / "packages", tool, skill)
             runtime_skill, retrieval_context = contextualize_skill_for_task(task, tool, skill, tools)
-            prediction = safe_predict(tool, runtime_skill, task, predictor)
+            prediction = safe_predict(tool, runtime_skill, task, predictor, allow_fallback=allow_predictor_fallback)
             score = score_prediction(task, tool, prediction)
             score["predictor_configured_backend"] = prediction.metadata.get("configured_predictor_backend", predictor.backend_name)
             score["predictor_backend"] = prediction.metadata.get("actual_predictor_backend", predictor.backend_name)
@@ -328,6 +395,7 @@ def run_benchmark_pipeline(
             score["predictor_fallback_reason"] = prediction.metadata.get("predictor_fallback_reason")
             score["user_request"] = task.user_request
             score["retrieval_context"] = retrieval_context
+            _annotate_run_record(score, model_name=model_name, model_slug=model_slug, shard_index=shard_index, num_shards=num_shards)
             all_scores.append(score)
 
             with result_path.open("w", encoding="utf-8") as f:
@@ -367,17 +435,44 @@ def run_routing_benchmark_pipeline(
     generator: SkillGenerator | None = None,
     predictor: PredictorBackend | None = None,
     allowed_conditions: List[str] | None = None,
+    tasks: List[Any] | None = None,
+    package_manager_dir: str | Path | None = None,
+    allow_package_generation: bool = True,
+    allow_predictor_fallback: bool = True,
+    benchmark_dir: str | Path | None = None,
+    model_name: str | None = None,
+    model_slug: str | None = None,
+    shard_index: int | None = None,
+    num_shards: int | None = None,
 ) -> tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, Any]]:
     out_dir = Path(output_dir)
     generator = generator or SkillGenerator()
     predictor = predictor or build_predictor_from_env()
-    tasks = load_benchmark_tasks(tasks_path)
+    tasks = tasks if tasks is not None else load_benchmark_tasks(tasks_path)
+    package_root = Path(package_manager_dir) if package_manager_dir is not None else out_dir.parent / "packages"
 
     skill_variants_by_tool = {
-        tool_name: build_skill_variant_map(tool, tools, generator, allowed_conditions=allowed_conditions, package_manager_dir=out_dir.parent / "packages")
+        tool_name: build_skill_variant_map(
+            tool,
+            tools,
+            generator,
+            allowed_conditions=allowed_conditions,
+            package_manager_dir=package_root,
+            allow_package_generation=allow_package_generation,
+        )
         for tool_name, tool in tools.items()
     }
-    routing_scores = run_routing_pipeline(tasks, tools, skill_variants_by_tool, predictor, output_dir=out_dir, benchmark_dir=out_dir.parent / "benchmark")
+    routing_scores = run_routing_pipeline(
+        tasks,
+        tools,
+        skill_variants_by_tool,
+        predictor,
+        output_dir=out_dir,
+        benchmark_dir=Path(benchmark_dir) if benchmark_dir is not None else out_dir.parent / "benchmark",
+        allow_predictor_fallback=allow_predictor_fallback,
+    )
+    for score in routing_scores:
+        _annotate_run_record(score, model_name=model_name, model_slug=model_slug, shard_index=shard_index, num_shards=num_shards)
     summary = summarize_routing_scores(routing_scores)
     summary_by_tool = summarize_routing_scores_by_tool(routing_scores)
     summary_by_split = summarize_routing_scores_by_split(routing_scores)
@@ -388,6 +483,24 @@ def run_routing_benchmark_pipeline(
         json.dump(routing_scores, f, indent=2, ensure_ascii=False)
     _write_jsonl(out_dir / "routing_records.jsonl", routing_scores)
     return routing_scores, summary, {"by_tool": summary_by_tool, "by_split": summary_by_split}
+
+
+def _annotate_run_record(
+    record: Dict[str, Any],
+    *,
+    model_name: str | None = None,
+    model_slug: str | None = None,
+    shard_index: int | None = None,
+    num_shards: int | None = None,
+) -> None:
+    if model_name:
+        record["model_name"] = model_name
+    if model_slug:
+        record["model_slug"] = model_slug
+    if shard_index is not None:
+        record["shard_index"] = shard_index
+    if num_shards is not None:
+        record["num_shards"] = num_shards
 
 
 def run_full_experiment(

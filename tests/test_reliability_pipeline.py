@@ -7,6 +7,7 @@ from pathlib import Path
 
 from autoskill.behavior import load_behavior_cases, run_behavior_tests
 from autoskill.benchmark import load_benchmark_tasks
+from autoskill.eval_types import EvalPrediction, EvalTask
 from autoskill.generator import SkillGenerator
 from autoskill.ir import GeneratedSkill
 from autoskill.mcptoolbench import convert_mcptoolbench_records
@@ -16,6 +17,7 @@ from autoskill.parser import parse_mcp_tool
 from autoskill.quality import score_reliability
 from autoskill.reliability import run_reliability_pipeline
 from autoskill.repair import classify_failure, repair_behavior_failures, repair_skill
+from autoskill.task_eval import score_prediction
 from autoskill.validator import validate_skill
 
 
@@ -51,6 +53,59 @@ class ReliabilityPipelineTests(unittest.TestCase):
         self.assertFalse(negative.should_trigger)
         self.assertEqual(negative.negative_target, "write_file")
         self.assertEqual(negative.expected_tool_name, "search_files")
+
+    def test_abstention_scoring_contract(self) -> None:
+        tool = _load_public_tool("write_file")
+        positive = EvalTask(
+            task_id="pos",
+            tool_name="write_file",
+            user_request="Write notes.",
+            expected_arguments={"path": "docs/out.txt", "content": "notes"},
+            expected_argument_candidates=[{"path": "docs/out.txt", "content": "notes"}],
+            should_trigger=True,
+        )
+        negative = EvalTask(
+            task_id="neg",
+            tool_name="write_file",
+            user_request="Explain how writing works; do not call a tool.",
+            expected_arguments={},
+            expected_argument_candidates=[{}],
+            should_trigger=False,
+            negative_category="explanation_instead_of_action",
+        )
+
+        exact = score_prediction(
+            positive,
+            tool,
+            EvalPrediction(
+                task_id="pos",
+                tool_name="write_file",
+                baseline_name="generated_skill_base",
+                predicted_arguments={"path": "docs/out.txt", "content": "notes"},
+                should_call=True,
+            ),
+        )
+        positive_abstain = score_prediction(
+            positive,
+            tool,
+            EvalPrediction(task_id="pos", tool_name="write_file", baseline_name="generated_skill_base", predicted_arguments={}, should_call=False),
+        )
+        negative_abstain = score_prediction(
+            negative,
+            tool,
+            EvalPrediction(task_id="neg", tool_name="write_file", baseline_name="generated_skill_base", predicted_arguments={}, should_call=False),
+        )
+        negative_empty_call = score_prediction(
+            negative,
+            tool,
+            EvalPrediction(task_id="neg", tool_name="write_file", baseline_name="generated_skill_base", predicted_arguments={}, should_call=True),
+        )
+
+        self.assertTrue(exact["joint_exact_match"])
+        self.assertFalse(positive_abstain["joint_exact_match"])
+        self.assertTrue(negative_abstain["joint_exact_match"])
+        self.assertFalse(negative_empty_call["joint_exact_match"])
+        self.assertTrue(negative_empty_call["harmful_injection"])
 
     def test_validator_structured_repairable_failures(self) -> None:
         tool = _load_tool("get_weather")

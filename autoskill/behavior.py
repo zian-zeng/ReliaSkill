@@ -94,6 +94,9 @@ def behavior_cases_from_tasks(tasks: Iterable[EvalTask]) -> List[BehaviorCase]:
                 expected_argument_candidates=[dict(item) for item in task.expected_argument_candidates],
                 expected_tool_name=task.expected_tool_name,
                 negative_target=task.negative_target,
+                negative_category=task.negative_category,
+                difficulty=task.difficulty,
+                domain=task.domain,
                 harm_baseline=task.harm_baseline,
                 split=task.split,
                 tags=list(task.tags),
@@ -111,6 +114,8 @@ def run_behavior_tests(
     skill: GeneratedSkill,
     cases: Iterable[BehaviorCase],
     predictor: PredictorBackend | None = None,
+    *,
+    allow_predictor_fallback: bool = True,
 ) -> BehaviorReport:
     predictor = predictor or HeuristicPredictorBackend()
     results: List[BehaviorResult] = []
@@ -131,9 +136,12 @@ def run_behavior_tests(
                 should_trigger=True,
                 split=case.split,
                 tags=list(case.tags),
+                negative_category=case.negative_category,
+                difficulty=case.difficulty,
+                domain=case.domain,
             )
             start = time.perf_counter()
-            prediction = safe_predict(tool, skill, task, predictor)
+            prediction = safe_predict(tool, skill, task, predictor, allow_fallback=allow_predictor_fallback)
             latency_ms = (time.perf_counter() - start) * 1000.0
             score = score_prediction(task, tool, prediction)
             results.append(
@@ -163,11 +171,14 @@ def run_behavior_tests(
                     expected_arguments={},
                     expected_argument_candidates=[{}],
                     should_trigger=False,
+                    negative_category=case.negative_category,
+                    difficulty=case.difficulty,
+                    domain=case.domain,
                     split=case.split,
                     tags=list(case.tags),
                 )
                 start = time.perf_counter()
-                prediction: EvalPrediction = safe_predict(tool, skill, task, predictor)
+                prediction: EvalPrediction = safe_predict(tool, skill, task, predictor, allow_fallback=allow_predictor_fallback)
                 latency_ms = (time.perf_counter() - start) * 1000.0
                 predicted_arguments = dict(prediction.predicted_arguments)
             else:

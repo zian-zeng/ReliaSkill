@@ -36,21 +36,21 @@ COMPARISON_TEMPLATES: List[ComparisonTemplate] = [
     ComparisonTemplate(
         "naive_skill_vs_raw_mcp",
         "raw_mcp",
-        "naive_skill_k1",
+        "naive_skill",
         [MetricSpec("joint_exact_match", primary=True), MetricSpec("argument_schema_validity"), MetricSpec("tool_selection_accuracy")],
         expected_claim="Generated skills improve structured tool-use accuracy over raw MCP schemas.",
     ),
     ComparisonTemplate(
         "repaired_vs_naive",
-        "naive_skill_k1",
-        "full_regeneration_repair",
+        "naive_skill",
+        "repaired_skill",
         [MetricSpec("joint_exact_match", primary=True), MetricSpec("argument_schema_validity"), MetricSpec("harmful_skill_injection_rate", "lower")],
         expected_claim="Repair improves or preserves utility while reducing harmful behavior.",
     ),
     ComparisonTemplate(
         "gated_vs_repaired",
-        "full_regeneration_repair",
-        "generated_skill_base",
+        "repaired_skill",
+        "gated_skill",
         [MetricSpec("harmful_skill_injection_rate", "lower", primary=True), MetricSpec("joint_exact_match", "higher", min_effect=-0.03)],
         source="harm_utility",
         expected_claim="Gating trades little utility for lower harm.",
@@ -98,7 +98,7 @@ COMPARISON_TEMPLATES: List[ComparisonTemplate] = [
     ComparisonTemplate(
         "negative_controls_only",
         "raw_mcp",
-        "generated_skill_base",
+        "gated_skill",
         [MetricSpec("harmful_skill_injection_rate", "lower", primary=True), MetricSpec("trigger_precision")],
         source="harm_utility",
         expected_claim="Gated skills reduce false triggering on negative controls.",
@@ -347,10 +347,28 @@ def _rows_for_template(template: ComparisonTemplate, tables: Dict[str, List[Dict
     else:
         candidates = tables.get("main_results.csv", [])
     by_condition = {str(row.get("baseline_name") or row.get("condition")): row for row in candidates}
+    _add_condition_aliases(by_condition)
     for condition in [template.condition_a, template.condition_b]:
         if condition not in by_condition:
             warnings.append(f"missing condition `{condition}` for {template.comparison_id}")
     return by_condition
+
+
+def _add_condition_aliases(by_condition: Dict[str, Dict[str, str]]) -> None:
+    aliases = {
+        "naive_skill": ["naive_skill_k1"],
+        "repaired_skill": ["full_regeneration_repair", "repaired_targeted_patch"],
+        "gated_skill": ["multi_candidate_repaired_gated"],
+    }
+    for canonical, alternatives in aliases.items():
+        if canonical in by_condition:
+            for alternative in alternatives:
+                by_condition.setdefault(alternative, by_condition[canonical])
+            continue
+        for alternative in alternatives:
+            if alternative in by_condition:
+                by_condition[canonical] = by_condition[alternative]
+                break
 
 
 def _evaluate_metric(
@@ -476,7 +494,7 @@ def _support_counts(results: Sequence[Dict[str, Any]]) -> Dict[str, int]:
 
 
 def _read_csv(path: Path) -> List[Dict[str, str]]:
-    with path.open("r", encoding="utf-8", newline="") as f:
+    with path.open("r", encoding="utf-8-sig", newline="") as f:
         return [dict(row) for row in csv.DictReader(f)]
 
 

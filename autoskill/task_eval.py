@@ -21,6 +21,10 @@ def load_eval_tasks(path: str | Path) -> List[EvalTask]:
             user_request=item["user_request"],
             expected_arguments=item["expected_arguments"],
             expected_argument_candidates=[dict(item["expected_arguments"])],
+            should_trigger=bool(item.get("should_trigger", True)),
+            negative_category=item.get("negative_category"),
+            difficulty=item.get("difficulty"),
+            domain=item.get("domain"),
             split=str(item.get("split", "default")),
             tags=[str(tag) for tag in item.get("tags", [])] if isinstance(item.get("tags", []), list) else [],
         )
@@ -71,6 +75,47 @@ def _score_against_expected(tool: ToolIR, expected: Dict[str, Any], predicted: D
 
 
 def score_prediction(task: EvalTask, tool: ToolIR, prediction: EvalPrediction) -> Dict[str, Any]:
+    expected_tool_name = task.expected_tool_name or (task.tool_name if task.should_trigger else "__abstain__")
+    selected_tool_name = prediction.metadata.get("selected_tool_name")
+    if not selected_tool_name:
+        selected_tool_name = tool.tool_name if prediction.should_call else "__abstain__"
+    triggered = bool(prediction.should_call)
+
+    if not task.should_trigger:
+        exact_match = not triggered
+        return {
+            "task_id": task.task_id,
+            "tool_name": task.tool_name,
+            "baseline_name": prediction.baseline_name,
+            "split": task.split,
+            "tags": list(task.tags),
+            "should_trigger": False,
+            "triggered": triggered,
+            "negative_category": task.negative_category,
+            "difficulty": task.difficulty,
+            "domain": task.domain,
+            "expected_tool_name": expected_tool_name,
+            "selected_tool_name": selected_tool_name,
+            "tool_selection_correct": selected_tool_name == expected_tool_name,
+            "exact_match": exact_match,
+            "argument_exact_match": exact_match,
+            "argument_validity": 1.0 if exact_match else 0.0,
+            "required_argument_recall": 1.0 if exact_match else 0.0,
+            "hallucinated_args": sorted(prediction.predicted_arguments),
+            "predicted_arguments": dict(prediction.predicted_arguments) if triggered else {},
+            "expected_arguments": {},
+            "num_gold_candidates": 1,
+            "joint_exact_match": exact_match,
+            "harmful_injection": triggered,
+            "skill_induced_harm": triggered,
+            "should_call": bool(prediction.should_call),
+            "abstention_reason": prediction.abstention_reason,
+            "retrieved_tool_candidates": list(prediction.metadata.get("retrieved_tool_candidates", [])),
+            "retrieval_target_rank": prediction.metadata.get("retrieval_target_rank"),
+            "retrieval_hit_at_k": None,
+            "prediction_metadata": dict(prediction.metadata),
+        }
+
     candidates = task.expected_argument_candidates or [task.expected_arguments]
     candidate_scores = [
         _score_against_expected(tool, expected_candidate, prediction.predicted_arguments)
@@ -87,7 +132,6 @@ def score_prediction(task: EvalTask, tool: ToolIR, prediction: EvalPrediction) -
     )
 
     retrieval_rank = prediction.metadata.get("retrieval_target_rank")
-    selected_tool_name = prediction.metadata.get("selected_tool_name")
     retrieved_tool_candidates = list(prediction.metadata.get("retrieved_tool_candidates", []))
     retrieval_hit = None
     if isinstance(retrieval_rank, int):
@@ -99,14 +143,27 @@ def score_prediction(task: EvalTask, tool: ToolIR, prediction: EvalPrediction) -
         "baseline_name": prediction.baseline_name,
         "split": task.split,
         "tags": list(task.tags),
-        "exact_match": best["exact_match"],
-        "argument_validity": best["argument_validity"],
-        "required_argument_recall": best["required_argument_recall"],
+        "should_trigger": True,
+        "triggered": triggered,
+        "negative_category": task.negative_category,
+        "difficulty": task.difficulty,
+        "domain": task.domain,
+        "expected_tool_name": expected_tool_name,
+        "selected_tool_name": selected_tool_name,
+        "tool_selection_correct": selected_tool_name == expected_tool_name,
+        "exact_match": bool(triggered and best["exact_match"]),
+        "argument_exact_match": bool(triggered and best["exact_match"]),
+        "argument_validity": best["argument_validity"] if triggered else 0.0,
+        "required_argument_recall": best["required_argument_recall"] if triggered else 0.0,
         "hallucinated_args": best["hallucinated_args"],
-        "predicted_arguments": best["predicted_arguments"],
+        "predicted_arguments": best["predicted_arguments"] if triggered else {},
         "expected_arguments": best["expected_arguments"],
         "num_gold_candidates": len(candidates),
-        "selected_tool_name": selected_tool_name,
+        "joint_exact_match": bool(triggered and best["exact_match"] and selected_tool_name == expected_tool_name),
+        "harmful_injection": False,
+        "skill_induced_harm": False,
+        "should_call": bool(prediction.should_call),
+        "abstention_reason": prediction.abstention_reason,
         "retrieved_tool_candidates": retrieved_tool_candidates,
         "retrieval_target_rank": retrieval_rank,
         "retrieval_hit_at_k": retrieval_hit,

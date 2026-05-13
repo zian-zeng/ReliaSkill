@@ -65,10 +65,12 @@ def build_reliability_variants(
     max_repair_rounds: int = 2,
     deploy_threshold: float = 85.0,
     ablation_mode: str | None = None,
+    base_generated_skill: GeneratedSkill | None = None,
+    allow_predictor_fallback: bool = True,
 ) -> Dict[str, Dict[str, Any]]:
     variants: Dict[str, Dict[str, Any]] = {}
 
-    base_generated = apply_skill_ablation(generator.generate(tool), ablation_mode)
+    base_generated = apply_skill_ablation(base_generated_skill or generator.generate(tool), ablation_mode)
     raw = build_raw_mcp_skill(tool)
     schema = build_schema_only_skill(tool)
     docs = build_docs_only_skill(tool)
@@ -85,7 +87,7 @@ def build_reliability_variants(
 
     for condition, skill in initial_items.items():
         validation_report = validate_skill(tool, skill)
-        behavior_report = run_behavior_tests(tool, skill, behavior_cases, predictor)
+        behavior_report = run_behavior_tests(tool, skill, behavior_cases, predictor, allow_predictor_fallback=allow_predictor_fallback)
         reliability_score = score_reliability(
             tool,
             skill,
@@ -104,7 +106,7 @@ def build_reliability_variants(
         }
 
     repaired_skill, repair_report, repaired_validation = repair_skill(tool, clone_skill_as(validated, REPAIRED_SKILL), max_rounds=max_repair_rounds)
-    repaired_behavior = run_behavior_tests(tool, repaired_skill, behavior_cases, predictor)
+    repaired_behavior = run_behavior_tests(tool, repaired_skill, behavior_cases, predictor, allow_predictor_fallback=allow_predictor_fallback)
     if not repaired_behavior.valid and repair_report.rounds < max_repair_rounds:
         behavior_repaired_skill, behavior_repair_report, behavior_validation = repair_behavior_failures(
             tool,
@@ -116,7 +118,7 @@ def build_reliability_variants(
         if behavior_repair_report.changed:
             repaired_skill = behavior_repaired_skill
             repaired_validation = behavior_validation
-            repaired_behavior = run_behavior_tests(tool, repaired_skill, behavior_cases, predictor)
+            repaired_behavior = run_behavior_tests(tool, repaired_skill, behavior_cases, predictor, allow_predictor_fallback=allow_predictor_fallback)
             repair_report = RepairReport(
                 attempted=True,
                 changed=True,
@@ -143,7 +145,7 @@ def build_reliability_variants(
 
     gated_skill = _build_gated_skill(repaired_skill, repaired_score)
     gated_validation = validate_skill(tool, gated_skill)
-    gated_behavior = run_behavior_tests(tool, gated_skill, behavior_cases, predictor)
+    gated_behavior = run_behavior_tests(tool, gated_skill, behavior_cases, predictor, allow_predictor_fallback=allow_predictor_fallback)
     gated_score = score_reliability(
         tool,
         gated_skill,

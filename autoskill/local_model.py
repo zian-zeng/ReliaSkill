@@ -1,9 +1,25 @@
 from __future__ import annotations
 
+import gc
 from copy import deepcopy
 from typing import Any, Dict, List
 
 _GLOBAL_MODEL_CACHE: Dict[str, Any] = {}
+
+
+def clear_model_cache() -> None:
+    """Release cached local HF models between sequential cluster model runs."""
+    for entry in list(_GLOBAL_MODEL_CACHE.values()):
+        entry.clear()
+    _GLOBAL_MODEL_CACHE.clear()
+    gc.collect()
+    try:
+        import torch
+
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+    except Exception:
+        pass
 
 
 class LocalHFChatRunner:

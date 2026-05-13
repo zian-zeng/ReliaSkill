@@ -143,6 +143,7 @@ class SchedulerTests(unittest.TestCase):
                 ("minimum_credible.yaml", 100),
                 ("strong_emnlp.yaml", 250),
                 ("stretch_emnlp.yaml", 290),
+                ("emnlp_acceptance.yaml", 290),
             ]:
                 plan = plan_experiment_run(
                     Path("configs/experiments") / config_name,
@@ -156,6 +157,25 @@ class SchedulerTests(unittest.TestCase):
                 self.assertGreater(plan["total_remaining_model_calls"], 0)
                 self.assertGreater(plan["total_token_volume"], 0)
                 self.assertGreaterEqual(plan["estimated_disk_usage_gb"], 0.0)
+
+    def test_sharded_plan_does_not_warn_about_full_target_tool_count(self) -> None:
+        plan = build_run_plan(
+            {
+                "tools_path": "data/raw_mcp/tools.jsonl",
+                "tasks_path": "data/controls/test.jsonl",
+                "output_root": "outputs/test_scheduler",
+                "target_tools": 290,
+                "data": {"max_tools": 290},
+                "models": [{"model_name": "mock", "backend": "heuristic", "estimated_vram_gb": 0.0, "batch_size": 1}],
+                "conditions": ["raw_mcp"],
+            },
+            gpu_budget_gb=24,
+            shard_index=0,
+            num_shards=4,
+        )
+
+        self.assertEqual(plan["num_tools"], 73)
+        self.assertFalse(any("target_tools=290" in warning for warning in plan["warnings"]))
 
 
 if __name__ == "__main__":

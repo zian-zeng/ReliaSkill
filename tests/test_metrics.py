@@ -71,6 +71,69 @@ class MetricsTests(unittest.TestCase):
         self.assertGreaterEqual(approx["p_value"], 0.0)
         self.assertLessEqual(approx["p_value"], 1.0)
 
+    def test_paired_tests_do_not_collide_across_model_slugs(self) -> None:
+        records = [
+            {"model_slug": "m1", "record_type": "benchmark", "task_id": "same", "baseline_name": "generated_skill_base", "joint_exact_match": True},
+            {"model_slug": "m1", "record_type": "benchmark", "task_id": "same", "baseline_name": "raw_mcp", "joint_exact_match": False},
+            {"model_slug": "m2", "record_type": "benchmark", "task_id": "same", "baseline_name": "generated_skill_base", "joint_exact_match": False},
+            {"model_slug": "m2", "record_type": "benchmark", "task_id": "same", "baseline_name": "raw_mcp", "joint_exact_match": True},
+        ]
+
+        result = mcnemar_test(records, "generated_skill_base", "raw_mcp")
+
+        self.assertEqual(result["paired_examples"], 2)
+        self.assertEqual(result["a_only_correct"], 1)
+        self.assertEqual(result["b_only_correct"], 1)
+
+    def test_metric_tables_separate_benchmark_routing_and_harm_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self._write_jsonl(
+                root / "prediction_records.jsonl",
+                [
+                    {
+                        "task_id": "pos",
+                        "baseline_name": "raw_mcp",
+                        "joint_exact_match": True,
+                        "exact_match": True,
+                        "argument_validity": 1.0,
+                        "should_trigger": True,
+                        "triggered": True,
+                    },
+                    {
+                        "task_id": "neg",
+                        "baseline_name": "raw_mcp",
+                        "joint_exact_match": False,
+                        "exact_match": False,
+                        "argument_validity": 0.0,
+                        "should_trigger": False,
+                        "triggered": True,
+                        "harmful_injection": True,
+                    },
+                ],
+            )
+            self._write_jsonl(
+                root / "routing_records.jsonl",
+                [
+                    {
+                        "task_id": "pos",
+                        "baseline_name": "raw_mcp",
+                        "joint_exact_match": False,
+                        "exact_match": False,
+                        "argument_validity": 0.0,
+                        "should_trigger": True,
+                        "triggered": True,
+                    }
+                ],
+            )
+
+            tables = build_metric_tables(root)
+
+            self.assertEqual(tables["main_results"][0]["num_examples"], 2)
+            self.assertEqual(tables["routing_results"][0]["num_examples"], 1)
+            self.assertEqual(tables["harm_utility"][0]["negative_controls"], 1)
+            self.assertEqual(tables["harm_utility"][0]["harmful_activations"], 1)
+
     def test_build_metric_tables_from_saved_jsonl(self) -> None:
         tables = build_metric_tables("outputs/baselines_smoke")
         main_by_baseline = {row["baseline_name"]: row for row in tables["main_results"]}
@@ -105,6 +168,12 @@ class MetricsTests(unittest.TestCase):
             baseline_names = {row["baseline_name"] for row in rows}
             self.assertTrue({"generated_skill_base", "raw_mcp"}.issubset(baseline_names))
             self.assertIn("tool_selection_accuracy_wilson_low", rows[0])
+
+    @staticmethod
+    def _write_jsonl(path: Path, rows: list[dict]) -> None:
+        with path.open("w", encoding="utf-8") as f:
+            for row in rows:
+                f.write(json.dumps(row) + "\n")
 
 
 if __name__ == "__main__":

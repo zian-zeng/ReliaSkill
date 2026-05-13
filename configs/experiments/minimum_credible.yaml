@@ -23,10 +23,18 @@ conditions:
   - raw_mcp
   - schema_only
   - raw_schema_plus_examples
+  - prompt_only_careful_tool_use
+  - retrieval_tool_card
+  - generated_skill_base
+  - generated_docs_verbose
+  - raw_docs_full
   - naive_skill
+  - validated_skill
   - repaired_skill
   - gated_skill
   - generated_docs_no_validation
+  - skill_prompt_boundary_first
+  - skill_prompt_verbose_docs
 
 data:
   config: configs/data/emnlp_scale.yaml
@@ -55,7 +63,15 @@ scheduler:
     raw_mcp: 900
     schema_only: 450
     raw_schema_plus_examples: 950
+    prompt_only_careful_tool_use: 300
+    retrieval_tool_card: 450
+    generated_skill_base: 300
+    generated_docs_verbose: 1200
+    raw_docs_full: 1600
     naive_skill: 300
+    validated_skill: 350
     repaired_skill: 450
     gated_skill: 475
     generated_docs_no_validation: 900
+    skill_prompt_boundary_first: 350
+    skill_prompt_verbose_docs: 1200

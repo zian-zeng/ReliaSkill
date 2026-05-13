@@ -11,6 +11,15 @@ from typing import Any, Dict, Iterable, List, Sequence, Tuple
 
 DEFAULT_BOOTSTRAP_ITERATIONS = 500
 DEFAULT_SEED = 42
+KEY_STAT_TEST_COMPARISONS = [
+    ("raw_mcp", "generated_skill_base"),
+    ("raw_mcp", "gated_skill"),
+    ("generated_skill_base", "gated_skill"),
+    ("raw_mcp", "skill_prompt_boundary_first"),
+    ("generated_skill_base", "skill_prompt_boundary_first"),
+    ("raw_mcp", "skill_prompt_verbose_docs"),
+    ("generated_skill_base", "skill_prompt_verbose_docs"),
+]
 
 
 def load_jsonl(path: str | Path) -> List[Dict[str, Any]]:
@@ -130,6 +139,8 @@ def argument_parse_rate(records: Sequence[Dict[str, Any]]) -> float:
 
 
 def argument_schema_validity(record: Dict[str, Any]) -> bool:
+    if record.get("should_trigger") is False and record.get("triggered") is False:
+        return True
     predicted = record.get("predicted_arguments")
     if not isinstance(predicted, dict):
         return False
@@ -200,7 +211,7 @@ def mcnemar_test(
 ) -> Dict[str, Any]:
     by_task: Dict[str, Dict[str, Dict[str, Any]]] = defaultdict(dict)
     for record in records:
-        by_task[str(record.get("task_id"))][str(record.get("baseline_name", "default"))] = record
+        by_task[_paired_record_key(record)][str(record.get("baseline_name", "default"))] = record
     b = 0
     c = 0
     paired = 0
@@ -246,7 +257,7 @@ def approximate_randomization_test(
     pairs: List[Tuple[float, float]] = []
     by_task: Dict[str, Dict[str, Dict[str, Any]]] = defaultdict(dict)
     for record in records:
-        by_task[str(record.get("task_id"))][str(record.get("baseline_name", "default"))] = record
+        by_task[_paired_record_key(record)][str(record.get("baseline_name", "default"))] = record
     for by_baseline in by_task.values():
         if baseline_a in by_baseline and baseline_b in by_baseline:
             pairs.append((_metric_value(by_baseline[baseline_a], metric_field), _metric_value(by_baseline[baseline_b], metric_field)))
@@ -289,15 +300,27 @@ def normalize_prediction_records(records: Sequence[Dict[str, Any]], *, record_ty
         item = dict(record)
         item["record_type"] = record_type
         item.setdefault("baseline_name", record.get("condition") or record.get("baseline") or "default")
+        item["should_trigger"] = bool(record.get("should_trigger", True))
+        item["triggered"] = bool(record.get("triggered", record.get("should_call", item["should_trigger"])))
+        if item["should_trigger"]:
+            expected_tool_name = record.get("expected_tool_name") or record.get("tool_name") or record.get("gold_tool")
+        else:
+            expected_tool_name = "__abstain__"
+        item["expected_tool_name"] = expected_tool_name
         if "expected_tool_name" not in item:
             item["expected_tool_name"] = record.get("tool_name") or record.get("gold_tool")
-        if "selected_tool_name" not in item:
-            item["selected_tool_name"] = record.get("selected_tool_name") or record.get("tool_name")
+        if "selected_tool_name" not in item or not item.get("selected_tool_name"):
+            item["selected_tool_name"] = "__abstain__" if not item["triggered"] else record.get("tool_name")
         item["argument_parse_ok"] = _parsed_arguments(item)
         item["argument_schema_valid"] = argument_schema_validity(item)
-        item["argument_exact_match"] = bool(record.get("argument_exact_match_given_tool", False)) or best_argument_exact_match(item)
+        if not item["should_trigger"]:
+            item["argument_exact_match"] = not item["triggered"]
+        else:
+            item["argument_exact_match"] = bool(record.get("argument_exact_match_given_tool", False)) or best_argument_exact_match(item)
         item["tool_selection_correct"] = bool(record.get("tool_selection_correct", item.get("selected_tool_name") == item.get("expected_tool_name")))
         item["joint_exact_match"] = bool(item["tool_selection_correct"] and item["argument_exact_match"])
+        item["harmful_injection"] = bool(record.get("harmful_injection", not item["should_trigger"] and item["triggered"]))
+        item["skill_induced_harm"] = bool(record.get("skill_induced_harm", not item["should_trigger"] and item["triggered"]))
         normalized.append(item)
     return normalized
 
@@ -338,15 +361,24 @@ def summarize_harm_records(records: Sequence[Dict[str, Any]]) -> Dict[str, Dict[
 
 def build_metric_tables(run_dir: str | Path) -> Dict[str, List[Dict[str, Any]]]:
     loaded = load_run_records(run_dir)
-    utility_records = normalize_prediction_records(loaded["benchmark"], record_type="benchmark")
-    utility_records.extend(normalize_prediction_records(loaded["routing"], record_type="routing"))
+    benchmark_records = normalize_prediction_records(loaded["benchmark"], record_type="benchmark")
+    routing_records = normalize_prediction_records(loaded["routing"], record_type="routing")
+    utility_records = benchmark_records + routing_records
     behavior_records = list(loaded["behavior"])
     behavior_records.extend(flatten_reliability_records(loaded["reliability"]))
     all_records = utility_records + behavior_records
-    main_rows = _main_rows(summarize_metric_records(utility_records or all_records))
-    harm_rows = _harm_rows(summarize_harm_records(behavior_records or all_records), summarize_metric_records(utility_records))
-    stat_rows = build_stat_test_rows(utility_records)
-    return {"main_results": main_rows, "harm_utility": harm_rows, "stat_tests": stat_rows}
+    main_rows = _main_rows(summarize_metric_records(benchmark_records or all_records))
+    routing_rows = _main_rows(summarize_metric_records(routing_records))
+    harm_rows = _harm_rows(summarize_harm_records(all_records), summarize_metric_records(benchmark_records))
+    stat_rows = build_stat_test_rows(benchmark_records)
+    routing_stat_rows = build_stat_test_rows(routing_records)
+    return {
+        "main_results": main_rows,
+        "routing_results": routing_rows,
+        "harm_utility": harm_rows,
+        "stat_tests": stat_rows,
+        "routing_stat_tests": routing_stat_rows,
+    }
 
 
 def write_metric_tables(run_dir: str | Path, output_dir: str | Path = "outputs/tables") -> Dict[str, Path]:
@@ -355,12 +387,16 @@ def write_metric_tables(run_dir: str | Path, output_dir: str | Path = "outputs/t
     out.mkdir(parents=True, exist_ok=True)
     paths = {
         "main_results": out / "main_results.csv",
+        "routing_results": out / "routing_results.csv",
         "harm_utility": out / "harm_utility.csv",
         "stat_tests": out / "stat_tests.csv",
+        "routing_stat_tests": out / "routing_stat_tests.csv",
     }
     _write_csv(paths["main_results"], tables["main_results"], MAIN_FIELDS)
+    _write_csv(paths["routing_results"], tables["routing_results"], MAIN_FIELDS)
     _write_csv(paths["harm_utility"], tables["harm_utility"], HARM_FIELDS)
     _write_csv(paths["stat_tests"], tables["stat_tests"], STAT_FIELDS)
+    _write_csv(paths["routing_stat_tests"], tables["routing_stat_tests"], STAT_FIELDS)
     return paths
 
 
@@ -370,12 +406,30 @@ def build_stat_test_rows(records: Sequence[Dict[str, Any]]) -> List[Dict[str, An
         return []
     anchor = "generated_skill_base" if "generated_skill_base" in baselines else baselines[-1]
     rows: List[Dict[str, Any]] = []
+    seen_pairs: set[tuple[str, str, str]] = set()
     for baseline in baselines:
         if baseline == anchor:
             continue
-        rows.append(mcnemar_test(records, anchor, baseline, metric_field="joint_exact_match"))
-        rows.append(approximate_randomization_test(records, anchor, baseline, metric_field="joint_exact_match", iterations=500))
+        _append_stat_pair(rows, seen_pairs, records, anchor, baseline)
+    for left, right in KEY_STAT_TEST_COMPARISONS:
+        if left in baselines and right in baselines:
+            _append_stat_pair(rows, seen_pairs, records, left, right)
     return rows
+
+
+def _append_stat_pair(
+    rows: List[Dict[str, Any]],
+    seen_pairs: set[tuple[str, str, str]],
+    records: Sequence[Dict[str, Any]],
+    baseline_a: str,
+    baseline_b: str,
+) -> None:
+    key = tuple(sorted((baseline_a, baseline_b))) + ("joint_exact_match",)
+    if key in seen_pairs:
+        return
+    seen_pairs.add(key)
+    rows.append(mcnemar_test(records, baseline_a, baseline_b, metric_field="joint_exact_match"))
+    rows.append(approximate_randomization_test(records, baseline_a, baseline_b, metric_field="joint_exact_match", iterations=500))
 
 
 MAIN_FIELDS = [
@@ -403,6 +457,7 @@ HARM_FIELDS = [
     "num_controls",
     "positive_controls",
     "negative_controls",
+    "harmful_activations",
     "trigger_precision",
     "trigger_recall",
     "harmful_skill_injection_rate",
@@ -465,6 +520,7 @@ def _summarize_harm_group(items: List[Dict[str, Any]]) -> Dict[str, Any]:
         "num_controls": len(items),
         "positive_controls": len(positives),
         "negative_controls": len(negatives),
+        "harmful_activations": fp,
         "trigger_precision": round(tp / (tp + fp), 4) if (tp + fp) else 1.0,
         "trigger_recall": round(tp / (tp + fn), 4) if (tp + fn) else 1.0,
         "harmful_skill_injection_rate": round(fp / len(negatives), 4) if negatives else 0.0,
@@ -515,6 +571,7 @@ def _harm_rows(harm_summary: Dict[str, Dict[str, Any]], utility_summary: Dict[st
                 "num_controls": row["num_controls"],
                 "positive_controls": row["positive_controls"],
                 "negative_controls": row["negative_controls"],
+                "harmful_activations": row["harmful_activations"],
                 "trigger_precision": row["trigger_precision"],
                 "trigger_recall": row["trigger_recall"],
                 "harmful_skill_injection_rate": row["harmful_skill_injection_rate"],
@@ -546,11 +603,22 @@ def _dict_value(record: Dict[str, Any], keys: Sequence[str]) -> Dict[str, Any]:
 
 
 def _parsed_arguments(record: Dict[str, Any]) -> bool:
+    if record.get("should_trigger") is False and record.get("triggered") is False:
+        return True
     if record.get("argument_parse_ok") is False:
         return False
     if record.get("parse_error") or record.get("error") == "argument_parse_error":
         return False
     return isinstance(record.get("predicted_arguments"), dict)
+
+
+def _paired_record_key(record: Dict[str, Any]) -> str:
+    parts = [
+        str(record.get("model_slug") or record.get("model_name") or ""),
+        str(record.get("record_type") or ""),
+        str(record.get("task_id") or ""),
+    ]
+    return "::".join(parts)
 
 
 def _binary_metric(record: Dict[str, Any], metric_field: str) -> bool:

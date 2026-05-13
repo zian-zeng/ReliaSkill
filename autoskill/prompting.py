@@ -13,9 +13,10 @@ def build_generation_prompt(tool: ToolIR, template_id: str = "compact_default") 
 def build_prediction_prompt(tool: ToolIR, skill: GeneratedSkill, user_request: str) -> str:
     return (
         "You are selecting arguments for a single MCP tool call.\n"
-        "Return valid JSON only with a single top-level object named `arguments`.\n"
+        "Return valid JSON only with keys `should_call`, `arguments`, and `abstention_reason`.\n"
+        "Set `should_call` to false and return an empty `arguments` object when the request is out of scope, asks for planning only, lacks required information, or conflicts with the tool boundary.\n"
         "Use only fields allowed by the schema.\n"
-        "Include all required arguments.\n"
+        "When `should_call` is true, include all required arguments.\n"
         "Do not include explanations.\n\n"
         f"Tool name: {tool.tool_name}\n"
         f"Tool description: {tool.tool_purpose or ''}\n"

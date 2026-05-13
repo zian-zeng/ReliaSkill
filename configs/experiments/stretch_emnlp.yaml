@@ -28,7 +28,11 @@ conditions:
   - schema_only
   - docs_only
   - raw_schema_plus_examples
+  - prompt_only_careful_tool_use
+  - retrieval_tool_card
+  - generated_skill_base
   - generated_docs_no_validation
+  - generic_validator_no_behavior_tests
   - naive_skill
   - validated_skill
   - repaired_skill
@@ -92,7 +96,11 @@ scheduler:
     schema_only: 450
     docs_only: 350
     raw_schema_plus_examples: 950
+    prompt_only_careful_tool_use: 300
+    retrieval_tool_card: 450
+    generated_skill_base: 300
     generated_docs_no_validation: 900
+    generic_validator_no_behavior_tests: 350
     naive_skill: 300
     validated_skill: 350
     repaired_skill: 450

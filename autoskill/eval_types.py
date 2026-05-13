@@ -14,6 +14,9 @@ class EvalTask:
     should_trigger: bool = True
     expected_tool_name: str | None = None
     negative_target: str | None = None
+    negative_category: str | None = None
+    difficulty: str | None = None
+    domain: str | None = None
     harm_baseline: str | None = None
     split: str = "default"
     tags: List[str] = field(default_factory=list)
@@ -25,5 +28,7 @@ class EvalPrediction:
     tool_name: str
     baseline_name: str
     predicted_arguments: Dict[str, Any] = field(default_factory=dict)
+    should_call: bool = True
+    abstention_reason: str | None = None
     exposure_text: str = ""
     metadata: Dict[str, Any] = field(default_factory=dict)

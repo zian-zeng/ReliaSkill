@@ -95,6 +95,9 @@ class BehaviorCase:
     expected_argument_candidates: List[Dict[str, Any]] = field(default_factory=list)
     expected_tool_name: Optional[str] = None
     negative_target: Optional[str] = None
+    negative_category: Optional[str] = None
+    difficulty: Optional[str] = None
+    domain: Optional[str] = None
     harm_baseline: Optional[str] = None
     split: str = "default"
     tags: List[str] = field(default_factory=list)
