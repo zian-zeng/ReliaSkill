@@ -121,6 +121,70 @@ class ClusterRunnerTests(unittest.TestCase):
             self.assertTrue((root / "out" / "merged" / "live_exec_results.jsonl").exists())
             self.assertTrue((root / "out" / "tables" / "live_exec_results.csv").exists())
 
+    def test_merge_recovers_partial_checkpoint_files_without_jsonl(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            config_path = self._write_small_config(root, conditions=["raw_mcp"], max_tools=1)
+            benchmark_dir = root / "out" / "predictors" / "mock" / "shard_00" / "benchmark" / "read_text_file" / "raw_mcp"
+            routing_dir = root / "out" / "predictors" / "mock" / "shard_00" / "routing_benchmark" / "t1"
+            live_dir = root / "out" / "predictors" / "mock" / "shard_00" / "live_exec" / "live_1"
+            benchmark_dir.mkdir(parents=True)
+            routing_dir.mkdir(parents=True)
+            live_dir.mkdir(parents=True)
+            (benchmark_dir / "t1.result.json").write_text(
+                json.dumps(
+                    {
+                        "task_id": "t1",
+                        "tool_name": "read_text_file",
+                        "baseline_name": "raw_mcp",
+                        "predicted_arguments": {},
+                        "expected_arguments": {},
+                        "exact_match": True,
+                        "argument_validity": 1.0,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (routing_dir / "raw_mcp.routing.json").write_text(
+                json.dumps(
+                    {
+                        "task_id": "t1",
+                        "baseline_name": "raw_mcp",
+                        "selected_tool_name": "read_text_file",
+                        "expected_tool_name": "read_text_file",
+                        "tool_selection_correct": True,
+                        "joint_exact_match": True,
+                        "argument_validity": 1.0,
+                        "required_argument_recall": 1.0,
+                        "should_trigger": True,
+                        "triggered": True,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (live_dir / "raw_mcp.live_result.json").write_text(
+                json.dumps(
+                    {
+                        "live_task_id": "live_1",
+                        "task_id": "live_1",
+                        "tool_id": "fs_read_file",
+                        "baseline_name": "raw_mcp",
+                        "predicted_call_valid": True,
+                        "execution_success": True,
+                        "observation_match": True,
+                        "state_match": True,
+                        "live_joint_success": True,
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            manifest = merge_cluster_shards(config_path, output_root=root / "out")
+
+            self.assertEqual(manifest["prediction_records"], 1)
+            self.assertEqual(manifest["routing_records"], 1)
+            self.assertEqual(manifest["live_exec_records"], 1)
+
     def test_cache_clear_called_after_each_model_run(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)

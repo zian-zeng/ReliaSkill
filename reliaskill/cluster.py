@@ -496,6 +496,7 @@ def _run_live_exec_for_model(
     }
     results: List[Dict[str, Any]] = []
     predictions: List[Dict[str, Any]] = []
+    live_dir = model_root / "live_exec"
     for task in live_tasks:
         tool_id = str(task.get("tool_id") or "")
         tool = live_tools.get(tool_id)
@@ -516,6 +517,18 @@ def _run_live_exec_for_model(
             difficulty=str(task.get("difficulty") or ""),
         )
         for condition, skill in skill_variants_by_tool[tool_id].items():
+            task_dir = live_dir / tool_slug(str(task["live_task_id"]))
+            result_path = task_dir / f"{tool_slug(condition)}.live_result.json"
+            prediction_path = task_dir / f"{tool_slug(condition)}.live_prediction.json"
+            if result_path.exists():
+                try:
+                    result = json.loads(result_path.read_text(encoding="utf-8"))
+                    results.append(result)
+                    if prediction_path.exists():
+                        predictions.append(json.loads(prediction_path.read_text(encoding="utf-8")))
+                    continue
+                except (OSError, json.JSONDecodeError):
+                    pass
             prediction = safe_predict(tool, skill, eval_task, predictor, allow_fallback=allow_predictor_fallback)
             predicted_call = {
                 "tool_name": tool_id if prediction.should_call else "__abstain__",
@@ -558,8 +571,10 @@ def _run_live_exec_for_model(
                 }
             )
             results.append(result)
+            task_dir.mkdir(parents=True, exist_ok=True)
+            prediction_path.write_text(json.dumps(prediction_row, indent=2, ensure_ascii=False), encoding="utf-8")
+            result_path.write_text(json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
 
-    live_dir = model_root / "live_exec"
     _write_jsonl(live_dir / "live_exec_predictions.jsonl", predictions)
     _write_jsonl(live_dir / "live_exec_results.jsonl", results)
     _write_csv(live_dir / "live_exec_results.csv", results, _fields_for_rows(results, preferred=["baseline_name", "live_task_id", "tool_id"]))
@@ -660,13 +675,66 @@ def _model_to_backend_config(model: Any) -> Dict[str, Any]:
 
 def _load_shard_jsonl(model_root: Path, filename: str) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
-    for path in sorted(model_root.glob(f"shard_*/**/{filename}")):
-        with path.open("r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line:
-                    rows.append(json.loads(line))
+    for shard_root in sorted(path for path in model_root.glob("shard_*") if path.is_dir()):
+        shard_rows: List[Dict[str, Any]] = []
+        shard_keys: set[tuple[str, str, str, str]] = set()
+        for path in sorted(shard_root.glob(f"**/{filename}")):
+            with path.open("r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    row = json.loads(line)
+                    _annotate_recovered_record(row, model_root=model_root)
+                    shard_rows.append(row)
+                    shard_keys.add(_merge_record_key(row, filename))
+
+        for path in _fallback_record_paths(shard_root, filename):
+            try:
+                row = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            _annotate_recovered_record(row, model_root=model_root)
+            key = _merge_record_key(row, filename)
+            if key in shard_keys:
+                continue
+            shard_rows.append(row)
+            shard_keys.add(key)
+        rows.extend(shard_rows)
     return rows
+
+
+def _fallback_record_paths(shard_root: Path, filename: str) -> List[Path]:
+    if filename == "prediction_records.jsonl":
+        return sorted(shard_root.glob("benchmark/**/*.result.json"))
+    if filename == "routing_records.jsonl":
+        return sorted(shard_root.glob("routing_benchmark/**/*.routing.json"))
+    if filename == "live_exec_results.jsonl":
+        return sorted(shard_root.glob("live_exec/**/*.live_result.json"))
+    return []
+
+
+def _annotate_recovered_record(record: Dict[str, Any], *, model_root: Path) -> None:
+    record.setdefault("model_slug", model_root.name)
+    record.setdefault("model_name", record.get("model_slug") or model_root.name)
+
+
+def _merge_record_key(record: Dict[str, Any], filename: str) -> tuple[str, str, str, str]:
+    if filename == "live_exec_results.jsonl":
+        record_type = "live_exec"
+        task_id = str(record.get("live_task_id") or record.get("task_id") or "")
+    elif filename == "routing_records.jsonl":
+        record_type = "routing"
+        task_id = str(record.get("task_id") or "")
+    else:
+        record_type = "prediction"
+        task_id = str(record.get("task_id") or "")
+    return (
+        str(record.get("model_slug") or record.get("model_name") or ""),
+        task_id,
+        str(record.get("baseline_name") or ""),
+        record_type,
+    )
 
 
 def _duplicate_keys(records: Sequence[Dict[str, Any]], *, record_type: str) -> List[str]:
