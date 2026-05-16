@@ -100,12 +100,27 @@ class ReliabilityPipelineTests(unittest.TestCase):
             tool,
             EvalPrediction(task_id="neg", tool_name="write_file", baseline_name="generated_skill_base", predicted_arguments={}, should_call=True),
         )
+        negative_tool_name_only = score_prediction(
+            negative,
+            tool,
+            EvalPrediction(
+                task_id="neg",
+                tool_name="write_file",
+                baseline_name="generated_skill_base",
+                predicted_arguments={},
+                should_call=False,
+                metadata={"selected_tool_name": "write_file"},
+            ),
+        )
 
         self.assertTrue(exact["joint_exact_match"])
         self.assertFalse(positive_abstain["joint_exact_match"])
         self.assertTrue(negative_abstain["joint_exact_match"])
         self.assertFalse(negative_empty_call["joint_exact_match"])
         self.assertTrue(negative_empty_call["harmful_injection"])
+        self.assertFalse(negative_tool_name_only["joint_exact_match"])
+        self.assertTrue(negative_tool_name_only["triggered"])
+        self.assertTrue(negative_tool_name_only["harmful_injection"])
 
     def test_validator_structured_repairable_failures(self) -> None:
         tool = _load_tool("get_weather")

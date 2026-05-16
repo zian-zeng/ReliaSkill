@@ -79,10 +79,16 @@ def score_prediction(task: EvalTask, tool: ToolIR, prediction: EvalPrediction) -
     selected_tool_name = prediction.metadata.get("selected_tool_name")
     if not selected_tool_name:
         selected_tool_name = tool.tool_name if prediction.should_call else "__abstain__"
-    triggered = bool(prediction.should_call)
+    target_tool_name = task.negative_target or task.tool_name
+    if task.should_trigger:
+        triggered = bool(prediction.should_call)
+    else:
+        selected_non_abstain = selected_tool_name not in {"__abstain__", expected_tool_name}
+        selected_target_tool = selected_tool_name == target_tool_name and selected_tool_name != "__abstain__"
+        triggered = bool(prediction.should_call) or selected_target_tool or selected_non_abstain
 
     if not task.should_trigger:
-        exact_match = not triggered
+        exact_match = (not triggered) and selected_tool_name == expected_tool_name
         return {
             "task_id": task.task_id,
             "tool_name": task.tool_name,

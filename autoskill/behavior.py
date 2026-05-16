@@ -47,6 +47,8 @@ def _negative_boundary_suppresses(skill: GeneratedSkill, request_tokens: set[str
     request_lower = user_request.lower().strip()
     for line in skill.when_not_to_use:
         line_lower = line.lower()
+        if _category_boundary_suppresses(line_lower, request_lower):
+            return True
         if "requests like:" in line_lower:
             exemplar = line_lower.split("requests like:", 1)[1].strip().strip(".")
             if exemplar and (exemplar in request_lower or request_lower in exemplar):
@@ -61,8 +63,46 @@ def _negative_boundary_suppresses(skill: GeneratedSkill, request_tokens: set[str
     return False
 
 
+def _has_any(text: str, markers: tuple[str, ...]) -> bool:
+    return any(marker in text for marker in markers)
+
+
+def _category_boundary_suppresses(line_lower: str, request_lower: str) -> bool:
+    if "out-of-domain" in line_lower and _has_any(request_lower, ("unrelated to", "out of domain")):
+        return True
+    if _has_any(line_lower, ("explanation", "planning-only", "no-tool-call", "checklist")) and _has_any(
+        request_lower,
+        ("explain", "checklist", "planning only", "no tool call", "no tool yet", "do not actually call", "do not call", "don't call"),
+    ):
+        return True
+    if _has_any(line_lower, ("missing required information", "required inputs are missing")) and _has_any(
+        request_lower,
+        ("do not know", "don't know", "missing", "not sure what input", "lacks required"),
+    ):
+        return True
+    if "ambiguous" in line_lower and _has_any(request_lower, ("maybe do something", "not sure", "ambiguous", "what input or action")):
+        return True
+    if _has_any(line_lower, ("destructive/read-only", "read/write", "read-only/destructive")) and _has_any(
+        request_lower,
+        ("only inspect", "not a read-only lookup", "do not create", "do not update", "do not delete", "do not send", "do not execute", "do not mutate"),
+    ):
+        return True
+    if _has_any(line_lower, ("known path", "no search or discovery")) and _has_any(
+        request_lower,
+        ("already know the exact path", "no search or discovery is needed"),
+    ):
+        return True
+    if "read/search mismatch" in line_lower and _has_any(request_lower, ("do not search", "do not search, retrieve", "read the exact item")):
+        return True
+    if _has_any(line_lower, ("similar tool", "distractor")) and _has_any(request_lower, ("distractor", "should not be called")):
+        return True
+    if "adjacent intent" in line_lower and _has_any(request_lower, ("adjacent to", "intended capability is")):
+        return True
+    return False
+
+
 def skill_should_trigger(tool: ToolIR, skill: GeneratedSkill, user_request: str) -> bool:
-    if skill.baseline_name == "gated_skill" and skill.metadata.get("gate_decision") != "deploy":
+    if skill.metadata.get("gate_decision") and skill.metadata.get("gate_decision") != "deploy":
         return False
     request_tokens = _tokens(user_request)
     if not request_tokens:
@@ -149,6 +189,7 @@ def run_behavior_tests(
                     case_id=case.case_id,
                     tool_name=tool.tool_name,
                     should_trigger=True,
+                    negative_category=case.negative_category,
                     triggered=triggered,
                     user_request=case.user_request,
                     exact_match=bool(score["exact_match"]),
@@ -188,6 +229,7 @@ def run_behavior_tests(
                     case_id=case.case_id,
                     tool_name=tool.tool_name,
                     should_trigger=False,
+                    negative_category=case.negative_category,
                     triggered=triggered,
                     user_request=case.user_request,
                     exact_match=not triggered,

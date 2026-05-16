@@ -15,6 +15,7 @@ NAIVE_SKILL = "naive_skill"
 VALIDATED_SKILL = "validated_skill"
 REPAIRED_SKILL = "repaired_skill"
 GATED_SKILL = "gated_skill"
+RELIASKILL_CHALLENGER = "reliaskill_challenger_v1"
 PROMPT_ONLY_CAREFUL_TOOL_USE = "prompt_only_careful_tool_use"
 RAW_SCHEMA_PLUS_EXAMPLES = "raw_schema_plus_examples"
 GENERATED_DOCS_NO_VALIDATION = "generated_docs_no_validation"
@@ -107,6 +108,7 @@ CONDITION_ORDER = [
     VALIDATED_SKILL,
     REPAIRED_SKILL,
     GATED_SKILL,
+    RELIASKILL_CHALLENGER,
     GENERATED_SKILL_BASE,
     AUTOSKILL_BASE,
 ]

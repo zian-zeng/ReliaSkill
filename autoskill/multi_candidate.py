@@ -21,7 +21,7 @@ from autoskill.ir import BehaviorCase, BehaviorReport, GeneratedSkill, RepairRep
 from autoskill.packaging import write_skill_package
 from autoskill.reliability_score import compute_reliability_components, score_reliability_formula
 from autoskill.repair import repair_behavior_failures, repair_skill
-from autoskill.templates import build_argument_template
+from autoskill.templates import build_argument_template, build_optional_argument_examples, build_structured_call_hints
 from autoskill.validator import validate_skill
 
 
@@ -161,7 +161,12 @@ def run_multi_candidate_pipeline(config: Dict[str, Any]) -> List[Dict[str, Any]]
             )
             if selected_behavior is not None and not selected_behavior.valid:
                 selected_behavior = run_behavior_tests(tool, selected_skill, cases)
-                selected_skill, behavior_repair, selected_validation = repair_behavior_failures(tool, selected_skill, selected_behavior)
+                selected_skill, behavior_repair, selected_validation = repair_behavior_failures(
+                    tool,
+                    selected_skill,
+                    selected_behavior,
+                    behavior_cases=cases,
+                )
                 repair_report = behavior_repair if repair_report is None else repair_report
                 selected_behavior = run_behavior_tests(tool, selected_skill, cases)
             selected_reliability = score_reliability_formula(tool, selected_skill, selected_validation, selected_behavior)
@@ -443,14 +448,14 @@ def _skill_for_strategy(tool: ToolIR, base_skill: GeneratedSkill, strategy: str)
     elif strategy == "example_heavy":
         examples = list(skill.examples)
         minimal = build_argument_template(tool, include_optional=False, variant=2)
-        full = build_argument_template(tool, include_optional=True, variant=3)
         if minimal:
             examples.append({"scenario": "Required-argument dev behavior example.", "arguments": minimal})
-        if full and full != minimal:
-            examples.append({"scenario": "Optional, enum, nested, or array argument example.", "arguments": full})
+        examples.extend(build_optional_argument_examples(tool, variant=3, max_examples=3))
         skill.examples = examples[:5]
-        skill.argument_template = full or minimal
-        skill.when_to_use = _dedupe_lines([*skill.when_to_use, "Use examples to map paraphrases into schema-faithful arguments."])
+        skill.argument_template = minimal
+        call_hints = build_structured_call_hints(tool)
+        skill.when_to_use = _dedupe_lines([*skill.when_to_use, *call_hints["when_to_use"], "Use examples to map paraphrases into schema-faithful arguments."])
+        skill.when_not_to_use = _dedupe_lines([*skill.when_not_to_use, *call_hints["when_not_to_use"]])
     elif strategy == "safety_first":
         skill.when_not_to_use = _dedupe_lines(
             [

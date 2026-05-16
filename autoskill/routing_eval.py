@@ -6,8 +6,9 @@ import re
 from typing import Any, Dict, Iterable, List, Tuple
 
 from autoskill.eval_types import EvalTask
-from autoskill.conditions import GENERATED_SKILL_BASE, normalize_condition_name
+from autoskill.conditions import GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER, normalize_condition_name
 from autoskill.ir import GeneratedSkill, ToolIR
+from autoskill.method_metadata import prediction_method_metadata
 from autoskill.predictor import PredictorBackend, safe_predict
 from autoskill.retrieval_runtime import (
     contextualize_skill_for_task,
@@ -15,7 +16,10 @@ from autoskill.retrieval_runtime import (
     retrieve_doc_tool_rankings,
     retrieve_memory_tool_rankings,
 )
+from autoskill.routing_boundaries import detect_routing_abstention, routing_tool_mention_adjustment
 from autoskill.task_eval import score_prediction
+
+METHOD_ROUTING_CONDITIONS = {GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER}
 
 def _safe_dir_name(value: str) -> str:
     """Truncate a tool or condition name for use as a directory component on Windows."""
@@ -57,6 +61,7 @@ def _router_overlap_score(query: str, text: str) -> int:
 def _generated_skill_routing_bonus(query: str, tool: ToolIR, skill: GeneratedSkill) -> int:
     lowered = query.lower()
     bonus = 0
+    bonus += routing_tool_mention_adjustment(query, tool)
     for arg_name, spec in skill.semantic_hints.items():
         if not isinstance(spec, dict):
             continue
@@ -80,6 +85,22 @@ def select_tool_for_task(
     top_k: int = 3,
 ) -> Dict[str, Any]:
     normalized_baseline_name = normalize_condition_name(baseline_name)
+    if normalized_baseline_name in METHOD_ROUTING_CONDITIONS:
+        abstention_reason = detect_routing_abstention(task.user_request)
+        if abstention_reason:
+            return {
+                "routing_strategy": "method_boundary_abstention",
+                "selected_tool_name": "__abstain__",
+                "candidate_tools": ["__abstain__"],
+                "candidate_rows": [
+                    {
+                        "tool_name": "__abstain__",
+                        "score": 0,
+                        "abstention_reason": abstention_reason,
+                    }
+                ],
+            }
+
     if baseline_name == "retrieved_docs":
         candidates = retrieve_doc_tool_rankings(task.user_request, tools, top_k=top_k)["candidates"]
         return {
@@ -107,7 +128,7 @@ def select_tool_for_task(
             "candidate_rows": candidates,
         }
 
-    if normalized_baseline_name == GENERATED_SKILL_BASE:
+    if normalized_baseline_name in METHOD_ROUTING_CONDITIONS:
         retrieval_rows = retrieve_candidate_tools(task.user_request, tools, top_k=max(len(tools), top_k))["candidates"]
         reranked: List[Dict[str, Any]] = []
         for row in retrieval_rows:
@@ -150,18 +171,25 @@ def select_tool_for_task(
     }
 
 
+def _expected_routing_tool_name(gold_task: EvalTask) -> str:
+    if gold_task.expected_tool_name:
+        return gold_task.expected_tool_name
+    return gold_task.tool_name if gold_task.should_trigger else "__abstain__"
+
+
 def score_routed_prediction(
     gold_task: EvalTask,
     selected_tool_name: str,
     candidate_tools: List[str],
     predictor_record: Dict[str, Any],
 ) -> Dict[str, Any]:
-    expected_tool_name = gold_task.tool_name if gold_task.should_trigger else "__abstain__"
+    expected_tool_name = _expected_routing_tool_name(gold_task)
     tool_correct = selected_tool_name == expected_tool_name
     argument_score = predictor_record["argument_score"]
     gold_rank = next((index + 1 for index, name in enumerate(candidate_tools) if name == expected_tool_name), None)
     triggered = selected_tool_name != "__abstain__"
-    argument_exact = bool(argument_score["exact_match"]) if triggered else not gold_task.should_trigger
+    argument_exact = bool(argument_score["exact_match"]) if triggered else expected_tool_name == "__abstain__"
+    harmful = bool(not gold_task.should_trigger and not tool_correct)
     return {
         "task_id": gold_task.task_id,
         "expected_tool_name": expected_tool_name,
@@ -187,8 +215,9 @@ def score_routed_prediction(
         "gold_tool_hit_at_k": gold_rank is not None,
         "routing_strategy": predictor_record["routing_strategy"],
         "prediction_metadata": predictor_record["prediction_metadata"],
-        "harmful_injection": bool(not gold_task.should_trigger and triggered),
-        "skill_induced_harm": bool(not gold_task.should_trigger and triggered),
+        "method_metadata": predictor_record.get("method_metadata", {}),
+        "harmful_injection": harmful,
+        "skill_induced_harm": harmful,
         "should_call": triggered,
         "abstention_reason": predictor_record.get("abstention_reason"),
     }
@@ -239,8 +268,34 @@ def run_routing_pipeline(
             skill_bank = {tool_name: variants[baseline_name] for tool_name, variants in skill_variants_by_tool.items()}
             routing = select_tool_for_task(task, baseline_name, tools, skill_bank)
             selected_tool_name = str(routing["selected_tool_name"])
+            expected_tool_name = _expected_routing_tool_name(task)
             
-            if selected_tool_name not in tools:
+            if selected_tool_name == "__abstain__":
+                record = score_routed_prediction(
+                    task,
+                    selected_tool_name="__abstain__",
+                    candidate_tools=list(routing["candidate_tools"]),
+                    predictor_record={
+                        "baseline_name": baseline_name,
+                        "predicted_arguments": {},
+                        "argument_score": {
+                            "exact_match": expected_tool_name == "__abstain__",
+                            "argument_validity": 1.0 if expected_tool_name == "__abstain__" else 0.0,
+                            "required_argument_recall": 1.0 if expected_tool_name == "__abstain__" else 0.0,
+                            "hallucinated_args": [],
+                        },
+                        "abstention_reason": (routing.get("candidate_rows") or [{}])[0].get("abstention_reason"),
+                        "routing_strategy": routing["routing_strategy"],
+                        "prediction_metadata": {
+                            "routing_candidate_rows": routing["candidate_rows"],
+                        },
+                        "method_metadata": {
+                            "condition": baseline_name,
+                            "routing_strategy": routing["routing_strategy"],
+                        },
+                    },
+                )
+            elif selected_tool_name not in tools:
                 # Handle hallucination
                 record = {
                     "task_id": task.task_id,
@@ -250,7 +305,7 @@ def run_routing_pipeline(
                     "exact_match": 0.0,
                     "soft_match": 0.0,
                     "error": "hallucinated_tool_name",
-                    "expected_tool_name": task.tool_name if task.should_trigger else "__abstain__",
+                    "expected_tool_name": expected_tool_name,
                     "tool_selection_correct": False,
                     "joint_exact_match": False,
                     "argument_validity": 0.0,
@@ -260,8 +315,8 @@ def run_routing_pipeline(
                     "negative_category": task.negative_category,
                     "difficulty": task.difficulty,
                     "domain": task.domain,
-                    "harmful_injection": bool(not task.should_trigger and selected_tool_name != "__abstain__"),
-                    "skill_induced_harm": bool(not task.should_trigger and selected_tool_name != "__abstain__"),
+                    "harmful_injection": bool(not task.should_trigger and selected_tool_name != expected_tool_name),
+                    "skill_induced_harm": bool(not task.should_trigger and selected_tool_name != expected_tool_name),
                     "split": task.split,
                 }
             else:
@@ -275,7 +330,7 @@ def run_routing_pipeline(
                     user_request=task.user_request,
                     expected_arguments=task.expected_arguments,
                     expected_argument_candidates=task.expected_argument_candidates,
-                    should_trigger=task.should_trigger,
+                    should_trigger=bool(task.should_trigger or (expected_tool_name != "__abstain__" and selected_tool_name == expected_tool_name)),
                     expected_tool_name=task.expected_tool_name,
                     negative_target=task.negative_target,
                     negative_category=task.negative_category,
@@ -326,6 +381,7 @@ def run_routing_pipeline(
                                 "routing_candidate_rows": routing["candidate_rows"],
                                 "retrieval_context": retrieval_context,
                             },
+                            "method_metadata": prediction_method_metadata(selected_skill),
                         },
                     )
                 else:
@@ -353,6 +409,7 @@ def run_routing_pipeline(
                                 "routing_candidate_rows": routing["candidate_rows"],
                                 "retrieval_context": retrieval_context,
                             },
+                            "method_metadata": prediction_method_metadata(selected_skill),
                         },
                     )
                 # Add split info for reporting

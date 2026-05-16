@@ -19,7 +19,15 @@ from autoskill.experiment import (
 )
 from autoskill.generator import SkillGenerator
 from autoskill.local_model import clear_model_cache
+from autoskill.artifacts import GATED_SKILL, GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER, clone_skill_as
 from autoskill.metrics import build_metric_tables, write_metric_tables
+from autoskill.multi_candidate import (
+    generate_skill_candidates,
+    load_multi_candidate_config,
+    score_skill_candidates,
+    select_candidate,
+    write_candidate_artifacts,
+)
 from autoskill.packaging import write_skill_package
 from autoskill.predictor import build_predictor_from_config, safe_predict
 from autoskill.reliability import build_reliability_variants
@@ -29,7 +37,7 @@ from reliaskill.live_exec.tool_defs import build_live_exec_tools
 from reliaskill.scheduler import load_model_config
 
 
-RELIABILITY_CONDITIONS = {"naive_skill", "validated_skill", "repaired_skill", "gated_skill"}
+RELIABILITY_CONDITIONS = {"naive_skill", "validated_skill", "repaired_skill", "gated_skill", RELIASKILL_CHALLENGER}
 
 
 def slugify(value: str) -> str:
@@ -50,6 +58,156 @@ def shared_package_root(config: Dict[str, Any], output_root: str | Path | None =
     if shared.get("root"):
         return Path(str(shared["root"]))
     return root / "shared_packages"
+
+
+def _multi_candidate_shared_config(config: Dict[str, Any]) -> Dict[str, Any] | None:
+    skills_config = config.get("skills") if isinstance(config.get("skills"), dict) else {}
+    multi_config_path = skills_config.get("multi_candidate_config")
+    if not multi_config_path:
+        return None
+    path = Path(str(multi_config_path))
+    if not path.exists():
+        raise FileNotFoundError(f"Configured multi-candidate skill config does not exist: {path}")
+    multi_config = load_multi_candidate_config(path)
+    if skills_config.get("candidate_k") is not None:
+        multi_config["candidate_k"] = int(skills_config["candidate_k"])
+    if int(multi_config.get("candidate_k") or 1) < 1:
+        raise ValueError("Multi-candidate shared package candidate_k must be >= 1.")
+    if int(multi_config.get("candidate_k") or 1) > 5:
+        raise ValueError("Multi-candidate shared package candidate_k above 5 is intentionally unsupported.")
+    return multi_config
+
+
+def _ensure_dev_behavior_cases(cases: Sequence[Any], source_path: str | Path) -> None:
+    if not cases:
+        raise ValueError(f"Multi-candidate shared package construction requires development controls: {source_path}")
+    non_dev = sorted({str(getattr(case, "split", "")) for case in cases if str(getattr(case, "split", "dev")) != "dev"})
+    if non_dev:
+        raise ValueError(
+            "Multi-candidate shared package construction may only use development controls; "
+            f"{source_path} contains split(s): {', '.join(non_dev)}"
+        )
+
+
+def _select_multi_candidate_base_skill(
+    *,
+    root: Path,
+    tool: Any,
+    base_skill: Any,
+    behavior_cases: Sequence[Any],
+    multi_config: Dict[str, Any],
+) -> Any:
+    candidates = generate_skill_candidates(
+        tool,
+        base_skill,
+        k=int(multi_config.get("candidate_k") or 1),
+        strategies=list(multi_config.get("candidate_strategies") or []),
+    )
+    score_rows = score_skill_candidates(tool, candidates, behavior_cases)
+    selected = select_candidate(score_rows, policy=str(multi_config.get("selection_policy") or "best_behavior_dev"))
+    selected_skill = selected["skill"]
+    selected_skill.metadata = {
+        **selected_skill.metadata,
+        "shared_package_base": "multi_candidate_selected",
+        "selected_candidate_id": selected["candidate_id"],
+        "selection_policy": str(multi_config.get("selection_policy") or "best_behavior_dev"),
+        "test_controls_used": False,
+    }
+    selected_skill.method_trace = [
+        *selected_skill.method_trace,
+        {
+            "trace_type": "multi_candidate_selection",
+            "selected_candidate_id": selected["candidate_id"],
+            "selection_policy": str(multi_config.get("selection_policy") or "best_behavior_dev"),
+            "candidate_count": len(candidates),
+            "dev_controls_used": True,
+            "test_controls_used": False,
+        },
+    ]
+    write_candidate_artifacts(
+        tool_dir=root / "_multi_candidate_selection" / tool_slug(tool.tool_name),
+        tool=tool,
+        candidates=candidates,
+        score_rows=score_rows,
+        selected_score=selected,
+        selected_skill=selected_skill,
+        selected_validation=selected["validation_report"],
+        selected_behavior=selected.get("behavior_report"),
+        selected_reliability=selected["reliability_score_obj"],
+        repair_report=None,
+        selection_policy=str(multi_config.get("selection_policy") or "best_behavior_dev"),
+    )
+    return selected_skill
+
+
+def _build_challenger_skill(gated_skill: Any) -> Any:
+    challenger = clone_skill_as(gated_skill, RELIASKILL_CHALLENGER)
+    challenger.metadata = {
+        **challenger.metadata,
+        "condition_family": RELIASKILL_CHALLENGER,
+        "source_condition": GATED_SKILL,
+        "artifact_backed": True,
+        "requires_improved_package": True,
+        "pipeline_stages": [
+            "generated_skill_base_package",
+            "dev_multi_candidate_selection",
+            "validation",
+            "repair",
+            "reliability_gate",
+            "runtime_routing_boundary",
+        ],
+        "test_controls_used": False,
+    }
+    challenger.method_trace = [
+        *challenger.method_trace,
+        {
+            "trace_type": "reliaskill_challenger_composition",
+            "source_condition": GATED_SKILL,
+            "condition": RELIASKILL_CHALLENGER,
+            "artifact_backed": True,
+            "test_controls_used": False,
+        },
+    ]
+    return challenger
+
+
+def _write_challenger_method_metadata(
+    *,
+    package_dir: Path,
+    tool_name: str,
+    selection_report_path: Path,
+    reliability_row: Dict[str, Any],
+) -> None:
+    if not selection_report_path.exists():
+        raise FileNotFoundError(
+            f"`{RELIASKILL_CHALLENGER}` requires a multi-candidate selection report for `{tool_name}`: "
+            f"{selection_report_path}"
+        )
+    shutil.copyfile(selection_report_path, package_dir / "selection_report.json")
+    score = reliability_row["reliability_score"]
+    repair = reliability_row["repair_report"]
+    metadata = {
+        "condition": RELIASKILL_CHALLENGER,
+        "tool_name": tool_name,
+        "source_condition": GATED_SKILL,
+        "artifact_backed": True,
+        "pipeline_stages": [
+            "generated_skill_base_package",
+            "dev_multi_candidate_selection",
+            "validation",
+            "repair",
+            "reliability_gate",
+            "runtime_routing_boundary",
+        ],
+        "dev_controls_used": True,
+        "test_controls_used": False,
+        "gate_decision": score.decision,
+        "gate_score": score.score,
+        "repair_attempted": repair.attempted,
+        "repair_changed": repair.changed,
+        "repair_rounds": repair.rounds,
+    }
+    (package_dir / "method_metadata.json").write_text(json.dumps(metadata, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
 def selected_tool_names(config: Dict[str, Any], tools: Dict[str, Any], *, shard_index: int | None = None, num_shards: int | None = None) -> List[str]:
@@ -88,16 +246,25 @@ def build_shared_skill_packages(
 
     generator = SkillGenerator(backend_config=config.get("generator"), allow_fallback=not strict_backends)
     allowed_conditions = [str(item) for item in config.get("conditions") or []]
+    requested_reliability_conditions = sorted(set(allowed_conditions).intersection(RELIABILITY_CONDITIONS))
+    packaging_conditions = [condition for condition in allowed_conditions if condition != RELIASKILL_CHALLENGER]
+    if requested_reliability_conditions and GENERATED_SKILL_BASE not in packaging_conditions:
+        packaging_conditions.append(GENERATED_SKILL_BASE)
     package_records, package_summary, _ = run_packaging_pipeline(
         tools=tools,
         output_dir=root,
         generator=generator,
-        allowed_conditions=allowed_conditions or None,
+        allowed_conditions=packaging_conditions or None,
     )
 
-    reliability_conditions = sorted(set(allowed_conditions).intersection(RELIABILITY_CONDITIONS))
+    reliability_conditions = requested_reliability_conditions
     reliability_records = []
+    multi_candidate_config = None
+    multi_candidate_base_records = []
     if reliability_conditions:
+        multi_candidate_config = _multi_candidate_shared_config(config)
+        if RELIASKILL_CHALLENGER in reliability_conditions and multi_candidate_config is None:
+            raise ValueError(f"`{RELIASKILL_CHALLENGER}` requires `skills.multi_candidate_config`.")
         shared_config = config.get("shared_skill_packages") if isinstance(config.get("shared_skill_packages"), dict) else {}
         behavior_path = (
             shared_config.get("dev_controls_path")
@@ -114,6 +281,8 @@ def build_shared_skill_packages(
         predictor = build_predictor_from_config(predictor_config)
         max_repair_rounds = int(shared_config.get("max_repair_rounds") or 2)
         deploy_threshold = float(shared_config.get("deploy_threshold") or 85.0)
+        if multi_candidate_config is not None:
+            _ensure_dev_behavior_cases(behavior_cases, behavior_path)
         for tool in tools.values():
             base_skill = build_skill_variant_map(
                 tool,
@@ -123,6 +292,21 @@ def build_shared_skill_packages(
                 package_manager_dir=root,
                 allow_package_generation=False,
             )["generated_skill_base"]
+            if multi_candidate_config is not None:
+                base_skill = _select_multi_candidate_base_skill(
+                    root=root,
+                    tool=tool,
+                    base_skill=base_skill,
+                    behavior_cases=behavior_cases,
+                    multi_config=multi_candidate_config,
+                )
+                multi_candidate_base_records.append(
+                    {
+                        "tool_name": tool.tool_name,
+                        "selection_policy": str(multi_candidate_config.get("selection_policy") or "best_behavior_dev"),
+                        "candidate_k": int(multi_candidate_config.get("candidate_k") or 1),
+                    }
+                )
             variants = build_reliability_variants(
                 tool,
                 generator=generator,
@@ -134,20 +318,31 @@ def build_shared_skill_packages(
                 allow_predictor_fallback=not strict_backends,
             )
             for condition in reliability_conditions:
-                row = variants[condition]
+                source_condition = GATED_SKILL if condition == RELIASKILL_CHALLENGER else condition
+                row = variants[source_condition]
+                package_skill = _build_challenger_skill(row["skill"]) if condition == RELIASKILL_CHALLENGER else row["skill"]
+                package_dir = root / tool_slug(tool.tool_name) / condition
                 write_skill_package(
-                    root / tool_slug(tool.tool_name) / condition,
+                    package_dir,
                     tool,
-                    row["skill"],
+                    package_skill,
                     row["validation_report"],
                     behavior_report=row["behavior_report"],
                     reliability_score=row["reliability_score"],
                     repair_report=row["repair_report"],
                 )
+                if condition == RELIASKILL_CHALLENGER:
+                    _write_challenger_method_metadata(
+                        package_dir=package_dir,
+                        tool_name=tool.tool_name,
+                        selection_report_path=root / "_multi_candidate_selection" / tool_slug(tool.tool_name) / "selection_report.json",
+                        reliability_row=row,
+                    )
                 reliability_records.append(
                     {
                         "tool_name": tool.tool_name,
                         "baseline_name": condition,
+                        "source_condition": source_condition,
                         "gate_decision": row["reliability_score"].decision,
                         "reliability_score": row["reliability_score"].score,
                     }
@@ -164,10 +359,13 @@ def build_shared_skill_packages(
         "packaged_records": len(package_records),
         "reliability_conditions": reliability_conditions,
         "reliability_records": len(reliability_records),
+        "multi_candidate_base_enabled": multi_candidate_config is not None,
+        "multi_candidate_base_records": len(multi_candidate_base_records),
         "package_summary": package_summary,
     }
     (root / "shared_package_manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
     _write_jsonl(root / "reliability_package_records.jsonl", reliability_records)
+    _write_jsonl(root / "multi_candidate_base_records.jsonl", multi_candidate_base_records)
     return manifest
 
 

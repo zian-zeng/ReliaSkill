@@ -4,8 +4,9 @@ import json
 import unittest
 from pathlib import Path
 
-from autoskill.behavior import load_behavior_cases, run_behavior_tests
-from autoskill.ir import GeneratedSkill
+from autoskill.behavior import load_behavior_cases, run_behavior_tests, skill_should_trigger
+from autoskill.exposure import render_exposure
+from autoskill.ir import BehaviorCase, GeneratedSkill
 from autoskill.parser import parse_mcp_tool
 from autoskill.repair import (
     FAILURE_TAXONOMY,
@@ -122,6 +123,55 @@ class RepairStrategyTests(unittest.TestCase):
         self.assertTrue(report.behavior_before_dev)
         self.assertTrue(report.behavior_after_dev)
         self.assertTrue(validation.valid)
+
+    def test_boundary_repair_adds_category_specific_nonuse_guidance(self) -> None:
+        tool = _load_public_tool("write_file")
+        skill = GeneratedSkill(
+            baseline_name="repaired_boundary_only",
+            skill_summary="Write files whenever the request mentions write_file.",
+            when_to_use=["Use this tool for write_file mentions."],
+            when_not_to_use=[],
+            argument_template={"path": "docs/out.txt", "content": "notes"},
+            examples=[],
+        )
+        cases = [
+            BehaviorCase(
+                case_id="dev_neg_explain_write",
+                tool_name="write_file",
+                user_request="Explain when someone should use write_file; do not actually call it or perform the action.",
+                should_trigger=False,
+                negative_target="write_file",
+                negative_category="explanation_instead_of_action",
+                split="dev",
+                tags=["negative", "explanation_instead_of_action"],
+            )
+        ]
+        before = run_behavior_tests(tool, skill, cases)
+
+        repaired, report, validation = repair_behavior_failures(
+            tool,
+            skill,
+            before,
+            strategy=NONUSE_BOUNDARY_PATCH,
+            behavior_cases=cases,
+        )
+
+        guidance = "\n".join(repaired.when_not_to_use).lower()
+        self.assertTrue(validation.valid)
+        self.assertTrue(report.changed)
+        self.assertIn("explanation", guidance)
+        self.assertIn("planning-only", guidance)
+        self.assertIn("no-tool-call", guidance)
+        self.assertEqual(repaired.examples, skill.examples)
+        self.assertTrue(any("explanation_instead_of_action" in action.description for action in report.actions))
+        self.assertFalse(
+            skill_should_trigger(
+                tool,
+                repaired,
+                "Give me a checklist for write_file usage; no tool call yet.",
+            )
+        )
+        self.assertIn("planning-only", render_exposure(tool, repaired))
 
 
 if __name__ == "__main__":

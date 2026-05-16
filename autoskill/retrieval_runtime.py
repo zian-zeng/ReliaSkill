@@ -7,6 +7,7 @@ from typing import Any, Dict, List, Tuple
 from autoskill.eval_types import EvalTask
 from autoskill.ir import GeneratedSkill, ToolIR
 from autoskill.retrieval_baselines import MEMORY_BANK
+from autoskill.routing_boundaries import routing_tool_mention_adjustment
 from autoskill.templates import build_argument_template
 
 
@@ -53,7 +54,11 @@ def _candidate_intent_bonus(query: str, tool: ToolIR) -> int:
         bonus += 10
     if "content" in argument_names and any(token in lowered for token in ("write", "save", "create file", "containing the text", "with content")):
         bonus += 10
-    if argument_names == {"path"} and "create" in tool.tool_name and any(token in lowered for token in ("create", "ensure", "mkdir", "directory")):
+    creation_cues = ("create", "ensure", "mkdir", "set up", "prepare")
+    directory_cues = ("directory", "folder", "path")
+    creation_intent = any(token in lowered for token in creation_cues) and any(token in lowered for token in directory_cues)
+    make_sure_exists = "make sure" in lowered and any(token in lowered for token in ("exist", "exists", *directory_cues))
+    if argument_names == {"path"} and "create" in tool.tool_name and (creation_intent or make_sure_exists):
         bonus += 8
     if argument_names == {"path"} and "list" in tool.tool_name and any(token in lowered for token in ("list", "show contents", "inspect", "directory contents")):
         bonus += 8
@@ -66,6 +71,7 @@ def retrieve_candidate_tools(query: str, tools: Dict[str, ToolIR], top_k: int = 
     for tool in tools.values():
         score, overlap = _scored_overlap(query, _tool_search_text(tool))
         score += _candidate_intent_bonus(query, tool)
+        score += routing_tool_mention_adjustment(query, tool)
         ranked.append(
             {
                 "tool_name": tool.tool_name,

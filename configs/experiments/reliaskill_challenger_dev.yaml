@@ -1,0 +1,43 @@
+experiment_scale: reliaskill_challenger_dev
+description: Dev-only heuristic build/evaluation config for the artifact-backed ReliaSkill challenger condition.
+seed: 42
+tools_path: data/raw_mcp/tools.jsonl
+tasks_path: data/controls/dev.jsonl
+output_root: outputs/method_improvement/reliaskill_challenger_v1_dev
+generator:
+  type: heuristic
+  ablation_mode: base_only
+predictor:
+  type: heuristic
+runtime:
+  strict_backends: true
+
+conditions:
+  - raw_mcp
+  - generated_skill_base
+  - gated_skill
+  - reliaskill_challenger_v1
+
+data:
+  max_tools: 290
+
+shared_skill_packages:
+  root: outputs/method_improvement/reliaskill_challenger_v1_dev/shared_packages
+  dev_controls_path: data/controls/dev.jsonl
+  reliability_predictor:
+    type: heuristic
+  max_repair_rounds: 2
+  deploy_threshold: 85.0
+
+skills:
+  multi_candidate_config: configs/skills/multi_candidate.yaml
+  candidate_k: 3
+
+scheduler:
+  resume: true
+  include_routing: true
+  condition_token_overheads:
+    raw_mcp: 900
+    generated_skill_base: 300
+    gated_skill: 475
+    reliaskill_challenger_v1: 525

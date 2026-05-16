@@ -36,6 +36,7 @@ DEFAULT_CONDITION_TOKEN_OVERHEAD = {
     "generated_docs_no_validation": 900,
     "repaired_skill": 450,
     "gated_skill": 475,
+    "reliaskill_challenger_v1": 525,
     "multi_candidate_skill_k3_validation_select": 350,
     "multi_candidate_skill_k3_behavior_select": 400,
     "multi_candidate_repaired_gated": 450,

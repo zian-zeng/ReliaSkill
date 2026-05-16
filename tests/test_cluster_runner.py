@@ -14,7 +14,8 @@ from reliaskill.cluster import (
     run_cluster_shard,
     selected_tool_names,
 )
-from autoskill.experiment import load_tools
+from autoskill.experiment import build_skill_variant_map, load_tools
+from autoskill.generator import SkillGenerator
 
 
 class ClusterRunnerTests(unittest.TestCase):
@@ -50,6 +51,96 @@ class ClusterRunnerTests(unittest.TestCase):
             package_root = Path(manifest["shared_package_root"])
             gated = list(package_root.glob("*/gated_skill/skill.json"))
             self.assertEqual(len(gated), 1)
+
+    def test_shared_package_builder_uses_dev_selected_multi_candidate_base(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            dev_controls = root / "dev_controls.jsonl"
+            dev_controls.write_text(
+                json.dumps(
+                    {
+                        "id": "dev_create_dir",
+                        "function": "create_directory",
+                        "question": "Create the docs directory.",
+                        "ground_truth": {"arguments": {"path": "docs"}},
+                        "should_trigger": True,
+                        "split": "dev",
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            multi_config = root / "multi_candidate.yaml"
+            multi_config.write_text(
+                yaml.safe_dump(
+                    {
+                        "candidate_k": 3,
+                        "selection_policy": "best_behavior_dev",
+                        "candidate_strategies": ["concise_default", "boundary_heavy", "example_heavy"],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            config_path = self._write_small_config(root, conditions=["generated_skill_base", "gated_skill"], max_tools=1)
+            config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+            config["shared_skill_packages"]["dev_controls_path"] = str(dev_controls)
+            config["skills"] = {"multi_candidate_config": str(multi_config), "candidate_k": 3}
+            config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+
+            manifest = build_shared_skill_packages(config_path)
+
+            package_root = Path(manifest["shared_package_root"])
+            self.assertTrue(manifest["multi_candidate_base_enabled"])
+            self.assertEqual(manifest["multi_candidate_base_records"], 1)
+            selection_report = package_root / "_multi_candidate_selection" / "create_directory" / "selection_report.json"
+            self.assertTrue(selection_report.exists())
+            report = json.loads(selection_report.read_text(encoding="utf-8"))
+            self.assertTrue(report["dev_controls_used"])
+            self.assertFalse(report["test_controls_used"])
+            gated_skill = json.loads((package_root / "create_directory" / "gated_skill" / "skill.json").read_text(encoding="utf-8"))
+            trace_types = [entry.get("trace_type") for entry in gated_skill["method_trace"]]
+            self.assertIn("multi_candidate_selection", trace_types)
+            self.assertEqual(gated_skill["metadata"]["shared_package_base"], "multi_candidate_selected")
+            tools = load_tools(config["tools_path"])
+            loaded = build_skill_variant_map(
+                tools["create_directory"],
+                tools,
+                SkillGenerator(),
+                allowed_conditions=["gated_skill"],
+                package_manager_dir=package_root,
+                allow_package_generation=False,
+            )["gated_skill"]
+            loaded_trace_types = [entry.get("trace_type") for entry in loaded.method_trace]
+            self.assertIn("multi_candidate_selection", loaded_trace_types)
+
+    def test_shared_multi_candidate_base_rejects_non_dev_controls(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            controls = root / "test_controls.jsonl"
+            controls.write_text(
+                json.dumps(
+                    {
+                        "id": "heldout_create_dir",
+                        "function": "create_directory",
+                        "question": "Create the docs directory.",
+                        "ground_truth": {"arguments": {"path": "docs"}},
+                        "should_trigger": True,
+                        "split": "test",
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            multi_config = root / "multi_candidate.yaml"
+            multi_config.write_text(yaml.safe_dump({"candidate_k": 1}), encoding="utf-8")
+            config_path = self._write_small_config(root, conditions=["generated_skill_base", "gated_skill"], max_tools=1)
+            config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+            config["shared_skill_packages"]["dev_controls_path"] = str(controls)
+            config["skills"] = {"multi_candidate_config": str(multi_config)}
+            config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "development controls"):
+                build_shared_skill_packages(config_path)
 
     def test_output_root_override_moves_shared_packages(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

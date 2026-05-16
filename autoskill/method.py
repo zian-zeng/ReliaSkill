@@ -4,7 +4,7 @@ from copy import deepcopy
 from typing import Any, Dict, List
 
 from autoskill.ir import GeneratedSkill, ToolIR
-from autoskill.templates import build_argument_template
+from autoskill.templates import build_argument_template, build_structured_call_hints
 from autoskill.validator import validate_skill
 
 
@@ -122,7 +122,8 @@ def build_semantic_examples(tool: ToolIR, semantic_hints: Dict[str, Any]) -> Lis
 def build_enhanced_skill_candidates(tool: ToolIR, base_skill: GeneratedSkill) -> List[Dict[str, Any]]:
     semantic_hints = build_semantic_hints(tool)
     semantic_examples = build_semantic_examples(tool, semantic_hints)
-    dense_template = build_argument_template(tool, include_optional=True, variant=0)
+    dense_template = build_argument_template(tool, include_optional=False, variant=0)
+    call_hints = build_structured_call_hints(tool)
 
     concise = deepcopy(base_skill)
     concise.when_to_use = [
@@ -134,11 +135,13 @@ def build_enhanced_skill_candidates(tool: ToolIR, base_skill: GeneratedSkill) ->
     dense = deepcopy(base_skill)
     dense.when_to_use = [
         *dense.when_to_use,
+        *call_hints["when_to_use"],
         "Map common request paraphrases to schema-faithful arguments using the semantic hints and examples.",
         "Prefer the smallest valid call that still captures file type, directionality, or enum intent from the request.",
     ]
     dense.when_not_to_use = [
         *dense.when_not_to_use,
+        *call_hints["when_not_to_use"],
         "Do not let semantic cues override explicit user-provided field values.",
     ]
     dense.argument_template = dense_template

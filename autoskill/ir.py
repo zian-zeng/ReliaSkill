@@ -113,6 +113,7 @@ class BehaviorResult:
     should_trigger: bool
     triggered: bool
     user_request: str = ""
+    negative_category: Optional[str] = None
     exact_match: bool = False
     argument_validity: float = 0.0
     harmful_injection: bool = False

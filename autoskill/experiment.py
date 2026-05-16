@@ -11,6 +11,7 @@ from autoskill.config import load_json_config, merge_experiment_config
 from autoskill.conditions import (
     AUTOSKILL_BASE,
     GENERATED_SKILL_BASE,
+    RELIASKILL_CHALLENGER,
     build_reviewer_baseline_skills,
     condition_prompt_text,
     normalize_condition_name,
@@ -25,6 +26,11 @@ from autoskill.logging_utils import (
     prediction_audit_record,
     write_jsonl as write_audit_jsonl,
     write_manifest as write_audit_manifest,
+)
+from autoskill.method_metadata import (
+    attach_loaded_package_metadata,
+    prediction_method_metadata,
+    require_challenger_package,
 )
 from autoskill.packaging import write_skill_package
 from autoskill.parser import parse_mcp_tool
@@ -169,9 +175,14 @@ def _find_packaged_skill(package_root: Path, tool: Any, condition: str) -> Any |
         )
     for candidate in candidates:
         if candidate.exists():
+            if condition == RELIASKILL_CHALLENGER:
+                require_challenger_package(candidate)
             skill = _load_packaged_skill(candidate)
             if skill is not None:
                 skill.baseline_name = normalize_condition_name(skill.baseline_name)
+                if condition == RELIASKILL_CHALLENGER:
+                    skill.baseline_name = RELIASKILL_CHALLENGER
+                skill = attach_loaded_package_metadata(skill, candidate, condition=condition)
                 return skill
     return None
 
@@ -247,12 +258,16 @@ def build_skill_variant_map(
                 variants[condition] = packaged
     if allowed_conditions is not None:
         variants = {k: v for k, v in variants.items() if k in set(normalized_allowed or [])}
-        if not allow_package_generation:
-            missing = sorted(set(normalized_allowed or []) - set(variants))
-            if missing:
-                raise FileNotFoundError(
-                    f"Missing read-only shared packages for tool `{tool.tool_name}`: {', '.join(missing)}"
-                )
+        missing = sorted(set(normalized_allowed or []) - set(variants))
+        package_only_missing = [condition for condition in missing if condition == RELIASKILL_CHALLENGER]
+        if package_only_missing:
+            raise FileNotFoundError(
+                f"Missing artifact-backed `{RELIASKILL_CHALLENGER}` package for tool `{tool.tool_name}` in {package_manager_dir}."
+            )
+        if not allow_package_generation and missing:
+            raise FileNotFoundError(
+                f"Missing read-only shared packages for tool `{tool.tool_name}`: {', '.join(missing)}"
+            )
     return variants
 
 
@@ -393,6 +408,7 @@ def run_benchmark_pipeline(
             score["predictor_backend"] = prediction.metadata.get("actual_predictor_backend", predictor.backend_name)
             score["predictor_fallback_used"] = bool(prediction.metadata.get("predictor_fallback_used", False))
             score["predictor_fallback_reason"] = prediction.metadata.get("predictor_fallback_reason")
+            score["method_metadata"] = prediction_method_metadata(skill)
             score["user_request"] = task.user_request
             score["retrieval_context"] = retrieval_context
             _annotate_run_record(score, model_name=model_name, model_slug=model_slug, shard_index=shard_index, num_shards=num_shards)

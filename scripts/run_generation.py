@@ -20,6 +20,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, default=None, help="Override output directory.")
     parser.add_argument("--candidate-k", type=int, default=None, help="Override candidate count K.")
     parser.add_argument("--selection-policy", default=None, help="Override selection policy.")
+    parser.add_argument("--repair-selected", action="store_true", help="Repair the selected candidate using dev behavior controls.")
     parser.add_argument("--compactness-variants", action="store_true", help="Also generate compactness variant artifacts and stats.")
     parser.add_argument("--prompt-templates", action="store_true", help="Generate prompt-template ablation skill artifacts from config.")
     return parser.parse_args()
@@ -36,6 +37,8 @@ def main() -> None:
         config["candidate_k"] = args.candidate_k
     if args.selection_policy is not None:
         config["selection_policy"] = args.selection_policy
+    if args.repair_selected:
+        config["repair_selected"] = True
     if args.compactness_variants:
         compactness = dict(config.get("compactness_variants") or {})
         compactness["enabled"] = True

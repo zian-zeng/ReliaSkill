@@ -13,7 +13,7 @@ from autoskill.json_output import parse_json_object_output
 from autoskill.local_model import LocalHFChatRunner
 from autoskill.prompting import build_generation_prompt
 from autoskill.prompt_templates import build_skill_from_prompt_template, parse_generated_skill_output
-from autoskill.templates import build_argument_template
+from autoskill.templates import build_argument_template, build_optional_argument_examples, build_structured_call_hints
 
 
 def _required_argument_line(tool: ToolIR) -> str:
@@ -89,9 +89,12 @@ class HeuristicBackend(GenerationBackend):
             when_not_to_use.append(tool.auth_or_env_notes)
         when_not_to_use.extend(tool.usage_warnings)
 
-        argument_template = build_argument_template(tool, include_optional=True, variant=0)
+        call_hints = build_structured_call_hints(tool)
+        when_to_use.extend(call_hints["when_to_use"])
+        when_not_to_use.extend(call_hints["when_not_to_use"])
+
+        argument_template = build_argument_template(tool, include_optional=False, variant=0)
         minimal_example = build_argument_template(tool, include_optional=False, variant=0)
-        full_example = build_argument_template(tool, include_optional=True, variant=1)
 
         examples = []
         if minimal_example:
@@ -101,13 +104,7 @@ class HeuristicBackend(GenerationBackend):
                     "arguments": minimal_example,
                 }
             )
-        if full_example:
-            examples.append(
-                {
-                    "scenario": f"Richer invocation that uses optional controls for {tool.tool_name}",
-                    "arguments": full_example,
-                }
-            )
+        examples.extend(build_optional_argument_examples(tool, variant=1, max_examples=3))
 
         base_skill = GeneratedSkill(
             baseline_name="generated_skill_base",

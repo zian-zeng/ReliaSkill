@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from autoskill.ir import ArgumentIR, ToolIR
 from autoskill.schema_utils import normalize_schema_node
@@ -85,7 +85,12 @@ def _value_from_schema(
     return None
 
 
-def build_argument_value(arg: ArgumentIR, variant: int = 0) -> Any:
+def build_argument_value(
+    arg: ArgumentIR,
+    variant: int = 0,
+    *,
+    include_optional_children: bool = True,
+) -> Any:
     if arg.default is not None:
         return deepcopy(arg.default)
     if arg.enum:
@@ -100,7 +105,7 @@ def build_argument_value(arg: ArgumentIR, variant: int = 0) -> Any:
         return bool(variant % 2)
     if arg.type == "array":
         item_schema = {"type": arg.items_type or "string"}
-        return [_value_from_schema(f"{arg.name}_item", item_schema, variant, include_optional=True)]
+        return [_value_from_schema(f"{arg.name}_item", item_schema, variant, include_optional=include_optional_children)]
     if arg.type == "object":
         return _value_from_schema(
             arg.name,
@@ -110,7 +115,7 @@ def build_argument_value(arg: ArgumentIR, variant: int = 0) -> Any:
                 "required": arg.required_properties,
             },
             variant,
-            include_optional=True,
+            include_optional=include_optional_children,
         )
     return None
 
@@ -123,5 +128,75 @@ def build_argument_template(
     template: Dict[str, Any] = {}
     for arg in tool.arguments:
         if include_optional or arg.required:
-            template[arg.name] = build_argument_value(arg, variant=variant)
+            template[arg.name] = build_argument_value(
+                arg,
+                variant=variant,
+                include_optional_children=include_optional,
+            )
     return template
+
+
+def build_optional_argument_examples(
+    tool: ToolIR,
+    *,
+    variant: int = 1,
+    max_examples: int = 4,
+) -> List[Dict[str, Any]]:
+    required_template = build_argument_template(tool, include_optional=False, variant=0)
+    examples: List[Dict[str, Any]] = []
+    for index, arg in enumerate(arg for arg in tool.arguments if not arg.required):
+        value = build_argument_value(arg, variant=variant + index, include_optional_children=False)
+        if value is None:
+            continue
+        arguments = dict(required_template)
+        arguments[arg.name] = value
+        examples.append(
+            {
+                "scenario": f"Valid call when optional `{arg.name}` is explicitly requested.",
+                "arguments": arguments,
+            }
+        )
+        if len(examples) >= max_examples:
+            break
+    return examples
+
+
+def build_structured_call_hints(tool: ToolIR) -> Dict[str, List[str]]:
+    required = [arg.name for arg in tool.arguments if arg.required]
+    optional = [arg.name for arg in tool.arguments if not arg.required]
+    allowed = [arg.name for arg in tool.arguments]
+    enums = [arg for arg in tool.arguments if arg.enum]
+    objects = [arg for arg in tool.arguments if arg.type == "object" or arg.properties]
+    arrays = [arg for arg in tool.arguments if arg.type == "array"]
+
+    when_to_use: List[str] = []
+    when_not_to_use: List[str] = []
+
+    if required:
+        when_to_use.append("Start structured calls from the required fields only: " + ", ".join(f"`{name}`" for name in required) + ".")
+    else:
+        when_to_use.append("Start structured calls from an empty argument object and add only fields grounded in the request.")
+    if optional:
+        when_to_use.append("Add optional fields only when the user explicitly asks for that control; omit unrelated optional fields.")
+    if allowed:
+        when_not_to_use.append("Do not include unsupported fields; allowed top-level fields are: " + ", ".join(f"`{name}`" for name in allowed) + ".")
+    if "head" in allowed and "tail" in allowed:
+        when_not_to_use.append("For line ranges, choose `head` or `tail` from the user's direction; do not include both unless both are explicitly requested.")
+    for arg in enums[:3]:
+        values = ", ".join(repr(value) for value in arg.enum or [])
+        when_to_use.append(f"Use exact enum literals for `{arg.name}`: {values}.")
+    for arg in objects[:3]:
+        nested_required = list(arg.required_properties)
+        if nested_required:
+            when_to_use.append(
+                f"For nested object `{arg.name}`, include its required keys: "
+                + ", ".join(repr(name) for name in nested_required)
+                + "."
+            )
+    for arg in arrays[:3]:
+        if arg.required:
+            when_to_use.append(f"For required array `{arg.name}`, provide a JSON array with schema-valid items.")
+        else:
+            when_not_to_use.append(f"Omit optional array `{arg.name}` unless the request explicitly asks for it.")
+
+    return {"when_to_use": when_to_use, "when_not_to_use": when_not_to_use}

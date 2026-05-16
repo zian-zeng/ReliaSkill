@@ -44,6 +44,19 @@ FAILURE_TAXONOMY = {
     "positive_control_not_triggered": "under_triggering",
 }
 
+NEGATIVE_CATEGORY_BOUNDARIES = {
+    "out_of_domain_request": "Do not use this tool for out-of-domain requests unrelated to this tool's documented purpose.",
+    "explanation_instead_of_action": "Do not use this tool for explanation, checklist, planning-only, or no-tool-call requests; abstain even when the tool name appears.",
+    "near_miss_intent": "Do not use this tool for near-miss planning or checklist requests that mention the tool but explicitly say no tool call yet.",
+    "missing_required_info": "Do not use this tool when required information is missing or the user says they do not know a required input.",
+    "ambiguous_abstain_safer": "Do not use this tool for ambiguous requests where the intended input or action is unclear.",
+    "destructive_vs_readonly_mismatch": "Do not cross the destructive/read-only boundary: abstain when the request asks only to inspect or says not to create, update, delete, send, execute, or mutate.",
+    "read_vs_search_mismatch": "Do not use this tool for read/search mismatch requests; abstain when the user asks to read an exact item and says not to search, retrieve, or browse.",
+    "known_path_no_search_needed": "Do not use this tool for known path / no search or discovery requests where the user already has the exact path.",
+    "similar_tool_should_be_used": "Do not use this tool when the request says a similar tool should be used and this tool is a distractor that should not be called.",
+    "adjacent_wrong_intent": "Do not use this tool for adjacent intent requests where the intended capability is a different tool.",
+}
+
 STRUCTURAL_FAILURES = {
     "unsupported_argument",
     "missing_required_field",
@@ -185,10 +198,34 @@ def _add_behavior_boundaries(skill: GeneratedSkill, behavior_report: BehaviorRep
     if behavior_report is None:
         return
     harmful_results = [result for result in behavior_report.results if result.harmful_injection]
+    added_categories = set()
+    request_boundaries_added = 0
     for result in harmful_results:
+        category = result.negative_category or ""
+        category_boundary = NEGATIVE_CATEGORY_BOUNDARIES.get(category)
+        if category_boundary and category not in added_categories:
+            added_categories.add(category)
+            if category_boundary not in skill.when_not_to_use:
+                skill.when_not_to_use.append(category_boundary)
+                actions.append(
+                    RepairAction(
+                        "add_negative_control_boundary",
+                        "when_not_to_use",
+                        "over_triggering",
+                        f"Added category non-use boundary for dev negative category `{category}`.",
+                    )
+                )
+            continue
+
+        if category_boundary:
+            continue
+
+        if request_boundaries_added >= 3:
+            continue
         request_boundary = f"Do not use this tool for requests like: {result.user_request or result.case_id}."
         if request_boundary not in skill.when_not_to_use:
             skill.when_not_to_use.append(request_boundary)
+            request_boundaries_added += 1
             actions.append(
                 RepairAction(
                     "add_negative_control_boundary",
