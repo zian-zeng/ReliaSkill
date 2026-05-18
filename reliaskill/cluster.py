@@ -383,7 +383,11 @@ def run_cluster_shard(
     config = load_json_config(config_path)
     strict_backends = _strict_backends(config)
     root = Path(output_root or config.get("output_root") or "outputs/emnlp_acceptance")
-    package_root = Path(shared_packages) if shared_packages else shared_package_root(config, root)
+    package_root = (
+        Path(shared_packages)
+        if shared_packages
+        else shared_package_root(config, root if output_root is not None else None)
+    )
     all_tools = load_tools(config["tools_path"])
     full_names = selected_tool_names(config, all_tools)
     shard_names = selected_tool_names(config, all_tools, shard_index=shard_index, num_shards=num_shards)

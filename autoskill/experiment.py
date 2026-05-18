@@ -35,6 +35,7 @@ from autoskill.method_metadata import (
 from autoskill.packaging import write_skill_package
 from autoskill.parser import parse_mcp_tool
 from autoskill.predictor import PredictorBackend, build_predictor_from_config, build_predictor_from_env, safe_predict
+from autoskill.progress import write_progress_state
 from autoskill.raw_mcp import build_raw_mcp_skill
 from autoskill.retrieval_baselines import (
     build_retrieved_candidates_skill,
@@ -402,6 +403,18 @@ def run_benchmark_pipeline(
             write_skill_package(target_dir, tool, skill, report)
             _write_condition_prompt(out_dir.parent / "packages", tool, skill)
             runtime_skill, retrieval_context = contextualize_skill_for_task(task, tool, skill, tools)
+            write_progress_state(
+                out_dir,
+                phase="benchmark",
+                status="running",
+                task_id=str(task.task_id),
+                tool_name=str(task.tool_name),
+                condition=str(skill.baseline_name),
+                model_name=model_name,
+                model_slug=model_slug,
+                shard_index=shard_index,
+                num_shards=num_shards,
+            )
             prediction = safe_predict(tool, runtime_skill, task, predictor, allow_fallback=allow_predictor_fallback)
             score = score_prediction(task, tool, prediction)
             score["predictor_configured_backend"] = prediction.metadata.get("configured_predictor_backend", predictor.backend_name)
@@ -420,6 +433,15 @@ def run_benchmark_pipeline(
             exposure_path = target_dir / f"{_safe_dir_name(task.task_id)}.prompt.txt"
             exposure_path.write_text(prediction.exposure_text, encoding="utf-8")
 
+    write_progress_state(
+        out_dir,
+        phase="benchmark",
+        status="done",
+        model_name=model_name,
+        model_slug=model_slug,
+        shard_index=shard_index,
+        num_shards=num_shards,
+    )
     summary = summarize_task_scores(all_scores)
     summary_by_tool = summarize_task_scores_by_tool(all_scores)
     summary_by_split = summarize_task_scores_by_split(all_scores)

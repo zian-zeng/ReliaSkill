@@ -10,6 +10,7 @@ from autoskill.conditions import GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER, no
 from autoskill.ir import GeneratedSkill, ToolIR
 from autoskill.method_metadata import prediction_method_metadata
 from autoskill.predictor import PredictorBackend, safe_predict
+from autoskill.progress import write_progress_state
 from autoskill.retrieval_runtime import (
     contextualize_skill_for_task,
     retrieve_candidate_tools,
@@ -265,6 +266,14 @@ def run_routing_pipeline(
                             continue
                     except: pass
 
+            write_progress_state(
+                output_dir,
+                phase="routing",
+                status="running",
+                task_id=str(task.task_id),
+                tool_name=str(task.tool_name),
+                condition=str(baseline_name),
+            )
             skill_bank = {tool_name: variants[baseline_name] for tool_name, variants in skill_variants_by_tool.items()}
             routing = select_tool_for_task(task, baseline_name, tools, skill_bank)
             selected_tool_name = str(routing["selected_tool_name"])
@@ -421,6 +430,7 @@ def run_routing_pipeline(
                 task_dir.mkdir(parents=True, exist_ok=True)
                 with (task_dir / f"{_safe_dir_name(baseline_name)}.routing.json").open("w", encoding="utf-8") as f:
                     json.dump(record, f, indent=2, ensure_ascii=False)
+    write_progress_state(output_dir, phase="routing", status="done")
     return records
 
 

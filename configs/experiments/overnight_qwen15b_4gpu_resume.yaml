@@ -1,0 +1,68 @@
+experiment_scale: overnight_qwen15b_4gpu_resume
+description: "Bounded resumable 4xA5000 overnight slice: one small predictor, 100 tools, eight conditions, routing enabled, live execution disabled."
+seed: 42
+tools_path: data/raw_mcp/tools.jsonl
+tasks_path: data/controls/test.jsonl
+output_root: outputs/overnight_qwen15b_4gpu_resume_v1
+
+generator:
+  type: heuristic
+  ablation_mode: base_only
+
+runtime:
+  strict_backends: true
+
+models:
+  - config: configs/models/qwen2_5_1_5b_instruct_4bit.yaml
+    batch_size: 2
+
+conditions:
+  - raw_mcp
+  - schema_only
+  - raw_schema_plus_examples
+  - prompt_only_careful_tool_use
+  - generated_skill_base
+  - multi_candidate_skill_k3_behavior_select
+  - multi_candidate_repaired_gated
+  - skill_prompt_boundary_first
+
+data:
+  config: configs/data/emnlp_scale.yaml
+  max_tools: 100
+  min_domains_required: 10
+
+controls:
+  config: configs/controls/emnlp_scale.yaml
+  positives_per_tool_total: 3
+  negatives_per_tool_total: 2
+
+routing:
+  config: configs/routing/distractor_inventory.yaml
+  candidate_set_sizes: [4]
+
+live_execution:
+  enabled: false
+
+shared_skill_packages:
+  root: outputs/method_improvement/variant_selection_v1/dev_benchmark
+
+scheduler:
+  one_gpu: true
+  resume: true
+  group_by_model: true
+  run_all_conditions_before_unload: true
+  max_batch_size: 2
+  prompt_safety_margin_tokens: 256
+  include_routing: true
+  examples_per_second: 0.20
+  estimated_bytes_per_call: 5120
+  estimated_bytes_per_token: 1.5
+  condition_token_overheads:
+    raw_mcp: 900
+    schema_only: 450
+    raw_schema_plus_examples: 950
+    prompt_only_careful_tool_use: 300
+    generated_skill_base: 300
+    multi_candidate_skill_k3_behavior_select: 400
+    multi_candidate_repaired_gated: 450
+    skill_prompt_boundary_first: 350

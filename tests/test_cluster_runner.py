@@ -151,6 +151,23 @@ class ClusterRunnerTests(unittest.TestCase):
 
             self.assertEqual(Path(manifest["shared_package_root"]), root / "scratch" / "shared_packages")
 
+    def test_cluster_shard_uses_configured_shared_package_root_without_output_override(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            config_path = self._write_small_config(root, conditions=["raw_mcp"], max_tools=1)
+
+            configured = run_cluster_shard(config_path, shard_index=0, num_shards=1, dry_run=True)
+            overridden = run_cluster_shard(
+                config_path,
+                shard_index=0,
+                num_shards=1,
+                output_root=root / "scratch",
+                dry_run=True,
+            )
+
+            self.assertEqual(Path(configured["shared_package_root"]), root / "shared_packages")
+            self.assertEqual(Path(overridden["shared_package_root"]), root / "scratch" / "shared_packages")
+
     def test_merge_writes_by_model_table(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
