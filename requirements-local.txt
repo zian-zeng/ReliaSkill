@@ -5,5 +5,5 @@ accelerate>=0.28
 # Optional but often useful for tokenizer/model support
 sentencepiece>=0.2
 
-# Optional for 4-bit / 8-bit quantized loading on supported systems
-# bitsandbytes>=0.43
+# Required for 4-bit / 8-bit quantized local-HF model configs.
+bitsandbytes>=0.46.1
