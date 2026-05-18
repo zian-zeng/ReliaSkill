@@ -246,6 +246,15 @@ def _parse_should_call(data: Dict[str, Any]) -> tuple[bool, str | None]:
     return should_call, str(reason) if reason is not None else None
 
 
+def _coerce_predicted_arguments(data: Dict[str, Any]) -> tuple[Dict[str, Any], str | None]:
+    raw_arguments = data.get("arguments", {})
+    if raw_arguments is None:
+        return {}, None
+    if isinstance(raw_arguments, dict):
+        return dict(raw_arguments), None
+    return {}, f"`arguments` must be a JSON object, got {type(raw_arguments).__name__}."
+
+
 def _heuristic_abstention_reason(user_request: str, skill: GeneratedSkill) -> str | None:
     lowered = user_request.lower()
     explicit_markers = (
@@ -391,9 +400,23 @@ class OpenAICompatiblePredictorBackend(PredictorBackend):
         content = response["choices"][0]["message"]["content"]
         data = parse_json_object_output(content)
         should_call, abstention_reason = _parse_should_call(data)
-        predicted_arguments = dict(data.get("arguments", {}))
+        predicted_arguments, argument_parse_error = _coerce_predicted_arguments(data)
         if not should_call:
             predicted_arguments = {}
+            argument_parse_error = None
+        metadata = _prediction_audit_metadata(
+            skill=skill,
+            prompt=prompt,
+            raw_model_output=content,
+            parsed_arguments=predicted_arguments,
+            backend_name=self.backend_name,
+            model_name=self.model,
+            quantization=self.quantization,
+            should_call=should_call,
+            abstention_reason=abstention_reason,
+        )
+        if argument_parse_error:
+            metadata["argument_parse_error"] = argument_parse_error
         return EvalPrediction(
             task_id=task.task_id,
             tool_name=task.tool_name,
@@ -402,17 +425,7 @@ class OpenAICompatiblePredictorBackend(PredictorBackend):
             should_call=should_call,
             abstention_reason=abstention_reason,
             exposure_text=render_exposure(tool, skill),
-            metadata=_prediction_audit_metadata(
-                skill=skill,
-                prompt=prompt,
-                raw_model_output=content,
-                parsed_arguments=predicted_arguments,
-                backend_name=self.backend_name,
-                model_name=self.model,
-                quantization=self.quantization,
-                should_call=should_call,
-                abstention_reason=abstention_reason,
-            ),
+            metadata=metadata,
         )
 
 
@@ -458,9 +471,23 @@ class LocalHFPredictorBackend(PredictorBackend):
         )
         data = parse_json_object_output(content)
         should_call, abstention_reason = _parse_should_call(data)
-        predicted_arguments = dict(data.get("arguments", {}))
+        predicted_arguments, argument_parse_error = _coerce_predicted_arguments(data)
         if not should_call:
             predicted_arguments = {}
+            argument_parse_error = None
+        metadata = _prediction_audit_metadata(
+            skill=skill,
+            prompt=prompt,
+            raw_model_output=content,
+            parsed_arguments=predicted_arguments,
+            backend_name=self.backend_name,
+            model_name=self.model_name_or_path,
+            quantization=self.quantization,
+            should_call=should_call,
+            abstention_reason=abstention_reason,
+        )
+        if argument_parse_error:
+            metadata["argument_parse_error"] = argument_parse_error
         return EvalPrediction(
             task_id=task.task_id,
             tool_name=task.tool_name,
@@ -469,17 +496,7 @@ class LocalHFPredictorBackend(PredictorBackend):
             should_call=should_call,
             abstention_reason=abstention_reason,
             exposure_text=render_exposure(tool, skill),
-            metadata=_prediction_audit_metadata(
-                skill=skill,
-                prompt=prompt,
-                raw_model_output=content,
-                parsed_arguments=predicted_arguments,
-                backend_name=self.backend_name,
-                model_name=self.model_name_or_path,
-                quantization=self.quantization,
-                should_call=should_call,
-                abstention_reason=abstention_reason,
-            ),
+            metadata=metadata,
         )
 
 
