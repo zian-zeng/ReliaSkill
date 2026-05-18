@@ -1,6 +1,7 @@
 from __future__ import annotations
 from tqdm import tqdm
 
+import hashlib
 import random
 import re
 from typing import Any, Dict, Iterable, List, Tuple
@@ -24,7 +25,19 @@ METHOD_ROUTING_CONDITIONS = {GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER}
 
 def _safe_dir_name(value: str) -> str:
     """Truncate a tool or condition name for use as a directory component on Windows."""
-    return "".join(char if char.isalnum() or char in {"-", "_", "."} else "_" for char in value)[:50]
+    return _safe_component(value)[:50]
+
+
+def _safe_component(value: str) -> str:
+    return "".join(char if char.isalnum() or char in {"-", "_", "."} else "_" for char in value) or "unknown"
+
+
+def _safe_task_name(value: str) -> str:
+    safe = _safe_component(value)
+    if len(safe) <= 96:
+        return safe
+    digest = hashlib.sha1(value.encode("utf-8")).hexdigest()[:12]
+    return f"{safe[:83]}_{digest}"
 
 
 def _tokenize(text: str) -> List[str]:
@@ -241,7 +254,7 @@ def run_routing_pipeline(
     for task in tqdm(tasks, desc="[ReliaSkill] Routing evaluation"):
         # Quick skip if all results for this task exist
         if output_dir:
-            task_dir = output_dir / _safe_dir_name(task.task_id)
+            task_dir = output_dir / _safe_task_name(task.task_id)
             if task_dir.exists():
                 existing = []
                 for b_name in baseline_names:
@@ -258,7 +271,7 @@ def run_routing_pipeline(
         for baseline_name in baseline_names:
             # Per-baseline resume
             if output_dir:
-                p = output_dir / _safe_dir_name(task.task_id) / f"{_safe_dir_name(baseline_name)}.routing.json"
+                p = output_dir / _safe_task_name(task.task_id) / f"{_safe_dir_name(baseline_name)}.routing.json"
                 if p.exists():
                     try:
                         with p.open("r", encoding="utf-8") as f:
@@ -352,7 +365,7 @@ def run_routing_pipeline(
                 
                 prediction_dict = None
                 if benchmark_dir and selected_tool_name == task.tool_name:
-                    cached_result_path = benchmark_dir / _safe_dir_name(selected_tool_name) / _safe_dir_name(baseline_name) / f"{_safe_dir_name(task.task_id)}.result.json"
+                    cached_result_path = benchmark_dir / _safe_dir_name(selected_tool_name) / _safe_dir_name(baseline_name) / f"{_safe_task_name(task.task_id)}.result.json"
                     if cached_result_path.exists():
                         try:
                             with cached_result_path.open("r", encoding="utf-8") as f:
@@ -426,7 +439,7 @@ def run_routing_pipeline(
             
             records.append(record)
             if output_dir:
-                task_dir = output_dir / _safe_dir_name(task.task_id)
+                task_dir = output_dir / _safe_task_name(task.task_id)
                 task_dir.mkdir(parents=True, exist_ok=True)
                 with (task_dir / f"{_safe_dir_name(baseline_name)}.routing.json").open("w", encoding="utf-8") as f:
                     json.dump(record, f, indent=2, ensure_ascii=False)

@@ -97,9 +97,9 @@ def build_progress_plan(
 
 def scan_progress(plan: ProgressPlan) -> Dict[str, Any]:
     root = plan.output_root
-    benchmark_completed = _count_files(root / "predictors", "benchmark", "*.result.json")
-    routing_completed = _count_files(root / "predictors", "routing_benchmark", "*.routing.json")
-    live_completed = _count_files(root / "predictors", "live_exec", "*.live_result.json")
+    benchmark_completed = _count_phase_records(root / "predictors", "benchmark", "*.result.json", "prediction_records.jsonl")
+    routing_completed = _count_phase_records(root / "predictors", "routing_benchmark", "*.routing.json", "routing_records.jsonl")
+    live_completed = _count_phase_records(root / "predictors", "live_exec", "*.live_result.json", "live_exec_results.jsonl")
     states = _load_state_rows(plan)
     if not states:
         states = _infer_state_rows(plan)
@@ -128,10 +128,62 @@ def _infer_num_shards(root: Path) -> int | None:
     return max(shard_indices) + 1
 
 
-def _count_files(predictors_root: Path, phase_dir: str, pattern: str) -> int:
+def _count_phase_records(predictors_root: Path, phase_dir: str, pattern: str, jsonl_name: str) -> int:
     if not predictors_root.exists():
         return 0
-    return sum(1 for _ in predictors_root.glob(f"*/shard_*/{phase_dir}/**/{pattern}"))
+    keys: set[tuple[str, str, str, str, str]] = set()
+    for shard_root in sorted(path for path in predictors_root.glob("*/shard_*") if path.is_dir()):
+        phase_root = shard_root / phase_dir
+        _collect_jsonl_record_keys(phase_root / jsonl_name, phase_dir=phase_dir, model_slug=shard_root.parent.name, keys=keys)
+        if phase_root.exists():
+            for path in phase_root.glob(f"**/{pattern}"):
+                _collect_json_record_key(path, phase_dir=phase_dir, model_slug=shard_root.parent.name, keys=keys)
+    return len(keys)
+
+
+def _collect_jsonl_record_keys(
+    path: Path,
+    *,
+    phase_dir: str,
+    model_slug: str,
+    keys: set[tuple[str, str, str, str, str]],
+) -> None:
+    if not path.exists():
+        return
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    record = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                keys.add(_record_key(record, phase_dir=phase_dir, model_slug=model_slug))
+    except OSError:
+        return
+
+
+def _collect_json_record_key(
+    path: Path,
+    *,
+    phase_dir: str,
+    model_slug: str,
+    keys: set[tuple[str, str, str, str, str]],
+) -> None:
+    try:
+        record = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return
+    keys.add(_record_key(record, phase_dir=phase_dir, model_slug=model_slug))
+
+
+def _record_key(record: Dict[str, Any], *, phase_dir: str, model_slug: str) -> tuple[str, str, str, str, str]:
+    task_id = str(record.get("live_task_id") or record.get("task_id") or "")
+    baseline = str(record.get("baseline_name") or record.get("condition") or "")
+    tool_name = str(record.get("tool_name") or record.get("expected_tool_name") or "")
+    return (str(record.get("model_slug") or model_slug), phase_dir, task_id, baseline, tool_name)
 
 
 def _load_state_rows(plan: ProgressPlan) -> List[Dict[str, Any]]:
@@ -171,8 +223,8 @@ def _infer_state_rows(plan: ProgressPlan) -> List[Dict[str, Any]]:
         model_root = plan.output_root / "predictors" / model_slug
         for shard_index, tasks in plan.tasks_by_shard.items():
             shard_root = model_root / f"shard_{shard_index:02d}"
-            benchmark_done = sum(1 for _ in (shard_root / "benchmark").glob("**/*.result.json"))
-            routing_done = sum(1 for _ in (shard_root / "routing_benchmark").glob("**/*.routing.json"))
+            benchmark_done = _count_shard_phase_records(shard_root, "benchmark", "*.result.json", "prediction_records.jsonl")
+            routing_done = _count_shard_phase_records(shard_root, "routing_benchmark", "*.routing.json", "routing_records.jsonl")
             phase = "done"
             completed_in_phase = benchmark_done
             phase_total = len(tasks) * condition_count
@@ -222,3 +274,13 @@ def _infer_row(
         "updated_at": None,
         "source": "inferred",
     }
+
+
+def _count_shard_phase_records(shard_root: Path, phase_dir: str, pattern: str, jsonl_name: str) -> int:
+    phase_root = shard_root / phase_dir
+    keys: set[tuple[str, str, str, str, str]] = set()
+    _collect_jsonl_record_keys(phase_root / jsonl_name, phase_dir=phase_dir, model_slug=shard_root.parent.name, keys=keys)
+    if phase_root.exists():
+        for path in phase_root.glob(f"**/{pattern}"):
+            _collect_json_record_key(path, phase_dir=phase_dir, model_slug=shard_root.parent.name, keys=keys)
+    return len(keys)

@@ -49,6 +49,44 @@ class ProgressMonitorTest(unittest.TestCase):
             self.assertEqual(snapshot["current"][0]["condition"], "condition_b")
             self.assertEqual(snapshot["current"][0]["source"], "heartbeat")
 
+    def test_scan_prefers_jsonl_counts_when_result_filenames_collide(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            benchmark_dir = root / "predictors" / "model_a" / "shard_00" / "benchmark"
+            result_dir = benchmark_dir / "tool_a" / "condition_a"
+            result_dir.mkdir(parents=True)
+            (result_dir / "shared_prefix.result.json").write_text(
+                json.dumps({"task_id": "task_1", "baseline_name": "condition_a", "tool_name": "tool_a"}),
+                encoding="utf-8",
+            )
+            with (benchmark_dir / "prediction_records.jsonl").open("w", encoding="utf-8") as f:
+                for task_id in ("task_1", "task_2", "task_3"):
+                    f.write(json.dumps({"task_id": task_id, "baseline_name": "condition_a", "tool_name": "tool_a"}) + "\n")
+
+            snapshot = scan_progress(self._plan(root))
+
+            self.assertEqual(snapshot["benchmark"], {"completed": 3, "total": 4})
+            self.assertEqual(snapshot["completed"], 3)
+
+    def test_scan_counts_unique_jsonl_records(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            benchmark_dir = root / "predictors" / "model_a" / "shard_00" / "benchmark"
+            benchmark_dir.mkdir(parents=True)
+            rows = [
+                {"task_id": "task_1", "baseline_name": "condition_a", "tool_name": "tool_a"},
+                {"task_id": "task_1", "baseline_name": "condition_a", "tool_name": "tool_a"},
+                {"task_id": "task_1", "baseline_name": "condition_b", "tool_name": "tool_a"},
+            ]
+            with (benchmark_dir / "prediction_records.jsonl").open("w", encoding="utf-8") as f:
+                for row in rows:
+                    f.write(json.dumps(row) + "\n")
+
+            snapshot = scan_progress(self._plan(root))
+
+            self.assertEqual(snapshot["benchmark"], {"completed": 2, "total": 4})
+            self.assertEqual(snapshot["completed"], 2)
+
     def test_scan_infers_next_task_when_heartbeat_is_missing(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

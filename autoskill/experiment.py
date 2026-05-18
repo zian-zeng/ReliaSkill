@@ -1,6 +1,7 @@
 from __future__ import annotations
 from tqdm import tqdm
 
+import hashlib
 import json
 from pathlib import Path
 from typing import Any, Dict, List, Sequence, Tuple
@@ -283,9 +284,22 @@ def _safe_filename(value: str) -> str:
     return "".join(char if char.isalnum() or char in {"-", "_", "."} else "_" for char in value)[:160]
 
 
+def _safe_component(value: str) -> str:
+    return "".join(char if char.isalnum() or char in {"-", "_", "."} else "_" for char in value) or "unknown"
+
+
 def _safe_dir_name(value: str) -> str:
     """Truncate a tool or condition name for use as a directory component on Windows."""
-    return "".join(char if char.isalnum() or char in {"-", "_", "."} else "_" for char in value)[:50]
+    return _safe_component(value)[:50]
+
+
+def _safe_task_name(value: str) -> str:
+    """Make task result filenames collision-resistant while keeping paths readable."""
+    safe = _safe_component(value)
+    if len(safe) <= 96:
+        return safe
+    digest = hashlib.sha1(value.encode("utf-8")).hexdigest()[:12]
+    return f"{safe[:83]}_{digest}"
 
 
 def _write_condition_prompt(output_dir: Path, tool: Any, skill: Any) -> None:
@@ -389,7 +403,7 @@ def run_benchmark_pipeline(
             target_dir = out_dir / _safe_dir_name(task.tool_name) / _safe_dir_name(skill.baseline_name)
             target_dir.mkdir(parents=True, exist_ok=True)
             
-            result_path = target_dir / f"{_safe_dir_name(task.task_id)}.result.json"
+            result_path = target_dir / f"{_safe_task_name(task.task_id)}.result.json"
             if result_path.exists():
                 try:
                     with result_path.open("r", encoding="utf-8") as f:
@@ -430,7 +444,7 @@ def run_benchmark_pipeline(
             with result_path.open("w", encoding="utf-8") as f:
                 json.dump(score, f, indent=2, ensure_ascii=False)
 
-            exposure_path = target_dir / f"{_safe_dir_name(task.task_id)}.prompt.txt"
+            exposure_path = target_dir / f"{_safe_task_name(task.task_id)}.prompt.txt"
             exposure_path.write_text(prediction.exposure_text, encoding="utf-8")
 
     write_progress_state(
@@ -657,7 +671,7 @@ def run_full_experiment(
         audit_records.append(generation_audit_record(audit_manifest, tool, record["skill"], record["report"], artifact_path))
     for score in benchmark_scores:
         package_record = package_record_map.get((score.get("tool_name"), score.get("baseline_name")))
-        artifact_path = output_root / "benchmark" / _safe_dir_name(str(score.get("tool_name", ""))) / _safe_dir_name(str(score.get("baseline_name", ""))) / f"{_safe_dir_name(str(score.get('task_id', '')))}.result.json"
+        artifact_path = output_root / "benchmark" / _safe_dir_name(str(score.get("tool_name", ""))) / _safe_dir_name(str(score.get("baseline_name", ""))) / f"{_safe_task_name(str(score.get('task_id', '')))}.result.json"
         audit_records.append(
             prediction_audit_record(
                 audit_manifest,
