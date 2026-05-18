@@ -3,7 +3,10 @@ set -euo pipefail
 
 CONFIG="${CONFIG:-configs/experiments/overnight_qwen15b_4gpu_resume.yaml}"
 GPUS="${GPUS:-4}"
-WALLTIME="${WALLTIME:-08:30:00}"
+CPUS="${CPUS:-16}"
+MEM="${MEM:-128G}"
+QOS="${QOS:-high}"
+WALLTIME="${WALLTIME:-1-00:00:00}"
 MODELS="${MODELS:-Qwen_Qwen2.5-1.5B-Instruct}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -18,14 +21,16 @@ python scripts/plan_experiment_run.py \
   --output-report outputs/reports/overnight_qwen15b_4gpu_pre_submit_plan.md \
   --output-csv outputs/tables/overnight_qwen15b_4gpu_pre_submit_plan.csv
 
-bash scripts/cluster/submit_emnlp_acceptance.sh \
-  --config "$CONFIG" \
-  --gpus "$GPUS" \
-  --models "$MODELS" \
-  --walltime "$WALLTIME" \
-  --skip-packages \
-  --per-model
+job_id="$(sbatch --parsable \
+  --qos="$QOS" \
+  --cpus-per-task="$CPUS" \
+  --mem="$MEM" \
+  --gres="gpu:${GPUS}" \
+  --time="$WALLTIME" \
+  --export=ALL,CONFIG="$CONFIG",GPUS="$GPUS",MODELS="$MODELS" \
+  scripts/cluster/run_overnight_qwen15b_4gpu_resume.sbatch)"
 
 echo
+echo "overnight_job=${job_id}"
 echo "Monitor with:"
 echo "python scripts/monitor_experiment_progress.py --config $CONFIG --num-shards $GPUS --models $MODELS"

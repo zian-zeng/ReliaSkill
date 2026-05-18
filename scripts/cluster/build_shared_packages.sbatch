@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=reliaskill-packages
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
 #SBATCH --gres=gpu:1
 #SBATCH --time=12:00:00
