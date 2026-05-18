@@ -238,7 +238,7 @@ def run_routing_pipeline(
     records: List[Dict[str, Any]] = []
     baseline_names = list(next(iter(skill_variants_by_tool.values())).keys())
     
-    for task in tqdm(tasks, desc="[AutoSkill] Routing evaluation"):
+    for task in tqdm(tasks, desc="[ReliaSkill] Routing evaluation"):
         # Quick skip if all results for this task exist
         if output_dir:
             task_dir = output_dir / _safe_dir_name(task.task_id)

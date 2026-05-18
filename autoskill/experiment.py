@@ -309,7 +309,7 @@ def run_packaging_pipeline(
     generator = generator or SkillGenerator()
     records: List[Dict[str, Any]] = []
 
-    for tool in tqdm(tools.values(), desc="[AutoSkill] Packaging tools"):
+    for tool in tqdm(tools.values(), desc="[ReliaSkill] Packaging tools"):
         variants = build_skill_variant_map(tool, tools, generator, allowed_conditions=allowed_conditions, package_manager_dir=out_dir)
         for skill in variants.values():
             report = validate_skill(tool, skill)
@@ -372,7 +372,7 @@ def run_benchmark_pipeline(
     package_root = Path(package_manager_dir) if package_manager_dir is not None else out_dir.parent / "packages"
     all_scores: List[Dict[str, Any]] = []
 
-    for task in tqdm(tasks, desc="[AutoSkill] Running benchmark"):
+    for task in tqdm(tasks, desc="[ReliaSkill] Running benchmark"):
         if task.tool_name not in tools:
             continue
         tool = tools[task.tool_name]
