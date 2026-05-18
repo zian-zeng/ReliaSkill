@@ -30,7 +30,7 @@ def main() -> None:
         from rich.console import Group
         from rich.live import Live
         from rich.panel import Panel
-        from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn, TimeElapsedColumn, TimeRemainingColumn
+        from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn
     except ImportError as exc:
         raise SystemExit("Rich is required for the live progress dashboard. Install with: python -m pip install rich") from exc
 
@@ -48,8 +48,6 @@ def main() -> None:
         BarColumn(),
         MofNCompleteColumn(),
         TextColumn("{task.percentage:>5.1f}%"),
-        TimeElapsedColumn(),
-        TimeRemainingColumn(),
         expand=True,
     )
     task_ids = {
@@ -59,15 +57,23 @@ def main() -> None:
     }
     if plan.live_total:
         task_ids["live"] = progress.add_task("Live execution", total=plan.live_total)
+    started_at = time.monotonic()
+    samples: list[tuple[float, int]] = []
 
     def render_once() -> Group:
+        now = time.monotonic()
         snapshot = scan_progress(plan)
+        stats = _observed_stats(samples, now=now, completed=int(snapshot["completed"]), total=int(snapshot["total"]))
         progress.update(task_ids["total"], total=max(snapshot["total"], 1), completed=snapshot["completed"])
         progress.update(task_ids["benchmark"], total=max(snapshot["benchmark"]["total"], 1), completed=snapshot["benchmark"]["completed"])
         progress.update(task_ids["routing"], total=max(snapshot["routing"]["total"], 1), completed=snapshot["routing"]["completed"])
         if "live" in task_ids:
             progress.update(task_ids["live"], total=max(snapshot["live"]["total"], 1), completed=snapshot["live"]["completed"])
-        return Group(_summary_panel(Panel, box, snapshot), progress, _current_panel(Panel, box, snapshot))
+        return Group(
+            _summary_panel(Panel, box, snapshot, elapsed_seconds=now - started_at, stats=stats),
+            progress,
+            _current_panel(Panel, box, snapshot),
+        )
 
     if args.once:
         from rich.console import Console
@@ -81,37 +87,82 @@ def main() -> None:
             time.sleep(max(1.0, args.refresh))
 
 
-def _summary_panel(panel_cls, box_module, snapshot: dict) -> object:
+def _summary_panel(panel_cls, box_module, snapshot: dict, *, elapsed_seconds: float, stats: dict) -> object:
     total = snapshot["total"] or 0
     completed = snapshot["completed"] or 0
     percent = (completed / total * 100.0) if total else 0.0
+    rate_text = f"{stats['rate_per_min']:.1f} records/min" if stats.get("rate_per_min") else "warming up"
     text = (
         f"[bold]Output[/bold] {snapshot['output_root']}\n"
         f"[bold]Completed[/bold] {completed}/{total} ({percent:.1f}%)\n"
-        "[dim]ETA is live Rich progress ETA from observed completed result files.[/dim]"
+        f"[bold]Elapsed[/bold] {_format_duration(elapsed_seconds)}\n"
+        f"[bold]Observed ETA[/bold] {stats['eta_text']}  [dim]({rate_text}, from saved result files)[/dim]"
     )
     return panel_cls(text, title="ReliaSkill Experiment Progress", box=box_module.ASCII)
 
 
 def _current_panel(panel_cls, box_module, snapshot: dict) -> object:
-    rows = snapshot.get("current") or []
+    rows = _active_rows(snapshot.get("current") or [])
     if not rows:
-        return panel_cls("waiting", title="Current / Next Work By Shard", box=box_module.ASCII)
+        return panel_cls("No active shard heartbeat yet. The counters above are authoritative.", title="Active Shards", box=box_module.ASCII)
     lines = []
     for row in rows:
-        worker = f"{row.get('model_slug') or row.get('model_name') or '-'} / shard {row.get('shard_index') if row.get('shard_index') is not None else '-'}"
+        shard = row.get("shard_index") if row.get("shard_index") is not None else "-"
+        task = str(row.get("task_id") or "-")
+        tool = str(row.get("tool_name") or "-")
+        condition = str(row.get("condition") or "-")
         lines.append(
-            " | ".join(
-                [
-                    _short(worker, 14),
-                    _short(row.get("phase") or "-", 9),
-                    _short(row.get("status") or "-", 4),
-                    _short(row.get("task_id") or "-", 22),
-                    _short(row.get("condition") or "-", 8),
-                ]
-            )
+            f"shard {shard} | {row.get('phase') or '-'} | {row.get('status') or '-'} | {condition}\n"
+            f"  task: {task}\n"
+            f"  tool: {tool}"
         )
-    return panel_cls("\n".join(lines), title="Current / Next Work By Shard", box=box_module.ASCII)
+    return panel_cls("\n\n".join(lines), title="Active / Next Shard Work", box=box_module.ASCII)
+
+
+def _active_rows(rows: list[dict]) -> list[dict]:
+    rank = {"running": 0, "next": 1, "done": 2}
+    phase_rank = {"benchmark": 0, "routing": 1, "live": 2, "done": 3}
+    best: dict[tuple[str, str], dict] = {}
+    for row in rows:
+        key = (str(row.get("model_slug") or row.get("model_name") or "-"), str(row.get("shard_index")))
+        existing = best.get(key)
+        if existing is None or (
+            rank.get(str(row.get("status")), 9),
+            phase_rank.get(str(row.get("phase")), 9),
+        ) < (
+            rank.get(str(existing.get("status")), 9),
+            phase_rank.get(str(existing.get("phase")), 9),
+        ):
+            best[key] = row
+    return [
+        row for row in sorted(best.values(), key=lambda item: (str(item.get("model_slug") or ""), str(item.get("shard_index"))))
+        if row.get("status") != "done"
+    ]
+
+
+def _observed_stats(samples: list[tuple[float, int]], *, now: float, completed: int, total: int) -> dict:
+    samples.append((now, completed))
+    cutoff = now - 1800.0
+    del samples[: max(0, next((index for index, (ts, _) in enumerate(samples) if ts >= cutoff), len(samples) - 1))]
+    previous = next(((ts, count) for ts, count in samples if count < completed), None)
+    if previous is None:
+        return {"eta_text": "waiting for result-file delta", "rate_per_min": 0.0}
+    prev_ts, prev_completed = previous
+    elapsed = max(0.001, now - prev_ts)
+    rate_per_second = (completed - prev_completed) / elapsed
+    if rate_per_second <= 0:
+        return {"eta_text": "waiting for result-file delta", "rate_per_min": 0.0}
+    remaining = max(0, total - completed)
+    return {"eta_text": _format_duration(remaining / rate_per_second), "rate_per_min": rate_per_second * 60.0}
+
+
+def _format_duration(seconds: float) -> str:
+    seconds = max(0, int(seconds))
+    hours, remainder = divmod(seconds, 3600)
+    minutes, secs = divmod(remainder, 60)
+    if hours:
+        return f"{hours}h {minutes:02d}m {secs:02d}s"
+    return f"{minutes}m {secs:02d}s"
 
 
 def _short(value: object, limit: int) -> str:
