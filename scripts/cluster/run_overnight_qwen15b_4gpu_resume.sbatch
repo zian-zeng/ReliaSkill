@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=reliaskill-overnight-qwen15b
-#SBATCH --qos=high
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=128G
 #SBATCH --gres=gpu:4
