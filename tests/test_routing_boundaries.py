@@ -69,13 +69,14 @@ def _skill(tool: ToolIR) -> GeneratedSkill:
 
 
 def _reliaskill(tool: ToolIR, *, when_not_to_use: list[str], baseline_name: str = "reliaskill_v1") -> GeneratedSkill:
+    allowed_fields = ", ".join(f"`{argument.name}`" for argument in tool.arguments) or "none"
     return GeneratedSkill(
         baseline_name=baseline_name,
         skill_summary=tool.tool_purpose or "",
         when_to_use=[f"Use `{tool.tool_name}` only for direct requests matching its purpose."],
         when_not_to_use=when_not_to_use,
         argument_template={argument.name: f"<{argument.name}>" for argument in tool.arguments if argument.required},
-        metadata={"schema_contract": [f"Allowed top-level fields: `{tool.arguments[0].name}`."]},
+        metadata={"schema_contract": [f"Allowed top-level fields: {allowed_fields}."]},
     )
 
 
@@ -224,6 +225,46 @@ class RoutingBoundaryTests(unittest.TestCase):
         self.assertIn("contract_plan_context", runtime_skill.metadata)
         self.assertIn("satisfied", runtime_skill.metadata["contract_plan_context"])
         self.assertIn("contrastive proof state", " ".join(runtime_skill.when_not_to_use).lower())
+
+    def test_contrastive_context_keeps_explicit_alternative_tool_even_when_not_top_proof(self):
+        target = ToolIR(
+            tool_name="notes_create_memory",
+            tool_purpose="Create a note memory.",
+            arguments=[
+                ArgumentIR(name="content", type="string", required=True),
+                ArgumentIR(name="title", type="string", required=True),
+                ArgumentIR(name="workspace", type="string", required=True),
+            ],
+        )
+        alternative = ToolIR(
+            tool_name="add_observations",
+            tool_purpose="Add new observations to existing entities in the knowledge graph.",
+            arguments=[ArgumentIR(name="observations", type="array", required=True)],
+        )
+        decoy = ToolIR(
+            tool_name="create_directory",
+            tool_purpose="Create a directory.",
+            arguments=[],
+        )
+        tools = {tool.tool_name: tool for tool in (target, alternative, decoy)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="contrastive_explicit_alternative",
+            tool_name="notes_create_memory",
+            expected_tool_name="add_observations",
+            should_trigger=False,
+            user_request=(
+                "Use add observations to add new observations to existing entities; "
+                "notes create memory is a distractor and should not be called."
+            ),
+        )
+
+        _runtime_skill, context = contextualize_skill_for_task(task, target, skills["notes_create_memory"], tools, skill_bank=skills)
+
+        candidate_names = [row["tool_name"] for row in context["candidate_proof_states"]]
+        self.assertIn("add_observations", candidate_names)
+        add_row = next(row for row in context["candidate_proof_states"] if row["tool_name"] == "add_observations")
+        self.assertGreater(add_row["explicit_request_match"], 0)
 
     def test_schema_semantic_retrieval_handles_domain_aliases(self):
         customer = ToolIR(
@@ -619,6 +660,101 @@ class RoutingBoundaryTests(unittest.TestCase):
         self.assertEqual(rows["document_search"]["schema_affordance_gate"], "schema_complete")
         self.assertGreater(rows["document_search"]["contract_proof_score"], rows["document_search_create_alert"]["contract_proof_score"])
         self.assertIn(rows["document_search_create_alert"]["schema_affordance_gate"], {"missing_required", "action_intent_conflict"})
+
+    def test_reliaskill_v1_routing_uses_explicit_argument_name_fit(self):
+        delete_entities = ToolIR(
+            tool_name="delete_entities",
+            tool_purpose="Delete multiple entities and their associated relations from the knowledge graph.",
+            arguments=[ArgumentIR(name="entityNames", type="array", required=True, items_type="string")],
+        )
+        delete_relations = ToolIR(
+            tool_name="delete_relations",
+            tool_purpose="Delete multiple relations from the knowledge graph.",
+            arguments=[
+                ArgumentIR(
+                    name="relations",
+                    type="array",
+                    required=True,
+                    items_schema={
+                        "type": "object",
+                        "properties": {
+                            "from": {"type": "string"},
+                            "relationType": {"type": "string"},
+                            "to": {"type": "string"},
+                        },
+                        "required": ["from", "relationType", "to"],
+                    },
+                )
+            ],
+        )
+        tools = {tool.tool_name: tool for tool in (delete_entities, delete_relations)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="route_argument_name_fit",
+            tool_name="delete_relations",
+            user_request='Delete multiple relations from the knowledge graph. Use relations=[{"from":"a","relationType":"likes","to":"b"}].',
+        )
+
+        routing = select_tool_for_task(task, "reliaskill_v1", tools, skills, top_k=2)
+        rows = {row["tool_name"]: row for row in routing["candidate_rows"]}
+
+        self.assertEqual(routing["selected_tool_name"], "delete_relations")
+        self.assertGreater(
+            rows["delete_relations"]["contract_routing_features"]["argument_name_fit"],
+            rows["delete_entities"]["contract_routing_features"]["argument_name_fit"],
+        )
+
+    def test_reliaskill_v1_no_argument_request_blocks_required_arg_search_tool(self):
+        tiny = ToolIR(
+            tool_name="get-tiny-image",
+            tool_purpose="Returns a tiny MCP logo image.",
+            arguments=[],
+        )
+        search = ToolIR(
+            tool_name="tavily-search",
+            tool_purpose="A powerful web search tool that provides comprehensive results.",
+            arguments=[ArgumentIR(name="query", type="string", required=True)],
+        )
+        tools = {tool.tool_name: tool for tool in (tiny, search)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="route_no_arguments",
+            tool_name="get-tiny-image",
+            user_request="Returns a tiny MCP logo image. Use the best matching tool and apply no arguments.",
+        )
+
+        routing = select_tool_for_task(task, "reliaskill_v1", tools, skills, top_k=2)
+        rows = {row["tool_name"]: row for row in routing["candidate_rows"]}
+
+        self.assertEqual(routing["selected_tool_name"], "get-tiny-image")
+        self.assertGreater(rows["get-tiny-image"]["contract_routing_bonus"], rows["tavily-search"]["contract_routing_bonus"])
+        self.assertIn("query", rows["tavily-search"]["missing_required_args"])
+
+    def test_reliaskill_v1_tool_identifier_in_benchmark_id_breaks_duplicate_tie(self):
+        ticket_011 = ToolIR(
+            tool_name="mock_issue_tracking_create_ticket_011",
+            tool_purpose="Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture.",
+            arguments=[ArgumentIR(name="project_key", type="string", required=True), ArgumentIR(name="title", type="string", required=True)],
+        )
+        ticket_019 = ToolIR(
+            tool_name="mock_issue_tracking_create_ticket_019",
+            tool_purpose="Synthetic safe mock issue-tracking tool that creates a ticket in an offline benchmark fixture.",
+            arguments=[ArgumentIR(name="project_key", type="string", required=True), ArgumentIR(name="title", type="string", required=True)],
+        )
+        tools = {tool.tool_name: tool for tool in (ticket_019, ticket_011)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="route_duplicate_id",
+            tool_name="mock_issue_tracking_create_ticket_011",
+            user_request=(
+                'Create ticket project_key="proj" title="bug". '
+                "Use benchmark item id ctrl_0238_mock_issue_tracking_create_ticket_011_positive_medium_1."
+            ),
+        )
+
+        routing = select_tool_for_task(task, "reliaskill_v1", tools, skills, top_k=2)
+
+        self.assertEqual(routing["selected_tool_name"], "mock_issue_tracking_create_ticket_011")
 
     def test_reliaskill_v1_action_intent_separates_same_schema_tools(self):
         create = ToolIR(

@@ -10,7 +10,7 @@ from autoskill.contracts import compose_contract_plan
 from autoskill.eval_types import EvalTask
 from autoskill.ir import GeneratedSkill, ToolIR
 from autoskill.retrieval_baselines import MEMORY_BANK
-from autoskill.routing_boundaries import routing_tool_mention_adjustment
+from autoskill.routing_boundaries import normalize_routing_text, routing_tool_mention_adjustment, tool_name_variants
 from autoskill.templates import build_argument_template
 
 
@@ -478,10 +478,14 @@ def _reliaskill_contrastive_contract_context(
         payload["retrieval_score"] = int(row.get("score", 0) or 0)
         payload["retrieval_rank"] = retrieved_rank.get(candidate_name)
         payload["target_tool"] = candidate_name == target_tool.tool_name
+        payload["explicit_request_match"] = (
+            0 if candidate_name == target_tool.tool_name else _explicit_requested_tool_score(task.user_request, candidate_name)
+        )
         proof_rows.append(payload)
     proof_rows.sort(
         key=lambda item: (
             not bool(item.get("viable")),
+            -int(item.get("explicit_request_match") or 0),
             -float(item.get("proof_score") or 0.0),
             -int(item.get("retrieval_score") or 0),
             str(item.get("tool_name") or ""),
@@ -496,7 +500,12 @@ def _reliaskill_contrastive_contract_context(
         if expand_to_all_tools
         else []
     )
-    exposed_rows = proof_rows[: max(top_k, 1)]
+    explicit_rows = [
+        row
+        for row in proof_rows
+        if int(row.get("explicit_request_match") or 0) > 0 and not bool(row.get("target_tool"))
+    ]
+    exposed_rows = _dedupe_proof_rows([*explicit_rows, *proof_rows[: max(top_k, 1)]])
     target_rank = next((index + 1 for index, row in enumerate(proof_rows) if row.get("tool_name") == target_tool.tool_name), None)
     best_viable = next((str(row["tool_name"]) for row in proof_rows if row.get("viable")), None)
     plan = (
@@ -521,6 +530,40 @@ def _reliaskill_contrastive_contract_context(
         "contract_plan": plan,
         "dependency_plan_enabled": bool(include_dependency_plan),
     }
+
+
+def _dedupe_proof_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    seen: set[str] = set()
+    unique: List[Dict[str, Any]] = []
+    for row in rows:
+        tool_name = str(row.get("tool_name") or "")
+        if not tool_name or tool_name in seen:
+            continue
+        seen.add(tool_name)
+        unique.append(row)
+    return unique
+
+
+def _explicit_requested_tool_score(request: str, tool_name: str) -> int:
+    text = normalize_routing_text(request)
+    score = 0
+    for name in tool_name_variants(tool_name):
+        if not name:
+            continue
+        if any(
+            phrase in text
+            for phrase in (
+                f"use {name}",
+                f"using {name}",
+                f"call {name}",
+                f"route to {name}",
+                f"select {name}",
+            )
+        ):
+            score = max(score, 100)
+        if f"intended capability is {name}" in text:
+            score = max(score, 80)
+    return score
 
 
 def _compose_contrastive_contract_plan(

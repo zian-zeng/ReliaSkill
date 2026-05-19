@@ -17,7 +17,7 @@ from autoskill.local_model import LocalHFChatRunner
 from autoskill.prompting import build_prediction_prompt
 from autoskill.contract_inference import build_contract_proof_state
 from autoskill.contracts import build_contract_failure_report, compile_skill_contract, evaluate_skill_contract
-from autoskill.routing_boundaries import detect_routing_abstention, tool_name_variants
+from autoskill.routing_boundaries import detect_routing_abstention, normalize_routing_text, tool_name_variants
 from autoskill.schema_utils import normalize_schema_node, schema_type
 
 
@@ -1536,13 +1536,22 @@ def _reliaskill_v1_boundary_reason(tool: ToolIR, skill: GeneratedSkill, request:
     if explicit:
         return explicit
     lowered = request.lower()
+    normalized = normalize_routing_text(request)
+    if _request_is_ambiguous_or_missing_required(request):
+        return "missing_required_information"
     for tool_phrase in tool_name_variants(tool):
-        if f"do not use {tool_phrase}" in lowered or f"do not call {tool_phrase}" in lowered:
+        if f"do not use {tool_phrase}" in normalized or f"do not call {tool_phrase}" in normalized:
             return "explicit_target_tool_forbidden"
-        if f"without using {tool_phrase}" in lowered:
+        if f"without using {tool_phrase}" in normalized:
             return "explicit_target_tool_forbidden"
-        if f"{tool_phrase} is a distractor" in lowered or f"{tool_phrase} should not be called" in lowered:
+        if f"{tool_phrase} is a distractor" in normalized or f"{tool_phrase} should not be called" in normalized:
             return "explicit_target_tool_forbidden"
+        if f"adjacent to {tool_phrase}" in normalized and "intended capability" in normalized:
+            return "adjacent_or_boundary_mismatch"
+        if f"close to {tool_phrase}" in normalized and "only want" in normalized:
+            return "adjacent_or_boundary_mismatch"
+    if re.search(r"\bthis\s+is\s+adjacent\s+to\b.+\bbut\b.+\bintended\s+capability\s+is\b", lowered):
+        return "adjacent_or_boundary_mismatch"
     if "only want a checklist" in lowered or "planning only" in lowered or "no tool call" in lowered:
         return "planning_or_no_tool_request"
     if re.search(
@@ -1558,6 +1567,78 @@ def _reliaskill_v1_boundary_reason(tool: ToolIR, skill: GeneratedSkill, request:
     return _heuristic_abstention_reason(request, skill)
 
 
+def _request_is_ambiguous_or_missing_required(request: str) -> bool:
+    lowered = request.lower()
+    if re.search(r"\bmaybe\s+do\s+something\s+with\b.+\bnot\s+sure\s+what\s+(?:input|action|tool|information|info)\b", lowered):
+        return True
+    if re.search(r"\b(?:i\s+)?(?:may|might|would)?\s*need\b.+\bbut\b.+\b(?:do\s+not\s+know|don't\s+know|not\s+sure|missing|lack)\b", lowered):
+        return True
+    if re.search(r"\b(?:input|argument|field|parameter|details?)\b.+\b(?:missing|unknown|not\s+provided|not\s+known)\b", lowered):
+        return True
+    if re.search(r"\b(?:send|provide|give|share)\s+(?:the\s+)?(?:query|path|input|details|fields|arguments?)\s+(?:later|after|when)\b", lowered):
+        return True
+    if re.search(r"\b(?:later|after|when)\b.*\b(?:send|provide|give|share)\s+(?:the\s+)?(?:query|path|input|details|fields|arguments?)\b", lowered):
+        return True
+    return False
+
+
+def _redirected_contract_candidate_tool(
+    tool: ToolIR,
+    skill: GeneratedSkill,
+    request: str,
+    abstention_reason: str | None,
+) -> str | None:
+    if abstention_reason != "explicit_target_tool_forbidden":
+        return None
+    candidates = skill.metadata.get("contrastive_contract_candidates") if isinstance(skill.metadata, dict) else None
+    if not isinstance(candidates, list):
+        return None
+
+    scored: list[tuple[float, str]] = []
+    for row in candidates:
+        if not isinstance(row, dict):
+            continue
+        candidate_name = str(row.get("tool_name") or "")
+        if not candidate_name or candidate_name == tool.tool_name:
+            continue
+        if row.get("action_intent_conflict"):
+            continue
+        mention_score = _requested_alternative_tool_score(request, candidate_name)
+        if mention_score <= 0:
+            continue
+        proof_score = float(row.get("proof_score") or 0.0)
+        viability_bonus = 25.0 if row.get("viable") else 0.0
+        scored.append((mention_score + viability_bonus + proof_score, candidate_name))
+    if not scored:
+        return None
+    scored.sort(key=lambda item: (-item[0], item[1]))
+    return scored[0][1]
+
+
+def _requested_alternative_tool_score(request: str, candidate_tool_name: str) -> int:
+    text = normalize_routing_text(request)
+    best = 0
+    for name in tool_name_variants(candidate_tool_name):
+        if not name:
+            continue
+        if any(
+            phrase in text
+            for phrase in (
+                f"use {name}",
+                f"using {name}",
+                f"call {name}",
+                f"route to {name}",
+                f"select {name}",
+            )
+        ):
+            best = max(best, 100)
+        if f"intended capability is {name}" in text:
+            best = max(best, 80)
+        if name in text and " is a distractor" in text:
+            best = max(best, 35)
+    return best
+
+
 PREDICTOR_ACTION_FAMILIES: Dict[str, set[str]] = {
     "search": {"search", "find", "lookup", "query", "match", "filter"},
     "read": {"read", "open", "show", "view", "preview", "list", "get", "fetch", "retrieve"},
@@ -1570,13 +1651,16 @@ PREDICTOR_ACTION_FAMILIES: Dict[str, set[str]] = {
 
 
 def _request_tool_action_conflict(request: str, tool: ToolIR) -> bool:
-    query_actions = _action_families_for_text(request)
+    action_request = _strip_unrelated_without_using_clause(request, tool)
+    query_actions = _action_families_for_text(action_request)
     if not query_actions:
         return False
     tool_actions = _action_families_for_text(" ".join([tool.tool_name, tool.tool_purpose or "", *(tool.side_effect_hints or []), *(tool.safety_hints or [])]))
     if not tool_actions:
         return False
-    if _negated_action_families_for_text(request).intersection(tool_actions):
+    if not any(arg.required for arg in tool.arguments) and _request_declares_no_arguments_text(action_request):
+        return False
+    if _negated_action_families_for_text(action_request).intersection(tool_actions):
         return True
     if query_actions.intersection(tool_actions):
         return False
@@ -1591,6 +1675,18 @@ def _request_tool_action_conflict(request: str, tool: ToolIR) -> bool:
     if query_actions.intersection({"create", "update", "send"}) and "delete" in tool_actions:
         return True
     return False
+
+
+def _strip_unrelated_without_using_clause(request: str, tool: ToolIR) -> str:
+    normalized_tool_names = tool_name_variants(tool)
+
+    def replace(match: re.Match[str]) -> str:
+        clause = match.group(0)
+        if any(name in normalize_routing_text(clause) for name in normalized_tool_names):
+            return clause
+        return " "
+
+    return re.sub(r"\bwithout\s+using\b[^:;,.]*(?::|;|,|\.)?", replace, request, flags=re.IGNORECASE)
 
 
 def _negated_action_families_for_text(text: str) -> set[str]:
@@ -1901,7 +1997,12 @@ def _verify_reliaskill_v1_prediction(
             arguments=sanitized,
             grounding_context=grounding_context,
         )
-    if should_call and proof_state_after.decision != "call" and not _contract_ablation_disabled(skill, "disable_runtime_grounding"):
+    if (
+        should_call
+        and proof_state_after.decision != "call"
+        and not _contract_ablation_disabled(skill, "disable_runtime_grounding")
+        and not _allow_direct_no_argument_call(tool, task.user_request, sanitized, boundary_reason)
+    ):
         should_call = False
         abstention_reason = f"contract_proof_policy:{proof_state_after.decision}"
         actions.append("abstained_contract_proof_policy")
@@ -1920,6 +2021,14 @@ def _verify_reliaskill_v1_prediction(
             arguments=sanitized,
             grounding_context=grounding_context,
         )
+    elif should_call and proof_state_after.decision != "call" and _allow_direct_no_argument_call(tool, task.user_request, sanitized, boundary_reason):
+        actions.append(f"allowed_direct_no_argument_call_despite_policy:{proof_state_after.decision}")
+
+    redirected_tool_name = None
+    if not should_call:
+        redirected_tool_name = _redirected_contract_candidate_tool(tool, skill, task.user_request, boundary_reason or abstention_reason)
+        if redirected_tool_name:
+            actions.append(f"redirected_to_contract_candidate:{redirected_tool_name}")
 
     metadata = dict(prediction.metadata)
     metadata["reliaskill_v1_runtime_verifier"] = {
@@ -1942,6 +2051,8 @@ def _verify_reliaskill_v1_prediction(
     metadata["parsed_prediction"] = dict(sanitized)
     metadata["should_call"] = should_call
     metadata["abstention_reason"] = abstention_reason
+    if redirected_tool_name:
+        metadata["selected_tool_name"] = redirected_tool_name
 
     return EvalPrediction(
         task_id=prediction.task_id,
@@ -1957,6 +2068,7 @@ def _verify_reliaskill_v1_prediction(
 
 def _heuristic_abstention_reason(user_request: str, skill: GeneratedSkill) -> str | None:
     lowered = user_request.lower()
+    has_explicit_negation = bool(re.search(r"\b(?:not|no|never|without|avoid|don't|do\s+not|should\s+not)\b", lowered))
     explicit_markers = (
         "no tool call",
         "do not actually call",
@@ -1977,9 +2089,37 @@ def _heuristic_abstention_reason(user_request: str, skill: GeneratedSkill) -> st
         line_lower = line.lower()
         if "missing" in line_lower and any(marker in lowered for marker in ("do not know", "don't know", "missing", "not sure")):
             return "missing_required_information"
-        if "adjacent" in line_lower and "not" in lowered:
+        if "adjacent" in line_lower and has_explicit_negation and any(
+            marker in lowered
+            for marker in ("adjacent", "distractor", "wrong tool", "wrong capability", "should not", "do not use", "do not call")
+        ):
             return "adjacent_or_boundary_mismatch"
     return None
+
+
+def _allow_direct_no_argument_call(
+    tool: ToolIR,
+    request: str,
+    sanitized_arguments: Dict[str, Any],
+    boundary_reason: str | None,
+) -> bool:
+    if boundary_reason is not None:
+        return False
+    if sanitized_arguments:
+        return False
+    if any(arg.required for arg in tool.arguments):
+        return False
+    return _request_declares_no_arguments_text(request)
+
+
+def _request_declares_no_arguments_text(request: str) -> bool:
+    lowered = request.lower()
+    return bool(
+        re.search(r"\bapply\s+no\s+arguments?\b", lowered)
+        or re.search(r"\bwith\s+no\s+arguments?\b", lowered)
+        or re.search(r"\bno\s+arguments?\s+(?:required|needed|provided)\b", lowered)
+        or "use the best matching tool" in lowered
+    )
 
 
 class PredictorBackend(ABC):

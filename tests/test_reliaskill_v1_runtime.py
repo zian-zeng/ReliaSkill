@@ -877,6 +877,165 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         self.assertEqual(prediction.predicted_arguments, {})
         self.assertEqual(prediction.abstention_reason, "explicit_target_tool_forbidden")
 
+    def test_v1_redirects_forbidden_target_to_explicit_viable_contract_candidate(self) -> None:
+        skill = _v1_skill()
+        skill.metadata["contrastive_contract_candidates"] = [
+            {"tool_name": "notes_create_memory", "viable": False, "proof_score": -10},
+            {"tool_name": "add_observations", "viable": True, "proof_score": 42},
+        ]
+
+        prediction = safe_predict(
+            ToolIR(
+                tool_name="notes_create_memory",
+                tool_purpose="Create a note memory.",
+                arguments=[ArgumentIR(name="content", type="string", required=True)],
+            ),
+            skill,
+            EvalTask(
+                task_id="t4_redirect_similar_tool",
+                tool_name="notes_create_memory",
+                user_request=(
+                    "Use add observations to add new observations to existing entities; "
+                    "notes create memory is a distractor and should not be called."
+                ),
+            ),
+            _StaticPredictor(arguments={"content": "Alice note"}),
+        )
+
+        self.assertFalse(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {})
+        self.assertEqual(prediction.metadata["selected_tool_name"], "add_observations")
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIn("redirected_to_contract_candidate:add_observations", verifier["actions"])
+
+    def test_v1_forbidden_target_matching_normalizes_punctuation(self) -> None:
+        skill = _v1_skill()
+        skill.metadata["contrastive_contract_candidates"] = [
+            {"tool_name": "bank_get_account_balance", "viable": False, "proof_score": 12},
+        ]
+
+        prediction = safe_predict(
+            ToolIR(
+                tool_name="algebra.quadratic_roots",
+                tool_purpose="Solve quadratic roots.",
+                arguments=[ArgumentIR(name="a", type="number", required=True)],
+            ),
+            skill,
+            EvalTask(
+                task_id="t4_redirect_punctuated_target",
+                tool_name="algebra.quadratic_roots",
+                user_request=(
+                    "Use bank get account balance to inspect the account; "
+                    "algebra.quadratic roots is a distractor and should not be called."
+                ),
+            ),
+            _StaticPredictor(arguments={"a": 1}),
+        )
+
+        self.assertFalse(prediction.should_call)
+        self.assertEqual(prediction.metadata["selected_tool_name"], "bank_get_account_balance")
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIn("redirected_to_contract_candidate:bank_get_account_balance", verifier["actions"])
+
+    def test_v1_adjacent_warning_does_not_treat_note_as_negation(self) -> None:
+        skill = _v1_skill()
+        skill.when_not_to_use.append("Do not use for adjacent tools with similar names or arguments.")
+
+        prediction = safe_predict(
+            _write_tool(),
+            skill,
+            EvalTask(
+                task_id="t4_note_not_negation",
+                tool_name="write_file",
+                user_request='Write content="ReliaSkill control note 17" to path="docs/control_17.md".',
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(
+            prediction.predicted_arguments,
+            {"path": "docs/control_17.md", "content": "ReliaSkill control note 17"},
+        )
+
+    def test_v1_without_using_unrelated_distractor_does_not_create_action_conflict(self) -> None:
+        prediction = safe_predict(
+            _no_argument_trigger_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t4_unrelated_without_using_action_words",
+                tool_name="trigger-elicitation-request-async",
+                user_request=(
+                    "I am trying to get this done without using bank get account balance: "
+                    "Trigger an async elicitation request. Use the best matching tool and apply no arguments."
+                ),
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {})
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIn("allowed_direct_no_argument_call_despite_policy:repair", verifier["actions"])
+
+    def test_v1_abstains_on_adjacent_wrong_intent_template(self) -> None:
+        prediction = safe_predict(
+            _create_event_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t4_adjacent_wrong_intent",
+                tool_name="calendar_create_event",
+                user_request=(
+                    "I need to Calculate the angle between the hour and minute hands of a clock at a given time. "
+                    "This is adjacent to calendar create event, but the intended capability is calculate clock angle."
+                ),
+            ),
+            _StaticPredictor(arguments={"title": "clock angle"}),
+        )
+
+        self.assertFalse(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {})
+        self.assertEqual(prediction.abstention_reason, "adjacent_wrong_intent")
+
+    def test_v1_abstains_on_ambiguous_not_sure_template(self) -> None:
+        prediction = safe_predict(
+            _search_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t4_ambiguous_not_sure",
+                tool_name="search",
+                user_request="Maybe do something with search; actually, I am not sure what input or action is intended.",
+            ),
+            _StaticPredictor(arguments={"query": "schema contract"}),
+        )
+
+        self.assertFalse(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {})
+        self.assertEqual(prediction.abstention_reason, "ambiguous_action")
+
+    def test_v1_abstains_on_may_need_but_missing_field_template(self) -> None:
+        prediction = safe_predict(
+            _calendar_event_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t4_missing_field_template",
+                tool_name="calendar_create_event",
+                user_request="I may need calendar create event, but I do not know calendar_id yet.",
+            ),
+            _StaticPredictor(
+                arguments={
+                    "calendar_id": "cal-1",
+                    "title": "standup",
+                    "start_time": "2026-05-20T09:00",
+                    "end_time": "2026-05-20T09:30",
+                }
+            ),
+        )
+
+        self.assertFalse(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {})
+        self.assertEqual(prediction.abstention_reason, "missing_required_information")
+
     def test_v1_abstains_on_action_intent_conflict_even_with_valid_arguments(self) -> None:
         prediction = safe_predict(
             _create_event_tool(),
@@ -956,6 +1115,27 @@ def _read_tool() -> ToolIR:
         tool_name="read_file",
         tool_purpose="Read a file from a known path.",
         arguments=[ArgumentIR(name="path", type="string", required=True)],
+    )
+
+
+def _write_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="write_file",
+        tool_purpose="Write content to a file path.",
+        arguments=[
+            ArgumentIR(name="path", type="string", required=True),
+            ArgumentIR(name="content", type="string", required=True),
+        ],
+        schema_complexity={"side_effect_type": "write"},
+    )
+
+
+def _no_argument_trigger_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="trigger-elicitation-request-async",
+        tool_purpose="Trigger an async elicitation request that runs as a background task.",
+        arguments=[],
+        schema_complexity={"side_effect_type": "write"},
     )
 
 

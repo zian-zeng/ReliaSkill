@@ -233,10 +233,13 @@ def evaluate_skill_contract(
         else:
             missing.append(arg.name)
 
-    request_actions = sorted(_action_families_for_text(request) - _negated_action_families_for_text(request))
-    negated_actions = sorted(_negated_action_families_for_text(request))
+    action_request = _strip_unrelated_without_using_clause(request, tool)
+    request_actions = sorted(_action_families_for_text(action_request) - _negated_action_families_for_text(action_request))
+    negated_actions = sorted(_negated_action_families_for_text(action_request))
     tool_actions = sorted(_action_families_for_tool(tool))
     action_conflict = _action_intent_conflict(set(request_actions), set(tool_actions), set(negated_actions))
+    if action_conflict and not any(arg.required for arg in tool.arguments) and _request_declares_no_arguments_text(action_request):
+        action_conflict = False
     argument_issues = _argument_contract_issues(tool, grounding_text, arguments) if arguments is not None else []
 
     blocking_reasons: List[str] = []
@@ -260,8 +263,8 @@ def evaluate_skill_contract(
     routing_bonus = (3 * len(grounded)) - (4 * len(missing))
     if len([arg for arg in tool.arguments if arg.required]) >= 3 and len(missing) >= len([arg for arg in tool.arguments if arg.required]) - 1:
         routing_bonus -= 3
-    routing_bonus += _side_effect_fit_bonus(request, tool)
-    routing_bonus += _action_intent_fit_bonus(request, tool)
+    routing_bonus += _side_effect_fit_bonus(action_request, tool)
+    routing_bonus += _action_intent_fit_bonus(action_request, tool)
 
     proof_obligations = [
         {
@@ -749,6 +752,8 @@ def _required_arg_grounding(request: str, arg: ArgumentIR, tool: ToolIR | None =
         return {"grounded": False, "evidence": "deferred_required_information"}
     if re.search(rf"\b{re.escape(arg.name)}\s*(?:=|:)", request, flags=re.IGNORECASE):
         return {"grounded": True, "evidence": "explicit_named_argument"}
+    if _request_declares_no_arguments(request):
+        return {"grounded": False, "evidence": "request_declares_no_arguments"}
     if (arg.type == "object" or arg.properties) and isinstance(arg.properties, dict):
         children = list(arg.required_properties) or list(arg.properties)
         missing = [child for child in children if not _schema_property_is_grounded(request, child, arg.properties.get(child, {}))]
@@ -1137,6 +1142,15 @@ def _contains_named_or_generic_array_text(name: str, request: str) -> bool:
     return False
 
 
+def _request_declares_no_arguments(request: str) -> bool:
+    lowered = request.lower()
+    return bool(
+        re.search(r"\bapply\s+no\s+arguments?\b", lowered)
+        or re.search(r"\bwith\s+no\s+arguments?\b", lowered)
+        or re.search(r"\bno\s+arguments?\s+(?:required|needed|provided)\b", lowered)
+    )
+
+
 def _looks_like_location_argument(name: str) -> bool:
     parts = _argument_name_parts(name)
     if parts.intersection({"city", "location", "place", "address"}):
@@ -1226,6 +1240,46 @@ def _argument_name_parts(text: str) -> set[str]:
 
 def _action_families_for_tool(tool: ToolIR) -> set[str]:
     return _action_families_for_text(" ".join([tool.tool_name, tool.tool_purpose or "", *(tool.side_effect_hints or []), *(tool.safety_hints or [])]))
+
+
+def _strip_unrelated_without_using_clause(request: str, tool: ToolIR) -> str:
+    tool_names = _tool_name_variants(tool)
+
+    def replace(match: re.Match[str]) -> str:
+        clause = match.group(0)
+        if any(name in _normalize_tool_text(clause) for name in tool_names):
+            return clause
+        return " "
+
+    return re.sub(r"\bwithout\s+using\b[^:;,.]*(?::|;|,|\.)?", replace, request, flags=re.IGNORECASE)
+
+
+def _tool_name_variants(tool: ToolIR) -> list[str]:
+    name = tool.tool_name
+    variants = {
+        _normalize_tool_text(name),
+        _normalize_tool_text(name.replace("_", " ")),
+        _normalize_tool_text(name.replace("-", " ")),
+        _normalize_tool_text(name.replace(".", " ")),
+    }
+    return sorted(value for value in variants if value)
+
+
+def _normalize_tool_text(text: str) -> str:
+    lowered = str(text or "").lower()
+    lowered = re.sub(r"[_./:-]+", " ", lowered)
+    lowered = re.sub(r"\s+", " ", lowered)
+    return lowered.strip()
+
+
+def _request_declares_no_arguments_text(request: str) -> bool:
+    lowered = request.lower()
+    return bool(
+        re.search(r"\bapply\s+no\s+arguments?\b", lowered)
+        or re.search(r"\bwith\s+no\s+arguments?\b", lowered)
+        or re.search(r"\bno\s+arguments?\s+(?:required|needed|provided)\b", lowered)
+        or "use the best matching tool" in lowered
+    )
 
 
 def _action_families_for_text(text: str) -> set[str]:

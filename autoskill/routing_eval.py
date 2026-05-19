@@ -207,6 +207,122 @@ def _generated_skill_routing_bonus(query: str, tool: ToolIR, skill: GeneratedSki
     return bonus
 
 
+def _reliaskill_v1_contract_routing_bonus(query: str, tool: ToolIR) -> tuple[int, Dict[str, Any]]:
+    explicit_args = _explicit_argument_names(query)
+    allowed_args = {arg.name for arg in tool.arguments}
+    required_args = {arg.name for arg in tool.arguments if arg.required}
+    matched_args = sorted(explicit_args.intersection(allowed_args))
+    matched_required = sorted(explicit_args.intersection(required_args))
+    unknown_explicit = sorted(explicit_args - allowed_args)
+
+    argument_bonus = (12 * len(matched_required)) + (4 * len(set(matched_args) - set(matched_required)))
+    if explicit_args and not matched_args and allowed_args:
+        argument_bonus -= 18
+    if explicit_args and not allowed_args:
+        argument_bonus -= 24
+    if required_args and explicit_args and not required_args.intersection(explicit_args):
+        argument_bonus -= min(12, 3 * len(required_args))
+    if unknown_explicit and not matched_required:
+        argument_bonus -= min(18, 3 * len(unknown_explicit))
+
+    no_argument_bonus = _no_argument_fit_bonus(query, tool)
+    identity_bonus = _tool_identity_match_bonus(query, tool)
+    purpose_bonus = _purpose_phrase_match_bonus(query, tool)
+    total = argument_bonus + no_argument_bonus + identity_bonus + purpose_bonus
+    return total, {
+        "argument_name_fit": argument_bonus,
+        "matched_explicit_args": matched_args,
+        "matched_required_args": matched_required,
+        "unknown_explicit_args": unknown_explicit[:8],
+        "no_argument_fit": no_argument_bonus,
+        "tool_identity_match": identity_bonus,
+        "purpose_phrase_match": purpose_bonus,
+    }
+
+
+def _explicit_argument_names(query: str) -> set[str]:
+    names = {
+        match.group(1)
+        for match in re.finditer(r"\b([A-Za-z_][A-Za-z0-9_.-]*)\s*(?:=|:)", query)
+        if not re.fullmatch(r"https?", match.group(1), flags=re.IGNORECASE)
+    }
+    return {name.split(".", 1)[0] for name in names}
+
+
+def _request_declares_no_arguments(query: str) -> bool:
+    lowered = query.lower()
+    return bool(
+        re.search(r"\bapply\s+no\s+arguments?\b", lowered)
+        or re.search(r"\bwith\s+no\s+arguments?\b", lowered)
+        or re.search(r"\bno\s+arguments?\s+(?:required|needed|provided)\b", lowered)
+    )
+
+
+def _no_argument_fit_bonus(query: str, tool: ToolIR) -> int:
+    if not _request_declares_no_arguments(query):
+        return 0
+    return 24 if not any(arg.required for arg in tool.arguments) else -36
+
+
+def _tool_identity_match_bonus(query: str, tool: ToolIR) -> int:
+    text = normalize_condition_text(query)
+    bonus = 0
+    for name in tool_name_text_variants(tool):
+        if not name:
+            continue
+        if _negated_tool_name_context(text, name):
+            return -80
+        if name in text:
+            bonus = max(bonus, 36)
+    return bonus
+
+
+def normalize_condition_text(text: str) -> str:
+    lowered = str(text or "").lower()
+    lowered = re.sub(r"[_./:-]+", " ", lowered)
+    lowered = re.sub(r"\s+", " ", lowered)
+    return lowered.strip()
+
+
+def tool_name_text_variants(tool: ToolIR) -> list[str]:
+    name = tool.tool_name
+    variants = {
+        normalize_condition_text(name),
+        normalize_condition_text(name.replace("_", " ")),
+        normalize_condition_text(name.replace("-", " ")),
+        normalize_condition_text(name.replace(".", " ")),
+    }
+    return sorted(value for value in variants if value)
+
+
+def _negated_tool_name_context(text: str, name: str) -> bool:
+    return any(
+        phrase in text
+        for phrase in (
+            f"{name} is a distractor",
+            f"{name} should not be called",
+            f"do not use {name}",
+            f"do not call {name}",
+            f"without using {name}",
+        )
+    )
+
+
+def _purpose_phrase_match_bonus(query: str, tool: ToolIR) -> int:
+    purpose = normalize_condition_text(tool.tool_purpose or "")
+    if not purpose:
+        return 0
+    query_text = normalize_condition_text(query)
+    purpose_tokens = [token for token in purpose.split() if token not in _BOUNDARY_STOP_TOKENS]
+    if len(purpose_tokens) >= 4 and " ".join(purpose_tokens[: min(10, len(purpose_tokens))]) in query_text:
+        return 28
+    if len(purpose_tokens) >= 3:
+        overlap = set(purpose_tokens).intersection(set(query_text.split()))
+        if len(overlap) >= min(4, len(set(purpose_tokens))):
+            return 4 * len(overlap)
+    return 0
+
+
 def _reliaskill_v1_schema_fit_bonus(query: str, tool: ToolIR) -> tuple[int, List[str], List[str]]:
     required_args = [arg for arg in tool.arguments if arg.required]
     if not required_args:
@@ -677,6 +793,11 @@ def select_tool_for_task(
             retrieval_score = int(row.get("score", 0))
             rerank_score = (2 * retrieval_score) + lexical_score
             rerank_score += _generated_skill_routing_bonus(task.user_request, tool, skill)
+            contract_routing_bonus = 0
+            contract_routing_features: Dict[str, Any] = {}
+            if is_reliaskill_v1_family(normalized_baseline_name):
+                contract_routing_bonus, contract_routing_features = _reliaskill_v1_contract_routing_bonus(task.user_request, tool)
+                rerank_score += contract_routing_bonus
             schema_fit_bonus = 0
             grounded_required_args: List[str] = []
             missing_required_args: List[str] = []
@@ -713,6 +834,8 @@ def select_tool_for_task(
                     "score": rerank_score,
                     "retrieval_score": row.get("score", 0),
                     "boundary_penalty": boundary_penalty,
+                    "contract_routing_bonus": contract_routing_bonus,
+                    "contract_routing_features": contract_routing_features,
                     "schema_fit_bonus": schema_fit_bonus,
                     "grounded_required_args": grounded_required_args,
                     "missing_required_args": missing_required_args,
