@@ -189,6 +189,9 @@ class RoutingBoundaryTests(unittest.TestCase):
         self.assertTrue(rows["read_file"]["contract_viable"])
         self.assertIn("contract_proof_state", rows["read_file"])
         self.assertIn("proof_score", rows["read_file"]["contract_proof_state"])
+        self.assertIn("contract_decision_confidence", rows["read_file"])
+        self.assertIn("contract_evidence_ledger", rows["read_file"])
+        self.assertTrue(rows["read_file"]["contract_evidence_ledger"]["positive_evidence"])
 
     def test_reliaskill_contextualization_adds_contrastive_contract_proof_states(self):
         read_tool = ToolIR(

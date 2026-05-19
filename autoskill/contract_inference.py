@@ -32,6 +32,8 @@ class ContractProofState:
     route_score: int
     feature_vector: Dict[str, float]
     proof_policy: Dict[str, Any]
+    decision_confidence: str
+    evidence_ledger: Dict[str, Any]
     grounded_required_args: List[str]
     missing_required_args: List[str]
     blocking_reasons: List[str]
@@ -79,6 +81,15 @@ def build_contract_proof_state(
     proof_score = _score_features(features, policy)
     decision = _proof_decision(evaluation, proof_score, policy)
     viable = decision == "call"
+    confidence = _proof_decision_confidence(evaluation, decision, proof_score, policy)
+    evidence_ledger = _proof_evidence_ledger(
+        evaluation,
+        features,
+        proof_score=proof_score,
+        policy=policy,
+        decision=decision,
+        confidence=confidence,
+    )
     return ContractProofState(
         tool_name=tool.tool_name,
         satisfied=evaluation.satisfied,
@@ -89,6 +100,8 @@ def build_contract_proof_state(
         route_score=evaluation.routing_bonus,
         feature_vector=features,
         proof_policy=policy.model_dump(),
+        decision_confidence=confidence,
+        evidence_ledger=evidence_ledger,
         grounded_required_args=list(evaluation.grounded_required_args),
         missing_required_args=list(evaluation.missing_required_args),
         blocking_reasons=list(evaluation.blocking_reasons),
@@ -113,6 +126,8 @@ def contract_state_payload(state: ContractProofState) -> Dict[str, Any]:
         "decision": state.decision,
         "proof_score": round(state.proof_score, 4),
         "proof_margin": round(state.proof_margin, 4),
+        "decision_confidence": state.decision_confidence,
+        "evidence_ledger": _compact_evidence_ledger(state.evidence_ledger),
         "grounded_required_args": state.grounded_required_args,
         "missing_required_args": state.missing_required_args,
         "request_actions": state.request_actions,
@@ -199,6 +214,123 @@ def _contract_proof_features(
 def _score_features(features: Dict[str, float], policy: ContractProofPolicy) -> float:
     score = sum(float(features.get(name, 0.0)) * float(weight) for name, weight in policy.weights.items())
     return round(score, 4)
+
+
+def _proof_decision_confidence(
+    evaluation: ContractEvaluation,
+    decision: str,
+    proof_score: float,
+    policy: ContractProofPolicy,
+) -> str:
+    call_margin = proof_score - policy.call_threshold
+    repair_margin = proof_score - policy.repair_threshold
+    hard_blockers = {"missing_required_arguments", "action_intent_conflict", "adaptive_policy_reject"}
+    if decision == "call":
+        return "high" if call_margin >= 10.0 and not evaluation.blocking_reasons else "medium"
+    if decision == "repair":
+        return "medium" if repair_margin >= 5.0 else "low"
+    if hard_blockers.intersection(evaluation.blocking_reasons):
+        return "high"
+    if proof_score < policy.repair_threshold:
+        return "medium"
+    return "low"
+
+
+def _proof_evidence_ledger(
+    evaluation: ContractEvaluation,
+    features: Dict[str, float],
+    *,
+    proof_score: float,
+    policy: ContractProofPolicy,
+    decision: str,
+    confidence: str,
+) -> Dict[str, Any]:
+    contributions = {
+        name: round(float(features.get(name, 0.0)) * float(policy.weights.get(name, 0.0)), 4)
+        for name in sorted(policy.weights)
+        if abs(float(features.get(name, 0.0)) * float(policy.weights.get(name, 0.0))) > 0.0
+    }
+    positive = _top_feature_contributions(contributions, positive=True)
+    negative = _top_feature_contributions(contributions, positive=False)
+    if evaluation.grounded_required_args:
+        positive.append(
+            {
+                "type": "grounded_required_arguments",
+                "arguments": list(evaluation.grounded_required_args),
+            }
+        )
+    if not evaluation.missing_required_args:
+        positive.append({"type": "no_missing_required_arguments"})
+    if evaluation.request_actions and evaluation.tool_actions:
+        positive.append(
+            {
+                "type": "action_alignment",
+                "request_actions": list(evaluation.request_actions),
+                "tool_actions": list(evaluation.tool_actions),
+            }
+        )
+
+    blockers = []
+    if evaluation.missing_required_args:
+        blockers.append({"type": "missing_required_arguments", "arguments": list(evaluation.missing_required_args)})
+    if "action_intent_conflict" in evaluation.blocking_reasons:
+        blockers.append(
+            {
+                "type": "action_intent_conflict",
+                "request_actions": list(evaluation.request_actions),
+                "tool_actions": list(evaluation.tool_actions),
+                "negated_actions": list(evaluation.negated_actions),
+            }
+        )
+    if evaluation.argument_issues:
+        blockers.append({"type": "argument_contract_violation", "issues": list(evaluation.argument_issues)[:6]})
+    if "adaptive_policy_reject" in evaluation.blocking_reasons:
+        blockers.append({"type": "adaptive_policy_reject", "policy_decision": dict(evaluation.policy_decision)})
+    if negative:
+        blockers.extend(negative)
+
+    obligation_summary = {
+        "satisfied": sum(1 for item in evaluation.proof_obligations if item.get("status") == "satisfied"),
+        "failed": sum(1 for item in evaluation.proof_obligations if item.get("status") == "failed"),
+        "not_evaluated": sum(1 for item in evaluation.proof_obligations if item.get("status") == "not_evaluated"),
+    }
+    return {
+        "decision": decision,
+        "confidence": confidence,
+        "score": round(proof_score, 4),
+        "thresholds": {
+            "call": float(policy.call_threshold),
+            "repair": float(policy.repair_threshold),
+            "margin_to_call": round(proof_score - policy.call_threshold, 4),
+            "margin_to_repair": round(proof_score - policy.repair_threshold, 4),
+        },
+        "positive_evidence": positive[:6],
+        "blocking_evidence": blockers[:6],
+        "feature_contributions": contributions,
+        "obligation_summary": obligation_summary,
+        "grounding_sources": list(evaluation.grounding_sources)[:6],
+    }
+
+
+def _top_feature_contributions(contributions: Dict[str, float], *, positive: bool) -> List[Dict[str, Any]]:
+    selected = [
+        {"type": "feature_contribution", "feature": name, "contribution": value}
+        for name, value in contributions.items()
+        if (value > 0 if positive else value < 0)
+    ]
+    return sorted(selected, key=lambda item: (-abs(float(item["contribution"])), str(item["feature"])))[:4]
+
+
+def _compact_evidence_ledger(ledger: Dict[str, Any]) -> Dict[str, Any]:
+    if not isinstance(ledger, dict):
+        return {}
+    return {
+        "confidence": ledger.get("confidence"),
+        "thresholds": ledger.get("thresholds", {}),
+        "positive_evidence": list(ledger.get("positive_evidence") or [])[:3],
+        "blocking_evidence": list(ledger.get("blocking_evidence") or [])[:3],
+        "obligation_summary": ledger.get("obligation_summary", {}),
+    }
 
 
 def _proof_decision(evaluation: ContractEvaluation, proof_score: float, policy: ContractProofPolicy) -> str:

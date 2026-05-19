@@ -26,6 +26,8 @@ class ReliaSkillV1PromptingTests(unittest.TestCase):
         self.assertIn("request_relevant_doc_snippets", prompt)
         self.assertIn("ReliaSkill v1 request-contract proof state", prompt)
         self.assertIn('"viable"', prompt)
+        self.assertIn("evidence_ledger", prompt)
+        self.assertIn("decision_confidence", prompt)
         self.assertIn("missing_required_args", prompt)
         self.assertIn("Search documents by query", prompt)
         self.assertIn("missing_required_information", prompt)

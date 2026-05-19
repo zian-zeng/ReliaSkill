@@ -78,6 +78,9 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         self.assertIn("compiled_contract", verifier)
         self.assertEqual(verifier["contract_proof_state_after"]["decision"], "call")
         self.assertIn("feature_vector", verifier["contract_proof_state_after"])
+        self.assertIn("decision_confidence", verifier["contract_proof_state_after"])
+        self.assertIn("evidence_ledger", verifier["contract_proof_state_after"])
+        self.assertTrue(verifier["contract_proof_state_after"]["evidence_ledger"]["positive_evidence"])
         self.assertEqual(
             verifier["contract_proof_state_after"]["proof_policy"]["name"],
             "dev_calibratable_contract_proof_policy",

@@ -59,6 +59,9 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         "uses_doc_contract_consistency_shield": bool(method.get("uses_doc_contract_consistency_shield", False)),
         "uses_contract_constrained_tool_inference": bool(method.get("uses_contract_constrained_tool_inference", False)),
         "uses_declarative_contract_proof_state": bool(method.get("uses_declarative_contract_proof_state", False)),
+        "uses_evidence_calibrated_contract_proof_ledger": bool(
+            method.get("uses_evidence_calibrated_contract_proof_ledger", False)
+        ),
         "uses_calibratable_contract_proof_policy": bool(method.get("uses_calibratable_contract_proof_policy", False)),
         "uses_proof_state_routing_policy": bool(method.get("uses_proof_state_routing_policy", False)),
         "uses_contrastive_contract_proof_context": bool(method.get("uses_contrastive_contract_proof_context", False)),
@@ -119,6 +122,10 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         compact["uses_contract_constrained_tool_inference"] = "contract_constrained_tool_inference" in compact.get("pipeline_stages", [])
     if not compact.get("uses_declarative_contract_proof_state"):
         compact["uses_declarative_contract_proof_state"] = "declarative_contract_proof_state" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_evidence_calibrated_contract_proof_ledger"):
+        compact["uses_evidence_calibrated_contract_proof_ledger"] = "evidence_calibrated_contract_proof_ledger" in compact.get(
+            "pipeline_stages", []
+        )
     if not compact.get("uses_calibratable_contract_proof_policy"):
         compact["uses_calibratable_contract_proof_policy"] = "calibratable_contract_proof_policy" in compact.get("pipeline_stages", [])
     if not compact.get("uses_proof_state_routing_policy"):

@@ -42,6 +42,10 @@ class ContractInferenceTests(unittest.TestCase):
         self.assertEqual(write_state.decision, "abstain")
         self.assertGreater(read_state.proof_score, write_state.proof_score)
         self.assertIn("feature_vector", read_state.model_dump())
+        self.assertIn(read_state.decision_confidence, {"medium", "high"})
+        self.assertIn("evidence_ledger", read_state.model_dump())
+        self.assertTrue(read_state.evidence_ledger["positive_evidence"])
+        self.assertFalse(read_state.evidence_ledger["blocking_evidence"])
         self.assertEqual(read_state.proof_policy["name"], "dev_calibratable_contract_proof_policy")
 
         payload = contract_state_payload(read_state)
@@ -49,7 +53,13 @@ class ContractInferenceTests(unittest.TestCase):
         self.assertTrue(payload["viable"])
         self.assertEqual(payload["decision"], "call")
         self.assertIn("proof_score", payload)
+        self.assertIn("decision_confidence", payload)
+        self.assertIn("evidence_ledger", payload)
         self.assertIn("proof_obligations", read_state.model_dump())
+
+        write_payload = contract_state_payload(write_state)
+        self.assertEqual(write_payload["decision_confidence"], "high")
+        self.assertTrue(write_payload["evidence_ledger"]["blocking_evidence"])
 
     def test_metadata_contract_proof_policy_can_change_threshold(self) -> None:
         tool = ToolIR(
@@ -69,6 +79,7 @@ class ContractInferenceTests(unittest.TestCase):
 
         self.assertEqual(state.proof_policy["name"], "strict_dev_calibrated_policy")
         self.assertEqual(state.decision, "abstain")
+        self.assertEqual(state.evidence_ledger["thresholds"]["call"], 1000.0)
         self.assertFalse(proof_state_is_viable(state))
 
 

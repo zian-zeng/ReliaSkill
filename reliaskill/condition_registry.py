@@ -38,6 +38,7 @@ CONDITION_REGISTRY[RELIASKILL_CHALLENGER] = {
     "uses_doc_contract_consistency_shield": True,
     "uses_contract_constrained_tool_inference": True,
     "uses_declarative_contract_proof_state": True,
+    "uses_evidence_calibrated_contract_proof_ledger": True,
     "uses_calibratable_contract_proof_policy": True,
     "uses_proof_state_routing_policy": True,
     "uses_contrastive_contract_proof_context": True,
