@@ -907,6 +907,99 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         self.assertEqual(prediction.metadata["selected_tool_name"], "add_observations")
         verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
         self.assertIn("redirected_to_contract_candidate:add_observations", verifier["actions"])
+        self.assertEqual(
+            verifier["contrastive_contract_decision"]["reason"],
+            "explicit_request_and_viable_contract",
+        )
+
+    def test_v1_redirects_action_conflict_to_higher_margin_viable_candidate(self) -> None:
+        skill = _v1_skill()
+        skill.metadata["contrastive_contract_candidates"] = [
+            {
+                "tool_name": "write_file",
+                "viable": False,
+                "proof_score": 2,
+                "missing_required_args": ["content"],
+                "action_intent_conflict": True,
+            },
+            {
+                "tool_name": "read_file",
+                "viable": True,
+                "proof_score": 45,
+                "missing_required_args": [],
+                "request_actions": ["read"],
+                "tool_actions": ["read"],
+            },
+        ]
+
+        prediction = safe_predict(
+            _write_tool(),
+            skill,
+            EvalTask(
+                task_id="t4_redirect_action_conflict",
+                tool_name="write_file",
+                user_request="Read docs/report.md.",
+            ),
+            _StaticPredictor(arguments={"path": "docs/report.md", "content": "invented"}),
+        )
+
+        self.assertFalse(prediction.should_call)
+        self.assertEqual(prediction.metadata["selected_tool_name"], "read_file")
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIn("redirected_to_contract_candidate:read_file", verifier["actions"])
+        self.assertEqual(
+            verifier["contrastive_contract_decision"]["reason"],
+            "current_tool_blocked:action intent conflict",
+        )
+
+    def test_v1_does_not_redirect_adjacent_abstention_without_explicit_use(self) -> None:
+        skill = _v1_skill()
+        skill.metadata["contrastive_contract_candidates"] = [
+            {"tool_name": "calendar_create_event", "viable": False, "proof_score": -5},
+            {"tool_name": "calculate_clock_angle", "viable": True, "proof_score": 60},
+        ]
+
+        prediction = safe_predict(
+            _create_event_tool(),
+            skill,
+            EvalTask(
+                task_id="t4_adjacent_no_redirect",
+                tool_name="calendar_create_event",
+                user_request=(
+                    "I need to calculate the angle between clock hands. "
+                    "This is adjacent to calendar create event, but the intended capability is calculate clock angle."
+                ),
+            ),
+            _StaticPredictor(arguments={"title": "meeting"}),
+        )
+
+        self.assertFalse(prediction.should_call)
+        self.assertNotIn("selected_tool_name", prediction.metadata)
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIsNone(verifier["contrastive_contract_decision"])
+
+    def test_v1_does_not_redirect_missing_required_information(self) -> None:
+        skill = _v1_skill()
+        skill.metadata["contrastive_contract_candidates"] = [
+            {"tool_name": "calendar_create_event", "viable": False, "proof_score": -5},
+            {"tool_name": "email_send_draft", "viable": True, "proof_score": 52},
+        ]
+
+        prediction = safe_predict(
+            _create_event_tool(),
+            skill,
+            EvalTask(
+                task_id="t4_missing_info_no_redirect",
+                tool_name="calendar_create_event",
+                user_request="I may need calendar create event, but I do not know calendar_id yet.",
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertFalse(prediction.should_call)
+        self.assertNotIn("selected_tool_name", prediction.metadata)
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIsNone(verifier["contrastive_contract_decision"])
 
     def test_v1_forbidden_target_matching_normalizes_punctuation(self) -> None:
         skill = _v1_skill()

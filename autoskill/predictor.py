@@ -15,6 +15,7 @@ from autoskill.ir import ArgumentIR, GeneratedSkill, ToolIR
 from autoskill.json_output import parse_json_object_output
 from autoskill.local_model import LocalHFChatRunner
 from autoskill.prompting import build_prediction_prompt
+from autoskill.contract_decision import choose_contrastive_contract_candidate, explicit_requested_tool_score
 from autoskill.contract_inference import build_contract_proof_state
 from autoskill.contracts import build_contract_failure_report, compile_skill_contract, evaluate_skill_contract
 from autoskill.routing_boundaries import detect_routing_abstention, normalize_routing_text, tool_name_variants
@@ -1582,61 +1583,43 @@ def _request_is_ambiguous_or_missing_required(request: str) -> bool:
     return False
 
 
+def _redirected_contract_candidate_decision(
+    tool: ToolIR,
+    skill: GeneratedSkill,
+    request: str,
+    abstention_reason: str | None,
+) -> Any | None:
+    candidates = skill.metadata.get("contrastive_contract_candidates") if isinstance(skill.metadata, dict) else None
+    if not isinstance(candidates, list):
+        return None
+    current_row = next((row for row in candidates if isinstance(row, dict) and row.get("tool_name") == tool.tool_name), {})
+    try:
+        current_proof_score = float(current_row.get("proof_score")) if isinstance(current_row, dict) else None
+    except (TypeError, ValueError):
+        current_proof_score = None
+    decision = choose_contrastive_contract_candidate(
+        request=request,
+        current_tool_name=tool.tool_name,
+        rows=candidates,
+        current_reason=abstention_reason,
+        current_proof_score=current_proof_score,
+        allow_nonviable_explicit=True,
+    )
+    return decision
+
+
 def _redirected_contract_candidate_tool(
     tool: ToolIR,
     skill: GeneratedSkill,
     request: str,
     abstention_reason: str | None,
 ) -> str | None:
-    if abstention_reason != "explicit_target_tool_forbidden":
-        return None
-    candidates = skill.metadata.get("contrastive_contract_candidates") if isinstance(skill.metadata, dict) else None
-    if not isinstance(candidates, list):
-        return None
-
-    scored: list[tuple[float, str]] = []
-    for row in candidates:
-        if not isinstance(row, dict):
-            continue
-        candidate_name = str(row.get("tool_name") or "")
-        if not candidate_name or candidate_name == tool.tool_name:
-            continue
-        if row.get("action_intent_conflict"):
-            continue
-        mention_score = _requested_alternative_tool_score(request, candidate_name)
-        if mention_score <= 0:
-            continue
-        proof_score = float(row.get("proof_score") or 0.0)
-        viability_bonus = 25.0 if row.get("viable") else 0.0
-        scored.append((mention_score + viability_bonus + proof_score, candidate_name))
-    if not scored:
-        return None
-    scored.sort(key=lambda item: (-item[0], item[1]))
-    return scored[0][1]
+    decision = _redirected_contract_candidate_decision(tool, skill, request, abstention_reason)
+    return decision.tool_name if decision is not None else None
 
 
 def _requested_alternative_tool_score(request: str, candidate_tool_name: str) -> int:
-    text = normalize_routing_text(request)
-    best = 0
-    for name in tool_name_variants(candidate_tool_name):
-        if not name:
-            continue
-        if any(
-            phrase in text
-            for phrase in (
-                f"use {name}",
-                f"using {name}",
-                f"call {name}",
-                f"route to {name}",
-                f"select {name}",
-            )
-        ):
-            best = max(best, 100)
-        if f"intended capability is {name}" in text:
-            best = max(best, 80)
-        if name in text and " is a distractor" in text:
-            best = max(best, 35)
-    return best
+    return explicit_requested_tool_score(request, candidate_tool_name)
 
 
 PREDICTOR_ACTION_FAMILIES: Dict[str, set[str]] = {
@@ -2025,9 +2008,11 @@ def _verify_reliaskill_v1_prediction(
         actions.append(f"allowed_direct_no_argument_call_despite_policy:{proof_state_after.decision}")
 
     redirected_tool_name = None
+    redirect_decision = None
     if not should_call:
-        redirected_tool_name = _redirected_contract_candidate_tool(tool, skill, task.user_request, boundary_reason or abstention_reason)
-        if redirected_tool_name:
+        redirect_decision = _redirected_contract_candidate_decision(tool, skill, task.user_request, boundary_reason or abstention_reason)
+        if redirect_decision is not None:
+            redirected_tool_name = redirect_decision.tool_name
             actions.append(f"redirected_to_contract_candidate:{redirected_tool_name}")
 
     metadata = dict(prediction.metadata)
@@ -2042,6 +2027,7 @@ def _verify_reliaskill_v1_prediction(
         "contract_proof_state_after": proof_state_after.model_dump(),
         "contract_failure_report_before": build_contract_failure_report(contract_before),
         "contract_failure_report_after": build_contract_failure_report(contract_after),
+        "contrastive_contract_decision": redirect_decision.model_dump() if redirect_decision is not None else None,
         "original_arguments": raw_original_arguments,
         "normalized_original_arguments": original_arguments,
         "verified_arguments": sanitized,

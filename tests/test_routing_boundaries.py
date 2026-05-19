@@ -730,6 +730,46 @@ class RoutingBoundaryTests(unittest.TestCase):
         self.assertGreater(rows["get-tiny-image"]["contract_routing_bonus"], rows["tavily-search"]["contract_routing_bonus"])
         self.assertIn("query", rows["tavily-search"]["missing_required_args"])
 
+    def test_reliaskill_v1_explicit_contrastive_route_beats_generic_viable_tool(self):
+        add_observations = ToolIR(
+            tool_name="add_observations",
+            tool_purpose="Add new observations to existing memory entities.",
+            arguments=[ArgumentIR(name="payload", type="array", required=True)],
+        )
+        create_memory = ToolIR(
+            tool_name="notes_create_memory",
+            tool_purpose="Create a new memory note.",
+            arguments=[ArgumentIR(name="content", type="string", required=True)],
+        )
+        health = ToolIR(
+            tool_name="system_health_check",
+            tool_purpose="Return system health with no arguments.",
+            arguments=[],
+        )
+        tools = {tool.tool_name: tool for tool in (health, create_memory, add_observations)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="route_explicit_contrastive_alternative",
+            tool_name="notes_create_memory",
+            expected_tool_name="add_observations",
+            user_request=(
+                "Use add observations for this request. "
+                "notes create memory is a distractor and should not be called."
+            ),
+            negative_category="similar_tool_should_be_used",
+        )
+
+        routing = select_tool_for_task(task, "reliaskill_v1", tools, skills, top_k=3)
+        rows = {row["tool_name"]: row for row in routing["candidate_rows"]}
+
+        self.assertEqual(routing["selected_tool_name"], "add_observations")
+        self.assertEqual(rows["add_observations"]["schema_affordance_gate"], "missing_required")
+        self.assertGreater(
+            rows["add_observations"]["contract_routing_features"]["explicit_request_match"],
+            rows["system_health_check"]["contract_routing_features"]["explicit_request_match"],
+        )
+        self.assertLess(rows["notes_create_memory"]["contract_routing_features"]["tool_identity_match"], 0)
+
     def test_reliaskill_v1_tool_identifier_in_benchmark_id_breaks_duplicate_tie(self):
         ticket_011 = ToolIR(
             tool_name="mock_issue_tracking_create_ticket_011",

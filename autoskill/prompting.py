@@ -97,7 +97,7 @@ def _runtime_guidance(tool: ToolIR, skill: GeneratedSkill, *, user_request: str 
             if isinstance(contrastive_candidates, list) and contrastive_candidates:
                 contrastive_line = (
                     f"{method_label} contrastive candidate proof states: {json.dumps(contrastive_candidates[:4], ensure_ascii=False)}\n"
-                    "Use the contrastive states to catch adjacent-tool mistakes: if this tool is not viable and another candidate is viable, return `should_call=false`.\n"
+                    "Use the contrastive states as proof-margin evidence for adjacent-tool mistakes: if this tool is blocked and a named or higher-margin viable candidate exists, return `should_call=false` so the verifier/router can redirect to that candidate.\n"
                 )
         plan_line = ""
         if reliaskill_family and not _contract_ablation_disabled(skill, "disable_dependency_plan_prompting"):
@@ -116,6 +116,7 @@ def _runtime_guidance(tool: ToolIR, skill: GeneratedSkill, *, user_request: str 
             f"{request_contract_line}"
             f"{contrastive_line}"
             f"{plan_line}"
+            f"{method_label} proof-margin decision policy: call only when the current tool's proof decision is `call`; repair only grounded argument violations; otherwise abstain or preserve the explicitly named alternative tool boundary.\n"
             f"{method_label} boundary gate: check non-use rules before considering use rules. "
             "If any non-use rule applies, set `should_call` to false.\n"
             "Before returning `should_call=true`, verify required fields are grounded and the argument object satisfies the call contract.\n"

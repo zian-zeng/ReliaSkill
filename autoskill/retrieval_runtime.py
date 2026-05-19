@@ -5,6 +5,7 @@ from copy import deepcopy
 from typing import Any, Dict, List, Tuple
 
 from autoskill.conditions import is_reliaskill_v1_family
+from autoskill.contract_decision import explicit_requested_tool_score as _shared_explicit_requested_tool_score
 from autoskill.contract_inference import build_contract_proof_state, contract_state_payload
 from autoskill.contracts import compose_contract_plan
 from autoskill.eval_types import EvalTask
@@ -545,25 +546,7 @@ def _dedupe_proof_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
 
 def _explicit_requested_tool_score(request: str, tool_name: str) -> int:
-    text = normalize_routing_text(request)
-    score = 0
-    for name in tool_name_variants(tool_name):
-        if not name:
-            continue
-        if any(
-            phrase in text
-            for phrase in (
-                f"use {name}",
-                f"using {name}",
-                f"call {name}",
-                f"route to {name}",
-                f"select {name}",
-            )
-        ):
-            score = max(score, 100)
-        if f"intended capability is {name}" in text:
-            score = max(score, 80)
-    return score
+    return _shared_explicit_requested_tool_score(request, tool_name)
 
 
 def _compose_contrastive_contract_plan(

@@ -9,6 +9,11 @@ from typing import Any, Dict, Iterable, List, Tuple
 
 from autoskill.eval_types import EvalTask
 from autoskill.conditions import GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER, is_reliaskill_v1_family, normalize_condition_name
+from autoskill.contract_decision import (
+    choose_contrastive_contract_candidate,
+    explicit_requested_tool_score,
+    row_explicit_request_match,
+)
 from autoskill.contract_inference import build_contract_proof_state, proof_state_is_viable
 from autoskill.doc_evidence import build_doc_grounding_evidence, render_doc_grounding_evidence
 from autoskill.ir import GeneratedSkill, ToolIR
@@ -227,8 +232,9 @@ def _reliaskill_v1_contract_routing_bonus(query: str, tool: ToolIR) -> tuple[int
 
     no_argument_bonus = _no_argument_fit_bonus(query, tool)
     identity_bonus = _tool_identity_match_bonus(query, tool)
+    explicit_request_match = explicit_requested_tool_score(query, tool.tool_name)
     purpose_bonus = _purpose_phrase_match_bonus(query, tool)
-    total = argument_bonus + no_argument_bonus + identity_bonus + purpose_bonus
+    total = argument_bonus + no_argument_bonus + identity_bonus + explicit_request_match + purpose_bonus
     return total, {
         "argument_name_fit": argument_bonus,
         "matched_explicit_args": matched_args,
@@ -236,6 +242,7 @@ def _reliaskill_v1_contract_routing_bonus(query: str, tool: ToolIR) -> tuple[int
         "unknown_explicit_args": unknown_explicit[:8],
         "no_argument_fit": no_argument_bonus,
         "tool_identity_match": identity_bonus,
+        "explicit_request_match": explicit_request_match,
         "purpose_phrase_match": purpose_bonus,
     }
 
@@ -306,6 +313,23 @@ def _negated_tool_name_context(text: str, name: str) -> bool:
             f"without using {name}",
         )
     )
+
+
+def _explicit_contrastive_route_override(
+    query: str,
+    current_tool_name: str,
+    rows: List[Dict[str, Any]],
+) -> Dict[str, Any] | None:
+    decision = choose_contrastive_contract_candidate(
+        request=query,
+        current_tool_name=current_tool_name,
+        rows=rows,
+        current_reason="explicit_contrastive_route",
+        allow_nonviable_explicit=True,
+    )
+    if decision is None or decision.explicit_request_match <= 0:
+        return None
+    return next((row for row in rows if str(row.get("tool_name") or "") == decision.tool_name), None)
 
 
 def _purpose_phrase_match_bonus(query: str, tool: ToolIR) -> int:
@@ -859,6 +883,7 @@ def select_tool_for_task(
         if is_reliaskill_v1_family(normalized_baseline_name):
             reranked.sort(
                 key=lambda item: (
+                    -row_explicit_request_match(item),
                     item.get("contract_viable") is not True,
                     -float(item.get("contract_proof_score") or item.get("score") or 0.0),
                     -float(item.get("score") or 0.0),
@@ -869,56 +894,65 @@ def select_tool_for_task(
             reranked.sort(key=lambda item: (-int(item["score"]), item["tool_name"]))
         selected_tool_name = reranked[0]["tool_name"] if reranked else task.tool_name
         if is_reliaskill_v1_family(normalized_baseline_name) and reranked:
-            viable_rows = [
-                row
-                for row in reranked
-                if (
-                    row.get("contract_satisfied") is True
-                    or _contract_ablation_disabled(skill_bank[str(row["tool_name"])], "disable_contract_routing")
-                    or (
-                        _contract_ablation_disabled(skill_bank[str(row["tool_name"])], "disable_action_gate")
-                        and row.get("contract_blocking_reasons") == ["action_intent_conflict"]
-                    )
-                )
-                and not row.get("missing_required_args")
-                and not row.get("action_intent_conflict")
-            ]
-            if viable_rows:
-                selected_tool_name = str(viable_rows[0]["tool_name"])
+            explicit_override_row = _explicit_contrastive_route_override(task.user_request, task.tool_name, reranked)
+            if explicit_override_row is not None:
+                selected_tool_name = str(explicit_override_row["tool_name"])
                 for row in reranked:
                     if row.get("action_intent_conflict"):
                         row["schema_affordance_gate"] = "action_intent_conflict"
                     else:
                         row["schema_affordance_gate"] = "schema_complete" if not row.get("missing_required_args") else "missing_required"
-                selected_skill = skill_bank[str(viable_rows[0]["tool_name"])]
-                ambiguity = None if _contract_ablation_disabled(selected_skill, "disable_ambiguity_abstention") else _reliaskill_v1_ambiguity_reason(task.user_request, viable_rows, tools)
-                if ambiguity:
+            else:
+                viable_rows = [
+                    row
+                    for row in reranked
+                    if (
+                        row.get("contract_satisfied") is True
+                        or _contract_ablation_disabled(skill_bank[str(row["tool_name"])], "disable_contract_routing")
+                        or (
+                            _contract_ablation_disabled(skill_bank[str(row["tool_name"])], "disable_action_gate")
+                            and row.get("contract_blocking_reasons") == ["action_intent_conflict"]
+                        )
+                    )
+                    and not row.get("missing_required_args")
+                    and not row.get("action_intent_conflict")
+                ]
+                if viable_rows:
+                    selected_tool_name = str(viable_rows[0]["tool_name"])
+                    for row in reranked:
+                        if row.get("action_intent_conflict"):
+                            row["schema_affordance_gate"] = "action_intent_conflict"
+                        else:
+                            row["schema_affordance_gate"] = "schema_complete" if not row.get("missing_required_args") else "missing_required"
+                    selected_skill = skill_bank[str(viable_rows[0]["tool_name"])]
+                    ambiguity = None if _contract_ablation_disabled(selected_skill, "disable_ambiguity_abstention") else _reliaskill_v1_ambiguity_reason(task.user_request, viable_rows, tools)
+                    if ambiguity:
+                        abstain_row = {
+                            "tool_name": "__abstain__",
+                            "score": viable_rows[0]["score"],
+                            "routing_abstention_reason": ambiguity,
+                            "candidate_count": len(viable_rows),
+                            "ambiguous_tools": [str(row["tool_name"]) for row in viable_rows[:3]],
+                        }
+                        return {
+                            "routing_strategy": "retrieve_then_semantic_rerank_ambiguity_abstention",
+                            "selected_tool_name": "__abstain__",
+                            "candidate_tools": ["__abstain__"],
+                            "candidate_rows": [abstain_row, *viable_rows[: max(top_k - 1, 0)]],
+                        }
+                else:
                     abstain_row = {
                         "tool_name": "__abstain__",
-                        "score": viable_rows[0]["score"],
-                        "routing_abstention_reason": ambiguity,
-                        "candidate_count": len(viable_rows),
-                        "ambiguous_tools": [str(row["tool_name"]) for row in viable_rows[:3]],
+                        "score": reranked[0]["score"],
+                        "routing_abstention_reason": "no_candidate_with_grounded_required_schema",
+                        "candidate_count": len(reranked),
                     }
                     return {
-                        "routing_strategy": "retrieve_then_semantic_rerank_ambiguity_abstention",
+                        "routing_strategy": "retrieve_then_semantic_rerank_schema_affordance_abstention",
                         "selected_tool_name": "__abstain__",
                         "candidate_tools": ["__abstain__"],
-                        "candidate_rows": [abstain_row, *viable_rows[: max(top_k - 1, 0)]],
+                        "candidate_rows": [abstain_row, *reranked[: max(top_k - 1, 0)]],
                     }
-            else:
-                abstain_row = {
-                    "tool_name": "__abstain__",
-                    "score": reranked[0]["score"],
-                    "routing_abstention_reason": "no_candidate_with_grounded_required_schema",
-                    "candidate_count": len(reranked),
-                }
-                return {
-                    "routing_strategy": "retrieve_then_semantic_rerank_schema_affordance_abstention",
-                    "selected_tool_name": "__abstain__",
-                    "candidate_tools": ["__abstain__"],
-                    "candidate_rows": [abstain_row, *reranked[: max(top_k - 1, 0)]],
-                }
         top_rows = reranked[: max(top_k, 1)]
         if is_reliaskill_v1_family(normalized_baseline_name) and selected_tool_name != (top_rows[0]["tool_name"] if top_rows else None):
             selected_row = next(row for row in reranked if row["tool_name"] == selected_tool_name)
