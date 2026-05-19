@@ -44,15 +44,17 @@ def load_run_records(run_dir: str | Path) -> Dict[str, List[Dict[str, Any]]]:
     reliability_records: List[Dict[str, Any]] = []
     behavior_records: List[Dict[str, Any]] = []
 
+    for path in _preferred_record_paths(root, "prediction_records.jsonl"):
+        benchmark_records.extend(load_jsonl(path))
+    for path in _preferred_record_paths(root, "routing_records.jsonl"):
+        routing_records.extend(load_jsonl(path))
+    for path in _preferred_record_paths(root, "reliability_records.jsonl"):
+        reliability_records.extend(load_jsonl(path))
     for path in sorted(root.rglob("*.jsonl")):
         name = path.name.lower()
-        if name == "prediction_records.jsonl":
-            benchmark_records.extend(load_jsonl(path))
-        elif name == "routing_records.jsonl":
-            routing_records.extend(load_jsonl(path))
-        elif name == "reliability_records.jsonl":
-            reliability_records.extend(load_jsonl(path))
-        elif "behavior" in name or "control" in name:
+        if name in {"prediction_records.jsonl", "routing_records.jsonl", "reliability_records.jsonl"}:
+            continue
+        if "behavior" in name or "control" in name:
             behavior_records.extend(load_jsonl(path))
 
     return {
@@ -61,6 +63,19 @@ def load_run_records(run_dir: str | Path) -> Dict[str, List[Dict[str, Any]]]:
         "reliability": reliability_records,
         "behavior": behavior_records,
     }
+
+
+def _preferred_record_paths(root: Path, filename: str) -> List[Path]:
+    direct = root / filename
+    if direct.exists():
+        return [direct]
+    global_merged = root / "merged" / filename
+    if global_merged.exists():
+        return [global_merged]
+    model_merged = sorted(root.glob(f"predictors/*/merged/{filename}"))
+    if model_merged:
+        return model_merged
+    return sorted(root.rglob(filename))
 
 
 def normalize_path(value: str) -> str:

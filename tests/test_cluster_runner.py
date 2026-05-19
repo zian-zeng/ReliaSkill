@@ -293,6 +293,48 @@ class ClusterRunnerTests(unittest.TestCase):
             self.assertTrue((root / "out" / "tables" / "main_results_by_model.csv").exists())
             self.assertTrue((root / "out" / "tables" / "routing_results_by_model.csv").exists())
 
+    def test_merge_filters_records_to_configured_conditions_for_append_runs(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            config_path = self._write_small_config(root, conditions=["raw_mcp"], max_tools=1)
+            shard_dir = root / "out" / "predictors" / "mock" / "shard_00" / "benchmark"
+            shard_dir.mkdir(parents=True)
+            self._write_jsonl(
+                shard_dir / "prediction_records.jsonl",
+                [
+                    {
+                        "task_id": "t1",
+                        "tool_name": "read_text_file",
+                        "baseline_name": "raw_mcp",
+                        "predicted_arguments": {},
+                        "expected_arguments": {},
+                        "exact_match": True,
+                        "argument_validity": 1.0,
+                        "model_name": "mock",
+                        "model_slug": "mock",
+                    },
+                    {
+                        "task_id": "t1",
+                        "tool_name": "read_text_file",
+                        "baseline_name": "stale_condition",
+                        "predicted_arguments": {},
+                        "expected_arguments": {},
+                        "exact_match": False,
+                        "argument_validity": 0.0,
+                        "model_name": "mock",
+                        "model_slug": "mock",
+                    },
+                ],
+            )
+
+            manifest = merge_cluster_shards(config_path, output_root=root / "out")
+
+            self.assertEqual(manifest["prediction_records"], 1)
+            self.assertEqual(manifest["ignored_prediction_records"], 1)
+            merged = (root / "out" / "merged" / "prediction_records.jsonl").read_text(encoding="utf-8")
+            self.assertIn("raw_mcp", merged)
+            self.assertNotIn("stale_condition", merged)
+
     def test_merge_collects_live_exec_records(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)

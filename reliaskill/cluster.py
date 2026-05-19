@@ -761,15 +761,25 @@ def merge_cluster_shards(
     routing_model_rows: List[Dict[str, Any]] = []
     live_model_rows: List[Dict[str, Any]] = []
     duplicates: List[str] = []
+    allowed_conditions = set(normalize_condition_names([str(item) for item in config.get("conditions") or []]))
+    ignored_prediction_records = 0
+    ignored_routing_records = 0
+    ignored_live_exec_records = 0
 
     for model_root in model_roots:
         if not model_root.is_dir():
             continue
         model_merged = model_root / "merged"
         model_merged.mkdir(parents=True, exist_ok=True)
-        prediction_records = _load_shard_jsonl(model_root, "prediction_records.jsonl")
-        routing_records = _load_shard_jsonl(model_root, "routing_records.jsonl")
-        live_exec_records = _load_shard_jsonl(model_root, "live_exec_results.jsonl")
+        raw_prediction_records = _load_shard_jsonl(model_root, "prediction_records.jsonl")
+        raw_routing_records = _load_shard_jsonl(model_root, "routing_records.jsonl")
+        raw_live_exec_records = _load_shard_jsonl(model_root, "live_exec_results.jsonl")
+        prediction_records = _filter_records_for_conditions(raw_prediction_records, allowed_conditions)
+        routing_records = _filter_records_for_conditions(raw_routing_records, allowed_conditions)
+        live_exec_records = _filter_records_for_conditions(raw_live_exec_records, allowed_conditions)
+        ignored_prediction_records += len(raw_prediction_records) - len(prediction_records)
+        ignored_routing_records += len(raw_routing_records) - len(routing_records)
+        ignored_live_exec_records += len(raw_live_exec_records) - len(live_exec_records)
         duplicates.extend(_duplicate_keys(prediction_records, record_type="prediction"))
         duplicates.extend(_duplicate_keys(routing_records, record_type="routing"))
         duplicates.extend(_duplicate_live_keys(live_exec_records))
@@ -828,6 +838,9 @@ def merge_cluster_shards(
         "prediction_records": len(all_prediction_records),
         "routing_records": len(all_routing_records),
         "live_exec_records": len(all_live_exec_records),
+        "ignored_prediction_records": ignored_prediction_records,
+        "ignored_routing_records": ignored_routing_records,
+        "ignored_live_exec_records": ignored_live_exec_records,
         "duplicates": duplicates,
         "table_paths": {name: str(path) for name, path in paths.items()},
     }
@@ -1136,6 +1149,12 @@ def _load_shard_jsonl(model_root: Path, filename: str) -> List[Dict[str, Any]]:
             shard_keys.add(key)
         rows.extend(shard_rows)
     return rows
+
+
+def _filter_records_for_conditions(records: Sequence[Dict[str, Any]], allowed_conditions: set[str]) -> List[Dict[str, Any]]:
+    if not allowed_conditions:
+        return list(records)
+    return [record for record in records if str(record.get("baseline_name") or record.get("condition") or "") in allowed_conditions]
 
 
 def _fallback_record_paths(shard_root: Path, filename: str) -> List[Path]:

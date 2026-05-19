@@ -134,6 +134,39 @@ class MetricsTests(unittest.TestCase):
             self.assertEqual(tables["harm_utility"][0]["negative_controls"], 1)
             self.assertEqual(tables["harm_utility"][0]["harmful_activations"], 1)
 
+    def test_build_metric_tables_prefers_global_merged_records(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self._write_jsonl(
+                root / "predictors" / "mock" / "shard_00" / "benchmark" / "prediction_records.jsonl",
+                [
+                    {
+                        "task_id": "task-1",
+                        "baseline_name": "raw_mcp",
+                        "joint_exact_match": False,
+                        "exact_match": False,
+                        "argument_validity": 0.0,
+                    }
+                ],
+            )
+            self._write_jsonl(
+                root / "merged" / "prediction_records.jsonl",
+                [
+                    {
+                        "task_id": "task-1",
+                        "baseline_name": "raw_mcp",
+                        "joint_exact_match": True,
+                        "exact_match": True,
+                        "argument_validity": 1.0,
+                    }
+                ],
+            )
+
+            tables = build_metric_tables(root)
+
+            self.assertEqual(tables["main_results"][0]["num_examples"], 1)
+            self.assertEqual(tables["main_results"][0]["joint_exact_match"], 1.0)
+
     def test_build_metric_tables_from_saved_jsonl(self) -> None:
         tables = build_metric_tables("outputs/baselines_smoke")
         main_by_baseline = {row["baseline_name"]: row for row in tables["main_results"]}
@@ -171,6 +204,7 @@ class MetricsTests(unittest.TestCase):
 
     @staticmethod
     def _write_jsonl(path: Path, rows: list[dict]) -> None:
+        path.parent.mkdir(parents=True, exist_ok=True)
         with path.open("w", encoding="utf-8") as f:
             for row in rows:
                 f.write(json.dumps(row) + "\n")
