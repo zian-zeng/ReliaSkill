@@ -9,7 +9,8 @@ from typing import Any, Dict, Iterable, List, Tuple
 
 from autoskill.eval_types import EvalTask
 from autoskill.conditions import GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER, is_reliaskill_v1_family, normalize_condition_name
-from autoskill.contracts import build_contract_failure_report, evaluate_skill_contract
+from autoskill.contract_inference import build_contract_proof_state, proof_state_is_viable
+from autoskill.doc_evidence import build_doc_grounding_evidence, render_doc_grounding_evidence
 from autoskill.ir import GeneratedSkill, ToolIR
 from autoskill.method_metadata import prediction_method_metadata
 from autoskill.predictor import PredictorBackend, safe_predict
@@ -76,6 +77,11 @@ def _skill_router_positive_text(tool: ToolIR, skill: GeneratedSkill) -> str:
     schema_contract = skill.metadata.get("schema_contract") if isinstance(skill.metadata, dict) else None
     if isinstance(schema_contract, list):
         parts.extend(str(line) for line in schema_contract if isinstance(line, str))
+    if is_reliaskill_v1_family(skill.baseline_name) and not _contract_ablation_disabled(skill, "disable_doc_grounding"):
+        evidence = skill.metadata.get("doc_grounding_evidence") if isinstance(skill.metadata, dict) else None
+        if not isinstance(evidence, dict):
+            evidence = build_doc_grounding_evidence(tool)
+        parts.append(render_doc_grounding_evidence(evidence, max_chars=1800))
     for argument in tool.arguments:
         parts.append(argument.name)
         if argument.description:
@@ -262,7 +268,7 @@ def _required_arg_is_grounded(query: str, arg: Any) -> bool:
     if arg.name in {"content", "text", "body", "message"} or name_parts.intersection({"content", "text", "body", "message"}):
         return bool(re.search(r'"[^"]+"', query) or re.search(r"\b(?:content|text|body|message|write|save|send)\b", lowered))
     if name_parts.intersection({"id", "account", "user", "entity", "name", "title"}):
-        return bool(re.search(r"\b(?:acct|account|user|entity|id)[-_]?[A-Za-z0-9]+\b", query, flags=re.IGNORECASE) or re.search(r'"[^"]+"', query))
+        return bool(_contains_identifier_like_text(query) or re.search(r'"[^"]+"', query))
     if name_parts.intersection(
         {
             "query",
@@ -328,7 +334,7 @@ def _schema_property_is_grounded(query: str, name: str, schema: Any) -> bool:
     if name_parts.intersection({"end", "until", "before", "to"}):
         return bool(re.search(r"\b(?:to|until|before|ending|through)\b", lowered) or _contains_date_like_text(query))
     if name_parts.intersection({"id", "account", "user", "entity", "name", "title"}):
-        return bool(re.search(r"\b(?:acct|account|user|entity|id)[-_]?[A-Za-z0-9]+\b", query, flags=re.IGNORECASE) or re.search(r'"[^"]+"', query))
+        return bool(_contains_identifier_like_text(query) or re.search(r'"[^"]+"', query))
     if name_parts.intersection(
         {
             "query",
@@ -370,6 +376,24 @@ def _contains_date_like_text(query: str) -> bool:
         or re.search(r"\b\d{1,2}/\d{1,2}(?:/\d{2,4})?\b", query)
         or re.search(r"\b(?:today|tomorrow|yesterday|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b", lowered)
         or re.search(r"\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b", lowered)
+    )
+
+
+def _contains_identifier_like_text(query: str) -> bool:
+    match = re.search(
+        r"\b(?:acct|account|user|entity|identifier|id)(?:[-_:]|\s+)([A-Za-z0-9][A-Za-z0-9_.-]*)\b",
+        query,
+        flags=re.IGNORECASE,
+    )
+    return bool(match and _looks_like_identifier_literal(match.group(1)))
+
+
+def _looks_like_identifier_literal(value: str) -> bool:
+    return bool(
+        value
+        and len(value) > 1
+        and (re.search(r"\d", value) or re.search(r"[-_.]", value))
+        and value.lower() not in {"record", "records", "identifier", "identifiers", "account", "accounts", "user", "users"}
     )
 
 
@@ -602,15 +626,17 @@ def select_tool_for_task(
                 boundary_penalty = _boundary_overlap_penalty(task.user_request, skill)
             else:
                 router_text = _skill_router_text(tool, skill)
-            rerank_score = (2 * int(row.get("score", 0))) + _router_overlap_score(task.user_request, router_text)
+            lexical_score = _router_overlap_score(task.user_request, router_text)
+            retrieval_score = int(row.get("score", 0))
+            rerank_score = (2 * retrieval_score) + lexical_score
             rerank_score += _generated_skill_routing_bonus(task.user_request, tool, skill)
             schema_fit_bonus = 0
             grounded_required_args: List[str] = []
             missing_required_args: List[str] = []
             action_intent_conflict = False
-            contract_eval = None
+            contract_proof_state = None
             if is_reliaskill_v1_family(normalized_baseline_name) and not _contract_ablation_disabled(skill, "disable_contract_routing"):
-                contract_eval = evaluate_skill_contract(
+                contract_proof_state = build_contract_proof_state(
                     tool,
                     skill,
                     task.user_request,
@@ -619,13 +645,16 @@ def select_tool_for_task(
                         "artifacts": dict(task.artifact_context),
                         "tool_observations": list(task.tool_observation_context),
                     },
+                    retrieval_score=retrieval_score,
+                    lexical_score=lexical_score,
+                    boundary_penalty=boundary_penalty,
                 )
-                schema_fit_bonus = contract_eval.routing_bonus
-                grounded_required_args = contract_eval.grounded_required_args
-                missing_required_args = contract_eval.missing_required_args
+                schema_fit_bonus = contract_proof_state.route_score
+                grounded_required_args = contract_proof_state.grounded_required_args
+                missing_required_args = contract_proof_state.missing_required_args
                 rerank_score += schema_fit_bonus
                 action_intent_conflict = (
-                    "action_intent_conflict" in contract_eval.blocking_reasons
+                    contract_proof_state.action_intent_conflict
                     and not _contract_ablation_disabled(skill, "disable_action_gate")
                 )
                 if action_intent_conflict:
@@ -641,15 +670,31 @@ def select_tool_for_task(
                     "grounded_required_args": grounded_required_args,
                     "missing_required_args": missing_required_args,
                     "action_intent_conflict": action_intent_conflict,
-                    "contract_satisfied": contract_eval.satisfied if contract_eval else None,
-                    "contract_blocking_reasons": contract_eval.blocking_reasons if contract_eval else [],
-                    "contract_failure_report": build_contract_failure_report(contract_eval) if contract_eval else {},
-                    "contract_proof_obligations": contract_eval.proof_obligations if contract_eval else [],
-                    "contract_side_effect_class": contract_eval.contract.side_effect_class if contract_eval else None,
+                    "contract_satisfied": contract_proof_state.satisfied if contract_proof_state else None,
+                    "contract_viable": proof_state_is_viable(contract_proof_state) if contract_proof_state else None,
+                    "contract_blocking_reasons": contract_proof_state.blocking_reasons if contract_proof_state else [],
+                    "contract_failure_report": contract_proof_state.failure_report if contract_proof_state else {},
+                    "contract_proof_obligations": contract_proof_state.proof_obligations if contract_proof_state else [],
+                    "contract_side_effect_class": contract_proof_state.side_effect_class if contract_proof_state else None,
+                    "contract_decision": contract_proof_state.decision if contract_proof_state else None,
+                    "contract_proof_score": contract_proof_state.proof_score if contract_proof_state else None,
+                    "contract_proof_margin": contract_proof_state.proof_margin if contract_proof_state else None,
+                    "contract_feature_vector": contract_proof_state.feature_vector if contract_proof_state else {},
+                    "contract_proof_state": contract_proof_state.model_dump() if contract_proof_state else {},
                     "overlap_terms": row.get("overlap_terms", []),
                 }
             )
-        reranked.sort(key=lambda item: (-int(item["score"]), item["tool_name"]))
+        if is_reliaskill_v1_family(normalized_baseline_name):
+            reranked.sort(
+                key=lambda item: (
+                    item.get("contract_viable") is not True,
+                    -float(item.get("contract_proof_score") or item.get("score") or 0.0),
+                    -float(item.get("score") or 0.0),
+                    str(item["tool_name"]),
+                )
+            )
+        else:
+            reranked.sort(key=lambda item: (-int(item["score"]), item["tool_name"]))
         selected_tool_name = reranked[0]["tool_name"] if reranked else task.tool_name
         if is_reliaskill_v1_family(normalized_baseline_name) and reranked:
             viable_rows = [
@@ -781,6 +826,110 @@ def score_routed_prediction(
         "abstention_reason": predictor_record.get("abstention_reason"),
     }
 
+
+def _prediction_contract_satisfied(prediction_metadata: Dict[str, Any]) -> bool:
+    verifier = prediction_metadata.get("reliaskill_v1_runtime_verifier")
+    verifier = verifier if isinstance(verifier, dict) else {}
+    after = verifier.get("contract_evaluation_after")
+    after = after if isinstance(after, dict) else {}
+    return after.get("satisfied") is True
+
+
+def _candidate_row_is_contract_viable(row: Dict[str, Any]) -> bool:
+    if row.get("contract_viable") is not None:
+        return bool(row.get("contract_viable")) and str(row.get("tool_name") or "") != "__abstain__"
+    return (
+        row.get("contract_satisfied") is True
+        and not row.get("missing_required_args")
+        and not row.get("action_intent_conflict")
+        and str(row.get("tool_name") or "") != "__abstain__"
+    )
+
+
+def _try_reliaskill_candidate_verification_fallback(
+    *,
+    task: EvalTask,
+    baseline_name: str,
+    selected_tool_name: str,
+    routing: Dict[str, Any],
+    tools: Dict[str, ToolIR],
+    skill_bank: Dict[str, GeneratedSkill],
+    predictor: PredictorBackend,
+    allow_predictor_fallback: bool,
+    max_candidates: int = 3,
+) -> tuple[str, ToolIR, GeneratedSkill, EvalTask, GeneratedSkill, Any, Dict[str, Any], str] | None:
+    normalized_baseline_name = normalize_condition_name(baseline_name)
+    if not is_reliaskill_v1_family(normalized_baseline_name):
+        return None
+    selected_skill = skill_bank.get(selected_tool_name)
+    if selected_skill is None or _contract_ablation_disabled(selected_skill, "disable_contract_routing"):
+        return None
+    if _contract_ablation_disabled(selected_skill, "disable_candidate_verification"):
+        return None
+    expected_tool_name = _expected_routing_tool_name(task)
+    if expected_tool_name == "__abstain__":
+        return None
+    attempted: List[str] = []
+    for row in (routing.get("candidate_rows") or [])[:max_candidates]:
+        candidate_name = str(row.get("tool_name") or "")
+        if not candidate_name or candidate_name == selected_tool_name or candidate_name not in tools:
+            continue
+        if not _candidate_row_is_contract_viable(row):
+            continue
+        candidate_tool = tools[candidate_name]
+        candidate_skill = skill_bank[candidate_name]
+        attempted.append(candidate_name)
+        candidate_task = EvalTask(
+            task_id=task.task_id,
+            tool_name=candidate_name,
+            user_request=task.user_request,
+            expected_arguments=task.expected_arguments,
+            expected_argument_candidates=task.expected_argument_candidates,
+            should_trigger=bool(task.should_trigger or (expected_tool_name != "__abstain__" and candidate_name == expected_tool_name)),
+            expected_tool_name=task.expected_tool_name,
+            negative_target=task.negative_target,
+            negative_category=task.negative_category,
+            difficulty=task.difficulty,
+            domain=task.domain,
+            split=task.split,
+            tags=list(task.tags),
+            conversation_history=list(task.conversation_history),
+            artifact_context=dict(task.artifact_context),
+            tool_observation_context=list(task.tool_observation_context),
+        )
+        runtime_skill, retrieval_context = contextualize_skill_for_task(
+            candidate_task,
+            candidate_tool,
+            candidate_skill,
+            tools,
+            skill_bank=skill_bank,
+        )
+        prediction = safe_predict(candidate_tool, runtime_skill, candidate_task, predictor, allow_fallback=allow_predictor_fallback)
+        if not prediction.should_call or not _prediction_contract_satisfied(prediction.metadata):
+            continue
+        prediction.metadata = {
+            **dict(prediction.metadata),
+            "reliaskill_candidate_verification": {
+                "attempted": True,
+                "selected_fallback": True,
+                "original_selected_tool": selected_tool_name,
+                "verified_selected_tool": candidate_name,
+                "attempted_tools": attempted,
+            },
+        }
+        return (
+            candidate_name,
+            candidate_tool,
+            candidate_skill,
+            candidate_task,
+            runtime_skill,
+            prediction,
+            retrieval_context,
+            "retrieve_then_semantic_rerank_candidate_verification",
+        )
+    return None
+
+
 def run_routing_pipeline(
     tasks: List[EvalTask],
     tools: Dict[str, ToolIR],
@@ -908,7 +1057,13 @@ def run_routing_pipeline(
                     artifact_context=dict(task.artifact_context),
                     tool_observation_context=list(task.tool_observation_context),
                 )
-                runtime_skill, retrieval_context = contextualize_skill_for_task(routed_task, selected_tool, selected_skill, tools)
+                runtime_skill, retrieval_context = contextualize_skill_for_task(
+                    routed_task,
+                    selected_tool,
+                    selected_skill,
+                    tools,
+                    skill_bank=skill_bank,
+                )
                 
                 prediction_dict = None
                 if benchmark_dir and selected_tool_name == task.tool_name:
@@ -955,6 +1110,33 @@ def run_routing_pipeline(
                     )
                 else:
                     prediction = safe_predict(selected_tool, runtime_skill, routed_task, predictor, allow_fallback=allow_predictor_fallback)
+                    if not prediction.should_call:
+                        fallback = _try_reliaskill_candidate_verification_fallback(
+                            task=task,
+                            baseline_name=baseline_name,
+                            selected_tool_name=selected_tool_name,
+                            routing=routing,
+                            tools=tools,
+                            skill_bank=skill_bank,
+                            predictor=predictor,
+                            allow_predictor_fallback=allow_predictor_fallback,
+                        )
+                        if fallback is not None:
+                            (
+                                selected_tool_name,
+                                selected_tool,
+                                selected_skill,
+                                routed_task,
+                                runtime_skill,
+                                prediction,
+                                retrieval_context,
+                                verified_strategy,
+                            ) = fallback
+                            routing = {
+                                **routing,
+                                "routing_strategy": verified_strategy,
+                                "selected_tool_name": selected_tool_name,
+                            }
                     score = score_prediction(routed_task, selected_tool, prediction)
                     argument_score = {
                         "exact_match": score.get("argument_exact_match", score.get("exact_match", False)),

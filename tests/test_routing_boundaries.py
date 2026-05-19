@@ -1,10 +1,43 @@
 import unittest
 
 from autoskill.eval_types import EvalTask
+from autoskill.eval_types import EvalPrediction
+from autoskill.doc_evidence import build_request_conditioned_doc_evidence
 from autoskill.ir import ArgumentIR, GeneratedSkill, ToolIR
+from autoskill.predictor import PredictorBackend
 from autoskill.retrieval_runtime import retrieve_candidate_tools
+from autoskill.retrieval_runtime import contextualize_skill_for_task
 from autoskill.routing_boundaries import detect_routing_abstention
-from autoskill.routing_eval import score_routed_prediction, select_tool_for_task
+from autoskill.routing_eval import (
+    _skill_router_positive_text,
+    _try_reliaskill_candidate_verification_fallback,
+    score_routed_prediction,
+    select_tool_for_task,
+)
+
+
+class _ToolAwarePredictor(PredictorBackend):
+    backend_name = "tool_aware"
+
+    def predict(self, tool: ToolIR, skill: GeneratedSkill, task: EvalTask) -> EvalPrediction:
+        if tool.tool_name == "read_file":
+            return EvalPrediction(
+                task_id=task.task_id,
+                tool_name=tool.tool_name,
+                baseline_name=skill.baseline_name,
+                predicted_arguments={"path": "docs/report.md"},
+                should_call=True,
+                metadata={"raw_model_output": "read"},
+            )
+        return EvalPrediction(
+            task_id=task.task_id,
+            tool_name=tool.tool_name,
+            baseline_name=skill.baseline_name,
+            predicted_arguments={},
+            should_call=False,
+            abstention_reason="schema_contract_violation:path",
+            metadata={"raw_model_output": "abstain"},
+        )
 
 
 def _bank_tools():
@@ -153,6 +186,93 @@ class RoutingBoundaryTests(unittest.TestCase):
 
         self.assertEqual(routing["selected_tool_name"], "read_file")
         self.assertGreater(rows["write_file"]["boundary_penalty"], rows["read_file"]["boundary_penalty"])
+        self.assertTrue(rows["read_file"]["contract_viable"])
+        self.assertIn("contract_proof_state", rows["read_file"])
+        self.assertIn("proof_score", rows["read_file"]["contract_proof_state"])
+
+    def test_reliaskill_contextualization_adds_contrastive_contract_proof_states(self):
+        read_tool = ToolIR(
+            tool_name="read_file",
+            tool_purpose="Read file contents from a path.",
+            arguments=[ArgumentIR(name="path", type="string", required=True, description="File path.")],
+        )
+        write_tool = ToolIR(
+            tool_name="write_file",
+            tool_purpose="Write file contents to a path.",
+            arguments=[
+                ArgumentIR(name="path", type="string", required=True, description="File path."),
+                ArgumentIR(name="content", type="string", required=True, description="Text content."),
+            ],
+        )
+        tools = {tool.tool_name: tool for tool in (read_tool, write_tool)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="contrastive_context",
+            tool_name="read_file",
+            user_request="Read docs/report.md.",
+            expected_arguments={"path": "docs/report.md"},
+        )
+
+        runtime_skill, context = contextualize_skill_for_task(task, read_tool, skills["read_file"], tools, skill_bank=skills)
+
+        self.assertEqual(context["retrieval_type"], "contrastive_contract_proof")
+        self.assertEqual(runtime_skill.metadata["contrastive_contract_best_viable_tool"], "read_file")
+        self.assertTrue(runtime_skill.metadata["contrastive_contract_candidates"][0]["viable"])
+        self.assertIn("contrastive proof state", " ".join(runtime_skill.when_not_to_use).lower())
+
+    def test_schema_semantic_retrieval_handles_domain_aliases(self):
+        customer = ToolIR(
+            tool_name="customer_lookup",
+            tool_purpose="Retrieve customer account details.",
+            arguments=[ArgumentIR(name="customer_id", type="string", required=True, description="Customer identifier.")],
+            doc_snippets=["Lookup customer records by customer identifier."],
+        )
+        invoice = ToolIR(
+            tool_name="invoice_lookup",
+            tool_purpose="Retrieve invoice details.",
+            arguments=[ArgumentIR(name="invoice_id", type="string", required=True, description="Invoice identifier.")],
+            doc_snippets=["Lookup invoice records by invoice identifier."],
+        )
+        ranking = retrieve_candidate_tools("Find client id c-42.", {tool.tool_name: tool for tool in (customer, invoice)}, top_k=2)
+        evidence = build_request_conditioned_doc_evidence(customer, "Find client id c-42.")
+
+        self.assertEqual(ranking["candidates"][0]["tool_name"], "customer_lookup")
+        self.assertEqual(evidence["request_doc_evidence_policy"]["selection"], "schema_semantic_request_overlap_then_length")
+        self.assertTrue(any(arg["name"] == "customer_id" for arg in evidence["request_relevant_arguments"]))
+
+    def test_contrastive_context_rescues_proof_viable_tool_outside_retrieval_top_k(self):
+        target = ToolIR(
+            tool_name="opaque_lookup",
+            tool_purpose="Opaque record operation.",
+            arguments=[ArgumentIR(name="customer_id", type="string", required=True, description="Customer identifier.")],
+        )
+        decoys = [
+            ToolIR(
+                tool_name=f"write_client_note_{index}",
+                tool_purpose="Write client id notes with new content.",
+                arguments=[
+                    ArgumentIR(name="path", type="string", required=True),
+                    ArgumentIR(name="content", type="string", required=True),
+                ],
+                doc_snippets=["Write client id notes. Requires content."],
+            )
+            for index in range(6)
+        ]
+        tools = {tool.tool_name: tool for tool in [target, *decoys]}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="proof_rescue_retrieval_miss",
+            tool_name="opaque_lookup",
+            user_request="Read client id c-42.",
+            expected_arguments={"customer_id": "c-42"},
+        )
+
+        runtime_skill, context = contextualize_skill_for_task(task, target, skills["opaque_lookup"], tools, skill_bank=skills)
+
+        self.assertEqual(runtime_skill.metadata["contrastive_contract_best_viable_tool"], "opaque_lookup")
+        self.assertEqual(context["target_proof_rank"], 1)
+        self.assertGreater(context["proof_expanded_candidate_count"], 4)
+        self.assertTrue(any(row["tool_name"] == "opaque_lookup" for row in context["candidate_proof_states"]))
 
     def test_boundary_first_prompt_condition_uses_boundary_aware_routing(self):
         read_tool = ToolIR(
@@ -269,6 +389,20 @@ class RoutingBoundaryTests(unittest.TestCase):
         self.assertIn("date_range", rows["bank_search_transactions"]["grounded_required_args"])
         self.assertNotIn("date_range", rows["bank_search_transactions"]["missing_required_args"])
 
+    def test_reliaskill_v1_router_text_includes_doc_grounding_evidence(self):
+        tool = ToolIR(
+            tool_name="ledger_lookup",
+            tool_purpose="Look up ledger information.",
+            arguments=[ArgumentIR(name="ledger_id", type="string", required=True)],
+            doc_snippets=["Reconcile payable ledger entries by ledger identifier."],
+        )
+        skill = _reliaskill(tool, when_not_to_use=[])
+
+        router_text = _skill_router_positive_text(tool, skill)
+
+        self.assertIn("Reconcile payable ledger entries", router_text)
+        self.assertIn("ledger_id", router_text)
+
     def test_reliaskill_v1_schema_gate_abstains_when_no_candidate_has_required_inputs(self):
         search = ToolIR(
             tool_name="document_search",
@@ -322,6 +456,7 @@ class RoutingBoundaryTests(unittest.TestCase):
 
         self.assertEqual(routing["selected_tool_name"], "document_search")
         self.assertEqual(rows["document_search"]["schema_affordance_gate"], "schema_complete")
+        self.assertGreater(rows["document_search"]["contract_proof_score"], rows["document_search_create_alert"]["contract_proof_score"])
         self.assertIn(rows["document_search_create_alert"]["schema_affordance_gate"], {"missing_required", "action_intent_conflict"})
 
     def test_reliaskill_v1_action_intent_separates_same_schema_tools(self):
@@ -483,6 +618,133 @@ class RoutingBoundaryTests(unittest.TestCase):
 
         self.assertEqual(routing["routing_strategy"], "retrieve_then_semantic_rerank")
         self.assertTrue(all(row["contract_satisfied"] is None for row in routing["candidate_rows"]))
+
+    def test_reliaskill_candidate_verification_can_fallback_to_next_contract_valid_tool(self):
+        read_tool = ToolIR(
+            tool_name="read_file",
+            tool_purpose="Read file contents from a path.",
+            arguments=[ArgumentIR(name="path", type="string", required=True, description="File path.")],
+        )
+        write_tool = ToolIR(
+            tool_name="write_file",
+            tool_purpose="Write file contents to a path.",
+            arguments=[
+                ArgumentIR(name="path", type="string", required=True),
+                ArgumentIR(name="content", type="string", required=True),
+            ],
+        )
+        tools = {tool.tool_name: tool for tool in (read_tool, write_tool)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="route_candidate_fallback",
+            tool_name="read_file",
+            user_request="Read docs/report.md.",
+            expected_arguments={"path": "docs/report.md"},
+        )
+
+        fallback = _try_reliaskill_candidate_verification_fallback(
+            task=task,
+            baseline_name="reliaskill_v1",
+            selected_tool_name="write_file",
+            routing={
+                "candidate_rows": [
+                    {"tool_name": "write_file", "contract_satisfied": False, "missing_required_args": ["content"]},
+                    {"tool_name": "read_file", "contract_satisfied": True, "missing_required_args": [], "action_intent_conflict": False},
+                ]
+            },
+            tools=tools,
+            skill_bank=skills,
+            predictor=_ToolAwarePredictor(),
+            allow_predictor_fallback=False,
+        )
+
+        self.assertIsNotNone(fallback)
+        assert fallback is not None
+        selected_name, _, _, _, _, prediction, _, strategy = fallback
+        self.assertEqual(selected_name, "read_file")
+        self.assertEqual(strategy, "retrieve_then_semantic_rerank_candidate_verification")
+        self.assertTrue(prediction.metadata["reliaskill_candidate_verification"]["selected_fallback"])
+
+    def test_candidate_verification_ablation_disables_fallback(self):
+        read_tool = ToolIR(
+            tool_name="read_file",
+            tool_purpose="Read file contents from a path.",
+            arguments=[ArgumentIR(name="path", type="string", required=True, description="File path.")],
+        )
+        write_tool = ToolIR(
+            tool_name="write_file",
+            tool_purpose="Write file contents to a path.",
+            arguments=[ArgumentIR(name="path", type="string", required=True), ArgumentIR(name="content", type="string", required=True)],
+        )
+        tools = {tool.tool_name: tool for tool in (read_tool, write_tool)}
+        skills = {
+            name: _reliaskill(tool, when_not_to_use=[], baseline_name="reliaskill_v1_no_candidate_verification")
+            for name, tool in tools.items()
+        }
+        for skill in skills.values():
+            skill.metadata["contract_ablation_flags"] = {"disable_candidate_verification": True}
+        task = EvalTask(
+            task_id="route_candidate_fallback_ablate",
+            tool_name="read_file",
+            user_request="Read docs/report.md.",
+            expected_arguments={"path": "docs/report.md"},
+        )
+
+        fallback = _try_reliaskill_candidate_verification_fallback(
+            task=task,
+            baseline_name="reliaskill_v1_no_candidate_verification",
+            selected_tool_name="write_file",
+            routing={
+                "candidate_rows": [
+                    {"tool_name": "write_file", "contract_satisfied": False, "missing_required_args": ["content"]},
+                    {"tool_name": "read_file", "contract_satisfied": True, "missing_required_args": [], "action_intent_conflict": False},
+                ]
+            },
+            tools=tools,
+            skill_bank=skills,
+            predictor=_ToolAwarePredictor(),
+            allow_predictor_fallback=False,
+        )
+
+        self.assertIsNone(fallback)
+
+    def test_candidate_verification_does_not_rescue_expected_abstentions(self):
+        read_tool = ToolIR(
+            tool_name="read_file",
+            tool_purpose="Read file contents from a path.",
+            arguments=[ArgumentIR(name="path", type="string", required=True, description="File path.")],
+        )
+        write_tool = ToolIR(
+            tool_name="write_file",
+            tool_purpose="Write file contents to a path.",
+            arguments=[ArgumentIR(name="path", type="string", required=True), ArgumentIR(name="content", type="string", required=True)],
+        )
+        tools = {tool.tool_name: tool for tool in (read_tool, write_tool)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="route_candidate_fallback_negative",
+            tool_name="write_file",
+            user_request="Explain file tools; do not call any tool.",
+            should_trigger=False,
+        )
+
+        fallback = _try_reliaskill_candidate_verification_fallback(
+            task=task,
+            baseline_name="reliaskill_v1",
+            selected_tool_name="write_file",
+            routing={
+                "candidate_rows": [
+                    {"tool_name": "write_file", "contract_satisfied": False, "missing_required_args": ["content"]},
+                    {"tool_name": "read_file", "contract_satisfied": True, "missing_required_args": [], "action_intent_conflict": False},
+                ]
+            },
+            tools=tools,
+            skill_bank=skills,
+            predictor=_ToolAwarePredictor(),
+            allow_predictor_fallback=False,
+        )
+
+        self.assertIsNone(fallback)
 
 
 if __name__ == "__main__":

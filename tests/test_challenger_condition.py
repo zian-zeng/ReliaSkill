@@ -11,8 +11,13 @@ from autoskill.experiment import build_skill_variant_map, load_tools, run_benchm
 from autoskill.generator import SkillGenerator
 from autoskill.conditions import (
     LEGACY_RELIASKILL_CHALLENGER,
+    RELIASKILL_V1_NO_CANDIDATE_VERIFICATION,
+    RELIASKILL_V1_NO_CONTRACT_DECODER,
     RELIASKILL_V1_NO_CONTRACT_ROUTING,
+    RELIASKILL_V1_NO_DOC_GROUNDING,
+    RELIASKILL_V1_NO_IDENTIFIER_BINDING,
     RELIASKILL_V1_NO_RUNTIME_GROUNDING,
+    RELIASKILL_V1_NO_VERIFIER_REFINEMENT,
     normalize_condition_name,
 )
 from autoskill.ir import ArgumentIR, GeneratedSkill, ReliabilityScore, RepairReport, ToolIR
@@ -49,6 +54,19 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertIn("dev_multi_candidate_selection", method_metadata["pipeline_stages"])
             self.assertIn("runtime_schema_contract_verifier", method_metadata["pipeline_stages"])
             self.assertIn("executable_contract_compilation", method_metadata["pipeline_stages"])
+            self.assertIn("doc_grounded_contract_evidence", method_metadata["pipeline_stages"])
+            self.assertIn("request_conditioned_doc_evidence", method_metadata["pipeline_stages"])
+            self.assertIn("contract_constrained_tool_inference", method_metadata["pipeline_stages"])
+            self.assertIn("declarative_contract_proof_state", method_metadata["pipeline_stages"])
+            self.assertIn("calibratable_contract_proof_policy", method_metadata["pipeline_stages"])
+            self.assertIn("proof_state_routing_policy", method_metadata["pipeline_stages"])
+            self.assertIn("contrastive_contract_proof_context", method_metadata["pipeline_stages"])
+            self.assertIn("retrieval_miss_proof_rescue", method_metadata["pipeline_stages"])
+            self.assertIn("schema_semantic_doc_reranking", method_metadata["pipeline_stages"])
+            self.assertIn("request_contract_parse_prompting", method_metadata["pipeline_stages"])
+            self.assertIn("verifier_guided_refinement", method_metadata["pipeline_stages"])
+            self.assertIn("contract_decoded_argument_completion", method_metadata["pipeline_stages"])
+            self.assertIn("candidate_verified_routing_fallback", method_metadata["pipeline_stages"])
             self.assertTrue(method_metadata["uses_runtime_schema_contract_verifier"])
             self.assertTrue(method_metadata["uses_executable_skill_contract"])
             self.assertTrue(method_metadata["uses_contract_proof_ledger"])
@@ -56,6 +74,19 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertTrue(method_metadata["uses_contextual_grounding_contract"])
             self.assertTrue(method_metadata["uses_multi_step_contract_planning"])
             self.assertTrue(method_metadata["uses_execution_feedback_contract"])
+            self.assertTrue(method_metadata["uses_doc_grounded_contract_evidence"])
+            self.assertTrue(method_metadata["uses_request_conditioned_doc_evidence"])
+            self.assertTrue(method_metadata["uses_contract_constrained_tool_inference"])
+            self.assertTrue(method_metadata["uses_declarative_contract_proof_state"])
+            self.assertTrue(method_metadata["uses_calibratable_contract_proof_policy"])
+            self.assertTrue(method_metadata["uses_proof_state_routing_policy"])
+            self.assertTrue(method_metadata["uses_contrastive_contract_proof_context"])
+            self.assertTrue(method_metadata["uses_retrieval_miss_proof_rescue"])
+            self.assertTrue(method_metadata["uses_schema_semantic_doc_reranking"])
+            self.assertTrue(method_metadata["uses_request_contract_parse_prompting"])
+            self.assertTrue(method_metadata["uses_verifier_guided_refinement"])
+            self.assertTrue(method_metadata["uses_contract_decoded_argument_completion"])
+            self.assertTrue(method_metadata["uses_candidate_verified_routing_fallback"])
             self.assertFalse(method_metadata["test_controls_used"])
             skill_json = json.loads((challenger_dir / "skill.json").read_text(encoding="utf-8"))
             self.assertIn("Full ReliaSkill v1 artifact", skill_json["skill_summary"])
@@ -65,8 +96,23 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertEqual(skill_json["metadata"]["gate_source_condition"], "gated_skill")
             self.assertTrue(any("Allowed top-level fields" in line for line in skill_json["metadata"]["schema_contract"]))
             self.assertIn("executable_contract", skill_json["metadata"])
+            self.assertIn("contract_proof_policy", skill_json["metadata"])
+            self.assertEqual(skill_json["metadata"]["contract_proof_policy"]["name"], "dev_calibratable_contract_proof_policy")
             self.assertIn("all_required_arguments_grounded", skill_json["metadata"]["executable_contract"]["proof_obligations"])
             self.assertIn("contract_counterexamples", skill_json["metadata"])
+            self.assertIn("doc_grounding_evidence", skill_json["metadata"])
+            self.assertTrue(skill_json["metadata"]["uses_doc_grounded_contract_evidence"])
+            self.assertTrue(skill_json["metadata"]["uses_request_conditioned_doc_evidence"])
+            self.assertTrue(skill_json["metadata"]["uses_contract_constrained_tool_inference"])
+            self.assertTrue(skill_json["metadata"]["uses_declarative_contract_proof_state"])
+            self.assertTrue(skill_json["metadata"]["uses_calibratable_contract_proof_policy"])
+            self.assertTrue(skill_json["metadata"]["uses_proof_state_routing_policy"])
+            self.assertTrue(skill_json["metadata"]["uses_contrastive_contract_proof_context"])
+            self.assertTrue(skill_json["metadata"]["uses_retrieval_miss_proof_rescue"])
+            self.assertTrue(skill_json["metadata"]["uses_schema_semantic_doc_reranking"])
+            self.assertTrue(skill_json["metadata"]["uses_request_contract_parse_prompting"])
+            self.assertTrue(skill_json["metadata"]["uses_contract_decoded_argument_completion"])
+            self.assertTrue(skill_json["metadata"]["uses_candidate_verified_routing_fallback"])
             self.assertTrue(
                 any(
                     item["violated_obligation"] == "all_required_arguments_grounded"
@@ -97,22 +143,71 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertTrue(loaded.metadata["method_metadata"]["uses_contextual_grounding_contract"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_multi_step_contract_planning"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_execution_feedback_contract"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_doc_grounded_contract_evidence"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_request_conditioned_doc_evidence"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_contract_constrained_tool_inference"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_declarative_contract_proof_state"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_calibratable_contract_proof_policy"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_proof_state_routing_policy"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_contrastive_contract_proof_context"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_retrieval_miss_proof_rescue"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_schema_semantic_doc_reranking"])
+            self.assertEqual(
+                loaded.metadata["method_metadata"]["contract_proof_policy"]["name"],
+                "dev_calibratable_contract_proof_policy",
+            )
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_request_contract_parse_prompting"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_verifier_guided_refinement"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_contract_decoded_argument_completion"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_candidate_verified_routing_fallback"])
             self.assertTrue(loaded.metadata["prompt_visible_method_evidence"])
             ablations = build_skill_variant_map(
                 tools["create_directory"],
                 tools,
                 SkillGenerator(),
-                allowed_conditions=[RELIASKILL_V1_NO_CONTRACT_ROUTING, RELIASKILL_V1_NO_RUNTIME_GROUNDING],
+                allowed_conditions=[
+                    RELIASKILL_V1_NO_CONTRACT_ROUTING,
+                    RELIASKILL_V1_NO_RUNTIME_GROUNDING,
+                    RELIASKILL_V1_NO_DOC_GROUNDING,
+                    RELIASKILL_V1_NO_VERIFIER_REFINEMENT,
+                    RELIASKILL_V1_NO_IDENTIFIER_BINDING,
+                    RELIASKILL_V1_NO_CONTRACT_DECODER,
+                    RELIASKILL_V1_NO_CANDIDATE_VERIFICATION,
+                ],
                 package_manager_dir=package_root,
                 allow_package_generation=False,
             )
-            self.assertEqual(set(ablations), {RELIASKILL_V1_NO_CONTRACT_ROUTING, RELIASKILL_V1_NO_RUNTIME_GROUNDING})
+            self.assertEqual(
+                set(ablations),
+                {
+                    RELIASKILL_V1_NO_CONTRACT_ROUTING,
+                    RELIASKILL_V1_NO_RUNTIME_GROUNDING,
+                    RELIASKILL_V1_NO_DOC_GROUNDING,
+                    RELIASKILL_V1_NO_VERIFIER_REFINEMENT,
+                    RELIASKILL_V1_NO_IDENTIFIER_BINDING,
+                    RELIASKILL_V1_NO_CONTRACT_DECODER,
+                    RELIASKILL_V1_NO_CANDIDATE_VERIFICATION,
+                },
+            )
             self.assertEqual(
                 ablations[RELIASKILL_V1_NO_CONTRACT_ROUTING].metadata["contract_ablation"],
                 "contract_routing",
             )
             self.assertTrue(
                 ablations[RELIASKILL_V1_NO_RUNTIME_GROUNDING].metadata["contract_ablation_flags"]["disable_runtime_grounding"]
+            )
+            self.assertTrue(ablations[RELIASKILL_V1_NO_DOC_GROUNDING].metadata["contract_ablation_flags"]["disable_doc_grounding"])
+            self.assertTrue(
+                ablations[RELIASKILL_V1_NO_VERIFIER_REFINEMENT].metadata["contract_ablation_flags"]["disable_verifier_refinement"]
+            )
+            self.assertTrue(
+                ablations[RELIASKILL_V1_NO_IDENTIFIER_BINDING].metadata["contract_ablation_flags"]["disable_identifier_binding"]
+            )
+            self.assertTrue(
+                ablations[RELIASKILL_V1_NO_CONTRACT_DECODER].metadata["contract_ablation_flags"]["disable_contract_decoder"]
+            )
+            self.assertTrue(
+                ablations[RELIASKILL_V1_NO_CANDIDATE_VERIFICATION].metadata["contract_ablation_flags"]["disable_candidate_verification"]
             )
 
             records, _, _ = run_benchmark_pipeline(

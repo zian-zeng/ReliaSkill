@@ -213,6 +213,11 @@ def _build_reliaskill_contract_ablation(base_skill: Any, condition: str) -> Any:
             "disable_schema_repair": condition == "reliaskill_v1_no_schema_repair",
             "disable_ambiguity_abstention": condition == "reliaskill_v1_no_ambiguity_abstention",
             "disable_contextual_grounding": condition == "reliaskill_v1_no_contextual_grounding",
+            "disable_doc_grounding": condition == "reliaskill_v1_no_doc_grounding",
+            "disable_verifier_refinement": condition == "reliaskill_v1_no_verifier_refinement",
+            "disable_identifier_binding": condition == "reliaskill_v1_no_identifier_binding",
+            "disable_contract_decoder": condition == "reliaskill_v1_no_contract_decoder",
+            "disable_candidate_verification": condition == "reliaskill_v1_no_candidate_verification",
         },
     }
     ablation.method_trace = [
@@ -466,7 +471,7 @@ def run_benchmark_pipeline(
 
             write_skill_package(target_dir, tool, skill, report)
             _write_condition_prompt(out_dir.parent / "packages", tool, skill)
-            runtime_skill, retrieval_context = contextualize_skill_for_task(task, tool, skill, tools)
+            runtime_skill, retrieval_context = contextualize_skill_for_task(task, tool, skill, tools, skill_bank=variants)
             write_progress_state(
                 out_dir,
                 phase="benchmark",

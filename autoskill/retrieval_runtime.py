@@ -4,11 +4,32 @@ import re
 from copy import deepcopy
 from typing import Any, Dict, List, Tuple
 
+from autoskill.conditions import is_reliaskill_v1_family
+from autoskill.contract_inference import build_contract_proof_state, contract_state_payload
 from autoskill.eval_types import EvalTask
 from autoskill.ir import GeneratedSkill, ToolIR
 from autoskill.retrieval_baselines import MEMORY_BANK
 from autoskill.routing_boundaries import routing_tool_mention_adjustment
 from autoskill.templates import build_argument_template
+
+
+SEMANTIC_ALIAS_GROUPS = [
+    {"find", "search", "lookup", "locate", "query", "retrieve"},
+    {"read", "show", "view", "open", "display", "fetch"},
+    {"create", "add", "insert", "new", "make", "ensure"},
+    {"update", "edit", "modify", "patch", "write", "save", "append"},
+    {"delete", "remove", "clear", "drop"},
+    {"send", "email", "notify", "post", "publish", "transfer"},
+    {"path", "file", "directory", "folder", "location"},
+    {"content", "text", "body", "message", "payload"},
+    {"account", "acct", "customer", "client", "user"},
+    {"identifier", "id", "name", "title", "key"},
+]
+
+SEMANTIC_ALIASES: Dict[str, set[str]] = {}
+for _group in SEMANTIC_ALIAS_GROUPS:
+    for _term in _group:
+        SEMANTIC_ALIASES[_term] = set(_group)
 
 
 def _tokenize(text: str) -> List[str]:
@@ -26,10 +47,37 @@ def _scored_overlap(query: str, text: str) -> Tuple[int, List[str]]:
     text_set = set(text_tokens)
     overlap = sorted(query_set.intersection(text_set))
     bigram_overlap = sorted(set(_bigrams(query_tokens)).intersection(set(_bigrams(text_tokens))))
-    score = 2 * len(overlap) + 4 * len(bigram_overlap)
+    semantic_overlap = sorted(_semantic_token_set(query).intersection(_semantic_token_set(text)) - set(overlap))
+    score = 2 * len(overlap) + len(semantic_overlap) + 4 * len(bigram_overlap)
     if query.lower() in text.lower():
         score += 6
-    return score, overlap[:6]
+    return score, [*overlap, *semantic_overlap][:6]
+
+
+def _semantic_token_set(text: str) -> set[str]:
+    expanded: set[str] = set()
+    for token in _tokenize(text):
+        parts = [token, *[part for part in re.split(r"[-_./*?]+", token) if part]]
+        for part in parts:
+            normalized = _normalize_semantic_token(part)
+            if not normalized:
+                continue
+            expanded.add(normalized)
+            expanded.update(SEMANTIC_ALIASES.get(normalized, set()))
+    return expanded
+
+
+def _normalize_semantic_token(token: str) -> str:
+    token = token.strip("._-/*?").lower()
+    if len(token) <= 1:
+        return ""
+    if token.endswith("ing") and len(token) > 5:
+        token = token[:-3]
+    elif token.endswith("ed") and len(token) > 4:
+        token = token[:-2]
+    elif token.endswith("s") and len(token) > 4:
+        token = token[:-1]
+    return token
 
 
 def _tool_search_text(tool: ToolIR) -> str:
@@ -258,7 +306,13 @@ def retrieve_memory_tool_rankings(query: str, tools: Dict[str, ToolIR], top_k: i
     return {"candidates": ranked[: max(top_k, 1)]}
 
 
-def contextualize_skill_for_task(task: EvalTask, tool: ToolIR, skill: GeneratedSkill, tools: Dict[str, ToolIR]) -> tuple[GeneratedSkill, Dict[str, Any]]:
+def contextualize_skill_for_task(
+    task: EvalTask,
+    tool: ToolIR,
+    skill: GeneratedSkill,
+    tools: Dict[str, ToolIR],
+    skill_bank: Dict[str, GeneratedSkill] | None = None,
+) -> tuple[GeneratedSkill, Dict[str, Any]]:
     contextualized = deepcopy(skill)
 
     if skill.baseline_name == "retrieved_docs":
@@ -340,4 +394,118 @@ def contextualize_skill_for_task(task: EvalTask, tool: ToolIR, skill: GeneratedS
         )
         return contextualized, context
 
+    if is_reliaskill_v1_family(skill.baseline_name) and not _contract_ablation_disabled(skill, "disable_contract_routing"):
+        context = _reliaskill_contrastive_contract_context(task, tool, skill, tools, skill_bank=skill_bank)
+        if context["candidate_proof_states"]:
+            contextualized.metadata = {
+                **contextualized.metadata,
+                "contrastive_contract_candidates": context["candidate_proof_states"],
+                "contrastive_contract_target_rank": context["target_proof_rank"],
+                "contrastive_contract_best_viable_tool": context["best_viable_tool"],
+            }
+            contextualized.when_not_to_use = _dedupe_lines(
+                [
+                    "If this tool's contrastive proof state is not viable while another candidate is viable, abstain so routing can verify the better candidate.",
+                    *contextualized.when_not_to_use,
+                ]
+            )
+            contextualized.method_trace.append(
+                {
+                    "retrieval_type": "contrastive_contract_proof",
+                    "candidate_tools": [row["tool_name"] for row in context["candidate_proof_states"]],
+                    "target_proof_rank": context["target_proof_rank"],
+                    "best_viable_tool": context["best_viable_tool"],
+                }
+            )
+            return contextualized, context
+
     return contextualized, {}
+
+
+def _reliaskill_contrastive_contract_context(
+    task: EvalTask,
+    target_tool: ToolIR,
+    target_skill: GeneratedSkill,
+    tools: Dict[str, ToolIR],
+    *,
+    skill_bank: Dict[str, GeneratedSkill] | None = None,
+    top_k: int = 4,
+) -> Dict[str, Any]:
+    rows = retrieve_candidate_tools(task.user_request, tools, top_k=max(len(tools), top_k))["candidates"]
+    retrieved_rank = {str(row["tool_name"]): index + 1 for index, row in enumerate(rows)}
+    proof_rows: List[Dict[str, Any]] = []
+    for row in rows:
+        candidate_name = str(row["tool_name"])
+        candidate_tool = tools.get(candidate_name)
+        if candidate_tool is None:
+            continue
+        candidate_skill = (skill_bank or {}).get(candidate_name) or _fallback_candidate_skill(candidate_tool, target_skill)
+        proof_state = build_contract_proof_state(
+            candidate_tool,
+            candidate_skill,
+            task.user_request,
+            grounding_context={
+                "conversation": list(task.conversation_history),
+                "artifacts": dict(task.artifact_context),
+                "tool_observations": list(task.tool_observation_context),
+            },
+            retrieval_score=int(row.get("score", 0) or 0),
+        )
+        payload = contract_state_payload(proof_state)
+        payload["retrieval_score"] = int(row.get("score", 0) or 0)
+        payload["retrieval_rank"] = retrieved_rank.get(candidate_name)
+        payload["target_tool"] = candidate_name == target_tool.tool_name
+        proof_rows.append(payload)
+    proof_rows.sort(
+        key=lambda item: (
+            not bool(item.get("viable")),
+            -float(item.get("proof_score") or 0.0),
+            -int(item.get("retrieval_score") or 0),
+            str(item.get("tool_name") or ""),
+        )
+    )
+    rescued_rows = [
+        row
+        for index, row in enumerate(proof_rows)
+        if row.get("viable") and int(row.get("retrieval_rank") or 0) > top_k and index < top_k
+    ]
+    exposed_rows = proof_rows[: max(top_k, 1)]
+    target_rank = next((index + 1 for index, row in enumerate(proof_rows) if row.get("tool_name") == target_tool.tool_name), None)
+    best_viable = next((str(row["tool_name"]) for row in proof_rows if row.get("viable")), None)
+    return {
+        "retrieval_type": "contrastive_contract_proof",
+        "candidate_proof_states": exposed_rows,
+        "proof_expanded_candidate_count": len(proof_rows),
+        "retrieval_miss_rescues": rescued_rows,
+        "target_proof_rank": target_rank,
+        "target_in_top_k": target_rank is not None,
+        "best_viable_tool": best_viable,
+    }
+
+
+def _fallback_candidate_skill(tool: ToolIR, source_skill: GeneratedSkill) -> GeneratedSkill:
+    return GeneratedSkill(
+        baseline_name=source_skill.baseline_name,
+        skill_summary=tool.tool_purpose or source_skill.skill_summary,
+        when_to_use=[f"Use `{tool.tool_name}` only for direct requests matching its purpose."],
+        when_not_to_use=[],
+        argument_template={argument.name: f"<{argument.name}>" for argument in tool.arguments if argument.required},
+        metadata=dict(source_skill.metadata),
+    )
+
+
+def _contract_ablation_disabled(skill: GeneratedSkill, flag: str) -> bool:
+    flags = skill.metadata.get("contract_ablation_flags") if isinstance(skill.metadata, dict) else None
+    return bool(isinstance(flags, dict) and flags.get(flag) is True)
+
+
+def _dedupe_lines(lines: List[str]) -> List[str]:
+    result: List[str] = []
+    seen: set[str] = set()
+    for line in lines:
+        normalized = " ".join(str(line).split())
+        if not normalized or normalized in seen:
+            continue
+        seen.add(normalized)
+        result.append(normalized)
+    return result

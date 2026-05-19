@@ -4,6 +4,7 @@ import json
 
 from autoskill.conditions import is_reliaskill_v1_family
 from autoskill.contracts import build_contract_counterexamples, compile_skill_contract
+from autoskill.doc_evidence import build_doc_grounding_evidence
 from autoskill.ir import GeneratedSkill, ToolIR
 from autoskill.templates import build_schema_contract_lines
 
@@ -72,6 +73,17 @@ def render_exposure(tool: ToolIR, skill: GeneratedSkill) -> str:
                     "",
                 ]
             )
+            if not _contract_ablation_disabled(skill, "disable_doc_grounding"):
+                doc_evidence = skill.metadata.get("doc_grounding_evidence")
+                if not isinstance(doc_evidence, dict):
+                    doc_evidence = build_doc_grounding_evidence(tool)
+                lines.extend(
+                    [
+                        "Documentation-grounded contract evidence:",
+                        json.dumps(doc_evidence, indent=2, ensure_ascii=False),
+                        "",
+                    ]
+                )
         lines.extend(
             [
                 "Skill summary:",
@@ -97,3 +109,8 @@ def render_exposure(tool: ToolIR, skill: GeneratedSkill) -> str:
             lines.append("- None")
 
     return "\n".join(lines).strip() + "\n"
+
+
+def _contract_ablation_disabled(skill: GeneratedSkill, flag: str) -> bool:
+    flags = skill.metadata.get("contract_ablation_flags") if isinstance(skill.metadata, dict) else None
+    return bool(isinstance(flags, dict) and flags.get(flag) is True)

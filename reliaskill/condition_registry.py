@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from autoskill.compactness import SKILL_LENGTH_VARIANTS
 from autoskill.artifacts import DOCS_ONLY, GATED_SKILL, NAIVE_SKILL, RAW_MCP, RELIASKILL_CHALLENGER, REPAIRED_SKILL, SCHEMA_ONLY, VALIDATED_SKILL
-from autoskill.conditions import REVIEWER_BASELINES
+from autoskill.conditions import REVIEWER_BASELINES, RELIASKILL_V1_CONTRACT_ABLATIONS
 from autoskill.prompt_templates import PROMPT_TEMPLATE_CONDITIONS, PROMPT_TEMPLATE_SPECS
 from reliaskill.human_skill_condition import HUMAN_WRITTEN_SKILL
 from reliaskill.stress_tests.corrupt_skills import STRESS_TEST_CONDITIONS
@@ -31,15 +31,35 @@ CONDITION_REGISTRY[RELIASKILL_CHALLENGER] = {
     "uses_contract_proof_ledger": True,
     "uses_adaptive_contract_policy": True,
     "uses_contextual_grounding_contract": True,
+    "uses_request_contract_parse_prompting": True,
     "uses_multi_step_contract_planning": True,
     "uses_execution_feedback_contract": True,
+    "uses_request_conditioned_doc_evidence": True,
+    "uses_contract_constrained_tool_inference": True,
+    "uses_declarative_contract_proof_state": True,
+    "uses_calibratable_contract_proof_policy": True,
+    "uses_proof_state_routing_policy": True,
+    "uses_contrastive_contract_proof_context": True,
+    "uses_retrieval_miss_proof_rescue": True,
+    "uses_schema_semantic_doc_reranking": True,
     "uses_schema_affordance_routing_gate": True,
+    "uses_candidate_verified_routing_fallback": True,
     "uses_action_intent_gate": True,
     "uses_required_argument_grounding": True,
+    "uses_contract_decoded_argument_completion": True,
     "uses_false_abstention_rescue": True,
     "uses_dev_controls": True,
     "uses_test_controls_for_authoring": False,
 }
+for condition in RELIASKILL_V1_CONTRACT_ABLATIONS:
+    CONDITION_REGISTRY[condition] = {
+        "condition": condition,
+        "family": "reliaskill_v1_component_ablation",
+        "source_condition": RELIASKILL_CHALLENGER,
+        "requires_reliaskill_v1_package": True,
+        "disabled_component": condition.replace("reliaskill_v1_no_", ""),
+        "uses_test_controls_for_authoring": False,
+    }
 CONDITION_REGISTRY[HUMAN_WRITTEN_SKILL] = {
     "condition": HUMAN_WRITTEN_SKILL,
     "family": "human_upper_bound",

@@ -134,6 +134,39 @@ class MetricsTests(unittest.TestCase):
             self.assertEqual(tables["harm_utility"][0]["negative_controls"], 1)
             self.assertEqual(tables["harm_utility"][0]["harmful_activations"], 1)
 
+    def test_metric_tables_report_reliaskill_runtime_refinement_rates(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self._write_jsonl(
+                root / "prediction_records.jsonl",
+                [
+                    {
+                        "task_id": "a",
+                        "baseline_name": "reliaskill_v1",
+                        "joint_exact_match": True,
+                        "prediction_metadata": {
+                            "reliaskill_v1_runtime_verifier": {"actions": ["filled_grounded_required:query"]},
+                            "reliaskill_v1_refinement": {"attempted": True, "selected_refined": True},
+                        },
+                    },
+                    {
+                        "task_id": "b",
+                        "baseline_name": "reliaskill_v1",
+                        "joint_exact_match": False,
+                        "prediction_metadata": {
+                            "reliaskill_v1_runtime_verifier": {"actions": []},
+                            "reliaskill_v1_refinement": {"attempted": True, "selected_refined": False},
+                        },
+                    },
+                ],
+            )
+
+            row = build_metric_tables(root)["main_results"][0]
+
+            self.assertEqual(row["verifier_action_rate"], 0.5)
+            self.assertEqual(row["refinement_attempt_rate"], 1.0)
+            self.assertEqual(row["refinement_selected_rate"], 0.5)
+
     def test_build_metric_tables_prefers_global_merged_records(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)

@@ -55,6 +55,29 @@ class ReliaSkillContractTests(unittest.TestCase):
         self.assertIn("date_range", evaluation.grounded_required_args)
         self.assertTrue(any(item["obligation"] == "arguments_schema_valid" for item in evaluation.proof_obligations))
 
+    def test_contract_treats_record_nouns_and_spaced_identifiers_conservatively(self) -> None:
+        tool = ToolIR(
+            tool_name="account_search",
+            tool_purpose="Search account records by account identifier.",
+            arguments=[ArgumentIR(name="account_id", type="string", required=True)],
+        )
+
+        evaluation = evaluate_skill_contract(
+            tool,
+            _skill(tool),
+            "Search account abc123.",
+            arguments={"account_id": "abc123"},
+        )
+
+        self.assertTrue(evaluation.satisfied)
+        self.assertNotIn("action_intent_conflict", evaluation.blocking_reasons)
+        self.assertEqual(evaluation.argument_issues, [])
+        self.assertIn("account_id", evaluation.grounded_required_args)
+
+        missing = evaluate_skill_contract(tool, _skill(tool), "Search account records.", arguments={})
+        self.assertFalse(missing.satisfied)
+        self.assertIn("account_id", missing.missing_required_args)
+
     def test_contract_evaluation_blocks_missing_required_information(self) -> None:
         tool = ToolIR(
             tool_name="document_search",

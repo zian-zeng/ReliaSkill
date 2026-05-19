@@ -22,6 +22,12 @@ class ReliaSkillV1PromptingTests(unittest.TestCase):
         self.assertIn("ReliaSkill v1 boundary gate", prompt)
         self.assertIn("ReliaSkill v1 proof obligations", prompt)
         self.assertIn("ReliaSkill v1 contract counterexamples", prompt)
+        self.assertIn("ReliaSkill v1 documentation-grounded evidence", prompt)
+        self.assertIn("request_relevant_doc_snippets", prompt)
+        self.assertIn("ReliaSkill v1 request-contract proof state", prompt)
+        self.assertIn('"viable"', prompt)
+        self.assertIn("missing_required_args", prompt)
+        self.assertIn("Search documents by query", prompt)
         self.assertIn("missing_required_information", prompt)
         self.assertIn("all_required_arguments_grounded", prompt)
         self.assertLess(prompt.index("When not to use:"), prompt.index("When to use:"))
@@ -44,6 +50,28 @@ class ReliaSkillV1PromptingTests(unittest.TestCase):
         self.assertIn("Each `observations` item required keys", prompt)
         self.assertIn("`observations[].contents` must be a JSON array of string items", prompt)
         self.assertLess(prompt.index("ReliaSkill v1 schema contract"), prompt.index("ReliaSkill v1 boundary gate"))
+
+    def test_reliaskill_v1_prompt_includes_contrastive_contract_context_when_available(self) -> None:
+        prompt = build_prediction_prompt(
+            _tool(),
+            GeneratedSkill(
+                baseline_name="reliaskill_v1",
+                skill_summary="Full ReliaSkill deployable artifact.",
+                when_to_use=["Use for direct search requests."],
+                when_not_to_use=["Do not use for explanation-only requests."],
+                argument_template={"query": "text"},
+                metadata={
+                    "contrastive_contract_candidates": [
+                        {"tool_name": "search", "viable": True, "proof_score": 42.0, "missing_required_args": []},
+                        {"tool_name": "write_file", "viable": False, "proof_score": 3.0, "missing_required_args": ["content"]},
+                    ]
+                },
+            ),
+            'Search query="budget".',
+        )
+
+        self.assertIn("ReliaSkill v1 contrastive candidate proof states", prompt)
+        self.assertIn("adjacent-tool mistakes", prompt)
 
     def test_boundary_first_prompt_condition_uses_boundary_first_runtime_contract(self) -> None:
         prompt = build_prediction_prompt(
@@ -93,6 +121,23 @@ class ReliaSkillV1PromptingTests(unittest.TestCase):
         self.assertIn("Schema contract:", exposure)
         self.assertIn("Executable contract:", exposure)
         self.assertIn("Contract counterexamples:", exposure)
+        self.assertIn("Documentation-grounded contract evidence:", exposure)
+
+    def test_doc_grounding_ablation_removes_doc_evidence_from_prompt_and_exposure(self) -> None:
+        skill = GeneratedSkill(
+            baseline_name="reliaskill_v1_no_doc_grounding",
+            skill_summary="Ablate doc grounding.",
+            when_to_use=["Use for direct search requests."],
+            when_not_to_use=["Do not use for explanation-only requests."],
+            argument_template={"query": "text"},
+            metadata={"contract_ablation_flags": {"disable_doc_grounding": True}},
+        )
+
+        prompt = build_prediction_prompt(_tool(), skill, "Search for notes.")
+        exposure = render_exposure(_tool(), skill)
+
+        self.assertNotIn("documentation-grounded evidence", prompt)
+        self.assertNotIn("Documentation-grounded contract evidence:", exposure)
 
     def test_regular_conditions_keep_standard_guidance_order(self) -> None:
         prompt = build_prediction_prompt(
@@ -115,6 +160,7 @@ def _tool() -> ToolIR:
     return ToolIR(
         tool_name="search",
         tool_purpose="Search documents.",
+        doc_snippets=["Search documents by query. Returns matching document snippets."],
         arguments=[ArgumentIR(name="query", type="string", required=True)],
     )
 

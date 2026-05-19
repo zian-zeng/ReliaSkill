@@ -25,6 +25,30 @@ class _StaticPredictor(PredictorBackend):
         )
 
 
+class _RefiningPredictor(_StaticPredictor):
+    def __init__(self, *, arguments: dict, refined_arguments: dict) -> None:
+        super().__init__(arguments=arguments, should_call=True)
+        self.refined_arguments = refined_arguments
+        self.refine_calls = 0
+
+    def refine_prediction(
+        self,
+        tool: ToolIR,
+        skill: GeneratedSkill,
+        task: EvalTask,
+        previous_prediction: EvalPrediction,
+    ) -> EvalPrediction | None:
+        self.refine_calls += 1
+        return EvalPrediction(
+            task_id=task.task_id,
+            tool_name=tool.tool_name,
+            baseline_name=skill.baseline_name,
+            predicted_arguments=dict(self.refined_arguments),
+            should_call=True,
+            metadata={"raw_model_output": "refined", "refinement_prompt_seen": True},
+        )
+
+
 class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
     def test_v1_drops_unsupported_fields_after_model_prediction(self) -> None:
         prediction = safe_predict(
@@ -52,6 +76,12 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
         self.assertIn("filled_grounded_required:query", verifier["actions"])
         self.assertIn("compiled_contract", verifier)
+        self.assertEqual(verifier["contract_proof_state_after"]["decision"], "call")
+        self.assertIn("feature_vector", verifier["contract_proof_state_after"])
+        self.assertEqual(
+            verifier["contract_proof_state_after"]["proof_policy"]["name"],
+            "dev_calibratable_contract_proof_policy",
+        )
         self.assertTrue(verifier["contract_evaluation_after"]["satisfied"])
         self.assertTrue(verifier["contract_failure_report_after"]["satisfied"])
         self.assertTrue(
@@ -121,6 +151,69 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         self.assertEqual(prediction.predicted_arguments, {"query": "release notes"})
         verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
         self.assertIn("replaced_ungrounded_required:query", verifier["actions"])
+
+    def test_v1_refines_unproved_call_with_contract_feedback(self) -> None:
+        backend = _RefiningPredictor(arguments={}, refined_arguments={"ticket_id": "TCK-123"})
+
+        prediction = safe_predict(
+            _ticket_search_tool(),
+            _v1_skill(),
+            EvalTask(task_id="t2_refine", tool_name="ticket_search", user_request="Search support ticket TCK-123."),
+            backend,
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"ticket_id": "TCK-123"})
+        self.assertEqual(backend.refine_calls, 1)
+        refinement = prediction.metadata["reliaskill_v1_refinement"]
+        self.assertTrue(refinement["attempted"])
+        self.assertTrue(refinement["selected_refined"])
+        self.assertGreater(refinement["refined_score"], refinement["original_score"])
+
+    def test_v1_fills_grounded_generic_identifier_without_refinement(self) -> None:
+        prediction = safe_predict(
+            _account_search_tool(),
+            _v1_skill(),
+            EvalTask(task_id="t2_identifier", tool_name="account_search", user_request="Search account abc123."),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"account_id": "abc123"})
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIn("filled_grounded_required:account_id", verifier["actions"])
+
+    def test_identifier_binding_ablation_does_not_fill_generic_identifier(self) -> None:
+        prediction = safe_predict(
+            _account_search_tool(),
+            _v1_skill(
+                baseline_name="reliaskill_v1_no_identifier_binding",
+                flags={"disable_identifier_binding": True},
+            ),
+            EvalTask(task_id="t2_identifier_ablate", tool_name="account_search", user_request="Search account abc123."),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertFalse(prediction.should_call)
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIn("account_id:missing_required", verifier["issues"])
+
+    def test_verifier_refinement_ablation_skips_second_pass(self) -> None:
+        backend = _RefiningPredictor(arguments={}, refined_arguments={"ticket_id": "TCK-123"})
+
+        prediction = safe_predict(
+            _ticket_search_tool(),
+            _v1_skill(
+                baseline_name="reliaskill_v1_no_verifier_refinement",
+                flags={"disable_verifier_refinement": True},
+            ),
+            EvalTask(task_id="t2_refine_ablate", tool_name="ticket_search", user_request="Search support ticket TCK-123."),
+            backend,
+        )
+
+        self.assertFalse(prediction.should_call)
+        self.assertEqual(backend.refine_calls, 0)
+        self.assertNotIn("reliaskill_v1_refinement", prediction.metadata)
 
     def test_v1_does_not_invent_missing_query_from_generic_request(self) -> None:
         prediction = safe_predict(
@@ -241,6 +334,35 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         self.assertTrue(prediction.should_call)
         self.assertEqual(prediction.predicted_arguments, {"query": "release notes", "limit": 5})
 
+    def test_v1_contract_decoder_fills_missing_grounded_optional_arguments(self) -> None:
+        prediction = safe_predict(
+            _search_with_optional_tool(),
+            _v1_skill(),
+            EvalTask(task_id="t2g_optional_fill", tool_name="search", user_request='Search for query="release notes" with limit=5.'),
+            _StaticPredictor(arguments={"query": "release notes"}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"query": "release notes", "limit": 5})
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIn("filled_grounded_optional:limit", verifier["actions"])
+
+    def test_contract_decoder_ablation_does_not_fill_missing_optional_arguments(self) -> None:
+        prediction = safe_predict(
+            _search_with_optional_tool(),
+            _v1_skill(
+                baseline_name="reliaskill_v1_no_contract_decoder",
+                flags={"disable_contract_decoder": True},
+            ),
+            EvalTask(task_id="t2g_optional_ablate", tool_name="search", user_request='Search for query="release notes" with limit=5.'),
+            _StaticPredictor(arguments={"query": "release notes"}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"query": "release notes"})
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertNotIn("filled_grounded_optional:limit", verifier["actions"])
+
     def test_v1_drops_ungrounded_nondefault_optional_even_when_schema_has_default(self) -> None:
         prediction = safe_predict(
             _search_with_default_optional_tool(),
@@ -277,6 +399,39 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         self.assertEqual(prediction.predicted_arguments, {"observations": [{"entityName": "Alice", "contents": ["note"]}]})
         verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
         self.assertIn("dropped_ungrounded_optional:observations[0].source", verifier["actions"])
+
+    def test_v1_contract_decoder_fills_grounded_nested_optional_properties(self) -> None:
+        prediction = safe_predict(
+            _observation_tool_with_optional_source(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t2h_fill_nested_optional",
+                tool_name="add_observations",
+                user_request='Add observation entityName="Alice" contents=["note"] source="meeting".',
+            ),
+            _StaticPredictor(arguments={"observations": [{"entityName": "Alice", "contents": ["note"]}]}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(
+            prediction.predicted_arguments,
+            {"observations": [{"entityName": "Alice", "contents": ["note"], "source": "meeting"}]},
+        )
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIn("filled_grounded_optional:observations[0].source", verifier["actions"])
+
+    def test_v1_contract_decoder_fills_grounded_boolean_optional_argument(self) -> None:
+        prediction = safe_predict(
+            _search_with_boolean_optional_tool(),
+            _v1_skill(),
+            EvalTask(task_id="t2h_bool_optional", tool_name="search", user_request='Search query="weather" and include forecast.'),
+            _StaticPredictor(arguments={"query": "weather"}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"query": "weather", "include_forecast": True})
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIn("filled_grounded_optional:include_forecast", verifier["actions"])
 
     def test_v1_lifts_flat_fields_into_required_nested_object(self) -> None:
         prediction = safe_predict(
@@ -475,6 +630,22 @@ def _search_tool() -> ToolIR:
     )
 
 
+def _account_search_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="account_search",
+        tool_purpose="Search account records by account identifier.",
+        arguments=[ArgumentIR(name="account_id", type="string", required=True)],
+    )
+
+
+def _ticket_search_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="ticket_search",
+        tool_purpose="Search support tickets by ticket identifier.",
+        arguments=[ArgumentIR(name="ticket_id", type="string", required=True)],
+    )
+
+
 def _search_with_optional_tool() -> ToolIR:
     return ToolIR(
         tool_name="search",
@@ -493,6 +664,17 @@ def _search_with_default_optional_tool() -> ToolIR:
         arguments=[
             ArgumentIR(name="query", type="string", required=True),
             ArgumentIR(name="limit", type="integer", required=False, default=10),
+        ],
+    )
+
+
+def _search_with_boolean_optional_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="search",
+        tool_purpose="Search documents.",
+        arguments=[
+            ArgumentIR(name="query", type="string", required=True),
+            ArgumentIR(name="include_forecast", type="boolean", required=False),
         ],
     )
 

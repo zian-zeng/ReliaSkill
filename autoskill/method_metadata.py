@@ -54,6 +54,19 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         "uses_contextual_grounding_contract": bool(method.get("uses_contextual_grounding_contract", False)),
         "uses_multi_step_contract_planning": bool(method.get("uses_multi_step_contract_planning", False)),
         "uses_execution_feedback_contract": bool(method.get("uses_execution_feedback_contract", False)),
+        "uses_doc_grounded_contract_evidence": bool(method.get("uses_doc_grounded_contract_evidence", False)),
+        "uses_request_conditioned_doc_evidence": bool(method.get("uses_request_conditioned_doc_evidence", False)),
+        "uses_contract_constrained_tool_inference": bool(method.get("uses_contract_constrained_tool_inference", False)),
+        "uses_declarative_contract_proof_state": bool(method.get("uses_declarative_contract_proof_state", False)),
+        "uses_calibratable_contract_proof_policy": bool(method.get("uses_calibratable_contract_proof_policy", False)),
+        "uses_proof_state_routing_policy": bool(method.get("uses_proof_state_routing_policy", False)),
+        "uses_contrastive_contract_proof_context": bool(method.get("uses_contrastive_contract_proof_context", False)),
+        "uses_retrieval_miss_proof_rescue": bool(method.get("uses_retrieval_miss_proof_rescue", False)),
+        "uses_schema_semantic_doc_reranking": bool(method.get("uses_schema_semantic_doc_reranking", False)),
+        "uses_request_contract_parse_prompting": bool(method.get("uses_request_contract_parse_prompting", False)),
+        "uses_verifier_guided_refinement": bool(method.get("uses_verifier_guided_refinement", False)),
+        "uses_contract_decoded_argument_completion": bool(method.get("uses_contract_decoded_argument_completion", False)),
+        "uses_candidate_verified_routing_fallback": bool(method.get("uses_candidate_verified_routing_fallback", False)),
         "test_controls_used": bool(method.get("test_controls_used", False)),
     }
     if metadata:
@@ -78,6 +91,8 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         compact["dev_controls_used"] = selection.get("dev_controls_used")
     if behavior:
         compact["dev_behavior_metrics"] = behavior.get("metrics")
+    if isinstance(method.get("contract_proof_policy"), dict):
+        compact["contract_proof_policy"] = method.get("contract_proof_policy")
     if not compact.get("uses_runtime_schema_contract_verifier"):
         compact["uses_runtime_schema_contract_verifier"] = "runtime_schema_contract_verifier" in compact.get("pipeline_stages", [])
     if not compact.get("uses_executable_skill_contract"):
@@ -92,6 +107,32 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         compact["uses_multi_step_contract_planning"] = "multi_step_contract_plan_composition" in compact.get("pipeline_stages", [])
     if not compact.get("uses_execution_feedback_contract"):
         compact["uses_execution_feedback_contract"] = "execution_feedback_contract_interpreter" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_doc_grounded_contract_evidence"):
+        compact["uses_doc_grounded_contract_evidence"] = "doc_grounded_contract_evidence" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_request_conditioned_doc_evidence"):
+        compact["uses_request_conditioned_doc_evidence"] = "request_conditioned_doc_evidence" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_contract_constrained_tool_inference"):
+        compact["uses_contract_constrained_tool_inference"] = "contract_constrained_tool_inference" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_declarative_contract_proof_state"):
+        compact["uses_declarative_contract_proof_state"] = "declarative_contract_proof_state" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_calibratable_contract_proof_policy"):
+        compact["uses_calibratable_contract_proof_policy"] = "calibratable_contract_proof_policy" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_proof_state_routing_policy"):
+        compact["uses_proof_state_routing_policy"] = "proof_state_routing_policy" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_contrastive_contract_proof_context"):
+        compact["uses_contrastive_contract_proof_context"] = "contrastive_contract_proof_context" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_retrieval_miss_proof_rescue"):
+        compact["uses_retrieval_miss_proof_rescue"] = "retrieval_miss_proof_rescue" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_schema_semantic_doc_reranking"):
+        compact["uses_schema_semantic_doc_reranking"] = "schema_semantic_doc_reranking" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_request_contract_parse_prompting"):
+        compact["uses_request_contract_parse_prompting"] = "request_contract_parse_prompting" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_verifier_guided_refinement"):
+        compact["uses_verifier_guided_refinement"] = "verifier_guided_refinement" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_contract_decoded_argument_completion"):
+        compact["uses_contract_decoded_argument_completion"] = "contract_decoded_argument_completion" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_candidate_verified_routing_fallback"):
+        compact["uses_candidate_verified_routing_fallback"] = "candidate_verified_routing_fallback" in compact.get("pipeline_stages", [])
     return {key: value for key, value in compact.items() if value is not None}
 
 

@@ -24,6 +24,11 @@ KEY_STAT_TEST_COMPARISONS = [
     ("generated_skill_base", "gated_skill"),
     ("generated_skill_base", "reliaskill_v1"),
     ("gated_skill", "reliaskill_v1"),
+    ("reliaskill_v1_no_doc_grounding", "reliaskill_v1"),
+    ("reliaskill_v1_no_verifier_refinement", "reliaskill_v1"),
+    ("reliaskill_v1_no_identifier_binding", "reliaskill_v1"),
+    ("reliaskill_v1_no_contract_decoder", "reliaskill_v1"),
+    ("reliaskill_v1_no_candidate_verification", "reliaskill_v1"),
     ("raw_mcp", "skill_prompt_boundary_first"),
     ("generated_skill_base", "skill_prompt_boundary_first"),
     ("raw_mcp", "skill_prompt_verbose_docs"),
@@ -474,6 +479,9 @@ MAIN_FIELDS = [
     "joint_exact_match_wilson_high",
     "avg_latency_ms",
     "avg_token_overhead",
+    "verifier_action_rate",
+    "refinement_attempt_rate",
+    "refinement_selected_rate",
 ]
 
 HARM_FIELDS = [
@@ -515,6 +523,9 @@ def _summarize_group(items: List[Dict[str, Any]]) -> Dict[str, Any]:
     tool_groups = [str(item.get("expected_tool_name") or item.get("tool_name") or "") for item in items]
     latencies = [_latency_ms(item) for item in items if _latency_ms(item) is not None]
     token_overheads = [_token_overhead(item) for item in items if _token_overhead(item) is not None]
+    verifier_actions = [_has_verifier_actions(item) for item in items]
+    refinement_attempts = [_refinement_attempted(item) for item in items]
+    refinement_selected = [_refinement_selected(item) for item in items]
     return {
         "num_examples": total,
         "tool_selection_accuracy": _mean(tool_values),
@@ -528,6 +539,9 @@ def _summarize_group(items: List[Dict[str, Any]]) -> Dict[str, Any]:
         "joint_exact_match_wilson": wilson_interval(sum(1 for value in joint_values if value), total),
         "avg_latency_ms": _mean(latencies),
         "avg_token_overhead": _mean(token_overheads),
+        "verifier_action_rate": _mean(verifier_actions),
+        "refinement_attempt_rate": _mean(refinement_attempts),
+        "refinement_selected_rate": _mean(refinement_selected),
     }
 
 
@@ -580,6 +594,9 @@ def _main_rows(summary: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
                 "joint_exact_match_wilson_high": joint_wilson["high"],
                 "avg_latency_ms": _round(row["avg_latency_ms"]),
                 "avg_token_overhead": _round(row["avg_token_overhead"]),
+                "verifier_action_rate": _round(row.get("verifier_action_rate")),
+                "refinement_attempt_rate": _round(row.get("refinement_attempt_rate")),
+                "refinement_selected_rate": _round(row.get("refinement_selected_rate")),
             }
         )
     return rows
@@ -695,6 +712,33 @@ def _token_overhead(record: Dict[str, Any]) -> float | None:
                 except (TypeError, ValueError):
                     return None
     return None
+
+
+def _has_verifier_actions(record: Dict[str, Any]) -> float:
+    verifier = _prediction_metadata_dict(record).get("reliaskill_v1_runtime_verifier")
+    if not isinstance(verifier, dict):
+        return 0.0
+    actions = verifier.get("actions")
+    return 1.0 if isinstance(actions, list) and bool(actions) else 0.0
+
+
+def _refinement_attempted(record: Dict[str, Any]) -> float:
+    refinement = _prediction_metadata_dict(record).get("reliaskill_v1_refinement")
+    if not isinstance(refinement, dict):
+        return 0.0
+    return 1.0 if refinement.get("attempted") is True else 0.0
+
+
+def _refinement_selected(record: Dict[str, Any]) -> float:
+    refinement = _prediction_metadata_dict(record).get("reliaskill_v1_refinement")
+    if not isinstance(refinement, dict):
+        return 0.0
+    return 1.0 if refinement.get("selected_refined") is True else 0.0
+
+
+def _prediction_metadata_dict(record: Dict[str, Any]) -> Dict[str, Any]:
+    metadata = record.get("prediction_metadata")
+    return metadata if isinstance(metadata, dict) else {}
 
 
 def _looks_like_path_key(key: str) -> bool:

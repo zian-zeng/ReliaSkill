@@ -15,6 +15,7 @@ from autoskill.ir import ArgumentIR, GeneratedSkill, ToolIR
 from autoskill.json_output import parse_json_object_output
 from autoskill.local_model import LocalHFChatRunner
 from autoskill.prompting import build_prediction_prompt
+from autoskill.contract_inference import build_contract_proof_state
 from autoskill.contracts import build_contract_failure_report, compile_skill_contract, evaluate_skill_contract
 from autoskill.routing_boundaries import detect_routing_abstention, tool_name_variants
 from autoskill.schema_utils import normalize_schema_node, schema_type
@@ -673,6 +674,12 @@ def _grounded_required_value(tool: ToolIR, arg: ArgumentIR, request: str, skill:
         for value in arg.enum:
             if str(value).lower() in lowered:
                 return value
+    name_parts = _name_parts(arg.name)
+    if (
+        not _contract_ablation_disabled(skill, "disable_identifier_binding")
+        and name_parts.intersection({"id", "identifier", "account", "user", "entity", "person", "name", "title"})
+    ):
+        return _extract_named_entity_like_value(arg.name, request)
     return None
 
 
@@ -840,10 +847,41 @@ def _extract_named_entity_like_value(name: str, request: str) -> str | None:
     quoted = _extract_first_quoted(request)
     if quoted:
         return quoted
+    identifier = _extract_identifier_like_value(name, request)
+    if identifier:
+        return identifier
     match = re.search(r"\b(?:for|to|about|named)\s+([A-Z][A-Za-z0-9_-]{1,})\b", request)
     if match:
         return match.group(1)
     return None
+
+
+def _extract_identifier_like_value(name: str, request: str) -> str | None:
+    cues = _name_parts(name).intersection({"id", "identifier", "account", "user", "entity", "person"})
+    if not cues:
+        return None
+    cue_pattern = "|".join(sorted(re.escape(cue) for cue in cues.union({"acct"})))
+    patterns = [
+        rf"\b(?:{cue_pattern})(?:\s+(?:id|identifier))?\s*(?:=|:|#)?\s+([A-Za-z0-9][A-Za-z0-9_.-]{{1,}})\b",
+        rf"\b(?:{cue_pattern})(?:\s+(?:id|identifier))?\s*(?:=|:|#)\s*([A-Za-z0-9][A-Za-z0-9_.-]{{1,}})\b",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, request, flags=re.IGNORECASE)
+        if not match:
+            continue
+        value = match.group(1).strip(" .,:;")
+        if _looks_like_grounded_identifier(value):
+            return value
+    return None
+
+
+def _looks_like_grounded_identifier(value: str) -> bool:
+    return bool(
+        value
+        and len(value) > 1
+        and (re.search(r"\d", value) or re.search(r"[-_.]", value))
+        and value.lower() not in {"record", "records", "identifier", "identifiers", "account", "accounts", "user", "users"}
+    )
 
 
 def _required_argument_value_is_grounded(tool: ToolIR, arg: ArgumentIR, request: str, skill: GeneratedSkill, value: Any) -> bool:
@@ -919,6 +957,15 @@ def _optional_argument_is_grounded(tool: ToolIR, arg: ArgumentIR, request: str, 
 
 
 def _grounded_optional_value(tool: ToolIR, arg: ArgumentIR, request: str, skill: GeneratedSkill) -> Any:
+    explicit = _extract_explicit_argument_value(arg, request)
+    if explicit is not None:
+        return explicit
+    structured = _grounded_structured_value(arg, request)
+    if structured is not None:
+        return structured
+    hinted = _infer_semantic_hint_value(tool, arg.name, request, skill)
+    if hinted is not None:
+        return hinted
     lowered = request.lower()
     if arg.name == "query":
         return _extract_query_from_request(request)
@@ -940,11 +987,68 @@ def _grounded_optional_value(tool: ToolIR, arg: ArgumentIR, request: str, skill:
     if arg.format == "date" or "date" in arg.name.lower():
         return _extract_date_from_request(request)
     if arg.type in {"integer", "number"}:
-        return _extract_number(lowered)
+        return _extract_optional_number_for_argument(arg.name, request)
+    if arg.type == "boolean":
+        return _extract_optional_boolean_for_argument(arg.name, request)
     if arg.enum:
         for enum_value in arg.enum:
             if str(enum_value).lower() in lowered:
                 return enum_value
+    name_parts = _name_parts(arg.name)
+    if (
+        not _contract_ablation_disabled(skill, "disable_identifier_binding")
+        and name_parts.intersection({"id", "identifier", "account", "user", "entity", "person", "name", "title"})
+    ):
+        return _extract_named_entity_like_value(arg.name, request)
+    return None
+
+
+def _extract_optional_number_for_argument(arg_name: str, request: str) -> int | float | None:
+    explicit = _extract_number_for_name(arg_name, request)
+    if explicit is not None:
+        return explicit
+    parts = _name_parts(arg_name)
+    lowered = request.lower()
+    if parts.intersection({"limit", "count", "number", "results", "top", "max", "maximum"}):
+        if re.search(r"\b(?:top|first|limit|max|maximum|up to|at most|return|show)\b", lowered):
+            return _extract_number(lowered)
+    if parts.intersection({"head", "first"}) and re.search(r"\b(?:first|head|opening|start)\b", lowered):
+        return _extract_number(lowered)
+    if parts.intersection({"tail", "last"}) and re.search(r"\b(?:last|tail|ending|end)\b", lowered):
+        return _extract_number(lowered)
+    return None
+
+
+def _extract_optional_boolean_for_argument(arg_name: str, request: str) -> bool | None:
+    raw = _extract_named_value(arg_name, request)
+    if raw is not None:
+        lowered_raw = raw.lower()
+        if lowered_raw in {"true", "1", "yes", "on", "enabled"}:
+            return True
+        if lowered_raw in {"false", "0", "no", "off", "disabled"}:
+            return False
+    parts = _name_parts(arg_name)
+    lowered = request.lower()
+    positive_cues = {
+        "include": r"\b(?:include|with|also|show)\b",
+        "forecast": r"\bforecast\b",
+        "recursive": r"\b(?:recursive|recursively|all subdirectories)\b",
+        "case": r"\bcase[- ]?sensitive\b",
+        "hidden": r"\bhidden\b",
+    }
+    negative_cues = {
+        "include": r"\b(?:exclude|without|omit|skip)\b",
+        "forecast": r"\b(?:no|without|exclude)\s+forecast\b",
+        "recursive": r"\b(?:nonrecursive|not recursive|without subdirectories)\b",
+        "case": r"\bcase[- ]?insensitive\b",
+        "hidden": r"\b(?:no|without|exclude)\s+hidden\b",
+    }
+    for part, pattern in negative_cues.items():
+        if part in parts and re.search(pattern, lowered):
+            return False
+    for part, pattern in positive_cues.items():
+        if part in parts and re.search(pattern, lowered):
+            return True
     return None
 
 
@@ -1025,6 +1129,59 @@ def _prune_ungrounded_schema_optionals(
         item_schema = schema.get("items", {}) or {}
         return [
             _prune_ungrounded_schema_optionals(item, item_schema, f"{path}[{index}]", request, actions)
+            for index, item in enumerate(value)
+        ]
+    return value
+
+
+def _complete_grounded_schema_optionals(
+    value: Any,
+    schema: Dict[str, Any],
+    path: str,
+    request: str,
+    actions: list[str],
+) -> Any:
+    schema, _ = normalize_schema_node(schema)
+    kind = schema_type(schema)
+    if kind == "object" and isinstance(value, dict):
+        properties = schema.get("properties", {}) or {}
+        required = {str(item) for item in schema.get("required", []) or []}
+        completed = {
+            key: _complete_grounded_schema_optionals(
+                child_value,
+                properties.get(key, {}) if isinstance(properties, dict) else {},
+                f"{path}.{key}",
+                request,
+                actions,
+            )
+            for key, child_value in value.items()
+        }
+        if isinstance(properties, dict):
+            for key, child_schema in properties.items():
+                key = str(key)
+                if key in completed or key in required:
+                    continue
+                extracted = _extract_schema_property_value(key, child_schema, request)
+                if extracted is None:
+                    continue
+                sanitized, issues = _sanitize_value_for_schema(extracted, child_schema if isinstance(child_schema, dict) else {}, f"{path}.{key}", actions)
+                if sanitized is None or issues:
+                    continue
+                if not _field_or_value_grounded(key, sanitized, request):
+                    continue
+                completed[key] = _complete_grounded_schema_optionals(
+                    sanitized,
+                    child_schema if isinstance(child_schema, dict) else {},
+                    f"{path}.{key}",
+                    request,
+                    actions,
+                )
+                actions.append(f"filled_grounded_optional:{path}.{key}")
+        return completed
+    if kind == "array" and isinstance(value, list):
+        item_schema = schema.get("items", {}) or {}
+        return [
+            _complete_grounded_schema_optionals(item, item_schema, f"{path}[{index}]", request, actions)
             for index, item in enumerate(value)
         ]
     return value
@@ -1243,6 +1400,50 @@ def _verify_reliaskill_v1_prediction(
                         continue
                 issues.append(f"{arg.name}:missing_required")
 
+            if (
+                not _contract_ablation_disabled(skill, "disable_runtime_grounding")
+                and not _contract_ablation_disabled(skill, "disable_contract_decoder")
+            ):
+                for arg_name, value in list(sanitized.items()):
+                    arg = by_name.get(arg_name)
+                    if arg is None:
+                        continue
+                    sanitized[arg_name] = _complete_grounded_schema_optionals(
+                        value,
+                        _schema_for_argument(arg),
+                        arg_name,
+                        grounding_request,
+                        actions,
+                    )
+                for arg in tool.arguments:
+                    if arg.required or arg.name in sanitized:
+                        continue
+                    grounded = _grounded_optional_value(tool, arg, grounding_request, skill)
+                    if grounded is None:
+                        continue
+                    sanitized_value, value_issues = _sanitize_value_for_schema(grounded, _schema_for_argument(arg), arg.name, actions)
+                    issues.extend(value_issues)
+                    if sanitized_value is None or value_issues:
+                        continue
+                    if not _optional_argument_is_grounded(tool, arg, grounding_request, skill, sanitized_value):
+                        continue
+                    decoded_optional = _prune_ungrounded_schema_optionals(
+                        sanitized_value,
+                        _schema_for_argument(arg),
+                        arg.name,
+                        grounding_request,
+                        actions,
+                    )
+                    decoded_optional = _complete_grounded_schema_optionals(
+                        decoded_optional,
+                        _schema_for_argument(arg),
+                        arg.name,
+                        grounding_request,
+                        actions,
+                    )
+                    sanitized[arg.name] = decoded_optional
+                    actions.append(f"filled_grounded_optional:{arg.name}")
+
         blocking_issues = [
             issue
             for issue in issues
@@ -1272,6 +1473,20 @@ def _verify_reliaskill_v1_prediction(
         arguments=sanitized,
         grounding_context=grounding_context,
     )
+    proof_state_before = build_contract_proof_state(
+        tool,
+        skill,
+        task.user_request,
+        arguments=original_arguments,
+        grounding_context=grounding_context,
+    )
+    proof_state_after = build_contract_proof_state(
+        tool,
+        skill,
+        task.user_request,
+        arguments=sanitized,
+        grounding_context=grounding_context,
+    )
     ignored_blockers = {"action_intent_conflict"} if _contract_ablation_disabled(skill, "disable_action_gate") else set()
     effective_contract_blockers = [reason for reason in contract_after.blocking_reasons if reason not in ignored_blockers]
     if should_call and effective_contract_blockers:
@@ -1288,6 +1503,32 @@ def _verify_reliaskill_v1_prediction(
             arguments=sanitized,
             grounding_context=grounding_context,
         )
+        proof_state_after = build_contract_proof_state(
+            tool,
+            skill,
+            task.user_request,
+            arguments=sanitized,
+            grounding_context=grounding_context,
+        )
+    if should_call and proof_state_after.decision != "call" and not _contract_ablation_disabled(skill, "disable_runtime_grounding"):
+        should_call = False
+        abstention_reason = f"contract_proof_policy:{proof_state_after.decision}"
+        actions.append("abstained_contract_proof_policy")
+        sanitized = {}
+        contract_after = evaluate_skill_contract(
+            tool,
+            skill,
+            task.user_request,
+            arguments=sanitized,
+            grounding_context=grounding_context,
+        )
+        proof_state_after = build_contract_proof_state(
+            tool,
+            skill,
+            task.user_request,
+            arguments=sanitized,
+            grounding_context=grounding_context,
+        )
 
     metadata = dict(prediction.metadata)
     metadata["reliaskill_v1_runtime_verifier"] = {
@@ -1297,6 +1538,8 @@ def _verify_reliaskill_v1_prediction(
         "compiled_contract": compile_skill_contract(tool, skill).model_dump(),
         "contract_evaluation_before": contract_before.model_dump(),
         "contract_evaluation_after": contract_after.model_dump(),
+        "contract_proof_state_before": proof_state_before.model_dump(),
+        "contract_proof_state_after": proof_state_after.model_dump(),
         "contract_failure_report_before": build_contract_failure_report(contract_before),
         "contract_failure_report_after": build_contract_failure_report(contract_after),
         "original_arguments": raw_original_arguments,
@@ -1353,6 +1596,15 @@ class PredictorBackend(ABC):
     @abstractmethod
     def predict(self, tool: ToolIR, skill: GeneratedSkill, task: EvalTask) -> EvalPrediction:
         raise NotImplementedError
+
+    def refine_prediction(
+        self,
+        tool: ToolIR,
+        skill: GeneratedSkill,
+        task: EvalTask,
+        previous_prediction: EvalPrediction,
+    ) -> EvalPrediction | None:
+        return None
 
 
 class HeuristicPredictorBackend(PredictorBackend):
@@ -1496,6 +1748,36 @@ class OpenAICompatiblePredictorBackend(PredictorBackend):
             metadata=metadata,
         )
 
+    def refine_prediction(
+        self,
+        tool: ToolIR,
+        skill: GeneratedSkill,
+        task: EvalTask,
+        previous_prediction: EvalPrediction,
+    ) -> EvalPrediction | None:
+        prompt = _build_refinement_prompt(tool, skill, task, previous_prediction)
+        payload = {
+            "model": self.model,
+            "messages": [
+                {"role": "system", "content": "You repair JSON MCP tool-call decisions using verifier feedback. Return JSON only."},
+                {"role": "user", "content": prompt},
+            ],
+            "temperature": 0.0,
+            "response_format": {"type": "json_object"},
+        }
+        response = self._post_json(payload)
+        content = response["choices"][0]["message"]["content"]
+        return _prediction_from_refinement_content(
+            tool,
+            skill,
+            task,
+            content,
+            backend_name=self.backend_name,
+            model_name=self.model,
+            quantization=self.quantization,
+            prompt=prompt,
+        )
+
 
 class LocalHFPredictorBackend(PredictorBackend):
     backend_name = "local_hf"
@@ -1567,6 +1849,32 @@ class LocalHFPredictorBackend(PredictorBackend):
             metadata=metadata,
         )
 
+    def refine_prediction(
+        self,
+        tool: ToolIR,
+        skill: GeneratedSkill,
+        task: EvalTask,
+        previous_prediction: EvalPrediction,
+    ) -> EvalPrediction | None:
+        prompt = _build_refinement_prompt(tool, skill, task, previous_prediction)
+        content = self.runner.generate_chat(
+            [
+                {"role": "system", "content": "You repair JSON MCP tool-call decisions using verifier feedback. Return JSON only."},
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.0,
+        )
+        return _prediction_from_refinement_content(
+            tool,
+            skill,
+            task,
+            content,
+            backend_name=self.backend_name,
+            model_name=self.model_name_or_path,
+            quantization=self.quantization,
+            prompt=prompt,
+        )
+
 
 def build_predictor_from_env() -> PredictorBackend:
     api_url = os.getenv("AUTOSKILL_PREDICT_API_URL") or os.getenv("AUTOSKILL_API_URL")
@@ -1611,6 +1919,176 @@ def build_predictor_from_config(config: Dict[str, Any] | None) -> PredictorBacke
     raise ValueError(f"Unsupported predictor backend type: {backend_type}")
 
 
+def _prediction_from_refinement_content(
+    tool: ToolIR,
+    skill: GeneratedSkill,
+    task: EvalTask,
+    content: str,
+    *,
+    backend_name: str,
+    model_name: str,
+    quantization: str,
+    prompt: str,
+) -> EvalPrediction:
+    data = parse_json_object_output(content)
+    should_call, abstention_reason = _parse_should_call(data)
+    predicted_arguments, argument_parse_error = _coerce_predicted_arguments(data)
+    if not should_call:
+        predicted_arguments = {}
+        argument_parse_error = None
+    metadata = _prediction_audit_metadata(
+        skill=skill,
+        prompt=prompt,
+        raw_model_output=content,
+        parsed_arguments=predicted_arguments,
+        backend_name=backend_name,
+        model_name=model_name,
+        quantization=quantization,
+        should_call=should_call,
+        abstention_reason=abstention_reason,
+    )
+    metadata["refinement_pass"] = True
+    if argument_parse_error:
+        metadata["argument_parse_error"] = argument_parse_error
+    return EvalPrediction(
+        task_id=task.task_id,
+        tool_name=task.tool_name,
+        baseline_name=skill.baseline_name,
+        predicted_arguments=predicted_arguments,
+        should_call=should_call,
+        abstention_reason=abstention_reason,
+        exposure_text=render_exposure(tool, skill),
+        metadata=metadata,
+    )
+
+
+def _build_refinement_prompt(
+    tool: ToolIR,
+    skill: GeneratedSkill,
+    task: EvalTask,
+    previous_prediction: EvalPrediction,
+) -> str:
+    verifier = previous_prediction.metadata.get("reliaskill_v1_runtime_verifier")
+    verifier = verifier if isinstance(verifier, dict) else {}
+    failure_report = verifier.get("contract_failure_report_after") or verifier.get("contract_failure_report_before") or {}
+    base_prompt = build_prediction_prompt(tool, skill, task.user_request)
+    return (
+        f"{base_prompt}\n"
+        "Verifier-guided refinement pass:\n"
+        "The previous JSON decision failed or was weakened by the executable ReliaSkill verifier. "
+        "Repair the decision using only the user request, schema, documentation-grounded evidence, and verifier report below.\n"
+        "If the verifier report indicates missing required information, adjacent intent, a side-effect conflict, or an explicit no-tool request, keep `should_call=false`.\n"
+        "Otherwise, return the minimal schema-valid arguments that satisfy all required fields. Do not invent values.\n"
+        f"Previous raw output: {json.dumps(previous_prediction.metadata.get('raw_model_output', ''), ensure_ascii=False)}\n"
+        f"Previous verifier actions: {json.dumps(verifier.get('actions', []), ensure_ascii=False)}\n"
+        f"Previous verifier issues: {json.dumps(verifier.get('issues', []), ensure_ascii=False)}\n"
+        f"Previous verified arguments: {json.dumps(verifier.get('verified_arguments', previous_prediction.predicted_arguments), ensure_ascii=False)}\n"
+        f"Verifier failure report: {json.dumps(failure_report, ensure_ascii=False, sort_keys=True)}\n"
+        "Return corrected JSON only with keys `should_call`, `arguments`, and `abstention_reason`.\n"
+    )
+
+
+def _maybe_refine_reliaskill_v1_prediction(
+    tool: ToolIR,
+    skill: GeneratedSkill,
+    task: EvalTask,
+    backend: PredictorBackend,
+    prediction: EvalPrediction,
+) -> EvalPrediction:
+    if not _should_attempt_contract_refinement(tool, skill, task, prediction):
+        return prediction
+    metadata = dict(prediction.metadata)
+    try:
+        refined = backend.refine_prediction(tool, skill, task, prediction)
+        if refined is None:
+            metadata["reliaskill_v1_refinement"] = {"attempted": False, "reason": "backend_does_not_support_refinement"}
+            prediction.metadata = metadata
+            return prediction
+        verified_refined = _verify_reliaskill_v1_prediction(tool, skill, task, refined)
+        original_score = _contract_selection_score(prediction)
+        refined_score = _contract_selection_score(verified_refined)
+        selected_refined = refined_score > original_score
+        selected = verified_refined if selected_refined else prediction
+        selected.metadata = {
+            **selected.metadata,
+            "reliaskill_v1_refinement": {
+                "attempted": True,
+                "selected_refined": selected_refined,
+                "original_score": original_score,
+                "refined_score": refined_score,
+                "refined_should_call": bool(verified_refined.should_call),
+                "refined_arguments": dict(verified_refined.predicted_arguments),
+            },
+        }
+        return selected
+    except Exception as exc:  # pragma: no cover - refinement is opportunistic.
+        metadata["reliaskill_v1_refinement"] = {
+            "attempted": True,
+            "selected_refined": False,
+            "error": f"{type(exc).__name__}: {exc}",
+        }
+        prediction.metadata = metadata
+        return prediction
+
+
+def _should_attempt_contract_refinement(
+    tool: ToolIR,
+    skill: GeneratedSkill,
+    task: EvalTask,
+    prediction: EvalPrediction,
+) -> bool:
+    if not _uses_reliaskill_v1_runtime(skill):
+        return False
+    if _contract_ablation_disabled(skill, "disable_runtime_grounding"):
+        return False
+    if _contract_ablation_disabled(skill, "disable_verifier_refinement"):
+        return False
+    if not _has_direct_action_intent(task.user_request):
+        return False
+    boundary_reason = _reliaskill_v1_boundary_reason(tool, skill, task.user_request)
+    if boundary_reason in {
+        "missing_required_information",
+        "action_intent_conflict",
+        "explicit_target_tool_forbidden",
+        "planning_or_no_tool_request",
+        "request_explicitly_asks_not_to_call",
+        "adjacent_or_boundary_mismatch",
+    }:
+        return False
+    verifier = prediction.metadata.get("reliaskill_v1_runtime_verifier")
+    if not isinstance(verifier, dict):
+        return False
+    after = verifier.get("contract_evaluation_after")
+    if prediction.should_call and isinstance(after, dict) and after.get("satisfied") is True:
+        return False
+    actions = [str(item) for item in verifier.get("actions", []) if item is not None]
+    issues = [str(item) for item in verifier.get("issues", []) if item is not None]
+    if any(action in {"abstained_schema_contract_violation", "abstained_contract_proof_failure"} for action in actions):
+        return True
+    if any(issue.endswith((":type_mismatch", ":invalid_enum", ":invalid_format", ":pattern_mismatch", ":missing_required")) for issue in issues):
+        return True
+    return bool(not prediction.should_call and not boundary_reason)
+
+
+def _contract_selection_score(prediction: EvalPrediction) -> float:
+    verifier = prediction.metadata.get("reliaskill_v1_runtime_verifier")
+    verifier = verifier if isinstance(verifier, dict) else {}
+    after = verifier.get("contract_evaluation_after")
+    after = after if isinstance(after, dict) else {}
+    issues = verifier.get("issues")
+    issue_count = len(issues) if isinstance(issues, list) else 0
+    score = 0.0
+    if prediction.should_call:
+        score += 4.0
+    if after.get("satisfied") is True:
+        score += 4.0
+    score += min(len(prediction.predicted_arguments), 4) * 0.25
+    score -= issue_count * 0.5
+    if prediction.abstention_reason:
+        score -= 1.0
+    return score
+
+
 def safe_predict(
     tool: ToolIR,
     skill: GeneratedSkill,
@@ -1622,6 +2100,7 @@ def safe_predict(
     try:
         prediction = backend.predict(tool, skill, task)
         prediction = _verify_reliaskill_v1_prediction(tool, skill, task, prediction)
+        prediction = _maybe_refine_reliaskill_v1_prediction(tool, skill, task, backend, prediction)
         prediction.metadata = {
             **prediction.metadata,
             "configured_predictor_backend": backend.backend_name,
@@ -1644,6 +2123,7 @@ def safe_predict(
             raise
         prediction = HeuristicPredictorBackend().predict(tool, skill, task)
         prediction = _verify_reliaskill_v1_prediction(tool, skill, task, prediction)
+        prediction = _maybe_refine_reliaskill_v1_prediction(tool, skill, task, HeuristicPredictorBackend(), prediction)
         prediction.metadata = {
             **prediction.metadata,
             "configured_predictor_backend": backend.backend_name,

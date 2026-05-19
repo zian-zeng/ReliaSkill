@@ -3,7 +3,9 @@ from __future__ import annotations
 import json
 
 from autoskill.conditions import is_reliaskill_v1_family
+from autoskill.contract_inference import build_contract_proof_state, contract_state_payload
 from autoskill.contracts import build_contract_counterexamples, compile_skill_contract
+from autoskill.doc_evidence import build_doc_grounding_evidence, build_request_conditioned_doc_evidence, render_doc_grounding_evidence
 from autoskill.ir import GeneratedSkill, ToolIR
 from autoskill.prompt_templates import build_generation_prompt_from_template
 from autoskill.templates import build_schema_contract_lines
@@ -19,7 +21,7 @@ def build_generation_prompt(tool: ToolIR, template_id: str = "compact_default") 
 
 
 def build_prediction_prompt(tool: ToolIR, skill: GeneratedSkill, user_request: str) -> str:
-    guidance = _runtime_guidance(tool, skill)
+    guidance = _runtime_guidance(tool, skill, user_request=user_request)
     return (
         "You are selecting arguments for a single MCP tool call.\n"
         "Return valid JSON only with keys `should_call`, `arguments`, and `abstention_reason`.\n"
@@ -39,7 +41,7 @@ def build_prediction_prompt(tool: ToolIR, skill: GeneratedSkill, user_request: s
     )
 
 
-def _runtime_guidance(tool: ToolIR, skill: GeneratedSkill) -> str:
+def _runtime_guidance(tool: ToolIR, skill: GeneratedSkill, *, user_request: str | None = None) -> str:
     reliaskill_family = is_reliaskill_v1_family(skill.baseline_name)
     if skill.baseline_name in BOUNDARY_FIRST_RUNTIME_CONDITIONS or reliaskill_family:
         contract_lines = skill.metadata.get("schema_contract")
@@ -53,6 +55,14 @@ def _runtime_guidance(tool: ToolIR, skill: GeneratedSkill) -> str:
         counterexamples = skill.metadata.get("contract_counterexamples")
         if not isinstance(counterexamples, list) and reliaskill_family:
             counterexamples = build_contract_counterexamples(tool, skill)
+        doc_evidence_text = ""
+        if reliaskill_family and not _contract_ablation_disabled(skill, "disable_doc_grounding"):
+            doc_evidence = skill.metadata.get("doc_grounding_evidence")
+            if user_request:
+                doc_evidence = build_request_conditioned_doc_evidence(tool, user_request)
+            elif not isinstance(doc_evidence, dict):
+                doc_evidence = build_doc_grounding_evidence(tool)
+            doc_evidence_text = render_doc_grounding_evidence(doc_evidence, max_chars=3200) if isinstance(doc_evidence, dict) else ""
         proof_line = (
             f"{method_label} proof obligations: {json.dumps(proof_obligations, ensure_ascii=False)}\n"
             if proof_obligations and reliaskill_family
@@ -63,14 +73,39 @@ def _runtime_guidance(tool: ToolIR, skill: GeneratedSkill) -> str:
             if isinstance(counterexamples, list) and counterexamples and reliaskill_family
             else ""
         )
+        doc_evidence_line = (
+            f"{method_label} documentation-grounded evidence: {doc_evidence_text}\n"
+            "Use this evidence to interpret tool purpose and argument meanings; the executable contract remains authoritative for validity and abstention.\n"
+            if doc_evidence_text and reliaskill_family
+            else ""
+        )
+        request_contract_line = ""
+        if reliaskill_family and user_request:
+            request_state = build_contract_proof_state(tool, skill, user_request)
+            request_contract_line = (
+                f"{method_label} request-contract proof state: {json.dumps(contract_state_payload(request_state), ensure_ascii=False)}\n"
+                "Use this proof state as the decision ledger: do not call when required arguments are missing or a blocking reason applies.\n"
+            )
+        contrastive_line = ""
+        if reliaskill_family:
+            contrastive_candidates = skill.metadata.get("contrastive_contract_candidates")
+            if isinstance(contrastive_candidates, list) and contrastive_candidates:
+                contrastive_line = (
+                    f"{method_label} contrastive candidate proof states: {json.dumps(contrastive_candidates[:4], ensure_ascii=False)}\n"
+                    "Use the contrastive states to catch adjacent-tool mistakes: if this tool is not viable and another candidate is viable, return `should_call=false`.\n"
+                )
         return (
             f"{method_label} schema contract: obey this compact argument contract before using examples.\n"
             f"Call contract: {json.dumps(contract_lines, ensure_ascii=False)}\n"
             f"{proof_line}"
             f"{counterexample_line}"
+            f"{doc_evidence_line}"
+            f"{request_contract_line}"
+            f"{contrastive_line}"
             f"{method_label} boundary gate: check non-use rules before considering use rules. "
             "If any non-use rule applies, set `should_call` to false.\n"
             "Before returning `should_call=true`, verify required fields are grounded and the argument object satisfies the call contract.\n"
+            "Include optional arguments only when they are explicitly grounded in the request or context; otherwise omit them.\n"
             f"When not to use: {json.dumps(skill.when_not_to_use, ensure_ascii=False)}\n"
             f"When to use: {json.dumps(skill.when_to_use, ensure_ascii=False)}\n"
         )
@@ -78,3 +113,8 @@ def _runtime_guidance(tool: ToolIR, skill: GeneratedSkill) -> str:
         f"When to use: {json.dumps(skill.when_to_use, ensure_ascii=False)}\n"
         f"When not to use: {json.dumps(skill.when_not_to_use, ensure_ascii=False)}\n"
     )
+
+
+def _contract_ablation_disabled(skill: GeneratedSkill, flag: str) -> bool:
+    flags = skill.metadata.get("contract_ablation_flags") if isinstance(skill.metadata, dict) else None
+    return bool(isinstance(flags, dict) and flags.get(flag) is True)

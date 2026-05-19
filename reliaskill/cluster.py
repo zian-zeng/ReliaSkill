@@ -22,7 +22,9 @@ from autoskill.generator import SkillGenerator
 from autoskill.local_model import clear_model_cache
 from autoskill.artifacts import GATED_SKILL, GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER, REPAIRED_SKILL, clone_skill_as
 from autoskill.conditions import RELIASKILL_V1_CONTRACT_ABLATIONS, normalize_condition_names
+from autoskill.contract_inference import default_contract_proof_policy
 from autoskill.contracts import build_contract_counterexamples, compile_skill_contract
+from autoskill.doc_evidence import build_doc_grounding_evidence
 from autoskill.metrics import build_metric_tables, write_metric_tables
 from autoskill.multi_candidate import (
     generate_skill_candidates,
@@ -164,10 +166,12 @@ def _build_challenger_skill(
     repair = source_row["repair_report"]
     selection = _load_selection_report(selection_report_path)
     evidence_lines = _challenger_evidence_lines(source_score, repair, selection, gate_score=gate_score)
+    doc_evidence = build_doc_grounding_evidence(tool)
     if evidence_lines:
         challenger.skill_summary = _compact_join(
             [
                 "Full ReliaSkill v1 artifact.",
+                "Doc-grounded evidence is fused into the executable contract.",
                 *evidence_lines,
                 challenger.skill_summary,
             ],
@@ -178,6 +182,7 @@ def _build_challenger_skill(
             [
                 "Use this full ReliaSkill artifact only when the request directly matches the tool purpose and every required input can be grounded in the user request.",
                 "Prefer the dev-selected, repaired, and gate-evidenced boundaries in this artifact over broad keyword matches.",
+                "Use documentation-grounded evidence to interpret tool purpose and argument semantics before relying on examples.",
                 *challenger.when_to_use,
             ],
             limit=6,
@@ -194,6 +199,7 @@ def _build_challenger_skill(
         challenger.when_to_use = _dedupe_text_lines(
             [
                 "Use this full ReliaSkill artifact only for exact, schema-grounded requests; non-use boundaries take priority over broad keyword overlap.",
+                "Use documentation-grounded evidence to interpret tool purpose and argument semantics before relying on examples.",
                 *challenger.when_to_use,
             ],
             limit=6,
@@ -217,6 +223,16 @@ def _build_challenger_skill(
             "dev_multi_candidate_selection",
             "validation",
             "repair",
+            "doc_grounded_contract_evidence",
+            "request_conditioned_doc_evidence",
+            "contract_constrained_tool_inference",
+            "declarative_contract_proof_state",
+            "calibratable_contract_proof_policy",
+            "proof_state_routing_policy",
+            "contrastive_contract_proof_context",
+            "retrieval_miss_proof_rescue",
+            "schema_semantic_doc_reranking",
+            "request_contract_parse_prompting",
             "executable_contract_compilation",
             "adaptive_contract_policy",
             "contextual_grounding_contract",
@@ -226,7 +242,10 @@ def _build_challenger_skill(
             "proof_carrying_contract_routing",
             "schema_affordance_routing_gate",
             "action_intent_routing_gate",
+            "candidate_verified_routing_fallback",
             "runtime_schema_contract_verifier",
+            "verifier_guided_refinement",
+            "contract_decoded_argument_completion",
             "proof_carrying_runtime_contract",
             "runtime_required_argument_grounding",
             "runtime_false_abstention_rescue",
@@ -240,11 +259,26 @@ def _build_challenger_skill(
         "uses_contextual_grounding_contract": True,
         "uses_multi_step_contract_planning": True,
         "uses_execution_feedback_contract": True,
+        "uses_doc_grounded_contract_evidence": True,
+        "uses_request_conditioned_doc_evidence": True,
+        "uses_contract_constrained_tool_inference": True,
+        "uses_declarative_contract_proof_state": True,
+        "uses_calibratable_contract_proof_policy": True,
+        "uses_proof_state_routing_policy": True,
+        "uses_contrastive_contract_proof_context": True,
+        "uses_retrieval_miss_proof_rescue": True,
+        "uses_schema_semantic_doc_reranking": True,
+        "uses_request_contract_parse_prompting": True,
+        "uses_verifier_guided_refinement": True,
+        "uses_contract_decoded_argument_completion": True,
+        "uses_candidate_verified_routing_fallback": True,
         "test_controls_used": False,
         "prompt_visible_method_evidence": True,
         "schema_contract": build_schema_contract_lines(tool),
         "executable_contract": compile_skill_contract(tool, challenger).model_dump(),
+        "contract_proof_policy": default_contract_proof_policy().model_dump(),
         "contract_counterexamples": build_contract_counterexamples(tool, challenger),
+        "doc_grounding_evidence": doc_evidence,
         "source_reliability_decision": source_score.decision,
         "source_reliability_score": source_score.score,
         "reliability_gate_decision": gate_score.decision,
@@ -261,6 +295,7 @@ def _build_challenger_skill(
             "condition": RELIASKILL_CHALLENGER,
             "artifact_backed": True,
             "prompt_visible_method_evidence": True,
+            "doc_grounded_contract_evidence": True,
             "test_controls_used": False,
         },
     ]
@@ -356,6 +391,16 @@ def _write_challenger_method_metadata(
             "dev_multi_candidate_selection",
             "validation",
             "repair",
+            "doc_grounded_contract_evidence",
+            "request_conditioned_doc_evidence",
+            "contract_constrained_tool_inference",
+            "declarative_contract_proof_state",
+            "calibratable_contract_proof_policy",
+            "proof_state_routing_policy",
+            "contrastive_contract_proof_context",
+            "retrieval_miss_proof_rescue",
+            "schema_semantic_doc_reranking",
+            "request_contract_parse_prompting",
             "executable_contract_compilation",
             "adaptive_contract_policy",
             "contextual_grounding_contract",
@@ -365,7 +410,10 @@ def _write_challenger_method_metadata(
             "proof_carrying_contract_routing",
             "schema_affordance_routing_gate",
             "action_intent_routing_gate",
+            "candidate_verified_routing_fallback",
             "runtime_schema_contract_verifier",
+            "verifier_guided_refinement",
+            "contract_decoded_argument_completion",
             "proof_carrying_runtime_contract",
             "runtime_required_argument_grounding",
             "runtime_false_abstention_rescue",
@@ -380,7 +428,21 @@ def _write_challenger_method_metadata(
         "uses_contextual_grounding_contract": True,
         "uses_multi_step_contract_planning": True,
         "uses_execution_feedback_contract": True,
+        "uses_doc_grounded_contract_evidence": True,
+        "uses_request_conditioned_doc_evidence": True,
+        "uses_contract_constrained_tool_inference": True,
+        "uses_declarative_contract_proof_state": True,
+        "uses_calibratable_contract_proof_policy": True,
+        "uses_proof_state_routing_policy": True,
+        "uses_contrastive_contract_proof_context": True,
+        "uses_retrieval_miss_proof_rescue": True,
+        "uses_schema_semantic_doc_reranking": True,
+        "uses_request_contract_parse_prompting": True,
+        "uses_verifier_guided_refinement": True,
+        "uses_contract_decoded_argument_completion": True,
+        "uses_candidate_verified_routing_fallback": True,
         "test_controls_used": False,
+        "contract_proof_policy": default_contract_proof_policy().model_dump(),
         "reliaskill_v1_decision": score.decision,
         "reliaskill_v1_score": score.score,
         "source_reliability_decision": source_score.decision,

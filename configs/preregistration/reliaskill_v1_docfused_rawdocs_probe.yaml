@@ -1,0 +1,76 @@
+protocol_lock:
+  criteria_locked_before_run: true
+  test_set_used_for_method_changes: false
+  frozen_reference_run: outputs/overnight_qwen15b_4gpu_reliaskill_v1_fresh
+  decision_rule: >
+    ReliaSkill v1 must beat the strongest documentation-only baseline while
+    preserving its contract-verifier safety story. Component ablations are
+    expected to be non-superior to the full method; they diagnose mechanism,
+    not leaderboard standing.
+
+primary_success_criteria:
+  - baseline: raw_docs_full
+    method: reliaskill_v1
+    metric: joint_exact_match
+    min_delta: 0.01
+    require_significance: false
+    alpha: 0.05
+    min_examples: 500
+    also_require_routing: true
+
+component_ablation_criteria:
+  - baseline: reliaskill_v1_no_doc_grounding
+    method: reliaskill_v1
+    metric: joint_exact_match
+    min_delta: 0.0
+    require_significance: false
+    min_examples: 500
+    also_require_routing: true
+  - baseline: reliaskill_v1_no_verifier_refinement
+    method: reliaskill_v1
+    metric: joint_exact_match
+    min_delta: 0.0
+    require_significance: false
+    min_examples: 500
+    also_require_routing: true
+  - baseline: reliaskill_v1_no_identifier_binding
+    method: reliaskill_v1
+    metric: joint_exact_match
+    min_delta: 0.0
+    require_significance: false
+    min_examples: 500
+    also_require_routing: true
+  - baseline: reliaskill_v1_no_contract_decoder
+    method: reliaskill_v1
+    metric: joint_exact_match
+    min_delta: 0.0
+    require_significance: false
+    min_examples: 500
+    also_require_routing: true
+  - baseline: reliaskill_v1_no_candidate_verification
+    method: reliaskill_v1
+    metric: joint_exact_match
+    min_delta: 0.0
+    require_significance: false
+    min_examples: 500
+    also_require_routing: true
+
+runtime_trace_criteria:
+  - condition: reliaskill_v1
+    metric: verifier_action_rate
+    min: 0.0
+    max: 1.0
+  - condition: reliaskill_v1
+    metric: refinement_attempt_rate
+    min: 0.0
+    max: 0.75
+  - condition: reliaskill_v1
+    metric: refinement_selected_rate
+    min: 0.0
+    max: 0.50
+
+harm_safety_criteria:
+  - baseline: raw_docs_full
+    method: reliaskill_v1
+    metric: harmful_skill_injection_rate
+    max_increase: 0.0

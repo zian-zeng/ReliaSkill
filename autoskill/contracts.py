@@ -11,7 +11,7 @@ from autoskill.schema_utils import normalize_schema_node, schema_type
 ACTION_FAMILIES: Dict[str, set[str]] = {
     "search": {"search", "find", "lookup", "look", "query", "match", "filter"},
     "read": {"read", "open", "show", "view", "preview", "list", "get", "fetch", "retrieve"},
-    "create": {"create", "add", "insert", "new", "draft", "schedule", "record"},
+    "create": {"create", "add", "insert", "new", "draft", "schedule"},
     "update": {"update", "edit", "modify", "patch", "change", "append", "write", "save"},
     "delete": {"delete", "remove", "clear", "drop"},
     "send": {"send", "post", "publish", "transfer", "email", "notify"},
@@ -795,9 +795,9 @@ def _required_arg_grounding(request: str, arg: ArgumentIR) -> Dict[str, Any]:
             "grounded": bool(re.search(r'"[^"]+"', request) or re.search(r"\b(?:content|text|body|message|write|save|send|remember|note|record|set)\b", lowered)),
             "evidence": "content_cue",
         }
-    if parts.intersection({"id", "account", "user", "entity", "name", "title"}):
+    if parts.intersection({"id", "account", "acct", "customer", "client", "user", "entity", "name", "title"}):
         return {
-            "grounded": bool(re.search(r"\b(?:acct|account|user|entity|id)[-_]?[A-Za-z0-9]+\b", request, flags=re.IGNORECASE) or re.search(r'"[^"]+"', request)),
+            "grounded": bool(_contains_identifier_like_text(request) or re.search(r'"[^"]+"', request)),
             "evidence": "identifier_literal",
         }
     if parts and parts.intersection(set(_tokenize(request))):
@@ -835,8 +835,8 @@ def _schema_property_is_grounded(request: str, name: str, schema: Any) -> bool:
         return _contains_path_like_text(request)
     if parts.intersection({"content", "contents", "text", "body", "message", "payload", "value"}):
         return bool(re.search(r'"[^"]+"', request) or re.search(r"\b(?:content|text|body|message|write|save|send|remember|note|record|set)\b", lowered))
-    if parts.intersection({"id", "account", "user", "entity", "name", "title"}):
-        return bool(re.search(r"\b(?:acct|account|user|entity|id)[-_]?[A-Za-z0-9]+\b", request, flags=re.IGNORECASE) or re.search(r'"[^"]+"', request))
+    if parts.intersection({"id", "account", "acct", "customer", "client", "user", "entity", "name", "title"}):
+        return bool(_contains_identifier_like_text(request) or re.search(r'"[^"]+"', request))
     return bool(parts and parts.intersection(set(_tokenize(request))))
 
 
@@ -974,6 +974,41 @@ def _value_grounded(field_name: str, value: Any, request: str) -> bool:
     return False
 
 
+def _contains_identifier_like_text(request: str) -> bool:
+    patterns = [
+        r"\b(?:acct|account|customer|client|user|entity)\s+(?:id|identifier)(?:[-_:]|\s+)([A-Za-z0-9][A-Za-z0-9_.-]*)\b",
+        r"\b(?:acct|account|customer|client|user|entity|identifier|id)(?:[-_:]|\s+)([A-Za-z0-9][A-Za-z0-9_.-]*)\b",
+    ]
+    for pattern in patterns:
+        for match in re.finditer(pattern, request, flags=re.IGNORECASE):
+            if _looks_like_identifier_literal(match.group(1)):
+                return True
+    return False
+
+
+def _looks_like_identifier_literal(value: str) -> bool:
+    return bool(
+        value
+        and len(value) > 1
+        and (re.search(r"\d", value) or re.search(r"[-_.]", value))
+        and value.lower()
+        not in {
+            "record",
+            "records",
+            "identifier",
+            "identifiers",
+            "account",
+            "accounts",
+            "customer",
+            "customers",
+            "client",
+            "clients",
+            "user",
+            "users",
+        }
+    )
+
+
 def _leaf_values(value: Any) -> List[Any]:
     if isinstance(value, dict):
         result: List[Any] = []
@@ -1056,6 +1091,8 @@ def _action_families_for_text(text: str) -> set[str]:
     for family, cues in ACTION_FAMILIES.items():
         if tokens.intersection(cues):
             families.add(family)
+    if re.search(r"\brecord\s+(?:an?\s+|the\s+|this\s+|new\s+)?(?:observation|note|entry|event|transaction|item|result|measurement)\b", text.lower()):
+        families.add("create")
     return families
 
 
