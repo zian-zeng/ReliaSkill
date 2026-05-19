@@ -92,11 +92,20 @@ def _summary_panel(panel_cls, box_module, snapshot: dict, *, elapsed_seconds: fl
     completed = snapshot["completed"] or 0
     percent = (completed / total * 100.0) if total else 0.0
     rate_text = f"{stats['rate_per_min']:.1f} records/min" if stats.get("rate_per_min") else "warming up"
+    ignored = snapshot.get("ignored_records") if isinstance(snapshot.get("ignored_records"), dict) else {}
+    ignored_total = int(ignored.get("total") or 0)
+    ignored_text = ""
+    if ignored_total:
+        ignored_text = (
+            "\n[bold yellow]Ignored saved records[/bold yellow] "
+            f"{ignored_total} not in current config/model/task plan"
+        )
     text = (
         f"[bold]Output[/bold] {snapshot['output_root']}\n"
         f"[bold]Completed[/bold] {completed}/{total} ({percent:.1f}%)\n"
         f"[bold]Elapsed[/bold] {_format_duration(elapsed_seconds)}\n"
         f"[bold]Observed ETA[/bold] {stats['eta_text']}  [dim]({rate_text}, from saved result files)[/dim]"
+        f"{ignored_text}"
     )
     return panel_cls(text, title="ReliaSkill Experiment Progress", box=box_module.ASCII)
 

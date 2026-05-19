@@ -97,21 +97,49 @@ def build_progress_plan(
 
 def scan_progress(plan: ProgressPlan) -> Dict[str, Any]:
     root = plan.output_root
-    benchmark_completed = _count_phase_records(root / "predictors", "benchmark", "*.result.json", "prediction_records.jsonl")
-    routing_completed = _count_phase_records(root / "predictors", "routing_benchmark", "*.routing.json", "routing_records.jsonl")
-    live_completed = _count_phase_records(root / "predictors", "live_exec", "*.live_result.json", "live_exec_results.jsonl")
+    benchmark_completed, benchmark_ignored = _count_phase_records(
+        root / "predictors",
+        "benchmark",
+        "*.result.json",
+        "prediction_records.jsonl",
+        plan=plan,
+    )
+    routing_completed, routing_ignored = _count_phase_records(
+        root / "predictors",
+        "routing_benchmark",
+        "*.routing.json",
+        "routing_records.jsonl",
+        plan=plan,
+    )
+    live_completed, live_ignored = _count_phase_records(
+        root / "predictors",
+        "live_exec",
+        "*.live_result.json",
+        "live_exec_results.jsonl",
+        plan=plan,
+        filter_tasks=False,
+    )
     states = _load_state_rows(plan)
     if not states:
         states = _infer_state_rows(plan)
-    completed = benchmark_completed + routing_completed + live_completed
+    benchmark_visible = min(benchmark_completed, plan.benchmark_total)
+    routing_visible = min(routing_completed, plan.routing_total)
+    live_visible = min(live_completed, plan.live_total)
+    completed = benchmark_visible + routing_visible + live_visible
     return {
         "config_path": str(plan.config_path),
         "output_root": str(root),
         "total": plan.total,
-        "completed": min(completed, plan.total) if plan.total else completed,
-        "benchmark": {"completed": min(benchmark_completed, plan.benchmark_total), "total": plan.benchmark_total},
-        "routing": {"completed": min(routing_completed, plan.routing_total), "total": plan.routing_total},
-        "live": {"completed": min(live_completed, plan.live_total), "total": plan.live_total},
+        "completed": completed,
+        "benchmark": {"completed": benchmark_visible, "total": plan.benchmark_total},
+        "routing": {"completed": routing_visible, "total": plan.routing_total},
+        "live": {"completed": live_visible, "total": plan.live_total},
+        "ignored_records": {
+            "benchmark": benchmark_ignored,
+            "routing": routing_ignored,
+            "live": live_ignored,
+            "total": benchmark_ignored + routing_ignored + live_ignored,
+        },
         "current": states,
     }
 
@@ -128,9 +156,18 @@ def _infer_num_shards(root: Path) -> int | None:
     return max(shard_indices) + 1
 
 
-def _count_phase_records(predictors_root: Path, phase_dir: str, pattern: str, jsonl_name: str) -> int:
+def _count_phase_records(
+    predictors_root: Path,
+    phase_dir: str,
+    pattern: str,
+    jsonl_name: str,
+    *,
+    plan: ProgressPlan,
+    task_ids: set[str] | None = None,
+    filter_tasks: bool = True,
+) -> tuple[int, int]:
     if not predictors_root.exists():
-        return 0
+        return 0, 0
     keys: set[tuple[str, str, str, str, str]] = set()
     for shard_root in sorted(path for path in predictors_root.glob("*/shard_*") if path.is_dir()):
         phase_root = shard_root / phase_dir
@@ -138,7 +175,13 @@ def _count_phase_records(predictors_root: Path, phase_dir: str, pattern: str, js
         if phase_root.exists():
             for path in phase_root.glob(f"**/{pattern}"):
                 _collect_json_record_key(path, phase_dir=phase_dir, model_slug=shard_root.parent.name, keys=keys)
-    return len(keys)
+    allowed_task_ids = task_ids if task_ids is not None else _planned_task_ids(plan) if filter_tasks else None
+    included = {
+        key
+        for key in keys
+        if _record_key_matches_plan(key, plan=plan, task_ids=allowed_task_ids)
+    }
+    return len(included), len(keys) - len(included)
 
 
 def _collect_jsonl_record_keys(
@@ -186,6 +229,26 @@ def _record_key(record: Dict[str, Any], *, phase_dir: str, model_slug: str) -> t
     return (str(record.get("model_slug") or model_slug), phase_dir, task_id, baseline, tool_name)
 
 
+def _planned_task_ids(plan: ProgressPlan) -> set[str]:
+    return {task.task_id for tasks in plan.tasks_by_shard.values() for task in tasks}
+
+
+def _record_key_matches_plan(
+    key: tuple[str, str, str, str, str],
+    *,
+    plan: ProgressPlan,
+    task_ids: set[str] | None,
+) -> bool:
+    model_slug, _phase_dir, task_id, baseline, _tool_name = key
+    if plan.model_slugs and model_slug and model_slug not in set(plan.model_slugs):
+        return False
+    if baseline and plan.conditions and baseline not in set(plan.conditions):
+        return False
+    if task_ids is not None and task_id and task_id not in task_ids:
+        return False
+    return True
+
+
 def _load_state_rows(plan: ProgressPlan) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     for state_path in sorted((plan.output_root / "predictors").glob("*/shard_*/progress/*_state.json")):
@@ -223,8 +286,22 @@ def _infer_state_rows(plan: ProgressPlan) -> List[Dict[str, Any]]:
         model_root = plan.output_root / "predictors" / model_slug
         for shard_index, tasks in plan.tasks_by_shard.items():
             shard_root = model_root / f"shard_{shard_index:02d}"
-            benchmark_done = _count_shard_phase_records(shard_root, "benchmark", "*.result.json", "prediction_records.jsonl")
-            routing_done = _count_shard_phase_records(shard_root, "routing_benchmark", "*.routing.json", "routing_records.jsonl")
+            benchmark_done = _count_shard_phase_records(
+                shard_root,
+                "benchmark",
+                "*.result.json",
+                "prediction_records.jsonl",
+                plan=plan,
+                tasks=tasks,
+            )
+            routing_done = _count_shard_phase_records(
+                shard_root,
+                "routing_benchmark",
+                "*.routing.json",
+                "routing_records.jsonl",
+                plan=plan,
+                tasks=tasks,
+            )
             phase = "done"
             completed_in_phase = benchmark_done
             phase_total = len(tasks) * condition_count
@@ -276,11 +353,20 @@ def _infer_row(
     }
 
 
-def _count_shard_phase_records(shard_root: Path, phase_dir: str, pattern: str, jsonl_name: str) -> int:
+def _count_shard_phase_records(
+    shard_root: Path,
+    phase_dir: str,
+    pattern: str,
+    jsonl_name: str,
+    *,
+    plan: ProgressPlan,
+    tasks: Sequence[TaskRef],
+) -> int:
     phase_root = shard_root / phase_dir
     keys: set[tuple[str, str, str, str, str]] = set()
     _collect_jsonl_record_keys(phase_root / jsonl_name, phase_dir=phase_dir, model_slug=shard_root.parent.name, keys=keys)
     if phase_root.exists():
         for path in phase_root.glob(f"**/{pattern}"):
             _collect_json_record_key(path, phase_dir=phase_dir, model_slug=shard_root.parent.name, keys=keys)
-    return len(keys)
+    task_ids = {task.task_id for task in tasks}
+    return sum(1 for key in keys if _record_key_matches_plan(key, plan=plan, task_ids=task_ids))

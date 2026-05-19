@@ -27,10 +27,16 @@ class ProgressMonitorTest(unittest.TestCase):
             root = Path(tmp)
             result_dir = root / "predictors" / "model_a" / "shard_00" / "benchmark" / "tool_a" / "condition_a"
             result_dir.mkdir(parents=True)
-            (result_dir / "task_1.result.json").write_text(json.dumps({"ok": True}), encoding="utf-8")
+            (result_dir / "task_1.result.json").write_text(
+                json.dumps({"task_id": "task_1", "baseline_name": "condition_a", "tool_name": "tool_a"}),
+                encoding="utf-8",
+            )
             routing_dir = root / "predictors" / "model_a" / "shard_00" / "routing_benchmark" / "task_1"
             routing_dir.mkdir(parents=True)
-            (routing_dir / "condition_a.routing.json").write_text(json.dumps({"ok": True}), encoding="utf-8")
+            (routing_dir / "condition_a.routing.json").write_text(
+                json.dumps({"task_id": "task_1", "baseline_name": "condition_a", "tool_name": "tool_a"}),
+                encoding="utf-8",
+            )
 
             write_progress_state(
                 root / "predictors" / "model_a" / "shard_00" / "benchmark",
@@ -49,6 +55,7 @@ class ProgressMonitorTest(unittest.TestCase):
             self.assertEqual(snapshot["current"][0]["task_id"], "task_1")
             self.assertEqual(snapshot["current"][0]["condition"], "condition_b")
             self.assertEqual(snapshot["current"][0]["source"], "heartbeat")
+            self.assertEqual(snapshot["ignored_records"]["total"], 0)
 
     def test_scan_prefers_jsonl_counts_when_result_filenames_collide(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -66,8 +73,9 @@ class ProgressMonitorTest(unittest.TestCase):
 
             snapshot = scan_progress(self._plan(root))
 
-            self.assertEqual(snapshot["benchmark"], {"completed": 3, "total": 4})
-            self.assertEqual(snapshot["completed"], 3)
+            self.assertEqual(snapshot["benchmark"], {"completed": 2, "total": 4})
+            self.assertEqual(snapshot["completed"], 2)
+            self.assertEqual(snapshot["ignored_records"]["benchmark"], 1)
 
     def test_scan_counts_unique_jsonl_records(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -87,6 +95,38 @@ class ProgressMonitorTest(unittest.TestCase):
 
             self.assertEqual(snapshot["benchmark"], {"completed": 2, "total": 4})
             self.assertEqual(snapshot["completed"], 2)
+
+    def test_scan_filters_stale_records_from_append_runs(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            benchmark_dir = root / "predictors" / "model_a" / "shard_00" / "benchmark"
+            routing_dir = root / "predictors" / "model_a" / "shard_00" / "routing_benchmark"
+            benchmark_dir.mkdir(parents=True)
+            routing_dir.mkdir(parents=True)
+            benchmark_rows = [
+                {"task_id": "task_1", "baseline_name": "condition_a", "tool_name": "tool_a"},
+                {"task_id": "task_1", "baseline_name": "stale_condition", "tool_name": "tool_a"},
+                {"task_id": "old_task", "baseline_name": "condition_a", "tool_name": "tool_a"},
+            ]
+            routing_rows = [
+                {"task_id": "task_1", "baseline_name": "condition_a", "tool_name": "tool_a"},
+                {"task_id": "task_2", "baseline_name": "stale_condition", "tool_name": "tool_a"},
+            ]
+            with (benchmark_dir / "prediction_records.jsonl").open("w", encoding="utf-8") as f:
+                for row in benchmark_rows:
+                    f.write(json.dumps(row) + "\n")
+            with (routing_dir / "routing_records.jsonl").open("w", encoding="utf-8") as f:
+                for row in routing_rows:
+                    f.write(json.dumps(row) + "\n")
+
+            snapshot = scan_progress(self._plan(root))
+
+            self.assertEqual(snapshot["benchmark"], {"completed": 1, "total": 4})
+            self.assertEqual(snapshot["routing"], {"completed": 1, "total": 4})
+            self.assertEqual(snapshot["completed"], 2)
+            self.assertEqual(snapshot["ignored_records"]["benchmark"], 2)
+            self.assertEqual(snapshot["ignored_records"]["routing"], 1)
+            self.assertEqual(snapshot["ignored_records"]["total"], 3)
 
     def test_progress_write_does_not_fail_when_atomic_replace_is_locked(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -112,7 +152,10 @@ class ProgressMonitorTest(unittest.TestCase):
             root = Path(tmp)
             result_dir = root / "predictors" / "model_a" / "shard_00" / "benchmark" / "tool_a" / "condition_a"
             result_dir.mkdir(parents=True)
-            (result_dir / "task_1.result.json").write_text(json.dumps({"ok": True}), encoding="utf-8")
+            (result_dir / "task_1.result.json").write_text(
+                json.dumps({"task_id": "task_1", "baseline_name": "condition_a", "tool_name": "tool_a"}),
+                encoding="utf-8",
+            )
 
             snapshot = scan_progress(self._plan(root))
 
