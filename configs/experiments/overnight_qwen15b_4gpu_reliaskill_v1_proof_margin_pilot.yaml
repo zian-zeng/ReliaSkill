@@ -1,0 +1,77 @@
+experiment_scale: overnight_qwen15b_4gpu_reliaskill_v1_proof_margin_pilot
+description: "Targeted Qwen2.5-1.5B proof-margin pilot after the unified contrastive decision upgrade; compares ReliaSkill v1 against the strongest documentation-heavy baselines before spending a full long-node run."
+seed: 42
+tools_path: data/raw_mcp/tools.jsonl
+tasks_path: data/controls/test.jsonl
+output_root: outputs/overnight_qwen15b_4gpu_reliaskill_v1_proof_margin_pilot
+
+generator:
+  type: heuristic
+  ablation_mode: base_only
+
+runtime:
+  strict_backends: true
+
+models:
+  - config: configs/models/qwen2_5_1_5b_instruct_4bit.yaml
+    batch_size: 2
+
+conditions:
+  - raw_mcp
+  - raw_docs_full
+  - skill_prompt_verbose_docs
+  - generated_skill_base
+  - gated_skill
+  - reliaskill_v1
+
+data:
+  config: configs/data/emnlp_scale.yaml
+  max_tools: 40
+  min_domains_required: 6
+
+controls:
+  config: configs/controls/emnlp_scale.yaml
+  positives_per_tool_total: 3
+  negatives_per_tool_total: 2
+
+routing:
+  config: configs/routing/distractor_inventory.yaml
+  candidate_set_sizes: [4]
+
+live_execution:
+  enabled: false
+
+shared_skill_packages:
+  root: outputs/overnight_qwen15b_4gpu_reliaskill_v1_proof_margin_pilot/shared_packages
+  dev_controls_path: data/controls/dev.jsonl
+  reliability_predictor:
+    type: heuristic
+  max_repair_rounds: 2
+  deploy_threshold: 85.0
+
+skills:
+  multi_candidate_config: configs/skills/multi_candidate.yaml
+  candidate_k: 3
+  compactness_config: configs/skills/compactness_variants.yaml
+
+repair:
+  config: configs/repair/repair_strategies.yaml
+
+scheduler:
+  one_gpu: true
+  resume: true
+  group_by_model: true
+  run_all_conditions_before_unload: true
+  max_batch_size: 2
+  prompt_safety_margin_tokens: 256
+  include_routing: true
+  examples_per_second: 0.20
+  estimated_bytes_per_call: 5120
+  estimated_bytes_per_token: 1.5
+  condition_token_overheads:
+    raw_mcp: 900
+    raw_docs_full: 1600
+    skill_prompt_verbose_docs: 1200
+    generated_skill_base: 300
+    gated_skill: 475
+    reliaskill_v1: 575
