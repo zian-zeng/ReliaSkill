@@ -79,8 +79,12 @@ def _skill_router_positive_text(tool: ToolIR, skill: GeneratedSkill) -> str:
         parts.extend(str(line) for line in schema_contract if isinstance(line, str))
     if is_reliaskill_v1_family(skill.baseline_name) and not _contract_ablation_disabled(skill, "disable_doc_grounding"):
         evidence = skill.metadata.get("doc_grounding_evidence") if isinstance(skill.metadata, dict) else None
-        if not isinstance(evidence, dict):
-            evidence = build_doc_grounding_evidence(tool)
+        enable_doc_shield = not _contract_ablation_disabled(skill, "disable_doc_consistency_shield")
+        if not isinstance(evidence, dict) or not enable_doc_shield:
+            evidence = build_doc_grounding_evidence(
+                tool,
+                enable_consistency_shield=enable_doc_shield,
+            )
         parts.append(render_doc_grounding_evidence(evidence, max_chars=1800))
     for argument in tool.arguments:
         parts.append(argument.name)

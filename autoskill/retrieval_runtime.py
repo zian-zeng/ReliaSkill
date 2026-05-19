@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Tuple
 
 from autoskill.conditions import is_reliaskill_v1_family
 from autoskill.contract_inference import build_contract_proof_state, contract_state_payload
+from autoskill.contracts import compose_contract_plan
 from autoskill.eval_types import EvalTask
 from autoskill.ir import GeneratedSkill, ToolIR
 from autoskill.retrieval_baselines import MEMORY_BANK
@@ -394,14 +395,32 @@ def contextualize_skill_for_task(
         )
         return contextualized, context
 
-    if is_reliaskill_v1_family(skill.baseline_name) and not _contract_ablation_disabled(skill, "disable_contract_routing"):
-        context = _reliaskill_contrastive_contract_context(task, tool, skill, tools, skill_bank=skill_bank)
+    if (
+        is_reliaskill_v1_family(skill.baseline_name)
+        and not _contract_ablation_disabled(skill, "disable_contract_routing")
+        and not _contract_ablation_disabled(skill, "disable_contrastive_contract_context")
+    ):
+        include_plan = not _contract_ablation_disabled(skill, "disable_dependency_plan_prompting")
+        context = _reliaskill_contrastive_contract_context(
+            task,
+            tool,
+            skill,
+            tools,
+            skill_bank=skill_bank,
+            expand_to_all_tools=not _contract_ablation_disabled(skill, "disable_retrieval_miss_rescue"),
+            include_dependency_plan=include_plan,
+        )
         if context["candidate_proof_states"]:
-            contextualized.metadata = {
-                **contextualized.metadata,
+            metadata_updates = {
                 "contrastive_contract_candidates": context["candidate_proof_states"],
                 "contrastive_contract_target_rank": context["target_proof_rank"],
                 "contrastive_contract_best_viable_tool": context["best_viable_tool"],
+            }
+            if include_plan:
+                metadata_updates["contract_plan_context"] = context.get("contract_plan", {})
+            contextualized.metadata = {
+                **contextualized.metadata,
+                **metadata_updates,
             }
             contextualized.when_not_to_use = _dedupe_lines(
                 [
@@ -415,6 +434,7 @@ def contextualize_skill_for_task(
                     "candidate_tools": [row["tool_name"] for row in context["candidate_proof_states"]],
                     "target_proof_rank": context["target_proof_rank"],
                     "best_viable_tool": context["best_viable_tool"],
+                    "contract_plan_satisfied": bool((context.get("contract_plan") or {}).get("satisfied")),
                 }
             )
             return contextualized, context
@@ -430,8 +450,11 @@ def _reliaskill_contrastive_contract_context(
     *,
     skill_bank: Dict[str, GeneratedSkill] | None = None,
     top_k: int = 4,
+    expand_to_all_tools: bool = True,
+    include_dependency_plan: bool = True,
 ) -> Dict[str, Any]:
-    rows = retrieve_candidate_tools(task.user_request, tools, top_k=max(len(tools), top_k))["candidates"]
+    retrieval_limit = max(len(tools), top_k) if expand_to_all_tools else top_k
+    rows = retrieve_candidate_tools(task.user_request, tools, top_k=retrieval_limit)["candidates"]
     retrieved_rank = {str(row["tool_name"]): index + 1 for index, row in enumerate(rows)}
     proof_rows: List[Dict[str, Any]] = []
     for row in rows:
@@ -464,23 +487,71 @@ def _reliaskill_contrastive_contract_context(
             str(item.get("tool_name") or ""),
         )
     )
-    rescued_rows = [
-        row
-        for index, row in enumerate(proof_rows)
-        if row.get("viable") and int(row.get("retrieval_rank") or 0) > top_k and index < top_k
-    ]
+    rescued_rows = (
+        [
+            row
+            for index, row in enumerate(proof_rows)
+            if row.get("viable") and int(row.get("retrieval_rank") or 0) > top_k and index < top_k
+        ]
+        if expand_to_all_tools
+        else []
+    )
     exposed_rows = proof_rows[: max(top_k, 1)]
     target_rank = next((index + 1 for index, row in enumerate(proof_rows) if row.get("tool_name") == target_tool.tool_name), None)
     best_viable = next((str(row["tool_name"]) for row in proof_rows if row.get("viable")), None)
+    plan = (
+        _compose_contrastive_contract_plan(
+            task,
+            tools,
+            skill_bank=skill_bank,
+            candidate_names=[str(row["tool_name"]) for row in exposed_rows],
+        )
+        if include_dependency_plan
+        else {}
+    )
     return {
         "retrieval_type": "contrastive_contract_proof",
         "candidate_proof_states": exposed_rows,
         "proof_expanded_candidate_count": len(proof_rows),
         "retrieval_miss_rescues": rescued_rows,
+        "retrieval_miss_rescue_enabled": bool(expand_to_all_tools),
         "target_proof_rank": target_rank,
         "target_in_top_k": target_rank is not None,
         "best_viable_tool": best_viable,
+        "contract_plan": plan,
+        "dependency_plan_enabled": bool(include_dependency_plan),
     }
+
+
+def _compose_contrastive_contract_plan(
+    task: EvalTask,
+    tools: Dict[str, ToolIR],
+    *,
+    skill_bank: Dict[str, GeneratedSkill] | None,
+    candidate_names: List[str],
+) -> Dict[str, Any]:
+    plan_tools = {name: tools[name] for name in candidate_names if name in tools}
+    plan_skills = {
+        name: (skill_bank or {}).get(name) or _fallback_candidate_skill(tool, GeneratedSkill(baseline_name="reliaskill_v1"))
+        for name, tool in plan_tools.items()
+    }
+    if not plan_tools or not plan_skills:
+        return {}
+    plan = compose_contract_plan(
+        task.user_request,
+        plan_tools,
+        plan_skills,
+        grounding_context={
+            "conversation": list(task.conversation_history),
+            "artifacts": dict(task.artifact_context),
+            "tool_observations": list(task.tool_observation_context),
+        },
+        max_steps=min(3, max(1, len(plan_tools))),
+    )
+    payload = plan.model_dump()
+    payload["steps"] = payload.get("steps", [])[:3]
+    payload["unresolved_tools"] = payload.get("unresolved_tools", [])[:3]
+    return payload
 
 
 def _fallback_candidate_skill(tool: ToolIR, source_skill: GeneratedSkill) -> GeneratedSkill:

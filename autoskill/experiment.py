@@ -214,10 +214,14 @@ def _build_reliaskill_contract_ablation(base_skill: Any, condition: str) -> Any:
             "disable_ambiguity_abstention": condition == "reliaskill_v1_no_ambiguity_abstention",
             "disable_contextual_grounding": condition == "reliaskill_v1_no_contextual_grounding",
             "disable_doc_grounding": condition == "reliaskill_v1_no_doc_grounding",
+            "disable_doc_consistency_shield": condition == "reliaskill_v1_no_doc_consistency_shield",
             "disable_verifier_refinement": condition == "reliaskill_v1_no_verifier_refinement",
             "disable_identifier_binding": condition == "reliaskill_v1_no_identifier_binding",
             "disable_contract_decoder": condition == "reliaskill_v1_no_contract_decoder",
             "disable_candidate_verification": condition == "reliaskill_v1_no_candidate_verification",
+            "disable_contrastive_contract_context": condition == "reliaskill_v1_no_contrastive_context",
+            "disable_retrieval_miss_rescue": condition == "reliaskill_v1_no_retrieval_miss_rescue",
+            "disable_dependency_plan_prompting": condition == "reliaskill_v1_no_dependency_plan",
         },
     }
     ablation.method_trace = [

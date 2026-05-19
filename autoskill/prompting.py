@@ -58,10 +58,15 @@ def _runtime_guidance(tool: ToolIR, skill: GeneratedSkill, *, user_request: str 
         doc_evidence_text = ""
         if reliaskill_family and not _contract_ablation_disabled(skill, "disable_doc_grounding"):
             doc_evidence = skill.metadata.get("doc_grounding_evidence")
+            enable_doc_shield = not _contract_ablation_disabled(skill, "disable_doc_consistency_shield")
             if user_request:
-                doc_evidence = build_request_conditioned_doc_evidence(tool, user_request)
-            elif not isinstance(doc_evidence, dict):
-                doc_evidence = build_doc_grounding_evidence(tool)
+                doc_evidence = build_request_conditioned_doc_evidence(
+                    tool,
+                    user_request,
+                    enable_consistency_shield=enable_doc_shield,
+                )
+            elif not isinstance(doc_evidence, dict) or not enable_doc_shield:
+                doc_evidence = build_doc_grounding_evidence(tool, enable_consistency_shield=enable_doc_shield)
             doc_evidence_text = render_doc_grounding_evidence(doc_evidence, max_chars=3200) if isinstance(doc_evidence, dict) else ""
         proof_line = (
             f"{method_label} proof obligations: {json.dumps(proof_obligations, ensure_ascii=False)}\n"
@@ -87,12 +92,20 @@ def _runtime_guidance(tool: ToolIR, skill: GeneratedSkill, *, user_request: str 
                 "Use this proof state as the decision ledger: do not call when required arguments are missing or a blocking reason applies.\n"
             )
         contrastive_line = ""
-        if reliaskill_family:
+        if reliaskill_family and not _contract_ablation_disabled(skill, "disable_contrastive_contract_context"):
             contrastive_candidates = skill.metadata.get("contrastive_contract_candidates")
             if isinstance(contrastive_candidates, list) and contrastive_candidates:
                 contrastive_line = (
                     f"{method_label} contrastive candidate proof states: {json.dumps(contrastive_candidates[:4], ensure_ascii=False)}\n"
                     "Use the contrastive states to catch adjacent-tool mistakes: if this tool is not viable and another candidate is viable, return `should_call=false`.\n"
+                )
+        plan_line = ""
+        if reliaskill_family and not _contract_ablation_disabled(skill, "disable_dependency_plan_prompting"):
+            contract_plan = skill.metadata.get("contract_plan_context")
+            if isinstance(contract_plan, dict) and contract_plan:
+                plan_line = (
+                    f"{method_label} dependency contract plan: {json.dumps(contract_plan, ensure_ascii=False)}\n"
+                    "Use this plan only as dependency evidence: call the current tool when its required inputs are grounded now; otherwise abstain until dependencies are bound by prior observations.\n"
                 )
         return (
             f"{method_label} schema contract: obey this compact argument contract before using examples.\n"
@@ -102,6 +115,7 @@ def _runtime_guidance(tool: ToolIR, skill: GeneratedSkill, *, user_request: str 
             f"{doc_evidence_line}"
             f"{request_contract_line}"
             f"{contrastive_line}"
+            f"{plan_line}"
             f"{method_label} boundary gate: check non-use rules before considering use rules. "
             "If any non-use rule applies, set `should_call` to false.\n"
             "Before returning `should_call=true`, verify required fields are grounded and the argument object satisfies the call contract.\n"

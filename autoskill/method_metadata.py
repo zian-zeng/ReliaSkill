@@ -56,6 +56,7 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         "uses_execution_feedback_contract": bool(method.get("uses_execution_feedback_contract", False)),
         "uses_doc_grounded_contract_evidence": bool(method.get("uses_doc_grounded_contract_evidence", False)),
         "uses_request_conditioned_doc_evidence": bool(method.get("uses_request_conditioned_doc_evidence", False)),
+        "uses_doc_contract_consistency_shield": bool(method.get("uses_doc_contract_consistency_shield", False)),
         "uses_contract_constrained_tool_inference": bool(method.get("uses_contract_constrained_tool_inference", False)),
         "uses_declarative_contract_proof_state": bool(method.get("uses_declarative_contract_proof_state", False)),
         "uses_calibratable_contract_proof_policy": bool(method.get("uses_calibratable_contract_proof_policy", False)),
@@ -63,6 +64,7 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         "uses_contrastive_contract_proof_context": bool(method.get("uses_contrastive_contract_proof_context", False)),
         "uses_retrieval_miss_proof_rescue": bool(method.get("uses_retrieval_miss_proof_rescue", False)),
         "uses_schema_semantic_doc_reranking": bool(method.get("uses_schema_semantic_doc_reranking", False)),
+        "uses_dependency_contract_plan_prompting": bool(method.get("uses_dependency_contract_plan_prompting", False)),
         "uses_request_contract_parse_prompting": bool(method.get("uses_request_contract_parse_prompting", False)),
         "uses_verifier_guided_refinement": bool(method.get("uses_verifier_guided_refinement", False)),
         "uses_contract_decoded_argument_completion": bool(method.get("uses_contract_decoded_argument_completion", False)),
@@ -111,6 +113,8 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         compact["uses_doc_grounded_contract_evidence"] = "doc_grounded_contract_evidence" in compact.get("pipeline_stages", [])
     if not compact.get("uses_request_conditioned_doc_evidence"):
         compact["uses_request_conditioned_doc_evidence"] = "request_conditioned_doc_evidence" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_doc_contract_consistency_shield"):
+        compact["uses_doc_contract_consistency_shield"] = "doc_contract_consistency_shield" in compact.get("pipeline_stages", [])
     if not compact.get("uses_contract_constrained_tool_inference"):
         compact["uses_contract_constrained_tool_inference"] = "contract_constrained_tool_inference" in compact.get("pipeline_stages", [])
     if not compact.get("uses_declarative_contract_proof_state"):
@@ -125,6 +129,8 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         compact["uses_retrieval_miss_proof_rescue"] = "retrieval_miss_proof_rescue" in compact.get("pipeline_stages", [])
     if not compact.get("uses_schema_semantic_doc_reranking"):
         compact["uses_schema_semantic_doc_reranking"] = "schema_semantic_doc_reranking" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_dependency_contract_plan_prompting"):
+        compact["uses_dependency_contract_plan_prompting"] = "dependency_contract_plan_prompting" in compact.get("pipeline_stages", [])
     if not compact.get("uses_request_contract_parse_prompting"):
         compact["uses_request_contract_parse_prompting"] = "request_contract_parse_prompting" in compact.get("pipeline_stages", [])
     if not compact.get("uses_verifier_guided_refinement"):

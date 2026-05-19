@@ -75,8 +75,12 @@ def render_exposure(tool: ToolIR, skill: GeneratedSkill) -> str:
             )
             if not _contract_ablation_disabled(skill, "disable_doc_grounding"):
                 doc_evidence = skill.metadata.get("doc_grounding_evidence")
-                if not isinstance(doc_evidence, dict):
-                    doc_evidence = build_doc_grounding_evidence(tool)
+                enable_doc_shield = not _contract_ablation_disabled(skill, "disable_doc_consistency_shield")
+                if not isinstance(doc_evidence, dict) or not enable_doc_shield:
+                    doc_evidence = build_doc_grounding_evidence(
+                        tool,
+                        enable_consistency_shield=enable_doc_shield,
+                    )
                 lines.extend(
                     [
                         "Documentation-grounded contract evidence:",
