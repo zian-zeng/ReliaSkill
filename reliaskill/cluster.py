@@ -21,7 +21,8 @@ from autoskill.experiment import (
 from autoskill.generator import SkillGenerator
 from autoskill.local_model import clear_model_cache
 from autoskill.artifacts import GATED_SKILL, GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER, REPAIRED_SKILL, clone_skill_as
-from autoskill.conditions import normalize_condition_names
+from autoskill.conditions import RELIASKILL_V1_CONTRACT_ABLATIONS, normalize_condition_names
+from autoskill.contracts import build_contract_counterexamples, compile_skill_contract
 from autoskill.metrics import build_metric_tables, write_metric_tables
 from autoskill.multi_candidate import (
     generate_skill_candidates,
@@ -34,6 +35,7 @@ from autoskill.packaging import write_skill_package
 from autoskill.predictor import build_predictor_from_config, safe_predict
 from autoskill.quality import score_reliability
 from autoskill.reliability import build_reliability_variants
+from autoskill.templates import build_schema_contract_lines
 from autoskill.validator import validate_skill
 from reliaskill.live_exec.evaluator import evaluate_live_exec_tasks
 from reliaskill.live_exec.task_builder import build_live_exec_tasks
@@ -151,6 +153,7 @@ def _select_multi_candidate_base_skill(
 def _build_challenger_skill(
     source_skill: Any,
     *,
+    tool: Any,
     source_row: Dict[str, Any],
     gate_row: Dict[str, Any],
     selection_report_path: Path,
@@ -214,11 +217,34 @@ def _build_challenger_skill(
             "dev_multi_candidate_selection",
             "validation",
             "repair",
+            "executable_contract_compilation",
+            "adaptive_contract_policy",
+            "contextual_grounding_contract",
+            "multi_step_contract_plan_composition",
+            "execution_feedback_contract_interpreter",
             "soft_reliability_gate_evidence",
+            "proof_carrying_contract_routing",
+            "schema_affordance_routing_gate",
+            "action_intent_routing_gate",
+            "runtime_schema_contract_verifier",
+            "proof_carrying_runtime_contract",
+            "runtime_required_argument_grounding",
+            "runtime_false_abstention_rescue",
+            "runtime_action_intent_gate",
             "runtime_routing_boundary",
         ],
+        "uses_runtime_schema_contract_verifier": True,
+        "uses_executable_skill_contract": True,
+        "uses_contract_proof_ledger": True,
+        "uses_adaptive_contract_policy": True,
+        "uses_contextual_grounding_contract": True,
+        "uses_multi_step_contract_planning": True,
+        "uses_execution_feedback_contract": True,
         "test_controls_used": False,
         "prompt_visible_method_evidence": True,
+        "schema_contract": build_schema_contract_lines(tool),
+        "executable_contract": compile_skill_contract(tool, challenger).model_dump(),
+        "contract_counterexamples": build_contract_counterexamples(tool, challenger),
         "source_reliability_decision": source_score.decision,
         "source_reliability_score": source_score.score,
         "reliability_gate_decision": gate_score.decision,
@@ -330,10 +356,30 @@ def _write_challenger_method_metadata(
             "dev_multi_candidate_selection",
             "validation",
             "repair",
+            "executable_contract_compilation",
+            "adaptive_contract_policy",
+            "contextual_grounding_contract",
+            "multi_step_contract_plan_composition",
+            "execution_feedback_contract_interpreter",
             "soft_reliability_gate_evidence",
+            "proof_carrying_contract_routing",
+            "schema_affordance_routing_gate",
+            "action_intent_routing_gate",
+            "runtime_schema_contract_verifier",
+            "proof_carrying_runtime_contract",
+            "runtime_required_argument_grounding",
+            "runtime_false_abstention_rescue",
+            "runtime_action_intent_gate",
             "runtime_routing_boundary",
         ],
         "dev_controls_used": True,
+        "uses_runtime_schema_contract_verifier": True,
+        "uses_executable_skill_contract": True,
+        "uses_contract_proof_ledger": True,
+        "uses_adaptive_contract_policy": True,
+        "uses_contextual_grounding_contract": True,
+        "uses_multi_step_contract_planning": True,
+        "uses_execution_feedback_contract": True,
         "test_controls_used": False,
         "reliaskill_v1_decision": score.decision,
         "reliaskill_v1_score": score.score,
@@ -385,7 +431,14 @@ def build_shared_skill_packages(
     generator = SkillGenerator(backend_config=config.get("generator"), allow_fallback=not strict_backends)
     allowed_conditions = normalize_condition_names([str(item) for item in config.get("conditions") or []]) or []
     requested_reliability_conditions = sorted(set(allowed_conditions).intersection(RELIABILITY_CONDITIONS))
-    packaging_conditions = [condition for condition in allowed_conditions if condition != RELIASKILL_CHALLENGER]
+    requested_contract_ablations = sorted(set(allowed_conditions).intersection(RELIASKILL_V1_CONTRACT_ABLATIONS))
+    if requested_contract_ablations and RELIASKILL_CHALLENGER not in requested_reliability_conditions:
+        requested_reliability_conditions.append(RELIASKILL_CHALLENGER)
+    packaging_conditions = [
+        condition
+        for condition in allowed_conditions
+        if condition != RELIASKILL_CHALLENGER and condition not in RELIASKILL_V1_CONTRACT_ABLATIONS
+    ]
     if requested_reliability_conditions and GENERATED_SKILL_BASE not in packaging_conditions:
         packaging_conditions.append(GENERATED_SKILL_BASE)
     package_records, package_summary, _ = run_packaging_pipeline(
@@ -463,6 +516,7 @@ def build_shared_skill_packages(
                     gate_row = variants[GATED_SKILL]
                     package_skill = _build_challenger_skill(
                         source_row["skill"],
+                        tool=tool,
                         source_row=source_row,
                         gate_row=gate_row,
                         selection_report_path=selection_report_path,

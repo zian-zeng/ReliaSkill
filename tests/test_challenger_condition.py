@@ -9,8 +9,13 @@ import yaml
 
 from autoskill.experiment import build_skill_variant_map, load_tools, run_benchmark_pipeline, run_routing_benchmark_pipeline
 from autoskill.generator import SkillGenerator
-from autoskill.conditions import LEGACY_RELIASKILL_CHALLENGER, normalize_condition_name
-from autoskill.ir import GeneratedSkill, ReliabilityScore, RepairReport
+from autoskill.conditions import (
+    LEGACY_RELIASKILL_CHALLENGER,
+    RELIASKILL_V1_NO_CONTRACT_ROUTING,
+    RELIASKILL_V1_NO_RUNTIME_GROUNDING,
+    normalize_condition_name,
+)
+from autoskill.ir import ArgumentIR, GeneratedSkill, ReliabilityScore, RepairReport, ToolIR
 from autoskill.method_metadata import RELIASKILL_CHALLENGER
 from reliaskill.cluster import _build_challenger_skill, build_shared_skill_packages
 
@@ -42,6 +47,15 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertEqual(method_metadata["source_condition"], "repaired_skill")
             self.assertEqual(method_metadata["gate_source_condition"], "gated_skill")
             self.assertIn("dev_multi_candidate_selection", method_metadata["pipeline_stages"])
+            self.assertIn("runtime_schema_contract_verifier", method_metadata["pipeline_stages"])
+            self.assertIn("executable_contract_compilation", method_metadata["pipeline_stages"])
+            self.assertTrue(method_metadata["uses_runtime_schema_contract_verifier"])
+            self.assertTrue(method_metadata["uses_executable_skill_contract"])
+            self.assertTrue(method_metadata["uses_contract_proof_ledger"])
+            self.assertTrue(method_metadata["uses_adaptive_contract_policy"])
+            self.assertTrue(method_metadata["uses_contextual_grounding_contract"])
+            self.assertTrue(method_metadata["uses_multi_step_contract_planning"])
+            self.assertTrue(method_metadata["uses_execution_feedback_contract"])
             self.assertFalse(method_metadata["test_controls_used"])
             skill_json = json.loads((challenger_dir / "skill.json").read_text(encoding="utf-8"))
             self.assertIn("Full ReliaSkill v1 artifact", skill_json["skill_summary"])
@@ -49,6 +63,16 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertTrue(skill_json["metadata"]["prompt_visible_method_evidence"])
             self.assertEqual(skill_json["metadata"]["source_condition"], "repaired_skill")
             self.assertEqual(skill_json["metadata"]["gate_source_condition"], "gated_skill")
+            self.assertTrue(any("Allowed top-level fields" in line for line in skill_json["metadata"]["schema_contract"]))
+            self.assertIn("executable_contract", skill_json["metadata"])
+            self.assertIn("all_required_arguments_grounded", skill_json["metadata"]["executable_contract"]["proof_obligations"])
+            self.assertIn("contract_counterexamples", skill_json["metadata"])
+            self.assertTrue(
+                any(
+                    item["violated_obligation"] == "all_required_arguments_grounded"
+                    for item in skill_json["metadata"]["contract_counterexamples"]
+                )
+            )
             self.assertNotIn("gate_decision", skill_json["metadata"])
 
             tools = load_tools("data/raw/public_mcp_filesystem_subset.json")
@@ -66,7 +90,30 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertIn("package_load", trace_types)
             self.assertEqual(loaded.metadata["method_metadata"]["source_condition"], "repaired_skill")
             self.assertEqual(loaded.metadata["method_metadata"]["gate_source_condition"], "gated_skill")
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_runtime_schema_contract_verifier"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_executable_skill_contract"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_contract_proof_ledger"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_adaptive_contract_policy"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_contextual_grounding_contract"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_multi_step_contract_planning"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_execution_feedback_contract"])
             self.assertTrue(loaded.metadata["prompt_visible_method_evidence"])
+            ablations = build_skill_variant_map(
+                tools["create_directory"],
+                tools,
+                SkillGenerator(),
+                allowed_conditions=[RELIASKILL_V1_NO_CONTRACT_ROUTING, RELIASKILL_V1_NO_RUNTIME_GROUNDING],
+                package_manager_dir=package_root,
+                allow_package_generation=False,
+            )
+            self.assertEqual(set(ablations), {RELIASKILL_V1_NO_CONTRACT_ROUTING, RELIASKILL_V1_NO_RUNTIME_GROUNDING})
+            self.assertEqual(
+                ablations[RELIASKILL_V1_NO_CONTRACT_ROUTING].metadata["contract_ablation"],
+                "contract_routing",
+            )
+            self.assertTrue(
+                ablations[RELIASKILL_V1_NO_RUNTIME_GROUNDING].metadata["contract_ablation_flags"]["disable_runtime_grounding"]
+            )
 
             records, _, _ = run_benchmark_pipeline(
                 tools={"create_directory": tools["create_directory"]},
@@ -115,6 +162,7 @@ class ChallengerConditionTests(unittest.TestCase):
 
         challenger = _build_challenger_skill(
             skill,
+            tool=_create_directory_tool(),
             source_row=source_row,
             gate_row=gate_row,
             selection_report_path=Path("missing_selection_report.json"),
@@ -155,6 +203,7 @@ class ChallengerConditionTests(unittest.TestCase):
 
         challenger = _build_challenger_skill(
             skill,
+            tool=_create_directory_tool(),
             source_row=row,
             gate_row=row,
             selection_report_path=Path("missing_selection_report.json"),
@@ -164,6 +213,7 @@ class ChallengerConditionTests(unittest.TestCase):
         self.assertIn("read/search mismatch", guidance)
         self.assertIn("similar tool should be used", guidance)
         self.assertIn("adjacent intent", guidance)
+        self.assertIn("Allowed top-level fields", "\n".join(challenger.metadata["schema_contract"]))
 
     def test_missing_challenger_package_fails_even_when_generation_is_allowed(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -254,6 +304,14 @@ class ChallengerConditionTests(unittest.TestCase):
             config["skills"] = {"multi_candidate_config": str(multi_config), "candidate_k": 3}
         config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
         return config_path
+
+
+def _create_directory_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="create_directory",
+        tool_purpose="Create a directory.",
+        arguments=[ArgumentIR(name="path", type="string", required=True)],
+    )
 
 
 if __name__ == "__main__":

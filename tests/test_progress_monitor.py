@@ -2,6 +2,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from autoskill.progress import write_progress_state
 from reliaskill.progress_monitor import ProgressPlan, TaskRef, scan_progress
@@ -86,6 +87,25 @@ class ProgressMonitorTest(unittest.TestCase):
 
             self.assertEqual(snapshot["benchmark"], {"completed": 2, "total": 4})
             self.assertEqual(snapshot["completed"], 2)
+
+    def test_progress_write_does_not_fail_when_atomic_replace_is_locked(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            output_dir = root / "predictors" / "model_a" / "shard_00" / "benchmark"
+
+            with mock.patch("pathlib.Path.replace", side_effect=PermissionError("locked")):
+                write_progress_state(
+                    output_dir,
+                    phase="benchmark",
+                    status="running",
+                    task_id="task_1",
+                    tool_name="tool_a",
+                    condition="condition_a",
+                )
+
+            state_path = root / "predictors" / "model_a" / "shard_00" / "progress" / "benchmark_state.json"
+            self.assertTrue(state_path.exists())
+            self.assertEqual(json.loads(state_path.read_text(encoding="utf-8"))["task_id"], "task_1")
 
     def test_scan_infers_next_task_when_heartbeat_is_missing(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

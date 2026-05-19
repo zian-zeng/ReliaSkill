@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from copy import deepcopy
 from typing import Any, Dict, List
 
@@ -210,3 +211,141 @@ def build_structured_call_hints(tool: ToolIR) -> Dict[str, List[str]]:
             when_not_to_use.append(f"Omit optional array `{arg.name}` unless the request explicitly asks for it.")
 
     return {"when_to_use": when_to_use, "when_not_to_use": when_not_to_use}
+
+
+def build_schema_contract_lines(tool: ToolIR) -> List[str]:
+    """Build a compact, prompt-visible contract for legal structured calls."""
+    allowed = [arg.name for arg in tool.arguments]
+    required = [arg.name for arg in tool.arguments if arg.required]
+    lines: List[str] = []
+
+    if allowed:
+        lines.append("Allowed top-level fields: " + ", ".join(f"`{name}`" for name in allowed) + "; do not emit any other top-level fields.")
+    else:
+        lines.append("Allowed top-level fields: none; use an empty argument object when calling.")
+
+    if required:
+        lines.append("Required top-level fields: " + ", ".join(f"`{name}`" for name in required) + ".")
+    else:
+        lines.append("No top-level fields are required; omit fields not grounded in the request.")
+
+    field_types = _top_level_type_contract(tool.arguments)
+    if field_types:
+        lines.append("Top-level field types: " + field_types + ".")
+
+    for arg in tool.arguments:
+        lines.extend(_argument_contract_lines(arg))
+
+    return _dedupe_contract_lines(lines)
+
+
+def _argument_contract_lines(arg: ArgumentIR) -> List[str]:
+    lines: List[str] = []
+    if arg.enum:
+        values = ", ".join(json_like(value) for value in arg.enum)
+        lines.append(f"`{arg.name}` must use one of these exact enum values: {values}.")
+
+    if arg.type == "object" or arg.properties:
+        child_names = sorted((arg.properties or {}).keys())
+        if child_names:
+            lines.append(f"`{arg.name}` object allowed keys: " + ", ".join(f"`{name}`" for name in child_names) + ".")
+        if arg.required_properties:
+            lines.append(f"`{arg.name}` object required keys: " + ", ".join(f"`{name}`" for name in arg.required_properties) + ".")
+        for child_name, child_schema in sorted((arg.properties or {}).items()):
+            lines.extend(_nested_schema_contract_lines(f"{arg.name}.{child_name}", child_schema))
+
+    if arg.type == "array":
+        item_schema = arg.items_schema if isinstance(arg.items_schema, dict) else {"type": arg.items_type or "string"}
+        item_schema, _ = normalize_schema_node(item_schema)
+        item_type = schema_type(item_schema)
+        lines.append(f"`{arg.name}` must be a JSON array of {item_type or 'schema-valid'} items.")
+        properties = item_schema.get("properties")
+        if isinstance(properties, dict) and properties:
+            child_names = sorted(str(name) for name in properties)
+            lines.append(f"Each `{arg.name}` item allowed keys: " + ", ".join(f"`{name}`" for name in child_names) + ".")
+            nested_required = [str(name) for name in item_schema.get("required", []) or []]
+            if nested_required:
+                lines.append(f"Each `{arg.name}` item required keys: " + ", ".join(f"`{name}`" for name in nested_required) + ".")
+            for child_name, child_schema in sorted(properties.items()):
+                lines.extend(_nested_schema_contract_lines(f"{arg.name}[].{child_name}", child_schema))
+        elif item_type == "array":
+            lines.extend(_nested_schema_contract_lines(f"{arg.name}[]", item_schema.get("items", {}) or {}, depth=1))
+
+    return lines
+
+
+def _top_level_type_contract(arguments: List[ArgumentIR]) -> str:
+    parts: List[str] = []
+    for arg in arguments:
+        type_label = _argument_type_label(arg)
+        required_label = "required" if arg.required else "optional"
+        parts.append(f"`{arg.name}`={type_label} ({required_label})")
+    text = ", ".join(parts)
+    return text[:900].rstrip(", ")
+
+
+def _argument_type_label(arg: ArgumentIR) -> str:
+    if arg.type == "array":
+        item_schema = arg.items_schema if isinstance(arg.items_schema, dict) else {"type": arg.items_type or "schema-valid"}
+        item_schema, _ = normalize_schema_node(item_schema)
+        return f"array<{schema_type(item_schema) or arg.items_type or 'schema-valid'}>"
+    if arg.type == "object" or arg.properties:
+        return "object"
+    return arg.type or "schema-valid"
+
+
+def _nested_schema_contract_lines(path: str, schema: Dict[str, Any], *, depth: int = 0) -> List[str]:
+    if depth > 3 or not isinstance(schema, dict):
+        return []
+    schema, _ = normalize_schema_node(schema)
+    kind = schema_type(schema)
+    lines: List[str] = []
+
+    enum_values = schema.get("enum")
+    if isinstance(enum_values, list) and enum_values:
+        values = ", ".join(json_like(value) for value in enum_values)
+        lines.append(f"`{path}` must use one of these exact enum values: {values}.")
+
+    if kind == "object":
+        properties = schema.get("properties")
+        if isinstance(properties, dict) and properties:
+            child_names = sorted(str(name) for name in properties)
+            lines.append(f"`{path}` object allowed keys: " + ", ".join(f"`{name}`" for name in child_names) + ".")
+            required = [str(name) for name in schema.get("required", []) or []]
+            if required:
+                lines.append(f"`{path}` object required keys: " + ", ".join(f"`{name}`" for name in required) + ".")
+            for child_name, child_schema in sorted(properties.items()):
+                lines.extend(_nested_schema_contract_lines(f"{path}.{child_name}", child_schema, depth=depth + 1))
+
+    if kind == "array":
+        item_schema = schema.get("items", {}) or {}
+        item_schema, _ = normalize_schema_node(item_schema)
+        item_type = schema_type(item_schema)
+        lines.append(f"`{path}` must be a JSON array of {item_type or 'schema-valid'} items.")
+        properties = item_schema.get("properties")
+        if isinstance(properties, dict) and properties:
+            child_names = sorted(str(name) for name in properties)
+            lines.append(f"Each `{path}` item allowed keys: " + ", ".join(f"`{name}`" for name in child_names) + ".")
+            required = [str(name) for name in item_schema.get("required", []) or []]
+            if required:
+                lines.append(f"Each `{path}` item required keys: " + ", ".join(f"`{name}`" for name in required) + ".")
+            for child_name, child_schema in sorted(properties.items()):
+                lines.extend(_nested_schema_contract_lines(f"{path}[].{child_name}", child_schema, depth=depth + 1))
+
+    return lines
+
+
+def _dedupe_contract_lines(lines: List[str]) -> List[str]:
+    seen = set()
+    result: List[str] = []
+    for line in lines:
+        normalized = " ".join(line.split()).lower()
+        if not normalized or normalized in seen:
+            continue
+        seen.add(normalized)
+        result.append(line)
+    return result
+
+
+def json_like(value: Any) -> str:
+    return json.dumps(value, ensure_ascii=False, sort_keys=True)

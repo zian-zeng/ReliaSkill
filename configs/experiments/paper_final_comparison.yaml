@@ -43,6 +43,7 @@ conditions:
   - multi_candidate_skill_k3_validation_select
   - multi_candidate_skill_k3_behavior_select
   - multi_candidate_repaired_gated
+  - reliaskill_v1
   - repaired_full_regeneration
   - repaired_targeted_patch
   - repaired_boundary_only
@@ -71,6 +72,16 @@ controls:
 routing:
   config: configs/routing/distractor_inventory.yaml
   candidate_set_sizes: [4]
+shared_skill_packages:
+  root: outputs/qwen_comparison_results/shared_packages
+  dev_controls_path: data/controls/dev.jsonl
+  reliability_predictor:
+    type: heuristic
+  max_repair_rounds: 2
+  deploy_threshold: 85.0
+skills:
+  multi_candidate_config: configs/skills/multi_candidate.yaml
+  candidate_k: 3
 
 scheduler:
   one_gpu: true

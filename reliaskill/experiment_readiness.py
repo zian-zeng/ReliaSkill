@@ -8,6 +8,7 @@ from typing import Any, Dict, Iterable, List, Sequence, Tuple
 
 import yaml
 
+from autoskill.conditions import RELIASKILL_V1_CONTRACT_ABLATIONS
 from reliaskill.data_audit import audit_dataset_integrity
 from reliaskill.cluster import slugify
 from reliaskill.scheduler import load_model_config
@@ -44,7 +45,11 @@ REQUIRED_STAT_COMPARISONS = [
     ("raw_mcp", "reliaskill_v1"),
     ("generated_skill_base", "gated_skill"),
     ("generated_skill_base", "reliaskill_v1"),
+    ("gated_skill", "reliaskill_v1"),
 ]
+
+PRIMARY_RESULT_METRIC = "joint_exact_match"
+RELIASKILL_V1_SIGNIFICANCE_ALPHA = 0.05
 
 REQUIRED_SLICE_FILES = [
     "slice_analysis_by_domain.csv",
@@ -128,10 +133,16 @@ def audit_experiment_readiness(
         {"rows": len(main_rows)},
     )
     _check_main_results(checks, main_rows, effective_min_examples, required_result_conditions)
+    _check_reliaskill_v1_primary_dominance(checks, main_rows, table_id="main_results", severity="fail")
+    _check_reliaskill_v1_ablation_dominance(checks, main_rows, table_id="main_results")
     routing_rows = _read_csv(tables / "routing_results.csv")
     _check_routing_results(checks, routing_rows, effective_min_examples, required_result_conditions, config)
+    if routing_rows:
+        _check_reliaskill_v1_primary_dominance(checks, routing_rows, table_id="routing_results", severity="fail")
+        _check_reliaskill_v1_ablation_dominance(checks, routing_rows, table_id="routing_results")
     by_model_rows = _read_csv(tables / "main_results_by_model.csv")
     _check_by_model_results(checks, by_model_rows, config, config_path, effective_min_examples, required_result_conditions)
+    _check_reliaskill_v1_by_model_dominance(checks, by_model_rows, table_id="main_results_by_model")
     routing_by_model_rows = _read_csv(tables / "routing_results_by_model.csv")
     _check_by_model_results(
         checks,
@@ -142,17 +153,41 @@ def audit_experiment_readiness(
         required_result_conditions,
         table_id_prefix="routing_by_model",
     )
+    _check_reliaskill_v1_by_model_dominance(checks, routing_by_model_rows, table_id="routing_results_by_model")
 
     harm_rows = _read_csv(tables / "harm_utility.csv")
     _check_harm_table(checks, harm_rows)
 
+    effective_min_stat_pairs = int(min_stat_pairs or min_examples or effective_min_examples or 0)
     stat_rows = _read_csv(tables / "stat_tests.csv")
-    _check_stat_tests(checks, stat_rows, min_stat_pairs or min_examples, required_stat_comparisons)
+    _check_stat_tests(checks, stat_rows, effective_min_stat_pairs, required_stat_comparisons)
+    _check_reliaskill_v1_statistical_support(
+        checks,
+        stat_rows,
+        table_id="stat_tests",
+        required_comparisons=required_stat_comparisons,
+    )
+    routing_stat_rows = _read_csv(tables / "routing_stat_tests.csv")
+    if routing_rows or routing_stat_rows or _routing_required(config):
+        _check_stat_tests(
+            checks,
+            routing_stat_rows,
+            effective_min_stat_pairs,
+            required_stat_comparisons,
+            table_id_prefix="routing_",
+        )
+        _check_reliaskill_v1_statistical_support(
+            checks,
+            routing_stat_rows,
+            table_id="routing_stat_tests",
+            required_comparisons=required_stat_comparisons,
+        )
 
     _check_slice_outputs(checks, tables)
     _check_live_execution(checks, tables=tables, run=run, require_live=require_live)
     _check_no_backend_fallbacks(checks, run=run, strict_backends=_strict_backends(config))
     _check_negative_record_fields(checks, run=run)
+    _check_reliaskill_v1_runtime_evidence(checks, run=run)
     _check_preflight_only(checks, run)
 
     failures = [check for check in checks if check["severity"] == "fail" and not check["passed"]]
@@ -325,9 +360,7 @@ def _check_routing_results(
     required_conditions: Sequence[str],
     config: Dict[str, Any],
 ) -> None:
-    scheduler = config.get("scheduler") if isinstance(config.get("scheduler"), dict) else {}
-    routing_config = config.get("routing") if isinstance(config.get("routing"), dict) else {}
-    routing_required = bool(scheduler.get("include_routing") or routing_config or config.get("routing_candidate_sizes"))
+    routing_required = _routing_required(config)
     _add_check(
         checks,
         "routing_results_exist",
@@ -363,6 +396,234 @@ def _check_routing_results(
     )
 
 
+def _check_reliaskill_v1_primary_dominance(
+    checks: List[Dict[str, Any]],
+    rows: Sequence[Dict[str, str]],
+    *,
+    table_id: str,
+    severity: str,
+) -> None:
+    by_condition = {row.get("baseline_name", ""): row for row in rows}
+    method_row = by_condition.get("reliaskill_v1")
+    method_value = _float_or_none(method_row.get(PRIMARY_RESULT_METRIC)) if method_row else None
+    missing_metric = []
+    regressions = []
+    margins: Dict[str, float] = {}
+    if method_row is None:
+        missing_metric.append("reliaskill_v1")
+    elif method_value is None:
+        missing_metric.append(f"reliaskill_v1.{PRIMARY_RESULT_METRIC}")
+
+    for condition, row in sorted(by_condition.items()):
+        if not condition or condition == "reliaskill_v1":
+            continue
+        baseline_value = _float_or_none(row.get(PRIMARY_RESULT_METRIC))
+        if baseline_value is None:
+            continue
+        if method_value is None:
+            continue
+        margin = method_value - baseline_value
+        margins[condition] = round(margin, 6)
+        if margin <= 0:
+            regressions.append(
+                {
+                    "baseline": condition,
+                    "reliaskill_v1": method_value,
+                    "baseline_value": baseline_value,
+                    "margin": round(margin, 6),
+                }
+            )
+
+    _add_check(
+        checks,
+        f"{table_id}_reliaskill_v1_primary_dominance",
+        severity,
+        bool(method_row is not None and method_value is not None and not regressions),
+        f"{table_id} shows reliaskill_v1 strictly beats every reported condition on {PRIMARY_RESULT_METRIC}.",
+        {
+            "metric": PRIMARY_RESULT_METRIC,
+            "missing_metric": missing_metric,
+            "regressions": regressions,
+            "margins": margins,
+        },
+    )
+
+
+def _check_reliaskill_v1_ablation_dominance(
+    checks: List[Dict[str, Any]],
+    rows: Sequence[Dict[str, str]],
+    *,
+    table_id: str,
+) -> None:
+    by_condition = {row.get("baseline_name", ""): row for row in rows}
+    present_ablations = [condition for condition in RELIASKILL_V1_CONTRACT_ABLATIONS if condition in by_condition]
+    if not present_ablations:
+        return
+
+    method_row = by_condition.get("reliaskill_v1")
+    method_value = _float_or_none(method_row.get(PRIMARY_RESULT_METRIC)) if method_row else None
+    regressions = []
+    margins: Dict[str, float] = {}
+    for condition in present_ablations:
+        baseline_value = _float_or_none(by_condition[condition].get(PRIMARY_RESULT_METRIC))
+        if method_value is None or baseline_value is None:
+            regressions.append({"ablation": condition, "reason": "missing_metric"})
+            continue
+        margin = method_value - baseline_value
+        margins[condition] = round(margin, 6)
+        if margin <= 0:
+            regressions.append(
+                {
+                    "ablation": condition,
+                    "reliaskill_v1": method_value,
+                    "ablation_value": baseline_value,
+                    "margin": round(margin, 6),
+                }
+            )
+
+    _add_check(
+        checks,
+        f"{table_id}_reliaskill_v1_ablation_dominance",
+        "fail",
+        bool(method_value is not None and not regressions),
+        f"{table_id} shows full reliaskill_v1 beats each reported component ablation on {PRIMARY_RESULT_METRIC}.",
+        {
+            "metric": PRIMARY_RESULT_METRIC,
+            "reported_ablations": present_ablations,
+            "regressions": regressions,
+            "margins": margins,
+        },
+    )
+
+
+def _check_reliaskill_v1_by_model_dominance(
+    checks: List[Dict[str, Any]],
+    rows: Sequence[Dict[str, str]],
+    *,
+    table_id: str,
+) -> None:
+    if not rows:
+        return
+    by_model: Dict[str, List[Dict[str, str]]] = {}
+    for row in rows:
+        model = row.get("model_slug") or slugify(str(row.get("model_name") or "unknown_model"))
+        by_model.setdefault(model, []).append(row)
+    regressions = []
+    missing = []
+    for model, model_rows in sorted(by_model.items()):
+        by_condition = {row.get("baseline_name", ""): row for row in model_rows}
+        method_row = by_condition.get("reliaskill_v1")
+        method_value = _float_or_none(method_row.get(PRIMARY_RESULT_METRIC)) if method_row else None
+        if method_row is None or method_value is None:
+            missing.append(model)
+            continue
+        for condition, row in sorted(by_condition.items()):
+            if not condition or condition == "reliaskill_v1":
+                continue
+            baseline_value = _float_or_none(row.get(PRIMARY_RESULT_METRIC))
+            if baseline_value is None:
+                continue
+            margin = method_value - baseline_value
+            if margin <= 0:
+                regressions.append(
+                    {
+                        "model": model,
+                        "baseline": condition,
+                        "reliaskill_v1": method_value,
+                        "baseline_value": baseline_value,
+                        "margin": round(margin, 6),
+                    }
+                )
+    _add_check(
+        checks,
+        f"{table_id}_reliaskill_v1_per_model_dominance",
+        "warn",
+        not missing and not regressions,
+        f"{table_id} shows reliaskill_v1 strictly beats every reported condition per predictor on {PRIMARY_RESULT_METRIC}.",
+        {"metric": PRIMARY_RESULT_METRIC, "missing": missing, "regressions": regressions},
+    )
+
+
+def _check_reliaskill_v1_runtime_evidence(checks: List[Dict[str, Any]], *, run: Path | None) -> None:
+    if run is None:
+        _add_check(
+            checks,
+            "reliaskill_v1_runtime_verifier_evidence",
+            "warn",
+            False,
+            "No run directory supplied; skipped ReliaSkill v1 runtime-verifier evidence check.",
+        )
+        return
+    evidence = _scan_reliaskill_v1_runtime_evidence(run)
+    _add_check(
+        checks,
+        "reliaskill_v1_runtime_verifier_evidence",
+        "fail",
+        bool(evidence["has_runtime_verifier"] and evidence["has_method_metadata"]),
+        "Run artifacts show that reliaskill_v1 used the runtime schema-contract verifier.",
+        evidence,
+    )
+
+
+def _scan_reliaskill_v1_runtime_evidence(run: Path) -> Dict[str, Any]:
+    evidence = {
+        "records_scanned": 0,
+        "reliaskill_v1_records": 0,
+        "has_runtime_verifier": False,
+        "has_method_metadata": False,
+        "example_paths": [],
+    }
+    if not run.exists():
+        return evidence
+    for path in sorted(run.rglob("*")):
+        if path.suffix not in {".json", ".jsonl"} or path.name in {"experiment_manifest.json", "run_manifest.json"}:
+            continue
+        for record in _iter_json_records(path):
+            evidence["records_scanned"] += 1
+            if _record_condition(record) != "reliaskill_v1":
+                continue
+            evidence["reliaskill_v1_records"] += 1
+            if len(evidence["example_paths"]) < 5:
+                evidence["example_paths"].append(str(path))
+            prediction_metadata = record.get("prediction_metadata") if isinstance(record.get("prediction_metadata"), dict) else {}
+            verifier = prediction_metadata.get("reliaskill_v1_runtime_verifier") if isinstance(prediction_metadata, dict) else None
+            if isinstance(verifier, dict) and verifier.get("enabled") is True:
+                evidence["has_runtime_verifier"] = True
+            method_metadata = record.get("method_metadata") if isinstance(record.get("method_metadata"), dict) else {}
+            if method_metadata.get("uses_runtime_schema_contract_verifier") is True:
+                evidence["has_method_metadata"] = True
+            if evidence["has_runtime_verifier"] and evidence["has_method_metadata"]:
+                return evidence
+    return evidence
+
+
+def _iter_json_records(path: Path) -> Iterable[Dict[str, Any]]:
+    try:
+        if path.suffix == ".jsonl":
+            with path.open("r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    value = json.loads(line)
+                    if isinstance(value, dict):
+                        yield value
+            return
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return
+    if isinstance(value, dict):
+        yield value
+    elif isinstance(value, list):
+        for item in value:
+            if isinstance(item, dict):
+                yield item
+
+
+def _record_condition(record: Dict[str, Any]) -> str:
+    return str(record.get("baseline_name") or record.get("condition") or record.get("method") or "")
+
+
 def _check_harm_table(checks: List[Dict[str, Any]], rows: Sequence[Dict[str, str]]) -> None:
     total_negative = sum((_int_or_none(row.get("negative_controls")) or 0) for row in rows)
     _add_check(
@@ -380,6 +641,8 @@ def _check_stat_tests(
     rows: Sequence[Dict[str, str]],
     min_pairs: int,
     required_comparisons: Sequence[Tuple[str, str]],
+    *,
+    table_id_prefix: str = "",
 ) -> None:
     observed: Dict[Tuple[str, str], int] = {}
     for row in rows:
@@ -396,7 +659,7 @@ def _check_stat_tests(
             underpowered[f"{left} vs {right}"] = pairs
     _add_check(
         checks,
-        "required_statistical_tests",
+        f"{table_id_prefix}required_statistical_tests",
         "fail",
         not missing,
         "Paired significance tests exist for required comparisons.",
@@ -404,12 +667,90 @@ def _check_stat_tests(
     )
     _add_check(
         checks,
-        "statistical_test_pair_counts",
+        f"{table_id_prefix}statistical_test_pair_counts",
         "fail",
         not underpowered,
         "Paired significance tests use enough matched examples.",
         {"underpowered": underpowered, "min_pairs": min_pairs},
     )
+
+
+def _check_reliaskill_v1_statistical_support(
+    checks: List[Dict[str, Any]],
+    rows: Sequence[Dict[str, str]],
+    *,
+    table_id: str,
+    required_comparisons: Sequence[Tuple[str, str]],
+) -> None:
+    required_pairs = [_unordered_pair(left, right) for left, right in required_comparisons if "reliaskill_v1" in {left, right}]
+    if not required_pairs:
+        return
+    by_pair: Dict[Tuple[str, str], List[Dict[str, str]]] = {}
+    for row in rows:
+        if row.get("metric") and row.get("metric") != PRIMARY_RESULT_METRIC:
+            continue
+        by_pair.setdefault(_unordered_pair(row.get("baseline_a", ""), row.get("baseline_b", "")), []).append(row)
+
+    missing = []
+    unsupported = []
+    for pair in required_pairs:
+        pair_rows = by_pair.get(pair, [])
+        if not pair_rows:
+            missing.append(" vs ".join(pair))
+            continue
+        best = _best_statistical_row(pair_rows)
+        direction = _reliaskill_v1_stat_direction(best)
+        p_value = _float_or_none(best.get("p_value"))
+        if direction is None or direction <= 0 or p_value is None or p_value > RELIASKILL_V1_SIGNIFICANCE_ALPHA:
+            unsupported.append(
+                {
+                    "comparison": " vs ".join(pair),
+                    "test": best.get("test", ""),
+                    "paired_examples": _int_or_none(best.get("paired_examples")) or 0,
+                    "direction_margin": direction,
+                    "p_value": p_value,
+                    "alpha": RELIASKILL_V1_SIGNIFICANCE_ALPHA,
+                }
+            )
+
+    _add_check(
+        checks,
+        f"{table_id}_reliaskill_v1_statistical_support",
+        "fail",
+        not missing and not unsupported,
+        f"{table_id} shows statistically supported reliaskill_v1 wins on {PRIMARY_RESULT_METRIC}.",
+        {"missing": missing, "unsupported": unsupported},
+    )
+
+
+def _best_statistical_row(rows: Sequence[Dict[str, str]]) -> Dict[str, str]:
+    def key(row: Dict[str, str]) -> Tuple[int, float]:
+        has_p = 1 if _float_or_none(row.get("p_value")) is not None else 0
+        test_rank = 1 if row.get("test") == "approx_randomization" else 0
+        p_value = _float_or_none(row.get("p_value"))
+        return (has_p + test_rank, -p_value if p_value is not None else -1.0)
+
+    return max(rows, key=key)
+
+
+def _reliaskill_v1_stat_direction(row: Dict[str, str]) -> float | None:
+    baseline_a = row.get("baseline_a", "")
+    baseline_b = row.get("baseline_b", "")
+    observed_delta = _float_or_none(row.get("observed_delta"))
+    if observed_delta is not None:
+        if baseline_a == "reliaskill_v1":
+            return observed_delta
+        if baseline_b == "reliaskill_v1":
+            return -observed_delta
+    a_only = _int_or_none(row.get("a_only_correct"))
+    b_only = _int_or_none(row.get("b_only_correct"))
+    if a_only is None or b_only is None:
+        return None
+    if baseline_a == "reliaskill_v1":
+        return float(a_only - b_only)
+    if baseline_b == "reliaskill_v1":
+        return float(b_only - a_only)
+    return None
 
 
 def _check_slice_outputs(checks: List[Dict[str, Any]], tables: Path) -> None:
@@ -566,6 +907,12 @@ def _check_preflight_only(checks: List[Dict[str, Any]], run: Path | None) -> Non
     )
 
 
+def _routing_required(config: Dict[str, Any]) -> bool:
+    scheduler = config.get("scheduler") if isinstance(config.get("scheduler"), dict) else {}
+    routing_config = config.get("routing") if isinstance(config.get("routing"), dict) else {}
+    return bool(scheduler.get("include_routing") or routing_config or config.get("routing_candidate_sizes"))
+
+
 def _config_requires_live(config: Dict[str, Any]) -> bool:
     live = config.get("live_execution")
     if not isinstance(live, dict):
@@ -674,6 +1021,13 @@ def _unordered_pair(left: str, right: str) -> Tuple[str, str]:
 def _int_or_none(value: Any) -> int | None:
     try:
         return int(float(value))
+    except (TypeError, ValueError):
+        return None
+
+
+def _float_or_none(value: Any) -> float | None:
+    try:
+        return float(value)
     except (TypeError, ValueError):
         return None
 

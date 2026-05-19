@@ -35,6 +35,17 @@ def _skill(tool: ToolIR) -> GeneratedSkill:
     )
 
 
+def _reliaskill(tool: ToolIR, *, when_not_to_use: list[str], baseline_name: str = "reliaskill_v1") -> GeneratedSkill:
+    return GeneratedSkill(
+        baseline_name=baseline_name,
+        skill_summary=tool.tool_purpose or "",
+        when_to_use=[f"Use `{tool.tool_name}` only for direct requests matching its purpose."],
+        when_not_to_use=when_not_to_use,
+        argument_template={argument.name: f"<{argument.name}>" for argument in tool.arguments if argument.required},
+        metadata={"schema_contract": [f"Allowed top-level fields: `{tool.arguments[0].name}`."]},
+    )
+
+
 class RoutingBoundaryTests(unittest.TestCase):
     def test_distractor_name_is_penalized_but_requested_tool_is_boosted(self):
         tools = _bank_tools()
@@ -110,6 +121,368 @@ class RoutingBoundaryTests(unittest.TestCase):
         self.assertTrue(score["joint_exact_match"])
         self.assertFalse(score["harmful_injection"])
         self.assertTrue(score["triggered"])
+
+    def test_reliaskill_routing_penalizes_matching_nonuse_boundary(self):
+        read_tool = ToolIR(
+            tool_name="read_file",
+            tool_purpose="Read file contents from a path.",
+            arguments=[ArgumentIR(name="path", type="string", required=True, description="File path.")],
+        )
+        write_tool = ToolIR(
+            tool_name="write_file",
+            tool_purpose="Write file contents to a path.",
+            arguments=[
+                ArgumentIR(name="path", type="string", required=True, description="File path."),
+                ArgumentIR(name="content", type="string", required=True, description="Text content."),
+            ],
+        )
+        tools = {tool.tool_name: tool for tool in (read_tool, write_tool)}
+        skills = {
+            "read_file": _reliaskill(read_tool, when_not_to_use=["Do not use for write, create, or update requests."]),
+            "write_file": _reliaskill(write_tool, when_not_to_use=["Do not use for read-only or preview requests."]),
+        }
+        task = EvalTask(
+            task_id="route_read",
+            tool_name="read_file",
+            user_request="Read docs/report.md.",
+            expected_arguments={"path": "docs/report.md"},
+        )
+
+        routing = select_tool_for_task(task, "reliaskill_v1", tools, skills, top_k=2)
+        rows = {row["tool_name"]: row for row in routing["candidate_rows"]}
+
+        self.assertEqual(routing["selected_tool_name"], "read_file")
+        self.assertGreater(rows["write_file"]["boundary_penalty"], rows["read_file"]["boundary_penalty"])
+
+    def test_boundary_first_prompt_condition_uses_boundary_aware_routing(self):
+        read_tool = ToolIR(
+            tool_name="read_file",
+            tool_purpose="Read file contents from a path.",
+            arguments=[ArgumentIR(name="path", type="string", required=True, description="File path.")],
+        )
+        write_tool = ToolIR(
+            tool_name="write_file",
+            tool_purpose="Write file contents to a path.",
+            arguments=[
+                ArgumentIR(name="path", type="string", required=True, description="File path."),
+                ArgumentIR(name="content", type="string", required=True, description="Text content."),
+            ],
+        )
+        tools = {tool.tool_name: tool for tool in (read_tool, write_tool)}
+        skills = {
+            "read_file": _reliaskill(
+                read_tool,
+                when_not_to_use=["Do not use for write, create, or update requests."],
+                baseline_name="skill_prompt_boundary_first",
+            ),
+            "write_file": _reliaskill(
+                write_tool,
+                when_not_to_use=["Do not use for read-only or preview requests."],
+                baseline_name="skill_prompt_boundary_first",
+            ),
+        }
+        task = EvalTask(
+            task_id="route_read_boundary_first",
+            tool_name="read_file",
+            user_request="Read docs/report.md.",
+            expected_arguments={"path": "docs/report.md"},
+        )
+
+        routing = select_tool_for_task(task, "skill_prompt_boundary_first", tools, skills, top_k=2)
+        rows = {row["tool_name"]: row for row in routing["candidate_rows"]}
+
+        self.assertEqual(routing["routing_strategy"], "retrieve_then_semantic_rerank")
+        self.assertEqual(routing["selected_tool_name"], "read_file")
+        self.assertGreater(rows["write_file"]["boundary_penalty"], rows["read_file"]["boundary_penalty"])
+
+    def test_reliaskill_v1_routing_prefers_required_schema_fit(self):
+        find_event = ToolIR(
+            tool_name="calendar_find_event",
+            tool_purpose="Find calendar events.",
+            arguments=[ArgumentIR(name="query", type="string", required=True, description="Event search query.")],
+        )
+        create_event = ToolIR(
+            tool_name="calendar_create_event",
+            tool_purpose="Create calendar events.",
+            arguments=[
+                ArgumentIR(name="title", type="string", required=True),
+                ArgumentIR(name="start_time", type="string", required=True),
+                ArgumentIR(name="end_time", type="string", required=True),
+                ArgumentIR(name="attendees", type="array", required=True, description="Attendee emails."),
+            ],
+            schema_complexity={"side_effect_type": "write"},
+            side_effect_hints=["write calendar state"],
+        )
+        tools = {tool.tool_name: tool for tool in (find_event, create_event)}
+        skills = {
+            "calendar_find_event": _reliaskill(find_event, when_not_to_use=["Do not use to create or update events."]),
+            "calendar_create_event": _reliaskill(create_event, when_not_to_use=["Do not use to search, find, or preview events."]),
+        }
+        task = EvalTask(
+            task_id="route_calendar_find",
+            tool_name="calendar_find_event",
+            user_request='Find event query="standup".',
+            expected_arguments={"query": "standup"},
+        )
+
+        routing = select_tool_for_task(task, "reliaskill_v1", tools, skills, top_k=2)
+        rows = {row["tool_name"]: row for row in routing["candidate_rows"]}
+
+        self.assertEqual(routing["selected_tool_name"], "calendar_find_event")
+        self.assertGreater(rows["calendar_find_event"]["schema_fit_bonus"], 0)
+        self.assertLess(rows["calendar_create_event"]["schema_fit_bonus"], 0)
+        self.assertIn("start_time", rows["calendar_create_event"]["missing_required_args"])
+
+    def test_reliaskill_v1_schema_fit_grounds_nested_required_fields(self):
+        transaction_search = ToolIR(
+            tool_name="bank_search_transactions",
+            tool_purpose="Search transactions by account and date range.",
+            arguments=[
+                ArgumentIR(name="account_id", type="string", required=True),
+                ArgumentIR(
+                    name="date_range",
+                    type="object",
+                    required=True,
+                    properties={"start": {"type": "string"}, "end": {"type": "string"}},
+                    required_properties=["start", "end"],
+                ),
+            ],
+        )
+        account_lookup = ToolIR(
+            tool_name="bank_get_account_balance",
+            tool_purpose="Retrieve account balance.",
+            arguments=[ArgumentIR(name="account_id", type="string", required=True)],
+        )
+        tools = {tool.tool_name: tool for tool in (transaction_search, account_lookup)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="route_nested_date_range",
+            tool_name="bank_search_transactions",
+            user_request='Search transactions for account_id="acct-1" from 2026-01-01 to 2026-01-31.',
+            expected_arguments={"account_id": "acct-1", "date_range": {"start": "2026-01-01", "end": "2026-01-31"}},
+        )
+
+        routing = select_tool_for_task(task, "reliaskill_v1", tools, skills, top_k=2)
+        rows = {row["tool_name"]: row for row in routing["candidate_rows"]}
+
+        self.assertEqual(routing["selected_tool_name"], "bank_search_transactions")
+        self.assertIn("date_range", rows["bank_search_transactions"]["grounded_required_args"])
+        self.assertNotIn("date_range", rows["bank_search_transactions"]["missing_required_args"])
+
+    def test_reliaskill_v1_schema_gate_abstains_when_no_candidate_has_required_inputs(self):
+        search = ToolIR(
+            tool_name="document_search",
+            tool_purpose="Search documents.",
+            arguments=[ArgumentIR(name="query", type="string", required=True)],
+        )
+        read = ToolIR(
+            tool_name="read_file",
+            tool_purpose="Read a file.",
+            arguments=[ArgumentIR(name="path", type="string", required=True)],
+        )
+        tools = {tool.tool_name: tool for tool in (search, read)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="route_missing_required_inputs",
+            tool_name="document_search",
+            user_request="Search after I send the query.",
+        )
+
+        routing = select_tool_for_task(task, "reliaskill_v1", tools, skills, top_k=2)
+
+        self.assertEqual(routing["selected_tool_name"], "__abstain__")
+        self.assertEqual(routing["routing_strategy"], "retrieve_then_semantic_rerank_schema_affordance_abstention")
+        self.assertEqual(routing["candidate_rows"][0]["routing_abstention_reason"], "no_candidate_with_grounded_required_schema")
+
+    def test_reliaskill_v1_schema_gate_prefers_complete_schema_over_lexical_overlap(self):
+        search = ToolIR(
+            tool_name="document_search",
+            tool_purpose="Search documents.",
+            arguments=[ArgumentIR(name="query", type="string", required=True)],
+        )
+        create = ToolIR(
+            tool_name="document_search_create_alert",
+            tool_purpose="Search documents and create an alert.",
+            arguments=[
+                ArgumentIR(name="query", type="string", required=True),
+                ArgumentIR(name="recipient_email", type="string", required=True),
+            ],
+        )
+        tools = {tool.tool_name: tool for tool in (search, create)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="route_schema_gate_complete",
+            tool_name="document_search",
+            user_request='Search documents query="budget".',
+            expected_arguments={"query": "budget"},
+        )
+
+        routing = select_tool_for_task(task, "reliaskill_v1", tools, skills, top_k=2)
+        rows = {row["tool_name"]: row for row in routing["candidate_rows"]}
+
+        self.assertEqual(routing["selected_tool_name"], "document_search")
+        self.assertEqual(rows["document_search"]["schema_affordance_gate"], "schema_complete")
+        self.assertIn(rows["document_search_create_alert"]["schema_affordance_gate"], {"missing_required", "action_intent_conflict"})
+
+    def test_reliaskill_v1_action_intent_separates_same_schema_tools(self):
+        create = ToolIR(
+            tool_name="entity_create",
+            tool_purpose="Create an entity.",
+            arguments=[ArgumentIR(name="entity_id", type="string", required=True)],
+            schema_complexity={"side_effect_type": "write"},
+        )
+        delete = ToolIR(
+            tool_name="entity_delete",
+            tool_purpose="Delete an entity.",
+            arguments=[ArgumentIR(name="entity_id", type="string", required=True)],
+            schema_complexity={"side_effect_type": "delete"},
+        )
+        tools = {tool.tool_name: tool for tool in (create, delete)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="route_action_intent",
+            tool_name="entity_delete",
+            user_request='Delete entity_id="e-1".',
+            expected_arguments={"entity_id": "e-1"},
+        )
+
+        routing = select_tool_for_task(task, "reliaskill_v1", tools, skills, top_k=2)
+        rows = {row["tool_name"]: row for row in routing["candidate_rows"]}
+
+        self.assertEqual(routing["selected_tool_name"], "entity_delete")
+        self.assertGreater(rows["entity_delete"]["schema_fit_bonus"], rows["entity_create"]["schema_fit_bonus"])
+
+    def test_reliaskill_v1_action_intent_respects_negated_actions(self):
+        search = ToolIR(
+            tool_name="document_search",
+            tool_purpose="Search documents.",
+            arguments=[ArgumentIR(name="query", type="string", required=True)],
+        )
+        alert = ToolIR(
+            tool_name="document_search_create_alert",
+            tool_purpose="Search documents and create an alert.",
+            arguments=[ArgumentIR(name="query", type="string", required=True)],
+            schema_complexity={"side_effect_type": "write"},
+        )
+        tools = {tool.tool_name: tool for tool in (search, alert)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="route_negated_action",
+            tool_name="document_search",
+            user_request='Search documents query="budget"; do not create an alert.',
+            expected_arguments={"query": "budget"},
+        )
+
+        routing = select_tool_for_task(task, "reliaskill_v1", tools, skills, top_k=2)
+        rows = {row["tool_name"]: row for row in routing["candidate_rows"]}
+
+        self.assertEqual(routing["selected_tool_name"], "document_search")
+        self.assertLess(rows["document_search_create_alert"]["schema_fit_bonus"], rows["document_search"]["schema_fit_bonus"])
+
+    def test_reliaskill_v1_abstains_on_ambiguous_same_schema_action_tie(self):
+        documents = ToolIR(
+            tool_name="document_search",
+            tool_purpose="Search documents.",
+            arguments=[ArgumentIR(name="query", type="string", required=True)],
+        )
+        notes = ToolIR(
+            tool_name="notes_search",
+            tool_purpose="Search notes.",
+            arguments=[ArgumentIR(name="query", type="string", required=True)],
+        )
+        tools = {tool.tool_name: tool for tool in (documents, notes)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="route_ambiguous_same_schema_action",
+            tool_name="document_search",
+            user_request='Search query="budget".',
+            expected_arguments={"query": "budget"},
+        )
+
+        routing = select_tool_for_task(task, "reliaskill_v1", tools, skills, top_k=2)
+
+        self.assertEqual(routing["selected_tool_name"], "__abstain__")
+        self.assertEqual(routing["routing_strategy"], "retrieve_then_semantic_rerank_ambiguity_abstention")
+        self.assertEqual(routing["candidate_rows"][0]["routing_abstention_reason"], "ambiguous_viable_tools_same_schema_and_action")
+
+    def test_reliaskill_v1_uses_domain_discriminator_to_resolve_same_schema_action(self):
+        documents = ToolIR(
+            tool_name="document_search",
+            tool_purpose="Search documents.",
+            arguments=[ArgumentIR(name="query", type="string", required=True)],
+        )
+        notes = ToolIR(
+            tool_name="notes_search",
+            tool_purpose="Search notes.",
+            arguments=[ArgumentIR(name="query", type="string", required=True)],
+        )
+        tools = {tool.tool_name: tool for tool in (documents, notes)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="route_disambiguated_same_schema_action",
+            tool_name="document_search",
+            user_request='Search documents query="budget".',
+            expected_arguments={"query": "budget"},
+        )
+
+        routing = select_tool_for_task(task, "reliaskill_v1", tools, skills, top_k=2)
+
+        self.assertEqual(routing["selected_tool_name"], "document_search")
+
+    def test_schema_fit_bonus_is_only_applied_to_reliaskill_v1(self):
+        find_event = ToolIR(
+            tool_name="calendar_find_event",
+            tool_purpose="Find calendar events.",
+            arguments=[ArgumentIR(name="query", type="string", required=True)],
+        )
+        create_event = ToolIR(
+            tool_name="calendar_create_event",
+            tool_purpose="Create calendar events.",
+            arguments=[ArgumentIR(name="title", type="string", required=True)],
+        )
+        tools = {tool.tool_name: tool for tool in (find_event, create_event)}
+        skills = {
+            name: _reliaskill(tool, when_not_to_use=[], baseline_name="skill_prompt_boundary_first")
+            for name, tool in tools.items()
+        }
+        task = EvalTask(
+            task_id="route_calendar_boundary_first_no_schema_fit",
+            tool_name="calendar_find_event",
+            user_request='Find event query="standup".',
+        )
+
+        routing = select_tool_for_task(task, "skill_prompt_boundary_first", tools, skills, top_k=2)
+
+        self.assertTrue(all(row["schema_fit_bonus"] == 0 for row in routing["candidate_rows"]))
+
+    def test_reliaskill_v1_contract_routing_ablation_disables_contract_gate(self):
+        search = ToolIR(
+            tool_name="document_search",
+            tool_purpose="Search documents.",
+            arguments=[ArgumentIR(name="query", type="string", required=True)],
+        )
+        alert = ToolIR(
+            tool_name="document_search_create_alert",
+            tool_purpose="Search documents and create an alert.",
+            arguments=[ArgumentIR(name="query", type="string", required=True), ArgumentIR(name="recipient_email", type="string", required=True)],
+        )
+        tools = {tool.tool_name: tool for tool in (search, alert)}
+        skills = {
+            name: _reliaskill(tool, when_not_to_use=[], baseline_name="reliaskill_v1_no_contract_routing")
+            for name, tool in tools.items()
+        }
+        for skill in skills.values():
+            skill.metadata["contract_ablation_flags"] = {"disable_contract_routing": True}
+        task = EvalTask(
+            task_id="route_no_contract_gate",
+            tool_name="document_search",
+            user_request='Search documents query="budget".',
+        )
+
+        routing = select_tool_for_task(task, "reliaskill_v1_no_contract_routing", tools, skills, top_k=2)
+
+        self.assertEqual(routing["routing_strategy"], "retrieve_then_semantic_rerank")
+        self.assertTrue(all(row["contract_satisfied"] is None for row in routing["candidate_rows"]))
 
 
 if __name__ == "__main__":

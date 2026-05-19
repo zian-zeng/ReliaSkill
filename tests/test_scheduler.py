@@ -177,6 +177,53 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual(plan["num_tools"], 73)
         self.assertFalse(any("target_tools=290" in warning for warning in plan["warnings"]))
 
+    def test_routing_enabled_conservatively_counts_second_phase_work(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            tasks_path = root / "tasks.jsonl"
+            tasks_path.write_text(
+                "\n".join(
+                    [
+                        '{"task_id":"ctrl_a","tool_name":"bank_get_account_balance","user_request":"Get balance","should_trigger":true}',
+                        '{"task_id":"ctrl_b","tool_name":"bank_get_account_balance","user_request":"Get balance again","should_trigger":true}',
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            config = {
+                "tools_path": "data/raw_mcp/tools.jsonl",
+                "tasks_path": str(tasks_path),
+                "output_root": str(root / "outputs"),
+                "models": [{"model_name": "mock", "backend": "heuristic", "estimated_vram_gb": 0.0, "batch_size": 1}],
+                "conditions": ["raw_mcp"],
+                "scheduler": {"include_routing": True, "examples_per_second": 1.0},
+            }
+
+            plan = build_run_plan(config, gpu_budget_gb=12.0)
+
+            self.assertEqual(plan["runs"][0]["benchmark_remaining_examples"], 2)
+            self.assertEqual(plan["runs"][0]["routing_remaining_examples"], 2)
+            self.assertEqual(plan["runs"][0]["estimated_model_calls"], 4)
+            self.assertEqual(plan["total_remaining_model_calls"], 4)
+
+    def test_v1_contract_ablations_use_v1_prompt_overhead_estimate(self) -> None:
+        config = {
+            "tools_path": "data/raw_mcp/tools.jsonl",
+            "tasks_path": "data/controls/test.jsonl",
+            "output_root": "outputs/test_scheduler",
+            "models": [{"model_name": "mock", "backend": "heuristic", "estimated_vram_gb": 0.0, "batch_size": 1}],
+            "conditions": ["reliaskill_v1", "reliaskill_v1_no_runtime_grounding"],
+        }
+
+        plan = build_run_plan(config, gpu_budget_gb=12.0)
+
+        rows = {row["condition"]: row for row in plan["runs"]}
+        self.assertEqual(
+            rows["reliaskill_v1"]["estimated_prompt_tokens_per_call"],
+            rows["reliaskill_v1_no_runtime_grounding"]["estimated_prompt_tokens_per_call"],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

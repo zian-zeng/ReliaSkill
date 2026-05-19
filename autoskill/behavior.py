@@ -179,6 +179,9 @@ def run_behavior_tests(
                 negative_category=case.negative_category,
                 difficulty=case.difficulty,
                 domain=case.domain,
+                conversation_history=[],
+                artifact_context={},
+                tool_observation_context=[],
             )
             start = time.perf_counter()
             prediction = safe_predict(tool, skill, task, predictor, allow_fallback=allow_predictor_fallback)
@@ -217,6 +220,9 @@ def run_behavior_tests(
                     domain=case.domain,
                     split=case.split,
                     tags=list(case.tags),
+                    conversation_history=[],
+                    artifact_context={},
+                    tool_observation_context=[],
                 )
                 start = time.perf_counter()
                 prediction: EvalPrediction = safe_predict(tool, skill, task, predictor, allow_fallback=allow_predictor_fallback)

@@ -26,6 +26,20 @@ AUTOSKILL_BASE = "autoskill_base"
 RELIASKILL_V1 = "reliaskill_v1"
 LEGACY_RELIASKILL_CHALLENGER = "reliaskill_challenger_v1"
 RELIASKILL_CHALLENGER = RELIASKILL_V1
+RELIASKILL_V1_NO_CONTRACT_ROUTING = "reliaskill_v1_no_contract_routing"
+RELIASKILL_V1_NO_RUNTIME_GROUNDING = "reliaskill_v1_no_runtime_grounding"
+RELIASKILL_V1_NO_ACTION_GATE = "reliaskill_v1_no_action_gate"
+RELIASKILL_V1_NO_SCHEMA_REPAIR = "reliaskill_v1_no_schema_repair"
+RELIASKILL_V1_NO_AMBIGUITY_ABSTENTION = "reliaskill_v1_no_ambiguity_abstention"
+RELIASKILL_V1_NO_CONTEXTUAL_GROUNDING = "reliaskill_v1_no_contextual_grounding"
+RELIASKILL_V1_CONTRACT_ABLATIONS = [
+    RELIASKILL_V1_NO_CONTRACT_ROUTING,
+    RELIASKILL_V1_NO_RUNTIME_GROUNDING,
+    RELIASKILL_V1_NO_ACTION_GATE,
+    RELIASKILL_V1_NO_SCHEMA_REPAIR,
+    RELIASKILL_V1_NO_AMBIGUITY_ABSTENTION,
+    RELIASKILL_V1_NO_CONTEXTUAL_GROUNDING,
+]
 RETRIEVAL_TOOL_CARD = "retrieval_tool_card"
 LARGER_MODEL_NAIVE_SKILL = "larger_model_naive_skill"
 ADVERSARIAL_DISTRACTOR_INVENTORY = "adversarial_distractor_inventory"
@@ -87,6 +101,11 @@ CONDITION_ALIASES = {
     AUTOSKILL_BASE: GENERATED_SKILL_BASE,
     LEGACY_RELIASKILL_CHALLENGER: RELIASKILL_V1,
 }
+
+
+def is_reliaskill_v1_family(condition: str) -> bool:
+    normalized = normalize_condition_name(condition)
+    return normalized == RELIASKILL_V1 or normalized in RELIASKILL_V1_CONTRACT_ABLATIONS
 
 
 def normalize_condition_name(condition: str) -> str:

@@ -47,6 +47,13 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         "pipeline_stages": method.get("pipeline_stages", []),
         "source_condition": method.get("source_condition"),
         "gate_source_condition": method.get("gate_source_condition"),
+        "uses_runtime_schema_contract_verifier": bool(method.get("uses_runtime_schema_contract_verifier", False)),
+        "uses_executable_skill_contract": bool(method.get("uses_executable_skill_contract", False)),
+        "uses_contract_proof_ledger": bool(method.get("uses_contract_proof_ledger", False)),
+        "uses_adaptive_contract_policy": bool(method.get("uses_adaptive_contract_policy", False)),
+        "uses_contextual_grounding_contract": bool(method.get("uses_contextual_grounding_contract", False)),
+        "uses_multi_step_contract_planning": bool(method.get("uses_multi_step_contract_planning", False)),
+        "uses_execution_feedback_contract": bool(method.get("uses_execution_feedback_contract", False)),
         "test_controls_used": bool(method.get("test_controls_used", False)),
     }
     if metadata:
@@ -71,6 +78,20 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         compact["dev_controls_used"] = selection.get("dev_controls_used")
     if behavior:
         compact["dev_behavior_metrics"] = behavior.get("metrics")
+    if not compact.get("uses_runtime_schema_contract_verifier"):
+        compact["uses_runtime_schema_contract_verifier"] = "runtime_schema_contract_verifier" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_executable_skill_contract"):
+        compact["uses_executable_skill_contract"] = "executable_contract_compilation" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_contract_proof_ledger"):
+        compact["uses_contract_proof_ledger"] = "proof_carrying_runtime_contract" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_adaptive_contract_policy"):
+        compact["uses_adaptive_contract_policy"] = "adaptive_contract_policy" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_contextual_grounding_contract"):
+        compact["uses_contextual_grounding_contract"] = "contextual_grounding_contract" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_multi_step_contract_planning"):
+        compact["uses_multi_step_contract_planning"] = "multi_step_contract_plan_composition" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_execution_feedback_contract"):
+        compact["uses_execution_feedback_contract"] = "execution_feedback_contract_interpreter" in compact.get("pipeline_stages", [])
     return {key: value for key, value in compact.items() if value is not None}
 
 

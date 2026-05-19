@@ -8,14 +8,18 @@ from typing import Any, Dict, List, Sequence, Tuple
 
 from autoskill.benchmark import load_benchmark_tasks
 from autoskill.analysis import summarize_error_taxonomy, summarize_method_wins
+from autoskill.artifacts import clone_skill_as
 from autoskill.config import load_json_config, merge_experiment_config
 from autoskill.conditions import (
     AUTOSKILL_BASE,
     GENERATED_SKILL_BASE,
     LEGACY_RELIASKILL_CHALLENGER,
     RELIASKILL_CHALLENGER,
+    RELIASKILL_V1,
+    RELIASKILL_V1_CONTRACT_ABLATIONS,
     build_reviewer_baseline_skills,
     condition_prompt_text,
+    is_reliaskill_v1_family,
     normalize_condition_name,
     normalize_condition_names,
 )
@@ -192,6 +196,37 @@ def _find_packaged_skill(package_root: Path, tool: Any, condition: str) -> Any |
     return None
 
 
+def _build_reliaskill_contract_ablation(base_skill: Any, condition: str) -> Any:
+    ablation = clone_skill_as(base_skill, condition)
+    ablation.baseline_name = condition
+    disabled = condition.replace("reliaskill_v1_no_", "")
+    ablation.skill_summary = f"ReliaSkill v1 ablation disabling `{disabled}`. {ablation.skill_summary}".strip()
+    ablation.metadata = {
+        **ablation.metadata,
+        "condition_family": "reliaskill_v1_contract_ablation",
+        "source_condition": RELIASKILL_V1,
+        "contract_ablation": disabled,
+        "contract_ablation_flags": {
+            "disable_contract_routing": condition == "reliaskill_v1_no_contract_routing",
+            "disable_runtime_grounding": condition == "reliaskill_v1_no_runtime_grounding",
+            "disable_action_gate": condition == "reliaskill_v1_no_action_gate",
+            "disable_schema_repair": condition == "reliaskill_v1_no_schema_repair",
+            "disable_ambiguity_abstention": condition == "reliaskill_v1_no_ambiguity_abstention",
+            "disable_contextual_grounding": condition == "reliaskill_v1_no_contextual_grounding",
+        },
+    }
+    ablation.method_trace = [
+        *ablation.method_trace,
+        {
+            "trace_type": "reliaskill_v1_contract_ablation",
+            "source_condition": RELIASKILL_V1,
+            "condition": condition,
+            "disabled_component": disabled,
+        },
+    ]
+    return ablation
+
+
 def build_skill_variants(
     tool: Any,
     tools: Dict[str, Any],
@@ -261,6 +296,12 @@ def build_skill_variant_map(
             if packaged is not None:
                 packaged.baseline_name = condition
                 variants[condition] = packaged
+        requested_ablations = [condition for condition in normalized_allowed if condition in RELIASKILL_V1_CONTRACT_ABLATIONS]
+        if requested_ablations:
+            base = variants.get(RELIASKILL_V1) or _find_packaged_skill(package_manager_dir, tool, RELIASKILL_V1)
+            if base is not None:
+                for condition in requested_ablations:
+                    variants[condition] = _build_reliaskill_contract_ablation(base, condition)
     if allowed_conditions is not None:
         variants = {k: v for k, v in variants.items() if k in set(normalized_allowed or [])}
         missing = sorted(set(normalized_allowed or []) - set(variants))
@@ -325,13 +366,15 @@ def run_packaging_pipeline(
     output_dir: str | Path,
     generator: SkillGenerator | None = None,
     allowed_conditions: List[str] | None = None,
+    package_manager_dir: str | Path | None = None,
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, Dict[str, Any]]]:
     out_dir = Path(output_dir)
+    package_root = Path(package_manager_dir) if package_manager_dir is not None else out_dir
     generator = generator or SkillGenerator()
     records: List[Dict[str, Any]] = []
 
     for tool in tqdm(tools.values(), desc="[ReliaSkill] Packaging tools"):
-        variants = build_skill_variant_map(tool, tools, generator, allowed_conditions=allowed_conditions, package_manager_dir=out_dir)
+        variants = build_skill_variant_map(tool, tools, generator, allowed_conditions=allowed_conditions, package_manager_dir=package_root)
         for skill in variants.values():
             report = validate_skill(tool, skill)
             _write_condition_prompt(out_dir, tool, skill)
@@ -418,7 +461,7 @@ def run_benchmark_pipeline(
                         _annotate_run_record(score, model_name=model_name, model_slug=model_slug, shard_index=shard_index, num_shards=num_shards)
                         all_scores.append(score)
                         continue
-                except:
+                except (OSError, json.JSONDecodeError):
                     pass
 
             write_skill_package(target_dir, tool, skill, report)
@@ -569,6 +612,7 @@ def run_full_experiment(
     generator_config: Dict[str, Any] | None = None,
     predictor_config: Dict[str, Any] | None = None,
     allowed_conditions: List[str] | None = None,
+    package_manager_dir: str | Path | None = None,
 ) -> Dict[str, Any]:
     output_root = Path(output_root)
     run_config = {
@@ -597,6 +641,7 @@ def run_full_experiment(
         output_dir=output_root / "packages",
         generator=generator,
         allowed_conditions=allowed_conditions,
+        package_manager_dir=package_manager_dir,
     )
     benchmark_scores, benchmark_summary, benchmark_detail_summaries = run_benchmark_pipeline(
         tools=tools,
@@ -605,6 +650,7 @@ def run_full_experiment(
         generator=generator,
         predictor=predictor,
         allowed_conditions=allowed_conditions,
+        package_manager_dir=package_manager_dir,
     )
     routing_scores, routing_summary, routing_detail_summaries = run_routing_benchmark_pipeline(
         tools=tools,
@@ -613,6 +659,7 @@ def run_full_experiment(
         generator=generator,
         predictor=predictor,
         allowed_conditions=allowed_conditions,
+        package_manager_dir=package_manager_dir,
     )
     benchmark_summary_by_tool = benchmark_detail_summaries["by_tool"]
     benchmark_summary_by_split = benchmark_detail_summaries["by_split"]
@@ -733,6 +780,7 @@ def run_full_experiment_from_config(config_path: str | Path, overrides: Dict[str
     if overrides:
         config = merge_experiment_config(config, overrides)
 
+    package_manager_dir = _configured_shared_package_root(config_path, config)
     return run_full_experiment(
         tools_path=config["tools_path"],
         tasks_path=config["tasks_path"],
@@ -740,4 +788,16 @@ def run_full_experiment_from_config(config_path: str | Path, overrides: Dict[str
         generator_config=config.get("generator"),
         predictor_config=config.get("predictor"),
         allowed_conditions=config.get("conditions"),
+        package_manager_dir=package_manager_dir,
     )
+
+
+def _configured_shared_package_root(config_path: str | Path, config: Dict[str, Any]) -> str | None:
+    shared = config.get("shared_skill_packages") if isinstance(config.get("shared_skill_packages"), dict) else {}
+    conditions = normalize_condition_names([str(item) for item in config.get("conditions") or []])
+    if not shared or not any(is_reliaskill_v1_family(condition) for condition in conditions):
+        return None
+    from reliaskill.cluster import build_shared_skill_packages
+
+    manifest = build_shared_skill_packages(config_path)
+    return str(manifest["shared_package_root"])

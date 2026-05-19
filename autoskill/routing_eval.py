@@ -2,12 +2,14 @@ from __future__ import annotations
 from tqdm import tqdm
 
 import hashlib
+import json
 import random
 import re
 from typing import Any, Dict, Iterable, List, Tuple
 
 from autoskill.eval_types import EvalTask
-from autoskill.conditions import GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER, normalize_condition_name
+from autoskill.conditions import GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER, is_reliaskill_v1_family, normalize_condition_name
+from autoskill.contracts import build_contract_failure_report, evaluate_skill_contract
 from autoskill.ir import GeneratedSkill, ToolIR
 from autoskill.method_metadata import prediction_method_metadata
 from autoskill.predictor import PredictorBackend, safe_predict
@@ -21,7 +23,13 @@ from autoskill.retrieval_runtime import (
 from autoskill.routing_boundaries import detect_routing_abstention, routing_tool_mention_adjustment
 from autoskill.task_eval import score_prediction
 
-METHOD_ROUTING_CONDITIONS = {GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER}
+BOUNDARY_FIRST_ROUTING_CONDITIONS = {RELIASKILL_CHALLENGER, "skill_prompt_boundary_first"}
+METHOD_ROUTING_CONDITIONS = {GENERATED_SKILL_BASE, *BOUNDARY_FIRST_ROUTING_CONDITIONS}
+
+
+def _contract_ablation_disabled(skill: GeneratedSkill, flag: str) -> bool:
+    flags = skill.metadata.get("contract_ablation_flags") if isinstance(skill.metadata, dict) else None
+    return bool(isinstance(flags, dict) and flags.get(flag) is True)
 
 def _safe_dir_name(value: str) -> str:
     """Truncate a tool or condition name for use as a directory component on Windows."""
@@ -62,6 +70,104 @@ def _skill_router_text(tool: ToolIR, skill: GeneratedSkill) -> str:
     return " ".join(part for part in parts if part)
 
 
+def _skill_router_positive_text(tool: ToolIR, skill: GeneratedSkill) -> str:
+    parts = [tool.tool_name, tool.tool_purpose or "", skill.skill_summary]
+    parts.extend(skill.when_to_use)
+    schema_contract = skill.metadata.get("schema_contract") if isinstance(skill.metadata, dict) else None
+    if isinstance(schema_contract, list):
+        parts.extend(str(line) for line in schema_contract if isinstance(line, str))
+    for argument in tool.arguments:
+        parts.append(argument.name)
+        if argument.description:
+            parts.append(argument.description)
+    for example in skill.examples:
+        parts.append(str(example.get("scenario", "")))
+    for arg_name, spec in skill.semantic_hints.items():
+        parts.append(arg_name)
+        if isinstance(spec, dict):
+            parts.extend(str(key) for key in spec.keys())
+            parts.extend(str(value) for value in spec.values() if isinstance(value, (str, int, float)))
+    return " ".join(part for part in parts if part)
+
+
+_BOUNDARY_STOP_TOKENS = {
+    "a",
+    "an",
+    "and",
+    "any",
+    "are",
+    "ask",
+    "be",
+    "call",
+    "do",
+    "field",
+    "fields",
+    "for",
+    "from",
+    "if",
+    "in",
+    "input",
+    "inputs",
+    "is",
+    "it",
+    "not",
+    "or",
+    "parameter",
+    "parameters",
+    "request",
+    "required",
+    "should",
+    "that",
+    "the",
+    "this",
+    "to",
+    "tool",
+    "unsupported",
+    "use",
+    "when",
+}
+
+
+def _boundary_overlap_penalty(query: str, skill: GeneratedSkill) -> int:
+    """Penalize ReliaSkill routes whose non-use boundaries match the request."""
+    query_tokens = _boundary_tokens(query)
+    if not query_tokens:
+        return 0
+    boundary_tokens = set().union(*(_boundary_tokens(line) for line in skill.when_not_to_use)) if skill.when_not_to_use else set()
+    overlap = query_tokens.intersection(boundary_tokens)
+    return min(8, 2 * len(overlap))
+
+
+def _boundary_tokens(text: str) -> set[str]:
+    result: set[str] = set()
+    for token in _tokenize(text):
+        for part in _compound_token_parts(token):
+            if part in _BOUNDARY_STOP_TOKENS or len(part) <= 2:
+                continue
+            result.update(_token_variants(part))
+    return result
+
+
+def _compound_token_parts(token: str) -> set[str]:
+    parts = {token}
+    parts.update(part for part in re.split(r"[-_/.]+", token) if part)
+    return parts
+
+
+def _token_variants(token: str) -> set[str]:
+    variants = {token}
+    if token.endswith("ing") and len(token) > 5:
+        stem = token[:-3]
+        variants.add(stem)
+        variants.add(stem + "e")
+    if token.endswith("ed") and len(token) > 4:
+        variants.add(token[:-2])
+        variants.add(token[:-1])
+    if token.endswith("s") and len(token) > 4:
+        variants.add(token[:-1])
+    return variants
+
+
 def _router_overlap_score(query: str, text: str) -> int:
     query_tokens = _tokenize(query)
     text_tokens = set(_tokenize(text))
@@ -91,6 +197,346 @@ def _generated_skill_routing_bonus(query: str, tool: ToolIR, skill: GeneratedSki
     return bonus
 
 
+def _reliaskill_v1_schema_fit_bonus(query: str, tool: ToolIR) -> tuple[int, List[str], List[str]]:
+    required_args = [arg for arg in tool.arguments if arg.required]
+    if not required_args:
+        return 0, [], []
+    grounded: List[str] = []
+    missing: List[str] = []
+    for arg in required_args:
+        if _required_arg_is_grounded(query, arg):
+            grounded.append(arg.name)
+        else:
+            missing.append(arg.name)
+
+    bonus = (3 * len(grounded)) - (4 * len(missing))
+    if len(required_args) >= 3 and len(missing) >= len(required_args) - 1:
+        bonus -= 3
+    bonus += _side_effect_fit_bonus(query, tool)
+    bonus += _action_intent_fit_bonus(query, tool)
+    return bonus, grounded, missing
+
+
+def _required_arg_is_grounded(query: str, arg: Any) -> bool:
+    lowered = query.lower()
+    if _mentions_deferred_required_info(query, str(arg.name)):
+        return False
+    if (arg.type == "object" or getattr(arg, "properties", None)) and isinstance(getattr(arg, "properties", None), dict):
+        required_children = list(getattr(arg, "required_properties", None) or [])
+        if not required_children:
+            required_children = list((getattr(arg, "properties", {}) or {}).keys())
+        if required_children:
+            properties = getattr(arg, "properties", {}) or {}
+            return all(_schema_property_is_grounded(query, child, properties.get(child, {})) for child in required_children)
+
+    items_schema = getattr(arg, "items_schema", None)
+    if arg.type == "array" and isinstance(items_schema, dict) and isinstance(items_schema.get("properties"), dict):
+        required_children = list(items_schema.get("required") or items_schema.get("required_properties") or [])
+        if not required_children:
+            required_children = list((items_schema.get("properties") or {}).keys())
+        if required_children:
+            properties = items_schema.get("properties") or {}
+            return all(_schema_property_is_grounded(query, child, properties.get(child, {})) for child in required_children)
+
+    if re.search(rf"\b{re.escape(str(arg.name))}\s*(?:=|:)", query, flags=re.IGNORECASE):
+        return True
+    name_parts = _argument_name_parts(str(arg.name))
+    if arg.type in {"integer", "number"} and re.search(r"\b\d+(?:\.\d+)?\b", query):
+        return True
+    if arg.enum:
+        for value in arg.enum:
+            if str(value).lower() in lowered:
+                return True
+    if arg.name in {"query", "q", "search", "pattern"}:
+        return bool(
+            re.search(r"\b(?:query|search|find|lookup|look up|matching|containing)\b", lowered)
+            or re.search(r'"[^"]+"', query)
+        )
+    if arg.name in {"path", "file", "filename", "directory", "folder"} or name_parts.intersection({"path", "file", "filename", "directory", "folder"}):
+        return bool(
+            re.search(r"\b[A-Za-z0-9_./-]+\.[A-Za-z0-9_*?-]+\b", query)
+            or re.search(r"\b(?:in|under|inside|within)\s+[A-Za-z0-9_./-]+\b", lowered)
+            or re.search(r"\bcreate\s+(?:the\s+)?(?:directory|folder)\s+[A-Za-z0-9_./-]+\b", lowered)
+            or re.search(r"\bcreate\s+(?:the\s+)?[A-Za-z0-9_./-]+\s+(?:directory|folder)\b", lowered)
+        )
+    if arg.name in {"content", "text", "body", "message"} or name_parts.intersection({"content", "text", "body", "message"}):
+        return bool(re.search(r'"[^"]+"', query) or re.search(r"\b(?:content|text|body|message|write|save|send)\b", lowered))
+    if name_parts.intersection({"id", "account", "user", "entity", "name", "title"}):
+        return bool(re.search(r"\b(?:acct|account|user|entity|id)[-_]?[A-Za-z0-9]+\b", query, flags=re.IGNORECASE) or re.search(r'"[^"]+"', query))
+    if name_parts.intersection(
+        {
+            "query",
+            "search",
+            "pattern",
+            "path",
+            "file",
+            "filename",
+            "directory",
+            "folder",
+            "content",
+            "text",
+            "body",
+            "message",
+            "start",
+            "end",
+            "date",
+            "time",
+            "amount",
+            "email",
+            "recipient",
+            "attendee",
+        }
+    ):
+        return False
+    if name_parts and name_parts.intersection(set(_tokenize(query))):
+        return True
+    description = str(getattr(arg, "description", "") or "")
+    description_parts = _argument_name_parts(description)
+    return bool(description_parts and description_parts.intersection(set(_tokenize(query))))
+
+
+def _schema_property_is_grounded(query: str, name: str, schema: Any) -> bool:
+    lowered = query.lower()
+    if _mentions_deferred_required_info(query, name):
+        return False
+    if re.search(rf"\b{re.escape(str(name))}\s*(?:=|:)", query, flags=re.IGNORECASE):
+        return True
+
+    schema = schema if isinstance(schema, dict) else {}
+    name_parts = _argument_name_parts(str(name))
+    schema_type_name = str(schema.get("type") or "").lower()
+    enum_values = schema.get("enum")
+    if isinstance(enum_values, list) and any(str(value).lower() in lowered for value in enum_values):
+        return True
+    if schema_type_name in {"integer", "number"} and re.search(r"\b\d+(?:\.\d+)?\b", query):
+        return True
+    if name_parts.intersection({"query", "search", "pattern"}):
+        return bool(re.search(r"\b(?:query|search|find|lookup|look up|matching|containing)\b", lowered) or re.search(r'"[^"]+"', query))
+    if name_parts.intersection({"path", "file", "filename", "directory", "folder"}):
+        return bool(
+            re.search(r"\b[A-Za-z0-9_./-]+\.[A-Za-z0-9_*?-]+\b", query)
+            or re.search(r"\b(?:in|under|inside|within)\s+[A-Za-z0-9_./-]+\b", lowered)
+            or re.search(r"\bcreate\s+(?:the\s+)?(?:directory|folder)\s+[A-Za-z0-9_./-]+\b", lowered)
+            or re.search(r"\bcreate\s+(?:the\s+)?[A-Za-z0-9_./-]+\s+(?:directory|folder)\b", lowered)
+        )
+    if name_parts.intersection({"content", "contents", "text", "body", "message", "payload", "value"}):
+        return bool(re.search(r'"[^"]+"', query) or re.search(r"\b(?:content|text|body|message|write|save|send|remember|note|record|set)\b", lowered))
+    if name_parts.intersection({"name", "entity", "user", "person", "title"}):
+        return bool(re.search(r'"[^"]+"', query) or re.search(r"\b[A-Z][a-zA-Z0-9_-]{2,}\b", query))
+    if name_parts.intersection({"start", "begin", "from", "since", "after"}):
+        return bool(re.search(r"\b(?:from|since|after|starting|beginning)\b", lowered) or _contains_date_like_text(query))
+    if name_parts.intersection({"end", "until", "before", "to"}):
+        return bool(re.search(r"\b(?:to|until|before|ending|through)\b", lowered) or _contains_date_like_text(query))
+    if name_parts.intersection({"id", "account", "user", "entity", "name", "title"}):
+        return bool(re.search(r"\b(?:acct|account|user|entity|id)[-_]?[A-Za-z0-9]+\b", query, flags=re.IGNORECASE) or re.search(r'"[^"]+"', query))
+    if name_parts.intersection(
+        {
+            "query",
+            "search",
+            "pattern",
+            "path",
+            "file",
+            "filename",
+            "directory",
+            "folder",
+            "content",
+            "contents",
+            "text",
+            "body",
+            "message",
+            "payload",
+            "value",
+            "start",
+            "end",
+            "date",
+            "time",
+            "amount",
+            "email",
+            "recipient",
+            "attendee",
+        }
+    ):
+        return False
+    if name_parts and name_parts.intersection(set(_tokenize(query))):
+        return True
+    description_parts = _argument_name_parts(str(schema.get("description") or ""))
+    return bool(description_parts and description_parts.intersection(set(_tokenize(query))))
+
+
+def _contains_date_like_text(query: str) -> bool:
+    lowered = query.lower()
+    return bool(
+        re.search(r"\b\d{4}-\d{1,2}-\d{1,2}\b", query)
+        or re.search(r"\b\d{1,2}/\d{1,2}(?:/\d{2,4})?\b", query)
+        or re.search(r"\b(?:today|tomorrow|yesterday|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b", lowered)
+        or re.search(r"\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b", lowered)
+    )
+
+
+def _mentions_deferred_required_info(query: str, name: str) -> bool:
+    lowered = query.lower()
+    parts = _argument_name_parts(name)
+    deferred = bool(re.search(r"\b(?:later|after|when)\b", lowered) and re.search(r"\b(?:send|provide|give|share)\b", lowered))
+    if not deferred:
+        return False
+    if not parts:
+        return True
+    return any(part in lowered for part in parts)
+
+
+def _argument_name_parts(text: str) -> set[str]:
+    spaced = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", text)
+    return {part.lower() for part in re.split(r"[^A-Za-z0-9]+", spaced) if len(part) > 2}
+
+
+def _side_effect_fit_bonus(query: str, tool: ToolIR) -> int:
+    lowered = query.lower()
+    side_effect = str(
+        tool.schema_complexity.get("side_effect_type")
+        or tool.schema_complexity.get("side_effect")
+        or ""
+    ).lower()
+    hint_text = " ".join([side_effect, *(tool.side_effect_hints or []), *(tool.safety_hints or [])]).lower()
+    write_like_tool = any(token in hint_text for token in ("write", "create", "update", "delete", "execute", "send", "transfer", "external"))
+    read_like_request = any(token in lowered for token in ("read", "list", "show", "search", "find", "lookup", "preview", "explain", "summarize"))
+    write_like_request = any(token in lowered for token in ("write", "create", "update", "delete", "remove", "send", "transfer", "post", "append"))
+    if write_like_tool and read_like_request and not write_like_request:
+        return -6
+    if write_like_tool and write_like_request:
+        return 2
+    if not write_like_tool and write_like_request and not read_like_request:
+        return -2
+    return 0
+
+
+ACTION_FAMILIES: Dict[str, set[str]] = {
+    "search": {"search", "find", "lookup", "look", "query", "match", "filter"},
+    "read": {"read", "open", "show", "view", "preview", "list", "get", "fetch", "retrieve"},
+    "create": {"create", "add", "insert", "new", "draft", "schedule", "record"},
+    "update": {"update", "edit", "modify", "patch", "change", "append", "write", "save"},
+    "delete": {"delete", "remove", "clear", "drop"},
+    "send": {"send", "post", "publish", "transfer", "email", "notify"},
+    "compute": {"calculate", "compute", "convert", "estimate", "derive", "solve"},
+}
+
+
+def _action_intent_fit_bonus(query: str, tool: ToolIR) -> int:
+    query_actions = _action_families_for_text(query)
+    if not query_actions:
+        return 0
+    tool_text = " ".join([tool.tool_name, tool.tool_purpose or "", *(tool.side_effect_hints or []), *(tool.safety_hints or [])])
+    tool_actions = _action_families_for_text(tool_text)
+    if not tool_actions:
+        return 0
+    if _negated_action_families_for_text(query).intersection(tool_actions):
+        return -30
+    overlap = query_actions.intersection(tool_actions)
+    if overlap:
+        return 3 * len(overlap)
+    if _actions_conflict(query_actions, tool_actions):
+        return -5
+    return 0
+
+
+def _action_families_for_text(text: str) -> set[str]:
+    tokens = {_normalize_action_token(token) for token in _tokenize(text)}
+    tokens = {token for token in tokens if token}
+    families: set[str] = set()
+    for family, cues in ACTION_FAMILIES.items():
+        if tokens.intersection(cues):
+            families.add(family)
+    return families
+
+
+def _negated_action_families_for_text(text: str) -> set[str]:
+    lowered = text.lower()
+    negated: set[str] = set()
+    for family, cues in ACTION_FAMILIES.items():
+        for cue in cues:
+            if re.search(rf"\b(?:do not|don't|without|avoid|no)\s+{re.escape(cue)}(?:ing|e|ed|s)?\b", lowered):
+                negated.add(family)
+    return negated
+
+
+def _normalize_action_token(token: str) -> str:
+    token = token.strip("._-/").lower()
+    if token.endswith("ing") and len(token) > 5:
+        token = token[:-3]
+    elif token.endswith("ed") and len(token) > 4:
+        token = token[:-2]
+    elif token.endswith("s") and len(token) > 4:
+        token = token[:-1]
+    return token
+
+
+def _actions_conflict(query_actions: set[str], tool_actions: set[str]) -> bool:
+    readonly = {"search", "read"}
+    mutating = {"create", "update", "delete", "send"}
+    if query_actions.intersection(readonly) and tool_actions.intersection(mutating):
+        return True
+    if query_actions.intersection(mutating) and tool_actions.intersection(readonly):
+        return True
+    if "delete" in query_actions and tool_actions.intersection({"create", "update", "send"}):
+        return True
+    if query_actions.intersection({"create", "update", "send"}) and "delete" in tool_actions:
+        return True
+    return False
+
+
+def _reliaskill_v1_action_intent_conflict(query: str, tool: ToolIR) -> bool:
+    tool_text = " ".join([tool.tool_name, tool.tool_purpose or "", *(tool.side_effect_hints or []), *(tool.safety_hints or [])])
+    tool_actions = _action_families_for_text(tool_text)
+    if not tool_actions:
+        return False
+    if _negated_action_families_for_text(query).intersection(tool_actions):
+        return True
+    query_actions = _action_families_for_text(query) - _negated_action_families_for_text(query)
+    return bool(query_actions and _actions_conflict(query_actions, tool_actions))
+
+
+def _reliaskill_v1_ambiguity_reason(query: str, viable_rows: List[Dict[str, Any]], tools: Dict[str, ToolIR]) -> str | None:
+    if len(viable_rows) < 2:
+        return None
+    top = viable_rows[0]
+    runner_up = viable_rows[1]
+    if int(top.get("score", 0)) - int(runner_up.get("score", 0)) > 1:
+        return None
+    top_tool = tools[str(top["tool_name"])]
+    runner_tool = tools[str(runner_up["tool_name"])]
+    if _required_signature(top_tool) != _required_signature(runner_tool):
+        return None
+    if _action_families_for_tool(top_tool) != _action_families_for_tool(runner_tool):
+        return None
+    if _request_disambiguates_between_tools(query, top_tool, runner_tool):
+        return None
+    return "ambiguous_viable_tools_same_schema_and_action"
+
+
+def _required_signature(tool: ToolIR) -> tuple[str, ...]:
+    return tuple(sorted(arg.name for arg in tool.arguments if arg.required))
+
+
+def _action_families_for_tool(tool: ToolIR) -> set[str]:
+    return _action_families_for_text(" ".join([tool.tool_name, tool.tool_purpose or "", *(tool.side_effect_hints or []), *(tool.safety_hints or [])]))
+
+
+def _request_disambiguates_between_tools(query: str, left: ToolIR, right: ToolIR) -> bool:
+    query_tokens = set(_tokenize(query))
+    left_tokens = _discriminator_tokens(left)
+    right_tokens = _discriminator_tokens(right)
+    return bool((query_tokens.intersection(left_tokens - right_tokens)) or (query_tokens.intersection(right_tokens - left_tokens)))
+
+
+def _discriminator_tokens(tool: ToolIR) -> set[str]:
+    text = " ".join([tool.tool_name, tool.tool_purpose or ""])
+    tokens: set[str] = set()
+    for token in _tokenize(text):
+        for part in _compound_token_parts(token):
+            if len(part) > 2 and part not in _BOUNDARY_STOP_TOKENS and part not in ACTION_FAMILIES.get("search", set()).union(*ACTION_FAMILIES.values()):
+                tokens.add(part)
+    return tokens
+
+
 def select_tool_for_task(
     task: EvalTask,
     baseline_name: str,
@@ -99,7 +545,8 @@ def select_tool_for_task(
     top_k: int = 3,
 ) -> Dict[str, Any]:
     normalized_baseline_name = normalize_condition_name(baseline_name)
-    if normalized_baseline_name in METHOD_ROUTING_CONDITIONS:
+    method_routing = normalized_baseline_name in METHOD_ROUTING_CONDITIONS or is_reliaskill_v1_family(normalized_baseline_name)
+    if method_routing:
         abstention_reason = detect_routing_abstention(task.user_request)
         if abstention_reason:
             return {
@@ -142,28 +589,126 @@ def select_tool_for_task(
             "candidate_rows": candidates,
         }
 
-    if normalized_baseline_name in METHOD_ROUTING_CONDITIONS:
+    if method_routing:
         retrieval_rows = retrieve_candidate_tools(task.user_request, tools, top_k=max(len(tools), top_k))["candidates"]
         reranked: List[Dict[str, Any]] = []
         for row in retrieval_rows:
             tool_name = str(row["tool_name"])
             tool = tools[tool_name]
             skill = skill_bank[tool_name]
-            rerank_score = (2 * int(row.get("score", 0))) + _router_overlap_score(task.user_request, _skill_router_text(tool, skill))
+            boundary_penalty = 0
+            if normalized_baseline_name in BOUNDARY_FIRST_ROUTING_CONDITIONS or is_reliaskill_v1_family(normalized_baseline_name):
+                router_text = _skill_router_positive_text(tool, skill)
+                boundary_penalty = _boundary_overlap_penalty(task.user_request, skill)
+            else:
+                router_text = _skill_router_text(tool, skill)
+            rerank_score = (2 * int(row.get("score", 0))) + _router_overlap_score(task.user_request, router_text)
             rerank_score += _generated_skill_routing_bonus(task.user_request, tool, skill)
+            schema_fit_bonus = 0
+            grounded_required_args: List[str] = []
+            missing_required_args: List[str] = []
+            action_intent_conflict = False
+            contract_eval = None
+            if is_reliaskill_v1_family(normalized_baseline_name) and not _contract_ablation_disabled(skill, "disable_contract_routing"):
+                contract_eval = evaluate_skill_contract(
+                    tool,
+                    skill,
+                    task.user_request,
+                    grounding_context={} if _contract_ablation_disabled(skill, "disable_contextual_grounding") else {
+                        "conversation": list(task.conversation_history),
+                        "artifacts": dict(task.artifact_context),
+                        "tool_observations": list(task.tool_observation_context),
+                    },
+                )
+                schema_fit_bonus = contract_eval.routing_bonus
+                grounded_required_args = contract_eval.grounded_required_args
+                missing_required_args = contract_eval.missing_required_args
+                rerank_score += schema_fit_bonus
+                action_intent_conflict = (
+                    "action_intent_conflict" in contract_eval.blocking_reasons
+                    and not _contract_ablation_disabled(skill, "disable_action_gate")
+                )
+                if action_intent_conflict:
+                    rerank_score -= 80
+            rerank_score -= boundary_penalty
             reranked.append(
                 {
                     "tool_name": tool_name,
                     "score": rerank_score,
                     "retrieval_score": row.get("score", 0),
+                    "boundary_penalty": boundary_penalty,
+                    "schema_fit_bonus": schema_fit_bonus,
+                    "grounded_required_args": grounded_required_args,
+                    "missing_required_args": missing_required_args,
+                    "action_intent_conflict": action_intent_conflict,
+                    "contract_satisfied": contract_eval.satisfied if contract_eval else None,
+                    "contract_blocking_reasons": contract_eval.blocking_reasons if contract_eval else [],
+                    "contract_failure_report": build_contract_failure_report(contract_eval) if contract_eval else {},
+                    "contract_proof_obligations": contract_eval.proof_obligations if contract_eval else [],
+                    "contract_side_effect_class": contract_eval.contract.side_effect_class if contract_eval else None,
                     "overlap_terms": row.get("overlap_terms", []),
                 }
             )
         reranked.sort(key=lambda item: (-int(item["score"]), item["tool_name"]))
+        selected_tool_name = reranked[0]["tool_name"] if reranked else task.tool_name
+        if is_reliaskill_v1_family(normalized_baseline_name) and reranked:
+            viable_rows = [
+                row
+                for row in reranked
+                if (
+                    row.get("contract_satisfied") is True
+                    or _contract_ablation_disabled(skill_bank[str(row["tool_name"])], "disable_contract_routing")
+                    or (
+                        _contract_ablation_disabled(skill_bank[str(row["tool_name"])], "disable_action_gate")
+                        and row.get("contract_blocking_reasons") == ["action_intent_conflict"]
+                    )
+                )
+                and not row.get("missing_required_args")
+                and not row.get("action_intent_conflict")
+            ]
+            if viable_rows:
+                selected_tool_name = str(viable_rows[0]["tool_name"])
+                for row in reranked:
+                    if row.get("action_intent_conflict"):
+                        row["schema_affordance_gate"] = "action_intent_conflict"
+                    else:
+                        row["schema_affordance_gate"] = "schema_complete" if not row.get("missing_required_args") else "missing_required"
+                selected_skill = skill_bank[str(viable_rows[0]["tool_name"])]
+                ambiguity = None if _contract_ablation_disabled(selected_skill, "disable_ambiguity_abstention") else _reliaskill_v1_ambiguity_reason(task.user_request, viable_rows, tools)
+                if ambiguity:
+                    abstain_row = {
+                        "tool_name": "__abstain__",
+                        "score": viable_rows[0]["score"],
+                        "routing_abstention_reason": ambiguity,
+                        "candidate_count": len(viable_rows),
+                        "ambiguous_tools": [str(row["tool_name"]) for row in viable_rows[:3]],
+                    }
+                    return {
+                        "routing_strategy": "retrieve_then_semantic_rerank_ambiguity_abstention",
+                        "selected_tool_name": "__abstain__",
+                        "candidate_tools": ["__abstain__"],
+                        "candidate_rows": [abstain_row, *viable_rows[: max(top_k - 1, 0)]],
+                    }
+            else:
+                abstain_row = {
+                    "tool_name": "__abstain__",
+                    "score": reranked[0]["score"],
+                    "routing_abstention_reason": "no_candidate_with_grounded_required_schema",
+                    "candidate_count": len(reranked),
+                }
+                return {
+                    "routing_strategy": "retrieve_then_semantic_rerank_schema_affordance_abstention",
+                    "selected_tool_name": "__abstain__",
+                    "candidate_tools": ["__abstain__"],
+                    "candidate_rows": [abstain_row, *reranked[: max(top_k - 1, 0)]],
+                }
         top_rows = reranked[: max(top_k, 1)]
+        if is_reliaskill_v1_family(normalized_baseline_name) and selected_tool_name != (top_rows[0]["tool_name"] if top_rows else None):
+            selected_row = next(row for row in reranked if row["tool_name"] == selected_tool_name)
+            top_rows = [selected_row, *[row for row in top_rows if row["tool_name"] != selected_tool_name]][: max(top_k, 1)]
         return {
             "routing_strategy": "retrieve_then_semantic_rerank",
-            "selected_tool_name": top_rows[0]["tool_name"] if top_rows else task.tool_name,
+            "selected_tool_name": selected_tool_name,
             "candidate_tools": [item["tool_name"] for item in top_rows],
             "candidate_rows": top_rows,
         }
@@ -236,9 +781,6 @@ def score_routed_prediction(
         "abstention_reason": predictor_record.get("abstention_reason"),
     }
 
-
-import json
-
 def run_routing_pipeline(
     tasks: List[EvalTask],
     tools: Dict[str, ToolIR],
@@ -263,7 +805,8 @@ def run_routing_pipeline(
                         try:
                             with p.open("r", encoding="utf-8") as f:
                                 existing.append(json.load(f))
-                        except: pass
+                        except (OSError, json.JSONDecodeError):
+                            pass
                 if len(existing) == len(baseline_names):
                     records.extend(existing)
                     continue
@@ -277,7 +820,8 @@ def run_routing_pipeline(
                         with p.open("r", encoding="utf-8") as f:
                             records.append(json.load(f))
                             continue
-                    except: pass
+                    except (OSError, json.JSONDecodeError):
+                        pass
 
             write_progress_state(
                 output_dir,
@@ -360,6 +904,9 @@ def run_routing_pipeline(
                     domain=task.domain,
                     split=task.split,
                     tags=list(task.tags),
+                    conversation_history=list(task.conversation_history),
+                    artifact_context=dict(task.artifact_context),
+                    tool_observation_context=list(task.tool_observation_context),
                 )
                 runtime_skill, retrieval_context = contextualize_skill_for_task(routed_task, selected_tool, selected_skill, tools)
                 

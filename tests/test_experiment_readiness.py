@@ -51,13 +51,62 @@ class ExperimentReadinessTests(unittest.TestCase):
             )
             self._write_csv(
                 tables / "stat_tests.csv",
-                ["baseline_a", "baseline_b", "paired_examples"],
+                ["test", "baseline_a", "baseline_b", "metric", "paired_examples", "observed_delta", "p_value"],
                 [
-                    {"baseline_a": "raw_mcp", "baseline_b": "generated_skill_base", "paired_examples": "3"},
-                    {"baseline_a": "raw_mcp", "baseline_b": "gated_skill", "paired_examples": "3"},
-                    {"baseline_a": "raw_mcp", "baseline_b": "reliaskill_v1", "paired_examples": "3"},
-                    {"baseline_a": "generated_skill_base", "baseline_b": "gated_skill", "paired_examples": "3"},
-                    {"baseline_a": "generated_skill_base", "baseline_b": "reliaskill_v1", "paired_examples": "3"},
+                    {
+                        "test": "approx_randomization",
+                        "baseline_a": "raw_mcp",
+                        "baseline_b": "generated_skill_base",
+                        "metric": "joint_exact_match",
+                        "paired_examples": "3",
+                        "observed_delta": "-0.1",
+                        "p_value": "0.04",
+                    },
+                    {
+                        "test": "approx_randomization",
+                        "baseline_a": "raw_mcp",
+                        "baseline_b": "gated_skill",
+                        "metric": "joint_exact_match",
+                        "paired_examples": "3",
+                        "observed_delta": "-0.2",
+                        "p_value": "0.04",
+                    },
+                    {
+                        "test": "approx_randomization",
+                        "baseline_a": "raw_mcp",
+                        "baseline_b": "reliaskill_v1",
+                        "metric": "joint_exact_match",
+                        "paired_examples": "3",
+                        "observed_delta": "-0.3",
+                        "p_value": "0.04",
+                    },
+                    {
+                        "test": "approx_randomization",
+                        "baseline_a": "generated_skill_base",
+                        "baseline_b": "gated_skill",
+                        "metric": "joint_exact_match",
+                        "paired_examples": "3",
+                        "observed_delta": "-0.1",
+                        "p_value": "0.04",
+                    },
+                    {
+                        "test": "approx_randomization",
+                        "baseline_a": "generated_skill_base",
+                        "baseline_b": "reliaskill_v1",
+                        "metric": "joint_exact_match",
+                        "paired_examples": "3",
+                        "observed_delta": "-0.2",
+                        "p_value": "0.04",
+                    },
+                    {
+                        "test": "approx_randomization",
+                        "baseline_a": "gated_skill",
+                        "baseline_b": "reliaskill_v1",
+                        "metric": "joint_exact_match",
+                        "paired_examples": "3",
+                        "observed_delta": "-0.1",
+                        "p_value": "0.04",
+                    },
                 ],
             )
             for name in [
@@ -67,6 +116,33 @@ class ExperimentReadinessTests(unittest.TestCase):
             ]:
                 self._write_csv(tables / name, ["slice_value", "suppressed"], [{"slice_value": "x", "suppressed": "False"}])
             (run / "live_exec_results.jsonl").write_text(json.dumps({"live_task_id": "t1", "live_joint_success": True}) + "\n", encoding="utf-8")
+            (run / "prediction_records.jsonl").write_text(
+                "\n".join(
+                    [
+                        json.dumps(
+                            {
+                                "baseline_name": "reliaskill_v1",
+                                "should_trigger": True,
+                                "triggered": True,
+                                "method_metadata": {"uses_runtime_schema_contract_verifier": True},
+                                "prediction_metadata": {"reliaskill_v1_runtime_verifier": {"enabled": True}},
+                            }
+                        ),
+                        json.dumps(
+                            {
+                                "baseline_name": "reliaskill_v1",
+                                "should_trigger": False,
+                                "triggered": False,
+                                "negative_category": "adjacent_intent",
+                                "method_metadata": {"uses_runtime_schema_contract_verifier": True},
+                                "prediction_metadata": {"reliaskill_v1_runtime_verifier": {"enabled": True}},
+                            }
+                        ),
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
 
             report = audit_experiment_readiness(config_path=config, tables_dir=tables, run_dir=run, min_examples=3)
 
@@ -109,6 +185,147 @@ class ExperimentReadinessTests(unittest.TestCase):
 
             failed_ids = {check["id"] for check in report["checks"] if not check["passed"] and check["severity"] == "fail"}
             self.assertIn("not_preflight_only", failed_ids)
+
+    def test_audit_rejects_reliaskill_v1_without_runtime_verifier_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            run = root / "run"
+            tables = root / "tables"
+            run.mkdir()
+            tables.mkdir()
+            self._write_csv(
+                tables / "main_results.csv",
+                ["baseline_name", "num_examples"],
+                [{"baseline_name": "reliaskill_v1", "num_examples": "3"}],
+            )
+            (run / "prediction_records.jsonl").write_text(
+                json.dumps(
+                    {
+                        "baseline_name": "reliaskill_v1",
+                        "method_metadata": {},
+                        "prediction_metadata": {},
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            report = audit_experiment_readiness(
+                tables_dir=tables,
+                run_dir=run,
+                min_examples=1,
+                required_result_conditions=["reliaskill_v1"],
+                required_config_conditions=[],
+                required_stat_comparisons=[],
+            )
+
+            failed_ids = {check["id"] for check in report["checks"] if not check["passed"] and check["severity"] == "fail"}
+            self.assertIn("reliaskill_v1_runtime_verifier_evidence", failed_ids)
+
+    def test_audit_rejects_reliaskill_v1_that_does_not_beat_reported_baselines(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            tables = root / "tables"
+            tables.mkdir()
+            self._write_csv(
+                tables / "main_results.csv",
+                ["baseline_name", "num_examples", "joint_exact_match"],
+                [
+                    {"baseline_name": "raw_mcp", "num_examples": "3", "joint_exact_match": "0.42"},
+                    {"baseline_name": "generated_skill_base", "num_examples": "3", "joint_exact_match": "0.40"},
+                    {"baseline_name": "reliaskill_v1", "num_examples": "3", "joint_exact_match": "0.41"},
+                ],
+            )
+
+            report = audit_experiment_readiness(
+                tables_dir=tables,
+                min_examples=1,
+                required_result_conditions=["raw_mcp", "generated_skill_base", "reliaskill_v1"],
+                required_config_conditions=[],
+                required_stat_comparisons=[],
+            )
+
+            failed = {
+                check["id"]: check
+                for check in report["checks"]
+                if not check["passed"] and check["severity"] == "fail"
+            }
+            self.assertIn("main_results_reliaskill_v1_primary_dominance", failed)
+            regressions = failed["main_results_reliaskill_v1_primary_dominance"]["details"]["regressions"]
+            self.assertEqual(regressions[0]["baseline"], "raw_mcp")
+
+    def test_audit_rejects_reliaskill_v1_routing_regression_when_routing_table_exists(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            tables = root / "tables"
+            tables.mkdir()
+            self._write_csv(
+                tables / "main_results.csv",
+                ["baseline_name", "num_examples", "joint_exact_match"],
+                [
+                    {"baseline_name": "raw_mcp", "num_examples": "3", "joint_exact_match": "0.20"},
+                    {"baseline_name": "reliaskill_v1", "num_examples": "3", "joint_exact_match": "0.30"},
+                ],
+            )
+            self._write_csv(
+                tables / "routing_results.csv",
+                ["baseline_name", "num_examples", "joint_exact_match"],
+                [
+                    {"baseline_name": "raw_mcp", "num_examples": "3", "joint_exact_match": "0.35"},
+                    {"baseline_name": "reliaskill_v1", "num_examples": "3", "joint_exact_match": "0.34"},
+                ],
+            )
+
+            report = audit_experiment_readiness(
+                tables_dir=tables,
+                min_examples=1,
+                required_result_conditions=["raw_mcp", "reliaskill_v1"],
+                required_config_conditions=[],
+                required_stat_comparisons=[],
+            )
+
+            failed_ids = {check["id"] for check in report["checks"] if not check["passed"] and check["severity"] == "fail"}
+            self.assertIn("routing_results_reliaskill_v1_primary_dominance", failed_ids)
+
+    def test_audit_rejects_reliaskill_v1_without_significant_paired_support(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            tables = root / "tables"
+            tables.mkdir()
+            self._write_csv(
+                tables / "main_results.csv",
+                ["baseline_name", "num_examples", "joint_exact_match"],
+                [
+                    {"baseline_name": "raw_mcp", "num_examples": "3", "joint_exact_match": "0.20"},
+                    {"baseline_name": "reliaskill_v1", "num_examples": "3", "joint_exact_match": "0.40"},
+                ],
+            )
+            self._write_csv(
+                tables / "stat_tests.csv",
+                ["test", "baseline_a", "baseline_b", "metric", "paired_examples", "observed_delta", "p_value"],
+                [
+                    {
+                        "test": "approx_randomization",
+                        "baseline_a": "raw_mcp",
+                        "baseline_b": "reliaskill_v1",
+                        "metric": "joint_exact_match",
+                        "paired_examples": "3",
+                        "observed_delta": "-0.20",
+                        "p_value": "0.20",
+                    }
+                ],
+            )
+
+            report = audit_experiment_readiness(
+                tables_dir=tables,
+                min_examples=1,
+                required_result_conditions=["raw_mcp", "reliaskill_v1"],
+                required_config_conditions=[],
+                required_stat_comparisons=[("raw_mcp", "reliaskill_v1")],
+            )
+
+            failed_ids = {check["id"] for check in report["checks"] if not check["passed"] and check["severity"] == "fail"}
+            self.assertIn("stat_tests_reliaskill_v1_statistical_support", failed_ids)
 
     @staticmethod
     def _write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, str]]) -> None:

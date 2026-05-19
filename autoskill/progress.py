@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import os
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -45,6 +47,23 @@ def write_progress_state(
     if extra:
         payload.update(extra)
     target = progress_dir / f"{phase}_state.json"
-    tmp = target.with_suffix(".json.tmp")
-    tmp.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
-    tmp.replace(target)
+    tmp = target.with_name(f"{target.stem}.{os.getpid()}.{time.time_ns()}.tmp")
+    text = json.dumps(payload, indent=2, ensure_ascii=False)
+    try:
+        tmp.write_text(text, encoding="utf-8")
+        for attempt in range(5):
+            try:
+                tmp.replace(target)
+                return
+            except PermissionError:
+                time.sleep(0.02 * (attempt + 1))
+        try:
+            target.write_text(text, encoding="utf-8")
+        except OSError:
+            pass
+    finally:
+        try:
+            if tmp.exists():
+                tmp.unlink()
+        except OSError:
+            pass

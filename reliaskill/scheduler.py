@@ -12,6 +12,7 @@ import yaml
 
 from autoskill.benchmark import load_benchmark_tasks
 from autoskill.config import load_json_config
+from autoskill.conditions import RELIASKILL_V1_CONTRACT_ABLATIONS
 from autoskill.experiment import load_tools
 
 
@@ -38,6 +39,7 @@ DEFAULT_CONDITION_TOKEN_OVERHEAD = {
     "gated_skill": 475,
     "reliaskill_v1": 525,
     "reliaskill_challenger_v1": 525,
+    **{condition: 525 for condition in RELIASKILL_V1_CONTRACT_ABLATIONS},
     "multi_candidate_skill_k3_validation_select": 350,
     "multi_candidate_skill_k3_behavior_select": 400,
     "multi_candidate_repaired_gated": 450,
@@ -214,6 +216,8 @@ def build_run_plan(
             total_examples = len(selected_tasks)
             completed_examples = _count_completed_predictions(output_root, selected_tasks, condition, resume=resume)
             remaining_examples = max(0, total_examples - completed_examples)
+            routing_remaining_examples = remaining_examples if include_routing else 0
+            estimated_model_calls = remaining_examples + routing_remaining_examples
             max_request_tokens = max((_estimate_text_tokens(task.user_request) for task in selected_tasks), default=0)
             condition_overhead = _condition_token_overhead(condition, scheduler_config)
             estimated_prompt_tokens = max_request_tokens + condition_overhead + prompt_safety_margin
@@ -227,8 +231,8 @@ def build_run_plan(
                     errors.append(message)
                 else:
                     warnings.append(message)
-            token_volume = remaining_examples * (estimated_prompt_tokens + model.max_new_tokens)
-            estimated_seconds = remaining_examples / model_eps if model_eps > 0 else math.inf
+            token_volume = estimated_model_calls * (estimated_prompt_tokens + model.max_new_tokens)
+            estimated_seconds = estimated_model_calls / model_eps if model_eps > 0 else math.inf
             runs.append(
                 {
                     "model_name": model.model_name,
@@ -244,7 +248,9 @@ def build_run_plan(
                     "total_examples": total_examples,
                     "completed_examples": completed_examples,
                     "remaining_examples": remaining_examples,
-                    "estimated_model_calls": remaining_examples,
+                    "benchmark_remaining_examples": remaining_examples,
+                    "routing_remaining_examples": routing_remaining_examples,
+                    "estimated_model_calls": estimated_model_calls,
                     "estimated_prompt_tokens_per_call": estimated_prompt_tokens,
                     "max_prompt_tokens": model.max_prompt_tokens,
                     "prompt_guard_ok": prompt_guard_ok,
@@ -257,7 +263,11 @@ def build_run_plan(
                     "resume_enabled": resume,
                     "routing_enabled": include_routing,
                     "status": "blocked" if model_errors or not prompt_guard_ok else "ready",
-                    "plan_note": "run all listed conditions for this model before unloading",
+                    "plan_note": (
+                        "conservative benchmark+routing work estimate; routing may reuse cached benchmark predictions"
+                        if include_routing
+                        else "benchmark-only work estimate"
+                    ),
                 }
             )
 
@@ -316,6 +326,8 @@ def write_run_plan_csv(path: str | Path, rows: Sequence[Dict[str, Any]]) -> None
         "total_examples",
         "completed_examples",
         "remaining_examples",
+        "benchmark_remaining_examples",
+        "routing_remaining_examples",
         "estimated_model_calls",
         "estimated_prompt_tokens_per_call",
         "max_prompt_tokens",
@@ -348,7 +360,7 @@ def build_run_plan_markdown(plan: Dict[str, Any]) -> str:
         f"- Tasks: `{plan['num_tasks']}`",
         f"- Models: `{plan['num_models']}`",
         f"- Conditions: `{plan['num_conditions']}`",
-        f"- Remaining model calls: `{plan['total_remaining_model_calls']}`",
+        f"- Remaining model/evaluation calls: `{plan['total_remaining_model_calls']}`",
         f"- Estimated token volume: `{plan['total_token_volume']}`",
         f"- Estimated disk usage: `{plan.get('estimated_disk_usage_gb', 0.0)} GB`",
         f"- Estimated runtime: `{plan['estimated_runtime_hours']} h`",
@@ -373,7 +385,7 @@ def build_run_plan_markdown(plan: Dict[str, Any]) -> str:
     )
     for row in plan["runs"]:
         lines.append(
-            f"| {row['model_name']} | {row['condition']} | {row['remaining_examples']} | "
+            f"| {row['model_name']} | {row['condition']} | {row['estimated_model_calls']} | "
             f"{row['estimated_prompt_tokens_per_call']} | {row['batch_size']} | "
             f"{row['estimated_vram_gb']} | {row['estimated_runtime_hours']} | {row['status']} |"
         )

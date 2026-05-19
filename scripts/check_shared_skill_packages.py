@@ -10,7 +10,12 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from autoskill.config import load_json_config
-from autoskill.conditions import LEGACY_RELIASKILL_CHALLENGER, RELIASKILL_CHALLENGER, normalize_condition_names
+from autoskill.conditions import (
+    LEGACY_RELIASKILL_CHALLENGER,
+    RELIASKILL_CHALLENGER,
+    RELIASKILL_V1_CONTRACT_ABLATIONS,
+    normalize_condition_names,
+)
 from autoskill.experiment import load_tools
 from reliaskill.cluster import _configured_live_tools, selected_tool_names, shared_package_root, tool_slug
 
@@ -45,7 +50,16 @@ def main() -> int:
     package_root = args.shared_packages or shared_package_root(config, args.output_root)
     configured_conditions = normalize_condition_names([str(item) for item in config.get("conditions") or []]) or []
     conditions = ["generated_skill_base"]
-    conditions.extend(condition for condition in configured_conditions if condition in PACKAGE_BACKED_CONDITIONS and condition != "generated_skill_base")
+    conditions.extend(
+        condition
+        for condition in configured_conditions
+        if condition in PACKAGE_BACKED_CONDITIONS and condition != "generated_skill_base"
+    )
+    if (
+        any(condition in RELIASKILL_V1_CONTRACT_ABLATIONS for condition in configured_conditions)
+        and RELIASKILL_CHALLENGER not in conditions
+    ):
+        conditions.append(RELIASKILL_CHALLENGER)
     missing = []
     for tool_name in sorted(tools):
         for condition in conditions:

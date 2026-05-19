@@ -15,7 +15,12 @@ from reliaskill.cluster import (
     selected_tool_names,
     tool_slug,
 )
-from autoskill.experiment import _safe_dir_name, build_skill_variant_map, load_tools
+from autoskill.experiment import (
+    _configured_shared_package_root,
+    _safe_dir_name,
+    build_skill_variant_map,
+    load_tools,
+)
 from autoskill.generator import SkillGenerator
 
 
@@ -125,6 +130,84 @@ class ClusterRunnerTests(unittest.TestCase):
             )["gated_skill"]
             loaded_trace_types = [entry.get("trace_type") for entry in loaded.method_trace]
             self.assertIn("multi_candidate_selection", loaded_trace_types)
+
+    def test_shared_package_builder_uses_v1_base_for_contract_ablation_only_config(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            dev_controls = root / "dev_controls.jsonl"
+            dev_controls.write_text(
+                json.dumps(
+                    {
+                        "id": "dev_create_dir",
+                        "function": "create_directory",
+                        "question": "Create the docs directory.",
+                        "ground_truth": {"arguments": {"path": "docs"}},
+                        "should_trigger": True,
+                        "split": "dev",
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            multi_config = root / "multi_candidate.yaml"
+            multi_config.write_text(
+                yaml.safe_dump(
+                    {
+                        "candidate_k": 1,
+                        "selection_policy": "best_behavior_dev",
+                        "candidate_strategies": ["concise_default"],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            config_path = self._write_small_config(
+                root,
+                conditions=["reliaskill_v1_no_runtime_grounding"],
+                max_tools=1,
+            )
+            config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+            config["shared_skill_packages"]["dev_controls_path"] = str(dev_controls)
+            config["skills"] = {"multi_candidate_config": str(multi_config), "candidate_k": 1}
+            config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+
+            manifest = build_shared_skill_packages(config_path)
+
+            package_root = Path(manifest["shared_package_root"])
+            self.assertIn("reliaskill_v1", manifest["reliability_conditions"])
+            self.assertTrue((package_root / "create_directory" / "reliaskill_v1" / "skill.json").exists())
+            self.assertFalse(
+                (package_root / "create_directory" / "reliaskill_v1_no_runtime_grounding" / "skill.json").exists()
+            )
+            tools = load_tools(config["tools_path"])
+            loaded = build_skill_variant_map(
+                tools["create_directory"],
+                tools,
+                SkillGenerator(),
+                allowed_conditions=["reliaskill_v1_no_runtime_grounding"],
+                package_manager_dir=package_root,
+                allow_package_generation=False,
+            )["reliaskill_v1_no_runtime_grounding"]
+            self.assertEqual(loaded.metadata["source_condition"], "reliaskill_v1")
+            self.assertTrue(loaded.metadata["contract_ablation_flags"]["disable_runtime_grounding"])
+
+    def test_configured_shared_package_root_is_enabled_for_contract_ablation_only_config(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            config_path = root / "experiment.yaml"
+            config = {
+                "conditions": ["reliaskill_v1_no_contract_routing"],
+                "shared_skill_packages": {"root": str(root / "shared_packages")},
+            }
+            config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+
+            with patch(
+                "reliaskill.cluster.build_shared_skill_packages",
+                return_value={"shared_package_root": str(root / "shared_packages")},
+            ) as build:
+                package_root = _configured_shared_package_root(config_path, config)
+
+            self.assertEqual(package_root, str(root / "shared_packages"))
+            build.assert_called_once_with(config_path)
 
     def test_shared_multi_candidate_base_rejects_non_dev_controls(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

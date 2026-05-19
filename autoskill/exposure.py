@@ -2,7 +2,17 @@ from __future__ import annotations
 
 import json
 
+from autoskill.conditions import is_reliaskill_v1_family
+from autoskill.contracts import build_contract_counterexamples, compile_skill_contract
 from autoskill.ir import GeneratedSkill, ToolIR
+from autoskill.templates import build_schema_contract_lines
+
+
+SCHEMA_CONTRACT_EXPOSURE_CONDITIONS = {
+    "reliaskill_v1",
+    "reliaskill_challenger_v1",
+    "skill_prompt_boundary_first",
+}
 
 
 def render_exposure(tool: ToolIR, skill: GeneratedSkill) -> str:
@@ -20,6 +30,48 @@ def render_exposure(tool: ToolIR, skill: GeneratedSkill) -> str:
     ]
 
     if skill.baseline_name != "raw_mcp":
+        schema_contract = skill.metadata.get("schema_contract")
+        if (
+            (not isinstance(schema_contract, list) or not schema_contract)
+            and (
+                skill.baseline_name in SCHEMA_CONTRACT_EXPOSURE_CONDITIONS
+                or is_reliaskill_v1_family(skill.baseline_name)
+            )
+        ):
+            schema_contract = build_schema_contract_lines(tool)
+        if isinstance(schema_contract, list) and schema_contract:
+            lines.extend(
+                [
+                    "Schema contract:",
+                    *[f"- {line}" for line in schema_contract if isinstance(line, str)],
+                    "",
+                ]
+            )
+        if is_reliaskill_v1_family(skill.baseline_name):
+            executable_contract = skill.metadata.get("executable_contract")
+            if not isinstance(executable_contract, dict):
+                executable_contract = compile_skill_contract(tool, skill).model_dump()
+            counterexamples = skill.metadata.get("contract_counterexamples")
+            if not isinstance(counterexamples, list):
+                counterexamples = build_contract_counterexamples(tool, skill)
+            lines.extend(
+                [
+                    "Executable contract:",
+                    json.dumps(
+                        {
+                            "proof_obligations": executable_contract.get("proof_obligations", []),
+                            "repair_policy": executable_contract.get("repair_policy", []),
+                            "abstention_policy": executable_contract.get("abstention_policy", []),
+                        },
+                        indent=2,
+                        ensure_ascii=False,
+                    ),
+                    "",
+                    "Contract counterexamples:",
+                    json.dumps(counterexamples[:4], indent=2, ensure_ascii=False),
+                    "",
+                ]
+            )
         lines.extend(
             [
                 "Skill summary:",

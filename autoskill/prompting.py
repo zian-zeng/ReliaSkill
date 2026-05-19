@@ -2,11 +2,16 @@ from __future__ import annotations
 
 import json
 
+from autoskill.conditions import is_reliaskill_v1_family
+from autoskill.contracts import build_contract_counterexamples, compile_skill_contract
 from autoskill.ir import GeneratedSkill, ToolIR
 from autoskill.prompt_templates import build_generation_prompt_from_template
+from autoskill.templates import build_schema_contract_lines
 
 
-BOUNDARY_FIRST_RUNTIME_CONDITIONS = {"reliaskill_v1", "reliaskill_challenger_v1"}
+BOUNDARY_FIRST_RUNTIME_CONDITIONS = {
+    "skill_prompt_boundary_first",
+}
 
 
 def build_generation_prompt(tool: ToolIR, template_id: str = "compact_default") -> str:
@@ -14,7 +19,7 @@ def build_generation_prompt(tool: ToolIR, template_id: str = "compact_default") 
 
 
 def build_prediction_prompt(tool: ToolIR, skill: GeneratedSkill, user_request: str) -> str:
-    guidance = _runtime_guidance(skill)
+    guidance = _runtime_guidance(tool, skill)
     return (
         "You are selecting arguments for a single MCP tool call.\n"
         "Return valid JSON only with keys `should_call`, `arguments`, and `abstention_reason`.\n"
@@ -34,11 +39,38 @@ def build_prediction_prompt(tool: ToolIR, skill: GeneratedSkill, user_request: s
     )
 
 
-def _runtime_guidance(skill: GeneratedSkill) -> str:
-    if skill.baseline_name in BOUNDARY_FIRST_RUNTIME_CONDITIONS:
+def _runtime_guidance(tool: ToolIR, skill: GeneratedSkill) -> str:
+    reliaskill_family = is_reliaskill_v1_family(skill.baseline_name)
+    if skill.baseline_name in BOUNDARY_FIRST_RUNTIME_CONDITIONS or reliaskill_family:
+        contract_lines = skill.metadata.get("schema_contract")
+        if not isinstance(contract_lines, list) or not all(isinstance(line, str) for line in contract_lines):
+            contract_lines = build_schema_contract_lines(tool)
+        method_label = "ReliaSkill v1" if reliaskill_family else "ReliaSkill boundary-first"
+        executable_contract = skill.metadata.get("executable_contract")
+        if not isinstance(executable_contract, dict) and reliaskill_family:
+            executable_contract = compile_skill_contract(tool, skill).model_dump()
+        proof_obligations = executable_contract.get("proof_obligations", []) if isinstance(executable_contract, dict) else []
+        counterexamples = skill.metadata.get("contract_counterexamples")
+        if not isinstance(counterexamples, list) and reliaskill_family:
+            counterexamples = build_contract_counterexamples(tool, skill)
+        proof_line = (
+            f"{method_label} proof obligations: {json.dumps(proof_obligations, ensure_ascii=False)}\n"
+            if proof_obligations and reliaskill_family
+            else ""
+        )
+        counterexample_line = (
+            f"{method_label} contract counterexamples: {json.dumps(counterexamples[:4], ensure_ascii=False)}\n"
+            if isinstance(counterexamples, list) and counterexamples and reliaskill_family
+            else ""
+        )
         return (
-            "ReliaSkill v1 boundary gate: check non-use rules before considering use rules. "
+            f"{method_label} schema contract: obey this compact argument contract before using examples.\n"
+            f"Call contract: {json.dumps(contract_lines, ensure_ascii=False)}\n"
+            f"{proof_line}"
+            f"{counterexample_line}"
+            f"{method_label} boundary gate: check non-use rules before considering use rules. "
             "If any non-use rule applies, set `should_call` to false.\n"
+            "Before returning `should_call=true`, verify required fields are grounded and the argument object satisfies the call contract.\n"
             f"When not to use: {json.dumps(skill.when_not_to_use, ensure_ascii=False)}\n"
             f"When to use: {json.dumps(skill.when_to_use, ensure_ascii=False)}\n"
         )

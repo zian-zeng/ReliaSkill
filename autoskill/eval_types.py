@@ -20,6 +20,9 @@ class EvalTask:
     harm_baseline: str | None = None
     split: str = "default"
     tags: List[str] = field(default_factory=list)
+    conversation_history: List[Dict[str, Any]] = field(default_factory=list)
+    artifact_context: Dict[str, Any] = field(default_factory=dict)
+    tool_observation_context: List[Dict[str, Any]] = field(default_factory=list)
 
 
 @dataclass

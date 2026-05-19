@@ -515,6 +515,138 @@ class ParserValidatorTests(unittest.TestCase):
         self.assertFalse(report["valid"])
         self.assertTrue(any("tools_path does not exist" in error for error in report["errors"]))
 
+    def test_validate_experiment_config_accepts_separated_reliaskill_v1_dev_controls(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            tools = root / "tools.jsonl"
+            tasks = root / "test.jsonl"
+            dev = root / "dev.jsonl"
+            tools.write_text("{}\n", encoding="utf-8")
+            tasks.write_text("{}\n", encoding="utf-8")
+            dev.write_text("{}\n", encoding="utf-8")
+
+            report = validate_experiment_config(
+                {
+                    "tools_path": str(tools),
+                    "tasks_path": str(tasks),
+                    "output_root": str(root / "out"),
+                    "generator": {"type": "heuristic"},
+                    "predictor": {"type": "heuristic"},
+                    "conditions": ["raw_mcp", "reliaskill_v1"],
+                    "shared_skill_packages": {
+                        "root": str(root / "shared_packages"),
+                        "dev_controls_path": str(dev),
+                        "reliability_predictor": {"type": "heuristic"},
+                        "max_repair_rounds": 2,
+                    },
+                    "skills": {"multi_candidate_config": str(root / "multi_candidate.yaml")},
+                }
+            )
+
+            self.assertTrue(report["valid"], report["errors"])
+
+    def test_validate_experiment_config_treats_v1_contract_ablation_as_v1_family(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            tools = root / "tools.jsonl"
+            tasks = root / "test.jsonl"
+            dev = root / "dev.jsonl"
+            tools.write_text("{}\n", encoding="utf-8")
+            tasks.write_text("{}\n", encoding="utf-8")
+            dev.write_text("{}\n", encoding="utf-8")
+
+            missing_shared = validate_experiment_config(
+                {
+                    "tools_path": str(tools),
+                    "tasks_path": str(tasks),
+                    "output_root": str(root / "out"),
+                    "generator": {"type": "heuristic"},
+                    "predictor": {"type": "heuristic"},
+                    "conditions": ["reliaskill_v1_no_runtime_grounding"],
+                }
+            )
+            valid_shared = validate_experiment_config(
+                {
+                    "tools_path": str(tools),
+                    "tasks_path": str(tasks),
+                    "output_root": str(root / "out"),
+                    "generator": {"type": "heuristic"},
+                    "predictor": {"type": "heuristic"},
+                    "conditions": ["reliaskill_v1_no_runtime_grounding"],
+                    "shared_skill_packages": {
+                        "root": str(root / "shared_packages"),
+                        "dev_controls_path": str(dev),
+                        "reliability_predictor": {"type": "heuristic"},
+                        "max_repair_rounds": 2,
+                    },
+                    "skills": {"multi_candidate_config": str(root / "multi_candidate.yaml")},
+                }
+            )
+
+            self.assertFalse(missing_shared["valid"])
+            self.assertTrue(any("requires a `shared_skill_packages` block" in error for error in missing_shared["errors"]))
+            self.assertTrue(valid_shared["valid"], valid_shared["errors"])
+
+    def test_validate_experiment_config_rejects_reliaskill_v1_dev_test_leakage(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            tools = root / "tools.jsonl"
+            tasks = root / "test.jsonl"
+            tools.write_text("{}\n", encoding="utf-8")
+            tasks.write_text("{}\n", encoding="utf-8")
+
+            report = validate_experiment_config(
+                {
+                    "tools_path": str(tools),
+                    "tasks_path": str(tasks),
+                    "output_root": str(root / "out"),
+                    "generator": {"type": "heuristic"},
+                    "predictor": {"type": "heuristic"},
+                    "conditions": ["reliaskill_v1"],
+                    "shared_skill_packages": {
+                        "root": str(root / "shared_packages"),
+                        "dev_controls_path": str(tasks),
+                        "reliability_predictor": {"type": "heuristic"},
+                        "max_repair_rounds": 2,
+                    },
+                    "skills": {"multi_candidate_config": str(root / "multi_candidate.yaml")},
+                }
+            )
+
+            self.assertFalse(report["valid"])
+            self.assertTrue(any("dev_controls_path must differ from tasks_path" in error for error in report["errors"]))
+
+    def test_validate_experiment_config_preflights_reliaskill_v1_reliability_predictor(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            tools = root / "tools.jsonl"
+            tasks = root / "test.jsonl"
+            dev = root / "dev.jsonl"
+            tools.write_text("{}\n", encoding="utf-8")
+            tasks.write_text("{}\n", encoding="utf-8")
+            dev.write_text("{}\n", encoding="utf-8")
+
+            report = validate_experiment_config(
+                {
+                    "tools_path": str(tools),
+                    "tasks_path": str(tasks),
+                    "output_root": str(root / "out"),
+                    "generator": {"type": "heuristic"},
+                    "predictor": {"type": "heuristic"},
+                    "conditions": ["reliaskill_v1"],
+                    "shared_skill_packages": {
+                        "root": str(root / "shared_packages"),
+                        "dev_controls_path": str(dev),
+                        "reliability_predictor": {"type": "openai_compatible"},
+                        "max_repair_rounds": 2,
+                    },
+                    "skills": {"multi_candidate_config": str(root / "multi_candidate.yaml")},
+                }
+            )
+
+            self.assertFalse(report["valid"])
+            self.assertTrue(any("reliaskill_v1.reliability_predictor" in error for error in report["errors"]))
+
     def test_predictor_config_builds_heuristic_backend(self) -> None:
         backend = build_predictor_from_config({"type": "heuristic"})
         self.assertEqual(backend.backend_name, "heuristic")
@@ -604,6 +736,81 @@ class ParserValidatorTests(unittest.TestCase):
             self.assertTrue((output_root / "routing_benchmark" / "routing_summary.json").exists())
             self.assertTrue((output_root / "routing_benchmark" / "routing_summary_by_tool.json").exists())
             self.assertTrue((output_root / "routing_benchmark" / "routing_summary_by_split.json").exists())
+
+    def test_run_full_experiment_from_config_uses_shared_reliaskill_v1_packages(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            tasks_path = root / "tasks.jsonl"
+            tasks_path.write_text(
+                json.dumps(
+                    {
+                        "task_id": "create_dir_eval",
+                        "tool_name": "create_directory",
+                        "user_request": "Create the docs directory.",
+                        "expected_arguments": {"path": "docs"},
+                        "should_trigger": True,
+                        "split": "dev",
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            dev_controls_path = root / "dev_controls.jsonl"
+            dev_controls_path.write_text(
+                json.dumps(
+                    {
+                        "task_id": "create_dir_dev",
+                        "tool_name": "create_directory",
+                        "user_request": "Create the docs directory.",
+                        "expected_arguments": {"path": "docs"},
+                        "should_trigger": True,
+                        "split": "dev",
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            multi_config_path = root / "multi_candidate.json"
+            multi_config_path.write_text(
+                json.dumps(
+                    {
+                        "candidate_k": 1,
+                        "selection_policy": "best_behavior_dev",
+                        "candidate_strategies": ["concise_default"],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            config_path = root / "experiment.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "tools_path": "data/raw/public_mcp_filesystem_subset.json",
+                        "tasks_path": str(tasks_path),
+                        "output_root": str(root / "experiment_outputs"),
+                        "generator": {"type": "heuristic"},
+                        "predictor": {"type": "heuristic"},
+                        "conditions": ["generated_skill_base", "reliaskill_v1"],
+                        "shared_skill_packages": {
+                            "root": str(root / "shared_packages"),
+                            "dev_controls_path": str(dev_controls_path),
+                            "reliability_predictor": {"type": "heuristic"},
+                        },
+                        "skills": {
+                            "multi_candidate_config": str(multi_config_path),
+                            "candidate_k": 1,
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            manifest = run_full_experiment_from_config(config_path)
+
+            output_root = Path(manifest["output_root"])
+            self.assertIn("reliaskill_v1", manifest["benchmark_summary"])
+            self.assertTrue((root / "shared_packages" / "create_directory" / "reliaskill_v1" / "skill.json").exists())
+            self.assertTrue((output_root / "packages" / "create_directory" / "reliaskill_v1" / "skill.json").exists())
 
     def test_sweep_aggregation_and_preflight_only(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

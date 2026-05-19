@@ -621,19 +621,20 @@ def _select_adjacent_tool(tool: Dict[str, Any], tools: Sequence[Dict[str, Any]],
 
 
 def _avoid_cross_split_duplicate_requests(controls: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    first_split_by_request: Dict[str, str] = {}
+    seen_requests: set[str] = set()
     adjusted: List[Dict[str, Any]] = []
     for control in controls:
         record = dict(control)
         request = str(record.get("user_request") or "")
-        split = str(record.get("split") or "")
-        previous_split = first_split_by_request.get(request)
-        if previous_split and previous_split != split:
-            suffix = f" Use trace id {record['control_id']} for this benchmark item."
+        normalized = " ".join(request.strip().lower().split())
+        if normalized in seen_requests:
+            suffix = f" Use benchmark item id {record['control_id']} to distinguish this item."
             request = f"{request}{suffix}"
             record["user_request"] = request
             record["question"] = request
-        first_split_by_request.setdefault(request, split)
+            record["request_deduplicated"] = True
+            normalized = " ".join(request.strip().lower().split())
+        seen_requests.add(normalized)
         adjusted.append(record)
     return adjusted
 
@@ -692,11 +693,16 @@ def _sample_value(arg: Dict[str, Any], variant: int) -> Any:
 
 
 def _sample_array_item(arg: Dict[str, Any], variant: int) -> Any:
+    items_schema = arg.get("items_schema") if isinstance(arg.get("items_schema"), dict) else None
+    if items_schema:
+        return _sample_value(_schema_to_argument("item", items_schema), variant)
     items_type = str(arg.get("items_type") or "string")
     if items_type in {"integer", "number", "float"}:
         return variant + 1
     if items_type == "boolean":
         return True
+    if items_type == "object":
+        return {"value": f"item_{variant}"}
     return f"item_{variant}"
 
 
@@ -707,13 +713,34 @@ def _sample_object(arg: Dict[str, Any], variant: int) -> Dict[str, Any]:
     for name, schema in properties.items():
         if required and name not in required:
             continue
-        child = {
-            "name": name,
-            "type": schema.get("type", "string") if isinstance(schema, dict) else "string",
-            "enum": schema.get("enum") if isinstance(schema, dict) else None,
-        }
-        payload[name] = _sample_value(child, variant)
+        payload[name] = _sample_value(_schema_to_argument(name, schema), variant)
     return payload or {"value": f"object_{variant}"}
+
+
+def _schema_to_argument(name: str, schema: Any) -> Dict[str, Any]:
+    schema = schema if isinstance(schema, dict) else {}
+    raw_type = schema.get("type", "string")
+    if isinstance(raw_type, list):
+        arg_type = next((str(item) for item in raw_type if item != "null"), "string")
+    else:
+        arg_type = str(raw_type or "string")
+    items_schema = schema.get("items") if isinstance(schema.get("items"), dict) else None
+    items_type = None
+    if items_schema:
+        item_type = items_schema.get("type", "string")
+        if isinstance(item_type, list):
+            items_type = next((str(item) for item in item_type if item != "null"), "string")
+        else:
+            items_type = str(item_type or "string")
+    return {
+        "name": name,
+        "type": arg_type,
+        "enum": schema.get("enum"),
+        "items_type": items_type,
+        "items_schema": items_schema,
+        "properties": schema.get("properties") if isinstance(schema.get("properties"), dict) else None,
+        "required_properties": list(schema.get("required", []) or []),
+    }
 
 
 def _format_args(args: Dict[str, Any]) -> str:

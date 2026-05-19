@@ -27,6 +27,21 @@ def load_eval_tasks(path: str | Path) -> List[EvalTask]:
             domain=item.get("domain"),
             split=str(item.get("split", "default")),
             tags=[str(tag) for tag in item.get("tags", [])] if isinstance(item.get("tags", []), list) else [],
+            conversation_history=[
+                dict(message)
+                for message in item.get("conversation_history", [])
+                if isinstance(message, dict)
+            ]
+            if isinstance(item.get("conversation_history", []), list)
+            else [],
+            artifact_context=dict(item.get("artifact_context", {})) if isinstance(item.get("artifact_context"), dict) else {},
+            tool_observation_context=[
+                dict(observation)
+                for observation in item.get("tool_observation_context", [])
+                if isinstance(observation, dict)
+            ]
+            if isinstance(item.get("tool_observation_context", []), list)
+            else [],
         )
         for item in raw_tasks
     ]

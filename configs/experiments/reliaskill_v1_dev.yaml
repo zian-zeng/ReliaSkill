@@ -1,8 +1,8 @@
 experiment_scale: reliaskill_v1_dev
-description: Dev-only heuristic build/evaluation config for the artifact-backed ReliaSkill v1 condition.
+description: Heuristic dev-package and held-out evaluation config for the artifact-backed ReliaSkill v1 condition.
 seed: 42
 tools_path: data/raw_mcp/tools.jsonl
-tasks_path: data/controls/dev.jsonl
+tasks_path: data/controls/test.jsonl
 output_root: outputs/method_improvement/reliaskill_v1_dev
 generator:
   type: heuristic

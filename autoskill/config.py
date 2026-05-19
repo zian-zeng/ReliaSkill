@@ -8,6 +8,8 @@ from typing import Any, Dict, List
 
 import yaml
 
+from autoskill.conditions import is_reliaskill_v1_family
+
 
 def load_json_config(path: str | Path) -> Dict[str, Any]:
     config_path = Path(path)
@@ -130,6 +132,13 @@ def validate_experiment_config(config: Dict[str, Any], config_path: str | Path |
     errors.extend(predictor_preflight["errors"])
     warnings.extend(generator_preflight["warnings"])
     warnings.extend(predictor_preflight["warnings"])
+    _check_reliaskill_v1_config(
+        config,
+        base_dir=base_dir,
+        resolved_tasks=resolved_tasks,
+        errors=errors,
+        warnings=warnings,
+    )
 
     return {
         "valid": not errors,
@@ -145,3 +154,55 @@ def validate_experiment_config(config: Dict[str, Any], config_path: str | Path |
             "predictor": predictor_preflight,
         },
     }
+
+
+def _check_reliaskill_v1_config(
+    config: Dict[str, Any],
+    *,
+    base_dir: Path,
+    resolved_tasks: Path | None,
+    errors: List[str],
+    warnings: List[str],
+) -> None:
+    conditions = {str(item) for item in config.get("conditions") or []}
+    if not any(is_reliaskill_v1_family(condition) for condition in conditions):
+        return
+
+    shared = config.get("shared_skill_packages")
+    if not isinstance(shared, dict) or not shared:
+        errors.append("`reliaskill_v1` requires a `shared_skill_packages` block.")
+        return
+
+    dev_controls = _resolve_path(base_dir, shared.get("dev_controls_path"))
+    if dev_controls is None:
+        errors.append("`reliaskill_v1` requires `shared_skill_packages.dev_controls_path` for dev-only selection.")
+    elif not dev_controls.exists():
+        errors.append(f"shared_skill_packages.dev_controls_path does not exist: {dev_controls}")
+    elif resolved_tasks is not None and dev_controls == resolved_tasks:
+        errors.append("`reliaskill_v1` dev_controls_path must differ from tasks_path to avoid dev/test leakage.")
+
+    if not shared.get("root"):
+        warnings.append("`reliaskill_v1` shared_skill_packages.root is not set; package artifacts may be rebuilt into a run-local path.")
+    reliability_predictor = shared.get("reliability_predictor")
+    if not isinstance(reliability_predictor, dict):
+        errors.append("`reliaskill_v1` requires `shared_skill_packages.reliability_predictor` for dev behavior selection.")
+    else:
+        reliability_preflight = _preflight_backend("reliaskill_v1.reliability_predictor", reliability_predictor)
+        errors.extend(reliability_preflight["errors"])
+        warnings.extend(reliability_preflight["warnings"])
+    repair_rounds = _int_or_none(shared.get("max_repair_rounds", 0))
+    if repair_rounds is None:
+        errors.append("`reliaskill_v1` shared_skill_packages.max_repair_rounds must be an integer when provided.")
+    elif repair_rounds < 1:
+        warnings.append("`reliaskill_v1` max_repair_rounds is less than 1; repair evidence will be absent.")
+
+    skills = config.get("skills") if isinstance(config.get("skills"), dict) else {}
+    if not skills.get("multi_candidate_config"):
+        errors.append("`reliaskill_v1` requires `skills.multi_candidate_config` for candidate selection.")
+
+
+def _int_or_none(value: Any) -> int | None:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None

@@ -151,6 +151,23 @@ def load_benchmark_tasks(path: str | Path) -> List[EvalTask]:
                 harm_baseline=str(_coalesce(item, ["harm_baseline"], None)) if _coalesce(item, ["harm_baseline"], None) is not None else None,
                 split=str(_coalesce(item, ["split", "partition"], "default")),
                 tags=tags,
+                conversation_history=[
+                    dict(message)
+                    for message in _coalesce(item, ["conversation_history", "messages"], [])
+                    if isinstance(message, dict)
+                ]
+                if isinstance(_coalesce(item, ["conversation_history", "messages"], []), list)
+                else [],
+                artifact_context=dict(_coalesce(item, ["artifact_context", "artifacts"], {}))
+                if isinstance(_coalesce(item, ["artifact_context", "artifacts"], {}), dict)
+                else {},
+                tool_observation_context=[
+                    dict(observation)
+                    for observation in _coalesce(item, ["tool_observation_context", "tool_observations", "observations"], [])
+                    if isinstance(observation, dict)
+                ]
+                if isinstance(_coalesce(item, ["tool_observation_context", "tool_observations", "observations"], []), list)
+                else [],
             )
         )
     return tasks

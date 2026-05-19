@@ -61,6 +61,68 @@ class DataAuditTests(unittest.TestCase):
             self.assertIn("dev_test_request_leakage", failed)
             self.assertIn("test_control_coverage", failed)
 
+    def test_detects_schema_invalid_positive_gold_arguments(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            tools = root / "tools.jsonl"
+            test = root / "test.jsonl"
+            config = root / "config.yaml"
+            self._write_jsonl(
+                tools,
+                [
+                    {
+                        "name": "add_observations",
+                        "description": "Add observations.",
+                        "inputSchema": {
+                            "type": "object",
+                            "properties": {
+                                "observations": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "entityName": {"type": "string"},
+                                            "contents": {"type": "array", "items": {"type": "string"}},
+                                        },
+                                        "required": ["entityName", "contents"],
+                                    },
+                                }
+                            },
+                            "required": ["observations"],
+                        },
+                    }
+                ],
+            )
+            self._write_jsonl(
+                test,
+                [
+                    {
+                        "task_id": "bad_gold",
+                        "tool_name": "add_observations",
+                        "user_request": "Add observation.",
+                        "expected_arguments": {"observations": ["not-an-object"]},
+                        "expected_argument_candidates": [{"observations": ["not-an-object"]}],
+                        "should_trigger": True,
+                    }
+                ],
+            )
+            config.write_text(
+                yaml.safe_dump(
+                    {
+                        "tools_path": str(tools),
+                        "tasks_path": str(test),
+                        "controls": {"positives_per_tool_total": 1, "negatives_per_tool_total": 0},
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            report = audit_dataset_integrity(config)
+
+            self.assertFalse(report["ok"])
+            failed = {check["id"] for check in report["checks"] if check["severity"] == "fail" and not check["passed"]}
+            self.assertIn("positive_gold_arguments_schema_valid", failed)
+
     @staticmethod
     def _tool(name: str) -> dict:
         return {

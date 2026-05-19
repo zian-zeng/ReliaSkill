@@ -172,6 +172,8 @@ class ControlGenerationTests(unittest.TestCase):
             dev_requests = {control["user_request"] for control in controls if control["split"] == "dev"}
             test_requests = {control["user_request"] for control in controls if control["split"] == "test"}
             self.assertFalse(dev_requests & test_requests)
+            request_counts = Counter(control["user_request"] for control in controls)
+            self.assertFalse([request for request, count in request_counts.items() if count > 1])
 
             from autoskill.control_generation import write_controls_outputs
 
@@ -189,6 +191,52 @@ class ControlGenerationTests(unittest.TestCase):
             negative_categories = {row["negative_category"] for row in negative_rows}
             self.assertIn("similar_tool_should_be_used", negative_categories)
             self.assertIn("ambiguous_abstain_safer", negative_categories)
+
+    def test_array_of_object_positive_gold_arguments_follow_schema(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmpdir_path = Path(tmpdir)
+            tools_path = tmpdir_path / "tools.jsonl"
+            tools_path.write_text(
+                json.dumps(
+                    {
+                        "name": "add_observations",
+                        "description": "Add observations to memory.",
+                        "inputSchema": {
+                            "type": "object",
+                            "properties": {
+                                "observations": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "entityName": {"type": "string"},
+                                            "contents": {"type": "array", "items": {"type": "string"}},
+                                        },
+                                        "required": ["entityName", "contents"],
+                                    },
+                                }
+                            },
+                            "required": ["observations"],
+                        },
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            controls = build_controls(
+                {
+                    "seed": 42,
+                    "tools_path": str(tools_path),
+                    "positive_controls_per_tool": 3,
+                    "negative_categories": ["out_of_domain_request", "missing_required_info", "wrong_tool_boundary"],
+                }
+            )
+            positive = next(control for control in controls if control["should_trigger"])
+            observation = positive["gold_args"]["observations"][0]
+
+            self.assertIsInstance(observation, dict)
+            self.assertIn("entityName", observation)
+            self.assertIsInstance(observation["contents"], list)
 
 
 if __name__ == "__main__":

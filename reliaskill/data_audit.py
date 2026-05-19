@@ -9,6 +9,7 @@ from typing import Any, Dict, Iterable, List, Sequence
 from autoskill.benchmark import load_benchmark_tasks
 from autoskill.config import load_json_config
 from autoskill.experiment import load_tools
+from autoskill.metrics import argument_schema_validity
 
 
 def audit_dataset_integrity(config_path: str | Path) -> Dict[str, Any]:
@@ -86,6 +87,15 @@ def audit_dataset_integrity(config_path: str | Path) -> Dict[str, Any]:
         "Every retained tool has configured positive and negative test coverage.",
         {"missing_or_undercovered": missing_coverage[:30], "num_undercovered": len(missing_coverage)},
     )
+    invalid_gold = _invalid_positive_gold_arguments(selected_tasks, tools)
+    _add_check(
+        checks,
+        "positive_gold_arguments_schema_valid",
+        "fail",
+        not invalid_gold,
+        "Positive selected test controls use schema-valid gold arguments.",
+        {"invalid": invalid_gold[:20], "num_invalid": len(invalid_gold)},
+    )
 
     if dev_path and dev_path.exists():
         dev_tasks = load_benchmark_tasks(dev_path)
@@ -116,6 +126,15 @@ def audit_dataset_integrity(config_path: str | Path) -> Dict[str, Any]:
             not dev_missing_tools,
             "Development controls for selected tools reference known tools.",
             {"missing_tools": dev_missing_tools[:20], "num_missing": len(dev_missing_tools)},
+        )
+        invalid_dev_gold = _invalid_positive_gold_arguments(dev_tasks, tools)
+        _add_check(
+            checks,
+            "dev_positive_gold_arguments_schema_valid",
+            "fail",
+            not invalid_dev_gold,
+            "Positive development controls use schema-valid gold arguments.",
+            {"invalid": invalid_dev_gold[:20], "num_invalid": len(invalid_dev_gold)},
         )
     elif dev_path:
         _add_check(
@@ -291,6 +310,25 @@ def _missing_coverage(config: Dict[str, Any], tasks: Sequence[Any], tool_names: 
         if pos[tool_name] < required_pos or neg[tool_name] < required_neg:
             missing.append({"tool_name": tool_name, "positive": pos[tool_name], "negative": neg[tool_name]})
     return missing
+
+
+def _invalid_positive_gold_arguments(tasks: Sequence[Any], tools: Dict[str, Any]) -> List[Dict[str, Any]]:
+    invalid: List[Dict[str, Any]] = []
+    for task in tasks:
+        if not getattr(task, "should_trigger", True):
+            continue
+        tool = tools.get(task.tool_name)
+        if tool is None:
+            continue
+        schema = getattr(tool, "input_schema_raw", {}) or {}
+        candidates = list(getattr(task, "expected_argument_candidates", []) or [getattr(task, "expected_arguments", {})])
+        for index, args in enumerate(candidates):
+            if not isinstance(args, dict):
+                invalid.append({"task_id": str(task.task_id), "tool_name": task.tool_name, "candidate_index": index, "reason": "not_object"})
+                continue
+            if not argument_schema_validity({"predicted_arguments": args, "inputSchema": schema}):
+                invalid.append({"task_id": str(task.task_id), "tool_name": task.tool_name, "candidate_index": index})
+    return invalid
 
 
 def _dev_controls_path(config: Dict[str, Any]) -> Path | None:
