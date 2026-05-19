@@ -62,7 +62,7 @@ conditions:
   - validated_skill
   - repaired_skill
   - gated_skill
-  - reliaskill_challenger_v1
+  - reliaskill_v1
   - generated_docs_verbose
   - raw_docs_full
   - skill_prompt_boundary_first
@@ -109,7 +109,7 @@ scheduler:
     validated_skill: 350
     repaired_skill: 450
     gated_skill: 475
-    reliaskill_challenger_v1: 525
+    reliaskill_v1: 525
     generated_docs_verbose: 1200
     raw_docs_full: 1600
     skill_prompt_boundary_first: 350

@@ -22,6 +22,7 @@ REQUIRED_CONFIG_CONDITIONS = [
     "validated_skill",
     "repaired_skill",
     "gated_skill",
+    "reliaskill_v1",
     "generated_skill_base",
     "generated_docs_verbose",
     "raw_docs_full",
@@ -34,12 +35,15 @@ REQUIRED_RESULT_CONDITIONS = [
     "raw_mcp",
     "generated_skill_base",
     "gated_skill",
+    "reliaskill_v1",
 ]
 
 REQUIRED_STAT_COMPARISONS = [
     ("raw_mcp", "generated_skill_base"),
     ("raw_mcp", "gated_skill"),
+    ("raw_mcp", "reliaskill_v1"),
     ("generated_skill_base", "gated_skill"),
+    ("generated_skill_base", "reliaskill_v1"),
 ]
 
 REQUIRED_SLICE_FILES = [

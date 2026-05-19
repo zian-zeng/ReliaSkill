@@ -13,6 +13,7 @@ class ArgumentIR:
     enum: Optional[List[Any]] = None
     description: Optional[str] = None
     items_type: Optional[str] = None
+    items_schema: Optional[Dict[str, Any]] = None
     properties: Optional[Dict[str, Any]] = None
     required_properties: List[str] = field(default_factory=list)
     nullable: bool = False

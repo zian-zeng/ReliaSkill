@@ -12,6 +12,7 @@ from autoskill.config import load_json_config, merge_experiment_config
 from autoskill.conditions import (
     AUTOSKILL_BASE,
     GENERATED_SKILL_BASE,
+    LEGACY_RELIASKILL_CHALLENGER,
     RELIASKILL_CHALLENGER,
     build_reviewer_baseline_skills,
     condition_prompt_text,
@@ -175,6 +176,8 @@ def _find_packaged_skill(package_root: Path, tool: Any, condition: str) -> Any |
                 package_root.parent / "benchmark" / _safe_dir_name(tool.tool_name) / AUTOSKILL_BASE,
             ]
         )
+    if condition == RELIASKILL_CHALLENGER:
+        candidates.append(_packaged_condition_path(package_root, tool.tool_name, LEGACY_RELIASKILL_CHALLENGER))
     for candidate in candidates:
         if candidate.exists():
             if condition == RELIASKILL_CHALLENGER:
@@ -290,7 +293,11 @@ def _safe_component(value: str) -> str:
 
 def _safe_dir_name(value: str) -> str:
     """Truncate a tool or condition name for use as a directory component on Windows."""
-    return _safe_component(value)[:50]
+    safe = _safe_component(value)
+    if len(safe) <= 50 and safe == safe.lower():
+        return safe
+    digest = hashlib.sha256(value.encode("utf-8")).hexdigest()[:12]
+    return f"{safe[:37].rstrip('_')}_{digest}"
 
 
 def _safe_task_name(value: str) -> str:

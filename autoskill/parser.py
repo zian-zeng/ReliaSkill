@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Tuple
 
 from autoskill.ir import ArgumentIR, ToolIR
-from autoskill.schema_utils import infer_schema_type, normalize_schema_node
+from autoskill.schema_utils import coerce_schema_default, infer_schema_type, normalize_schema_node
 
 
 def _canonicalize_text(value: Any) -> str | None:
@@ -128,13 +128,18 @@ def parse_mcp_tool(raw_tool: Dict[str, Any], source_pointer: str | None = None) 
         arg_schema, nullable = normalize_schema_node(raw_arg_schema)
         arg_type, _ = infer_schema_type(arg_schema)
         enum_vals = arg_schema.get("enum")
-        default = arg_schema.get("default")
+        default = coerce_schema_default(arg_schema.get("default"), arg_type)
         desc = _canonicalize_text(arg_schema.get("description"))
 
         items_type = None
+        items_schema = None
         if arg_type == "array":
             items = arg_schema.get("items", {})
-            items_type, _ = infer_schema_type(items if isinstance(items, dict) else {})
+            if isinstance(items, dict):
+                items_schema, _ = normalize_schema_node(items)
+                items_type, _ = infer_schema_type(items_schema)
+            else:
+                items_type, _ = infer_schema_type({})
 
         nested_properties = None
         required_properties: List[str] = []
@@ -151,6 +156,7 @@ def parse_mcp_tool(raw_tool: Dict[str, Any], source_pointer: str | None = None) 
                 enum=enum_vals,
                 description=desc,
                 items_type=items_type,
+                items_schema=items_schema,
                 properties=nested_properties,
                 required_properties=required_properties,
                 nullable=nullable,

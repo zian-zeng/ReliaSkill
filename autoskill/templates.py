@@ -4,7 +4,7 @@ from copy import deepcopy
 from typing import Any, Dict, List
 
 from autoskill.ir import ArgumentIR, ToolIR
-from autoskill.schema_utils import normalize_schema_node
+from autoskill.schema_utils import coerce_schema_default, normalize_schema_node, schema_type
 
 
 def _string_value(name: str, description: str | None, fmt: str | None, variant: int) -> str:
@@ -53,7 +53,7 @@ def _value_from_schema(
     schema, _ = normalize_schema_node(schema)
 
     if "default" in schema:
-        return deepcopy(schema["default"])
+        return deepcopy(coerce_schema_default(schema["default"], schema_type(schema)))
     if isinstance(schema.get("enum"), list) and schema["enum"]:
         values = schema["enum"]
         return deepcopy(values[variant % len(values)])
@@ -72,7 +72,7 @@ def _value_from_schema(
         return bool(variant % 2)
     if type_value == "array":
         items_schema = schema.get("items", {})
-        return [_value_from_schema(f"{name}_item", items_schema, variant, include_optional=True)]
+        return [_value_from_schema(f"{name}_item", items_schema, variant, include_optional=include_optional)]
     if type_value == "object" or isinstance(schema.get("properties"), dict):
         result: Dict[str, Any] = {}
         properties = schema.get("properties", {}) or {}
@@ -104,7 +104,7 @@ def build_argument_value(
     if arg.type == "boolean":
         return bool(variant % 2)
     if arg.type == "array":
-        item_schema = {"type": arg.items_type or "string"}
+        item_schema = arg.items_schema if isinstance(arg.items_schema, dict) else {"type": arg.items_type or "string"}
         return [_value_from_schema(f"{arg.name}_item", item_schema, variant, include_optional=include_optional_children)]
     if arg.type == "object":
         return _value_from_schema(
@@ -196,6 +196,16 @@ def build_structured_call_hints(tool: ToolIR) -> Dict[str, List[str]]:
     for arg in arrays[:3]:
         if arg.required:
             when_to_use.append(f"For required array `{arg.name}`, provide a JSON array with schema-valid items.")
+            item_schema = arg.items_schema if isinstance(arg.items_schema, dict) else {}
+            item_schema, _ = normalize_schema_node(item_schema)
+            if isinstance(item_schema.get("properties"), dict):
+                nested_required = [str(name) for name in item_schema.get("required", []) or []]
+                if nested_required:
+                    when_to_use.append(
+                        f"For each `{arg.name}` item, include required keys: "
+                        + ", ".join(repr(name) for name in nested_required)
+                        + "."
+                    )
         else:
             when_not_to_use.append(f"Omit optional array `{arg.name}` unless the request explicitly asks for it.")
 

@@ -143,7 +143,7 @@ class ScientificComparisonTests(unittest.TestCase):
             self.assertTrue((root / "summary.md").exists())
             self.assertTrue((root / "key.csv").exists())
             payload = json.loads((root / "summary.json").read_text(encoding="utf-8"))
-            self.assertEqual(payload["comparison_count"], 11)
+            self.assertEqual(payload["comparison_count"], 13)
 
 
 def _write_csv(path: Path, rows: list[dict]) -> None:

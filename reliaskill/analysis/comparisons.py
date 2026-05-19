@@ -56,6 +56,20 @@ COMPARISON_TEMPLATES: List[ComparisonTemplate] = [
         expected_claim="Gating trades little utility for lower harm.",
     ),
     ComparisonTemplate(
+        "reliaskill_v1_vs_gated",
+        "gated_skill",
+        "reliaskill_v1",
+        [MetricSpec("joint_exact_match", primary=True), MetricSpec("argument_schema_validity"), MetricSpec("tool_selection_accuracy")],
+        expected_claim="The full ReliaSkill v1 artifact improves over the gated artifact it is composed from.",
+    ),
+    ComparisonTemplate(
+        "reliaskill_v1_vs_raw_mcp",
+        "raw_mcp",
+        "reliaskill_v1",
+        [MetricSpec("joint_exact_match", primary=True), MetricSpec("argument_schema_validity"), MetricSpec("tool_selection_accuracy")],
+        expected_claim="The full ReliaSkill v1 artifact improves over raw MCP schema exposure.",
+    ),
+    ComparisonTemplate(
         "compact_vs_verbose",
         "skill_verbose",
         "skill_compact",
@@ -359,6 +373,7 @@ def _add_condition_aliases(by_condition: Dict[str, Dict[str, str]]) -> None:
         "naive_skill": ["naive_skill_k1"],
         "repaired_skill": ["full_regeneration_repair", "repaired_targeted_patch"],
         "gated_skill": ["multi_candidate_repaired_gated"],
+        "reliaskill_v1": ["reliaskill_challenger_v1"],
     }
     for canonical, alternatives in aliases.items():
         if canonical in by_condition:

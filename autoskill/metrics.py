@@ -14,7 +14,10 @@ DEFAULT_SEED = 42
 KEY_STAT_TEST_COMPARISONS = [
     ("raw_mcp", "generated_skill_base"),
     ("raw_mcp", "gated_skill"),
+    ("raw_mcp", "reliaskill_v1"),
     ("generated_skill_base", "gated_skill"),
+    ("generated_skill_base", "reliaskill_v1"),
+    ("gated_skill", "reliaskill_v1"),
     ("raw_mcp", "skill_prompt_boundary_first"),
     ("generated_skill_base", "skill_prompt_boundary_first"),
     ("raw_mcp", "skill_prompt_verbose_docs"),

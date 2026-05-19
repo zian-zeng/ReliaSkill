@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import shutil
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Sequence
 
-from autoskill.behavior import load_behavior_cases
+from autoskill.behavior import load_behavior_cases, run_behavior_tests
 from autoskill.benchmark import load_benchmark_tasks
 from autoskill.config import load_json_config
 from autoskill.eval_types import EvalTask
@@ -19,7 +20,8 @@ from autoskill.experiment import (
 )
 from autoskill.generator import SkillGenerator
 from autoskill.local_model import clear_model_cache
-from autoskill.artifacts import GATED_SKILL, GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER, clone_skill_as
+from autoskill.artifacts import GATED_SKILL, GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER, REPAIRED_SKILL, clone_skill_as
+from autoskill.conditions import normalize_condition_names
 from autoskill.metrics import build_metric_tables, write_metric_tables
 from autoskill.multi_candidate import (
     generate_skill_candidates,
@@ -30,7 +32,9 @@ from autoskill.multi_candidate import (
 )
 from autoskill.packaging import write_skill_package
 from autoskill.predictor import build_predictor_from_config, safe_predict
+from autoskill.quality import score_reliability
 from autoskill.reliability import build_reliability_variants
+from autoskill.validator import validate_skill
 from reliaskill.live_exec.evaluator import evaluate_live_exec_tasks
 from reliaskill.live_exec.task_builder import build_live_exec_tasks
 from reliaskill.live_exec.tool_defs import build_live_exec_tools
@@ -47,7 +51,11 @@ def slugify(value: str) -> str:
 
 def tool_slug(value: str) -> str:
     slug = "".join(char if char.isalnum() or char in {"-", "_", "."} else "_" for char in value)
-    return slug[:50] or "unknown"
+    slug = slug or "unknown"
+    if len(slug) <= 50 and slug == slug.lower():
+        return slug
+    digest = hashlib.sha256(value.encode("utf-8")).hexdigest()[:12]
+    return f"{slug[:37].rstrip('_')}_{digest}"
 
 
 def shared_package_root(config: Dict[str, Any], output_root: str | Path | None = None) -> Path:
@@ -140,12 +148,65 @@ def _select_multi_candidate_base_skill(
     return selected_skill
 
 
-def _build_challenger_skill(gated_skill: Any) -> Any:
-    challenger = clone_skill_as(gated_skill, RELIASKILL_CHALLENGER)
+def _build_challenger_skill(
+    source_skill: Any,
+    *,
+    source_row: Dict[str, Any],
+    gate_row: Dict[str, Any],
+    selection_report_path: Path,
+) -> Any:
+    challenger = clone_skill_as(source_skill, RELIASKILL_CHALLENGER)
+    source_score = source_row["reliability_score"]
+    gate_score = gate_row["reliability_score"]
+    repair = source_row["repair_report"]
+    selection = _load_selection_report(selection_report_path)
+    evidence_lines = _challenger_evidence_lines(source_score, repair, selection, gate_score=gate_score)
+    if evidence_lines:
+        challenger.skill_summary = _compact_join(
+            [
+                "Full ReliaSkill v1 artifact.",
+                *evidence_lines,
+                challenger.skill_summary,
+            ],
+            max_chars=900,
+        )
+    if source_score.decision == "deploy":
+        challenger.when_to_use = _dedupe_text_lines(
+            [
+                "Use this full ReliaSkill artifact only when the request directly matches the tool purpose and every required input can be grounded in the user request.",
+                "Prefer the dev-selected, repaired, and gate-evidenced boundaries in this artifact over broad keyword matches.",
+                *challenger.when_to_use,
+            ],
+            limit=6,
+        )
+        challenger.when_not_to_use = _dedupe_text_lines(
+            [
+                "Abstain rather than invent missing required arguments, enum values, unsupported fields, or hidden tool capabilities.",
+                *challenger.when_not_to_use,
+                "Do not use for adjacent, similar-tool, read/write-mismatched, explanation-only, or ambiguous requests.",
+            ],
+            limit=14,
+        )
+    else:
+        challenger.when_to_use = _dedupe_text_lines(
+            [
+                "Use this full ReliaSkill artifact only for exact, schema-grounded requests; non-use boundaries take priority over broad keyword overlap.",
+                *challenger.when_to_use,
+            ],
+            limit=6,
+        )
+        challenger.when_not_to_use = _dedupe_text_lines(
+            [
+                "Abstain on any request that matches a non-use boundary or lacks grounded required arguments.",
+                *challenger.when_not_to_use,
+            ],
+            limit=14,
+        )
     challenger.metadata = {
         **challenger.metadata,
         "condition_family": RELIASKILL_CHALLENGER,
-        "source_condition": GATED_SKILL,
+        "source_condition": REPAIRED_SKILL,
+        "gate_source_condition": GATED_SKILL,
         "artifact_backed": True,
         "requires_improved_package": True,
         "pipeline_stages": [
@@ -153,22 +214,90 @@ def _build_challenger_skill(gated_skill: Any) -> Any:
             "dev_multi_candidate_selection",
             "validation",
             "repair",
-            "reliability_gate",
+            "soft_reliability_gate_evidence",
             "runtime_routing_boundary",
         ],
         "test_controls_used": False,
+        "prompt_visible_method_evidence": True,
+        "source_reliability_decision": source_score.decision,
+        "source_reliability_score": source_score.score,
+        "reliability_gate_decision": gate_score.decision,
+        "reliability_gate_score": gate_score.score,
+        "selected_candidate_id": selection.get("selected_candidate_id"),
+        "selection_policy": selection.get("selection_policy"),
     }
     challenger.method_trace = [
         *challenger.method_trace,
         {
-            "trace_type": "reliaskill_challenger_composition",
-            "source_condition": GATED_SKILL,
+            "trace_type": "reliaskill_v1_composition",
+            "source_condition": REPAIRED_SKILL,
+            "gate_source_condition": GATED_SKILL,
             "condition": RELIASKILL_CHALLENGER,
             "artifact_backed": True,
+            "prompt_visible_method_evidence": True,
             "test_controls_used": False,
         },
     ]
     return challenger
+
+
+def _load_selection_report(path: Path) -> Dict[str, Any]:
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _challenger_evidence_lines(score: Any, repair: Any, selection: Dict[str, Any], *, gate_score: Any | None = None) -> List[str]:
+    lines = [
+        "Pipeline: dev-selected candidate, validation, repair, and reliability gate evidence recorded in package metadata.",
+    ]
+    candidate_id = selection.get("selected_candidate_id")
+    strategy = selection.get("selected_generation_strategy")
+    policy = selection.get("selection_policy")
+    if candidate_id or strategy or policy:
+        lines.append(
+            "Selection: "
+            + ", ".join(
+                item
+                for item in [
+                    f"policy={policy}" if policy else "",
+                    f"strategy={strategy}" if strategy else "",
+                    f"candidate={candidate_id}" if candidate_id else "",
+                ]
+                if item
+            )
+            + "."
+        )
+    if repair.attempted:
+        changed = "changed" if repair.changed else "no text change"
+        lines.append(f"Repair: {changed}, rounds={repair.rounds}, primary_failure={repair.failure_type or 'none'}.")
+    return lines
+
+
+def _compact_join(lines: Sequence[str], *, max_chars: int) -> str:
+    text = " ".join(line.strip() for line in lines if str(line).strip())
+    return text[: max_chars - 3].rstrip() + "..." if len(text) > max_chars else text
+
+
+def _dedupe_text_lines(lines: Sequence[str], *, limit: int) -> List[str]:
+    result: List[str] = []
+    seen = set()
+    for line in lines:
+        clean = str(line).strip()
+        if not clean:
+            continue
+        key = clean.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        result.append(clean)
+        if len(result) >= limit:
+            break
+    return result
 
 
 def _write_challenger_method_metadata(
@@ -177,6 +306,8 @@ def _write_challenger_method_metadata(
     tool_name: str,
     selection_report_path: Path,
     reliability_row: Dict[str, Any],
+    source_row: Dict[str, Any],
+    gate_row: Dict[str, Any],
 ) -> None:
     if not selection_report_path.exists():
         raise FileNotFoundError(
@@ -185,24 +316,31 @@ def _write_challenger_method_metadata(
         )
     shutil.copyfile(selection_report_path, package_dir / "selection_report.json")
     score = reliability_row["reliability_score"]
-    repair = reliability_row["repair_report"]
+    source_score = source_row["reliability_score"]
+    gate_score = gate_row["reliability_score"]
+    repair = source_row["repair_report"]
     metadata = {
         "condition": RELIASKILL_CHALLENGER,
         "tool_name": tool_name,
-        "source_condition": GATED_SKILL,
+        "source_condition": REPAIRED_SKILL,
+        "gate_source_condition": GATED_SKILL,
         "artifact_backed": True,
         "pipeline_stages": [
             "generated_skill_base_package",
             "dev_multi_candidate_selection",
             "validation",
             "repair",
-            "reliability_gate",
+            "soft_reliability_gate_evidence",
             "runtime_routing_boundary",
         ],
         "dev_controls_used": True,
         "test_controls_used": False,
-        "gate_decision": score.decision,
-        "gate_score": score.score,
+        "reliaskill_v1_decision": score.decision,
+        "reliaskill_v1_score": score.score,
+        "source_reliability_decision": source_score.decision,
+        "source_reliability_score": source_score.score,
+        "gate_decision": gate_score.decision,
+        "gate_score": gate_score.score,
         "repair_attempted": repair.attempted,
         "repair_changed": repair.changed,
         "repair_rounds": repair.rounds,
@@ -245,7 +383,7 @@ def build_shared_skill_packages(
     root.mkdir(parents=True, exist_ok=True)
 
     generator = SkillGenerator(backend_config=config.get("generator"), allow_fallback=not strict_backends)
-    allowed_conditions = [str(item) for item in config.get("conditions") or []]
+    allowed_conditions = normalize_condition_names([str(item) for item in config.get("conditions") or []]) or []
     requested_reliability_conditions = sorted(set(allowed_conditions).intersection(RELIABILITY_CONDITIONS))
     packaging_conditions = [condition for condition in allowed_conditions if condition != RELIASKILL_CHALLENGER]
     if requested_reliability_conditions and GENERATED_SKILL_BASE not in packaging_conditions:
@@ -318,9 +456,47 @@ def build_shared_skill_packages(
                 allow_predictor_fallback=not strict_backends,
             )
             for condition in reliability_conditions:
-                source_condition = GATED_SKILL if condition == RELIASKILL_CHALLENGER else condition
-                row = variants[source_condition]
-                package_skill = _build_challenger_skill(row["skill"]) if condition == RELIASKILL_CHALLENGER else row["skill"]
+                selection_report_path = root / "_multi_candidate_selection" / tool_slug(tool.tool_name) / "selection_report.json"
+                if condition == RELIASKILL_CHALLENGER:
+                    source_condition = REPAIRED_SKILL
+                    source_row = variants[REPAIRED_SKILL]
+                    gate_row = variants[GATED_SKILL]
+                    package_skill = _build_challenger_skill(
+                        source_row["skill"],
+                        source_row=source_row,
+                        gate_row=gate_row,
+                        selection_report_path=selection_report_path,
+                    )
+                    package_validation = validate_skill(tool, package_skill)
+                    package_behavior = run_behavior_tests(
+                        tool,
+                        package_skill,
+                        behavior_cases,
+                        predictor,
+                        allow_predictor_fallback=not strict_backends,
+                    )
+                    package_score = score_reliability(
+                        tool,
+                        package_skill,
+                        package_validation,
+                        package_behavior,
+                        repair_rounds=source_row["repair_report"].rounds,
+                        deploy_threshold=deploy_threshold,
+                        max_repair_rounds=max_repair_rounds,
+                    )
+                    row = {
+                        "skill": package_skill,
+                        "validation_report": package_validation,
+                        "behavior_report": package_behavior,
+                        "reliability_score": package_score,
+                        "repair_report": source_row["repair_report"],
+                    }
+                else:
+                    source_condition = condition
+                    source_row = variants[source_condition]
+                    gate_row = variants.get(GATED_SKILL, source_row)
+                    row = source_row
+                    package_skill = row["skill"]
                 package_dir = root / tool_slug(tool.tool_name) / condition
                 write_skill_package(
                     package_dir,
@@ -335,8 +511,10 @@ def build_shared_skill_packages(
                     _write_challenger_method_metadata(
                         package_dir=package_dir,
                         tool_name=tool.tool_name,
-                        selection_report_path=root / "_multi_candidate_selection" / tool_slug(tool.tool_name) / "selection_report.json",
+                        selection_report_path=selection_report_path,
                         reliability_row=row,
+                        source_row=source_row,
+                        gate_row=gate_row,
                     )
                 reliability_records.append(
                     {
@@ -403,7 +581,7 @@ def run_cluster_shard(
             model for model in model_configs
             if model.model_name in requested or slugify(model.model_name) in requested or model.config_path in requested
         ]
-    allowed_conditions = [str(item) for item in config.get("conditions") or []]
+    allowed_conditions = normalize_condition_names([str(item) for item in config.get("conditions") or []]) or []
     if dry_run:
         return {
             "dry_run": True,

@@ -7,7 +7,9 @@ from typing import Any, Dict
 from autoskill.ir import GeneratedSkill
 
 
-RELIASKILL_CHALLENGER = "reliaskill_challenger_v1"
+RELIASKILL_V1 = "reliaskill_v1"
+LEGACY_RELIASKILL_CHALLENGER = "reliaskill_challenger_v1"
+RELIASKILL_CHALLENGER = RELIASKILL_V1
 
 CHALLENGER_REQUIRED_FILES = [
     "skill.json",
@@ -44,6 +46,7 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         "package_path": str(package_dir),
         "pipeline_stages": method.get("pipeline_stages", []),
         "source_condition": method.get("source_condition"),
+        "gate_source_condition": method.get("gate_source_condition"),
         "test_controls_used": bool(method.get("test_controls_used", False)),
     }
     if metadata:

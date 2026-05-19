@@ -45,6 +45,7 @@ from autoskill.retrieval_baselines import (
     build_retrieved_memory_skill,
 )
 from autoskill.schema_only import build_schema_only_skill
+from autoskill.templates import build_argument_template, build_structured_call_hints
 from autoskill.sweep import aggregate_experiment_manifests, run_experiment_sweep
 from autoskill.task_eval import (
     score_prediction,
@@ -142,6 +143,101 @@ class ParserValidatorTests(unittest.TestCase):
         self.assertIn("time_range", skill.argument_template)
         self.assertEqual(skill.argument_template["visibility"], "team")
         self.assertIsInstance(skill.argument_template["attendees"], list)
+
+    def test_argument_template_preserves_array_item_required_schema(self) -> None:
+        raw_tool = {
+            "name": "add_observations",
+            "description": "Add observations to entities.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "observations": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "entityName": {"type": "string"},
+                                "contents": {"type": "array", "items": {"type": "string"}},
+                                "metadata": {"type": "object", "properties": {"source": {"type": "string"}}},
+                            },
+                            "required": ["entityName", "contents"],
+                        },
+                    }
+                },
+                "required": ["observations"],
+            },
+        }
+        tool = parse_mcp_tool(raw_tool, source_pointer="fixture#array_object")
+        observations = next(arg for arg in tool.arguments if arg.name == "observations")
+
+        self.assertEqual(observations.items_type, "object")
+        self.assertIn("entityName", (observations.items_schema or {}).get("properties", {}))
+
+        template = build_argument_template(tool, include_optional=False)
+        item = template["observations"][0]
+        self.assertIn("entityName", item)
+        self.assertIn("contents", item)
+        self.assertNotIn("metadata", item)
+
+        skill = SkillGenerator().generate(tool)
+        report = validate_skill(tool, skill)
+        self.assertTrue(report.valid, msg=[issue.message for issue in report.issues])
+        hints = build_structured_call_hints(tool)
+        self.assertTrue(any("entityName" in line and "contents" in line for line in hints["when_to_use"]))
+
+    def test_nonstandard_schema_type_aliases_are_normalized_for_templates(self) -> None:
+        raw_tool = {
+            "name": "sort_and_average",
+            "description": "Sort numbers and average a dictionary of grades.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "values": {"type": "array", "items": {"type": "float"}},
+                    "gradeDict": {"type": "dict"},
+                    "count": {"type": "int"},
+                    "enabled": {"type": "bool"},
+                },
+                "required": ["values", "gradeDict", "count", "enabled"],
+            },
+        }
+        tool = parse_mcp_tool(raw_tool, source_pointer="fixture#aliases")
+        template = build_argument_template(tool, include_optional=False)
+
+        self.assertEqual(next(arg for arg in tool.arguments if arg.name == "values").items_type, "number")
+        self.assertIsInstance(template["values"][0], float)
+        self.assertEqual(template["gradeDict"], {})
+        self.assertIsInstance(template["count"], int)
+        self.assertIsInstance(template["enabled"], bool)
+
+        skill = SkillGenerator().generate(tool)
+        report = validate_skill(tool, skill)
+        self.assertTrue(report.valid, msg=[issue.message for issue in report.issues])
+
+    def test_typed_string_defaults_are_coerced_before_validation(self) -> None:
+        raw_tool = {
+            "name": "get_cell_info",
+            "description": "Get cell information.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "cell_type": {"type": "string"},
+                    "detailed": {"type": "boolean", "default": "false"},
+                    "limit": {"type": "integer", "default": "3"},
+                    "threshold": {"type": "float", "default": "0.5"},
+                },
+                "required": ["cell_type"],
+            },
+        }
+        tool = parse_mcp_tool(raw_tool, source_pointer="fixture#typed_defaults")
+        defaults = {arg.name: arg.default for arg in tool.arguments}
+
+        self.assertIs(defaults["detailed"], False)
+        self.assertEqual(defaults["limit"], 3)
+        self.assertEqual(defaults["threshold"], 0.5)
+
+        skill = SkillGenerator().generate(tool)
+        report = validate_skill(tool, skill)
+        self.assertTrue(report.valid, msg=[issue.message for issue in report.issues])
 
     def test_validator_flags_nested_hallucinated_field(self) -> None:
         tools = {tool.tool_name: tool for tool in _load_tools()}
@@ -252,6 +348,20 @@ class ParserValidatorTests(unittest.TestCase):
 
         self.assertEqual(prediction.predicted_arguments.get("head"), 8)
         self.assertNotIn("tail", prediction.predicted_arguments)
+
+    def test_heuristic_predictor_prefers_explicit_field_assignments(self) -> None:
+        tools = {tool.tool_name: tool for tool in _load_public_tools()}
+        create_tool = tools["create_directory"]
+        task = EvalTask(
+            task_id="explicit_path",
+            tool_name="create_directory",
+            user_request='Use create directory. Set path="docs/control_0.md".',
+            expected_arguments={"path": "docs/control_0.md"},
+        )
+
+        prediction = HeuristicPredictorBackend().predict(create_tool, SkillGenerator().generate(create_tool), task)
+
+        self.assertEqual(prediction.predicted_arguments["path"], "docs/control_0.md")
 
     def test_retrieval_baselines_build_expected_fields(self) -> None:
         tools = {tool.tool_name: tool for tool in _load_public_tools()}

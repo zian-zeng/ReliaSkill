@@ -9,12 +9,18 @@ import yaml
 
 from autoskill.experiment import build_skill_variant_map, load_tools, run_benchmark_pipeline, run_routing_benchmark_pipeline
 from autoskill.generator import SkillGenerator
+from autoskill.conditions import LEGACY_RELIASKILL_CHALLENGER, normalize_condition_name
+from autoskill.ir import GeneratedSkill, ReliabilityScore, RepairReport
 from autoskill.method_metadata import RELIASKILL_CHALLENGER
-from reliaskill.cluster import build_shared_skill_packages
+from reliaskill.cluster import _build_challenger_skill, build_shared_skill_packages
 
 
 class ChallengerConditionTests(unittest.TestCase):
-    def test_challenger_package_loads_dev_selected_gated_artifact_and_records_metadata(self) -> None:
+    def test_reliaskill_v1_is_canonical_and_legacy_name_aliases_to_it(self) -> None:
+        self.assertEqual(RELIASKILL_CHALLENGER, "reliaskill_v1")
+        self.assertEqual(normalize_condition_name(LEGACY_RELIASKILL_CHALLENGER), RELIASKILL_CHALLENGER)
+
+    def test_challenger_package_loads_dev_selected_repaired_artifact_and_records_metadata(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             dev_controls = self._write_dev_controls(root)
@@ -33,9 +39,17 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertTrue((challenger_dir / "skill.json").exists())
             self.assertTrue((challenger_dir / "selection_report.json").exists())
             method_metadata = json.loads((challenger_dir / "method_metadata.json").read_text(encoding="utf-8"))
-            self.assertEqual(method_metadata["source_condition"], "gated_skill")
+            self.assertEqual(method_metadata["source_condition"], "repaired_skill")
+            self.assertEqual(method_metadata["gate_source_condition"], "gated_skill")
             self.assertIn("dev_multi_candidate_selection", method_metadata["pipeline_stages"])
             self.assertFalse(method_metadata["test_controls_used"])
+            skill_json = json.loads((challenger_dir / "skill.json").read_text(encoding="utf-8"))
+            self.assertIn("Full ReliaSkill v1 artifact", skill_json["skill_summary"])
+            self.assertIn("Pipeline: dev-selected candidate", skill_json["skill_summary"])
+            self.assertTrue(skill_json["metadata"]["prompt_visible_method_evidence"])
+            self.assertEqual(skill_json["metadata"]["source_condition"], "repaired_skill")
+            self.assertEqual(skill_json["metadata"]["gate_source_condition"], "gated_skill")
+            self.assertNotIn("gate_decision", skill_json["metadata"])
 
             tools = load_tools("data/raw/public_mcp_filesystem_subset.json")
             loaded = build_skill_variant_map(
@@ -48,9 +62,11 @@ class ChallengerConditionTests(unittest.TestCase):
             )[RELIASKILL_CHALLENGER]
             trace_types = [entry.get("trace_type") for entry in loaded.method_trace]
             self.assertIn("multi_candidate_selection", trace_types)
-            self.assertIn("reliaskill_challenger_composition", trace_types)
+            self.assertIn("reliaskill_v1_composition", trace_types)
             self.assertIn("package_load", trace_types)
-            self.assertEqual(loaded.metadata["method_metadata"]["source_condition"], "gated_skill")
+            self.assertEqual(loaded.metadata["method_metadata"]["source_condition"], "repaired_skill")
+            self.assertEqual(loaded.metadata["method_metadata"]["gate_source_condition"], "gated_skill")
+            self.assertTrue(loaded.metadata["prompt_visible_method_evidence"])
 
             records, _, _ = run_benchmark_pipeline(
                 tools={"create_directory": tools["create_directory"]},
@@ -63,7 +79,7 @@ class ChallengerConditionTests(unittest.TestCase):
             )
             self.assertEqual(len(records), 1)
             self.assertEqual(records[0]["baseline_name"], RELIASKILL_CHALLENGER)
-            self.assertEqual(records[0]["method_metadata"]["source_condition"], "gated_skill")
+            self.assertEqual(records[0]["method_metadata"]["source_condition"], "repaired_skill")
             self.assertEqual(records[0]["method_metadata"]["selection_policy"], "best_behavior_dev")
 
             routing_records, _, _ = run_routing_benchmark_pipeline(
@@ -77,7 +93,77 @@ class ChallengerConditionTests(unittest.TestCase):
             )
             self.assertEqual(len(routing_records), 1)
             self.assertEqual(routing_records[0]["baseline_name"], RELIASKILL_CHALLENGER)
-            self.assertEqual(routing_records[0]["method_metadata"]["source_condition"], "gated_skill")
+            self.assertEqual(routing_records[0]["method_metadata"]["source_condition"], "repaired_skill")
+
+    def test_challenger_soft_gate_keeps_repaired_guidance_visible(self) -> None:
+        skill = GeneratedSkill(
+            baseline_name="repaired_skill",
+            skill_summary="Create a directory.",
+            when_to_use=["Use when the user asks to create a directory and provides a path."],
+            when_not_to_use=["Do not use when the path is missing."],
+            argument_template={"path": "docs"},
+            examples=[{"scenario": "Create docs", "arguments": {"path": "docs"}}],
+        )
+        source_row = {
+            "reliability_score": ReliabilityScore(score=55.0, decision="repair", features={}, rationale=[]),
+            "repair_report": RepairReport(attempted=True, changed=True, rounds=1),
+        }
+        gate_row = {
+            "reliability_score": ReliabilityScore(score=30.0, decision="reject", features={}, rationale=[]),
+            "repair_report": RepairReport(attempted=True, changed=True, rounds=1),
+        }
+
+        challenger = _build_challenger_skill(
+            skill,
+            source_row=source_row,
+            gate_row=gate_row,
+            selection_report_path=Path("missing_selection_report.json"),
+        )
+
+        self.assertEqual(challenger.baseline_name, RELIASKILL_CHALLENGER)
+        self.assertTrue(challenger.when_to_use)
+        self.assertIn("create a directory", " ".join(challenger.when_to_use).lower())
+        self.assertNotIn("gate_decision", challenger.metadata)
+        self.assertEqual(challenger.metadata["source_condition"], "repaired_skill")
+        self.assertEqual(challenger.metadata["gate_source_condition"], "gated_skill")
+
+    def test_challenger_preserves_specific_repaired_negative_boundaries(self) -> None:
+        skill = GeneratedSkill(
+            baseline_name="repaired_skill",
+            skill_summary="Create a directory.",
+            when_to_use=["Use for directory creation."],
+            when_not_to_use=[
+                "Do not call this tool when required inputs are missing or ambiguous.",
+                "Do not invent unsupported parameters or unsupported enum values.",
+                "Do not include unsupported fields; allowed top-level fields are: `path`.",
+                "Do not use for adjacent tools with similar names, descriptions, or arguments.",
+                "Do not use for read/write, search/fetch, create/update, delete/preview, or execute/explain mismatches.",
+                "If the request lacks required fields, abstain or ask for clarification.",
+                "Do not use this tool for out-of-domain requests unrelated to this tool's documented purpose.",
+                "Do not use this tool for explanation, checklist, planning-only, or no-tool-call requests; abstain even when the tool name appears.",
+                "Do not use this tool for read/search mismatch requests; abstain when the user asks to read an exact item and says not to search, retrieve, or browse.",
+                "Do not use this tool when the request says a similar tool should be used and this tool is a distractor that should not be called.",
+                "Do not use this tool for adjacent intent requests where the intended capability is a different tool.",
+            ],
+            argument_template={"path": "docs"},
+            examples=[],
+        )
+        row = {
+            "reliability_score": ReliabilityScore(score=70.0, decision="repair", features={}, rationale=[]),
+            "repair_report": RepairReport(attempted=True, changed=True, rounds=1),
+        }
+
+        challenger = _build_challenger_skill(
+            skill,
+            source_row=row,
+            gate_row=row,
+            selection_report_path=Path("missing_selection_report.json"),
+        )
+        guidance = "\n".join(challenger.when_not_to_use)
+
+        self.assertIn("read/search mismatch", guidance)
+        self.assertIn("similar tool should be used", guidance)
+        self.assertIn("adjacent intent", guidance)
 
     def test_missing_challenger_package_fails_even_when_generation_is_allowed(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

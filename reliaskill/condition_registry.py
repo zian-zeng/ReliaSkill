@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from autoskill.compactness import SKILL_LENGTH_VARIANTS
+from autoskill.artifacts import DOCS_ONLY, GATED_SKILL, NAIVE_SKILL, RAW_MCP, RELIASKILL_CHALLENGER, REPAIRED_SKILL, SCHEMA_ONLY, VALIDATED_SKILL
 from autoskill.conditions import REVIEWER_BASELINES
 from autoskill.prompt_templates import PROMPT_TEMPLATE_CONDITIONS, PROMPT_TEMPLATE_SPECS
 from reliaskill.human_skill_condition import HUMAN_WRITTEN_SKILL
@@ -9,6 +10,24 @@ from reliaskill.stress_tests.corrupt_skills import STRESS_TEST_CONDITIONS
 CONDITION_REGISTRY = {
     condition: {"condition": condition}
     for condition in REVIEWER_BASELINES
+}
+for condition in [RAW_MCP, SCHEMA_ONLY, DOCS_ONLY, NAIVE_SKILL, VALIDATED_SKILL, REPAIRED_SKILL, GATED_SKILL]:
+    CONDITION_REGISTRY[condition] = {
+        "condition": condition,
+        "family": "reliability_ladder",
+        "uses_dev_controls": condition in {NAIVE_SKILL, VALIDATED_SKILL, REPAIRED_SKILL, GATED_SKILL},
+        "uses_test_controls_for_authoring": False,
+    }
+CONDITION_REGISTRY[RELIASKILL_CHALLENGER] = {
+    "condition": RELIASKILL_CHALLENGER,
+    "family": "reliaskill_full_method",
+    "artifact_backed": True,
+    "requires_dev_multi_candidate_selection": True,
+    "requires_validation": True,
+    "requires_repair": True,
+    "requires_reliability_gate": True,
+    "uses_dev_controls": True,
+    "uses_test_controls_for_authoring": False,
 }
 CONDITION_REGISTRY[HUMAN_WRITTEN_SKILL] = {
     "condition": HUMAN_WRITTEN_SKILL,

@@ -13,8 +13,9 @@ from reliaskill.cluster import (
     merge_cluster_shards,
     run_cluster_shard,
     selected_tool_names,
+    tool_slug,
 )
-from autoskill.experiment import build_skill_variant_map, load_tools
+from autoskill.experiment import _safe_dir_name, build_skill_variant_map, load_tools
 from autoskill.generator import SkillGenerator
 
 
@@ -29,6 +30,18 @@ class ClusterRunnerTests(unittest.TestCase):
         for left_index, left in enumerate(shards):
             for right in shards[left_index + 1 :]:
                 self.assertFalse(left.intersection(right))
+
+    def test_long_tool_package_slugs_are_collision_resistant(self) -> None:
+        left = "same_prefix_" + ("x" * 80) + "_left"
+        right = "same_prefix_" + ("x" * 80) + "_right"
+
+        self.assertNotEqual(tool_slug(left), tool_slug(right))
+        self.assertNotEqual(_safe_dir_name(left), _safe_dir_name(right))
+        self.assertLessEqual(len(tool_slug(left)), 50)
+        self.assertLessEqual(len(_safe_dir_name(left)), 50)
+
+        self.assertNotEqual(tool_slug("calculate_BMI"), tool_slug("calculate_bmi"))
+        self.assertNotEqual(_safe_dir_name("calculate_BMI"), _safe_dir_name("calculate_bmi"))
 
     def test_cluster_shard_dry_run_reports_subset_counts(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

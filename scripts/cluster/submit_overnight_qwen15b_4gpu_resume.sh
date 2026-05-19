@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CONFIG="${CONFIG:-configs/experiments/overnight_qwen15b_4gpu_resume.yaml}"
+CONFIG="${CONFIG:-configs/experiments/overnight_qwen15b_full_method_pilot.yaml}"
 GPUS="${GPUS:-4}"
 CPUS="${CPUS:-16}"
 MEM="${MEM:-128G}"

@@ -25,17 +25,17 @@ Do not use test controls for skill selection, repair, threshold tuning, or task 
 
 The current local preparation artifacts establish the following starting point for full experiment runs:
 
-- dataset build: 295 tools, 10 sources, 14 domains, 63 side-effect tools, 261 hard tools, and 48 synthetic tools
+- dataset build: 290 tools, 10 sources, 14 domains, 63 side-effect tools, 261 hard tools, and 48 synthetic tools
 - synthetic fraction: 16.27 percent, with synthetic tools explicitly marked
 - external conversion: 1,089 unique converted tools and 18,702 positive examples
 - BFCL conversion subset: 995 tools and 17,003 examples
 - ToolBench/MCPToolBench++ conversion subset: 94 tools and 1,699 examples
 - API-Bank local availability: missing locally, warning logged without failing conversion
-- controls: 2,950 total controls over 295 tools
-- control split: 1,475 dev and 1,475 test
+- selected controls: 2,900 total controls over 290 tools
+- selected control split: 1,450 dev and 1,450 test
 - per-tool controls: 5 positive and 5 negative controls
-- routing inventory: 5,900 routing examples
-- routing distractor levels: 1,475 easy, 1,475 medium, 1,475 hard, and 1,475 adversarial
+- selected routing inventory: 5,800 routing examples
+- selected routing distractor levels: 1,450 easy, 1,450 medium, 1,450 hard, and 1,450 adversarial
 - routing candidate set: 8.0 average candidates
 - routing similarity diagnostics: 0.196 average name similarity and 0.1393 average argument overlap
 - live execution subset: 75 safe sandbox tasks across filesystem, SQLite, and mock-git domains
@@ -155,7 +155,7 @@ Use this only after the strong run is stable.
 Current dry-run estimate on the local prepared dataset:
 
 - 290 available tools
-- 1,475 tasks
+- 1,450 selected tasks
 - 29 conditions
 - 3 models
 - 128,325 model calls
@@ -245,7 +245,7 @@ Expected outputs:
 
 Current local dataset build:
 
-- 295 tools
+- 290 tools
 - 10 sources
 - 14 domains
 - 63 side-effect tools
@@ -280,7 +280,7 @@ Safe phrases:
 
 Avoid:
 
-- "representative of all MCP servers"
+- "representative of MCP-like tools beyond the evaluated setup"
 - "comprehensive"
 - "real-world" for synthetic or converted records
 
@@ -301,10 +301,10 @@ Expected outputs:
 
 Current local control build:
 
-- 295 tools
-- 2,950 controls
-- 1,475 dev controls
-- 1,475 test controls
+- 290 selected tools
+- 2,900 selected controls
+- 1,450 selected dev controls
+- 1,450 selected test controls
 - 5 positive and 5 negative controls per tool
 - medium and hard negative categories rotate across adjacent intent, explanation-vs-action, known-path/no-search, read-vs-search, near-miss, destructive/read-only, similar-tool distractor, missing-required-info, and ambiguous-abstain cases
 
@@ -360,10 +360,10 @@ Current local routing inventory:
 
 - 5,900 routing examples
 - 8.0 average candidates
-- 1,475 easy examples
-- 1,475 medium examples
-- 1,475 hard examples
-- 1,475 adversarial examples
+- 1,450 selected easy examples
+- 1,450 selected medium examples
+- 1,450 selected hard examples
+- 1,450 selected adversarial examples
 - 0.196 average name similarity
 - 0.1393 average argument overlap
 
@@ -633,7 +633,7 @@ Current `configs/experiments/large_scale.yaml` dry-run estimate:
 - 2 models
 - 9 conditions
 - 290 tools
-- 1,475 tasks
+- 1,450 selected tasks
 - 26,550 remaining model calls
 - about 29 estimated hours
 - Qwen 3B and 7B 4-bit configs fit under a 12 GB budget

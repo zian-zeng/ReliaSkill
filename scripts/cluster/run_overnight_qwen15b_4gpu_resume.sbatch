@@ -11,7 +11,7 @@
 set -euo pipefail
 
 PYTHON_BIN="${PYTHON_BIN:-python}"
-CONFIG="${CONFIG:-configs/experiments/overnight_qwen15b_4gpu_resume.yaml}"
+CONFIG="${CONFIG:-configs/experiments/overnight_qwen15b_full_method_pilot.yaml}"
 GPUS="${GPUS:-4}"
 MODELS="${MODELS:-Qwen_Qwen2.5-1.5B-Instruct}"
 

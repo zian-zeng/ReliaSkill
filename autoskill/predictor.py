@@ -10,7 +10,7 @@ from typing import Any, Dict
 
 from autoskill.eval_types import EvalPrediction, EvalTask
 from autoskill.exposure import render_exposure
-from autoskill.ir import GeneratedSkill, ToolIR
+from autoskill.ir import ArgumentIR, GeneratedSkill, ToolIR
 from autoskill.json_output import parse_json_object_output
 from autoskill.local_model import LocalHFChatRunner
 from autoskill.prompting import build_prediction_prompt
@@ -184,6 +184,50 @@ def _infer_argument_value(arg_name: str, request: str, skill: GeneratedSkill) ->
     return skill.argument_template.get(arg_name)
 
 
+def _extract_explicit_argument_value(arg: ArgumentIR, request: str) -> Any:
+    pattern = rf"\b{re.escape(arg.name)}\s*(?:=|:)\s*(\"[^\"]*\"|'[^']*'|`[^`]*`|\[[^\]]*\]|\{{[^}}]*\}}|[^,\s.;]+)"
+    match = re.search(pattern, request, flags=re.IGNORECASE)
+    if not match:
+        return None
+    raw_value = match.group(1).strip()
+    if len(raw_value) >= 2 and raw_value[0] == raw_value[-1] and raw_value[0] in {"\"", "'", "`"}:
+        raw_value = raw_value[1:-1]
+
+    if arg.type in {"object", "array"}:
+        try:
+            parsed = json.loads(raw_value)
+        except json.JSONDecodeError:
+            return {} if arg.type == "object" else [raw_value]
+        if arg.type == "object" and isinstance(parsed, dict):
+            return parsed
+        if arg.type == "array" and isinstance(parsed, list):
+            return parsed
+        return None
+    if arg.type == "integer":
+        try:
+            return int(raw_value)
+        except ValueError:
+            return None
+    if arg.type == "number":
+        try:
+            return float(raw_value)
+        except ValueError:
+            return None
+    if arg.type == "boolean":
+        lowered = raw_value.lower()
+        if lowered in {"true", "1", "yes"}:
+            return True
+        if lowered in {"false", "0", "no"}:
+            return False
+        return None
+    if arg.enum:
+        for value in arg.enum:
+            if str(value).lower() == raw_value.lower():
+                return value
+        return raw_value
+    return raw_value
+
+
 def _collect_prediction_metadata(skill: GeneratedSkill) -> Dict[str, Any]:
     metadata: Dict[str, Any] = {}
     for entry in skill.method_trace:
@@ -303,7 +347,9 @@ class HeuristicPredictorBackend(PredictorBackend):
                     predicted[arg.name] = arg.default
 
             for arg in tool.arguments:
-                value = _infer_argument_value(arg.name, task.user_request, skill)
+                value = _extract_explicit_argument_value(arg, task.user_request)
+                if value is None:
+                    value = _infer_argument_value(arg.name, task.user_request, skill)
                 if value is None and skill.semantic_hints:
                     value = _infer_semantic_hint_value(tool, arg.name, task.user_request, skill)
                 if value is None:

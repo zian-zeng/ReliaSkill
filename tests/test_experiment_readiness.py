@@ -41,6 +41,7 @@ class ExperimentReadinessTests(unittest.TestCase):
                     {"baseline_name": "raw_mcp", "num_examples": "3", "joint_exact_match": "0.1"},
                     {"baseline_name": "generated_skill_base", "num_examples": "3", "joint_exact_match": "0.2"},
                     {"baseline_name": "gated_skill", "num_examples": "3", "joint_exact_match": "0.3"},
+                    {"baseline_name": "reliaskill_v1", "num_examples": "3", "joint_exact_match": "0.4"},
                 ],
             )
             self._write_csv(
@@ -54,7 +55,9 @@ class ExperimentReadinessTests(unittest.TestCase):
                 [
                     {"baseline_a": "raw_mcp", "baseline_b": "generated_skill_base", "paired_examples": "3"},
                     {"baseline_a": "raw_mcp", "baseline_b": "gated_skill", "paired_examples": "3"},
+                    {"baseline_a": "raw_mcp", "baseline_b": "reliaskill_v1", "paired_examples": "3"},
                     {"baseline_a": "generated_skill_base", "baseline_b": "gated_skill", "paired_examples": "3"},
+                    {"baseline_a": "generated_skill_base", "baseline_b": "reliaskill_v1", "paired_examples": "3"},
                 ],
             )
             for name in [
