@@ -124,6 +124,21 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
         self.assertIn("rescued_grounded_false_abstention", verifier["actions"])
 
+    def test_v1_does_not_abstain_when_without_using_mentions_unrelated_distractor(self) -> None:
+        prediction = safe_predict(
+            _search_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t2_unrelated_without_using",
+                tool_name="search",
+                user_request='Search query="schema contract" without using bank get account balance.',
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"query": "schema contract"})
+
     def test_v1_rescues_false_abstention_with_artifact_grounding_context(self) -> None:
         prediction = safe_predict(
             _read_tool(),
@@ -477,6 +492,221 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
         self.assertIn("filled_grounded_required:date_range", verifier["actions"])
 
+    def test_v1_fills_grounded_scalar_array_argument(self) -> None:
+        prediction = safe_predict(
+            _array_sort_tool(),
+            _v1_skill(),
+            EvalTask(task_id="t2_array_scalar", tool_name="array_sort", user_request="Sort list=[3, 1, 2] order=ascending."),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"list": [3.0, 1.0, 2.0], "order": "ascending"})
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIn("filled_grounded_required:list", verifier["actions"])
+
+    def test_v1_fills_comma_separated_scalar_array_argument(self) -> None:
+        prediction = safe_predict(
+            _array_sort_tool(),
+            _v1_skill(),
+            EvalTask(task_id="t2_array_scalar_commas", tool_name="array_sort", user_request="Sort list=3, 1, 2, order=descending."),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"list": [3.0, 1.0, 2.0], "order": "descending"})
+
+    def test_v1_fills_directional_city_arguments(self) -> None:
+        prediction = safe_predict(
+            _city_route_tool(),
+            _v1_skill(),
+            EvalTask(task_id="t2_city_pair", tool_name="city_distance.find_shortest", user_request="Find the route from Paris to Berlin."),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"start_city": "Paris", "end_city": "Berlin"})
+
+    def test_v1_fills_sequence_and_reference_arguments(self) -> None:
+        prediction = safe_predict(
+            _dna_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t2_sequence_pair",
+                tool_name="analyze_dna_sequence",
+                user_request="Analyze sequence ATCGAA against reference ATCGTA.",
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"sequence": "ATCGAA", "reference_sequence": "ATCGTA"})
+
+    def test_v1_does_not_bind_every_numeric_required_arg_to_first_number(self) -> None:
+        prediction = safe_predict(
+            _quadratic_tool(),
+            _v1_skill(),
+            EvalTask(task_id="t2_numeric_guard", tool_name="algebra.quadratic_roots", user_request="Solve the quadratic with coefficient 7 only."),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertFalse(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {})
+
+    def test_v1_binds_positional_coefficients_when_the_request_says_coefficients(self) -> None:
+        prediction = safe_predict(
+            _quadratic_tool(),
+            _v1_skill(),
+            EvalTask(task_id="t2_numeric_positional", tool_name="algebra.quadratic_roots", user_request="Solve quadratic coefficients 1, -3, 2."),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"a": 1.0, "b": -3.0, "c": 2.0})
+
+    def test_v1_prefers_later_explicit_argument_over_formula_text(self) -> None:
+        prediction = safe_predict(
+            _quadratic_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t2_numeric_formula_then_apply",
+                tool_name="algebra.quadratic_roots",
+                user_request="Find roots of ax^2 + bx + c = 0. Use a=9, b=9, c=9.",
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"a": 9.0, "b": 9.0, "c": 9.0})
+
+    def test_v1_preserves_explicit_free_form_object_argument(self) -> None:
+        prediction = safe_predict(
+            _free_form_object_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t2_free_object",
+                tool_name="calculate_average",
+                user_request='Calculate average with gradeDict={"math": 95, "science": 91}.',
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"gradeDict": {"math": 95, "science": 91}})
+
+    def test_v1_preserves_exact_enum_case_when_schema_allows_it(self) -> None:
+        prediction = safe_predict(
+            _genotype_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t2_enum_exact_case",
+                tool_name="calculate_genotype_frequency",
+                user_request='Calculate genotype frequency allele_frequency=9 genotype="aa".',
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"allele_frequency": 9.0, "genotype": "aa"})
+
+    def test_v1_accepts_explicit_symbolic_datetime_placeholders(self) -> None:
+        prediction = safe_predict(
+            _calendar_event_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t2_symbolic_datetime",
+                tool_name="calendar_create_event",
+                user_request='Create event calendar_id="item-17" title="title_17" start_time="start_time_17" end_time="end_time_17".',
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(
+            prediction.predicted_arguments,
+            {
+                "calendar_id": "item-17",
+                "title": "title_17",
+                "start_time": "start_time_17",
+                "end_time": "end_time_17",
+            },
+        )
+
+    def test_v1_grounds_single_character_required_enum(self) -> None:
+        prediction = safe_predict(
+            _weather_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t2_single_char_enum",
+                tool_name="get_weather",
+                user_request='Fetch weather city="Boston" unit="F" include_forecast=false.',
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"city": "Boston", "unit": "F", "include_forecast": False})
+
+    def test_v1_does_not_fill_optional_enum_from_benchmark_id_token(self) -> None:
+        prediction = safe_predict(
+            _ticket_create_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t2_optional_enum_id_noise",
+                tool_name="mock_issue_tracking_create_ticket",
+                user_request='Create ticket project_key="project_key_8" title="title_8" dry_run=true. Use benchmark item id positive_medium_1.',
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"project_key": "project_key_8", "title": "title_8", "dry_run": True})
+
+    def test_v1_does_not_fill_tail_from_unrelated_end_tool_phrase(self) -> None:
+        prediction = safe_predict(
+            _read_with_head_tail_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t2_optional_tail_noise",
+                tool_name="read_file",
+                user_request='Read path="docs/control_17.md" head=10 without using end codegen session.',
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"path": "docs/control_17.md", "head": 10})
+
+    def test_v1_does_not_fill_nested_optional_from_sibling_property_name(self) -> None:
+        prediction = safe_predict(
+            _start_codegen_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t2_nested_optional_noise",
+                tool_name="start_codegen_session",
+                user_request='Start session options={"outputPath": "docs/control_17.md"}.',
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"options": {"outputPath": "docs/control_17.md"}})
+
+    def test_v1_does_not_fill_include_boolean_from_generic_include_phrase(self) -> None:
+        prediction = safe_predict(
+            _web_search_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t2_include_boolean_noise",
+                tool_name="tavily-search",
+                user_request='Search query="reliability evaluation"; include these details where applicable: country="austria", days=9.',
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"query": "reliability evaluation", "country": "austria", "days": 9})
+
     def test_v1_lifts_dotted_fields_into_required_nested_object(self) -> None:
         prediction = safe_predict(
             _transaction_search_tool(),
@@ -562,6 +792,45 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         self.assertEqual(prediction.predicted_arguments, {"observations": [{"entityName": "Alice", "contents": ["note"]}]})
         verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
         self.assertIn("filled_grounded_required:observations", verifier["actions"])
+
+    def test_v1_fills_nested_json_array_object_without_truncation(self) -> None:
+        prediction = safe_predict(
+            _observation_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t2k_fill_array_json",
+                tool_name="add_observations",
+                user_request='Add observations=[{"contents": ["item_17"], "entityName": "entityname_17"}].',
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(
+            prediction.predicted_arguments,
+            {"observations": [{"contents": ["item_17"], "entityName": "entityname_17"}]},
+        )
+
+    def test_v1_write_call_survives_unrelated_without_using_distractor_phrase(self) -> None:
+        prediction = safe_predict(
+            _observation_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t2k_unrelated_without_using_write",
+                tool_name="add_observations",
+                user_request=(
+                    'Without using notes create memory, add observations='
+                    '[{"contents": ["item_17"], "entityName": "entityname_17"}].'
+                ),
+            ),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(
+            prediction.predicted_arguments,
+            {"observations": [{"contents": ["item_17"], "entityName": "entityname_17"}]},
+        )
 
     def test_v1_replaces_invalid_array_container_when_flat_item_fields_are_grounded(self) -> None:
         prediction = safe_predict(
@@ -771,6 +1040,153 @@ def _transaction_search_tool() -> ToolIR:
                 },
                 required_properties=["start", "end"],
             ),
+        ],
+    )
+
+
+def _array_sort_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="array_sort",
+        tool_purpose="Sort a numeric array.",
+        arguments=[
+            ArgumentIR(name="list", type="array", required=True, items_type="number"),
+            ArgumentIR(name="order", type="string", required=True, enum=["ascending", "descending"]),
+        ],
+    )
+
+
+def _city_route_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="city_distance.find_shortest",
+        tool_purpose="Find a route between two cities.",
+        arguments=[
+            ArgumentIR(name="start_city", type="string", required=True),
+            ArgumentIR(name="end_city", type="string", required=True),
+        ],
+    )
+
+
+def _dna_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="analyze_dna_sequence",
+        tool_purpose="Analyze differences between a DNA sequence and reference sequence.",
+        arguments=[
+            ArgumentIR(name="sequence", type="string", required=True),
+            ArgumentIR(name="reference_sequence", type="string", required=True),
+        ],
+    )
+
+
+def _quadratic_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="algebra.quadratic_roots",
+        tool_purpose="Solve quadratic roots from coefficients a, b, and c.",
+        arguments=[
+            ArgumentIR(name="a", type="number", required=True),
+            ArgumentIR(name="b", type="number", required=True),
+            ArgumentIR(name="c", type="number", required=True),
+        ],
+    )
+
+
+def _free_form_object_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="calculate_average",
+        tool_purpose="Calculate an average from a dictionary of grades.",
+        arguments=[ArgumentIR(name="gradeDict", type="object", required=True)],
+    )
+
+
+def _genotype_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="calculate_genotype_frequency",
+        tool_purpose="Calculate genotype frequency.",
+        arguments=[
+            ArgumentIR(name="allele_frequency", type="number", required=True),
+            ArgumentIR(name="genotype", type="string", required=True, enum=["AA", "Aa", "aa"]),
+        ],
+    )
+
+
+def _calendar_event_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="calendar_create_event",
+        tool_purpose="Create a calendar event.",
+        arguments=[
+            ArgumentIR(name="calendar_id", type="string", required=True),
+            ArgumentIR(name="title", type="string", required=True),
+            ArgumentIR(name="start_time", type="string", required=True, format="date-time"),
+            ArgumentIR(name="end_time", type="string", required=True, format="date-time"),
+        ],
+        schema_complexity={"side_effect_type": "write"},
+    )
+
+
+def _weather_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="get_weather",
+        tool_purpose="Fetch weather for a city.",
+        arguments=[
+            ArgumentIR(name="city", type="string", required=True),
+            ArgumentIR(name="unit", type="string", required=True, enum=["C", "F"]),
+            ArgumentIR(name="include_forecast", type="boolean", required=False),
+        ],
+    )
+
+
+def _ticket_create_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="mock_issue_tracking_create_ticket",
+        tool_purpose="Create a ticket in an offline benchmark fixture.",
+        arguments=[
+            ArgumentIR(name="project_key", type="string", required=True),
+            ArgumentIR(name="title", type="string", required=True),
+            ArgumentIR(name="dry_run", type="boolean", required=False),
+            ArgumentIR(name="priority", type="string", required=False, enum=["low", "medium", "high"]),
+        ],
+        schema_complexity={"side_effect_type": "write"},
+    )
+
+
+def _read_with_head_tail_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="read_file",
+        tool_purpose="Read file contents.",
+        arguments=[
+            ArgumentIR(name="path", type="string", required=True),
+            ArgumentIR(name="head", type="integer", required=False),
+            ArgumentIR(name="tail", type="integer", required=False),
+        ],
+    )
+
+
+def _start_codegen_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="start_codegen_session",
+        tool_purpose="Start a code generation session.",
+        arguments=[
+            ArgumentIR(
+                name="options",
+                type="object",
+                required=True,
+                properties={"outputPath": {"type": "string"}, "testNamePrefix": {"type": "string"}},
+                required_properties=["outputPath"],
+            )
+        ],
+    )
+
+
+def _web_search_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="tavily-search",
+        tool_purpose="Search the web.",
+        arguments=[
+            ArgumentIR(name="query", type="string", required=True),
+            ArgumentIR(name="country", type="string", required=False),
+            ArgumentIR(name="days", type="integer", required=False),
+            ArgumentIR(name="include_images", type="boolean", required=False),
+            ArgumentIR(name="include_image_descriptions", type="boolean", required=False),
+            ArgumentIR(name="include_raw_content", type="boolean", required=False),
         ],
     )
 

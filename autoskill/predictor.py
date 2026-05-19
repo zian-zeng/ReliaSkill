@@ -24,9 +24,22 @@ from autoskill.schema_utils import normalize_schema_node, schema_type
 RELIASKILL_V1_RUNTIME_CONDITIONS = {"reliaskill_v1", "reliaskill_challenger_v1"}
 
 
-def _extract_number(text: str) -> int | None:
-    match = re.search(r"\b(\d+)\b", text)
-    return int(match.group(1)) if match else None
+def _extract_number(text: str) -> int | float | None:
+    numbers = _extract_numeric_literals(text)
+    return numbers[0] if numbers else None
+
+
+def _extract_numeric_literals(text: str) -> list[int | float]:
+    text = re.sub(r"\b\d{4}-\d{1,2}-\d{1,2}\b", " ", text)
+    text = re.sub(r"\b\d{1,2}/\d{1,2}(?:/\d{2,4})?\b", " ", text)
+    values: list[int | float] = []
+    for match in re.finditer(r"(?<![A-Za-z0-9_.-])-?\d+(?:\.\d+)?(?![A-Za-z0-9_-])", text):
+        values.append(_parse_numeric_literal(match.group(0)))
+    return values
+
+
+def _parse_numeric_literal(raw_value: str) -> int | float:
+    return float(raw_value) if "." in raw_value else int(raw_value)
 
 
 def _extract_quoted_or_tail(text: str) -> str:
@@ -237,12 +250,75 @@ def _infer_argument_value(arg_name: str, request: str, skill: GeneratedSkill) ->
     return skill.argument_template.get(arg_name)
 
 
-def _extract_explicit_argument_value(arg: ArgumentIR, request: str) -> Any:
-    pattern = rf"\b{re.escape(arg.name)}\s*(?:=|:)\s*(\"[^\"]*\"|'[^']*'|`[^`]*`|\[[^\]]*\]|\{{[^}}]*\}}|[^,\s.;]+)"
-    match = re.search(pattern, request, flags=re.IGNORECASE)
-    if not match:
+def _extract_named_argument_span(name: str, request: str, *, allow_commas: bool = False) -> str | None:
+    matches = list(re.finditer(rf"\b{re.escape(name)}\s*(?:=|:)\s*", request, flags=re.IGNORECASE))
+    if not matches:
         return None
-    raw_value = match.group(1).strip()
+    match = matches[-1]
+    return _extract_value_span(request, match.end(), allow_commas=allow_commas)
+
+
+def _extract_value_span(text: str, start: int, *, allow_commas: bool) -> str | None:
+    tail = text[start:].lstrip()
+    if not tail:
+        return None
+    opener = tail[0]
+    if opener in {"\"", "'", "`"}:
+        escaped = False
+        for index, char in enumerate(tail[1:], start=1):
+            if escaped:
+                escaped = False
+                continue
+            if char == "\\":
+                escaped = True
+                continue
+            if char == opener:
+                return tail[: index + 1].strip()
+        return tail.strip()
+    if opener in {"[", "{"}:
+        balanced = _extract_balanced_jsonish_span(tail)
+        if balanced:
+            return balanced
+    if allow_commas:
+        boundary = re.search(r",\s*[A-Za-z_][A-Za-z0-9_.-]*\s*(?:=|:)|\s+(?:and|with|using|where)\s+[A-Za-z_][A-Za-z0-9_.-]*\s*(?:=|:)|[.;]", tail)
+        value = tail[: boundary.start() if boundary else len(tail)].strip()
+        return value or None
+    match = re.match(r"[^,\s.;]+", tail)
+    return match.group(0).strip() if match else None
+
+
+def _extract_balanced_jsonish_span(text: str) -> str | None:
+    open_to_close = {"[": "]", "{": "}"}
+    stack: list[str] = []
+    quote: str | None = None
+    escaped = False
+    for index, char in enumerate(text):
+        if quote is not None:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == quote:
+                quote = None
+            continue
+        if char in {"\"", "'"}:
+            quote = char
+            continue
+        if char in open_to_close:
+            stack.append(open_to_close[char])
+            continue
+        if stack and char == stack[-1]:
+            stack.pop()
+            if not stack:
+                return text[: index + 1].strip()
+    return None
+
+
+def _extract_explicit_argument_value(arg: ArgumentIR, request: str) -> Any:
+    raw_value = _extract_named_argument_span(arg.name, request)
+    if raw_value is None:
+        return None
+    raw_value = raw_value.strip()
     if len(raw_value) >= 2 and raw_value[0] == raw_value[-1] and raw_value[0] in {"\"", "'", "`"}:
         raw_value = raw_value[1:-1]
 
@@ -250,7 +326,10 @@ def _extract_explicit_argument_value(arg: ArgumentIR, request: str) -> Any:
         try:
             parsed = json.loads(raw_value)
         except json.JSONDecodeError:
-            return {} if arg.type == "object" else [raw_value]
+            if arg.type == "array":
+                extracted = _extract_array_value_for_argument(arg, request)
+                return extracted if extracted is not None else [raw_value]
+            return {}
         if arg.type == "object" and isinstance(parsed, dict):
             return parsed
         if arg.type == "array" and isinstance(parsed, list):
@@ -275,10 +354,218 @@ def _extract_explicit_argument_value(arg: ArgumentIR, request: str) -> Any:
         return None
     if arg.enum:
         for value in arg.enum:
+            if str(value) == raw_value:
+                return value
+        for value in arg.enum:
             if str(value).lower() == raw_value.lower():
                 return value
         return raw_value
     return raw_value
+
+
+def _item_schema_for_array(arg: ArgumentIR) -> Dict[str, Any]:
+    if isinstance(arg.items_schema, dict):
+        schema, _ = normalize_schema_node(arg.items_schema)
+        return schema
+    return {"type": arg.items_type or "string"}
+
+
+def _extract_array_value_for_argument(arg: ArgumentIR, request: str) -> list[Any] | None:
+    item_schema = _item_schema_for_array(arg)
+    return _extract_array_value(arg.name, item_schema, request)
+
+
+def _extract_array_value(name: str, item_schema: Dict[str, Any], request: str) -> list[Any] | None:
+    raw_value = _extract_named_array_value_span(name, request)
+    parts = _name_parts(name)
+    if raw_value is None and parts.intersection({"list", "array", "data", "values", "numbers", "items", "series"}):
+        raw_value = _extract_generic_array_span(request)
+    if raw_value is None and parts.intersection({"path", "paths", "file", "files", "filename", "filenames"}):
+        paths = _extract_path_list_from_request(request)
+        return paths or None
+    if raw_value is None:
+        quoted_values = re.findall(r'"([^"]+)"', request)
+        if quoted_values and parts.intersection({"content", "contents", "text", "message", "messages", "items", "values"}):
+            return quoted_values
+        return None
+    return _parse_array_items(raw_value, item_schema)
+
+
+def _extract_named_array_value_span(name: str, request: str) -> str | None:
+    return _extract_named_argument_span(name, request, allow_commas=True)
+
+
+def _extract_generic_array_span(request: str) -> str | None:
+    patterns = (
+        r"\b(?:numbers?|values?|data|list|array|items|series)\s*(?:=|:|are|is|of|to sort|to use|containing)?\s*(\[[^\]]+\]|[^.;]+)",
+        r"\b(?:sort|histogram|plot|analyze)\s+(?:the\s+)?(?:numbers?|values?|data|list|array|items|series)\s+([^.;]+)",
+    )
+    for pattern in patterns:
+        match = re.search(pattern, request, flags=re.IGNORECASE)
+        if match:
+            raw_value = match.group(1).strip()
+            if raw_value:
+                return raw_value
+    return None
+
+
+def _parse_array_items(raw_value: str, item_schema: Dict[str, Any]) -> list[Any] | None:
+    raw_value = raw_value.strip().strip(".")
+    kind = schema_type(item_schema) or str(item_schema.get("type") or "string").lower()
+    if raw_value.startswith("[") and raw_value.endswith("]"):
+        try:
+            parsed = json.loads(raw_value)
+            if isinstance(parsed, list):
+                return [_coerce_array_item(item, kind) for item in parsed]
+        except json.JSONDecodeError:
+            raw_value = raw_value[1:-1]
+    if kind in {"integer", "number"}:
+        numbers = _extract_numeric_literals(raw_value)
+        if not numbers:
+            return None
+        if kind == "integer":
+            return [int(value) for value in numbers]
+        return [float(value) if isinstance(value, float) else value for value in numbers]
+    if kind == "boolean":
+        values: list[bool] = []
+        for token in re.findall(r"\b(?:true|false|yes|no|on|off|1|0)\b", raw_value, flags=re.IGNORECASE):
+            lowered = token.lower()
+            values.append(lowered in {"true", "yes", "on", "1"})
+        return values or None
+    quoted = re.findall(r'"([^"]+)"|\'([^\']+)\'|`([^`]+)`', raw_value)
+    if quoted:
+        return [next(item for item in group if item) for group in quoted]
+    parts = [part.strip(" \"'`") for part in re.split(r"\s*(?:,|\band\b)\s*", raw_value) if part.strip(" \"'`")]
+    return parts or None
+
+
+def _coerce_array_item(value: Any, kind: str | None) -> Any:
+    if kind == "integer" and isinstance(value, (int, float, str)) and not isinstance(value, bool):
+        return int(value)
+    if kind == "number" and isinstance(value, (int, float, str)) and not isinstance(value, bool):
+        return float(value) if isinstance(value, str) and "." in value else value
+    if kind == "string" and not isinstance(value, str):
+        return str(value)
+    return value
+
+
+def _extract_path_list_from_request(request: str) -> list[str]:
+    quoted = re.findall(r'"([A-Za-z0-9_./*?-]+\.[A-Za-z0-9_*?-]+)"', request)
+    paths = quoted or re.findall(r"\b[A-Za-z0-9_./*?-]+\.[A-Za-z0-9_*?-]+\b", request)
+    deduped: list[str] = []
+    for path in paths:
+        if path not in deduped:
+            deduped.append(path)
+    return deduped
+
+
+def _extract_numeric_value_for_argument(tool: ToolIR, arg: ArgumentIR, request: str) -> int | float | None:
+    named = _extract_number_for_name(arg.name, request)
+    if named is not None:
+        return int(named) if arg.type == "integer" else named
+    positional = _extract_positional_numeric_value(tool, arg, request)
+    if positional is not None:
+        return int(positional) if arg.type == "integer" else positional
+    required_numeric = [item for item in tool.arguments if item.required and item.type in {"integer", "number"}]
+    if len(required_numeric) <= 1:
+        value = _extract_number(request)
+        if value is not None:
+            return int(value) if arg.type == "integer" else value
+    return None
+
+
+def _extract_positional_numeric_value(tool: ToolIR, arg: ArgumentIR, request: str) -> int | float | None:
+    required_numeric = [item for item in tool.arguments if item.required and item.type in {"integer", "number"}]
+    if arg.name not in {item.name for item in required_numeric} or len(required_numeric) < 2:
+        return None
+    numbers = _extract_numeric_literals(request)
+    if len(numbers) < len(required_numeric):
+        return None
+    names = [item.name for item in required_numeric]
+    lowered = request.lower()
+    safe_positional = (
+        set(names).issubset({"a", "b", "c", "x", "y", "z"})
+        and re.search(r"\b(?:coefficient|coefficients|quadratic|polynomial|coordinate|coordinates|point)\b", lowered)
+    ) or (
+        re.search(r"\b(?:values?|parameters?|inputs?|dimensions?)\b", lowered)
+        and len(numbers) == len(required_numeric)
+    )
+    if not safe_positional:
+        return None
+    return numbers[names.index(arg.name)]
+
+
+def _looks_like_location_argument(name: str) -> bool:
+    parts = _name_parts(name)
+    if parts.intersection({"city", "location", "place", "address"}):
+        return True
+    if parts.intersection({"origin", "destination"}) and not parts.intersection({"id", "account", "user", "entity"}):
+        return True
+    return False
+
+
+def _extract_directional_location_value(name: str, request: str) -> str | None:
+    explicit = _extract_named_value(name, request)
+    if explicit:
+        return explicit
+    parts = _name_parts(name)
+    patterns = (
+        r"\bfrom\s+(.+?)\s+(?:to|toward|towards|into)\s+(.+?)(?:\s+(?:by|via|using|with|for)\b|[.;]|$)",
+        r"\borigin\s*(?:=|:|is)?\s*(.+?)\s+(?:destination|dest)\s*(?:=|:|is)?\s*(.+?)(?:\s+(?:by|via|using|with|for)\b|[.;]|$)",
+        r"\bsource\s*(?:city|location|place)?\s*(?:=|:|is)?\s*(.+?)\s+(?:target|destination|dest)\s*(?:city|location|place)?\s*(?:=|:|is)?\s*(.+?)(?:\s+(?:by|via|using|with|for)\b|[.;]|$)",
+    )
+    for pattern in patterns:
+        match = re.search(pattern, request, flags=re.IGNORECASE)
+        if not match:
+            continue
+        start_value = _clean_location_value(match.group(1))
+        end_value = _clean_location_value(match.group(2))
+        if parts.intersection({"start", "from", "source", "origin", "departure"}):
+            return start_value
+        if parts.intersection({"end", "to", "target", "destination", "dest", "arrival"}):
+            return end_value
+    if parts.intersection({"city", "location", "place", "address"}):
+        match = re.search(r"\b(?:in|at|near|for)\s+([A-Z][A-Za-z0-9_-]*(?:\s+[A-Z][A-Za-z0-9_-]*){0,3})\b", request)
+        if match:
+            return _clean_location_value(match.group(1))
+    return None
+
+
+def _clean_location_value(value: str) -> str:
+    cleaned = value.strip(" \"'`,")
+    cleaned = re.sub(r"\b(?:city|location|place|address)\b$", "", cleaned, flags=re.IGNORECASE).strip(" \"'`,")
+    return cleaned
+
+
+def _looks_like_sequence_argument(name: str) -> bool:
+    return bool(_name_parts(name).intersection({"sequence", "reference", "dna", "rna"}))
+
+
+def _extract_sequence_value(name: str, request: str) -> str | None:
+    explicit = _extract_named_value(name, request)
+    if explicit and re.fullmatch(r"[A-Za-z]+", explicit):
+        return explicit.upper()
+    parts = _name_parts(name)
+    reference_patterns = (
+        r"\breference(?:\s+sequence)?\s*(?:=|:|is|as|of)?\s*([ACGTUNacgtun]{4,})\b",
+        r"\bagainst\s+(?:reference\s+)?([ACGTUNacgtun]{4,})\b",
+    )
+    if "reference" in parts:
+        for pattern in reference_patterns:
+            match = re.search(pattern, request, flags=re.IGNORECASE)
+            if match:
+                return match.group(1).upper()
+        dna_values = re.findall(r"\b[ACGTUNacgtun]{4,}\b", request)
+        return dna_values[1].upper() if len(dna_values) > 1 else None
+    for pattern in (
+        r"\b(?:dna|rna)?\s*sequence\s*(?:=|:|is|as|of)?\s*([ACGTUNacgtun]{4,})\b",
+        r"\banalyze\s+([ACGTUNacgtun]{4,})\b",
+    ):
+        match = re.search(pattern, request, flags=re.IGNORECASE)
+        if match:
+            return match.group(1).upper()
+    dna_values = re.findall(r"\b[ACGTUNacgtun]{4,}\b", request)
+    return dna_values[0].upper() if dna_values else None
 
 
 def _collect_prediction_metadata(skill: GeneratedSkill) -> Dict[str, Any]:
@@ -567,6 +854,8 @@ def _sanitize_value_for_schema(value: Any, schema: Dict[str, Any], path: str, ac
             issues.append(f"{path}:type_mismatch")
             return None, issues
         properties = schema.get("properties", {}) or {}
+        if not properties:
+            return dict(value), issues
         required = [str(item) for item in schema.get("required", []) or []]
         sanitized: Dict[str, Any] = {}
         for key, child_value in value.items():
@@ -614,13 +903,14 @@ def _sanitize_value_for_schema(value: Any, schema: Dict[str, Any], path: str, ac
 def _validate_string_contract(value: str, schema: Dict[str, Any], path: str) -> list[str]:
     issues: list[str] = []
     fmt = str(schema.get("format") or "").lower()
-    if fmt == "email" and not re.fullmatch(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}", value):
+    symbolic_placeholder = _looks_like_symbolic_placeholder(value)
+    if fmt == "email" and not symbolic_placeholder and not re.fullmatch(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}", value):
         issues.append(f"{path}:invalid_format")
-    if fmt in {"uri", "url"} and not re.match(r"^https?://[^\s]+$", value):
+    if fmt in {"uri", "url"} and not symbolic_placeholder and not re.match(r"^https?://[^\s]+$", value):
         issues.append(f"{path}:invalid_format")
-    if fmt == "date" and not re.fullmatch(r"\d{4}-\d{1,2}-\d{1,2}", value):
+    if fmt == "date" and not symbolic_placeholder and not re.fullmatch(r"\d{4}-\d{1,2}-\d{1,2}", value):
         issues.append(f"{path}:invalid_format")
-    if fmt == "date-time" and not re.fullmatch(r"\d{4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:?\d{2})?", value):
+    if fmt == "date-time" and not symbolic_placeholder and not re.fullmatch(r"\d{4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:?\d{2})?", value):
         issues.append(f"{path}:invalid_format")
     pattern = schema.get("pattern")
     if isinstance(pattern, str):
@@ -636,6 +926,10 @@ def _validate_string_contract(value: str, schema: Dict[str, Any], path: str) -> 
     if isinstance(max_length, int) and len(value) > max_length:
         issues.append(f"{path}:max_length")
     return issues
+
+
+def _looks_like_symbolic_placeholder(value: str) -> bool:
+    return bool(re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*_\d+", value.strip()))
 
 
 def _grounded_required_value(tool: ToolIR, arg: ArgumentIR, request: str, skill: GeneratedSkill) -> Any:
@@ -660,6 +954,10 @@ def _grounded_required_value(tool: ToolIR, arg: ArgumentIR, request: str, skill:
     if arg.name == "excludePatterns":
         extracted = _extract_exclude_patterns(request)
         return extracted if extracted else None
+    if arg.type == "array":
+        extracted = _extract_array_value_for_argument(arg, request)
+        if extracted:
+            return extracted
     if arg.format == "email" or "email" in arg.name.lower():
         return _extract_email_from_request(request)
     if arg.format in {"uri", "url"} or any(token in arg.name.lower() for token in ("url", "uri", "link")):
@@ -669,12 +967,16 @@ def _grounded_required_value(tool: ToolIR, arg: ArgumentIR, request: str, skill:
     if arg.format == "date" or "date" in arg.name.lower():
         return _extract_date_from_request(request)
     if arg.type in {"integer", "number"}:
-        return _extract_number(lowered)
+        return _extract_numeric_value_for_argument(tool, arg, request)
     if arg.enum:
         for value in arg.enum:
             if str(value).lower() in lowered:
                 return value
     name_parts = _name_parts(arg.name)
+    if _looks_like_location_argument(arg.name):
+        return _extract_directional_location_value(arg.name, request)
+    if _looks_like_sequence_argument(arg.name):
+        return _extract_sequence_value(arg.name, request)
     if (
         not _contract_ablation_disabled(skill, "disable_identifier_binding")
         and name_parts.intersection({"id", "identifier", "account", "user", "entity", "person", "name", "title"})
@@ -735,9 +1037,10 @@ def _extract_schema_property_value(name: str, schema: Any, request: str) -> Any:
                 return True
         return None
     if kind == "array":
-        quoted_values = re.findall(r'"([^"]+)"', request)
-        if quoted_values and parts.intersection({"content", "contents", "text", "message", "items", "values"}):
-            return quoted_values
+        item_schema = schema.get("items", {}) if isinstance(schema.get("items"), dict) else {"type": schema.get("items_type") or "string"}
+        extracted = _extract_array_value(name, item_schema, request)
+        if extracted:
+            return extracted
         return None
     if schema.get("format") == "email" or parts.intersection({"email", "recipient"}):
         return _extract_email_from_request(request)
@@ -747,6 +1050,10 @@ def _extract_schema_property_value(name: str, schema: Any, request: str) -> Any:
         return _extract_datetime_from_request(request)
     if schema.get("format") == "date" or parts.intersection({"date"}):
         return _extract_date_from_request(request)
+    if _looks_like_location_argument(name):
+        return _extract_directional_location_value(name, request)
+    if _looks_like_sequence_argument(name):
+        return _extract_sequence_value(name, request)
     if parts.intersection({"start", "begin", "from", "since", "after"}):
         return _extract_temporal_value(request, start=True)
     if parts.intersection({"end", "until", "before", "to"}):
@@ -763,11 +1070,10 @@ def _extract_schema_property_value(name: str, schema: Any, request: str) -> Any:
 
 
 def _extract_named_value(name: str, request: str) -> str | None:
-    pattern = rf"\b{re.escape(name)}\s*(?:=|:)\s*(\"[^\"]*\"|'[^']*'|`[^`]*`|\[[^\]]*\]|\{{[^}}]*\}}|[^,\s.;]+)"
-    match = re.search(pattern, request, flags=re.IGNORECASE)
-    if not match:
+    raw_value = _extract_named_argument_span(name, request)
+    if raw_value is None:
         return None
-    raw_value = match.group(1).strip()
+    raw_value = raw_value.strip()
     if len(raw_value) >= 2 and raw_value[0] == raw_value[-1] and raw_value[0] in {"\"", "'", "`"}:
         raw_value = raw_value[1:-1]
     return raw_value
@@ -816,6 +1122,14 @@ def _extract_number_for_name(name: str, request: str) -> int | float | None:
                 return float(raw)
             except ValueError:
                 return None
+    before = re.search(rf"(?<![A-Za-z0-9_.-])(-?\d+(?:\.\d+)?)(?![A-Za-z0-9_-])\s+{re.escape(name)}\b", request, flags=re.IGNORECASE)
+    if before:
+        return _parse_numeric_literal(before.group(1))
+    parts = _name_parts(name)
+    if parts.intersection({"amount", "total", "cost", "price"}):
+        amount = re.search(r"\b(?:amount|total|cost|price|transfer|pay|send)\s+(?:of\s+)?\$?(-?\d+(?:\.\d+)?)\b", request, flags=re.IGNORECASE)
+        if amount:
+            return _parse_numeric_literal(amount.group(1))
     return None
 
 
@@ -966,6 +1280,8 @@ def _grounded_optional_value(tool: ToolIR, arg: ArgumentIR, request: str, skill:
     hinted = _infer_semantic_hint_value(tool, arg.name, request, skill)
     if hinted is not None:
         return hinted
+    if not _optional_argument_has_direct_cue(arg.name, request):
+        return None
     lowered = request.lower()
     if arg.name == "query":
         return _extract_query_from_request(request)
@@ -978,6 +1294,10 @@ def _grounded_optional_value(tool: ToolIR, arg: ArgumentIR, request: str, skill:
     if arg.name == "excludePatterns":
         extracted = _extract_exclude_patterns(request)
         return extracted if extracted else None
+    if arg.type == "array":
+        extracted = _extract_array_value_for_argument(arg, request)
+        if extracted:
+            return extracted
     if arg.format == "email" or "email" in arg.name.lower():
         return _extract_email_from_request(request)
     if arg.format in {"uri", "url"} or any(token in arg.name.lower() for token in ("url", "uri", "link")):
@@ -992,9 +1312,13 @@ def _grounded_optional_value(tool: ToolIR, arg: ArgumentIR, request: str, skill:
         return _extract_optional_boolean_for_argument(arg.name, request)
     if arg.enum:
         for enum_value in arg.enum:
-            if str(enum_value).lower() in lowered:
+            if re.search(rf"\b{re.escape(arg.name)}\b[^,.;]{{0,40}}\b{re.escape(str(enum_value).lower())}\b", lowered):
                 return enum_value
     name_parts = _name_parts(arg.name)
+    if _looks_like_location_argument(arg.name):
+        return _extract_directional_location_value(arg.name, request)
+    if _looks_like_sequence_argument(arg.name):
+        return _extract_sequence_value(arg.name, request)
     if (
         not _contract_ablation_disabled(skill, "disable_identifier_binding")
         and name_parts.intersection({"id", "identifier", "account", "user", "entity", "person", "name", "title"})
@@ -1014,7 +1338,7 @@ def _extract_optional_number_for_argument(arg_name: str, request: str) -> int | 
             return _extract_number(lowered)
     if parts.intersection({"head", "first"}) and re.search(r"\b(?:first|head|opening|start)\b", lowered):
         return _extract_number(lowered)
-    if parts.intersection({"tail", "last"}) and re.search(r"\b(?:last|tail|ending|end)\b", lowered):
+    if parts.intersection({"tail", "last"}) and re.search(r"\b(?:last|tail)\b", lowered):
         return _extract_number(lowered)
     return None
 
@@ -1029,6 +1353,16 @@ def _extract_optional_boolean_for_argument(arg_name: str, request: str) -> bool 
             return False
     parts = _name_parts(arg_name)
     lowered = request.lower()
+    specific_parts = parts - {"include", "includes", "included", "allow", "allows", "allowed", "external"}
+    if "include" in parts and specific_parts:
+        specific_pattern = "|".join(re.escape(part) for part in sorted(specific_parts))
+        if re.search(rf"\b(?:no|without|exclude|omit|skip)\b[^,.;]{{0,40}}\b(?:{specific_pattern})\b", lowered):
+            return False
+        if re.search(rf"\b(?:include|with|also|show|return)\b[^,.;]{{0,40}}\b(?:{specific_pattern})\b", lowered):
+            return True
+        if re.search(rf"\b(?:{specific_pattern})\b[^,.;]{{0,30}}\b(?:included|enabled|on)\b", lowered):
+            return True
+        return None
     positive_cues = {
         "include": r"\b(?:include|with|also|show)\b",
         "forecast": r"\bforecast\b",
@@ -1050,6 +1384,14 @@ def _extract_optional_boolean_for_argument(arg_name: str, request: str) -> bool 
         if part in parts and re.search(pattern, lowered):
             return True
     return None
+
+
+def _optional_argument_has_direct_cue(arg_name: str, request: str) -> bool:
+    if re.search(rf"\b{re.escape(arg_name)}\s*(?:=|:)", request, flags=re.IGNORECASE):
+        return True
+    tokens = set(re.findall(r"[a-z0-9_./*?-]+", request.lower()))
+    parts = _name_parts(arg_name)
+    return bool(parts and parts.intersection(tokens))
 
 
 def _field_or_value_grounded(field_name: str, value: Any, request: str) -> bool:
@@ -1161,6 +1503,8 @@ def _complete_grounded_schema_optionals(
                 key = str(key)
                 if key in completed or key in required:
                     continue
+                if not _optional_argument_has_direct_cue(key, request):
+                    continue
                 extracted = _extract_schema_property_value(key, child_schema, request)
                 if extracted is None:
                     continue
@@ -1265,7 +1609,50 @@ def _action_families_for_text(text: str) -> set[str]:
     for family, cues in PREDICTOR_ACTION_FAMILIES.items():
         if tokens.intersection(cues):
             families.add(family)
+    if _has_compute_context(text, tokens):
+        families.add("compute")
     return families
+
+
+def _has_compute_context(text: str, tokens: set[str]) -> bool:
+    if not tokens.intersection({"find", "determine", "derive", "solve", "rank"}):
+        return False
+    compute_terms = {
+        "root",
+        "roots",
+        "equation",
+        "quadratic",
+        "coefficient",
+        "coefficients",
+        "average",
+        "mean",
+        "median",
+        "density",
+        "pressure",
+        "velocity",
+        "acceleration",
+        "force",
+        "area",
+        "volume",
+        "circumference",
+        "frequency",
+        "resonance",
+        "entropy",
+        "bmi",
+        "probability",
+        "genotype",
+        "electric",
+        "potential",
+        "capacitance",
+        "inductance",
+        "heat",
+        "capacity",
+        "concentration",
+        "rate",
+        "distance",
+    }
+    lowered = text.lower()
+    return bool(tokens.intersection(compute_terms) or re.search(r"\b(?:under|over)\s+(?:the\s+)?curve\b", lowered))
 
 
 def _normalize_action_token(token: str) -> str:
@@ -1349,6 +1736,9 @@ def _verify_reliaskill_v1_prediction(
                     continue
                 sanitized_value, value_issues = _sanitize_value_for_schema(value, _schema_for_argument(arg), key, actions)
                 schema = _schema_for_argument(arg)
+                if not arg.required and value_issues:
+                    actions.append(f"dropped_invalid_optional:{key}")
+                    continue
                 if (
                     arg.required
                     and (sanitized_value is None or value_issues)
@@ -1422,8 +1812,9 @@ def _verify_reliaskill_v1_prediction(
                     if grounded is None:
                         continue
                     sanitized_value, value_issues = _sanitize_value_for_schema(grounded, _schema_for_argument(arg), arg.name, actions)
-                    issues.extend(value_issues)
                     if sanitized_value is None or value_issues:
+                        if value_issues:
+                            actions.append(f"skipped_invalid_grounded_optional:{arg.name}")
                         continue
                     if not _optional_argument_is_grounded(tool, arg, grounding_request, skill, sanitized_value):
                         continue
@@ -1568,9 +1959,10 @@ def _heuristic_abstention_reason(user_request: str, skill: GeneratedSkill) -> st
     lowered = user_request.lower()
     explicit_markers = (
         "no tool call",
-        "do not call",
-        "don't call",
-        "without using",
+        "do not actually call",
+        "don't actually call",
+        "do not perform the action",
+        "don't perform the action",
         "planning only",
         "checklist",
         "no tool yet",

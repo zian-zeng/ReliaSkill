@@ -218,7 +218,7 @@ def evaluate_skill_contract(
     for arg in tool.arguments:
         if not arg.required:
             continue
-        result = _required_arg_grounding(grounding_text, arg)
+        result = _required_arg_grounding(grounding_text, arg, tool)
         if not result["grounded"] and arguments is not None and arg.name in arguments and _value_grounded(arg.name, arguments[arg.name], grounding_text):
             result = {"grounded": True, "evidence": "argument_value_in_request"}
         grounding_proofs.append(
@@ -744,7 +744,7 @@ def _provider_for_missing_arg(argument_name: str, provided: Dict[str, str]) -> s
     return None
 
 
-def _required_arg_grounding(request: str, arg: ArgumentIR) -> Dict[str, Any]:
+def _required_arg_grounding(request: str, arg: ArgumentIR, tool: ToolIR | None = None) -> Dict[str, Any]:
     if _mentions_deferred_required_info(request, arg.name):
         return {"grounded": False, "evidence": "deferred_required_information"}
     if re.search(rf"\b{re.escape(arg.name)}\s*(?:=|:)", request, flags=re.IGNORECASE):
@@ -756,8 +756,8 @@ def _required_arg_grounding(request: str, arg: ArgumentIR) -> Dict[str, Any]:
             "grounded": not missing,
             "evidence": "nested_required_properties" if not missing else {"missing_nested": missing},
         }
-    if arg.type == "array" and isinstance(arg.items_schema, dict):
-        item_schema, _ = normalize_schema_node(arg.items_schema)
+    if arg.type == "array":
+        item_schema, _ = normalize_schema_node(arg.items_schema if isinstance(arg.items_schema, dict) else {"type": arg.items_type or "string"})
         properties = item_schema.get("properties")
         if isinstance(properties, dict) and properties:
             children = list(item_schema.get("required") or properties)
@@ -777,10 +777,15 @@ def _required_arg_grounding(request: str, arg: ArgumentIR) -> Dict[str, Any]:
         return {"grounded": bool(_contains_url(request)), "evidence": "url_literal"}
     if arg.format == "date-time" or parts.intersection({"datetime"}):
         return {"grounded": bool(_contains_date_like_text(request)), "evidence": "datetime_literal"}
+    if _looks_like_location_argument(arg.name):
+        return {"grounded": _contains_directional_location_text(arg.name, request), "evidence": "directional_location_literal"}
+    if _looks_like_sequence_argument(arg.name):
+        return {"grounded": _contains_sequence_text(arg.name, request), "evidence": "sequence_literal"}
     if arg.format == "date" or parts.intersection({"date", "time", "start", "end"}):
         return {"grounded": bool(_contains_date_like_text(request)), "evidence": "date_literal"}
     if arg.type in {"integer", "number"}:
-        return {"grounded": bool(re.search(r"\b\d+(?:\.\d+)?\b", request)), "evidence": "numeric_literal"}
+        grounded = _numeric_arg_is_grounded(request, arg, tool)
+        return {"grounded": grounded, "evidence": "numeric_literal" if grounded else "numeric_argument_not_bound"}
     if arg.enum:
         return {"grounded": any(str(value).lower() in lowered for value in arg.enum), "evidence": "enum_literal"}
     if parts.intersection({"query", "search", "pattern"}):
@@ -825,10 +830,14 @@ def _schema_property_is_grounded(request: str, name: str, schema: Any) -> bool:
         return _contains_email(request)
     if schema.get("format") in {"uri", "url"} or parts.intersection({"url", "uri", "link", "website"}):
         return _contains_url(request)
+    if _looks_like_location_argument(name):
+        return _contains_directional_location_text(name, request)
+    if _looks_like_sequence_argument(name):
+        return _contains_sequence_text(name, request)
     if schema.get("format") in {"date", "date-time"} or parts.intersection({"date", "time", "start", "end", "begin", "from", "since", "after", "until", "before"}):
         return _contains_date_like_text(request)
     if kind in {"integer", "number"}:
-        return bool(re.search(r"\b\d+(?:\.\d+)?\b", request))
+        return _numeric_field_is_grounded(request, name)
     if parts.intersection({"query", "search", "pattern"}):
         return bool(re.search(r"\b(?:query|search|find|lookup|look up|matching|containing)\b", lowered) or re.search(r'"[^"]+"', request))
     if parts.intersection({"path", "file", "filename", "directory", "folder"}):
@@ -907,6 +916,8 @@ def _schema_issues(value: Any, schema: Dict[str, Any], path: str) -> List[str]:
             issues.append(f"{path}:type_mismatch")
             return issues
         properties = schema.get("properties", {}) or {}
+        if not properties:
+            return issues
         for key, child in value.items():
             if key not in properties:
                 issues.append(f"{path}.{key}:unsupported_field")
@@ -935,13 +946,14 @@ def _schema_issues(value: Any, schema: Dict[str, Any], path: str) -> List[str]:
 def _string_issues(value: str, schema: Dict[str, Any], path: str) -> List[str]:
     issues: List[str] = []
     fmt = str(schema.get("format") or "").lower()
-    if fmt == "email" and not re.fullmatch(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}", value):
+    symbolic_placeholder = _looks_like_symbolic_placeholder(value)
+    if fmt == "email" and not symbolic_placeholder and not re.fullmatch(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}", value):
         issues.append(f"{path}:invalid_format")
-    if fmt in {"uri", "url"} and not re.match(r"^https?://[^\s]+$", value):
+    if fmt in {"uri", "url"} and not symbolic_placeholder and not re.match(r"^https?://[^\s]+$", value):
         issues.append(f"{path}:invalid_format")
-    if fmt == "date" and not re.fullmatch(r"\d{4}-\d{1,2}-\d{1,2}", value):
+    if fmt == "date" and not symbolic_placeholder and not re.fullmatch(r"\d{4}-\d{1,2}-\d{1,2}", value):
         issues.append(f"{path}:invalid_format")
-    if fmt == "date-time" and not re.fullmatch(r"\d{4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:?\d{2})?", value):
+    if fmt == "date-time" and not symbolic_placeholder and not re.fullmatch(r"\d{4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:?\d{2})?", value):
         issues.append(f"{path}:invalid_format")
     pattern = schema.get("pattern")
     if isinstance(pattern, str):
@@ -959,6 +971,10 @@ def _string_issues(value: str, schema: Dict[str, Any], path: str) -> List[str]:
     return issues
 
 
+def _looks_like_symbolic_placeholder(value: str) -> bool:
+    return bool(re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*_\d+", value.strip()))
+
+
 def _value_grounded(field_name: str, value: Any, request: str) -> bool:
     lowered = request.lower()
     if isinstance(value, bool):
@@ -967,10 +983,31 @@ def _value_grounded(field_name: str, value: Any, request: str) -> bool:
     for leaf in leaves:
         if not leaf:
             continue
-        if re.fullmatch(r"\d+(?:\.\d+)?", leaf) and re.search(rf"\b{re.escape(leaf)}\b", lowered):
+        if _explicit_field_value_in_request(field_name, leaf, request):
+            return True
+        if re.fullmatch(r"-?\d+(?:\.\d+)?", leaf) and _numeric_value_in_request(leaf, request):
             return True
         if len(leaf) > 1 and leaf in lowered:
             return True
+    return False
+
+
+def _explicit_field_value_in_request(field_name: str, leaf: str, request: str) -> bool:
+    pattern = rf"\b{re.escape(field_name)}\s*(?:=|:)\s*(?:\"{re.escape(leaf)}\"|'{re.escape(leaf)}'|`{re.escape(leaf)}`|{re.escape(leaf)})(?=$|[\s,.;])"
+    return bool(re.search(pattern, request, flags=re.IGNORECASE))
+
+
+def _numeric_value_in_request(leaf: str, request: str) -> bool:
+    try:
+        target = float(leaf)
+    except ValueError:
+        return False
+    for literal in _numeric_literals(request):
+        try:
+            if float(literal) == target:
+                return True
+        except ValueError:
+            continue
     return False
 
 
@@ -1023,15 +1060,122 @@ def _leaf_values(value: Any) -> List[Any]:
     return [value]
 
 
+def _numeric_arg_is_grounded(request: str, arg: ArgumentIR, tool: ToolIR | None) -> bool:
+    if _numeric_field_is_grounded(request, arg.name):
+        return True
+    if _numeric_arg_has_positional_grounding(request, arg, tool):
+        return True
+    required_numeric = [
+        item
+        for item in (tool.arguments if tool is not None else [arg])
+        if item.required and item.type in {"integer", "number"}
+    ]
+    return len(required_numeric) <= 1 and bool(_numeric_literals(request))
+
+
+def _numeric_arg_has_positional_grounding(request: str, arg: ArgumentIR, tool: ToolIR | None) -> bool:
+    if tool is None:
+        return False
+    required_numeric = [item for item in tool.arguments if item.required and item.type in {"integer", "number"}]
+    names = [item.name for item in required_numeric]
+    if arg.name not in names or len(names) < 2:
+        return False
+    numbers = _numeric_literals(request)
+    if len(numbers) < len(names):
+        return False
+    lowered = request.lower()
+    return (
+        set(names).issubset({"a", "b", "c", "x", "y", "z"})
+        and bool(re.search(r"\b(?:coefficient|coefficients|quadratic|polynomial|coordinate|coordinates|point)\b", lowered))
+    ) or (
+        len(numbers) == len(names)
+        and bool(re.search(r"\b(?:values?|parameters?|inputs?|dimensions?)\b", lowered))
+    )
+
+
+def _numeric_field_is_grounded(request: str, name: str) -> bool:
+    if re.search(rf"\b{re.escape(name)}\s*(?:=|:)\s*-?\d+(?:\.\d+)?\b", request, flags=re.IGNORECASE):
+        return True
+    if re.search(rf"(?<![A-Za-z0-9_.-])-?\d+(?:\.\d+)?(?![A-Za-z0-9_-])\s+{re.escape(name)}\b", request, flags=re.IGNORECASE):
+        return True
+    parts = _argument_name_parts(name)
+    if parts.intersection({"amount", "total", "cost", "price"}):
+        return bool(re.search(r"\b(?:amount|total|cost|price|transfer|pay|send)\s+(?:of\s+)?\$?-?\d+(?:\.\d+)?\b", request, flags=re.IGNORECASE))
+    return False
+
+
+def _numeric_literals(request: str) -> List[str]:
+    text = re.sub(r"\b\d{4}-\d{1,2}-\d{1,2}\b", " ", request)
+    text = re.sub(r"\b\d{1,2}/\d{1,2}(?:/\d{2,4})?\b", " ", text)
+    return re.findall(r"(?<![A-Za-z0-9_.-])-?\d+(?:\.\d+)?(?![A-Za-z0-9_-])", text)
+
+
 def _array_scalar_is_grounded(request: str, arg: ArgumentIR, item_schema: Dict[str, Any]) -> bool:
     parts = _argument_name_parts(arg.name)
+    item_type = schema_type(item_schema) or str(item_schema.get("type") or "").lower()
     if item_schema.get("format") == "email" or parts.intersection({"email", "emails", "recipient", "recipients", "attendee", "attendees"}):
         return _contains_email(request)
     if item_schema.get("format") in {"uri", "url"} or parts.intersection({"url", "urls", "link", "links"}):
         return _contains_url(request)
+    if item_type in {"integer", "number"}:
+        return _contains_named_or_generic_array_text(arg.name, request) and bool(_numeric_literals(request))
+    if parts.intersection({"path", "paths", "file", "files", "filename", "filenames"}):
+        return bool(re.findall(r"\b[A-Za-z0-9_./*?-]+\.[A-Za-z0-9_*?-]+\b", request))
+    if _contains_named_or_generic_array_text(arg.name, request) and re.search(r"[,[]", request):
+        return True
     if re.findall(r'"([^"]+)"', request) and parts.intersection({"items", "values", "content", "contents", "messages"}):
         return True
     return False
+
+
+def _contains_named_or_generic_array_text(name: str, request: str) -> bool:
+    if re.search(rf"\b{re.escape(name)}\s*(?:=|:)\s*(?:\[[^\]]+\]|[^.;]+)", request, flags=re.IGNORECASE):
+        return True
+    parts = _argument_name_parts(name)
+    if parts.intersection({"list", "array", "data", "values", "numbers", "items", "series"}):
+        return bool(re.search(r"\b(?:numbers?|values?|data|list|array|items|series)\b", request, flags=re.IGNORECASE))
+    return False
+
+
+def _looks_like_location_argument(name: str) -> bool:
+    parts = _argument_name_parts(name)
+    if parts.intersection({"city", "location", "place", "address"}):
+        return True
+    if parts.intersection({"origin", "destination"}) and not parts.intersection({"id", "account", "user", "entity"}):
+        return True
+    return False
+
+
+def _contains_directional_location_text(name: str, request: str) -> bool:
+    if re.search(rf"\b{re.escape(name)}\s*(?:=|:)\s*[^,.;]+", request, flags=re.IGNORECASE):
+        return True
+    parts = _argument_name_parts(name)
+    if parts.intersection({"start", "from", "source", "origin", "departure", "end", "to", "target", "destination", "arrival"}):
+        return bool(
+            re.search(r"\bfrom\s+.+?\s+(?:to|toward|towards|into)\s+.+?(?:[.;]|$|\s+(?:by|via|using|with|for)\b)", request, flags=re.IGNORECASE)
+            or re.search(r"\borigin\s*(?:=|:|is)?\s*.+?\s+(?:destination|dest)\s*(?:=|:|is)?\s*.+", request, flags=re.IGNORECASE)
+            or re.search(r"\bsource\s*(?:city|location|place)?\s*(?:=|:|is)?\s*.+?\s+(?:target|destination|dest)\s*(?:city|location|place)?\s*(?:=|:|is)?\s*.+", request, flags=re.IGNORECASE)
+        )
+    return bool(re.search(r"\b(?:in|at|near|for)\s+[A-Z][A-Za-z0-9_-]{1,}", request))
+
+
+def _looks_like_sequence_argument(name: str) -> bool:
+    return bool(_argument_name_parts(name).intersection({"sequence", "reference", "dna", "rna"}))
+
+
+def _contains_sequence_text(name: str, request: str) -> bool:
+    if re.search(rf"\b{re.escape(name)}\s*(?:=|:)\s*[A-Za-z]{{4,}}\b", request, flags=re.IGNORECASE):
+        return True
+    parts = _argument_name_parts(name)
+    if "reference" in parts:
+        return bool(
+            re.search(r"\breference(?:\s+sequence)?\s*(?:=|:|is|as|of)?\s*[ACGTUNacgtun]{4,}\b", request, flags=re.IGNORECASE)
+            or re.search(r"\bagainst\s+(?:reference\s+)?[ACGTUNacgtun]{4,}\b", request, flags=re.IGNORECASE)
+        )
+    return bool(
+        re.search(r"\b(?:dna|rna)?\s*sequence\s*(?:=|:|is|as|of)?\s*[ACGTUNacgtun]{4,}\b", request, flags=re.IGNORECASE)
+        or re.search(r"\banalyze\s+[ACGTUNacgtun]{4,}\b", request, flags=re.IGNORECASE)
+    )
 
 
 def _contains_path_like_text(request: str) -> bool:
@@ -1091,9 +1235,52 @@ def _action_families_for_text(text: str) -> set[str]:
     for family, cues in ACTION_FAMILIES.items():
         if tokens.intersection(cues):
             families.add(family)
+    if _has_compute_context(text, tokens):
+        families.add("compute")
     if re.search(r"\brecord\s+(?:an?\s+|the\s+|this\s+|new\s+)?(?:observation|note|entry|event|transaction|item|result|measurement)\b", text.lower()):
         families.add("create")
     return families
+
+
+def _has_compute_context(text: str, tokens: set[str]) -> bool:
+    if not tokens.intersection({"find", "determine", "derive", "solve", "rank"}):
+        return False
+    compute_terms = {
+        "root",
+        "roots",
+        "equation",
+        "quadratic",
+        "coefficient",
+        "coefficients",
+        "average",
+        "mean",
+        "median",
+        "density",
+        "pressure",
+        "velocity",
+        "acceleration",
+        "force",
+        "area",
+        "volume",
+        "circumference",
+        "frequency",
+        "resonance",
+        "entropy",
+        "bmi",
+        "probability",
+        "genotype",
+        "electric",
+        "potential",
+        "capacitance",
+        "inductance",
+        "heat",
+        "capacity",
+        "concentration",
+        "rate",
+        "distance",
+    }
+    lowered = text.lower()
+    return bool(tokens.intersection(compute_terms) or re.search(r"\b(?:under|over)\s+(?:the\s+)?curve\b", lowered))
 
 
 def _negated_action_families_for_text(text: str) -> set[str]:
@@ -1172,6 +1359,8 @@ def _action_intent_fit_bonus(request: str, tool: ToolIR) -> int:
 def _action_intent_conflict(request_actions: set[str], tool_actions: set[str], negated_actions: set[str]) -> bool:
     if tool_actions and negated_actions.intersection(tool_actions):
         return True
+    if request_actions.intersection(tool_actions):
+        return False
     return bool(request_actions and tool_actions and _actions_conflict(request_actions, tool_actions))
 
 

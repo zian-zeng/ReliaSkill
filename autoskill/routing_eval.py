@@ -473,7 +473,50 @@ def _action_families_for_text(text: str) -> set[str]:
     for family, cues in ACTION_FAMILIES.items():
         if tokens.intersection(cues):
             families.add(family)
+    if _has_compute_context(text, tokens):
+        families.add("compute")
     return families
+
+
+def _has_compute_context(text: str, tokens: set[str]) -> bool:
+    if not tokens.intersection({"find", "determine", "derive", "solve", "rank"}):
+        return False
+    compute_terms = {
+        "root",
+        "roots",
+        "equation",
+        "quadratic",
+        "coefficient",
+        "coefficients",
+        "average",
+        "mean",
+        "median",
+        "density",
+        "pressure",
+        "velocity",
+        "acceleration",
+        "force",
+        "area",
+        "volume",
+        "circumference",
+        "frequency",
+        "resonance",
+        "entropy",
+        "bmi",
+        "probability",
+        "genotype",
+        "electric",
+        "potential",
+        "capacitance",
+        "inductance",
+        "heat",
+        "capacity",
+        "concentration",
+        "rate",
+        "distance",
+    }
+    lowered = text.lower()
+    return bool(tokens.intersection(compute_terms) or re.search(r"\b(?:under|over)\s+(?:the\s+)?curve\b", lowered))
 
 
 def _negated_action_families_for_text(text: str) -> set[str]:
