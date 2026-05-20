@@ -4,6 +4,8 @@
 
 We completed the clean full Qwen2.5-1.5B ReliaSkill v1 proof-margin run after the method upgrade. The result is strong and consistent with the earlier pilot: ReliaSkill v1 beats every reported baseline by a large margin in both the structured-call benchmark and the hidden-tool routing benchmark.
 
+We also completed two cross-model key-condition replications on Llama-3.2-3B-Instruct and Gemma-2-2B-it. These runs use the same 100 tools and 500 tasks, but a focused 6-condition comparison rather than the full 16-condition ladder. The main story replicates: ReliaSkill v1 remains far ahead of `raw_docs_full`, `raw_mcp`, and generated/prompt skill baselines.
+
 The strongest competing baseline is `raw_docs_full`, which gives the model the fullest documentation exposure. ReliaSkill v1 improves over it by:
 
 - +0.502 joint exact match in the structured-call benchmark,
@@ -14,7 +16,17 @@ Both gains are statistically significant under paired tests:
 - Structured-call `raw_docs_full` vs `reliaskill_v1`: approximate randomization `p = 0.001996`
 - Hidden-tool routing `raw_docs_full` vs `reliaskill_v1`: approximate randomization `p = 0.001996`
 
-The readiness audit passes with zero failures and zero warnings. This is no longer only a pilot. It is a claim-ready single-model result on the main mixed-source ReliaSkill benchmark suite.
+The Llama-3.2-3B key replication shows the same pattern:
+
+- Structured-call: `raw_docs_full` 0.360 vs `reliaskill_v1` 0.866, margin +0.506, `p = 0.001996`
+- Hidden-tool routing: `raw_docs_full` 0.360 vs `reliaskill_v1` 0.828, margin +0.468, `p = 0.001996`
+
+The Gemma-2-2B key replication is also strongly positive. In Gemma, the strongest non-ReliaSkill key baseline is `generated_skill_base`, not `raw_docs_full`:
+
+- Structured-call: `generated_skill_base` 0.512 vs `reliaskill_v1` 0.870, margin +0.358, `p = 0.001996`
+- Hidden-tool routing: `generated_skill_base` 0.512 vs `reliaskill_v1` 0.844, margin +0.332, `p = 0.001996`
+
+The Qwen full-run readiness audit passes with zero failures and zero warnings. This is no longer only a pilot. It is a claim-ready full-ladder main result on the mixed-source ReliaSkill benchmark suite, with cross-model replication support from Llama-3.2-3B and Gemma-2-2B.
 
 ## Artifact Provenance
 
@@ -22,9 +34,25 @@ Full-run archive:
 
 `outputs/frozen_results/reliaskill_v1_proof_margin_full_results_20260520_100412.tar.gz`
 
+Model-specific copy of the Qwen full-run archive:
+
+`outputs/frozen_results/reliaskill_v1_qwen2_5_1_5b_proof_margin_full_results_20260520_100412.tar.gz`
+
+Llama-3.2-3B key-replication archive:
+
+`outputs/frozen_results/reliaskill_v1_llama3_2_3b_keyrep_results_20260520_111613.tar.gz`
+
+Gemma-2-2B key-replication archive:
+
+`outputs/frozen_results/reliaskill_v1_gemma2_2b_keyrep_results_20260520_120948.tar.gz`
+
 Extracted full-run artifacts:
 
 `outputs/overnight_qwen15b_4gpu_reliaskill_v1_proof_margin`
+
+Extracted multi-model key-replication artifacts:
+
+`outputs/reliaskill_v1_multimodel_key_replication`
 
 Config:
 
@@ -39,6 +67,20 @@ This report was verified against the extracted local artifacts:
 - `merged/cluster_merge_manifest.json`
 - `reliaskill_readiness_full.md`
 - `slice_analysis_summary.md`
+
+For the Llama replication, this report was verified against:
+
+- `outputs/reliaskill_v1_multimodel_key_replication/tables/main_results_by_model.csv`
+- `outputs/reliaskill_v1_multimodel_key_replication/tables/routing_results_by_model.csv`
+- `outputs/reliaskill_v1_multimodel_key_replication/tables/stat_tests.csv`
+- `outputs/reliaskill_v1_multimodel_key_replication/tables/routing_stat_tests.csv`
+
+For model-specific Llama and Gemma statistics, this report was also verified against:
+
+- `outputs/reliaskill_v1_multimodel_key_replication/predictors/meta-llama_Llama-3.2-3B-Instruct/merged/tables/stat_tests.csv`
+- `outputs/reliaskill_v1_multimodel_key_replication/predictors/meta-llama_Llama-3.2-3B-Instruct/merged/tables/routing_stat_tests.csv`
+- `outputs/reliaskill_v1_multimodel_key_replication/predictors/google_gemma-2-2b-it/merged/tables/stat_tests.csv`
+- `outputs/reliaskill_v1_multimodel_key_replication/predictors/google_gemma-2-2b-it/merged/tables/routing_stat_tests.csv`
 
 ## Full Run Setup
 
@@ -123,6 +165,145 @@ The full run preserves almost the same story at the larger scale:
 | Hidden-tool routing full run | 0.880 | `raw_docs_full` | 0.388 | +0.492 |
 
 This consistency is important. The pilot was not a one-off small-sample artifact. The full 100-tool, 500-task, 16-condition run keeps the same large effect size and passes the readiness checks.
+
+## Cross-Model Replication: Llama And Gemma
+
+After the Qwen full run, we ran focused key-condition replications with `meta-llama/Llama-3.2-3B-Instruct` and `google/gemma-2-2b-it`. These were not the full 16-condition ladder. They were designed to answer the most important reviewer question quickly:
+
+> Does the large ReliaSkill gain survive on a different model family?
+
+The answer from these runs is yes.
+
+Shared setup:
+
+- Tools: 100
+- Tasks: 500
+- Conditions: 6
+- Structured-call records per model: 3,000
+- Hidden-tool routing records per model: 3,000
+- Total analyzed records per model: 6,000
+- Backend errors in shard logs: none found
+
+The 6 conditions were:
+
+- `raw_mcp`
+- `raw_docs_full`
+- `generated_skill_base`
+- `gated_skill`
+- `skill_prompt_verbose_docs`
+- `reliaskill_v1`
+
+### Big Cross-Model Result Chart
+
+The table below uses the strongest non-ReliaSkill condition available in each run. For Qwen, that is `raw_docs_full`. For Llama, all listed baselines tie at 0.360. For Gemma, the strongest key baseline is `generated_skill_base`.
+
+| Model | Setting | ReliaSkill v1 Joint | Best Non-ReliaSkill | Best Baseline Joint | Margin | Significance |
+|---|---|---:|---|---:|---:|---:|
+| Qwen2.5-1.5B | Structured-call | 0.892 | `raw_docs_full` | 0.390 | +0.502 | 0.001996 |
+| Qwen2.5-1.5B | Hidden-tool routing | 0.880 | `raw_docs_full` | 0.388 | +0.492 | 0.001996 |
+| Llama-3.2-3B | Structured-call | 0.866 | `raw_docs_full` | 0.360 | +0.506 | 0.001996 |
+| Llama-3.2-3B | Hidden-tool routing | 0.828 | `raw_docs_full` | 0.360 | +0.468 | 0.001996 |
+| Gemma-2-2B | Structured-call | 0.870 | `generated_skill_base` | 0.512 | +0.358 | 0.001996 |
+| Gemma-2-2B | Hidden-tool routing | 0.844 | `generated_skill_base` | 0.512 | +0.332 | 0.001996 |
+
+Same result as a compact visual chart:
+
+```text
+Qwen structured       best baseline 0.390 | ########
+                      ReliaSkill    0.892 | ##################
+
+Qwen routing          best baseline 0.388 | ########
+                      ReliaSkill    0.880 | ##################
+
+Llama structured      best baseline 0.360 | #######
+                      ReliaSkill    0.866 | #################
+
+Llama routing         best baseline 0.360 | #######
+                      ReliaSkill    0.828 | #################
+
+Gemma structured      best baseline 0.512 | ##########
+                      ReliaSkill    0.870 | #################
+
+Gemma routing         best baseline 0.512 | ##########
+                      ReliaSkill    0.844 | #################
+```
+
+This is the current big result: across three local instruction-tuned models and both evaluation settings, ReliaSkill v1 wins by +0.332 to +0.506 joint exact match over the strongest non-ReliaSkill condition in the corresponding run.
+
+### Llama-3.2-3B Results
+
+Structured-call Llama results:
+
+| Condition | Joint Exact Match | Tool Selection | Argument Exact |
+|---|---:|---:|---:|
+| ReliaSkill v1 | 0.866 | 0.894 | 0.938 |
+| raw_docs_full | 0.360 | 0.360 | 0.550 |
+| raw_mcp | 0.360 | 0.360 | 0.550 |
+| generated_skill_base | 0.360 | 0.360 | 0.550 |
+| gated_skill | 0.360 | 0.360 | 0.550 |
+| skill_prompt_verbose_docs | 0.360 | 0.360 | 0.550 |
+
+Hidden-tool routing Llama results:
+
+| Condition | Joint Exact Match | Tool Selection | Argument Exact |
+|---|---:|---:|---:|
+| ReliaSkill v1 | 0.828 | 0.856 | 0.940 |
+| raw_docs_full | 0.360 | 0.360 | 0.550 |
+| raw_mcp | 0.360 | 0.360 | 0.550 |
+| generated_skill_base | 0.360 | 0.360 | 0.550 |
+| gated_skill | 0.360 | 0.360 | 0.550 |
+| skill_prompt_verbose_docs | 0.360 | 0.360 | 0.550 |
+
+This is a strong replication signal because the ReliaSkill advantage remains large on another instruction-tuned local model family. The method is not merely tuned to one local Qwen model's quirks.
+
+The verifier action rate also remains high:
+
+- Llama structured-call verifier action rate: 0.898
+- Llama hidden-tool routing verifier action rate: 0.550
+
+That means the contract layer is actively doing work in the Llama run too. It is not a passive wrapper around the model.
+
+### Gemma-2-2B Results
+
+Gemma is especially useful because its strongest baseline differs from Qwen and Llama. In this run, `generated_skill_base` and `skill_prompt_verbose_docs` are stronger than `raw_docs_full`, so Gemma tests whether ReliaSkill can still win when generated-skill prompting is the best competitor.
+
+Structured-call Gemma results:
+
+| Condition | Joint Exact Match | Tool Selection | Argument Exact |
+|---|---:|---:|---:|
+| ReliaSkill v1 | 0.870 | 0.898 | 0.944 |
+| generated_skill_base | 0.512 | 0.524 | 0.702 |
+| skill_prompt_verbose_docs | 0.508 | 0.518 | 0.698 |
+| gated_skill | 0.458 | 0.458 | 0.648 |
+| raw_docs_full | 0.452 | 0.458 | 0.642 |
+| raw_mcp | 0.430 | 0.436 | 0.620 |
+
+Hidden-tool routing Gemma results:
+
+| Condition | Joint Exact Match | Tool Selection | Argument Exact |
+|---|---:|---:|---:|
+| ReliaSkill v1 | 0.844 | 0.872 | 0.946 |
+| generated_skill_base | 0.512 | 0.524 | 0.702 |
+| skill_prompt_verbose_docs | 0.502 | 0.512 | 0.694 |
+| gated_skill | 0.454 | 0.454 | 0.646 |
+| raw_docs_full | 0.448 | 0.454 | 0.638 |
+| raw_mcp | 0.428 | 0.434 | 0.618 |
+
+Gemma statistical support:
+
+| Setting | Comparator | Comparator Joint | ReliaSkill Joint | Margin | McNemar A-only | McNemar ReliaSkill-only | Approx. Randomization |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Structured-call | `generated_skill_base` | 0.512 | 0.870 | +0.358 | 17 | 196 | 0.001996 |
+| Structured-call | `raw_docs_full` | 0.452 | 0.870 | +0.418 | 10 | 219 | 0.001996 |
+| Hidden-tool routing | `generated_skill_base` | 0.512 | 0.844 | +0.332 | 16 | 182 | 0.001996 |
+| Hidden-tool routing | `raw_docs_full` | 0.448 | 0.844 | +0.396 | 9 | 207 | 0.001996 |
+
+Gemma verifier action rates:
+
+- Gemma structured-call verifier action rate: 0.902
+- Gemma hidden-tool routing verifier action rate: 0.558
+
+The Gemma run strengthens the story because it shows ReliaSkill is not merely exploiting weak documentation baselines. It beats the best generated-skill baseline too, by a large margin.
 
 ## Main Structured-Call Results
 
@@ -365,13 +546,17 @@ The strongest concise result is:
 
 > On the full 100-tool, 500-task Qwen2.5-1.5B run, ReliaSkill v1 improves joint exact match from 0.390 to 0.892 over the strongest documentation baseline in structured calls, and from 0.388 to 0.880 in hidden-tool routing.
 
+The cross-model key replications support a stronger emerging claim:
+
+> Across Qwen2.5-1.5B, Llama-3.2-3B, and Gemma-2-2B, ReliaSkill v1 beats the strongest non-ReliaSkill condition in each run by +0.332 to +0.506 joint exact match across structured-call and hidden-tool routing evaluations.
+
 ## Remaining Caveats
 
-This is a strong single-model result, but it is not the entire paper story yet.
+This is now a strong main-model result with two positive cross-model key-condition replications, but it is not the entire paper story yet.
 
 Remaining work:
 
-- Multi-model replication would strengthen generality.
+- More model families would strengthen generality further. Llama-3.2-3B and Gemma-2-2B are complete; Phi-3.5-mini is the natural next check.
 - External benchmark replication would strengthen dataset breadth.
 - Live/sandbox execution would strengthen end-to-end operational realism.
 - Ablation-specific reporting should be used to show which ReliaSkill components drive the gain.
@@ -386,8 +571,8 @@ However, the current result is already much stronger than the earlier small-marg
 2. Update the paper result tables and figures.
    Use the full-run numbers as the main Qwen2.5-1.5B result.
 
-3. Run a smaller multi-model replication.
-   A focused 5 or 6 condition comparison across another model family may be more valuable than another full Qwen rerun.
+3. Continue the multi-model key-condition replication.
+   Llama-3.2-3B and Gemma-2-2B are complete and positive. Phi-3.5-mini should be run with the same 6-condition setup to turn the result into a three-model-family panel.
 
 4. Prepare reviewer-facing ablations.
    The report should explain that ReliaSkill's gain comes from executable contracts, dev-calibrated policy, runtime verification, grounded argument completion, and contract routing.

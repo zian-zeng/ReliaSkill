@@ -19,6 +19,8 @@ models:
     examples_per_second: 0.50
   - config: configs/models/phi_3_5_mini_instruct_4bit.yaml
     examples_per_second: 0.35
+  - config: configs/models/qwen2_5_7b_instruct_4bit.yaml
+    examples_per_second: 0.20
 
 conditions:
   - raw_mcp
