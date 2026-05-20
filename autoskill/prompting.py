@@ -67,14 +67,14 @@ def _runtime_guidance(tool: ToolIR, skill: GeneratedSkill, *, user_request: str 
                 )
             elif not isinstance(doc_evidence, dict) or not enable_doc_shield:
                 doc_evidence = build_doc_grounding_evidence(tool, enable_consistency_shield=enable_doc_shield)
-            doc_evidence_text = render_doc_grounding_evidence(doc_evidence, max_chars=3200) if isinstance(doc_evidence, dict) else ""
+            doc_evidence_text = render_doc_grounding_evidence(doc_evidence, max_chars=1400) if isinstance(doc_evidence, dict) else ""
         proof_line = (
             f"{method_label} proof obligations: {json.dumps(proof_obligations, ensure_ascii=False)}\n"
             if proof_obligations and reliaskill_family
             else ""
         )
         counterexample_line = (
-            f"{method_label} contract counterexamples: {json.dumps(counterexamples[:4], ensure_ascii=False)}\n"
+            f"{method_label} contract counterexamples: {json.dumps(counterexamples[:2], ensure_ascii=False)}\n"
             if isinstance(counterexamples, list) and counterexamples and reliaskill_family
             else ""
         )
@@ -96,7 +96,7 @@ def _runtime_guidance(tool: ToolIR, skill: GeneratedSkill, *, user_request: str 
             contrastive_candidates = skill.metadata.get("contrastive_contract_candidates")
             if isinstance(contrastive_candidates, list) and contrastive_candidates:
                 contrastive_line = (
-                    f"{method_label} contrastive candidate proof states: {json.dumps(contrastive_candidates[:4], ensure_ascii=False)}\n"
+                    f"{method_label} contrastive candidate proof states: {json.dumps(contrastive_candidates[:3], ensure_ascii=False)}\n"
                     "Use the contrastive states as proof-margin evidence for adjacent-tool mistakes: if this tool is blocked and a named or higher-margin viable candidate exists, return `should_call=false` so the verifier/router can redirect to that candidate.\n"
                 )
         plan_line = ""

@@ -30,6 +30,8 @@ CONDITION_REGISTRY[RELIASKILL_CHALLENGER] = {
     "uses_executable_skill_contract": True,
     "uses_contract_proof_ledger": True,
     "uses_adaptive_contract_policy": True,
+    "uses_dev_calibrated_contract_policy": True,
+    "uses_dev_learned_slot_grounding": True,
     "uses_contextual_grounding_contract": True,
     "uses_request_contract_parse_prompting": True,
     "uses_multi_step_contract_planning": True,

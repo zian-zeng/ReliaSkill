@@ -1,0 +1,69 @@
+experiment_scale: reliaskill_v1_proof_margin_micro
+description: "Micro proof-margin throughput check for the upgraded ReliaSkill v1 path against raw_docs_full before any pilot or full rerun."
+seed: 42
+tools_path: data/raw_mcp/tools.jsonl
+tasks_path: data/controls/test.jsonl
+output_root: outputs/reliaskill_v1_proof_margin_micro
+
+generator:
+  type: heuristic
+  ablation_mode: base_only
+
+runtime:
+  strict_backends: true
+
+models:
+  - config: configs/models/qwen2_5_1_5b_instruct_4bit.yaml
+    batch_size: 2
+
+conditions:
+  - raw_docs_full
+  - reliaskill_v1
+
+data:
+  config: configs/data/emnlp_scale.yaml
+  max_tools: 4
+  min_domains_required: 1
+
+controls:
+  config: configs/controls/emnlp_scale.yaml
+  positives_per_tool_total: 2
+  negatives_per_tool_total: 1
+
+routing:
+  config: configs/routing/distractor_inventory.yaml
+  candidate_set_sizes: [4]
+
+live_execution:
+  enabled: false
+
+shared_skill_packages:
+  root: outputs/reliaskill_v1_proof_margin_micro/shared_packages
+  dev_controls_path: data/controls/dev.jsonl
+  reliability_predictor:
+    type: heuristic
+  max_repair_rounds: 2
+  deploy_threshold: 85.0
+
+skills:
+  multi_candidate_config: configs/skills/multi_candidate.yaml
+  candidate_k: 3
+  compactness_config: configs/skills/compactness_variants.yaml
+
+repair:
+  config: configs/repair/repair_strategies.yaml
+
+scheduler:
+  one_gpu: true
+  resume: true
+  group_by_model: true
+  run_all_conditions_before_unload: true
+  max_batch_size: 2
+  prompt_safety_margin_tokens: 256
+  include_routing: true
+  examples_per_second: 0.20
+  estimated_bytes_per_call: 5120
+  estimated_bytes_per_token: 1.5
+  condition_token_overheads:
+    raw_docs_full: 1600
+    reliaskill_v1: 575

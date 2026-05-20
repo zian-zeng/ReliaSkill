@@ -23,6 +23,7 @@ from autoskill.schema_utils import normalize_schema_node, schema_type
 
 
 RELIASKILL_V1_RUNTIME_CONDITIONS = {"reliaskill_v1", "reliaskill_challenger_v1"}
+_LOCAL_HF_REFINEMENT_USED = 0
 
 
 def _extract_number(text: str) -> int | float | None:
@@ -937,7 +938,10 @@ def _grounded_required_value(tool: ToolIR, arg: ArgumentIR, request: str, skill:
     explicit = _extract_explicit_argument_value(arg, request)
     if explicit is not None:
         return explicit
-    structured = _grounded_structured_value(arg, request)
+    learned = _extract_dev_learned_slot_value(arg.name, _schema_for_argument(arg), request, skill)
+    if learned is not None:
+        return learned
+    structured = _grounded_structured_value(arg, request, skill)
     if structured is not None:
         return structured
     hinted = _infer_semantic_hint_value(tool, arg.name, request, skill)
@@ -986,13 +990,13 @@ def _grounded_required_value(tool: ToolIR, arg: ArgumentIR, request: str, skill:
     return None
 
 
-def _grounded_structured_value(arg: ArgumentIR, request: str) -> Any:
+def _grounded_structured_value(arg: ArgumentIR, request: str, skill: GeneratedSkill) -> Any:
     if (arg.type == "object" or arg.properties) and isinstance(arg.properties, dict) and arg.properties:
         required = list(arg.required_properties) or list(arg.properties.keys())
         value: Dict[str, Any] = {}
         for child_name in required:
             child_schema = arg.properties.get(child_name, {})
-            child_value = _extract_schema_property_value(child_name, child_schema, request)
+            child_value = _extract_schema_property_value(child_name, child_schema, request, skill=skill, slot_path=f"{arg.name}.{child_name}")
             if child_value is None:
                 return None
             value[child_name] = child_value
@@ -1005,7 +1009,7 @@ def _grounded_structured_value(arg: ArgumentIR, request: str) -> Any:
         required = list(arg.items_schema.get("required") or arg.items_schema.get("required_properties") or properties.keys())
         item: Dict[str, Any] = {}
         for child_name in required:
-            child_value = _extract_schema_property_value(child_name, properties.get(child_name, {}), request)
+            child_value = _extract_schema_property_value(child_name, properties.get(child_name, {}), request, skill=skill, slot_path=f"{arg.name}.{child_name}")
             if child_value is None:
                 return None
             item[child_name] = child_value
@@ -1013,12 +1017,20 @@ def _grounded_structured_value(arg: ArgumentIR, request: str) -> Any:
     return None
 
 
-def _extract_schema_property_value(name: str, schema: Any, request: str) -> Any:
+def _extract_schema_property_value(name: str, schema: Any, request: str, *, skill: GeneratedSkill | None = None, slot_path: str | None = None) -> Any:
     schema = schema if isinstance(schema, dict) else {}
     kind = schema_type(schema)
     explicit = _extract_named_value(name, request)
     if explicit is not None:
         return _coerce_extracted_value(explicit, kind)
+    if skill is not None:
+        learned = _extract_dev_learned_slot_value(slot_path or name, schema, request, skill)
+        if learned is not None:
+            return learned
+        if slot_path:
+            learned = _extract_dev_learned_slot_value(name, schema, request, skill)
+            if learned is not None:
+                return learned
 
     lowered = request.lower()
     enum_values = schema.get("enum")
@@ -1068,6 +1080,67 @@ def _extract_schema_property_value(name: str, schema: Any, request: str) -> Any:
     if parts.intersection({"name", "entity", "user", "person", "title"}):
         return _extract_named_entity_like_value(name, request)
     return None
+
+
+def _extract_dev_learned_slot_value(slot_name: str, schema: Dict[str, Any], request: str, skill: GeneratedSkill) -> Any:
+    metadata = skill.metadata if isinstance(skill.metadata, dict) else {}
+    grounding = metadata.get("dev_learned_slot_grounding")
+    if not isinstance(grounding, dict):
+        return None
+    arguments = grounding.get("arguments")
+    if not isinstance(arguments, dict):
+        return None
+    slot = arguments.get(slot_name)
+    if not isinstance(slot, dict) and "." in slot_name:
+        slot = arguments.get(slot_name.split(".")[-1])
+    if not isinstance(slot, dict):
+        return None
+    aliases = [str(alias).strip() for alias in slot.get("aliases", []) if str(alias).strip()]
+    kind = schema_type(schema)
+    for alias in aliases[:16]:
+        raw_value = _extract_value_after_alias(alias, request, allow_commas=kind in {"array", "object"})
+        if raw_value is None:
+            continue
+        value = _coerce_dev_learned_value(raw_value, kind, schema)
+        if value is not None:
+            return value
+    return None
+
+
+def _extract_value_after_alias(alias: str, request: str, *, allow_commas: bool = False) -> str | None:
+    alias_pattern = r"\s+".join(re.escape(part) for part in alias.split())
+    if not alias_pattern:
+        return None
+    connectors = r"(?:(?:=|:|#)|\bis\b|\bas\b|\bof\b|\bto\b|\bnamed\b)?"
+    for match in re.finditer(rf"\b{alias_pattern}\b\s*{connectors}\s*", request, flags=re.IGNORECASE):
+        value = _extract_value_span(request, match.end(), allow_commas=allow_commas)
+        if value is None:
+            continue
+        value = value.strip(" .,:;\"'`")
+        if value and _looks_like_learned_slot_value(value):
+            return value
+    return None
+
+
+def _coerce_dev_learned_value(raw_value: str, kind: str, schema: Dict[str, Any]) -> Any:
+    value = raw_value.strip()
+    enum_values = schema.get("enum")
+    if isinstance(enum_values, list):
+        for enum_value in enum_values:
+            if str(enum_value).lower() == value.lower():
+                return enum_value
+    if kind == "string":
+        return value
+    return _coerce_extracted_value(value, kind)
+
+
+def _looks_like_learned_slot_value(value: str) -> bool:
+    lowered = value.lower().strip()
+    return bool(
+        lowered
+        and lowered not in {"a", "an", "and", "for", "from", "in", "of", "on", "the", "to", "with"}
+        and not lowered.startswith(("please ", "use ", "call "))
+    )
 
 
 def _extract_named_value(name: str, request: str) -> str | None:
@@ -1172,14 +1245,71 @@ def _extract_named_entity_like_value(name: str, request: str) -> str | None:
 
 
 def _extract_identifier_like_value(name: str, request: str) -> str | None:
-    cues = _name_parts(name).intersection({"id", "identifier", "account", "user", "entity", "person"})
+    parts = _name_parts(name)
+    directional = _extract_directional_identifier_value(parts, request)
+    if directional:
+        return directional
+    cues = _identifier_cues_for_name(parts)
     if not cues:
         return None
-    cue_pattern = "|".join(sorted(re.escape(cue) for cue in cues.union({"acct"})))
+    cue_pattern = "|".join(sorted(re.escape(cue) for cue in cues))
     patterns = [
         rf"\b(?:{cue_pattern})(?:\s+(?:id|identifier))?\s*(?:=|:|#)?\s+([A-Za-z0-9][A-Za-z0-9_.-]{{1,}})\b",
         rf"\b(?:{cue_pattern})(?:\s+(?:id|identifier))?\s*(?:=|:|#)\s*([A-Za-z0-9][A-Za-z0-9_.-]{{1,}})\b",
     ]
+    for pattern in patterns:
+        match = re.search(pattern, request, flags=re.IGNORECASE)
+        if not match:
+            continue
+        value = match.group(1).strip(" .,:;")
+        if _looks_like_grounded_identifier(value):
+            return value
+    return None
+
+
+def _identifier_cues_for_name(parts: set[str]) -> set[str]:
+    semantic = {
+        "account",
+        "acct",
+        "case",
+        "customer",
+        "entity",
+        "file",
+        "invoice",
+        "item",
+        "order",
+        "person",
+        "record",
+        "request",
+        "task",
+        "ticket",
+        "transaction",
+        "user",
+    }
+    generic = {"id", "identifier"}
+    cues = parts.intersection(semantic | generic)
+    if parts.intersection(generic):
+        cues.update(parts - {"source", "destination", "dest", "target", "from", "to"})
+    cues.add("acct")
+    return {cue for cue in cues if cue}
+
+
+def _extract_directional_identifier_value(parts: set[str], request: str) -> str | None:
+    if not parts.intersection({"account", "acct", "id", "identifier", "user", "entity", "record", "item"}):
+        return None
+    lowered_parts = parts
+    if lowered_parts.intersection({"source", "from", "origin", "sender"}):
+        patterns = (
+            r"\b(?:from|source|origin|sender)\s+(?:account|acct|user|id|identifier)?\s*(?:=|:|#)?\s*([A-Za-z0-9][A-Za-z0-9_.-]{1,})\b",
+            r"\b(?:transfer|send|move)\b[^,.;]{0,80}\bfrom\s+([A-Za-z0-9][A-Za-z0-9_.-]{1,})\s+\b(?:to|into)\b",
+        )
+    elif lowered_parts.intersection({"destination", "dest", "target", "to", "recipient", "receiver"}):
+        patterns = (
+            r"\b(?:to|into|destination|dest|target|recipient|receiver)\s+(?:account|acct|user|id|identifier)?\s*(?:=|:|#)?\s*([A-Za-z0-9][A-Za-z0-9_.-]{1,})\b",
+            r"\b(?:transfer|send|move)\b[^,.;]{0,120}\bfrom\s+[A-Za-z0-9][A-Za-z0-9_.-]{1,}\s+\b(?:to|into)\s+([A-Za-z0-9][A-Za-z0-9_.-]{1,})\b",
+        )
+    else:
+        return None
     for pattern in patterns:
         match = re.search(pattern, request, flags=re.IGNORECASE)
         if not match:
@@ -1234,7 +1364,7 @@ def _has_direct_action_intent(request: str) -> bool:
         return False
     return bool(
         re.search(
-            r"\b(?:use|call|run|search|find|lookup|look up|read|open|show|list|get|fetch|create|add|update|delete|remove|write|save|send|calculate|compute|convert|summarize|draft|record)\b",
+            r"\b(?:use|call|run|search|find|lookup|look up|read|open|show|list|get|fetch|create|add|update|delete|remove|write|save|send|calculate|compute|convert|summarize|draft|record|assign|schedule|book|transfer|sort|analyze|solve|rank|extract|generate)\b",
             lowered,
         )
     )
@@ -1275,7 +1405,10 @@ def _grounded_optional_value(tool: ToolIR, arg: ArgumentIR, request: str, skill:
     explicit = _extract_explicit_argument_value(arg, request)
     if explicit is not None:
         return explicit
-    structured = _grounded_structured_value(arg, request)
+    learned = _extract_dev_learned_slot_value(arg.name, _schema_for_argument(arg), request, skill)
+    if learned is not None:
+        return learned
+    structured = _grounded_structured_value(arg, request, skill)
     if structured is not None:
         return structured
     hinted = _infer_semantic_hint_value(tool, arg.name, request, skill)
@@ -1408,7 +1541,7 @@ def _field_or_value_grounded(field_name: str, value: Any, request: str) -> bool:
 
 def _name_parts(name: str) -> set[str]:
     spaced = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", name)
-    return {part.lower() for part in re.split(r"[^A-Za-z0-9]+", spaced) if len(part) > 2}
+    return {part.lower() for part in re.split(r"[^A-Za-z0-9]+", spaced) if len(part) > 2 or part.lower() == "id"}
 
 
 def _has_nonempty_leaf_value(value: Any) -> bool:
@@ -1754,7 +1887,12 @@ def _verify_reliaskill_v1_prediction(
     if not _uses_reliaskill_v1_runtime(skill):
         return prediction
 
-    actions: list[str] = []
+    predecoder_metadata = prediction.metadata.get("reliaskill_v1_predecoder") if isinstance(prediction.metadata, dict) else None
+    actions: list[str] = [
+        str(action)
+        for action in (predecoder_metadata.get("actions", []) if isinstance(predecoder_metadata, dict) else [])
+        if action is not None
+    ]
     issues: list[str] = []
     raw_original_arguments = dict(prediction.predicted_arguments)
     if _contract_ablation_disabled(skill, "disable_schema_repair"):
@@ -2314,6 +2452,7 @@ class LocalHFPredictorBackend(PredictorBackend):
         generation_kwargs: Dict[str, Any] | None = None,
     ) -> None:
         self.model_name_or_path = model_name_or_path
+        self.max_new_tokens = max_new_tokens
         self.quantization = _quantization_label(load_in_4bit=load_in_4bit, load_in_8bit=load_in_8bit, torch_dtype=torch_dtype)
         self.runner = LocalHFChatRunner(
             model_name_or_path=model_name_or_path,
@@ -2381,6 +2520,7 @@ class LocalHFPredictorBackend(PredictorBackend):
                 {"role": "user", "content": prompt},
             ],
             temperature=0.0,
+            max_new_tokens=min(96, self.max_new_tokens),
         )
         return _prediction_from_refinement_content(
             tool,
@@ -2516,6 +2656,15 @@ def _maybe_refine_reliaskill_v1_prediction(
     if not _should_attempt_contract_refinement(tool, skill, task, prediction):
         return prediction
     metadata = dict(prediction.metadata)
+    refinement_allowed, refinement_reason = _model_refinement_budget_decision(backend, prediction)
+    if not refinement_allowed:
+        metadata["reliaskill_v1_refinement"] = {
+            "attempted": False,
+            "reason": refinement_reason,
+            "backend": backend.backend_name,
+        }
+        prediction.metadata = metadata
+        return prediction
     try:
         refined = backend.refine_prediction(tool, skill, task, prediction)
         if refined is None:
@@ -2547,6 +2696,52 @@ def _maybe_refine_reliaskill_v1_prediction(
         }
         prediction.metadata = metadata
         return prediction
+
+
+def _model_refinement_budget_decision(backend: PredictorBackend, prediction: EvalPrediction) -> tuple[bool, str]:
+    if os.getenv("RELIASKILL_ENABLE_MODEL_REFINEMENT", "").strip().lower() in {"1", "true", "yes"}:
+        return True, "explicitly_enabled"
+    if backend.backend_name != "local_hf":
+        return True, "backend_not_local_hf"
+    if not _is_high_value_refinement_candidate(prediction):
+        return False, "not_high_value_refinement_candidate"
+    budget = _local_hf_refinement_budget()
+    if budget <= 0:
+        return False, "skipped_local_hf_runtime_budget"
+    global _LOCAL_HF_REFINEMENT_USED
+    if _LOCAL_HF_REFINEMENT_USED >= budget:
+        return False, "local_hf_runtime_budget_exhausted"
+    _LOCAL_HF_REFINEMENT_USED += 1
+    return True, "local_hf_runtime_budget"
+
+
+def _local_hf_refinement_budget() -> int:
+    raw_value = os.getenv("RELIASKILL_LOCAL_HF_REFINEMENT_BUDGET", "").strip()
+    if not raw_value:
+        return 0
+    try:
+        return max(int(raw_value), 0)
+    except ValueError:
+        return 0
+
+
+def _is_high_value_refinement_candidate(prediction: EvalPrediction) -> bool:
+    if prediction.metadata.get("reliaskill_v1_predecoder"):
+        return False
+    verifier = prediction.metadata.get("reliaskill_v1_runtime_verifier")
+    if not isinstance(verifier, dict):
+        return False
+    after = verifier.get("contract_evaluation_after")
+    if prediction.should_call and isinstance(after, dict) and after.get("satisfied") is True:
+        return False
+    actions = {str(item) for item in verifier.get("actions", []) if item is not None}
+    issues = {str(item) for item in verifier.get("issues", []) if item is not None}
+    if actions.intersection({"abstained_schema_contract_violation", "abstained_contract_proof_failure", "abstained_contract_proof_policy"}):
+        return True
+    return any(
+        issue.endswith((":missing_required", ":type_mismatch", ":invalid_enum", ":invalid_format", ":pattern_mismatch"))
+        for issue in issues
+    )
 
 
 def _should_attempt_contract_refinement(
@@ -2607,6 +2802,165 @@ def _contract_selection_score(prediction: EvalPrediction) -> float:
     return score
 
 
+def _maybe_predecode_reliaskill_v1_prediction(
+    tool: ToolIR,
+    skill: GeneratedSkill,
+    task: EvalTask,
+    backend: PredictorBackend,
+) -> EvalPrediction | None:
+    if not _uses_reliaskill_v1_runtime(skill):
+        return None
+    if not _backend_allows_contract_predecoder(backend):
+        return None
+    boundary_reason = _reliaskill_v1_boundary_reason(tool, skill, task.user_request)
+    if boundary_reason == "action_intent_conflict" and _contract_ablation_disabled(skill, "disable_action_gate"):
+        boundary_reason = None
+    if boundary_reason:
+        prediction = _predecoded_prediction(
+            tool,
+            skill,
+            task,
+            backend,
+            should_call=False,
+            arguments={},
+            reason=boundary_reason,
+            decision="pre_abstain_boundary",
+            actions=["predecoded_boundary_abstention"],
+        )
+        return _verify_reliaskill_v1_prediction(tool, skill, task, prediction)
+
+    if _contract_ablation_disabled(skill, "disable_runtime_grounding") or _contract_ablation_disabled(skill, "disable_contract_decoder"):
+        return None
+    if not _has_direct_action_intent(task.user_request):
+        return None
+
+    grounding_request = _task_grounding_text(task)
+    actions: list[str] = []
+    required_arguments, required_issues = _grounded_required_arguments(tool, grounding_request, skill, actions)
+    missing_required = [issue for issue in required_issues if issue.endswith(":missing_required")]
+    if missing_required:
+        return None
+
+    decoded = dict(required_arguments)
+    for arg in tool.arguments:
+        if arg.required or arg.name in decoded:
+            continue
+        optional_value = _grounded_optional_value(tool, arg, grounding_request, skill)
+        if optional_value is None:
+            continue
+        sanitized_value, value_issues = _sanitize_value_for_schema(optional_value, _schema_for_argument(arg), arg.name, actions)
+        if sanitized_value is None or value_issues:
+            continue
+        if not _optional_argument_is_grounded(tool, arg, grounding_request, skill, sanitized_value):
+            continue
+        decoded[arg.name] = _prune_ungrounded_schema_optionals(
+            sanitized_value,
+            _schema_for_argument(arg),
+            arg.name,
+            grounding_request,
+            actions,
+        )
+        actions.append(f"predecoded_grounded_optional:{arg.name}")
+
+    required_names = {arg.name for arg in tool.arguments if arg.required}
+    if not required_names and not _allow_direct_no_argument_call(tool, task.user_request, decoded, boundary_reason):
+        proof_state = build_contract_proof_state(
+            tool,
+            skill,
+            task.user_request,
+            arguments=decoded,
+            grounding_context=_task_grounding_context(task),
+        )
+        if proof_state.decision != "call":
+            return None
+    elif not required_names.issubset(decoded):
+        return None
+
+    proof_state = build_contract_proof_state(
+        tool,
+        skill,
+        task.user_request,
+        arguments=decoded,
+        grounding_context=_task_grounding_context(task),
+    )
+    if proof_state.decision != "call":
+        return None
+    prediction = _predecoded_prediction(
+        tool,
+        skill,
+        task,
+        backend,
+        should_call=True,
+        arguments=decoded,
+        reason=None,
+        decision="pre_call_contract_decoder",
+        actions=["predecoded_grounded_contract_call", *actions],
+    )
+    return _verify_reliaskill_v1_prediction(tool, skill, task, prediction)
+
+
+def _predecoded_prediction(
+    tool: ToolIR,
+    skill: GeneratedSkill,
+    task: EvalTask,
+    backend: PredictorBackend,
+    *,
+    should_call: bool,
+    arguments: Dict[str, Any],
+    reason: str | None,
+    decision: str,
+    actions: list[str],
+) -> EvalPrediction:
+    raw_output = json.dumps(
+        {"should_call": should_call, "arguments": arguments, "abstention_reason": reason},
+        ensure_ascii=False,
+        sort_keys=True,
+    )
+    metadata = _prediction_audit_metadata(
+        skill=skill,
+        prompt="",
+        raw_model_output=raw_output,
+        parsed_arguments=arguments,
+        backend_name="reliaskill_contract_predecoder",
+        model_name="dev_calibrated_contract_policy_decoder",
+        quantization=getattr(backend, "quantization", "none"),
+        should_call=should_call,
+        abstention_reason=reason,
+    )
+    metadata["configured_predictor_backend"] = backend.backend_name
+    metadata["actual_predictor_backend"] = "reliaskill_contract_predecoder"
+    metadata["predictor_fallback_used"] = False
+    metadata["predictor_fallback_reason"] = None
+    metadata["reliaskill_v1_predecoder"] = {
+        "used": True,
+        "decision": decision,
+        "actions": actions,
+        "skipped_model_call": True,
+        "contract_policy": (skill.metadata.get("contract_policy") or {}).get("name")
+        if isinstance(skill.metadata.get("contract_policy"), dict)
+        else None,
+        "contract_policy_calibration": skill.metadata.get("contract_policy_calibration")
+        if isinstance(skill.metadata.get("contract_policy_calibration"), dict)
+        else None,
+    }
+    return EvalPrediction(
+        task_id=task.task_id,
+        tool_name=task.tool_name,
+        baseline_name=skill.baseline_name,
+        predicted_arguments=arguments,
+        should_call=should_call,
+        abstention_reason=reason,
+        exposure_text=render_exposure(tool, skill),
+        metadata=metadata,
+    )
+
+
+def _backend_allows_contract_predecoder(backend: PredictorBackend) -> bool:
+    if os.getenv("RELIASKILL_ENABLE_CONTRACT_PREDECODER", "").strip().lower() in {"1", "true", "yes"}:
+        return True
+    return backend.backend_name == "local_hf"
+
+
 def safe_predict(
     tool: ToolIR,
     skill: GeneratedSkill,
@@ -2616,6 +2970,16 @@ def safe_predict(
     allow_fallback: bool = True,
 ) -> EvalPrediction:
     try:
+        predecoded = _maybe_predecode_reliaskill_v1_prediction(tool, skill, task, backend)
+        if predecoded is not None:
+            predecoded.metadata = {
+                **predecoded.metadata,
+                "configured_predictor_backend": backend.backend_name,
+                "actual_predictor_backend": predecoded.metadata.get("actual_predictor_backend", "reliaskill_contract_predecoder"),
+                "predictor_fallback_used": False,
+                "predictor_fallback_reason": None,
+            }
+            return predecoded
         prediction = backend.predict(tool, skill, task)
         prediction = _verify_reliaskill_v1_prediction(tool, skill, task, prediction)
         prediction = _maybe_refine_reliaskill_v1_prediction(tool, skill, task, backend, prediction)

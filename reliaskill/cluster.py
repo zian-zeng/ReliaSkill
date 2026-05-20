@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import re
 import shutil
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Sequence
@@ -23,7 +24,12 @@ from autoskill.local_model import clear_model_cache
 from autoskill.artifacts import GATED_SKILL, GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER, REPAIRED_SKILL, clone_skill_as
 from autoskill.conditions import RELIASKILL_V1_CONTRACT_ABLATIONS, normalize_condition_names
 from autoskill.contract_inference import default_contract_proof_policy
-from autoskill.contracts import build_contract_counterexamples, compile_skill_contract
+from autoskill.contracts import (
+    build_contract_counterexamples,
+    calibrate_contract_policy,
+    compile_skill_contract,
+    evaluate_skill_contract,
+)
 from autoskill.doc_evidence import build_doc_grounding_evidence
 from autoskill.metrics import build_metric_tables, write_metric_tables
 from autoskill.multi_candidate import (
@@ -159,6 +165,7 @@ def _build_challenger_skill(
     source_row: Dict[str, Any],
     gate_row: Dict[str, Any],
     selection_report_path: Path,
+    behavior_cases: Sequence[Any] = (),
 ) -> Any:
     challenger = clone_skill_as(source_skill, RELIASKILL_CHALLENGER)
     source_score = source_row["reliability_score"]
@@ -167,6 +174,12 @@ def _build_challenger_skill(
     selection = _load_selection_report(selection_report_path)
     evidence_lines = _challenger_evidence_lines(source_score, repair, selection, gate_score=gate_score)
     doc_evidence = build_doc_grounding_evidence(tool)
+    learned_contract_policy, learned_contract_proof_policy, contract_policy_calibration = _learn_contract_policy_from_dev_controls(
+        tool,
+        challenger,
+        behavior_cases,
+    )
+    learned_slot_grounding = _learn_slot_grounding_from_dev_controls(tool, challenger, behavior_cases)
     if evidence_lines:
         challenger.skill_summary = _compact_join(
             [
@@ -230,6 +243,8 @@ def _build_challenger_skill(
             "declarative_contract_proof_state",
             "evidence_calibrated_contract_proof_ledger",
             "calibratable_contract_proof_policy",
+            "dev_calibrated_contract_policy",
+            "dev_learned_slot_grounding",
             "proof_state_routing_policy",
             "contrastive_contract_proof_context",
             "retrieval_miss_proof_rescue",
@@ -259,6 +274,8 @@ def _build_challenger_skill(
         "uses_executable_skill_contract": True,
         "uses_contract_proof_ledger": True,
         "uses_adaptive_contract_policy": True,
+        "uses_dev_calibrated_contract_policy": True,
+        "uses_dev_learned_slot_grounding": True,
         "uses_contextual_grounding_contract": True,
         "uses_multi_step_contract_planning": True,
         "uses_execution_feedback_contract": True,
@@ -281,8 +298,10 @@ def _build_challenger_skill(
         "test_controls_used": False,
         "prompt_visible_method_evidence": True,
         "schema_contract": build_schema_contract_lines(tool),
-        "executable_contract": compile_skill_contract(tool, challenger).model_dump(),
-        "contract_proof_policy": default_contract_proof_policy().model_dump(),
+        "contract_proof_policy": learned_contract_proof_policy,
+        "contract_policy": learned_contract_policy,
+        "contract_policy_calibration": contract_policy_calibration,
+        "dev_learned_slot_grounding": learned_slot_grounding,
         "contract_counterexamples": build_contract_counterexamples(tool, challenger),
         "doc_grounding_evidence": doc_evidence,
         "source_reliability_decision": source_score.decision,
@@ -292,6 +311,7 @@ def _build_challenger_skill(
         "selected_candidate_id": selection.get("selected_candidate_id"),
         "selection_policy": selection.get("selection_policy"),
     }
+    challenger.metadata["executable_contract"] = compile_skill_contract(tool, challenger).model_dump()
     challenger.method_trace = [
         *challenger.method_trace,
         {
@@ -306,6 +326,336 @@ def _build_challenger_skill(
         },
     ]
     return challenger
+
+
+def _learn_slot_grounding_from_dev_controls(tool: Any, skill: Any, behavior_cases: Sequence[Any]) -> Dict[str, Any]:
+    slots: Dict[str, Dict[str, Any]] = {}
+    for arg in getattr(tool, "arguments", []) or []:
+        aliases = set(_default_slot_aliases(arg.name, getattr(arg, "description", "") or ""))
+        slots[arg.name] = {"aliases": aliases, "examples": 0, "value_kinds": set(), "sources": set()}
+        for child_name, _child_schema in (getattr(arg, "properties", {}) or {}).items():
+            path = f"{arg.name}.{child_name}"
+            child_aliases = set(_default_slot_aliases(child_name, ""))
+            slots[path] = {"aliases": child_aliases, "examples": 0, "value_kinds": set(), "sources": set()}
+
+    positive_cases = [
+        case
+        for case in behavior_cases
+        if getattr(case, "tool_name", None) == tool.tool_name and bool(getattr(case, "should_trigger", False))
+    ]
+    for case in positive_cases:
+        _collect_slot_grounding_from_arguments(
+            slots,
+            str(getattr(case, "user_request", "")),
+            getattr(case, "expected_arguments", {}) or {},
+            source="dev_positive",
+        )
+
+    if not positive_cases:
+        for example in getattr(skill, "examples", []) or []:
+            if not isinstance(example, dict):
+                continue
+            _collect_slot_grounding_from_arguments(
+                slots,
+                str(example.get("scenario", "")),
+                example.get("arguments", {}) if isinstance(example.get("arguments"), dict) else {},
+                source="skill_example",
+            )
+
+    return {
+        "source": "dev_positive_controls_and_skill_examples",
+        "test_controls_used": False,
+        "arguments": {
+            name: {
+                "aliases": sorted(str(alias) for alias in data["aliases"] if str(alias).strip())[:16],
+                "examples": int(data["examples"]),
+                "value_kinds": sorted(str(kind) for kind in data["value_kinds"]),
+                "sources": sorted(str(source) for source in data["sources"]),
+            }
+            for name, data in sorted(slots.items())
+        },
+    }
+
+
+def _collect_slot_grounding_from_arguments(
+    slots: Dict[str, Dict[str, Any]],
+    request: str,
+    arguments: Dict[str, Any],
+    *,
+    source: str,
+    prefix: str = "",
+) -> None:
+    for name, value in arguments.items():
+        slot_name = f"{prefix}.{name}" if prefix else str(name)
+        if isinstance(value, dict):
+            _collect_slot_grounding_from_arguments(slots, request, value, source=source, prefix=slot_name)
+            continue
+        data = slots.setdefault(slot_name, {"aliases": set(_default_slot_aliases(slot_name, "")), "examples": 0, "value_kinds": set(), "sources": set()})
+        data["examples"] += 1
+        data["sources"].add(source)
+        data["value_kinds"].add(type(value).__name__)
+        for alias in _aliases_before_value(request, value):
+            data["aliases"].add(alias)
+
+
+def _default_slot_aliases(name: str, description: str) -> List[str]:
+    spaced = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", str(name).replace("_", " ").replace(".", " "))
+    parts = [part for part in re.findall(r"[A-Za-z0-9]+", spaced.lower()) if part and part not in _SLOT_ALIAS_STOPWORDS]
+    aliases = {spaced.lower(), str(name).replace("_", " ").replace(".", " ").lower(), *parts}
+    aliases.update(" ".join(parts[index:]) for index in range(len(parts)) if parts[index:])
+    for token in re.findall(r"[A-Za-z][A-Za-z0-9_-]+", description.lower()):
+        if token not in _SLOT_ALIAS_STOPWORDS and len(token) > 2:
+            aliases.add(token)
+    return [alias.strip() for alias in aliases if alias.strip()]
+
+
+def _aliases_before_value(request: str, value: Any) -> List[str]:
+    if value in (None, "", [], {}):
+        return []
+    raw_value = str(value)
+    index = request.lower().find(raw_value.lower())
+    if index < 0:
+        return []
+    prefix = request[:index]
+    tokens = [
+        token.lower()
+        for token in re.findall(r"[A-Za-z][A-Za-z0-9_-]*", prefix)[-4:]
+        if token.lower() not in _SLOT_ALIAS_STOPWORDS
+    ]
+    aliases: List[str] = []
+    for width in (1, 2, 3):
+        if len(tokens) >= width:
+            aliases.append(" ".join(tokens[-width:]))
+    return aliases
+
+
+_SLOT_ALIAS_STOPWORDS = {
+    "a",
+    "an",
+    "and",
+    "as",
+    "by",
+    "for",
+    "from",
+    "in",
+    "into",
+    "is",
+    "of",
+    "on",
+    "please",
+    "the",
+    "to",
+    "use",
+    "with",
+}
+
+
+def _learn_contract_policy_from_dev_controls(
+    tool: Any,
+    skill: Any,
+    behavior_cases: Sequence[Any],
+) -> tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
+    examples: List[Dict[str, Any]] = []
+    source_counts = {
+        "dev_positive": 0,
+        "dev_explicit_negative": 0,
+        "dev_contrastive_negative": 0,
+        "skill_example_positive": 0,
+        "contract_counterfactual_negative": 0,
+    }
+
+    contrastive_budget = 32
+    for case in behavior_cases:
+        case_tool = getattr(case, "tool_name", None)
+        negative_target = getattr(case, "negative_target", None)
+        should_trigger = bool(getattr(case, "should_trigger", False))
+        if case_tool == tool.tool_name and should_trigger:
+            _append_contract_policy_example(
+                examples,
+                tool,
+                skill,
+                str(getattr(case, "user_request", "")),
+                arguments=getattr(case, "expected_arguments", {}) or {},
+                label=True,
+                source="dev_positive",
+                case_id=getattr(case, "case_id", None),
+            )
+            source_counts["dev_positive"] += 1
+            continue
+        if case_tool == tool.tool_name or negative_target == tool.tool_name:
+            _append_contract_policy_example(
+                examples,
+                tool,
+                skill,
+                str(getattr(case, "user_request", "")),
+                arguments={},
+                label=False,
+                source="dev_explicit_negative",
+                case_id=getattr(case, "case_id", None),
+            )
+            source_counts["dev_explicit_negative"] += 1
+            continue
+        if should_trigger and case_tool and case_tool != tool.tool_name and source_counts["dev_contrastive_negative"] < contrastive_budget:
+            _append_contract_policy_example(
+                examples,
+                tool,
+                skill,
+                str(getattr(case, "user_request", "")),
+                arguments={},
+                label=False,
+                source="dev_contrastive_negative",
+                case_id=getattr(case, "case_id", None),
+            )
+            source_counts["dev_contrastive_negative"] += 1
+
+    if not any(item.get("label") for item in examples):
+        for index, example in enumerate(getattr(skill, "examples", []) or []):
+            arguments = example.get("arguments") if isinstance(example, dict) else {}
+            scenario = str(example.get("scenario", "")) if isinstance(example, dict) else ""
+            if not scenario or not isinstance(arguments, dict):
+                continue
+            if _append_contract_policy_example(
+                examples,
+                tool,
+                skill,
+                scenario,
+                arguments=arguments,
+                label=True,
+                source="skill_example_positive",
+                case_id=f"skill_example_{index}",
+            ):
+                source_counts["skill_example_positive"] += 1
+            if source_counts["skill_example_positive"] >= 4:
+                break
+
+    for index, counterexample in enumerate(build_contract_counterexamples(tool, skill, limit=4)):
+        request = str(counterexample.get("user_request", ""))
+        if not request:
+            continue
+        if _append_contract_policy_example(
+            examples,
+            tool,
+            skill,
+            request,
+            arguments={},
+            label=False,
+            source="contract_counterfactual_negative",
+            case_id=f"contract_counterfactual_{index}",
+        ):
+            source_counts["contract_counterfactual_negative"] += 1
+
+    positives = sum(1 for item in examples if item.get("label"))
+    negatives = len(examples) - positives
+    policy = calibrate_contract_policy(examples, name="dev_learned_contract_policy")
+    policy["calibration_source"] = "dev_behavior_controls"
+    policy["calibration_source_counts"] = dict(source_counts)
+    proof_policy = _calibrate_contract_proof_policy(examples)
+    calibration = {
+        "source": "dev_behavior_controls",
+        "examples": len(examples),
+        "positive_examples": positives,
+        "negative_examples": negatives,
+        "source_counts": dict(source_counts),
+        "mode": policy.get("mode"),
+        "threshold": policy.get("threshold"),
+        "proof_policy_name": proof_policy.get("name"),
+        "proof_policy_call_threshold": proof_policy.get("call_threshold"),
+        "feature_names": sorted((policy.get("weights") or {}).keys()),
+        "test_controls_used": False,
+    }
+    return policy, proof_policy, calibration
+
+
+def _append_contract_policy_example(
+    examples: List[Dict[str, Any]],
+    tool: Any,
+    skill: Any,
+    request: str,
+    *,
+    arguments: Dict[str, Any],
+    label: bool,
+    source: str,
+    case_id: Any,
+) -> bool:
+    try:
+        evaluation = evaluate_skill_contract(
+            tool,
+            skill,
+            request,
+            arguments=arguments if label else {},
+            grounding_context={},
+        )
+    except Exception:
+        return False
+    examples.append(
+        {
+            "features": dict(evaluation.policy_features),
+            "proof_features": _proof_features_from_evaluation(evaluation),
+            "label": label,
+            "source": source,
+            "case_id": case_id,
+        }
+    )
+    return True
+
+
+def _proof_features_from_evaluation(evaluation: Any) -> Dict[str, float]:
+    return {
+        "retrieval_score": 0.0,
+        "lexical_score": 0.0,
+        "route_score": float(getattr(evaluation, "routing_bonus", 0.0) or 0.0),
+        "satisfied": 1.0 if bool(getattr(evaluation, "satisfied", False)) else 0.0,
+        "grounded_required_count": float(len(getattr(evaluation, "grounded_required_args", []) or [])),
+        "missing_required_count": float(len(getattr(evaluation, "missing_required_args", []) or [])),
+        "action_conflict": 1.0 if "action_intent_conflict" in (getattr(evaluation, "blocking_reasons", []) or []) else 0.0,
+        "argument_issue_count": float(len(getattr(evaluation, "argument_issues", []) or [])),
+        "non_action_blocker_count": float(
+            len([reason for reason in (getattr(evaluation, "blocking_reasons", []) or []) if reason != "action_intent_conflict"])
+        ),
+        "boundary_penalty": 0.0,
+    }
+
+
+def _calibrate_contract_proof_policy(examples: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
+    default = default_contract_proof_policy()
+    positives = [item for item in examples if bool(item.get("label"))]
+    negatives = [item for item in examples if not bool(item.get("label"))]
+    feature_names = sorted(default.weights)
+    if not positives or not negatives:
+        policy = default.model_dump()
+        policy["calibration_source"] = "default_sparse_dev_controls"
+        policy["calibration_examples"] = len(examples)
+        return policy
+    weights = dict(default.weights)
+    learning_rate = 0.05
+    for _ in range(8):
+        for item in examples:
+            features = item.get("proof_features") if isinstance(item.get("proof_features"), dict) else {}
+            label = 1.0 if bool(item.get("label")) else -1.0
+            score = sum(weights[feature] * float(features.get(feature, 0.0) or 0.0) for feature in feature_names)
+            if label * score <= 2.0:
+                for feature in feature_names:
+                    weights[feature] += learning_rate * label * float(features.get(feature, 0.0) or 0.0)
+
+    def score(item: Dict[str, Any]) -> float:
+        features = item.get("proof_features") if isinstance(item.get("proof_features"), dict) else {}
+        return sum(weights[feature] * float(features.get(feature, 0.0) or 0.0) for feature in feature_names)
+
+    positive_score = sum(score(item) for item in positives) / len(positives)
+    negative_score = sum(score(item) for item in negatives) / len(negatives)
+    call_threshold = max(default.repair_threshold + 1.0, (positive_score + negative_score) / 2.0)
+    repair_threshold = min(default.repair_threshold, call_threshold - 1.0)
+    return {
+        "name": "dev_learned_contract_proof_policy",
+        "learner": "default_initialized_margin_perceptron",
+        "weights": {feature: round(weights[feature], 6) for feature in feature_names},
+        "call_threshold": round(call_threshold, 6),
+        "repair_threshold": round(repair_threshold, 6),
+        "calibration_source": "dev_behavior_controls_with_contrastive_and_counterfactual_negatives",
+        "calibration_examples": len(examples),
+        "positive_examples": len(positives),
+        "negative_examples": len(negatives),
+    }
 
 
 def _load_selection_report(path: Path) -> Dict[str, Any]:
@@ -375,6 +725,10 @@ def _write_challenger_method_metadata(
     reliability_row: Dict[str, Any],
     source_row: Dict[str, Any],
     gate_row: Dict[str, Any],
+    contract_proof_policy: Dict[str, Any] | None = None,
+    contract_policy: Dict[str, Any] | None = None,
+    contract_policy_calibration: Dict[str, Any] | None = None,
+    dev_learned_slot_grounding: Dict[str, Any] | None = None,
 ) -> None:
     if not selection_report_path.exists():
         raise FileNotFoundError(
@@ -404,6 +758,8 @@ def _write_challenger_method_metadata(
             "declarative_contract_proof_state",
             "evidence_calibrated_contract_proof_ledger",
             "calibratable_contract_proof_policy",
+            "dev_calibrated_contract_policy",
+            "dev_learned_slot_grounding",
             "proof_state_routing_policy",
             "contrastive_contract_proof_context",
             "retrieval_miss_proof_rescue",
@@ -434,6 +790,8 @@ def _write_challenger_method_metadata(
         "uses_executable_skill_contract": True,
         "uses_contract_proof_ledger": True,
         "uses_adaptive_contract_policy": True,
+        "uses_dev_calibrated_contract_policy": True,
+        "uses_dev_learned_slot_grounding": True,
         "uses_contextual_grounding_contract": True,
         "uses_multi_step_contract_planning": True,
         "uses_execution_feedback_contract": True,
@@ -454,7 +812,10 @@ def _write_challenger_method_metadata(
         "uses_contract_decoded_argument_completion": True,
         "uses_candidate_verified_routing_fallback": True,
         "test_controls_used": False,
-        "contract_proof_policy": default_contract_proof_policy().model_dump(),
+        "contract_proof_policy": contract_proof_policy or default_contract_proof_policy().model_dump(),
+        "contract_policy": contract_policy or {},
+        "contract_policy_calibration": contract_policy_calibration or {},
+        "dev_learned_slot_grounding": dev_learned_slot_grounding or {},
         "reliaskill_v1_decision": score.decision,
         "reliaskill_v1_score": score.score,
         "source_reliability_decision": source_score.decision,
@@ -594,6 +955,7 @@ def build_shared_skill_packages(
                         source_row=source_row,
                         gate_row=gate_row,
                         selection_report_path=selection_report_path,
+                        behavior_cases=behavior_cases,
                     )
                     package_validation = validate_skill(tool, package_skill)
                     package_behavior = run_behavior_tests(
@@ -643,6 +1005,10 @@ def build_shared_skill_packages(
                         reliability_row=row,
                         source_row=source_row,
                         gate_row=gate_row,
+                        contract_proof_policy=package_skill.metadata.get("contract_proof_policy"),
+                        contract_policy=package_skill.metadata.get("contract_policy"),
+                        contract_policy_calibration=package_skill.metadata.get("contract_policy_calibration"),
+                        dev_learned_slot_grounding=package_skill.metadata.get("dev_learned_slot_grounding"),
                     )
                 reliability_records.append(
                     {

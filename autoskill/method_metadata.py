@@ -51,6 +51,8 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         "uses_executable_skill_contract": bool(method.get("uses_executable_skill_contract", False)),
         "uses_contract_proof_ledger": bool(method.get("uses_contract_proof_ledger", False)),
         "uses_adaptive_contract_policy": bool(method.get("uses_adaptive_contract_policy", False)),
+        "uses_dev_calibrated_contract_policy": bool(method.get("uses_dev_calibrated_contract_policy", False)),
+        "uses_dev_learned_slot_grounding": bool(method.get("uses_dev_learned_slot_grounding", False)),
         "uses_contextual_grounding_contract": bool(method.get("uses_contextual_grounding_contract", False)),
         "uses_multi_step_contract_planning": bool(method.get("uses_multi_step_contract_planning", False)),
         "uses_execution_feedback_contract": bool(method.get("uses_execution_feedback_contract", False)),
@@ -98,6 +100,12 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         compact["dev_behavior_metrics"] = behavior.get("metrics")
     if isinstance(method.get("contract_proof_policy"), dict):
         compact["contract_proof_policy"] = method.get("contract_proof_policy")
+    if isinstance(method.get("contract_policy"), dict):
+        compact["contract_policy"] = method.get("contract_policy")
+    if isinstance(method.get("contract_policy_calibration"), dict):
+        compact["contract_policy_calibration"] = method.get("contract_policy_calibration")
+    if isinstance(method.get("dev_learned_slot_grounding"), dict):
+        compact["dev_learned_slot_grounding"] = method.get("dev_learned_slot_grounding")
     if not compact.get("uses_runtime_schema_contract_verifier"):
         compact["uses_runtime_schema_contract_verifier"] = "runtime_schema_contract_verifier" in compact.get("pipeline_stages", [])
     if not compact.get("uses_executable_skill_contract"):
@@ -106,6 +114,10 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         compact["uses_contract_proof_ledger"] = "proof_carrying_runtime_contract" in compact.get("pipeline_stages", [])
     if not compact.get("uses_adaptive_contract_policy"):
         compact["uses_adaptive_contract_policy"] = "adaptive_contract_policy" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_dev_calibrated_contract_policy"):
+        compact["uses_dev_calibrated_contract_policy"] = "dev_calibrated_contract_policy" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_dev_learned_slot_grounding"):
+        compact["uses_dev_learned_slot_grounding"] = "dev_learned_slot_grounding" in compact.get("pipeline_stages", [])
     if not compact.get("uses_contextual_grounding_contract"):
         compact["uses_contextual_grounding_contract"] = "contextual_grounding_contract" in compact.get("pipeline_stages", [])
     if not compact.get("uses_multi_step_contract_planning"):

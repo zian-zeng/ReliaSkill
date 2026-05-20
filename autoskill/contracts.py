@@ -459,11 +459,24 @@ def calibrate_contract_policy(
     def mean(items: List[Dict[str, Any]], feature: str) -> float:
         return sum(float((item.get("features") or {}).get(feature, 0.0) or 0.0) for item in items) / len(items)
 
-    weights = {feature: round(mean(positives, feature) - mean(negatives, feature), 6) for feature in feature_names}
+    weights = {feature: mean(positives, feature) - mean(negatives, feature) for feature in feature_names}
+    bias = 0.0
+    learning_rate = 0.25
+    for _ in range(8):
+        for item in examples:
+            features = item.get("features") if isinstance(item.get("features"), dict) else {}
+            label = 1.0 if bool(item.get("label")) else -1.0
+            margin = label * (bias + sum(weights[feature] * float(features.get(feature, 0.0) or 0.0) for feature in feature_names))
+            if margin <= 0.25:
+                for feature in feature_names:
+                    weights[feature] += learning_rate * label * float(features.get(feature, 0.0) or 0.0)
+                bias += learning_rate * label
+
+    rounded_weights = {feature: round(weight, 6) for feature, weight in weights.items()}
 
     def score(item: Dict[str, Any]) -> float:
         features = item.get("features") if isinstance(item.get("features"), dict) else {}
-        return sum(weights[feature] * float(features.get(feature, 0.0) or 0.0) for feature in feature_names)
+        return bias + sum(weights[feature] * float(features.get(feature, 0.0) or 0.0) for feature in feature_names)
 
     positive_score = sum(score(item) for item in positives) / len(positives)
     negative_score = sum(score(item) for item in negatives) / len(negatives)
@@ -471,9 +484,10 @@ def calibrate_contract_policy(
     return {
         "name": name,
         "mode": "strict_weighted",
-        "bias": 0.0,
+        "learner": "mean_initialized_margin_perceptron",
+        "bias": round(bias, 6),
         "threshold": round(threshold, 6),
-        "weights": weights,
+        "weights": rounded_weights,
         "hard_block_missing_required": True,
         "hard_block_action_conflict": True,
         "hard_block_argument_issues": True,

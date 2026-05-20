@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import unittest
+import os
+from unittest.mock import patch
 
+import autoskill.predictor as predictor_module
 from autoskill.eval_types import EvalPrediction, EvalTask
 from autoskill.ir import ArgumentIR, GeneratedSkill, ToolIR
 from autoskill.predictor import PredictorBackend, safe_predict
@@ -13,8 +16,10 @@ class _StaticPredictor(PredictorBackend):
     def __init__(self, *, arguments: dict, should_call: bool = True) -> None:
         self.arguments = arguments
         self.should_call = should_call
+        self.predict_calls = 0
 
     def predict(self, tool: ToolIR, skill: GeneratedSkill, task: EvalTask) -> EvalPrediction:
+        self.predict_calls += 1
         return EvalPrediction(
             task_id=task.task_id,
             tool_name=tool.tool_name,
@@ -49,6 +54,14 @@ class _RefiningPredictor(_StaticPredictor):
         )
 
 
+class _LocalHFRefiningPredictor(_RefiningPredictor):
+    backend_name = "local_hf"
+
+
+class _LocalHFStaticPredictor(_StaticPredictor):
+    backend_name = "local_hf"
+
+
 class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
     def test_v1_drops_unsupported_fields_after_model_prediction(self) -> None:
         prediction = safe_predict(
@@ -64,17 +77,20 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         self.assertIn("dropped_unsupported_field:unsupported", verifier["actions"])
 
     def test_v1_fills_required_argument_only_when_grounded(self) -> None:
+        backend = _LocalHFStaticPredictor(arguments={})
         prediction = safe_predict(
             _search_tool(),
             _v1_skill(),
             EvalTask(task_id="t2", tool_name="search", user_request='Please search query="schema contract".'),
-            _StaticPredictor(arguments={}),
+            backend,
         )
 
         self.assertTrue(prediction.should_call)
         self.assertEqual(prediction.predicted_arguments, {"query": "schema contract"})
+        self.assertEqual(backend.predict_calls, 0)
+        self.assertEqual(prediction.metadata["reliaskill_v1_predecoder"]["decision"], "pre_call_contract_decoder")
         verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
-        self.assertIn("filled_grounded_required:query", verifier["actions"])
+        self.assertIn("predecoded_grounded_contract_call", verifier["actions"])
         self.assertIn("compiled_contract", verifier)
         self.assertEqual(verifier["contract_proof_state_after"]["decision"], "call")
         self.assertIn("feature_vector", verifier["contract_proof_state_after"])
@@ -112,17 +128,19 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         self.assertNotIn("filled_grounded_required:query", verifier["actions"])
 
     def test_v1_rescues_false_abstention_when_required_arguments_are_grounded(self) -> None:
+        backend = _LocalHFStaticPredictor(arguments={}, should_call=False)
         prediction = safe_predict(
             _search_tool(),
             _v1_skill(),
             EvalTask(task_id="t2_rescue", tool_name="search", user_request='Search query="schema contract".'),
-            _StaticPredictor(arguments={}, should_call=False),
+            backend,
         )
 
         self.assertTrue(prediction.should_call)
         self.assertEqual(prediction.predicted_arguments, {"query": "schema contract"})
+        self.assertEqual(backend.predict_calls, 0)
         verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
-        self.assertIn("rescued_grounded_false_abstention", verifier["actions"])
+        self.assertIn("predecoded_grounded_contract_call", verifier["actions"])
 
     def test_v1_does_not_abstain_when_without_using_mentions_unrelated_distractor(self) -> None:
         prediction = safe_predict(
@@ -176,7 +194,7 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         prediction = safe_predict(
             _ticket_search_tool(),
             _v1_skill(),
-            EvalTask(task_id="t2_refine", tool_name="ticket_search", user_request="Search support ticket TCK-123."),
+            EvalTask(task_id="t2_refine", tool_name="ticket_search", user_request="Search support TCK-123."),
             backend,
         )
 
@@ -187,6 +205,57 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         self.assertTrue(refinement["attempted"])
         self.assertTrue(refinement["selected_refined"])
         self.assertGreater(refinement["refined_score"], refinement["original_score"])
+
+    def test_v1_fills_named_ticket_identifier_without_refinement(self) -> None:
+        backend = _RefiningPredictor(arguments={}, refined_arguments={"ticket_id": "TCK-123"})
+
+        prediction = safe_predict(
+            _ticket_search_tool(),
+            _v1_skill(),
+            EvalTask(task_id="t2_ticket_identifier", tool_name="ticket_search", user_request="Search support ticket TCK-123."),
+            backend,
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"ticket_id": "TCK-123"})
+        self.assertEqual(backend.refine_calls, 0)
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIn("filled_grounded_required:ticket_id", verifier["actions"])
+
+    def test_v1_skips_local_hf_model_refinement_by_default(self) -> None:
+        backend = _LocalHFRefiningPredictor(arguments={}, refined_arguments={"ticket_id": "TCK-123"})
+
+        prediction = safe_predict(
+            _ticket_search_tool(),
+            _v1_skill(),
+            EvalTask(task_id="t2_refine_budget", tool_name="ticket_search", user_request="Search support TCK-123."),
+            backend,
+        )
+
+        self.assertFalse(prediction.should_call)
+        self.assertEqual(backend.refine_calls, 0)
+        refinement = prediction.metadata["reliaskill_v1_refinement"]
+        self.assertFalse(refinement["attempted"])
+        self.assertEqual(refinement["reason"], "skipped_local_hf_runtime_budget")
+
+    def test_v1_allows_budgeted_local_hf_refinement_for_high_value_failures(self) -> None:
+        backend = _LocalHFRefiningPredictor(arguments={}, refined_arguments={"ticket_id": "TCK-123"})
+        predictor_module._LOCAL_HF_REFINEMENT_USED = 0
+
+        with patch.dict(os.environ, {"RELIASKILL_LOCAL_HF_REFINEMENT_BUDGET": "1"}):
+            prediction = safe_predict(
+                _ticket_search_tool(),
+                _v1_skill(),
+                EvalTask(task_id="t2_refine_budget_allowed", tool_name="ticket_search", user_request="Search support TCK-123."),
+                backend,
+            )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"ticket_id": "TCK-123"})
+        self.assertEqual(backend.refine_calls, 1)
+        refinement = prediction.metadata["reliaskill_v1_refinement"]
+        self.assertTrue(refinement["attempted"])
+        self.assertTrue(refinement["selected_refined"])
 
     def test_v1_fills_grounded_generic_identifier_without_refinement(self) -> None:
         prediction = safe_predict(
@@ -200,6 +269,31 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         self.assertEqual(prediction.predicted_arguments, {"account_id": "abc123"})
         verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
         self.assertIn("filled_grounded_required:account_id", verifier["actions"])
+
+    def test_v1_uses_dev_learned_slot_alias_for_required_argument(self) -> None:
+        skill = _v1_skill()
+        skill.metadata["dev_learned_slot_grounding"] = {
+            "arguments": {
+                "assignee_id": {
+                    "aliases": ["owner"],
+                    "examples": 1,
+                    "value_kinds": ["str"],
+                    "sources": ["dev_positive"],
+                }
+            }
+        }
+
+        prediction = safe_predict(
+            _assignment_tool(),
+            skill,
+            EvalTask(task_id="t2_slot_alias", tool_name="assign_ticket", user_request="Assign the ticket to owner zed-42."),
+            _StaticPredictor(arguments={}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"assignee_id": "zed-42"})
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIn("filled_grounded_required:assignee_id", verifier["actions"])
 
     def test_identifier_binding_ablation_does_not_fill_generic_identifier(self) -> None:
         prediction = safe_predict(
@@ -225,7 +319,7 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
                 baseline_name="reliaskill_v1_no_verifier_refinement",
                 flags={"disable_verifier_refinement": True},
             ),
-            EvalTask(task_id="t2_refine_ablate", tool_name="ticket_search", user_request="Search support ticket TCK-123."),
+            EvalTask(task_id="t2_refine_ablate", tool_name="ticket_search", user_request="Search support TCK-123."),
             backend,
         )
 
@@ -234,16 +328,19 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         self.assertNotIn("reliaskill_v1_refinement", prediction.metadata)
 
     def test_v1_does_not_invent_missing_query_from_generic_request(self) -> None:
+        backend = _LocalHFStaticPredictor(arguments={})
         prediction = safe_predict(
             _search_tool(),
             _v1_skill(),
             EvalTask(task_id="t2b", tool_name="search", user_request="I will send the query later."),
-            _StaticPredictor(arguments={}),
+            backend,
         )
 
         self.assertFalse(prediction.should_call)
         self.assertEqual(prediction.predicted_arguments, {})
         self.assertEqual(prediction.abstention_reason, "missing_required_information")
+        self.assertEqual(backend.predict_calls, 0)
+        self.assertEqual(prediction.metadata["reliaskill_v1_predecoder"]["decision"], "pre_abstain_boundary")
 
     def test_v1_rejects_hallucinated_required_value_when_no_grounded_value_exists(self) -> None:
         prediction = safe_predict(
@@ -1167,6 +1264,14 @@ def _ticket_search_tool() -> ToolIR:
         tool_name="ticket_search",
         tool_purpose="Search support tickets by ticket identifier.",
         arguments=[ArgumentIR(name="ticket_id", type="string", required=True)],
+    )
+
+
+def _assignment_tool() -> ToolIR:
+    return ToolIR(
+        tool_name="assign_ticket",
+        tool_purpose="Assign a ticket to a user.",
+        arguments=[ArgumentIR(name="assignee_id", type="string", required=True)],
     )
 
 

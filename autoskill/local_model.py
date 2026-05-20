@@ -158,7 +158,13 @@ class LocalHFChatRunner:
         parts.append("ASSISTANT:")
         return "\n".join(parts)
 
-    def generate_chat(self, messages: List[Dict[str, str]], temperature: float = 0.0) -> str:
+    def generate_chat(
+        self,
+        messages: List[Dict[str, str]],
+        temperature: float = 0.0,
+        *,
+        max_new_tokens: int | None = None,
+    ) -> str:
         self._load()
 
         tokenizer = self._tokenizer
@@ -177,7 +183,7 @@ class LocalHFChatRunner:
             inputs = {key: value.to(model.device) for key, value in inputs.items()}
 
         generation_kwargs = dict(self.generation_kwargs)
-        generation_kwargs.setdefault("max_new_tokens", self.max_new_tokens)
+        generation_kwargs.setdefault("max_new_tokens", max_new_tokens or self.max_new_tokens)
         generation_kwargs.setdefault("do_sample", temperature > 0)
         if temperature > 0:
             generation_kwargs.setdefault("temperature", temperature)
