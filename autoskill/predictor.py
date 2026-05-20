@@ -18,6 +18,7 @@ from autoskill.prompting import build_prediction_prompt
 from autoskill.contract_arbitration import contract_arbitration_policy_from_skill
 from autoskill.contract_decision import choose_contrastive_contract_candidate, explicit_requested_tool_score
 from autoskill.contract_inference import build_contract_proof_state
+from autoskill.contrastive_memory import score_contrastive_memory
 from autoskill.contracts import build_contract_failure_report, compile_skill_contract, evaluate_skill_contract
 from autoskill.routing_boundaries import detect_routing_abstention, normalize_routing_text, tool_name_variants
 from autoskill.schema_utils import normalize_schema_node, schema_type
@@ -1699,6 +1700,10 @@ def _reliaskill_v1_boundary_reason(tool: ToolIR, skill: GeneratedSkill, request:
         return "missing_required_information"
     if _request_tool_action_conflict(request, tool):
         return "action_intent_conflict"
+    if not _contract_ablation_disabled(skill, "disable_contrastive_memory"):
+        memory = score_contrastive_memory(request, tool, skill)
+        if memory.negative_boundary:
+            return "dev_contrastive_memory_negative_boundary"
     return _heuristic_abstention_reason(request, skill)
 
 

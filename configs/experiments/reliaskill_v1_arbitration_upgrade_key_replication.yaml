@@ -1,5 +1,5 @@
 experiment_scale: reliaskill_v1_arbitration_upgrade_key_replication
-description: "Post-upgrade key replication for contract-aware arbitration: five model families, strongest baselines, ReliaSkill v1, and the no-arbitration ablation."
+description: "Post-upgrade key replication for learned contrastive memory plus contract-aware arbitration: five model families, strongest baselines, ReliaSkill v1, and method ablations."
 seed: 42
 tools_path: data/raw_mcp/tools.jsonl
 tasks_path: data/controls/test.jsonl
@@ -30,6 +30,7 @@ conditions:
   - generated_skill_base
   - gated_skill
   - skill_prompt_verbose_docs
+  - reliaskill_v1_no_contrastive_memory
   - reliaskill_v1_no_contract_arbitration
   - reliaskill_v1
 
@@ -83,5 +84,6 @@ scheduler:
     generated_skill_base: 300
     gated_skill: 475
     skill_prompt_verbose_docs: 1200
+    reliaskill_v1_no_contrastive_memory: 575
     reliaskill_v1_no_contract_arbitration: 575
     reliaskill_v1: 575

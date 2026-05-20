@@ -14,6 +14,7 @@ from autoskill.contract_arbitration import (
     routing_row_contract_margin,
     routing_row_contract_risk,
 )
+from autoskill.contrastive_memory import score_contrastive_memory
 from autoskill.contract_decision import (
     choose_contrastive_contract_candidate,
     explicit_requested_tool_score,
@@ -850,6 +851,10 @@ def select_tool_for_task(
             if is_reliaskill_v1_family(normalized_baseline_name):
                 contract_routing_bonus, contract_routing_features = _reliaskill_v1_contract_routing_bonus(task.user_request, tool)
                 rerank_score += contract_routing_bonus
+                if not _contract_ablation_disabled(skill, "disable_contrastive_memory"):
+                    contrastive_memory = score_contrastive_memory(task.user_request, tool, skill)
+                    rerank_score += contrastive_memory.route_bonus
+                    contract_routing_features["contrastive_memory"] = contrastive_memory.model_dump()
             schema_fit_bonus = 0
             grounded_required_args: List[str] = []
             missing_required_args: List[str] = []

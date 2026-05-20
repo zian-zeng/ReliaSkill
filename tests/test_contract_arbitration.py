@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from autoskill.eval_types import EvalTask
+from autoskill.eval_types import EvalPrediction, EvalTask
 from autoskill.ir import ArgumentIR, GeneratedSkill, ToolIR
 from autoskill.predictor import PredictorBackend, safe_predict
 from autoskill.routing_eval import _maybe_apply_reliaskill_routing_arbitration
-from tests.test_reliaskill_v1_runtime import _LocalHFStaticPredictor
 
 
 def test_runtime_arbitration_preserves_valid_model_native_call() -> None:
@@ -187,3 +186,23 @@ class _FailingLocalHFPredictor(PredictorBackend):
     def predict(self, tool: ToolIR, skill: GeneratedSkill, task: EvalTask):
         self.predict_calls += 1
         raise RuntimeError("forced arbitration failure")
+
+
+class _LocalHFStaticPredictor(PredictorBackend):
+    backend_name = "local_hf"
+
+    def __init__(self, *, arguments: dict, should_call: bool = True) -> None:
+        self.arguments = arguments
+        self.should_call = should_call
+        self.predict_calls = 0
+
+    def predict(self, tool: ToolIR, skill: GeneratedSkill, task: EvalTask) -> EvalPrediction:
+        self.predict_calls += 1
+        return EvalPrediction(
+            task_id=task.task_id,
+            tool_name=tool.tool_name,
+            baseline_name=skill.baseline_name,
+            predicted_arguments=dict(self.arguments),
+            should_call=self.should_call,
+            metadata={"raw_model_output": "static"},
+        )
