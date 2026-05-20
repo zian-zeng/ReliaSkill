@@ -183,6 +183,8 @@ cython_debug/
 # Project-specific ignores
 .claude/
 outputs/
+docs/*professor_report.md
+docs/internal/
 data/external/
 data/converted_external/bfcl_records.jsonl
 data/converted_external/conversion_records.jsonl
