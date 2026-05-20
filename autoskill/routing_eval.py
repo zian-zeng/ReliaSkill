@@ -9,6 +9,11 @@ from typing import Any, Dict, Iterable, List, Tuple
 
 from autoskill.eval_types import EvalTask
 from autoskill.conditions import GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER, is_reliaskill_v1_family, normalize_condition_name
+from autoskill.contract_arbitration import (
+    contract_arbitration_policy_from_skill,
+    routing_row_contract_margin,
+    routing_row_contract_risk,
+)
 from autoskill.contract_decision import (
     choose_contrastive_contract_candidate,
     explicit_requested_tool_score,
@@ -74,6 +79,23 @@ def _skill_router_text(tool: ToolIR, skill: GeneratedSkill) -> str:
             parts.extend(str(key) for key in spec.keys())
             parts.extend(str(value) for value in spec.values() if isinstance(value, (str, int, float)))
     return " ".join(part for part in parts if part)
+
+
+def _model_native_router_text(tool: ToolIR, skill: GeneratedSkill) -> str:
+    profile = skill.metadata.get("model_native_router_profile") if isinstance(skill.metadata, dict) else None
+    if isinstance(profile, dict):
+        parts = [
+            tool.tool_name,
+            tool.tool_purpose or "",
+            str(profile.get("skill_summary") or ""),
+            *[str(item) for item in profile.get("when_to_use", []) if str(item)],
+            *[str(item) for item in profile.get("argument_names", []) if str(item)],
+            *[str(item) for item in profile.get("example_scenarios", []) if str(item)],
+        ]
+        text = " ".join(part for part in parts if part)
+        if text.strip():
+            return text
+    return _skill_router_text(tool, skill)
 
 
 def _skill_router_positive_text(tool: ToolIR, skill: GeneratedSkill) -> str:
@@ -814,6 +836,12 @@ def select_tool_for_task(
             else:
                 router_text = _skill_router_text(tool, skill)
             lexical_score = _router_overlap_score(task.user_request, router_text)
+            native_router_text = _model_native_router_text(tool, skill)
+            model_native_router_score = _router_overlap_score(task.user_request, native_router_text) + _generated_skill_routing_bonus(
+                task.user_request,
+                tool,
+                skill,
+            )
             retrieval_score = int(row.get("score", 0))
             rerank_score = (2 * retrieval_score) + lexical_score
             rerank_score += _generated_skill_routing_bonus(task.user_request, tool, skill)
@@ -856,6 +884,7 @@ def select_tool_for_task(
                 {
                     "tool_name": tool_name,
                     "score": rerank_score,
+                    "model_native_router_score": model_native_router_score,
                     "retrieval_score": row.get("score", 0),
                     "boundary_penalty": boundary_penalty,
                     "contract_routing_bonus": contract_routing_bonus,
@@ -918,13 +947,25 @@ def select_tool_for_task(
                     and not row.get("action_intent_conflict")
                 ]
                 if viable_rows:
-                    selected_tool_name = str(viable_rows[0]["tool_name"])
+                    selected_row = viable_rows[0]
+                    routing_arbitration = _maybe_apply_reliaskill_routing_arbitration(
+                        task.user_request,
+                        selected_row,
+                        reranked,
+                        skill_bank,
+                    )
+                    if routing_arbitration is not None:
+                        selected_tool_name = str(routing_arbitration["selected_tool_name"])
+                        selected_row = next(row for row in reranked if str(row.get("tool_name") or "") == selected_tool_name)
+                        selected_row["contract_arbitration_decision"] = routing_arbitration
+                    else:
+                        selected_tool_name = str(selected_row["tool_name"])
                     for row in reranked:
                         if row.get("action_intent_conflict"):
                             row["schema_affordance_gate"] = "action_intent_conflict"
                         else:
                             row["schema_affordance_gate"] = "schema_complete" if not row.get("missing_required_args") else "missing_required"
-                    selected_skill = skill_bank[str(viable_rows[0]["tool_name"])]
+                    selected_skill = skill_bank[selected_tool_name]
                     ambiguity = None if _contract_ablation_disabled(selected_skill, "disable_ambiguity_abstention") else _reliaskill_v1_ambiguity_reason(task.user_request, viable_rows, tools)
                     if ambiguity:
                         abstain_row = {
@@ -979,6 +1020,92 @@ def select_tool_for_task(
         "candidate_tools": [item["tool_name"] for item in top_rows],
         "candidate_rows": top_rows,
     }
+
+
+def _maybe_apply_reliaskill_routing_arbitration(
+    query: str,
+    contract_selected_row: Dict[str, Any],
+    reranked_rows: List[Dict[str, Any]],
+    skill_bank: Dict[str, GeneratedSkill],
+) -> Dict[str, Any] | None:
+    selected_tool = str(contract_selected_row.get("tool_name") or "")
+    selected_skill = skill_bank.get(selected_tool)
+    if selected_skill is None or _contract_ablation_disabled(selected_skill, "disable_contract_arbitration"):
+        return None
+    policy = contract_arbitration_policy_from_skill(selected_skill)
+    if not (policy.enabled and policy.enable_routing_arbitration):
+        return None
+
+    native_candidates = [
+        row
+        for row in reranked_rows
+        if str(row.get("tool_name") or "") in skill_bank
+        and str(row.get("tool_name") or "") != "__abstain__"
+        and _routing_row_is_low_risk_native_candidate(row, policy)
+    ]
+    if not native_candidates:
+        return None
+    native_candidates.sort(
+        key=lambda row: (
+            -float(row.get("model_native_router_score") or 0.0),
+            -float(row.get("contract_proof_score") or row.get("score") or 0.0),
+            str(row.get("tool_name") or ""),
+        )
+    )
+    native_row = native_candidates[0]
+    native_tool = str(native_row.get("tool_name") or "")
+    if native_tool == selected_tool:
+        return None
+
+    selected_native_score = float(contract_selected_row.get("model_native_router_score") or 0.0)
+    native_score = float(native_row.get("model_native_router_score") or 0.0)
+    native_advantage = native_score - selected_native_score
+    selected_margin = routing_row_contract_margin(contract_selected_row)
+    native_margin = routing_row_contract_margin(native_row)
+    contract_margin_advantage = selected_margin - native_margin
+    preserve_native = (
+        native_advantage >= policy.preserve_native_score_advantage
+        and contract_margin_advantage < policy.contract_override_margin
+    ) or (
+        selected_margin < policy.preserve_native_routing_margin
+        and native_score > selected_native_score
+    )
+    if not preserve_native:
+        return {
+            "attempted": True,
+            "selected": "contract_selected_candidate",
+            "selected_tool_name": selected_tool,
+            "native_tool_name": native_tool,
+            "reason": "contract_margin_stronger_than_native_advantage",
+            "policy": policy.model_dump(),
+            "native_advantage": round(native_advantage, 4),
+            "contract_margin_advantage": round(contract_margin_advantage, 4),
+        }
+    return {
+        "attempted": True,
+        "selected": "model_native_low_risk_candidate",
+        "selected_tool_name": native_tool,
+        "native_tool_name": native_tool,
+        "contract_selected_tool_name": selected_tool,
+        "reason": "native_candidate_low_contract_risk_and_higher_native_score",
+        "policy": policy.model_dump(),
+        "native_advantage": round(native_advantage, 4),
+        "contract_margin_advantage": round(contract_margin_advantage, 4),
+        "native_contract_margin": round(native_margin, 4),
+        "selected_contract_margin": round(selected_margin, 4),
+    }
+
+
+def _routing_row_is_low_risk_native_candidate(row: Dict[str, Any], policy: Any) -> bool:
+    if row.get("contract_viable") is not True and row.get("contract_satisfied") is not True:
+        return False
+    risk = routing_row_contract_risk(row)
+    if risk["hard_blocked"]:
+        return False
+    if int(risk["missing_required_count"]) > int(policy.low_risk_missing_required_max):
+        return False
+    blockers = {str(item) for item in risk["blocking_reasons"]}
+    return not blockers.intersection(set(policy.hard_block_reasons))
 
 
 def _expected_routing_tool_name(gold_task: EvalTask) -> str:

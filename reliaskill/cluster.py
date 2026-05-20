@@ -24,6 +24,7 @@ from autoskill.local_model import clear_model_cache
 from autoskill.artifacts import GATED_SKILL, GENERATED_SKILL_BASE, RELIASKILL_CHALLENGER, REPAIRED_SKILL, clone_skill_as
 from autoskill.conditions import RELIASKILL_V1_CONTRACT_ABLATIONS, normalize_condition_names
 from autoskill.contract_inference import default_contract_proof_policy
+from autoskill.contract_arbitration import default_contract_arbitration_policy
 from autoskill.contracts import (
     build_contract_counterexamples,
     calibrate_contract_policy,
@@ -174,7 +175,12 @@ def _build_challenger_skill(
     selection = _load_selection_report(selection_report_path)
     evidence_lines = _challenger_evidence_lines(source_score, repair, selection, gate_score=gate_score)
     doc_evidence = build_doc_grounding_evidence(tool)
-    learned_contract_policy, learned_contract_proof_policy, contract_policy_calibration = _learn_contract_policy_from_dev_controls(
+    (
+        learned_contract_policy,
+        learned_contract_proof_policy,
+        contract_policy_calibration,
+        learned_contract_arbitration_policy,
+    ) = _learn_contract_policy_from_dev_controls(
         tool,
         challenger,
         behavior_cases,
@@ -253,6 +259,9 @@ def _build_challenger_skill(
             "request_contract_parse_prompting",
             "executable_contract_compilation",
             "adaptive_contract_policy",
+            "contract_aware_arbitration_policy",
+            "runtime_model_contract_arbitration",
+            "adaptive_routing_arbitration",
             "contextual_grounding_contract",
             "multi_step_contract_plan_composition",
             "execution_feedback_contract_interpreter",
@@ -274,6 +283,9 @@ def _build_challenger_skill(
         "uses_executable_skill_contract": True,
         "uses_contract_proof_ledger": True,
         "uses_adaptive_contract_policy": True,
+        "uses_contract_aware_arbitration": True,
+        "uses_runtime_model_contract_arbitration": True,
+        "uses_adaptive_routing_arbitration": True,
         "uses_dev_calibrated_contract_policy": True,
         "uses_dev_learned_slot_grounding": True,
         "uses_contextual_grounding_contract": True,
@@ -300,7 +312,9 @@ def _build_challenger_skill(
         "schema_contract": build_schema_contract_lines(tool),
         "contract_proof_policy": learned_contract_proof_policy,
         "contract_policy": learned_contract_policy,
+        "contract_arbitration_policy": learned_contract_arbitration_policy,
         "contract_policy_calibration": contract_policy_calibration,
+        "model_native_router_profile": _model_native_router_profile(source_skill, tool),
         "dev_learned_slot_grounding": learned_slot_grounding,
         "contract_counterexamples": build_contract_counterexamples(tool, challenger),
         "doc_grounding_evidence": doc_evidence,
@@ -374,6 +388,20 @@ def _learn_slot_grounding_from_dev_controls(tool: Any, skill: Any, behavior_case
             }
             for name, data in sorted(slots.items())
         },
+    }
+
+
+def _model_native_router_profile(skill: Any, tool: Any) -> Dict[str, Any]:
+    return {
+        "source": "pre_contract_generated_skill_profile",
+        "skill_summary": str(getattr(skill, "skill_summary", "") or ""),
+        "when_to_use": [str(item) for item in (getattr(skill, "when_to_use", []) or [])[:6] if str(item)],
+        "argument_names": [str(getattr(arg, "name", "")) for arg in (getattr(tool, "arguments", []) or []) if str(getattr(arg, "name", ""))],
+        "example_scenarios": [
+            str(example.get("scenario", ""))
+            for example in (getattr(skill, "examples", []) or [])[:4]
+            if isinstance(example, dict) and str(example.get("scenario", ""))
+        ],
     }
 
 
@@ -454,7 +482,7 @@ def _learn_contract_policy_from_dev_controls(
     tool: Any,
     skill: Any,
     behavior_cases: Sequence[Any],
-) -> tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
+) -> tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
     examples: List[Dict[str, Any]] = []
     source_counts = {
         "dev_positive": 0,
@@ -550,6 +578,7 @@ def _learn_contract_policy_from_dev_controls(
     policy["calibration_source"] = "dev_behavior_controls"
     policy["calibration_source_counts"] = dict(source_counts)
     proof_policy = _calibrate_contract_proof_policy(examples)
+    arbitration_policy = _calibrate_contract_arbitration_policy(examples, proof_policy)
     calibration = {
         "source": "dev_behavior_controls",
         "examples": len(examples),
@@ -560,10 +589,12 @@ def _learn_contract_policy_from_dev_controls(
         "threshold": policy.get("threshold"),
         "proof_policy_name": proof_policy.get("name"),
         "proof_policy_call_threshold": proof_policy.get("call_threshold"),
+        "arbitration_policy_name": arbitration_policy.get("name"),
+        "arbitration_contract_override_margin": arbitration_policy.get("contract_override_margin"),
         "feature_names": sorted((policy.get("weights") or {}).keys()),
         "test_controls_used": False,
     }
-    return policy, proof_policy, calibration
+    return policy, proof_policy, calibration, arbitration_policy
 
 
 def _append_contract_policy_example(
@@ -658,6 +689,57 @@ def _calibrate_contract_proof_policy(examples: Sequence[Dict[str, Any]]) -> Dict
     }
 
 
+def _calibrate_contract_arbitration_policy(
+    examples: Sequence[Dict[str, Any]],
+    proof_policy: Dict[str, Any],
+) -> Dict[str, Any]:
+    default = default_contract_arbitration_policy().model_dump()
+    positives = [item for item in examples if bool(item.get("label"))]
+    negatives = [item for item in examples if not bool(item.get("label"))]
+    weights = proof_policy.get("weights") if isinstance(proof_policy.get("weights"), dict) else {}
+
+    def score(item: Dict[str, Any]) -> float:
+        features = item.get("proof_features") if isinstance(item.get("proof_features"), dict) else {}
+        total = 0.0
+        for name, raw_weight in weights.items():
+            try:
+                total += float(raw_weight) * float(features.get(name, 0.0) or 0.0)
+            except (TypeError, ValueError):
+                continue
+        return total
+
+    if positives and negatives and weights:
+        positive_score = sum(score(item) for item in positives) / len(positives)
+        negative_score = sum(score(item) for item in negatives) / len(negatives)
+        separation = max(positive_score - negative_score, 0.0)
+    else:
+        positive_score = 0.0
+        negative_score = 0.0
+        separation = 0.0
+
+    preserve_margin = min(14.0, max(6.0, separation * 0.12))
+    contract_override_margin = min(20.0, max(10.0, separation * 0.18))
+    runtime_margin_threshold = min(16.0, max(8.0, separation * 0.14))
+    return {
+        **default,
+        "name": "dev_learned_contract_aware_arbitration_policy",
+        "enabled": True,
+        "enable_runtime_model_arbitration": True,
+        "enable_routing_arbitration": True,
+        "runtime_arbitration_margin_threshold": round(runtime_margin_threshold, 4),
+        "preserve_native_routing_margin": round(preserve_margin, 4),
+        "preserve_native_score_advantage": 4.0,
+        "contract_override_margin": round(contract_override_margin, 4),
+        "low_risk_missing_required_max": 0,
+        "calibration_source": "dev_behavior_controls_proof_margin_separation",
+        "calibration_examples": len(examples),
+        "positive_examples": len(positives),
+        "negative_examples": len(negatives),
+        "positive_mean_proof_score": round(positive_score, 4),
+        "negative_mean_proof_score": round(negative_score, 4),
+    }
+
+
 def _load_selection_report(path: Path) -> Dict[str, Any]:
     if not path.exists():
         return {}
@@ -727,6 +809,7 @@ def _write_challenger_method_metadata(
     gate_row: Dict[str, Any],
     contract_proof_policy: Dict[str, Any] | None = None,
     contract_policy: Dict[str, Any] | None = None,
+    contract_arbitration_policy: Dict[str, Any] | None = None,
     contract_policy_calibration: Dict[str, Any] | None = None,
     dev_learned_slot_grounding: Dict[str, Any] | None = None,
 ) -> None:
@@ -768,6 +851,9 @@ def _write_challenger_method_metadata(
             "request_contract_parse_prompting",
             "executable_contract_compilation",
             "adaptive_contract_policy",
+            "contract_aware_arbitration_policy",
+            "runtime_model_contract_arbitration",
+            "adaptive_routing_arbitration",
             "contextual_grounding_contract",
             "multi_step_contract_plan_composition",
             "execution_feedback_contract_interpreter",
@@ -790,6 +876,9 @@ def _write_challenger_method_metadata(
         "uses_executable_skill_contract": True,
         "uses_contract_proof_ledger": True,
         "uses_adaptive_contract_policy": True,
+        "uses_contract_aware_arbitration": True,
+        "uses_runtime_model_contract_arbitration": True,
+        "uses_adaptive_routing_arbitration": True,
         "uses_dev_calibrated_contract_policy": True,
         "uses_dev_learned_slot_grounding": True,
         "uses_contextual_grounding_contract": True,
@@ -814,6 +903,7 @@ def _write_challenger_method_metadata(
         "test_controls_used": False,
         "contract_proof_policy": contract_proof_policy or default_contract_proof_policy().model_dump(),
         "contract_policy": contract_policy or {},
+        "contract_arbitration_policy": contract_arbitration_policy or default_contract_arbitration_policy().model_dump(),
         "contract_policy_calibration": contract_policy_calibration or {},
         "dev_learned_slot_grounding": dev_learned_slot_grounding or {},
         "reliaskill_v1_decision": score.decision,
@@ -1007,6 +1097,7 @@ def build_shared_skill_packages(
                         gate_row=gate_row,
                         contract_proof_policy=package_skill.metadata.get("contract_proof_policy"),
                         contract_policy=package_skill.metadata.get("contract_policy"),
+                        contract_arbitration_policy=package_skill.metadata.get("contract_arbitration_policy"),
                         contract_policy_calibration=package_skill.metadata.get("contract_policy_calibration"),
                         dev_learned_slot_grounding=package_skill.metadata.get("dev_learned_slot_grounding"),
                     )

@@ -15,6 +15,7 @@ from autoskill.ir import ArgumentIR, GeneratedSkill, ToolIR
 from autoskill.json_output import parse_json_object_output
 from autoskill.local_model import LocalHFChatRunner
 from autoskill.prompting import build_prediction_prompt
+from autoskill.contract_arbitration import contract_arbitration_policy_from_skill
 from autoskill.contract_decision import choose_contrastive_contract_candidate, explicit_requested_tool_score
 from autoskill.contract_inference import build_contract_proof_state
 from autoskill.contracts import build_contract_failure_report, compile_skill_contract, evaluate_skill_contract
@@ -3041,6 +3042,146 @@ def _backend_allows_contract_predecoder(backend: PredictorBackend) -> bool:
     return backend.backend_name == "local_hf"
 
 
+def _maybe_arbitrate_predecoded_reliaskill_v1_prediction(
+    tool: ToolIR,
+    skill: GeneratedSkill,
+    task: EvalTask,
+    backend: PredictorBackend,
+    predecoded: EvalPrediction,
+) -> EvalPrediction:
+    if not _should_arbitrate_predecoded_reliaskill_v1_prediction(skill, predecoded):
+        return predecoded
+    try:
+        model_native = backend.predict(tool, skill, task)
+    except Exception as exc:  # pragma: no cover - model-native arbitration is opportunistic.
+        metadata = dict(predecoded.metadata)
+        predecoder = metadata.get("reliaskill_v1_predecoder")
+        if isinstance(predecoder, dict):
+            metadata["reliaskill_v1_predecoder"] = {
+                **predecoder,
+                "skipped_model_call": False,
+                "arbitration_model_call_attempted": True,
+            }
+        metadata["reliaskill_v1_arbitration"] = {
+            "attempted": True,
+            "selected": "contract_predecoder",
+            "reason": "model_native_prediction_failed",
+            "error": f"{type(exc).__name__}: {exc}",
+            "policy": contract_arbitration_policy_from_skill(skill).model_dump(),
+        }
+        predecoded.metadata = metadata
+        return predecoded
+
+    verified_model = _verify_reliaskill_v1_prediction(tool, skill, task, model_native)
+    selected, arbitration = _select_reliaskill_v1_runtime_candidate(
+        skill=skill,
+        contract_candidate=predecoded,
+        model_candidate=verified_model,
+    )
+    metadata = dict(selected.metadata)
+    predecoder = metadata.get("reliaskill_v1_predecoder")
+    if isinstance(predecoder, dict):
+        metadata["reliaskill_v1_predecoder"] = {
+            **predecoder,
+            "skipped_model_call": False,
+            "arbitration_model_call_attempted": True,
+        }
+    metadata["reliaskill_v1_arbitration"] = arbitration
+    selected.metadata = metadata
+    return selected
+
+
+def _should_arbitrate_predecoded_reliaskill_v1_prediction(
+    skill: GeneratedSkill,
+    predecoded: EvalPrediction,
+) -> bool:
+    if _contract_ablation_disabled(skill, "disable_contract_arbitration"):
+        return False
+    policy = contract_arbitration_policy_from_skill(skill)
+    if not (policy.enabled and policy.enable_runtime_model_arbitration):
+        return False
+    predecoder = predecoded.metadata.get("reliaskill_v1_predecoder") if isinstance(predecoded.metadata, dict) else None
+    if not isinstance(predecoder, dict):
+        return False
+    if predecoder.get("decision") != "pre_call_contract_decoder":
+        return False
+    if not predecoded.should_call:
+        return False
+    if os.getenv("RELIASKILL_FORCE_CONTRACT_ARBITRATION", "").strip().lower() in {"1", "true", "yes"}:
+        return True
+    verifier = predecoded.metadata.get("reliaskill_v1_runtime_verifier") if isinstance(predecoded.metadata, dict) else None
+    verifier = verifier if isinstance(verifier, dict) else {}
+    proof_after = verifier.get("contract_proof_state_after") if isinstance(verifier.get("contract_proof_state_after"), dict) else {}
+    try:
+        proof_margin = float(proof_after.get("proof_margin"))
+    except (TypeError, ValueError):
+        return True
+    return proof_margin <= policy.runtime_arbitration_margin_threshold
+
+
+def _select_reliaskill_v1_runtime_candidate(
+    *,
+    skill: GeneratedSkill,
+    contract_candidate: EvalPrediction,
+    model_candidate: EvalPrediction,
+) -> tuple[EvalPrediction, Dict[str, Any]]:
+    policy = contract_arbitration_policy_from_skill(skill)
+    contract_summary = _runtime_candidate_summary("contract_predecoder", contract_candidate)
+    model_summary = _runtime_candidate_summary("model_native_verified", model_candidate)
+    if model_summary["hard_blocked"]:
+        return contract_candidate, {
+            "attempted": True,
+            "selected": "contract_predecoder",
+            "reason": "model_native_hard_blocked",
+            "policy": policy.model_dump(),
+            "candidates": [contract_summary, model_summary],
+        }
+    if model_candidate.should_call and model_summary["contract_satisfied"]:
+        model_score = _contract_selection_score(model_candidate)
+        contract_score = _contract_selection_score(contract_candidate)
+        if model_score >= contract_score - 0.5:
+            return model_candidate, {
+                "attempted": True,
+                "selected": "model_native_verified",
+                "reason": "valid_model_native_candidate_preserved",
+                "policy": policy.model_dump(),
+                "candidates": [contract_summary, model_summary],
+            }
+    return contract_candidate, {
+        "attempted": True,
+        "selected": "contract_predecoder",
+        "reason": "contract_candidate_has_safer_or_higher_contract_score",
+        "policy": policy.model_dump(),
+        "candidates": [contract_summary, model_summary],
+    }
+
+
+def _runtime_candidate_summary(name: str, prediction: EvalPrediction) -> Dict[str, Any]:
+    verifier = prediction.metadata.get("reliaskill_v1_runtime_verifier") if isinstance(prediction.metadata, dict) else None
+    verifier = verifier if isinstance(verifier, dict) else {}
+    after = verifier.get("contract_evaluation_after") if isinstance(verifier.get("contract_evaluation_after"), dict) else {}
+    proof_after = verifier.get("contract_proof_state_after") if isinstance(verifier.get("contract_proof_state_after"), dict) else {}
+    blockers = [str(item) for item in after.get("blocking_reasons", []) if item is not None]
+    actions = [str(item) for item in verifier.get("actions", []) if item is not None]
+    return {
+        "name": name,
+        "should_call": bool(prediction.should_call),
+        "argument_count": len(prediction.predicted_arguments),
+        "abstention_reason": prediction.abstention_reason,
+        "contract_satisfied": after.get("satisfied") is True,
+        "contract_decision": proof_after.get("decision"),
+        "contract_proof_score": proof_after.get("proof_score"),
+        "contract_proof_margin": proof_after.get("proof_margin"),
+        "blocking_reasons": blockers,
+        "hard_blocked": bool(
+            blockers
+            or prediction.abstention_reason in {"missing_required_information", "action_intent_conflict", "explicit_target_tool_forbidden"}
+            or any(action.startswith("abstained_") for action in actions)
+        ),
+        "selection_score": _contract_selection_score(prediction),
+    }
+
+
 def safe_predict(
     tool: ToolIR,
     skill: GeneratedSkill,
@@ -3052,10 +3193,16 @@ def safe_predict(
     try:
         predecoded = _maybe_predecode_reliaskill_v1_prediction(tool, skill, task, backend)
         if predecoded is not None:
+            predecoded = _maybe_arbitrate_predecoded_reliaskill_v1_prediction(tool, skill, task, backend, predecoded)
+            arbitration = predecoded.metadata.get("reliaskill_v1_arbitration") if isinstance(predecoded.metadata, dict) else None
+            selected_by_arbitration = arbitration.get("selected") if isinstance(arbitration, dict) else None
+            actual_backend = predecoded.metadata.get("actual_predictor_backend")
+            if not actual_backend:
+                actual_backend = backend.backend_name if selected_by_arbitration == "model_native_verified" else "reliaskill_contract_predecoder"
             predecoded.metadata = {
                 **predecoded.metadata,
                 "configured_predictor_backend": backend.backend_name,
-                "actual_predictor_backend": predecoded.metadata.get("actual_predictor_backend", "reliaskill_contract_predecoder"),
+                "actual_predictor_backend": actual_backend,
                 "predictor_fallback_used": False,
                 "predictor_fallback_reason": None,
             }
