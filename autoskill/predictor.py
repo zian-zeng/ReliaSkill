@@ -2374,7 +2374,20 @@ class OpenAICompatiblePredictorBackend(PredictorBackend):
         }
         response = self._post_json(payload)
         content = response["choices"][0]["message"]["content"]
-        data = parse_json_object_output(content)
+        try:
+            data = parse_json_object_output(content)
+        except ValueError as exc:
+            return _malformed_model_output_prediction(
+                tool,
+                skill,
+                task,
+                content,
+                backend_name=self.backend_name,
+                model_name=self.model,
+                quantization=self.quantization,
+                prompt=prompt,
+                error=exc,
+            )
         should_call, abstention_reason = _parse_should_call(data)
         predicted_arguments, argument_parse_error = _coerce_predicted_arguments(data)
         if not should_call:
@@ -2476,7 +2489,20 @@ class LocalHFPredictorBackend(PredictorBackend):
             ],
             temperature=0.0,
         )
-        data = parse_json_object_output(content)
+        try:
+            data = parse_json_object_output(content)
+        except ValueError as exc:
+            return _malformed_model_output_prediction(
+                tool,
+                skill,
+                task,
+                content,
+                backend_name=self.backend_name,
+                model_name=self.model_name_or_path,
+                quantization=self.quantization,
+                prompt=prompt,
+                error=exc,
+            )
         should_call, abstention_reason = _parse_should_call(data)
         predicted_arguments, argument_parse_error = _coerce_predicted_arguments(data)
         if not should_call:
@@ -2577,6 +2603,45 @@ def build_predictor_from_config(config: Dict[str, Any] | None) -> PredictorBacke
     raise ValueError(f"Unsupported predictor backend type: {backend_type}")
 
 
+def _malformed_model_output_prediction(
+    tool: ToolIR,
+    skill: GeneratedSkill,
+    task: EvalTask,
+    content: str,
+    *,
+    backend_name: str,
+    model_name: str,
+    quantization: str,
+    prompt: str,
+    error: Exception,
+) -> EvalPrediction:
+    abstention_reason = "malformed_model_output"
+    metadata = _prediction_audit_metadata(
+        skill=skill,
+        prompt=prompt,
+        raw_model_output=content,
+        parsed_arguments={},
+        backend_name=backend_name,
+        model_name=model_name,
+        quantization=quantization,
+        should_call=False,
+        abstention_reason=abstention_reason,
+    )
+    metadata["argument_parse_error"] = f"{type(error).__name__}: {error}"
+    metadata["model_output_parse_error"] = True
+    metadata["malformed_model_output"] = True
+    return EvalPrediction(
+        task_id=task.task_id,
+        tool_name=task.tool_name,
+        baseline_name=skill.baseline_name,
+        predicted_arguments={},
+        should_call=False,
+        abstention_reason=abstention_reason,
+        exposure_text=render_exposure(tool, skill),
+        metadata=metadata,
+    )
+
+
 def _prediction_from_refinement_content(
     tool: ToolIR,
     skill: GeneratedSkill,
@@ -2588,7 +2653,22 @@ def _prediction_from_refinement_content(
     quantization: str,
     prompt: str,
 ) -> EvalPrediction:
-    data = parse_json_object_output(content)
+    try:
+        data = parse_json_object_output(content)
+    except ValueError as exc:
+        prediction = _malformed_model_output_prediction(
+            tool,
+            skill,
+            task,
+            content,
+            backend_name=backend_name,
+            model_name=model_name,
+            quantization=quantization,
+            prompt=prompt,
+            error=exc,
+        )
+        prediction.metadata["refinement_pass"] = True
+        return prediction
     should_call, abstention_reason = _parse_should_call(data)
     predicted_arguments, argument_parse_error = _coerce_predicted_arguments(data)
     if not should_call:

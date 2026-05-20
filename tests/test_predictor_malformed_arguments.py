@@ -2,7 +2,7 @@ import unittest
 
 from autoskill.eval_types import EvalTask
 from autoskill.ir import ArgumentIR, GeneratedSkill, ToolIR
-from autoskill.predictor import LocalHFPredictorBackend, OpenAICompatiblePredictorBackend
+from autoskill.predictor import LocalHFPredictorBackend, OpenAICompatiblePredictorBackend, safe_predict
 
 
 class _FakeRunner:
@@ -58,6 +58,53 @@ class MalformedArgumentPredictionTests(unittest.TestCase):
         self.assertTrue(prediction.should_call)
         self.assertEqual(prediction.predicted_arguments, {})
         self.assertIn("argument_parse_error", prediction.metadata)
+
+    def test_local_hf_empty_output_becomes_audited_abstention_not_exception(self) -> None:
+        backend = LocalHFPredictorBackend(model_name_or_path="fake")
+        backend.runner = _FakeRunner("")
+
+        prediction = backend.predict(_tool(), _skill(), _task())
+
+        self.assertFalse(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {})
+        self.assertEqual(prediction.abstention_reason, "malformed_model_output")
+        self.assertTrue(prediction.metadata["model_output_parse_error"])
+        self.assertIn("No JSON object found", prediction.metadata["argument_parse_error"])
+
+    def test_openai_compatible_empty_output_becomes_audited_abstention_not_exception(self) -> None:
+        backend = _FakeOpenAIBackend("")
+
+        prediction = backend.predict(_tool(), _skill(), _task())
+
+        self.assertFalse(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {})
+        self.assertEqual(prediction.abstention_reason, "malformed_model_output")
+        self.assertTrue(prediction.metadata["model_output_parse_error"])
+
+    def test_safe_predict_strict_local_hf_empty_output_does_not_raise_or_fallback(self) -> None:
+        backend = LocalHFPredictorBackend(model_name_or_path="fake")
+        backend.runner = _FakeRunner("")
+
+        prediction = safe_predict(_tool(), _skill(), _task(), backend, allow_fallback=False)
+
+        self.assertFalse(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {})
+        self.assertEqual(prediction.abstention_reason, "malformed_model_output")
+        self.assertFalse(prediction.metadata["predictor_fallback_used"])
+        self.assertEqual(prediction.metadata["configured_predictor_backend"], "local_hf")
+        self.assertEqual(prediction.metadata["actual_predictor_backend"], "local_hf")
+
+    def test_local_hf_malformed_refinement_output_is_audited_not_exception(self) -> None:
+        backend = LocalHFPredictorBackend(model_name_or_path="fake")
+        backend.runner = _FakeRunner("")
+        previous = backend.predict(_tool(), _skill(), _task())
+
+        prediction = backend.refine_prediction(_tool(), _skill(), _task(), previous)
+
+        self.assertFalse(prediction.should_call)
+        self.assertEqual(prediction.abstention_reason, "malformed_model_output")
+        self.assertTrue(prediction.metadata["model_output_parse_error"])
+        self.assertTrue(prediction.metadata["refinement_pass"])
 
 
 if __name__ == "__main__":
