@@ -10,6 +10,7 @@ from autoskill.retrieval_runtime import contextualize_skill_for_task
 from autoskill.routing_boundaries import detect_routing_abstention
 from autoskill.routing_eval import (
     _skill_router_positive_text,
+    _try_reliaskill_candidate_verification_cascade,
     _try_reliaskill_candidate_verification_fallback,
     score_routed_prediction,
     select_tool_for_task,
@@ -1001,6 +1002,66 @@ class RoutingBoundaryTests(unittest.TestCase):
         self.assertEqual(selected_name, "read_file")
         self.assertEqual(strategy, "retrieve_then_semantic_rerank_candidate_verification")
         self.assertTrue(prediction.metadata["reliaskill_candidate_verification"]["selected_fallback"])
+
+    def test_reliaskill_candidate_verification_cascade_can_replace_low_margin_call(self):
+        read_tool = ToolIR(
+            tool_name="read_file",
+            tool_purpose="Read file contents from a path.",
+            arguments=[ArgumentIR(name="path", type="string", required=True, description="File path.")],
+        )
+        write_tool = ToolIR(
+            tool_name="write_file",
+            tool_purpose="Write file contents to a path.",
+            arguments=[
+                ArgumentIR(name="path", type="string", required=True),
+                ArgumentIR(name="content", type="string", required=True),
+            ],
+        )
+        tools = {tool.tool_name: tool for tool in (read_tool, write_tool)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="route_candidate_cascade",
+            tool_name="read_file",
+            user_request="Read docs/report.md.",
+            expected_arguments={"path": "docs/report.md"},
+        )
+        selected_prediction = EvalPrediction(
+            task_id=task.task_id,
+            tool_name="write_file",
+            baseline_name="reliaskill_v1",
+            predicted_arguments={"path": "docs/report.md", "content": ""},
+            should_call=True,
+            metadata={
+                "reliaskill_v1_runtime_verifier": {
+                    "contract_evaluation_after": {"satisfied": True},
+                    "contract_proof_state_after": {"proof_score": 20.0, "proof_margin": 0.0},
+                }
+            },
+        )
+
+        cascade = _try_reliaskill_candidate_verification_cascade(
+            task=task,
+            baseline_name="reliaskill_v1",
+            selected_tool_name="write_file",
+            selected_prediction=selected_prediction,
+            routing={
+                "candidate_rows": [
+                    {"tool_name": "write_file", "contract_satisfied": True, "contract_proof_margin": 0.0, "missing_required_args": []},
+                    {"tool_name": "read_file", "contract_satisfied": True, "contract_proof_margin": 20.0, "missing_required_args": [], "action_intent_conflict": False},
+                ]
+            },
+            tools=tools,
+            skill_bank=skills,
+            predictor=_ToolAwarePredictor(),
+            allow_predictor_fallback=False,
+        )
+
+        self.assertIsNotNone(cascade)
+        assert cascade is not None
+        selected_name, _, _, _, _, prediction, _, strategy = cascade
+        self.assertEqual(selected_name, "read_file")
+        self.assertEqual(strategy, "retrieve_then_semantic_rerank_candidate_verification_cascade")
+        self.assertTrue(prediction.metadata["reliaskill_candidate_verification_cascade"]["selected_cascade"])
 
     def test_candidate_verification_ablation_disables_fallback(self):
         read_tool = ToolIR(

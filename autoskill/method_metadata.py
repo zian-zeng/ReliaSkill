@@ -74,6 +74,7 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         "uses_verifier_guided_refinement": bool(method.get("uses_verifier_guided_refinement", False)),
         "uses_contract_decoded_argument_completion": bool(method.get("uses_contract_decoded_argument_completion", False)),
         "uses_candidate_verified_routing_fallback": bool(method.get("uses_candidate_verified_routing_fallback", False)),
+        "uses_contract_verified_candidate_cascade": bool(method.get("uses_contract_verified_candidate_cascade", False)),
         "test_controls_used": bool(method.get("test_controls_used", False)),
     }
     if metadata:
@@ -158,6 +159,8 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         compact["uses_contract_decoded_argument_completion"] = "contract_decoded_argument_completion" in compact.get("pipeline_stages", [])
     if not compact.get("uses_candidate_verified_routing_fallback"):
         compact["uses_candidate_verified_routing_fallback"] = "candidate_verified_routing_fallback" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_contract_verified_candidate_cascade"):
+        compact["uses_contract_verified_candidate_cascade"] = "contract_verified_candidate_cascade" in compact.get("pipeline_stages", [])
     return {key: value for key, value in compact.items() if value is not None}
 
 

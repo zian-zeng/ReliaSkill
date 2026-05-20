@@ -1173,6 +1173,28 @@ def _prediction_contract_satisfied(prediction_metadata: Dict[str, Any]) -> bool:
     return after.get("satisfied") is True
 
 
+def _prediction_contract_margin(prediction_metadata: Dict[str, Any]) -> float:
+    verifier = prediction_metadata.get("reliaskill_v1_runtime_verifier")
+    verifier = verifier if isinstance(verifier, dict) else {}
+    proof = verifier.get("contract_proof_state_after")
+    proof = proof if isinstance(proof, dict) else {}
+    try:
+        return float(proof.get("proof_margin"))
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _prediction_contract_score(prediction_metadata: Dict[str, Any]) -> float:
+    verifier = prediction_metadata.get("reliaskill_v1_runtime_verifier")
+    verifier = verifier if isinstance(verifier, dict) else {}
+    proof = verifier.get("contract_proof_state_after")
+    proof = proof if isinstance(proof, dict) else {}
+    try:
+        return float(proof.get("proof_score"))
+    except (TypeError, ValueError):
+        return 0.0
+
+
 def _candidate_row_is_contract_viable(row: Dict[str, Any]) -> bool:
     if row.get("contract_viable") is not None:
         return bool(row.get("contract_viable")) and str(row.get("tool_name") or "") != "__abstain__"
@@ -1181,6 +1203,158 @@ def _candidate_row_is_contract_viable(row: Dict[str, Any]) -> bool:
         and not row.get("missing_required_args")
         and not row.get("action_intent_conflict")
         and str(row.get("tool_name") or "") != "__abstain__"
+    )
+
+
+def _verified_candidate_commit_score(prediction: Any, row: Dict[str, Any] | None) -> float:
+    row = row or {}
+    metadata = prediction.metadata if isinstance(getattr(prediction, "metadata", None), dict) else {}
+    contract_satisfied = _prediction_contract_satisfied(metadata)
+    score = 0.0
+    if prediction.should_call:
+        score += 10.0
+    if contract_satisfied:
+        score += 20.0
+    score += _prediction_contract_score(metadata) * 0.5
+    score += _prediction_contract_margin(metadata)
+    score += routing_row_contract_margin(row) * 0.5
+    if not _candidate_row_is_contract_viable(row):
+        score -= 8.0
+    return round(score, 4)
+
+
+def _candidate_row_for_tool(routing: Dict[str, Any], tool_name: str) -> Dict[str, Any]:
+    for row in routing.get("candidate_rows") or []:
+        if isinstance(row, dict) and str(row.get("tool_name") or "") == tool_name:
+            return row
+    return {"tool_name": tool_name}
+
+
+def _try_reliaskill_candidate_verification_cascade(
+    *,
+    task: EvalTask,
+    baseline_name: str,
+    selected_tool_name: str,
+    selected_prediction: Any,
+    routing: Dict[str, Any],
+    tools: Dict[str, ToolIR],
+    skill_bank: Dict[str, GeneratedSkill],
+    predictor: PredictorBackend,
+    allow_predictor_fallback: bool,
+    max_candidates: int = 3,
+    min_switch_advantage: float = 6.0,
+) -> tuple[str, ToolIR, GeneratedSkill, EvalTask, GeneratedSkill, Any, Dict[str, Any], str] | None:
+    normalized_baseline_name = normalize_condition_name(baseline_name)
+    if not is_reliaskill_v1_family(normalized_baseline_name):
+        return None
+    selected_skill = skill_bank.get(selected_tool_name)
+    if selected_skill is None or _contract_ablation_disabled(selected_skill, "disable_contract_routing"):
+        return None
+    if _contract_ablation_disabled(selected_skill, "disable_candidate_verification"):
+        return None
+    expected_tool_name = _expected_routing_tool_name(task)
+    if expected_tool_name == "__abstain__":
+        return None
+
+    selected_row = _candidate_row_for_tool(routing, selected_tool_name)
+    selected_score = _verified_candidate_commit_score(selected_prediction, selected_row)
+    selected_satisfied = selected_prediction.should_call and _prediction_contract_satisfied(selected_prediction.metadata)
+    selected_margin = _prediction_contract_margin(selected_prediction.metadata) or routing_row_contract_margin(selected_row)
+    best_competing_margin = max(
+        [
+            routing_row_contract_margin(row)
+            for row in (routing.get("candidate_rows") or [])[:max_candidates]
+            if isinstance(row, dict) and str(row.get("tool_name") or "") != selected_tool_name
+        ]
+        or [0.0]
+    )
+    if (
+        selected_satisfied
+        and selected_margin >= 12.0
+        and best_competing_margin < selected_margin + 4.0
+    ):
+        return None
+
+    attempted: List[str] = []
+    best: tuple[float, str, ToolIR, GeneratedSkill, EvalTask, GeneratedSkill, Any, Dict[str, Any]] | None = None
+    for row in (routing.get("candidate_rows") or [])[:max_candidates]:
+        if not isinstance(row, dict):
+            continue
+        candidate_name = str(row.get("tool_name") or "")
+        if not candidate_name or candidate_name == selected_tool_name or candidate_name not in tools:
+            continue
+        if not _candidate_row_is_contract_viable(row):
+            continue
+        candidate_tool = tools[candidate_name]
+        candidate_skill = skill_bank[candidate_name]
+        attempted.append(candidate_name)
+        candidate_task = EvalTask(
+            task_id=task.task_id,
+            tool_name=candidate_name,
+            user_request=task.user_request,
+            expected_arguments=task.expected_arguments,
+            expected_argument_candidates=task.expected_argument_candidates,
+            should_trigger=bool(task.should_trigger or (expected_tool_name != "__abstain__" and candidate_name == expected_tool_name)),
+            expected_tool_name=task.expected_tool_name,
+            negative_target=task.negative_target,
+            negative_category=task.negative_category,
+            difficulty=task.difficulty,
+            domain=task.domain,
+            split=task.split,
+            tags=list(task.tags),
+            conversation_history=list(task.conversation_history),
+            artifact_context=dict(task.artifact_context),
+            tool_observation_context=list(task.tool_observation_context),
+        )
+        runtime_skill, retrieval_context = contextualize_skill_for_task(
+            candidate_task,
+            candidate_tool,
+            candidate_skill,
+            tools,
+            skill_bank=skill_bank,
+        )
+        prediction = safe_predict(candidate_tool, runtime_skill, candidate_task, predictor, allow_fallback=allow_predictor_fallback)
+        if not prediction.should_call or not _prediction_contract_satisfied(prediction.metadata):
+            continue
+        candidate_score = _verified_candidate_commit_score(prediction, row)
+        if best is None or candidate_score > best[0]:
+            best = (
+                candidate_score,
+                candidate_name,
+                candidate_tool,
+                candidate_skill,
+                candidate_task,
+                runtime_skill,
+                prediction,
+                retrieval_context,
+            )
+    if best is None:
+        return None
+    candidate_score, candidate_name, candidate_tool, candidate_skill, candidate_task, runtime_skill, prediction, retrieval_context = best
+    if selected_satisfied and candidate_score < selected_score + min_switch_advantage:
+        return None
+    prediction.metadata = {
+        **dict(prediction.metadata),
+        "reliaskill_candidate_verification_cascade": {
+            "attempted": True,
+            "selected_cascade": True,
+            "original_selected_tool": selected_tool_name,
+            "verified_selected_tool": candidate_name,
+            "attempted_tools": attempted,
+            "selected_score": selected_score,
+            "verified_score": candidate_score,
+            "min_switch_advantage": min_switch_advantage,
+        },
+    }
+    return (
+        candidate_name,
+        candidate_tool,
+        candidate_skill,
+        candidate_task,
+        runtime_skill,
+        prediction,
+        retrieval_context,
+        "retrieve_then_semantic_rerank_candidate_verification_cascade",
     )
 
 
@@ -1448,6 +1622,33 @@ def run_routing_pipeline(
                     )
                 else:
                     prediction = safe_predict(selected_tool, runtime_skill, routed_task, predictor, allow_fallback=allow_predictor_fallback)
+                    cascade = _try_reliaskill_candidate_verification_cascade(
+                        task=task,
+                        baseline_name=baseline_name,
+                        selected_tool_name=selected_tool_name,
+                        selected_prediction=prediction,
+                        routing=routing,
+                        tools=tools,
+                        skill_bank=skill_bank,
+                        predictor=predictor,
+                        allow_predictor_fallback=allow_predictor_fallback,
+                    )
+                    if cascade is not None:
+                        (
+                            selected_tool_name,
+                            selected_tool,
+                            selected_skill,
+                            routed_task,
+                            runtime_skill,
+                            prediction,
+                            retrieval_context,
+                            verified_strategy,
+                        ) = cascade
+                        routing = {
+                            **routing,
+                            "routing_strategy": verified_strategy,
+                            "selected_tool_name": selected_tool_name,
+                        }
                     if not prediction.should_call:
                         fallback = _try_reliaskill_candidate_verification_fallback(
                             task=task,
