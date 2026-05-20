@@ -26,7 +26,7 @@ from autoskill.conditions import RELIASKILL_V1_CONTRACT_ABLATIONS, normalize_con
 from autoskill.contract_inference import default_contract_proof_policy
 from autoskill.contract_arbitration import default_contract_arbitration_policy
 from autoskill.contrastive_memory import learn_contrastive_memory_policy
-from autoskill.learned_router import learn_router_policy
+from autoskill.learned_router import learn_global_router_policy, learn_router_policy
 from autoskill.contracts import (
     build_contract_counterexamples,
     calibrate_contract_policy,
@@ -169,6 +169,7 @@ def _build_challenger_skill(
     gate_row: Dict[str, Any],
     selection_report_path: Path,
     behavior_cases: Sequence[Any] = (),
+    global_router_policy: Dict[str, Any] | None = None,
 ) -> Any:
     challenger = clone_skill_as(source_skill, RELIASKILL_CHALLENGER)
     source_score = source_row["reliability_score"]
@@ -233,7 +234,12 @@ def _build_challenger_skill(
             ],
             limit=14,
         )
-    learned_router_policy = learn_router_policy(tool, challenger, behavior_cases)
+    learned_router_policy = learn_router_policy(
+        tool,
+        challenger,
+        behavior_cases,
+        global_router_policy=global_router_policy,
+    )
     challenger.metadata = {
         **challenger.metadata,
         "condition_family": RELIASKILL_CHALLENGER,
@@ -263,8 +269,11 @@ def _build_challenger_skill(
             "request_contract_parse_prompting",
             "executable_contract_compilation",
             "adaptive_contract_policy",
+            "global_pairwise_router_prior",
             "dev_learned_contrastive_memory",
             "dev_learned_risk_aware_router_policy",
+            "dev_hard_negative_policy_refinement",
+            "unified_proof_risk_policy_score",
             "contract_aware_arbitration_policy",
             "runtime_model_contract_arbitration",
             "adaptive_routing_arbitration",
@@ -290,8 +299,11 @@ def _build_challenger_skill(
         "uses_executable_skill_contract": True,
         "uses_contract_proof_ledger": True,
         "uses_adaptive_contract_policy": True,
+        "uses_global_pairwise_router_prior": True,
         "uses_dev_learned_contrastive_memory": True,
         "uses_dev_learned_router_policy": True,
+        "uses_dev_hard_negative_policy_refinement": True,
+        "uses_unified_proof_risk_policy_score": True,
         "uses_contract_aware_arbitration": True,
         "uses_runtime_model_contract_arbitration": True,
         "uses_adaptive_routing_arbitration": True,
@@ -865,8 +877,11 @@ def _write_challenger_method_metadata(
             "request_contract_parse_prompting",
             "executable_contract_compilation",
             "adaptive_contract_policy",
+            "global_pairwise_router_prior",
             "dev_learned_contrastive_memory",
             "dev_learned_risk_aware_router_policy",
+            "dev_hard_negative_policy_refinement",
+            "unified_proof_risk_policy_score",
             "contract_aware_arbitration_policy",
             "runtime_model_contract_arbitration",
             "adaptive_routing_arbitration",
@@ -893,8 +908,11 @@ def _write_challenger_method_metadata(
         "uses_executable_skill_contract": True,
         "uses_contract_proof_ledger": True,
         "uses_adaptive_contract_policy": True,
+        "uses_global_pairwise_router_prior": True,
         "uses_dev_learned_contrastive_memory": True,
         "uses_dev_learned_router_policy": True,
+        "uses_dev_hard_negative_policy_refinement": True,
+        "uses_unified_proof_risk_policy_score": True,
         "uses_contract_aware_arbitration": True,
         "uses_runtime_model_contract_arbitration": True,
         "uses_adaptive_routing_arbitration": True,
@@ -1010,6 +1028,7 @@ def build_shared_skill_packages(
             or "data/controls/dev.jsonl"
         )
         behavior_cases = load_behavior_cases(behavior_path)
+        global_router_policy = learn_global_router_policy(tools, behavior_cases)
         predictor_config = (
             shared_config.get("reliability_predictor")
             or config.get("reliability_predictor")
@@ -1068,6 +1087,7 @@ def build_shared_skill_packages(
                         gate_row=gate_row,
                         selection_report_path=selection_report_path,
                         behavior_cases=behavior_cases,
+                        global_router_policy=global_router_policy,
                     )
                     package_validation = validate_skill(tool, package_skill)
                     package_behavior = run_behavior_tests(

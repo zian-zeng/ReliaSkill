@@ -44,6 +44,54 @@ def _contract_ablation_disabled(skill: GeneratedSkill, flag: str) -> bool:
     flags = skill.metadata.get("contract_ablation_flags") if isinstance(skill.metadata, dict) else None
     return bool(isinstance(flags, dict) and flags.get(flag) is True)
 
+
+def _reliaskill_unified_policy_score(
+    *,
+    learned_router_decision: Any,
+    contrastive_memory_decision: Any,
+    contract_proof_state: Any,
+    rerank_score: float,
+    action_intent_conflict: bool,
+    boundary_penalty: int,
+) -> Dict[str, Any]:
+    proof_score = float(getattr(contract_proof_state, "proof_score", 0.0) or 0.0) if contract_proof_state is not None else 0.0
+    proof_margin = float(getattr(contract_proof_state, "proof_margin", 0.0) or 0.0) if contract_proof_state is not None else 0.0
+    learned_score = float(getattr(learned_router_decision, "score", 0.0) or 0.0) if learned_router_decision is not None else 0.0
+    learned_risk = float(getattr(learned_router_decision, "risk_score", 0.0) or 0.0) if learned_router_decision is not None else 0.0
+    memory_score = float(getattr(contrastive_memory_decision, "score", 0.0) or 0.0) if contrastive_memory_decision is not None else 0.0
+    risk = learned_risk
+    if action_intent_conflict:
+        risk += 3.0
+    if boundary_penalty:
+        risk += min(boundary_penalty / 20.0, 3.0)
+    if getattr(learned_router_decision, "negative_boundary", False):
+        risk += 4.0
+    if getattr(contrastive_memory_decision, "negative_boundary", False):
+        risk += 3.0
+    score = proof_score + proof_margin + learned_score + (0.25 * memory_score) + (0.05 * rerank_score) - (4.0 * risk)
+    if getattr(learned_router_decision, "negative_boundary", False) or action_intent_conflict:
+        action = "abstain"
+    elif contract_proof_state is not None and not proof_state_is_viable(contract_proof_state):
+        action = "abstain_or_reroute"
+    else:
+        action = "call"
+    return {
+        "name": "unified_proof_risk_policy_score",
+        "score": round(score, 4),
+        "risk": round(risk, 4),
+        "action": action,
+        "components": {
+            "proof_score": round(proof_score, 4),
+            "proof_margin": round(proof_margin, 4),
+            "learned_router_score": round(learned_score, 4),
+            "learned_router_risk": round(learned_risk, 4),
+            "contrastive_memory_score": round(memory_score, 4),
+            "rerank_score": round(float(rerank_score), 4),
+            "boundary_penalty": int(boundary_penalty),
+            "action_intent_conflict": bool(action_intent_conflict),
+        },
+    }
+
 def _safe_dir_name(value: str) -> str:
     """Truncate a tool or condition name for use as a directory component on Windows."""
     return _safe_component(value)[:50]
@@ -851,19 +899,21 @@ def select_tool_for_task(
             contract_routing_features: Dict[str, Any] = {}
             learned_router_score = 0.0
             learned_router_bonus = 0
+            learned_router_decision = None
+            contrastive_memory_decision = None
             if is_reliaskill_v1_family(normalized_baseline_name):
                 contract_routing_bonus, contract_routing_features = _reliaskill_v1_contract_routing_bonus(task.user_request, tool)
                 rerank_score += contract_routing_bonus
                 if not _contract_ablation_disabled(skill, "disable_contrastive_memory"):
-                    contrastive_memory = score_contrastive_memory(task.user_request, tool, skill)
-                    rerank_score += contrastive_memory.route_bonus
-                    contract_routing_features["contrastive_memory"] = contrastive_memory.model_dump()
+                    contrastive_memory_decision = score_contrastive_memory(task.user_request, tool, skill)
+                    rerank_score += contrastive_memory_decision.route_bonus
+                    contract_routing_features["contrastive_memory"] = contrastive_memory_decision.model_dump()
                 if not _contract_ablation_disabled(skill, "disable_learned_router_policy"):
-                    learned_router = score_learned_router(task.user_request, tool, skill)
-                    learned_router_score = learned_router.score
-                    learned_router_bonus = learned_router.route_bonus
+                    learned_router_decision = score_learned_router(task.user_request, tool, skill)
+                    learned_router_score = learned_router_decision.score
+                    learned_router_bonus = learned_router_decision.route_bonus
                     rerank_score += learned_router_bonus
-                    contract_routing_features["learned_router_policy"] = learned_router.model_dump()
+                    contract_routing_features["learned_router_policy"] = learned_router_decision.model_dump()
             schema_fit_bonus = 0
             grounded_required_args: List[str] = []
             missing_required_args: List[str] = []
@@ -894,6 +944,14 @@ def select_tool_for_task(
                 if action_intent_conflict:
                     rerank_score -= 80
             rerank_score -= boundary_penalty
+            unified_policy_score = _reliaskill_unified_policy_score(
+                learned_router_decision=learned_router_decision,
+                contrastive_memory_decision=contrastive_memory_decision,
+                contract_proof_state=contract_proof_state,
+                rerank_score=rerank_score,
+                action_intent_conflict=action_intent_conflict,
+                boundary_penalty=boundary_penalty,
+            )
             reranked.append(
                 {
                     "tool_name": tool_name,
@@ -904,6 +962,9 @@ def select_tool_for_task(
                     "contract_routing_bonus": contract_routing_bonus,
                     "learned_router_score": learned_router_score,
                     "learned_router_bonus": learned_router_bonus,
+                    "reliaskill_policy_score": unified_policy_score["score"],
+                    "reliaskill_policy_action": unified_policy_score["action"],
+                    "reliaskill_policy_risk": unified_policy_score["risk"],
                     "contract_routing_features": contract_routing_features,
                     "schema_fit_bonus": schema_fit_bonus,
                     "grounded_required_args": grounded_required_args,
@@ -922,6 +983,7 @@ def select_tool_for_task(
                     "contract_evidence_ledger": contract_proof_state.evidence_ledger if contract_proof_state else {},
                     "contract_feature_vector": contract_proof_state.feature_vector if contract_proof_state else {},
                     "contract_proof_state": contract_proof_state.model_dump() if contract_proof_state else {},
+                    "unified_proof_risk_policy_score": unified_policy_score,
                     "overlap_terms": row.get("overlap_terms", []),
                 }
             )
@@ -930,6 +992,7 @@ def select_tool_for_task(
                 key=lambda item: (
                     -row_explicit_request_match(item),
                     item.get("contract_viable") is not True,
+                    -float(item.get("reliaskill_policy_score") or 0.0),
                     -float(item.get("contract_proof_score") or item.get("score") or 0.0),
                     -float(item.get("learned_router_score") or 0.0),
                     -float(item.get("score") or 0.0),
@@ -949,7 +1012,7 @@ def select_tool_for_task(
                     else:
                         row["schema_affordance_gate"] = "schema_complete" if not row.get("missing_required_args") else "missing_required"
             else:
-                viable_rows = [
+                schema_viable_rows = [
                     row
                     for row in reranked
                     if (
@@ -963,6 +1026,7 @@ def select_tool_for_task(
                     and not row.get("missing_required_args")
                     and not row.get("action_intent_conflict")
                 ]
+                viable_rows = [row for row in schema_viable_rows if row.get("reliaskill_policy_action") == "call"]
                 if viable_rows:
                     selected_row = viable_rows[0]
                     routing_arbitration = _maybe_apply_reliaskill_routing_arbitration(
@@ -998,6 +1062,25 @@ def select_tool_for_task(
                             "candidate_tools": ["__abstain__"],
                             "candidate_rows": [abstain_row, *viable_rows[: max(top_k - 1, 0)]],
                         }
+                elif schema_viable_rows:
+                    risky_row = schema_viable_rows[0]
+                    abstain_row = {
+                        "tool_name": "__abstain__",
+                        "score": risky_row["score"],
+                        "routing_abstention_reason": "learned_proof_risk_policy_abstention",
+                        "candidate_count": len(schema_viable_rows),
+                        "blocked_tool_name": str(risky_row["tool_name"]),
+                        "blocked_policy_score": risky_row.get("reliaskill_policy_score"),
+                        "blocked_policy_risk": risky_row.get("reliaskill_policy_risk"),
+                        "blocked_policy_action": risky_row.get("reliaskill_policy_action"),
+                        "blocked_policy_details": risky_row.get("unified_proof_risk_policy_score"),
+                    }
+                    return {
+                        "routing_strategy": "retrieve_then_semantic_rerank_learned_policy_abstention",
+                        "selected_tool_name": "__abstain__",
+                        "candidate_tools": ["__abstain__"],
+                        "candidate_rows": [abstain_row, *schema_viable_rows[: max(top_k - 1, 0)]],
+                    }
                 else:
                     abstain_row = {
                         "tool_name": "__abstain__",

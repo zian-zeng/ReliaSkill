@@ -222,6 +222,8 @@ def _build_reliaskill_contract_ablation(base_skill: Any, condition: str) -> Any:
             "disable_contract_arbitration": condition == "reliaskill_v1_no_contract_arbitration",
             "disable_contrastive_memory": condition == "reliaskill_v1_no_contrastive_memory",
             "disable_learned_router_policy": condition == "reliaskill_v1_no_learned_router_policy",
+            "disable_global_router_prior": condition == "reliaskill_v1_no_global_router_prior",
+            "disable_hard_negative_policy": condition == "reliaskill_v1_no_hard_negative_policy",
             "disable_contrastive_contract_context": condition == "reliaskill_v1_no_contrastive_context",
             "disable_retrieval_miss_rescue": condition == "reliaskill_v1_no_retrieval_miss_rescue",
             "disable_dependency_plan_prompting": condition == "reliaskill_v1_no_dependency_plan",

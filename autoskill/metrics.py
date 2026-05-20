@@ -32,6 +32,8 @@ KEY_STAT_TEST_COMPARISONS = [
     ("reliaskill_v1_no_candidate_verification", "reliaskill_v1"),
     ("reliaskill_v1_no_contrastive_memory", "reliaskill_v1"),
     ("reliaskill_v1_no_learned_router_policy", "reliaskill_v1"),
+    ("reliaskill_v1_no_global_router_prior", "reliaskill_v1"),
+    ("reliaskill_v1_no_hard_negative_policy", "reliaskill_v1"),
     ("reliaskill_v1_no_contrastive_context", "reliaskill_v1"),
     ("reliaskill_v1_no_retrieval_miss_rescue", "reliaskill_v1"),
     ("reliaskill_v1_no_dependency_plan", "reliaskill_v1"),

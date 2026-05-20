@@ -1,9 +1,9 @@
-experiment_scale: reliaskill_v1_arbitration_upgrade_key_replication
-description: "Post-upgrade key replication for learned contrastive memory plus contract-aware arbitration: five model families, strongest baselines, ReliaSkill v1, and method ablations."
+experiment_scale: reliaskill_v1_arbitration_upgrade_pilot_fast
+description: "Fast upgraded ReliaSkill pilot: Qwen 1.5B, all strongest baselines, ReliaSkill v1, and the learned-policy ablations before the full 5-model replication."
 seed: 42
 tools_path: data/raw_mcp/tools.jsonl
 tasks_path: data/controls/test.jsonl
-output_root: outputs/reliaskill_v1_arbitration_upgrade_key_replication
+output_root: outputs/reliaskill_v1_arbitration_upgrade_pilot_fast
 
 generator:
   type: heuristic
@@ -14,15 +14,8 @@ runtime:
 
 models:
   - config: configs/models/qwen2_5_1_5b_instruct_4bit.yaml
+    batch_size: 2
     examples_per_second: 0.35
-  - config: configs/models/llama_3_2_3b_instruct_4bit.yaml
-    examples_per_second: 0.35
-  - config: configs/models/gemma_2_2b_it_4bit.yaml
-    examples_per_second: 0.50
-  - config: configs/models/phi_3_5_mini_instruct_4bit.yaml
-    examples_per_second: 0.35
-  - config: configs/models/qwen2_5_7b_instruct_4bit.yaml
-    examples_per_second: 0.20
 
 conditions:
   - raw_mcp
@@ -40,8 +33,8 @@ conditions:
 
 data:
   config: configs/data/emnlp_scale.yaml
-  max_tools: 100
-  min_domains_required: 10
+  max_tools: 20
+  min_domains_required: 6
 
 controls:
   config: configs/controls/emnlp_scale.yaml
@@ -56,7 +49,7 @@ live_execution:
   enabled: false
 
 shared_skill_packages:
-  root: outputs/reliaskill_v1_arbitration_upgrade_key_replication/shared_packages
+  root: outputs/reliaskill_v1_arbitration_upgrade_pilot_fast/shared_packages
   dev_controls_path: data/controls/dev.jsonl
   reliability_predictor:
     type: heuristic
@@ -76,7 +69,7 @@ scheduler:
   resume: true
   group_by_model: true
   run_all_conditions_before_unload: true
-  max_batch_size: 32
+  max_batch_size: 2
   prompt_safety_margin_tokens: 256
   include_routing: true
   examples_per_second: 0.35

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 import math
 import re
-from typing import Any, Dict, Iterable, List, Tuple
+from typing import Any, Dict, Iterable, List, Mapping, Tuple
 
 from autoskill.contract_decision import explicit_requested_tool_score
 from autoskill.ir import GeneratedSkill, ToolIR
@@ -97,18 +97,84 @@ class LearnedRouterDecision:
     positive_features: List[Dict[str, float]]
     negative_features: List[Dict[str, float]]
     threshold: float
+    policy_action: str = "call"
+    risk_score: float = 0.0
+    components: Dict[str, float] = field(default_factory=dict)
 
     def model_dump(self) -> Dict[str, Any]:
         return asdict(self)
 
 
-def learn_router_policy(tool: ToolIR, skill: GeneratedSkill, behavior_cases: Iterable[Any]) -> Dict[str, Any]:
-    """Learn a small auditable router policy from dev behavior controls.
+def learn_global_router_policy(tools: Mapping[str, ToolIR], behavior_cases: Iterable[Any]) -> Dict[str, Any]:
+    """Learn a shared pairwise prior for route/call risk across all tools."""
 
-    The policy is intentionally compact: it learns weights over interpretable
-    contract/routing features rather than memorizing test cases or calling a
-    second model at inference time.
-    """
+    cases = list(behavior_cases)
+    training_rows: List[Tuple[Dict[str, float], float, float, str]] = []
+    for case in cases:
+        request = str(getattr(case, "user_request", "") or "")
+        if not request:
+            continue
+        positive_tool_name = str(getattr(case, "expected_tool_name", "") or getattr(case, "tool_name", "") or "")
+        if bool(getattr(case, "should_trigger", False)) and positive_tool_name in tools:
+            positive_tool = tools[positive_tool_name]
+            training_rows.append((_feature_vector(request, positive_tool, _minimal_skill_for_tool(positive_tool)), 1.0, 1.25, "global_positive"))
+            for candidate in _global_hard_negative_tools(request, positive_tool_name, tools, limit=5):
+                training_rows.append((_feature_vector(request, candidate, _minimal_skill_for_tool(candidate)), -1.0, 1.0, "global_pairwise_hard_negative"))
+        negative_name = str(getattr(case, "negative_target", "") or "")
+        if negative_name in tools:
+            negative_tool = tools[negative_name]
+            training_rows.append((_feature_vector(request, negative_tool, _minimal_skill_for_tool(negative_tool)), -1.0, 1.4, "global_targeted_negative"))
+
+    if not training_rows:
+        return {
+            "name": "global_pairwise_dev_router_prior",
+            "enabled": False,
+            "test_controls_used": False,
+            "disabled_reason": "no_global_router_training_rows",
+        }
+
+    weights = _train_margin_perceptron(
+        training_rows,
+        initial_weights=_default_weights(),
+        epochs=10,
+        learning_rate=0.08,
+        target_margin=2.0,
+    )
+    summary = _training_score_summary(weights, training_rows)
+    hard_rows = _mine_margin_violations(weights, training_rows, target_margin=2.5)
+    if hard_rows:
+        weights = _train_margin_perceptron(
+            [*training_rows, *hard_rows],
+            initial_weights=weights,
+            epochs=6,
+            learning_rate=0.06,
+            target_margin=2.5,
+        )
+        summary = _training_score_summary(weights, training_rows)
+
+    return {
+        "name": "global_pairwise_dev_router_prior",
+        "enabled": True,
+        "learner": "weighted_margin_perceptron",
+        "source": "all_dev_controls_pairwise_tool_risk",
+        "test_controls_used": False,
+        "num_tools": len(tools),
+        "training_row_count": len(training_rows),
+        "self_mined_hard_row_count": len(hard_rows),
+        "weights": _round_weights(weights),
+        "training_positive_score_mean": summary["positive_mean"],
+        "training_negative_score_mean": summary["negative_mean"],
+    }
+
+
+def learn_router_policy(
+    tool: ToolIR,
+    skill: GeneratedSkill,
+    behavior_cases: Iterable[Any],
+    *,
+    global_router_policy: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Learn a per-tool risk policy, seeded by a global pairwise router prior."""
 
     positive_cases: List[Any] = []
     targeted_negative_cases: List[Any] = []
@@ -138,46 +204,75 @@ def learn_router_policy(tool: ToolIR, skill: GeneratedSkill, behavior_cases: Ite
             "disabled_reason": "insufficient_positive_or_negative_dev_controls",
         }
 
-    training_rows: List[Tuple[Dict[str, float], float]] = []
+    local_rows: List[Tuple[Dict[str, float], float, float, str]] = []
     for case in positive_cases[:32]:
-        training_rows.append((_feature_vector(str(getattr(case, "user_request", "") or ""), tool, skill), 1.0))
-    for case in negative_cases[:56]:
-        training_rows.append((_feature_vector(str(getattr(case, "user_request", "") or ""), tool, skill), -1.0))
+        local_rows.append((_feature_vector(str(getattr(case, "user_request", "") or ""), tool, skill), 1.0, 1.25, "tool_positive"))
+    for case in targeted_negative_cases[:32]:
+        local_rows.append((_feature_vector(str(getattr(case, "user_request", "") or ""), tool, skill), -1.0, 1.5, "targeted_negative"))
+    for _overlap, case in hard_cross_negatives[:24]:
+        local_rows.append((_feature_vector(str(getattr(case, "user_request", "") or ""), tool, skill), -1.0, 1.15, "cross_tool_hard_negative"))
 
-    weights = dict(_default_weights())
-    learning_rate = 0.12
-    target_margin = 2.0
-    for _epoch in range(16):
-        for features, label in training_rows:
-            margin = label * _dot(weights, features)
-            if margin >= target_margin:
-                continue
-            for name, value in features.items():
-                weights[name] = weights.get(name, 0.0) + learning_rate * label * value
-
-    positive_scores = [_dot(weights, features) for features, label in training_rows if label > 0]
-    negative_scores = [_dot(weights, features) for features, label in training_rows if label < 0]
-    positive_mean = sum(positive_scores) / len(positive_scores)
-    negative_mean = sum(negative_scores) / len(negative_scores)
-    if positive_mean > negative_mean:
-        threshold = (positive_mean + negative_mean) / 2.0
-    else:
-        threshold = 0.0
+    local_weights = _train_margin_perceptron(
+        local_rows,
+        initial_weights=_default_weights(),
+        epochs=14,
+        learning_rate=0.12,
+        target_margin=2.0,
+    )
+    global_weights = (
+        global_router_policy.get("weights")
+        if isinstance(global_router_policy, dict) and isinstance(global_router_policy.get("weights"), dict)
+        else {}
+    )
+    global_scale = 0.35 if global_weights else 0.0
+    pre_hard_weights = _combine_weights(local_weights, global_weights, global_scale=global_scale)
+    pre_hard_summary = _training_score_summary(pre_hard_weights, local_rows)
+    pre_hard_threshold = _threshold_from_summary(pre_hard_summary)
+    hard_rows = _mine_margin_violations(pre_hard_weights, local_rows, target_margin=3.0)
+    hard_negative_delta: Dict[str, float] = {}
+    final_weights = pre_hard_weights
+    if hard_rows:
+        refined_weights = _train_margin_perceptron(
+            [*local_rows, *hard_rows],
+            initial_weights=pre_hard_weights,
+            epochs=8,
+            learning_rate=0.08,
+            target_margin=3.0,
+        )
+        hard_negative_delta = {
+            name: refined_weights.get(name, 0.0) - pre_hard_weights.get(name, 0.0)
+            for name in set(refined_weights).union(pre_hard_weights)
+            if abs(refined_weights.get(name, 0.0) - pre_hard_weights.get(name, 0.0)) > 1e-9
+        }
+        final_weights = refined_weights
+    final_summary = _training_score_summary(final_weights, local_rows)
+    threshold = _threshold_from_summary(final_summary)
 
     return {
         "name": "dev_learned_risk_aware_router_policy",
         "enabled": True,
-        "learner": "margin_perceptron",
+        "learner": "global_seeded_weighted_margin_perceptron",
         "source": "dev_positive_and_negative_behavior_controls",
         "test_controls_used": False,
         "positive_example_count": len(positive_cases),
         "negative_example_count": len(negative_cases),
         "targeted_negative_example_count": len(targeted_negative_cases),
         "hard_cross_negative_example_count": len(hard_cross_negatives),
-        "weights": {name: round(value, 5) for name, value in sorted(weights.items())},
+        "self_mined_hard_row_count": len(hard_rows),
+        "uses_global_pairwise_prior": bool(global_weights),
+        "uses_hard_negative_self_training": bool(hard_rows),
+        "local_weights": _round_weights(local_weights),
+        "global_prior_weights": _round_weights(global_weights),
+        "global_prior_scale": global_scale,
+        "pre_hard_weights": _round_weights(pre_hard_weights),
+        "hard_negative_delta_weights": _round_weights(hard_negative_delta),
+        "weights": _round_weights(final_weights),
+        "pre_hard_threshold": round(pre_hard_threshold, 5),
         "threshold": round(threshold, 5),
-        "training_positive_score_mean": round(positive_mean, 5),
-        "training_negative_score_mean": round(negative_mean, 5),
+        "training_positive_score_mean": final_summary["positive_mean"],
+        "training_negative_score_mean": final_summary["negative_mean"],
+        "pre_hard_positive_score_mean": pre_hard_summary["positive_mean"],
+        "pre_hard_negative_score_mean": pre_hard_summary["negative_mean"],
         "route_bonus_scale": 5.0,
         "max_route_bonus": 36,
         "negative_boundary_threshold": -3.0,
@@ -188,15 +283,21 @@ def score_learned_router(query: str, tool: ToolIR, skill: GeneratedSkill) -> Lea
     policy = _policy_from_skill(skill)
     if not policy.get("enabled"):
         return LearnedRouterDecision(0.0, 0, False, {}, [], [], 0.0)
-    weights = policy.get("weights") if isinstance(policy.get("weights"), dict) else {}
+    flags = _contract_ablation_flags(skill)
+    if flags.get("disable_learned_router_policy"):
+        return LearnedRouterDecision(0.0, 0, False, {}, [], [], 0.0)
+    weights = _effective_policy_weights(policy, flags)
     features = _feature_vector(query, tool, skill)
-    threshold = _float(policy.get("threshold"), 0.0)
+    threshold_key = "pre_hard_threshold" if flags.get("disable_hard_negative_policy") else "threshold"
+    threshold = _float(policy.get(threshold_key), _float(policy.get("threshold"), 0.0))
     raw_score = _dot(weights, features) - threshold
     scale = _float(policy.get("route_bonus_scale"), 5.0)
     max_bonus = max(int(policy.get("max_route_bonus") or 36), 0)
     route_bonus = int(round(max(-max_bonus, min(max_bonus, raw_score * scale))))
     negative_boundary = _negative_boundary(query, tool, raw_score, features, policy)
     positive_features, negative_features = _feature_contributions(weights, features)
+    risk_score = _risk_score(raw_score, features)
+    action = "abstain" if negative_boundary else "call"
     return LearnedRouterDecision(
         score=round(raw_score, 4),
         route_bonus=route_bonus,
@@ -205,6 +306,13 @@ def score_learned_router(query: str, tool: ToolIR, skill: GeneratedSkill) -> Lea
         positive_features=positive_features,
         negative_features=negative_features,
         threshold=round(threshold, 4),
+        policy_action=action,
+        risk_score=round(risk_score, 4),
+        components={
+            "local": round(_dot(policy.get("local_weights") or policy.get("weights") or {}, features), 4),
+            "global_prior": round(_dot(policy.get("global_prior_weights") or {}, features) * _float(policy.get("global_prior_scale"), 0.0), 4),
+            "hard_negative_delta": round(_dot(policy.get("hard_negative_delta_weights") or {}, features), 4),
+        },
     )
 
 
@@ -276,6 +384,133 @@ def _default_weights() -> Dict[str, float]:
         "read_write_conflict": -5.5,
         "side_effect_conflict": -5.0,
     }
+
+
+def _train_margin_perceptron(
+    rows: List[Tuple[Dict[str, float], float, float, str]],
+    *,
+    initial_weights: Dict[str, Any],
+    epochs: int,
+    learning_rate: float,
+    target_margin: float,
+) -> Dict[str, float]:
+    weights = {name: _float(value) for name, value in initial_weights.items()}
+    for _epoch in range(epochs):
+        for features, label, weight, _source in rows:
+            margin = label * _dot(weights, features)
+            if margin >= target_margin:
+                continue
+            step = learning_rate * max(weight, 0.1) * min(target_margin - margin, target_margin + 2.0)
+            for name, value in features.items():
+                if value:
+                    weights[name] = weights.get(name, 0.0) + step * label * value
+    return weights
+
+
+def _mine_margin_violations(
+    weights: Dict[str, float],
+    rows: List[Tuple[Dict[str, float], float, float, str]],
+    *,
+    target_margin: float,
+) -> List[Tuple[Dict[str, float], float, float, str]]:
+    mined: List[Tuple[Dict[str, float], float, float, str]] = []
+    ranked: List[Tuple[float, Dict[str, float], float, float, str]] = []
+    for features, label, weight, source in rows:
+        margin = label * _dot(weights, features)
+        ranked.append((margin, features, label, weight, source))
+        if margin < target_margin:
+            mined.append((features, label, max(weight * 1.75, weight + 0.5), f"self_mined_{source}"))
+    if not mined:
+        for _margin, features, label, weight, source in sorted(ranked, key=lambda item: item[0])[:2]:
+            mined.append((features, label, max(weight * 1.4, weight + 0.25), f"self_mined_hardest_{source}"))
+    mined.sort(key=lambda item: item[1] * _dot(weights, item[0]))
+    return mined[:48]
+
+
+def _training_score_summary(weights: Dict[str, float], rows: List[Tuple[Dict[str, float], float, float, str]]) -> Dict[str, float]:
+    positive_scores = [_dot(weights, features) for features, label, _weight, _source in rows if label > 0]
+    negative_scores = [_dot(weights, features) for features, label, _weight, _source in rows if label < 0]
+    positive_mean = sum(positive_scores) / len(positive_scores) if positive_scores else 0.0
+    negative_mean = sum(negative_scores) / len(negative_scores) if negative_scores else 0.0
+    return {"positive_mean": round(positive_mean, 5), "negative_mean": round(negative_mean, 5)}
+
+
+def _threshold_from_summary(summary: Dict[str, float]) -> float:
+    positive_mean = _float(summary.get("positive_mean"), 0.0)
+    negative_mean = _float(summary.get("negative_mean"), 0.0)
+    return (positive_mean + negative_mean) / 2.0 if positive_mean > negative_mean else 0.0
+
+
+def _combine_weights(local_weights: Dict[str, Any], global_weights: Dict[str, Any], *, global_scale: float) -> Dict[str, float]:
+    result = {name: _float(value) for name, value in local_weights.items()}
+    for name, value in global_weights.items():
+        result[name] = result.get(name, 0.0) + global_scale * _float(value)
+    return result
+
+
+def _effective_policy_weights(policy: Dict[str, Any], flags: Dict[str, Any]) -> Dict[str, float]:
+    local_weights = policy.get("local_weights")
+    if not isinstance(local_weights, dict):
+        return {name: _float(value) for name, value in (policy.get("weights") if isinstance(policy.get("weights"), dict) else {}).items()}
+    weights = {name: _float(value) for name, value in local_weights.items()}
+    if not flags.get("disable_global_router_prior"):
+        weights = _combine_weights(
+            weights,
+            policy.get("global_prior_weights") if isinstance(policy.get("global_prior_weights"), dict) else {},
+            global_scale=_float(policy.get("global_prior_scale"), 0.0),
+        )
+    if not flags.get("disable_hard_negative_policy"):
+        for name, value in (policy.get("hard_negative_delta_weights") if isinstance(policy.get("hard_negative_delta_weights"), dict) else {}).items():
+            weights[name] = weights.get(name, 0.0) + _float(value)
+    return weights
+
+
+def _contract_ablation_flags(skill: GeneratedSkill) -> Dict[str, Any]:
+    flags = skill.metadata.get("contract_ablation_flags") if isinstance(skill.metadata, dict) else None
+    return flags if isinstance(flags, dict) else {}
+
+
+def _risk_score(raw_score: float, features: Dict[str, float]) -> float:
+    structural_risk = (
+        1.5 * features.get("action_family_conflict", 0.0)
+        + 1.5 * features.get("read_write_conflict", 0.0)
+        + 1.3 * features.get("side_effect_conflict", 0.0)
+        + 1.0 * features.get("negative_marker", 0.0)
+        + 1.0 * features.get("no_tool_marker", 0.0)
+        + 0.8 * features.get("missing_info_marker", 0.0)
+    )
+    return max(0.0, structural_risk - max(raw_score, 0.0) * 0.1)
+
+
+def _global_hard_negative_tools(request: str, positive_tool_name: str, tools: Mapping[str, ToolIR], *, limit: int) -> List[ToolIR]:
+    request_tokens = _tokens(request)
+    scored: List[Tuple[float, str, ToolIR]] = []
+    for name, tool in tools.items():
+        if name == positive_tool_name:
+            continue
+        signature = _tool_signature_tokens(tool, _minimal_skill_for_tool(tool))
+        overlap = len(request_tokens.intersection(signature))
+        action_conflict = 1 if _action_family_conflict(request, tool) else 0
+        score = float(overlap + action_conflict)
+        if score > 0:
+            scored.append((score, name, tool))
+    scored.sort(key=lambda item: (-item[0], item[1]))
+    return [tool for _score, _name, tool in scored[:limit]]
+
+
+def _minimal_skill_for_tool(tool: ToolIR) -> GeneratedSkill:
+    return GeneratedSkill(
+        baseline_name="global_router_prior",
+        skill_summary=tool.tool_purpose or tool.tool_name.replace("_", " "),
+        when_to_use=[f"Use {tool.tool_name} for requests matching its schema and purpose."],
+        when_not_to_use=[
+            "Do not use for adjacent tools, missing required arguments, read/write mismatches, or explanation-only requests."
+        ],
+    )
+
+
+def _round_weights(weights: Dict[str, Any]) -> Dict[str, float]:
+    return {name: round(_float(value), 5) for name, value in sorted(weights.items()) if abs(_float(value)) > 1e-9}
 
 
 def _negative_boundary(query: str, tool: ToolIR, raw_score: float, features: Dict[str, float], policy: Dict[str, Any]) -> bool:

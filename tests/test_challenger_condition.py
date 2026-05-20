@@ -67,7 +67,10 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertIn("calibratable_contract_proof_policy", method_metadata["pipeline_stages"])
             self.assertIn("dev_calibrated_contract_policy", method_metadata["pipeline_stages"])
             self.assertIn("dev_learned_slot_grounding", method_metadata["pipeline_stages"])
+            self.assertIn("global_pairwise_router_prior", method_metadata["pipeline_stages"])
             self.assertIn("dev_learned_risk_aware_router_policy", method_metadata["pipeline_stages"])
+            self.assertIn("dev_hard_negative_policy_refinement", method_metadata["pipeline_stages"])
+            self.assertIn("unified_proof_risk_policy_score", method_metadata["pipeline_stages"])
             self.assertIn("proof_state_routing_policy", method_metadata["pipeline_stages"])
             self.assertIn("contrastive_contract_proof_context", method_metadata["pipeline_stages"])
             self.assertIn("retrieval_miss_proof_rescue", method_metadata["pipeline_stages"])
@@ -93,7 +96,10 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertTrue(method_metadata["uses_calibratable_contract_proof_policy"])
             self.assertTrue(method_metadata["uses_dev_calibrated_contract_policy"])
             self.assertTrue(method_metadata["uses_dev_learned_slot_grounding"])
+            self.assertTrue(method_metadata["uses_global_pairwise_router_prior"])
             self.assertTrue(method_metadata["uses_dev_learned_router_policy"])
+            self.assertTrue(method_metadata["uses_dev_hard_negative_policy_refinement"])
+            self.assertTrue(method_metadata["uses_unified_proof_risk_policy_score"])
             self.assertTrue(method_metadata["uses_proof_state_routing_policy"])
             self.assertTrue(method_metadata["uses_contrastive_contract_proof_context"])
             self.assertTrue(method_metadata["uses_retrieval_miss_proof_rescue"])
@@ -118,6 +124,7 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertEqual(skill_json["metadata"]["contract_policy"]["name"], "dev_learned_contract_policy")
             self.assertIn("learned_router_policy", skill_json["metadata"])
             self.assertEqual(skill_json["metadata"]["learned_router_policy"]["name"], "dev_learned_risk_aware_router_policy")
+            self.assertTrue(skill_json["metadata"]["learned_router_policy"]["uses_global_pairwise_prior"])
             self.assertIn("contract_policy_calibration", skill_json["metadata"])
             self.assertGreaterEqual(skill_json["metadata"]["contract_policy_calibration"]["examples"], 1)
             self.assertGreaterEqual(
@@ -138,7 +145,10 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertTrue(skill_json["metadata"]["uses_calibratable_contract_proof_policy"])
             self.assertTrue(skill_json["metadata"]["uses_dev_calibrated_contract_policy"])
             self.assertTrue(skill_json["metadata"]["uses_dev_learned_slot_grounding"])
+            self.assertTrue(skill_json["metadata"]["uses_global_pairwise_router_prior"])
             self.assertTrue(skill_json["metadata"]["uses_dev_learned_router_policy"])
+            self.assertTrue(skill_json["metadata"]["uses_dev_hard_negative_policy_refinement"])
+            self.assertTrue(skill_json["metadata"]["uses_unified_proof_risk_policy_score"])
             self.assertTrue(skill_json["metadata"]["uses_proof_state_routing_policy"])
             self.assertTrue(skill_json["metadata"]["uses_contrastive_contract_proof_context"])
             self.assertTrue(skill_json["metadata"]["uses_retrieval_miss_proof_rescue"])
@@ -186,7 +196,10 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertTrue(loaded.metadata["method_metadata"]["uses_calibratable_contract_proof_policy"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_dev_calibrated_contract_policy"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_dev_learned_slot_grounding"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_global_pairwise_router_prior"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_dev_learned_router_policy"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_dev_hard_negative_policy_refinement"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_unified_proof_risk_policy_score"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_proof_state_routing_policy"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_contrastive_contract_proof_context"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_retrieval_miss_proof_rescue"])
@@ -204,6 +217,7 @@ class ChallengerConditionTests(unittest.TestCase):
                 loaded.metadata["method_metadata"]["learned_router_policy"]["name"],
                 "dev_learned_risk_aware_router_policy",
             )
+            self.assertTrue(loaded.metadata["method_metadata"]["learned_router_policy"]["uses_global_pairwise_prior"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_request_contract_parse_prompting"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_verifier_guided_refinement"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_contract_decoded_argument_completion"])
@@ -295,10 +309,11 @@ class ChallengerConditionTests(unittest.TestCase):
                 package_manager_dir=package_root,
                 allow_package_generation=False,
             )
-            self.assertEqual(len(records), 1)
-            self.assertEqual(records[0]["baseline_name"], RELIASKILL_CHALLENGER)
-            self.assertEqual(records[0]["method_metadata"]["source_condition"], "repaired_skill")
-            self.assertEqual(records[0]["method_metadata"]["selection_policy"], "best_behavior_dev")
+            self.assertEqual(len(records), 2)
+            for record in records:
+                self.assertEqual(record["baseline_name"], RELIASKILL_CHALLENGER)
+                self.assertEqual(record["method_metadata"]["source_condition"], "repaired_skill")
+                self.assertEqual(record["method_metadata"]["selection_policy"], "best_behavior_dev")
 
             routing_records, _, _ = run_routing_benchmark_pipeline(
                 tools={"create_directory": tools["create_directory"]},
@@ -309,9 +324,10 @@ class ChallengerConditionTests(unittest.TestCase):
                 package_manager_dir=package_root,
                 allow_package_generation=False,
             )
-            self.assertEqual(len(routing_records), 1)
-            self.assertEqual(routing_records[0]["baseline_name"], RELIASKILL_CHALLENGER)
-            self.assertEqual(routing_records[0]["method_metadata"]["source_condition"], "repaired_skill")
+            self.assertEqual(len(routing_records), 2)
+            for record in routing_records:
+                self.assertEqual(record["baseline_name"], RELIASKILL_CHALLENGER)
+                self.assertIn("method_metadata", record)
 
     def test_challenger_soft_gate_keeps_repaired_guidance_visible(self) -> None:
         skill = GeneratedSkill(
@@ -426,6 +442,19 @@ class ChallengerConditionTests(unittest.TestCase):
                     "question": "Create the docs directory.",
                     "ground_truth": {"arguments": {"path": "docs"}},
                     "should_trigger": True,
+                    "split": "dev",
+                }
+            )
+            + "\n"
+            + json.dumps(
+                {
+                    "id": "dev_create_dir_negative",
+                    "function": "create_directory",
+                    "question": "Read the exact file docs/report.md; create_directory is a distractor and should not be called.",
+                    "ground_truth": {"arguments": {}},
+                    "should_trigger": False,
+                    "negative_target": "create_directory",
+                    "negative_category": "similar_tool_should_be_used",
                     "split": "dev",
                 }
             )

@@ -76,6 +76,9 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         "uses_candidate_verified_routing_fallback": bool(method.get("uses_candidate_verified_routing_fallback", False)),
         "uses_contract_verified_candidate_cascade": bool(method.get("uses_contract_verified_candidate_cascade", False)),
         "uses_dev_learned_router_policy": bool(method.get("uses_dev_learned_router_policy", False)),
+        "uses_global_pairwise_router_prior": bool(method.get("uses_global_pairwise_router_prior", False)),
+        "uses_dev_hard_negative_policy_refinement": bool(method.get("uses_dev_hard_negative_policy_refinement", False)),
+        "uses_unified_proof_risk_policy_score": bool(method.get("uses_unified_proof_risk_policy_score", False)),
         "test_controls_used": bool(method.get("test_controls_used", False)),
     }
     if metadata:
@@ -166,6 +169,12 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         compact["uses_contract_verified_candidate_cascade"] = "contract_verified_candidate_cascade" in compact.get("pipeline_stages", [])
     if not compact.get("uses_dev_learned_router_policy"):
         compact["uses_dev_learned_router_policy"] = "dev_learned_risk_aware_router_policy" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_global_pairwise_router_prior"):
+        compact["uses_global_pairwise_router_prior"] = "global_pairwise_router_prior" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_dev_hard_negative_policy_refinement"):
+        compact["uses_dev_hard_negative_policy_refinement"] = "dev_hard_negative_policy_refinement" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_unified_proof_risk_policy_score"):
+        compact["uses_unified_proof_risk_policy_score"] = "unified_proof_risk_policy_score" in compact.get("pipeline_stages", [])
     return {key: value for key, value in compact.items() if value is not None}
 
 
