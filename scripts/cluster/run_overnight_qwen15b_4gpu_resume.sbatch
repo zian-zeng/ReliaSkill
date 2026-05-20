@@ -13,21 +13,23 @@ PYTHON_BIN="${PYTHON_BIN:-python}"
 CONFIG="${CONFIG:-configs/experiments/overnight_qwen15b_full_method_pilot.yaml}"
 GPUS="${GPUS:-4}"
 MODELS="${MODELS:-Qwen_Qwen2.5-1.5B-Instruct}"
+GPU_BUDGET_GB="${GPU_BUDGET_GB:-24}"
+PLAN_SLUG="$(basename "$CONFIG" .yaml)"
 
 mkdir -p logs
 
 "$PYTHON_BIN" scripts/plan_experiment_run.py \
   --config "$CONFIG" \
-  --gpu_budget_gb 24 \
+  --gpu_budget_gb "$GPU_BUDGET_GB" \
   --strict \
   --json \
-  --output-report outputs/reports/overnight_qwen15b_4gpu_pre_submit_plan.md \
-  --output-csv outputs/tables/overnight_qwen15b_4gpu_pre_submit_plan.csv
+  --output-report "outputs/reports/${PLAN_SLUG}_${GPUS}gpu_in_job_plan.md" \
+  --output-csv "outputs/tables/${PLAN_SLUG}_${GPUS}gpu_in_job_plan.csv"
 
 pids=()
 for shard_index in $(seq 0 $((GPUS - 1))); do
-  shard_log="logs/reliaskill-overnight-qwen15b-${SLURM_JOB_ID:-manual}-shard-${shard_index}.out"
-  shard_err="logs/reliaskill-overnight-qwen15b-${SLURM_JOB_ID:-manual}-shard-${shard_index}.err"
+  shard_log="logs/${PLAN_SLUG}-${SLURM_JOB_ID:-manual}-shard-${shard_index}.out"
+  shard_err="logs/${PLAN_SLUG}-${SLURM_JOB_ID:-manual}-shard-${shard_index}.err"
   (
     export CUDA_VISIBLE_DEVICES="$shard_index"
     "$PYTHON_BIN" scripts/run_cluster_shard.py \
@@ -49,7 +51,7 @@ for pid in "${pids[@]}"; do
 done
 
 if [[ "$status" -ne 0 ]]; then
-  echo "At least one shard failed; not merging. Check logs/reliaskill-overnight-qwen15b-${SLURM_JOB_ID:-manual}-shard-*.err" >&2
+  echo "At least one shard failed; not merging. Check logs/${PLAN_SLUG}-${SLURM_JOB_ID:-manual}-shard-*.err" >&2
   exit "$status"
 fi
 

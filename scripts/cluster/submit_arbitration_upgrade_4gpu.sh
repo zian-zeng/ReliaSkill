@@ -5,12 +5,14 @@ CONFIG="${CONFIG:-configs/experiments/reliaskill_v1_arbitration_upgrade_pilot_fa
 GPUS="${GPUS:-4}"
 CPUS="${CPUS:-16}"
 MEM="${MEM:-128G}"
-QOS="${QOS-high}"
+QOS="${QOS-}"
 ACCOUNT="${ACCOUNT-}"
 PARTITION="${PARTITION-}"
 WALLTIME="${WALLTIME:-12:00:00}"
 MODELS="${MODELS:-Qwen_Qwen2.5-1.5B-Instruct}"
 GPU_BUDGET_GB="${GPU_BUDGET_GB:-24}"
+GPU_TYPE="${GPU_TYPE-}"
+GPU_GRES="${GPU_GRES-}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
@@ -41,13 +43,28 @@ sbatch_args+=(
   --job-name="reliaskill-upgrade"
   --cpus-per-task="$CPUS"
   --mem="$MEM"
-  --gres="gpu:${GPUS}"
   --time="$WALLTIME"
-  --export=ALL,CONFIG="$CONFIG",GPUS="$GPUS",MODELS="$MODELS"
+  --output="logs/${plan_slug}-%j.out"
+  --error="logs/${plan_slug}-%j.err"
+  --export=ALL,CONFIG="$CONFIG",GPUS="$GPUS",MODELS="$MODELS",GPU_BUDGET_GB="$GPU_BUDGET_GB"
   scripts/cluster/run_overnight_qwen15b_4gpu_resume.sbatch
 )
+if [[ -n "$GPU_GRES" ]]; then
+  sbatch_args=(--gres="$GPU_GRES" "${sbatch_args[@]}")
+elif [[ -n "$GPU_TYPE" ]]; then
+  sbatch_args=(--gres="gpu:${GPU_TYPE}:${GPUS}" "${sbatch_args[@]}")
+else
+  sbatch_args=(--gres="gpu:${GPUS}" "${sbatch_args[@]}")
+fi
 
 echo "submitting config=${CONFIG} models=${MODELS} gpus=${GPUS} walltime=${WALLTIME}"
+if [[ -n "$GPU_GRES" ]]; then
+  echo "gpu_request=${GPU_GRES}"
+elif [[ -n "$GPU_TYPE" ]]; then
+  echo "gpu_request=gpu:${GPU_TYPE}:${GPUS}"
+else
+  echo "gpu_request=gpu:${GPUS}"
+fi
 job_id="$(sbatch "${sbatch_args[@]}")"
 
 echo
