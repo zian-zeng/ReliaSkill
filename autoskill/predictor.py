@@ -20,6 +20,7 @@ from autoskill.contract_decision import choose_contrastive_contract_candidate, e
 from autoskill.contract_inference import build_contract_proof_state
 from autoskill.contrastive_memory import score_contrastive_memory
 from autoskill.contracts import build_contract_failure_report, compile_skill_contract, evaluate_skill_contract
+from autoskill.learned_router import score_learned_router
 from autoskill.routing_boundaries import detect_routing_abstention, normalize_routing_text, tool_name_variants
 from autoskill.schema_utils import normalize_schema_node, schema_type
 
@@ -1704,6 +1705,10 @@ def _reliaskill_v1_boundary_reason(tool: ToolIR, skill: GeneratedSkill, request:
         memory = score_contrastive_memory(request, tool, skill)
         if memory.negative_boundary:
             return "dev_contrastive_memory_negative_boundary"
+    if not _contract_ablation_disabled(skill, "disable_learned_router_policy"):
+        learned_router = score_learned_router(request, tool, skill)
+        if learned_router.negative_boundary:
+            return "dev_learned_router_negative_boundary"
     return _heuristic_abstention_reason(request, skill)
 
 

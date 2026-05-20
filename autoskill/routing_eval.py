@@ -23,6 +23,7 @@ from autoskill.contract_decision import (
 from autoskill.contract_inference import build_contract_proof_state, proof_state_is_viable
 from autoskill.doc_evidence import build_doc_grounding_evidence, render_doc_grounding_evidence
 from autoskill.ir import GeneratedSkill, ToolIR
+from autoskill.learned_router import score_learned_router
 from autoskill.method_metadata import prediction_method_metadata
 from autoskill.predictor import PredictorBackend, safe_predict
 from autoskill.progress import write_progress_state
@@ -848,6 +849,8 @@ def select_tool_for_task(
             rerank_score += _generated_skill_routing_bonus(task.user_request, tool, skill)
             contract_routing_bonus = 0
             contract_routing_features: Dict[str, Any] = {}
+            learned_router_score = 0.0
+            learned_router_bonus = 0
             if is_reliaskill_v1_family(normalized_baseline_name):
                 contract_routing_bonus, contract_routing_features = _reliaskill_v1_contract_routing_bonus(task.user_request, tool)
                 rerank_score += contract_routing_bonus
@@ -855,6 +858,12 @@ def select_tool_for_task(
                     contrastive_memory = score_contrastive_memory(task.user_request, tool, skill)
                     rerank_score += contrastive_memory.route_bonus
                     contract_routing_features["contrastive_memory"] = contrastive_memory.model_dump()
+                if not _contract_ablation_disabled(skill, "disable_learned_router_policy"):
+                    learned_router = score_learned_router(task.user_request, tool, skill)
+                    learned_router_score = learned_router.score
+                    learned_router_bonus = learned_router.route_bonus
+                    rerank_score += learned_router_bonus
+                    contract_routing_features["learned_router_policy"] = learned_router.model_dump()
             schema_fit_bonus = 0
             grounded_required_args: List[str] = []
             missing_required_args: List[str] = []
@@ -893,6 +902,8 @@ def select_tool_for_task(
                     "retrieval_score": row.get("score", 0),
                     "boundary_penalty": boundary_penalty,
                     "contract_routing_bonus": contract_routing_bonus,
+                    "learned_router_score": learned_router_score,
+                    "learned_router_bonus": learned_router_bonus,
                     "contract_routing_features": contract_routing_features,
                     "schema_fit_bonus": schema_fit_bonus,
                     "grounded_required_args": grounded_required_args,
@@ -920,6 +931,7 @@ def select_tool_for_task(
                     -row_explicit_request_match(item),
                     item.get("contract_viable") is not True,
                     -float(item.get("contract_proof_score") or item.get("score") or 0.0),
+                    -float(item.get("learned_router_score") or 0.0),
                     -float(item.get("score") or 0.0),
                     str(item["tool_name"]),
                 )

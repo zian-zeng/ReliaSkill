@@ -75,6 +75,7 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         "uses_contract_decoded_argument_completion": bool(method.get("uses_contract_decoded_argument_completion", False)),
         "uses_candidate_verified_routing_fallback": bool(method.get("uses_candidate_verified_routing_fallback", False)),
         "uses_contract_verified_candidate_cascade": bool(method.get("uses_contract_verified_candidate_cascade", False)),
+        "uses_dev_learned_router_policy": bool(method.get("uses_dev_learned_router_policy", False)),
         "test_controls_used": bool(method.get("test_controls_used", False)),
     }
     if metadata:
@@ -107,6 +108,8 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         compact["contract_policy_calibration"] = method.get("contract_policy_calibration")
     if isinstance(method.get("dev_learned_slot_grounding"), dict):
         compact["dev_learned_slot_grounding"] = method.get("dev_learned_slot_grounding")
+    if isinstance(method.get("learned_router_policy"), dict):
+        compact["learned_router_policy"] = method.get("learned_router_policy")
     if not compact.get("uses_runtime_schema_contract_verifier"):
         compact["uses_runtime_schema_contract_verifier"] = "runtime_schema_contract_verifier" in compact.get("pipeline_stages", [])
     if not compact.get("uses_executable_skill_contract"):
@@ -161,6 +164,8 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         compact["uses_candidate_verified_routing_fallback"] = "candidate_verified_routing_fallback" in compact.get("pipeline_stages", [])
     if not compact.get("uses_contract_verified_candidate_cascade"):
         compact["uses_contract_verified_candidate_cascade"] = "contract_verified_candidate_cascade" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_dev_learned_router_policy"):
+        compact["uses_dev_learned_router_policy"] = "dev_learned_risk_aware_router_policy" in compact.get("pipeline_stages", [])
     return {key: value for key, value in compact.items() if value is not None}
 
 

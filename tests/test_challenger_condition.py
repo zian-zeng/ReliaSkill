@@ -67,6 +67,7 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertIn("calibratable_contract_proof_policy", method_metadata["pipeline_stages"])
             self.assertIn("dev_calibrated_contract_policy", method_metadata["pipeline_stages"])
             self.assertIn("dev_learned_slot_grounding", method_metadata["pipeline_stages"])
+            self.assertIn("dev_learned_risk_aware_router_policy", method_metadata["pipeline_stages"])
             self.assertIn("proof_state_routing_policy", method_metadata["pipeline_stages"])
             self.assertIn("contrastive_contract_proof_context", method_metadata["pipeline_stages"])
             self.assertIn("retrieval_miss_proof_rescue", method_metadata["pipeline_stages"])
@@ -92,6 +93,7 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertTrue(method_metadata["uses_calibratable_contract_proof_policy"])
             self.assertTrue(method_metadata["uses_dev_calibrated_contract_policy"])
             self.assertTrue(method_metadata["uses_dev_learned_slot_grounding"])
+            self.assertTrue(method_metadata["uses_dev_learned_router_policy"])
             self.assertTrue(method_metadata["uses_proof_state_routing_policy"])
             self.assertTrue(method_metadata["uses_contrastive_contract_proof_context"])
             self.assertTrue(method_metadata["uses_retrieval_miss_proof_rescue"])
@@ -114,6 +116,8 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertEqual(skill_json["metadata"]["contract_proof_policy"]["name"], "dev_learned_contract_proof_policy")
             self.assertIn("contract_policy", skill_json["metadata"])
             self.assertEqual(skill_json["metadata"]["contract_policy"]["name"], "dev_learned_contract_policy")
+            self.assertIn("learned_router_policy", skill_json["metadata"])
+            self.assertEqual(skill_json["metadata"]["learned_router_policy"]["name"], "dev_learned_risk_aware_router_policy")
             self.assertIn("contract_policy_calibration", skill_json["metadata"])
             self.assertGreaterEqual(skill_json["metadata"]["contract_policy_calibration"]["examples"], 1)
             self.assertGreaterEqual(
@@ -134,6 +138,7 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertTrue(skill_json["metadata"]["uses_calibratable_contract_proof_policy"])
             self.assertTrue(skill_json["metadata"]["uses_dev_calibrated_contract_policy"])
             self.assertTrue(skill_json["metadata"]["uses_dev_learned_slot_grounding"])
+            self.assertTrue(skill_json["metadata"]["uses_dev_learned_router_policy"])
             self.assertTrue(skill_json["metadata"]["uses_proof_state_routing_policy"])
             self.assertTrue(skill_json["metadata"]["uses_contrastive_contract_proof_context"])
             self.assertTrue(skill_json["metadata"]["uses_retrieval_miss_proof_rescue"])
@@ -181,6 +186,7 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertTrue(loaded.metadata["method_metadata"]["uses_calibratable_contract_proof_policy"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_dev_calibrated_contract_policy"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_dev_learned_slot_grounding"])
+            self.assertTrue(loaded.metadata["method_metadata"]["uses_dev_learned_router_policy"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_proof_state_routing_policy"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_contrastive_contract_proof_context"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_retrieval_miss_proof_rescue"])
@@ -193,6 +199,10 @@ class ChallengerConditionTests(unittest.TestCase):
             self.assertEqual(
                 loaded.metadata["method_metadata"]["contract_policy"]["name"],
                 "dev_learned_contract_policy",
+            )
+            self.assertEqual(
+                loaded.metadata["method_metadata"]["learned_router_policy"]["name"],
+                "dev_learned_risk_aware_router_policy",
             )
             self.assertTrue(loaded.metadata["method_metadata"]["uses_request_contract_parse_prompting"])
             self.assertTrue(loaded.metadata["method_metadata"]["uses_verifier_guided_refinement"])

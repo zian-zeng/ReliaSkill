@@ -26,6 +26,7 @@ from autoskill.conditions import RELIASKILL_V1_CONTRACT_ABLATIONS, normalize_con
 from autoskill.contract_inference import default_contract_proof_policy
 from autoskill.contract_arbitration import default_contract_arbitration_policy
 from autoskill.contrastive_memory import learn_contrastive_memory_policy
+from autoskill.learned_router import learn_router_policy
 from autoskill.contracts import (
     build_contract_counterexamples,
     calibrate_contract_policy,
@@ -232,6 +233,7 @@ def _build_challenger_skill(
             ],
             limit=14,
         )
+    learned_router_policy = learn_router_policy(tool, challenger, behavior_cases)
     challenger.metadata = {
         **challenger.metadata,
         "condition_family": RELIASKILL_CHALLENGER,
@@ -262,6 +264,7 @@ def _build_challenger_skill(
             "executable_contract_compilation",
             "adaptive_contract_policy",
             "dev_learned_contrastive_memory",
+            "dev_learned_risk_aware_router_policy",
             "contract_aware_arbitration_policy",
             "runtime_model_contract_arbitration",
             "adaptive_routing_arbitration",
@@ -288,6 +291,7 @@ def _build_challenger_skill(
         "uses_contract_proof_ledger": True,
         "uses_adaptive_contract_policy": True,
         "uses_dev_learned_contrastive_memory": True,
+        "uses_dev_learned_router_policy": True,
         "uses_contract_aware_arbitration": True,
         "uses_runtime_model_contract_arbitration": True,
         "uses_adaptive_routing_arbitration": True,
@@ -320,6 +324,7 @@ def _build_challenger_skill(
         "contract_policy": learned_contract_policy,
         "contract_arbitration_policy": learned_contract_arbitration_policy,
         "contrastive_memory_policy": learned_contrastive_memory,
+        "learned_router_policy": learned_router_policy,
         "contract_policy_calibration": contract_policy_calibration,
         "model_native_router_profile": _model_native_router_profile(source_skill, tool),
         "dev_learned_slot_grounding": learned_slot_grounding,
@@ -818,6 +823,7 @@ def _write_challenger_method_metadata(
     contract_policy: Dict[str, Any] | None = None,
     contract_arbitration_policy: Dict[str, Any] | None = None,
     contrastive_memory_policy: Dict[str, Any] | None = None,
+    learned_router_policy: Dict[str, Any] | None = None,
     contract_policy_calibration: Dict[str, Any] | None = None,
     dev_learned_slot_grounding: Dict[str, Any] | None = None,
 ) -> None:
@@ -860,6 +866,7 @@ def _write_challenger_method_metadata(
             "executable_contract_compilation",
             "adaptive_contract_policy",
             "dev_learned_contrastive_memory",
+            "dev_learned_risk_aware_router_policy",
             "contract_aware_arbitration_policy",
             "runtime_model_contract_arbitration",
             "adaptive_routing_arbitration",
@@ -887,6 +894,7 @@ def _write_challenger_method_metadata(
         "uses_contract_proof_ledger": True,
         "uses_adaptive_contract_policy": True,
         "uses_dev_learned_contrastive_memory": True,
+        "uses_dev_learned_router_policy": True,
         "uses_contract_aware_arbitration": True,
         "uses_runtime_model_contract_arbitration": True,
         "uses_adaptive_routing_arbitration": True,
@@ -917,6 +925,7 @@ def _write_challenger_method_metadata(
         "contract_policy": contract_policy or {},
         "contract_arbitration_policy": contract_arbitration_policy or default_contract_arbitration_policy().model_dump(),
         "contrastive_memory_policy": contrastive_memory_policy or {"enabled": False},
+        "learned_router_policy": learned_router_policy or {"enabled": False},
         "contract_policy_calibration": contract_policy_calibration or {},
         "dev_learned_slot_grounding": dev_learned_slot_grounding or {},
         "reliaskill_v1_decision": score.decision,
@@ -1112,6 +1121,7 @@ def build_shared_skill_packages(
                         contract_policy=package_skill.metadata.get("contract_policy"),
                         contract_arbitration_policy=package_skill.metadata.get("contract_arbitration_policy"),
                         contrastive_memory_policy=package_skill.metadata.get("contrastive_memory_policy"),
+                        learned_router_policy=package_skill.metadata.get("learned_router_policy"),
                         contract_policy_calibration=package_skill.metadata.get("contract_policy_calibration"),
                         dev_learned_slot_grounding=package_skill.metadata.get("dev_learned_slot_grounding"),
                     )
