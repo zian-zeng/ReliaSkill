@@ -4,9 +4,9 @@
 Run on a Nexus/CML login node:
 
   python3 scripts/cluster/rank_available_gpus.py --min-gpus 4
-  python3 scripts/cluster/rank_available_gpus.py --counts 8,7,6,4 --partitions scavenger,cml-scavenger
+  python3 scripts/cluster/rank_available_gpus.py --counts 8,7,6,4,3,2 --partitions scavenger,cml-scavenger
   python3 scripts/cluster/rank_available_gpus.py --request-gpus 8 --min-gpus 4
-  python3 scripts/cluster/rank_available_gpus.py --counts 8,7,6,4 --mem-gb 120 --cpus 32
+  python3 scripts/cluster/rank_available_gpus.py --counts 8,7,6,4,3,2 --mem-gb 120 --cpus 32
 
 The script is intentionally read-only: it only calls sinfo, scontrol, and
 optionally sacctmgr to print user associations.
@@ -299,7 +299,7 @@ def default_counts(args: argparse.Namespace) -> List[int]:
         return explicit
     if args.request_gpus:
         return list(range(args.request_gpus, args.min_gpus - 1, -1))
-    return []
+    return [8, 7, 6, 4, 3, 2]
 
 
 def preferred_partition_bonus(partition: str, args: argparse.Namespace) -> int:
@@ -397,7 +397,7 @@ def print_table(options: Iterable[AllocationOption], args: argparse.Namespace) -
     rows = list(options)[: args.top]
     if not rows:
         print("No matching free GPU candidates found.")
-        print("Try --min-gpus 1, --counts 8,7,6,4, --include-planned, or omit --partitions.")
+        print("Try --mem-gb 40, --cpus 8, --include-planned, or omit --partitions.")
         return
     header = (
         f"{'#':>2} {'est':>7} {'request':>7} {'node':<12} {'partition':<16} {'state':<18} "
@@ -440,8 +440,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--counts",
-        default="",
-        help="Comma-separated allocation sizes to compare, e.g. 8,7,6,4. Overrides --request-gpus expansion.",
+        default=None,
+        help="Comma-separated allocation sizes to compare. Default: 8,7,6,4,3,2 unless --request-gpus is set.",
     )
     parser.add_argument(
         "--rank-mode",
@@ -454,8 +454,8 @@ def parse_args() -> argparse.Namespace:
         default="cml-scavenger,scavenger,cml-dpart,class,cml-furongh,cml,nexus",
         help="Comma-separated tie-break preference for requestable partitions.",
     )
-    parser.add_argument("--cpus", type=int, default=32, help="CPU count required by the request template.")
-    parser.add_argument("--mem-gb", type=int, default=120, help="Memory in GB required by the request template.")
+    parser.add_argument("--cpus", type=int, default=16, help="CPU count required by the request template.")
+    parser.add_argument("--mem-gb", type=int, default=60, help="Memory in GB required by the request template.")
     parser.add_argument("--time", default="12:00:00", help="Time limit to put in the request template.")
     parser.add_argument(
         "--ignore-fit",
