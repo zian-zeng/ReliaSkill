@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Rank currently available Slurm GPU nodes by GPU strength.
+"""Rank currently available Slurm GPU allocation options.
 
 Run on a Nexus/CML login node:
 
   python3 scripts/cluster/rank_available_gpus.py --min-gpus 4
-  python3 scripts/cluster/rank_available_gpus.py --min-gpus 8 --partitions scavenger,cml-scavenger
+  python3 scripts/cluster/rank_available_gpus.py --counts 8,7,6,4 --partitions scavenger,cml-scavenger
+  python3 scripts/cluster/rank_available_gpus.py --request-gpus 8 --min-gpus 4
 
 The script is intentionally read-only: it only calls sinfo, scontrol, and
 optionally sacctmgr to print user associations.
@@ -20,32 +21,34 @@ from dataclasses import dataclass
 from typing import Dict, Iterable, List
 
 
-GPU_STRENGTH = {
-    "h200-sxm": 1000,
-    "h200": 995,
-    "h100-sxm": 960,
-    "h100-nvl": 950,
-    "h100": 940,
-    "a100": 900,
-    "l40s": 850,
-    "rtx6000ada": 835,
-    "rtx6000-ada": 835,
-    "rtxa6000": 800,
-    "a6000": 800,
-    "rtxa5000": 720,
-    "a5000": 720,
-    "rtxa4000": 610,
-    "a4000": 610,
-    "rtx4090": 600,
-    "rtx3090": 560,
-    "rtx3070": 430,
-    "rtx2080ti": 400,
-    "gtx1080ti": 280,
-    "titanxp": 260,
-    "titanxpascal": 250,
-    "gtxtitanx": 220,
-    "p6000": 210,
-    "p100": 180,
+GPU_THROUGHPUT = {
+    # Rough per-GPU ranking for local HF inference throughput. These are not
+    # benchmark claims; they are only meant to compare allocation shapes.
+    "h200-sxm": 480,
+    "h200": 470,
+    "h100-sxm": 430,
+    "h100-nvl": 420,
+    "h100": 410,
+    "a100": 300,
+    "l40s": 260,
+    "rtx6000ada": 250,
+    "rtx6000-ada": 250,
+    "rtxa6000": 190,
+    "a6000": 190,
+    "rtxa5000": 140,
+    "a5000": 140,
+    "rtx4090": 125,
+    "rtx3090": 115,
+    "rtxa4000": 95,
+    "a4000": 95,
+    "rtx3070": 85,
+    "rtx2080ti": 70,
+    "gtx1080ti": 45,
+    "titanxp": 42,
+    "titanxpascal": 40,
+    "gtxtitanx": 36,
+    "p6000": 34,
+    "p100": 30,
     "gpu": 1,
 }
 
@@ -72,7 +75,21 @@ class Candidate:
     @property
     def score(self) -> int:
         penalty = 50_000 if self.planned else 0
-        return self.strength * 100_000 + self.free * 1_000 + self.free_mem_gb - penalty
+        return self.strength * self.free * 100_000 + self.free_mem_gb - penalty
+
+
+@dataclass
+class AllocationOption:
+    candidate: Candidate
+    requested: int
+    rank_mode: str
+
+    @property
+    def score(self) -> int:
+        penalty = 50_000 if self.candidate.planned else 0
+        if self.rank_mode == "single-gpu":
+            return self.candidate.strength * 100_000 + self.requested * 1_000 + self.candidate.free_mem_gb - penalty
+        return self.candidate.strength * self.requested * 100_000 + self.candidate.free_mem_gb - penalty
 
 
 def run_text(args: List[str]) -> str:
@@ -151,12 +168,12 @@ def normalize_gpu_type(value: str) -> str:
 
 def gpu_strength(gpu_type: str) -> int:
     normalized = normalize_gpu_type(gpu_type)
-    if normalized in GPU_STRENGTH:
-        return GPU_STRENGTH[normalized]
+    if normalized in GPU_THROUGHPUT:
+        return GPU_THROUGHPUT[normalized]
     compact = normalized.replace("-", "")
-    if compact in GPU_STRENGTH:
-        return GPU_STRENGTH[compact]
-    for key, score in GPU_STRENGTH.items():
+    if compact in GPU_THROUGHPUT:
+        return GPU_THROUGHPUT[compact]
+    for key, score in GPU_THROUGHPUT.items():
         if key in normalized or key in compact:
             return score
     return 1
@@ -230,8 +247,38 @@ def state_is_usable(state: str, *, include_planned: bool, include_drain: bool) -
     return True
 
 
+def parse_counts(value: str | None) -> List[int]:
+    if not value:
+        return []
+    counts: List[int] = []
+    for part in value.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        try:
+            count = int(part)
+        except ValueError as exc:
+            raise SystemExit(f"Invalid --counts value: {part!r}") from exc
+        if count < 1:
+            raise SystemExit("--counts values must be >= 1")
+        if count not in counts:
+            counts.append(count)
+    return sorted(counts, reverse=True)
+
+
+def default_counts(args: argparse.Namespace) -> List[int]:
+    explicit = parse_counts(args.counts)
+    if explicit:
+        return explicit
+    if args.request_gpus:
+        return list(range(args.request_gpus, args.min_gpus - 1, -1))
+    return []
+
+
 def collect_candidates(args: argparse.Namespace) -> List[Candidate]:
     partitions = {item.strip() for item in (args.partitions or "").split(",") if item.strip()}
+    counts = default_counts(args)
+    min_free = min(counts) if counts else args.min_gpus
     fmt = "%N|%P|%T|%80G|%m|%c|%l"
     rows = run_text(["sinfo", "-N", "-h", "-o", fmt]).splitlines()
     details_by_node = collect_node_details()
@@ -250,12 +297,23 @@ def collect_candidates(args: argparse.Namespace) -> List[Candidate]:
             if key in seen:
                 continue
             seen.add(key)
-            if candidate.free < args.min_gpus:
+            if candidate.free < min_free:
                 continue
             if not state_is_usable(candidate.state, include_planned=args.include_planned, include_drain=args.include_drain):
                 continue
             candidates.append(candidate)
     return sorted(candidates, key=lambda item: item.score, reverse=True)
+
+
+def expand_options(candidates: Iterable[Candidate], args: argparse.Namespace) -> List[AllocationOption]:
+    counts = default_counts(args)
+    options: List[AllocationOption] = []
+    for candidate in candidates:
+        candidate_counts = counts or [candidate.free]
+        for count in candidate_counts:
+            if count <= candidate.free:
+                options.append(AllocationOption(candidate=candidate, requested=count, rank_mode=args.rank_mode))
+    return sorted(options, key=lambda item: item.score, reverse=True)
 
 
 def print_associations() -> None:
@@ -274,25 +332,27 @@ def current_user() -> str:
     return try_text(["id", "-un"]).strip() or "unknown"
 
 
-def print_table(candidates: Iterable[Candidate], top: int, request_gpus: int | None) -> None:
-    rows = list(candidates)[:top]
+def print_table(options: Iterable[AllocationOption], top: int) -> None:
+    rows = list(options)[:top]
     if not rows:
         print("No matching free GPU candidates found.")
-        print("Try --min-gpus 1, --include-planned, or omit --partitions.")
+        print("Try --min-gpus 1, --counts 8,7,6,4, --include-planned, or omit --partitions.")
         return
     header = (
-        f"{'#':>2} {'score':>7} {'node':<12} {'partition':<16} {'state':<18} "
+        f"{'#':>2} {'est':>7} {'request':>7} {'node':<12} {'partition':<16} {'state':<18} "
         f"{'gpu':<14} {'free/total':>10} {'free_mem':>8} {'mem':>7} {'cpu':>5} {'time':>10}"
     )
     print(header)
     print("-" * len(header))
-    for index, row in enumerate(rows, start=1):
+    for index, option in enumerate(rows, start=1):
+        row = option.candidate
+        est = row.strength * option.requested
         print(
-            f"{index:>2} {row.strength:>7} {row.node:<12} {row.partition:<16} {row.state:<18} "
+            f"{index:>2} {est:>7} {option.requested:>7} {row.node:<12} {row.partition:<16} {row.state:<18} "
             f"{row.gpu_type:<14} {row.free:>4}/{row.total:<5} {row.free_mem_gb:>6}G {row.mem_gb:>5}G {row.cpus:>5} {row.time_limit:>10}"
         )
-    best = rows[0]
-    gpus = min(request_gpus or best.free, best.free)
+    best = rows[0].candidate
+    gpus = rows[0].requested
     print()
     print("== Best immediate request template ==")
     print(
@@ -301,12 +361,29 @@ def print_table(candidates: Iterable[Candidate], top: int, request_gpus: int | N
     )
     print("# Add -A/--account and --qos if this partition requires them.")
     print("# For example: -A cml-scavenger --qos=cml-scavenger on cml-scavenger/scavenger.")
+    print("# Column 'est' is a rough count-aware throughput score: per-GPU rank x requested GPUs.")
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--min-gpus", type=int, default=1, help="Minimum free GPUs of the same type on one node.")
-    parser.add_argument("--request-gpus", type=int, default=None, help="GPU count to put in the request template.")
+    parser.add_argument(
+        "--request-gpus",
+        type=int,
+        default=None,
+        help="Preferred GPU count. If --counts is omitted, compare this count down to --min-gpus.",
+    )
+    parser.add_argument(
+        "--counts",
+        default="",
+        help="Comma-separated allocation sizes to compare, e.g. 8,7,6,4. Overrides --request-gpus expansion.",
+    )
+    parser.add_argument(
+        "--rank-mode",
+        choices=("throughput", "single-gpu"),
+        default="throughput",
+        help="throughput compares GPU type x requested count; single-gpu prioritizes strongest individual GPUs.",
+    )
     parser.add_argument("--top", type=int, default=30, help="Number of ranked rows to print.")
     parser.add_argument(
         "--partitions",
@@ -325,10 +402,13 @@ def main() -> int:
         raise SystemExit("Run this on a Slurm login node with sinfo and scontrol available.")
     if args.min_gpus < 1:
         raise SystemExit("--min-gpus must be >= 1")
+    if args.request_gpus is not None and args.request_gpus < 1:
+        raise SystemExit("--request-gpus must be >= 1")
     if not args.no_assoc:
         print_associations()
     candidates = collect_candidates(args)
-    print_table(candidates, top=args.top, request_gpus=args.request_gpus)
+    options = expand_options(candidates, args)
+    print_table(options, top=args.top)
     return 0
 
 
