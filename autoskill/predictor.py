@@ -2897,7 +2897,11 @@ def _contract_selection_score(
     score -= issue_count * 0.5
     if prediction.abstention_reason:
         score -= 1.0
-    if tool is not None and task is not None:
+    if (
+        tool is not None
+        and task is not None
+        and not (skill is not None and _contract_ablation_disabled(skill, "disable_explicit_argument_fidelity"))
+    ):
         score += _explicit_argument_fidelity_score(tool, task, prediction)
     return score
 
@@ -2945,6 +2949,15 @@ def _adaptive_reliaskill_prompt_skill(
 ) -> tuple[GeneratedSkill, Dict[str, Any] | None]:
     if not _uses_reliaskill_v1_runtime(skill):
         return skill, None
+    if _contract_ablation_disabled(skill, "force_full_reliaskill_prompt") or _contract_ablation_disabled(
+        skill,
+        "disable_risk_adaptive_prompt_policy",
+    ):
+        return skill, {
+            "enabled": False,
+            "selected": "full_reliaskill_prompt",
+            "reason": "disabled_by_ablation",
+        }
     if os.getenv("RELIASKILL_DISABLE_ADAPTIVE_PROMPT_POLICY", "").strip().lower() in {"1", "true", "yes"}:
         return skill, {
             "enabled": False,
@@ -2954,6 +2967,13 @@ def _adaptive_reliaskill_prompt_skill(
     fallback_skill = _adaptive_prompt_fallback_skill(skill)
     if fallback_skill is None:
         return skill, None
+    if _contract_ablation_disabled(skill, "force_compact_reliaskill_prompt"):
+        return fallback_skill, {
+            "enabled": True,
+            "policy": "risk_adaptive_contract_prompt_v1",
+            "selected": "compact_fallback_prompt",
+            "reason": "forced_compact_prompt_by_ablation",
+        }
 
     decision = _adaptive_reliaskill_prompt_policy(tool, skill, task)
     if decision["selected"] == "compact_fallback_prompt":
@@ -3391,7 +3411,13 @@ def _maybe_apply_reliaskill_v1_prompt_arbitration(
     backend: PredictorBackend,
     current_prediction: EvalPrediction,
 ) -> tuple[EvalPrediction, Dict[str, Any] | None]:
-    if _contract_ablation_disabled(skill, "disable_contract_arbitration"):
+    if (
+        _contract_ablation_disabled(skill, "disable_contract_arbitration")
+        or _contract_ablation_disabled(skill, "disable_prompt_cascade")
+        or _contract_ablation_disabled(skill, "disable_risk_adaptive_prompt_policy")
+        or _contract_ablation_disabled(skill, "force_full_reliaskill_prompt")
+        or _contract_ablation_disabled(skill, "force_compact_reliaskill_prompt")
+    ):
         return current_prediction, None
     if os.getenv("RELIASKILL_DISABLE_ADAPTIVE_PROMPT_ARBITRATION", "").strip().lower() in {"1", "true", "yes"}:
         return current_prediction, None

@@ -81,6 +81,7 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         "uses_unified_proof_risk_policy_score": bool(method.get("uses_unified_proof_risk_policy_score", False)),
         "uses_adaptive_prompt_package_arbitration": bool(method.get("uses_adaptive_prompt_package_arbitration", False)),
         "uses_risk_adaptive_contract_prompt_policy": bool(method.get("uses_risk_adaptive_contract_prompt_policy", False)),
+        "uses_explicit_argument_fidelity_selection": bool(method.get("uses_explicit_argument_fidelity_selection", False)),
         "test_controls_used": bool(method.get("test_controls_used", False)),
     }
     if metadata:
@@ -181,6 +182,10 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         compact["uses_adaptive_prompt_package_arbitration"] = "adaptive_prompt_package_arbitration" in compact.get("pipeline_stages", [])
     if not compact.get("uses_risk_adaptive_contract_prompt_policy"):
         compact["uses_risk_adaptive_contract_prompt_policy"] = "risk_adaptive_contract_prompt_policy" in compact.get(
+            "pipeline_stages", []
+        )
+    if not compact.get("uses_explicit_argument_fidelity_selection"):
+        compact["uses_explicit_argument_fidelity_selection"] = "explicit_argument_fidelity_candidate_selection" in compact.get(
             "pipeline_stages", []
         )
     return {key: value for key, value in compact.items() if value is not None}

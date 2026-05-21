@@ -11,6 +11,7 @@ from autoskill.experiment import build_skill_variant_map, load_tools, run_benchm
 from autoskill.generator import SkillGenerator
 from autoskill.conditions import (
     LEGACY_RELIASKILL_CHALLENGER,
+    RELIASKILL_V1_COMPACT_PROMPT_ONLY,
     RELIASKILL_V1_NO_CANDIDATE_VERIFICATION,
     RELIASKILL_V1_NO_CONTRASTIVE_CONTEXT,
     RELIASKILL_V1_NO_CONTRACT_DECODER,
@@ -18,10 +19,14 @@ from autoskill.conditions import (
     RELIASKILL_V1_NO_DEPENDENCY_PLAN,
     RELIASKILL_V1_NO_DOC_CONSISTENCY_SHIELD,
     RELIASKILL_V1_NO_DOC_GROUNDING,
+    RELIASKILL_V1_NO_EXPLICIT_ARGUMENT_FIDELITY,
     RELIASKILL_V1_NO_IDENTIFIER_BINDING,
+    RELIASKILL_V1_NO_PROMPT_CASCADE,
     RELIASKILL_V1_NO_RETRIEVAL_MISS_RESCUE,
+    RELIASKILL_V1_NO_RISK_ADAPTIVE_PROMPT_POLICY,
     RELIASKILL_V1_NO_RUNTIME_GROUNDING,
     RELIASKILL_V1_NO_VERIFIER_REFINEMENT,
+    RELIASKILL_V1_FULL_PROOF_PROMPT_ONLY,
     normalize_condition_name,
 )
 from autoskill.ir import ArgumentIR, GeneratedSkill, ReliabilityScore, RepairReport, ToolIR
@@ -236,6 +241,11 @@ class ChallengerConditionTests(unittest.TestCase):
                     RELIASKILL_V1_NO_IDENTIFIER_BINDING,
                     RELIASKILL_V1_NO_CONTRACT_DECODER,
                     RELIASKILL_V1_NO_CANDIDATE_VERIFICATION,
+                    RELIASKILL_V1_NO_RISK_ADAPTIVE_PROMPT_POLICY,
+                    RELIASKILL_V1_NO_PROMPT_CASCADE,
+                    RELIASKILL_V1_NO_EXPLICIT_ARGUMENT_FIDELITY,
+                    RELIASKILL_V1_COMPACT_PROMPT_ONLY,
+                    RELIASKILL_V1_FULL_PROOF_PROMPT_ONLY,
                     RELIASKILL_V1_NO_CONTRASTIVE_CONTEXT,
                     RELIASKILL_V1_NO_RETRIEVAL_MISS_RESCUE,
                     RELIASKILL_V1_NO_DEPENDENCY_PLAN,
@@ -254,6 +264,11 @@ class ChallengerConditionTests(unittest.TestCase):
                     RELIASKILL_V1_NO_IDENTIFIER_BINDING,
                     RELIASKILL_V1_NO_CONTRACT_DECODER,
                     RELIASKILL_V1_NO_CANDIDATE_VERIFICATION,
+                    RELIASKILL_V1_NO_RISK_ADAPTIVE_PROMPT_POLICY,
+                    RELIASKILL_V1_NO_PROMPT_CASCADE,
+                    RELIASKILL_V1_NO_EXPLICIT_ARGUMENT_FIDELITY,
+                    RELIASKILL_V1_COMPACT_PROMPT_ONLY,
+                    RELIASKILL_V1_FULL_PROOF_PROMPT_ONLY,
                     RELIASKILL_V1_NO_CONTRASTIVE_CONTEXT,
                     RELIASKILL_V1_NO_RETRIEVAL_MISS_RESCUE,
                     RELIASKILL_V1_NO_DEPENDENCY_PLAN,
@@ -283,6 +298,29 @@ class ChallengerConditionTests(unittest.TestCase):
             )
             self.assertTrue(
                 ablations[RELIASKILL_V1_NO_CANDIDATE_VERIFICATION].metadata["contract_ablation_flags"]["disable_candidate_verification"]
+            )
+            self.assertTrue(
+                ablations[RELIASKILL_V1_NO_RISK_ADAPTIVE_PROMPT_POLICY].metadata["contract_ablation_flags"][
+                    "disable_risk_adaptive_prompt_policy"
+                ]
+            )
+            self.assertTrue(
+                ablations[RELIASKILL_V1_NO_PROMPT_CASCADE].metadata["contract_ablation_flags"]["disable_prompt_cascade"]
+            )
+            self.assertTrue(
+                ablations[RELIASKILL_V1_NO_EXPLICIT_ARGUMENT_FIDELITY].metadata["contract_ablation_flags"][
+                    "disable_explicit_argument_fidelity"
+                ]
+            )
+            self.assertTrue(
+                ablations[RELIASKILL_V1_COMPACT_PROMPT_ONLY].metadata["contract_ablation_flags"][
+                    "force_compact_reliaskill_prompt"
+                ]
+            )
+            self.assertTrue(
+                ablations[RELIASKILL_V1_FULL_PROOF_PROMPT_ONLY].metadata["contract_ablation_flags"][
+                    "force_full_reliaskill_prompt"
+                ]
             )
             self.assertTrue(
                 ablations[RELIASKILL_V1_NO_CONTRASTIVE_CONTEXT].metadata["contract_ablation_flags"][

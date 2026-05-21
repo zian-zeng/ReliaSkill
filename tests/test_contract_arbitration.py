@@ -153,6 +153,55 @@ def test_runtime_adaptive_prompt_policy_keeps_full_prompt_for_side_effect_tool()
     assert prompt_policy["reason"] == "side_effect_risk"
 
 
+def test_runtime_adaptive_prompt_policy_ablation_keeps_full_prompt() -> None:
+    backend = _LocalHFStaticPredictor(arguments={"query": "schema contract"})
+    skill = _v1_skill_with_arbitration(
+        prompt_fallback=True,
+        flags={"disable_risk_adaptive_prompt_policy": True},
+    )
+
+    prediction = safe_predict(
+        ToolIR(
+            tool_name="search",
+            tool_purpose="Search documents.",
+            arguments=[ArgumentIR(name="query", type="string", required=True)],
+        ),
+        skill,
+        EvalTask(task_id="arb_prompt_disabled", tool_name="search", user_request='Search query="schema contract".'),
+        backend,
+    )
+
+    assert prediction.should_call
+    prompt_policy = prediction.metadata["reliaskill_v1_adaptive_prompt_policy"]
+    assert prompt_policy["selected"] == "full_reliaskill_prompt"
+    assert prompt_policy["reason"] == "disabled_by_ablation"
+
+
+def test_prompt_cascade_ablation_leaves_full_prompt_failure_unrescued() -> None:
+    backend = _PromptSensitiveStaticPredictor()
+    skill = _v1_skill_with_arbitration(prompt_fallback=True, flags={"disable_prompt_cascade": True})
+
+    prediction = safe_predict(
+        ToolIR(
+            tool_name="calendar_create_event",
+            tool_purpose="Create calendar events.",
+            arguments=[ArgumentIR(name="query", type="string", required=True)],
+            schema_complexity={"side_effect_type": "write"},
+        ),
+        skill,
+        EvalTask(
+            task_id="prompt_cascade_disabled",
+            tool_name="calendar_create_event",
+            user_request='Create a calendar event query="schema contract".',
+        ),
+        backend,
+    )
+
+    assert prediction.should_call
+    assert backend.predict_calls == 1
+    assert "reliaskill_v1_prompt_arbitration" not in prediction.metadata
+
+
 def test_contract_selection_score_rewards_explicit_argument_fidelity() -> None:
     tool = ToolIR(
         tool_name="calc_heat_capacity",
@@ -188,6 +237,49 @@ def test_contract_selection_score_rewards_explicit_argument_fidelity() -> None:
     assert _contract_selection_score(good, tool=tool, task=task) > _contract_selection_score(bad, tool=tool, task=task)
     assert good.metadata["reliaskill_v1_explicit_argument_fidelity"]["matched"] == 3
     assert bad.metadata["reliaskill_v1_explicit_argument_fidelity"]["matched"] == 2
+
+
+def test_contract_selection_score_can_ablate_explicit_argument_fidelity() -> None:
+    tool = ToolIR(
+        tool_name="calc_heat_capacity",
+        tool_purpose="Calculate heat capacity for a gas.",
+        arguments=[
+            ArgumentIR(name="gas", type="string", required=True),
+            ArgumentIR(name="temp", type="integer", required=True),
+            ArgumentIR(name="volume", type="integer", required=True),
+        ],
+    )
+    task = EvalTask(
+        task_id="explicit_fidelity_score_disabled",
+        tool_name="calc_heat_capacity",
+        user_request='Calculate heat capacity for air with gas="gas_17", temp=18, volume=18.',
+    )
+    skill = _v1_skill_with_arbitration(flags={"disable_explicit_argument_fidelity": True})
+    good = EvalPrediction(
+        task_id=task.task_id,
+        tool_name=tool.tool_name,
+        baseline_name="reliaskill_v1",
+        predicted_arguments={"gas": "gas_17", "temp": 18, "volume": 18},
+        should_call=True,
+        metadata={"reliaskill_v1_runtime_verifier": {"contract_evaluation_after": {"satisfied": True}, "issues": []}},
+    )
+    bad = EvalPrediction(
+        task_id=task.task_id,
+        tool_name=tool.tool_name,
+        baseline_name="reliaskill_v1",
+        predicted_arguments={"gas": "air", "temp": 18, "volume": 18},
+        should_call=True,
+        metadata={"reliaskill_v1_runtime_verifier": {"contract_evaluation_after": {"satisfied": True}, "issues": []}},
+    )
+
+    assert _contract_selection_score(good, tool=tool, task=task, skill=skill) == _contract_selection_score(
+        bad,
+        tool=tool,
+        task=task,
+        skill=skill,
+    )
+    assert "reliaskill_v1_explicit_argument_fidelity" not in good.metadata
+    assert "reliaskill_v1_explicit_argument_fidelity" not in bad.metadata
 
 
 def test_routing_arbitration_preserves_low_risk_native_candidate() -> None:
@@ -264,7 +356,12 @@ def test_routing_arbitration_keeps_contract_candidate_when_native_is_blocked() -
     assert decision is None
 
 
-def _v1_skill_with_arbitration(*, runtime_threshold: float = 20.0, prompt_fallback: bool = False) -> GeneratedSkill:
+def _v1_skill_with_arbitration(
+    *,
+    runtime_threshold: float = 20.0,
+    prompt_fallback: bool = False,
+    flags: dict | None = None,
+) -> GeneratedSkill:
     metadata = {
         "contract_arbitration_policy": {
             "name": "test_contract_aware_arbitration",
@@ -284,6 +381,8 @@ def _v1_skill_with_arbitration(*, runtime_threshold: float = 20.0, prompt_fallba
             "calibration_source": "unit_test",
         }
     }
+    if flags:
+        metadata["contract_ablation_flags"] = dict(flags)
     if prompt_fallback:
         metadata["adaptive_prompt_fallback_skill"] = GeneratedSkill(
             baseline_name="generated_skill_base",
