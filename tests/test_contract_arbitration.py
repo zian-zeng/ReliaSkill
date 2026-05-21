@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from autoskill.eval_types import EvalPrediction, EvalTask
 from autoskill.ir import ArgumentIR, GeneratedSkill, ToolIR
-from autoskill.predictor import PredictorBackend, safe_predict
+from autoskill.predictor import PredictorBackend, _contract_selection_score, safe_predict
 from autoskill.routing_eval import _maybe_apply_reliaskill_routing_arbitration
 
 
@@ -151,6 +151,43 @@ def test_runtime_adaptive_prompt_policy_keeps_full_prompt_for_side_effect_tool()
     prompt_policy = prediction.metadata["reliaskill_v1_adaptive_prompt_policy"]
     assert prompt_policy["selected"] == "full_reliaskill_prompt"
     assert prompt_policy["reason"] == "side_effect_risk"
+
+
+def test_contract_selection_score_rewards_explicit_argument_fidelity() -> None:
+    tool = ToolIR(
+        tool_name="calc_heat_capacity",
+        tool_purpose="Calculate heat capacity for a gas.",
+        arguments=[
+            ArgumentIR(name="gas", type="string", required=True),
+            ArgumentIR(name="temp", type="integer", required=True),
+            ArgumentIR(name="volume", type="integer", required=True),
+        ],
+    )
+    task = EvalTask(
+        task_id="explicit_fidelity_score",
+        tool_name="calc_heat_capacity",
+        user_request='Calculate heat capacity for air with gas="gas_17", temp=18, volume=18.',
+    )
+    good = EvalPrediction(
+        task_id=task.task_id,
+        tool_name=tool.tool_name,
+        baseline_name="reliaskill_v1",
+        predicted_arguments={"gas": "gas_17", "temp": 18, "volume": 18},
+        should_call=True,
+        metadata={"reliaskill_v1_runtime_verifier": {"contract_evaluation_after": {"satisfied": True}, "issues": []}},
+    )
+    bad = EvalPrediction(
+        task_id=task.task_id,
+        tool_name=tool.tool_name,
+        baseline_name="reliaskill_v1",
+        predicted_arguments={"gas": "air", "temp": 18, "volume": 18},
+        should_call=True,
+        metadata={"reliaskill_v1_runtime_verifier": {"contract_evaluation_after": {"satisfied": True}, "issues": []}},
+    )
+
+    assert _contract_selection_score(good, tool=tool, task=task) > _contract_selection_score(bad, tool=tool, task=task)
+    assert good.metadata["reliaskill_v1_explicit_argument_fidelity"]["matched"] == 3
+    assert bad.metadata["reliaskill_v1_explicit_argument_fidelity"]["matched"] == 2
 
 
 def test_routing_arbitration_preserves_low_risk_native_candidate() -> None:

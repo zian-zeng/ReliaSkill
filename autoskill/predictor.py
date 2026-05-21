@@ -2764,8 +2764,8 @@ def _maybe_refine_reliaskill_v1_prediction(
             prediction.metadata = metadata
             return prediction
         verified_refined = _verify_reliaskill_v1_prediction(tool, skill, task, refined)
-        original_score = _contract_selection_score(prediction)
-        refined_score = _contract_selection_score(verified_refined)
+        original_score = _contract_selection_score(prediction, tool=tool, task=task, skill=skill)
+        refined_score = _contract_selection_score(verified_refined, tool=tool, task=task, skill=skill)
         selected_refined = refined_score > original_score
         selected = verified_refined if selected_refined else prediction
         selected.metadata = {
@@ -2875,7 +2875,13 @@ def _should_attempt_contract_refinement(
     return bool(not prediction.should_call and not boundary_reason)
 
 
-def _contract_selection_score(prediction: EvalPrediction) -> float:
+def _contract_selection_score(
+    prediction: EvalPrediction,
+    *,
+    tool: ToolIR | None = None,
+    task: EvalTask | None = None,
+    skill: GeneratedSkill | None = None,
+) -> float:
     verifier = prediction.metadata.get("reliaskill_v1_runtime_verifier")
     verifier = verifier if isinstance(verifier, dict) else {}
     after = verifier.get("contract_evaluation_after")
@@ -2891,6 +2897,44 @@ def _contract_selection_score(prediction: EvalPrediction) -> float:
     score -= issue_count * 0.5
     if prediction.abstention_reason:
         score -= 1.0
+    if tool is not None and task is not None:
+        score += _explicit_argument_fidelity_score(tool, task, prediction)
+    return score
+
+
+def _explicit_argument_fidelity_score(tool: ToolIR, task: EvalTask, prediction: EvalPrediction) -> float:
+    request = _task_grounding_text(task)
+    score = 0.0
+    matched = 0
+    total = 0
+    actions: list[str] = []
+    for arg in tool.arguments:
+        explicit = _extract_explicit_argument_value(arg, request)
+        if explicit is None:
+            continue
+        total += 1
+        expected, expected_issues = _sanitize_value_for_schema(explicit, _schema_for_argument(arg), arg.name, actions)
+        if expected is None or expected_issues:
+            continue
+        actual = prediction.predicted_arguments.get(arg.name)
+        weight = 2.0 if arg.required else 1.25
+        if actual is None:
+            score -= weight
+            continue
+        actual_sanitized, actual_issues = _sanitize_value_for_schema(actual, _schema_for_argument(arg), arg.name, actions)
+        if actual_sanitized is not None and not actual_issues and _values_overlap(expected, actual_sanitized):
+            score += weight
+            matched += 1
+        else:
+            score -= weight * 1.5
+    if total:
+        metadata = prediction.metadata if isinstance(prediction.metadata, dict) else {}
+        metadata["reliaskill_v1_explicit_argument_fidelity"] = {
+            "matched": matched,
+            "total": total,
+            "score": round(score, 4),
+        }
+        prediction.metadata = metadata
     return score
 
 
@@ -3204,6 +3248,8 @@ def _maybe_arbitrate_predecoded_reliaskill_v1_prediction(
     verified_model = _verify_reliaskill_v1_prediction(tool, skill, task, model_native)
     selected, arbitration = _select_reliaskill_v1_runtime_candidate(
         skill=skill,
+        tool=tool,
+        task=task,
         contract_candidate=predecoded,
         model_candidate=verified_model,
     )
@@ -3225,7 +3271,7 @@ def _maybe_arbitrate_predecoded_reliaskill_v1_prediction(
     metadata["reliaskill_v1_arbitration"] = arbitration
     if prompt_arbitration is not None:
         metadata["reliaskill_v1_prompt_arbitration"] = prompt_arbitration
-        if prompt_arbitration.get("selected") == "adaptive_prompt_fallback":
+        if prompt_arbitration.get("selected") in {"adaptive_prompt_fallback", "full_reliaskill_prompt"}:
             metadata["actual_predictor_backend"] = backend.backend_name
     selected.metadata = metadata
     return selected
@@ -3268,12 +3314,14 @@ def _should_arbitrate_predecoded_reliaskill_v1_prediction(
 def _select_reliaskill_v1_runtime_candidate(
     *,
     skill: GeneratedSkill,
+    tool: ToolIR,
+    task: EvalTask,
     contract_candidate: EvalPrediction,
     model_candidate: EvalPrediction,
 ) -> tuple[EvalPrediction, Dict[str, Any]]:
     policy = contract_arbitration_policy_from_skill(skill)
-    contract_summary = _runtime_candidate_summary("contract_predecoder", contract_candidate)
-    model_summary = _runtime_candidate_summary("model_native_verified", model_candidate)
+    contract_summary = _runtime_candidate_summary("contract_predecoder", contract_candidate, tool=tool, task=task, skill=skill)
+    model_summary = _runtime_candidate_summary("model_native_verified", model_candidate, tool=tool, task=task, skill=skill)
     if model_summary["hard_blocked"]:
         return contract_candidate, {
             "attempted": True,
@@ -3283,8 +3331,8 @@ def _select_reliaskill_v1_runtime_candidate(
             "candidates": [contract_summary, model_summary],
         }
     if model_candidate.should_call and model_summary["contract_satisfied"]:
-        model_score = _contract_selection_score(model_candidate)
-        contract_score = _contract_selection_score(contract_candidate)
+        model_score = _contract_selection_score(model_candidate, tool=tool, task=task, skill=skill)
+        contract_score = _contract_selection_score(contract_candidate, tool=tool, task=task, skill=skill)
         if model_score >= contract_score - 0.5:
             return model_candidate, {
                 "attempted": True,
@@ -3302,7 +3350,14 @@ def _select_reliaskill_v1_runtime_candidate(
     }
 
 
-def _runtime_candidate_summary(name: str, prediction: EvalPrediction) -> Dict[str, Any]:
+def _runtime_candidate_summary(
+    name: str,
+    prediction: EvalPrediction,
+    *,
+    tool: ToolIR | None = None,
+    task: EvalTask | None = None,
+    skill: GeneratedSkill | None = None,
+) -> Dict[str, Any]:
     verifier = prediction.metadata.get("reliaskill_v1_runtime_verifier") if isinstance(prediction.metadata, dict) else None
     verifier = verifier if isinstance(verifier, dict) else {}
     after = verifier.get("contract_evaluation_after") if isinstance(verifier.get("contract_evaluation_after"), dict) else {}
@@ -3324,7 +3379,7 @@ def _runtime_candidate_summary(name: str, prediction: EvalPrediction) -> Dict[st
             or prediction.abstention_reason in {"missing_required_information", "action_intent_conflict", "explicit_target_tool_forbidden"}
             or any(action.startswith("abstained_") for action in actions)
         ),
-        "selection_score": _contract_selection_score(prediction),
+        "selection_score": _contract_selection_score(prediction, tool=tool, task=task, skill=skill),
     }
 
 
@@ -3341,11 +3396,19 @@ def _maybe_apply_reliaskill_v1_prompt_arbitration(
     if os.getenv("RELIASKILL_DISABLE_ADAPTIVE_PROMPT_ARBITRATION", "").strip().lower() in {"1", "true", "yes"}:
         return current_prediction, None
     prompt_policy = current_prediction.metadata.get("reliaskill_v1_adaptive_prompt_policy") if isinstance(current_prediction.metadata, dict) else None
-    if isinstance(prompt_policy, dict) and prompt_policy.get("selected") == "compact_fallback_prompt":
+    current_summary = _runtime_candidate_summary("current_runtime_candidate", current_prediction, tool=tool, task=task, skill=skill)
+    current_needs_rescue = (
+        not current_prediction.should_call
+        or not current_summary["contract_satisfied"]
+        or current_summary["hard_blocked"]
+    )
+    current_used_compact_prompt = isinstance(prompt_policy, dict) and prompt_policy.get("selected") == "compact_fallback_prompt"
+    if current_used_compact_prompt and not current_needs_rescue:
         return current_prediction, None
-    fallback_skill = _adaptive_prompt_fallback_skill(skill)
+    fallback_skill = skill if current_used_compact_prompt else _adaptive_prompt_fallback_skill(skill)
     if fallback_skill is None:
         return current_prediction, None
+    fallback_name = "full_reliaskill_prompt" if current_used_compact_prompt else "adaptive_prompt_fallback"
     try:
         fallback_prediction = backend.predict(tool, fallback_skill, task)
     except Exception as exc:  # pragma: no cover - opportunistic fallback arbitration.
@@ -3353,38 +3416,32 @@ def _maybe_apply_reliaskill_v1_prompt_arbitration(
             "attempted": True,
             "selected": "current_runtime_candidate",
             "fallback_condition": fallback_skill.baseline_name,
-            "reason": "fallback_prompt_prediction_failed",
+            "reason": f"{fallback_name}_prediction_failed",
             "error": f"{type(exc).__name__}: {exc}",
         }
     verified_fallback = _verify_reliaskill_v1_prediction(tool, skill, task, fallback_prediction)
     verified_fallback.baseline_name = skill.baseline_name
-    current_summary = _runtime_candidate_summary("current_runtime_candidate", current_prediction)
-    fallback_summary = _runtime_candidate_summary("adaptive_prompt_fallback", verified_fallback)
+    fallback_summary = _runtime_candidate_summary(fallback_name, verified_fallback, tool=tool, task=task, skill=skill)
     if fallback_summary["hard_blocked"]:
         return current_prediction, {
             "attempted": True,
             "selected": "current_runtime_candidate",
             "fallback_condition": fallback_skill.baseline_name,
-            "reason": "fallback_prompt_hard_blocked",
+            "reason": f"{fallback_name}_hard_blocked",
             "candidates": [current_summary, fallback_summary],
         }
     if verified_fallback.should_call and fallback_summary["contract_satisfied"]:
-        fallback_score = _contract_selection_score(verified_fallback)
-        current_score = _contract_selection_score(current_prediction)
-        current_needs_rescue = (
-            not current_prediction.should_call
-            or not current_summary["contract_satisfied"]
-            or current_summary["hard_blocked"]
-        )
+        fallback_score = _contract_selection_score(verified_fallback, tool=tool, task=task, skill=skill)
+        current_score = _contract_selection_score(current_prediction, tool=tool, task=task, skill=skill)
         if current_needs_rescue or fallback_score > current_score + 0.5:
             metadata = dict(verified_fallback.metadata)
             metadata["adaptive_prompt_fallback_condition"] = fallback_skill.baseline_name
             verified_fallback.metadata = metadata
             return verified_fallback, {
                 "attempted": True,
-                "selected": "adaptive_prompt_fallback",
+                "selected": fallback_name,
                 "fallback_condition": fallback_skill.baseline_name,
-                "reason": "fallback_prompt_repairs_current_or_has_higher_contract_score",
+                "reason": f"{fallback_name}_repairs_current_or_has_higher_contract_score",
                 "candidates": [current_summary, fallback_summary],
             }
     return current_prediction, {
