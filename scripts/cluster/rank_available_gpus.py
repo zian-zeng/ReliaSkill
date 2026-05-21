@@ -83,13 +83,25 @@ class AllocationOption:
     candidate: Candidate
     requested: int
     rank_mode: str
+    partition_bonus: int = 0
 
     @property
     def score(self) -> int:
         penalty = 50_000 if self.candidate.planned else 0
         if self.rank_mode == "single-gpu":
-            return self.candidate.strength * 100_000 + self.requested * 1_000 + self.candidate.free_mem_gb - penalty
-        return self.candidate.strength * self.requested * 100_000 + self.candidate.free_mem_gb - penalty
+            return (
+                self.candidate.strength * 100_000
+                + self.requested * 1_000
+                + self.candidate.free_mem_gb
+                + self.partition_bonus
+                - penalty
+            )
+        return (
+            self.candidate.strength * self.requested * 100_000
+            + self.candidate.free_mem_gb
+            + self.partition_bonus
+            - penalty
+        )
 
 
 def run_text(args: List[str]) -> str:
@@ -275,6 +287,29 @@ def default_counts(args: argparse.Namespace) -> List[int]:
     return []
 
 
+def preferred_partition_bonus(partition: str, args: argparse.Namespace) -> int:
+    preferred = [part.strip() for part in args.prefer_partitions.split(",") if part.strip()]
+    if partition not in preferred:
+        return 0
+    return (len(preferred) - preferred.index(partition)) * 10_000
+
+
+def request_flags_for_partition(partition: str) -> str:
+    if partition == "scavenger":
+        return "-A scavenger --qos=scavenger "
+    if partition == "cml-scavenger":
+        return "-A cml-scavenger --qos=cml-scavenger "
+    if partition == "class":
+        return "-A class --qos=medium "
+    if partition == "nexus":
+        return "-A nexus --qos=medium "
+    if partition == "cml-dpart":
+        return "-A cml --qos=cml-default "
+    if partition == "cml-furongh":
+        return "-A cml-furongh --qos=cml-default "
+    return ""
+
+
 def collect_candidates(args: argparse.Namespace) -> List[Candidate]:
     partitions = {item.strip() for item in (args.partitions or "").split(",") if item.strip()}
     counts = default_counts(args)
@@ -312,7 +347,14 @@ def expand_options(candidates: Iterable[Candidate], args: argparse.Namespace) ->
         candidate_counts = counts or [candidate.free]
         for count in candidate_counts:
             if count <= candidate.free:
-                options.append(AllocationOption(candidate=candidate, requested=count, rank_mode=args.rank_mode))
+                options.append(
+                    AllocationOption(
+                        candidate=candidate,
+                        requested=count,
+                        rank_mode=args.rank_mode,
+                        partition_bonus=preferred_partition_bonus(candidate.partition, args),
+                    )
+                )
     return sorted(options, key=lambda item: item.score, reverse=True)
 
 
@@ -355,12 +397,15 @@ def print_table(options: Iterable[AllocationOption], top: int) -> None:
     gpus = rows[0].requested
     print()
     print("== Best immediate request template ==")
+    flags = request_flags_for_partition(best.partition)
     print(
-        f"salloc -p {best.partition} --gres=gpu:{best.gpu_type}:{gpus} "
+        f"salloc -p {best.partition} {flags}--gres=gpu:{best.gpu_type}:{gpus} "
         "--cpus-per-task=32 --mem=120G --time=12:00:00"
     )
-    print("# Add -A/--account and --qos if this partition requires them.")
-    print("# For example: -A cml-scavenger --qos=cml-scavenger on cml-scavenger/scavenger.")
+    if flags:
+        print("# Account/QoS flags were inferred from common UMIACS/Nexus associations.")
+    else:
+        print("# No account/QoS rule is known for this partition; add -A/--qos manually or prefer a scavenger row.")
     print("# Column 'est' is a rough count-aware throughput score: per-GPU rank x requested GPUs.")
 
 
@@ -383,6 +428,11 @@ def parse_args() -> argparse.Namespace:
         choices=("throughput", "single-gpu"),
         default="throughput",
         help="throughput compares GPU type x requested count; single-gpu prioritizes strongest individual GPUs.",
+    )
+    parser.add_argument(
+        "--prefer-partitions",
+        default="cml-scavenger,scavenger,cml-dpart,class,cml-furongh,cml,nexus",
+        help="Comma-separated tie-break preference for requestable partitions.",
     )
     parser.add_argument("--top", type=int, default=30, help="Number of ranked rows to print.")
     parser.add_argument(
