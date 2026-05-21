@@ -38,6 +38,7 @@ KEY_STAT_TEST_COMPARISONS = [
     ("reliaskill_v1_no_contrastive_context", "reliaskill_v1"),
     ("reliaskill_v1_no_retrieval_miss_rescue", "reliaskill_v1"),
     ("reliaskill_v1_no_dependency_plan", "reliaskill_v1"),
+    ("reliaskill_v1_no_explicit_boundary_certificate", "reliaskill_v1"),
     ("raw_mcp", "skill_prompt_boundary_first"),
     ("generated_skill_base", "skill_prompt_boundary_first"),
     ("raw_mcp", "skill_prompt_verbose_docs"),

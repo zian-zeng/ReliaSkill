@@ -70,6 +70,39 @@ def request_forbids_tool(query: str, tool: ToolIR | str) -> str | None:
     return None
 
 
+def request_selects_tool(query: str, tool: ToolIR | str) -> str | None:
+    """Return a high-precision certificate that the request selects this tool.
+
+    This is the positive half of the boundary certificate: when the request
+    explicitly contrasts tools, ReliaSkill should preserve the named
+    alternative instead of collapsing the decision into an uninformative
+    abstention.
+    """
+    if request_forbids_tool(query, tool):
+        return None
+    text = normalize_routing_text(query)
+    for name in tool_name_variants(tool):
+        if not name:
+            continue
+        if _contains_any(
+            text,
+            (
+                f"use {name}",
+                f"using {name}",
+                f"call {name}",
+                f"route to {name}",
+                f"select {name}",
+                f"choose {name}",
+                f"correct tool is {name}",
+                f"right tool is {name}",
+                f"{name} should handle",
+                f"{name} should be used",
+            ),
+        ):
+            return "explicit_tool_selection"
+    return None
+
+
 def detect_routing_abstention(query: str) -> str | None:
     """Return a boundary reason when a request explicitly asks for no tool call."""
     text = normalize_routing_text(query)
@@ -167,13 +200,6 @@ def routing_tool_mention_adjustment(query: str, tool: ToolIR) -> int:
             continue
         if request_forbids_tool(text, name):
             adjustment -= 80
-        if _contains_any(
-            text,
-            (
-                f"use {name}",
-                f"using {name}",
-                f"call {name}",
-            ),
-        ):
+        if request_selects_tool(text, name):
             adjustment += 18
     return adjustment

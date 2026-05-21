@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, Iterable
 
-from autoskill.routing_boundaries import normalize_routing_text, request_forbids_tool, tool_name_variants
+from autoskill.routing_boundaries import normalize_routing_text, request_selects_tool
 
 
 @dataclass
@@ -30,23 +30,7 @@ _NON_EXPLICIT_REDIRECT_REASONS = {
 
 
 def explicit_requested_tool_score(request: str, tool_name: str) -> int:
-    text = normalize_routing_text(request)
-    score = 0
-    for name in tool_name_variants(tool_name):
-        if not name or _negated_tool_name_context(text, name):
-            continue
-        if any(
-            phrase in text
-            for phrase in (
-                f"use {name}",
-                f"using {name}",
-                f"call {name}",
-                f"route to {name}",
-                f"select {name}",
-            )
-        ):
-            score = max(score, 100)
-    return score
+    return 100 if request_selects_tool(request, tool_name) else 0
 
 
 def row_explicit_request_match(row: Dict[str, Any], request: str = "") -> int:
@@ -182,7 +166,3 @@ def _missing_required_count(row: Dict[str, Any]) -> int:
     if isinstance(missing, list):
         return len(missing)
     return 0
-
-
-def _negated_tool_name_context(text: str, name: str) -> bool:
-    return request_forbids_tool(text, name) is not None

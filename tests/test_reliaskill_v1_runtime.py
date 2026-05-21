@@ -1273,6 +1273,62 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         self.assertEqual(prediction.predicted_arguments, {})
         self.assertEqual(prediction.abstention_reason, "explicit_target_tool_forbidden")
 
+    def test_v1_preserves_boundary_check_alternative_contract_candidate(self) -> None:
+        skill = _v1_skill()
+        skill.metadata["contrastive_contract_candidates"] = [
+            {"tool_name": "calendar_create_event", "viable": False, "proof_score": -6},
+            {"tool_name": "calendar_find_event", "viable": True, "proof_score": 48},
+        ]
+
+        prediction = safe_predict(
+            _create_event_tool(),
+            skill,
+            EvalTask(
+                task_id="t5_boundary_check_redirect",
+                tool_name="calendar_create_event",
+                user_request=(
+                    "This is a boundary check: calendar find event should handle the request to find a standup, "
+                    "not calendar create event."
+                ),
+            ),
+            _StaticPredictor(arguments={"title": "standup"}),
+        )
+
+        self.assertFalse(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {})
+        self.assertEqual(prediction.metadata["selected_tool_name"], "calendar_find_event")
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIn("redirected_to_contract_candidate:calendar_find_event", verifier["actions"])
+        self.assertEqual(verifier["contrastive_contract_decision"]["reason"], "explicit_request_and_viable_contract")
+
+    def test_no_explicit_boundary_certificate_does_not_preserve_boundary_candidate(self) -> None:
+        skill = _v1_skill(
+            baseline_name="reliaskill_v1_no_explicit_boundary_certificate",
+            flags={"disable_explicit_boundary_certificate": True},
+        )
+        skill.metadata["contrastive_contract_candidates"] = [
+            {"tool_name": "calendar_create_event", "viable": False, "proof_score": -6},
+            {"tool_name": "calendar_find_event", "viable": True, "proof_score": 48},
+        ]
+
+        prediction = safe_predict(
+            _create_event_tool(),
+            skill,
+            EvalTask(
+                task_id="t5_boundary_check_no_certificate",
+                tool_name="calendar_create_event",
+                user_request=(
+                    "This is a boundary check: calendar find event should handle the request to find a standup, "
+                    "not calendar create event."
+                ),
+            ),
+            _StaticPredictor(arguments={"title": "standup"}),
+        )
+
+        self.assertFalse(prediction.should_call)
+        self.assertNotIn("selected_tool_name", prediction.metadata)
+        self.assertEqual(prediction.abstention_reason, "adjacent_wrong_intent")
+
     def test_v1_abstains_on_action_intent_conflict_even_with_valid_arguments(self) -> None:
         prediction = safe_predict(
             _create_event_tool(),

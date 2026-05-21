@@ -82,6 +82,7 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         "uses_adaptive_prompt_package_arbitration": bool(method.get("uses_adaptive_prompt_package_arbitration", False)),
         "uses_risk_adaptive_contract_prompt_policy": bool(method.get("uses_risk_adaptive_contract_prompt_policy", False)),
         "uses_explicit_argument_fidelity_selection": bool(method.get("uses_explicit_argument_fidelity_selection", False)),
+        "uses_bidirectional_boundary_certificate": bool(method.get("uses_bidirectional_boundary_certificate", False)),
         "test_controls_used": bool(method.get("test_controls_used", False)),
     }
     if metadata:
@@ -190,6 +191,8 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         )
     if not compact.get("uses_explicit_nonuse_boundary_certificate"):
         compact["uses_explicit_nonuse_boundary_certificate"] = "explicit_nonuse_boundary_certificate" in compact.get("pipeline_stages", [])
+    if not compact.get("uses_bidirectional_boundary_certificate"):
+        compact["uses_bidirectional_boundary_certificate"] = "bidirectional_boundary_certificate" in compact.get("pipeline_stages", [])
     return {key: value for key, value in compact.items() if value is not None}
 
 

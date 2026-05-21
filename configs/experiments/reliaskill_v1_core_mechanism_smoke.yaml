@@ -1,5 +1,5 @@
 experiment_scale: reliaskill_v1_core_mechanism_smoke
-description: "Core mechanism smoke test for ReliaSkill: isolates contract decoding, runtime grounding, action gating, contract routing, arbitration, verifier refinement, and legacy global-router-prior inference on Phi 3.5 mini and Qwen 2.5 7B."
+description: "Core mechanism smoke test for ReliaSkill: isolates contract decoding, runtime grounding, action gating, contract routing, arbitration, verifier refinement, explicit boundary certificates, and legacy global-router-prior inference on Phi 3.5 mini and Qwen 2.5 7B."
 seed: 42
 tools_path: data/raw_mcp/tools.jsonl
 tasks_path: data/controls/test.jsonl
@@ -30,6 +30,7 @@ conditions:
   - reliaskill_v1_no_contract_arbitration
   - reliaskill_v1_no_candidate_verification
   - reliaskill_v1_no_verifier_refinement
+  - reliaskill_v1_no_explicit_boundary_certificate
   - reliaskill_v1_with_global_router_prior
   - reliaskill_v1
 
@@ -89,5 +90,6 @@ scheduler:
     reliaskill_v1_no_contract_arbitration: 575
     reliaskill_v1_no_candidate_verification: 575
     reliaskill_v1_no_verifier_refinement: 575
+    reliaskill_v1_no_explicit_boundary_certificate: 575
     reliaskill_v1_with_global_router_prior: 575
     reliaskill_v1: 575

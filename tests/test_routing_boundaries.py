@@ -9,6 +9,7 @@ from autoskill.retrieval_runtime import retrieve_candidate_tools
 from autoskill.retrieval_runtime import contextualize_skill_for_task
 from autoskill.routing_boundaries import detect_routing_abstention
 from autoskill.routing_boundaries import request_forbids_tool
+from autoskill.routing_boundaries import request_selects_tool
 from autoskill.routing_eval import (
     _skill_router_positive_text,
     _try_reliaskill_candidate_verification_cascade,
@@ -141,6 +142,16 @@ class RoutingBoundaryTests(unittest.TestCase):
         )
 
         self.assertEqual(reason, "explicit_target_tool_forbidden")
+
+    def test_bidirectional_boundary_certificate_selects_named_alternative(self):
+        request = "This is a boundary check: add observations should handle the request, not notes create memory."
+
+        self.assertEqual(request_selects_tool(request, "add_observations"), "explicit_tool_selection")
+        self.assertIsNone(request_selects_tool(request, "notes_create_memory"))
+        self.assertEqual(
+            request_selects_tool("The correct tool is bank get account balance, not bank transfer between accounts.", "bank_get_account_balance"),
+            "explicit_tool_selection",
+        )
 
     def test_preview_and_read_write_legacy_boundaries_are_detected(self):
         self.assertEqual(
@@ -817,6 +828,77 @@ class RoutingBoundaryTests(unittest.TestCase):
             rows["system_health_check"]["contract_routing_features"]["explicit_request_match"],
         )
         self.assertLess(rows["notes_create_memory"]["contract_routing_features"]["tool_identity_match"], 0)
+
+    def test_reliaskill_v1_routes_boundary_check_to_named_alternative(self):
+        add_observations = ToolIR(
+            tool_name="add_observations",
+            tool_purpose="Add new observations to existing memory entities.",
+            arguments=[ArgumentIR(name="payload", type="array", required=True)],
+        )
+        create_memory = ToolIR(
+            tool_name="notes_create_memory",
+            tool_purpose="Create a new memory note.",
+            arguments=[ArgumentIR(name="content", type="string", required=True)],
+        )
+        tools = {tool.tool_name: tool for tool in (create_memory, add_observations)}
+        skills = {name: _reliaskill(tool, when_not_to_use=[]) for name, tool in tools.items()}
+        task = EvalTask(
+            task_id="route_boundary_check_alternative",
+            tool_name="notes_create_memory",
+            expected_tool_name="add_observations",
+            user_request=(
+                "This is a boundary check: add observations should handle the request to add new observations, "
+                "not notes create memory."
+            ),
+            negative_category="wrong_tool_boundary",
+        )
+
+        routing = select_tool_for_task(task, "reliaskill_v1", tools, skills, top_k=2)
+
+        self.assertEqual(routing["selected_tool_name"], "add_observations")
+        self.assertNotEqual(routing["routing_strategy"], "method_boundary_abstention")
+
+    def test_no_explicit_boundary_certificate_keeps_boundary_check_abstention(self):
+        add_observations = ToolIR(
+            tool_name="add_observations",
+            tool_purpose="Add new observations to existing memory entities.",
+            arguments=[ArgumentIR(name="payload", type="array", required=True)],
+        )
+        create_memory = ToolIR(
+            tool_name="notes_create_memory",
+            tool_purpose="Create a new memory note.",
+            arguments=[ArgumentIR(name="content", type="string", required=True)],
+        )
+        tools = {tool.tool_name: tool for tool in (create_memory, add_observations)}
+        skills = {
+            name: _reliaskill(
+                tool,
+                when_not_to_use=[],
+                baseline_name="reliaskill_v1_no_explicit_boundary_certificate",
+            )
+            for name, tool in tools.items()
+        }
+        task = EvalTask(
+            task_id="route_boundary_check_ablation",
+            tool_name="notes_create_memory",
+            expected_tool_name="add_observations",
+            user_request=(
+                "This is a boundary check: add observations should handle the request to add new observations, "
+                "not notes create memory."
+            ),
+            negative_category="wrong_tool_boundary",
+        )
+
+        routing = select_tool_for_task(
+            task,
+            "reliaskill_v1_no_explicit_boundary_certificate",
+            tools,
+            skills,
+            top_k=2,
+        )
+
+        self.assertEqual(routing["selected_tool_name"], "__abstain__")
+        self.assertEqual(routing["routing_strategy"], "method_boundary_abstention")
 
     def test_reliaskill_v1_tool_identifier_in_benchmark_id_breaks_duplicate_tie(self):
         ticket_011 = ToolIR(

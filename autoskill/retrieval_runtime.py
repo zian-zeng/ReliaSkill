@@ -480,7 +480,9 @@ def _reliaskill_contrastive_contract_context(
         payload["retrieval_rank"] = retrieved_rank.get(candidate_name)
         payload["target_tool"] = candidate_name == target_tool.tool_name
         payload["explicit_request_match"] = (
-            0 if candidate_name == target_tool.tool_name else _explicit_requested_tool_score(task.user_request, candidate_name)
+            0
+            if candidate_name == target_tool.tool_name or _contract_ablation_disabled(target_skill, "disable_explicit_boundary_certificate")
+            else _explicit_requested_tool_score(task.user_request, candidate_name)
         )
         proof_rows.append(payload)
     proof_rows.sort(
@@ -547,6 +549,11 @@ def _dedupe_proof_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
 def _explicit_requested_tool_score(request: str, tool_name: str) -> int:
     return _shared_explicit_requested_tool_score(request, tool_name)
+
+
+def _contract_ablation_disabled(skill: GeneratedSkill, flag: str) -> bool:
+    flags = skill.metadata.get("contract_ablation_flags") if isinstance(skill.metadata, dict) else None
+    return bool(isinstance(flags, dict) and flags.get(flag) is True)
 
 
 def _compose_contrastive_contract_plan(

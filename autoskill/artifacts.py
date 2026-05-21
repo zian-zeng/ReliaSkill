@@ -44,6 +44,7 @@ RELIASKILL_V1_FULL_PROOF_PROMPT_ONLY = "reliaskill_v1_full_proof_prompt_only"
 RELIASKILL_V1_NO_CONTRASTIVE_CONTEXT = "reliaskill_v1_no_contrastive_context"
 RELIASKILL_V1_NO_RETRIEVAL_MISS_RESCUE = "reliaskill_v1_no_retrieval_miss_rescue"
 RELIASKILL_V1_NO_DEPENDENCY_PLAN = "reliaskill_v1_no_dependency_plan"
+RELIASKILL_V1_NO_EXPLICIT_BOUNDARY_CERTIFICATE = "reliaskill_v1_no_explicit_boundary_certificate"
 PROMPT_ONLY_CAREFUL_TOOL_USE = "prompt_only_careful_tool_use"
 RAW_SCHEMA_PLUS_EXAMPLES = "raw_schema_plus_examples"
 GENERATED_DOCS_NO_VALIDATION = "generated_docs_no_validation"
@@ -163,6 +164,7 @@ CONDITION_ORDER = [
     RELIASKILL_V1_NO_CONTRASTIVE_CONTEXT,
     RELIASKILL_V1_NO_RETRIEVAL_MISS_RESCUE,
     RELIASKILL_V1_NO_DEPENDENCY_PLAN,
+    RELIASKILL_V1_NO_EXPLICIT_BOUNDARY_CERTIFICATE,
     GENERATED_SKILL_BASE,
     AUTOSKILL_BASE,
 ]

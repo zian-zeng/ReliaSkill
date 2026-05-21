@@ -241,6 +241,7 @@ def _build_reliaskill_contract_ablation(base_skill: Any, condition: str) -> Any:
             "disable_contrastive_contract_context": condition == "reliaskill_v1_no_contrastive_context",
             "disable_retrieval_miss_rescue": condition == "reliaskill_v1_no_retrieval_miss_rescue",
             "disable_dependency_plan_prompting": condition == "reliaskill_v1_no_dependency_plan",
+            "disable_explicit_boundary_certificate": condition == "reliaskill_v1_no_explicit_boundary_certificate",
         },
     }
     ablation.method_trace = [

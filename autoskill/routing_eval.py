@@ -33,7 +33,7 @@ from autoskill.retrieval_runtime import (
     retrieve_doc_tool_rankings,
     retrieve_memory_tool_rankings,
 )
-from autoskill.routing_boundaries import detect_routing_abstention, routing_tool_mention_adjustment
+from autoskill.routing_boundaries import detect_routing_abstention, request_forbids_tool, request_selects_tool, routing_tool_mention_adjustment
 from autoskill.task_eval import score_prediction
 
 BOUNDARY_FIRST_ROUTING_CONDITIONS = {RELIASKILL_CHALLENGER, "skill_prompt_boundary_first"}
@@ -43,6 +43,28 @@ METHOD_ROUTING_CONDITIONS = {GENERATED_SKILL_BASE, *BOUNDARY_FIRST_ROUTING_CONDI
 def _contract_ablation_disabled(skill: GeneratedSkill, flag: str) -> bool:
     flags = skill.metadata.get("contract_ablation_flags") if isinstance(skill.metadata, dict) else None
     return bool(isinstance(flags, dict) and flags.get(flag) is True)
+
+
+def _condition_disables_explicit_boundary_certificate(condition: str) -> bool:
+    return condition == "reliaskill_v1_no_explicit_boundary_certificate"
+
+
+def _has_explicit_alternative_route_certificate(query: str, tools: Dict[str, ToolIR]) -> bool:
+    return any(request_selects_tool(query, tool) for tool in tools.values())
+
+
+def _should_defer_global_boundary_abstention(
+    *,
+    query: str,
+    tools: Dict[str, ToolIR],
+    abstention_reason: str,
+    condition: str,
+) -> bool:
+    if _condition_disables_explicit_boundary_certificate(condition):
+        return False
+    if abstention_reason != "adjacent_wrong_intent":
+        return False
+    return _has_explicit_alternative_route_certificate(query, tools)
 
 
 def _reliaskill_unified_policy_score(
@@ -268,7 +290,8 @@ def _router_overlap_score(query: str, text: str) -> int:
 def _generated_skill_routing_bonus(query: str, tool: ToolIR, skill: GeneratedSkill) -> int:
     lowered = query.lower()
     bonus = 0
-    bonus += routing_tool_mention_adjustment(query, tool)
+    if not _contract_ablation_disabled(skill, "disable_explicit_boundary_certificate"):
+        bonus += routing_tool_mention_adjustment(query, tool)
     for arg_name, spec in skill.semantic_hints.items():
         if not isinstance(spec, dict):
             continue
@@ -284,7 +307,7 @@ def _generated_skill_routing_bonus(query: str, tool: ToolIR, skill: GeneratedSki
     return bonus
 
 
-def _reliaskill_v1_contract_routing_bonus(query: str, tool: ToolIR) -> tuple[int, Dict[str, Any]]:
+def _reliaskill_v1_contract_routing_bonus(query: str, tool: ToolIR, skill: GeneratedSkill | None = None) -> tuple[int, Dict[str, Any]]:
     explicit_args = _explicit_argument_names(query)
     allowed_args = {arg.name for arg in tool.arguments}
     required_args = {arg.name for arg in tool.arguments if arg.required}
@@ -304,7 +327,11 @@ def _reliaskill_v1_contract_routing_bonus(query: str, tool: ToolIR) -> tuple[int
 
     no_argument_bonus = _no_argument_fit_bonus(query, tool)
     identity_bonus = _tool_identity_match_bonus(query, tool)
-    explicit_request_match = explicit_requested_tool_score(query, tool.tool_name)
+    explicit_request_match = (
+        0
+        if skill is not None and _contract_ablation_disabled(skill, "disable_explicit_boundary_certificate")
+        else explicit_requested_tool_score(query, tool.tool_name)
+    )
     purpose_bonus = _purpose_phrase_match_bonus(query, tool)
     total = argument_bonus + no_argument_bonus + identity_bonus + explicit_request_match + purpose_bonus
     return total, {
@@ -375,16 +402,7 @@ def tool_name_text_variants(tool: ToolIR) -> list[str]:
 
 
 def _negated_tool_name_context(text: str, name: str) -> bool:
-    return any(
-        phrase in text
-        for phrase in (
-            f"{name} is a distractor",
-            f"{name} should not be called",
-            f"do not use {name}",
-            f"do not call {name}",
-            f"without using {name}",
-        )
-    )
+    return request_forbids_tool(text, name) is not None
 
 
 def _explicit_contrastive_route_override(
@@ -831,7 +849,12 @@ def select_tool_for_task(
     method_routing = normalized_baseline_name in METHOD_ROUTING_CONDITIONS or is_reliaskill_v1_family(normalized_baseline_name)
     if method_routing:
         abstention_reason = detect_routing_abstention(task.user_request)
-        if abstention_reason:
+        if abstention_reason and not _should_defer_global_boundary_abstention(
+            query=task.user_request,
+            tools=tools,
+            abstention_reason=abstention_reason,
+            condition=normalized_baseline_name,
+        ):
             return {
                 "routing_strategy": "method_boundary_abstention",
                 "selected_tool_name": "__abstain__",
@@ -902,7 +925,11 @@ def select_tool_for_task(
             learned_router_decision = None
             contrastive_memory_decision = None
             if is_reliaskill_v1_family(normalized_baseline_name):
-                contract_routing_bonus, contract_routing_features = _reliaskill_v1_contract_routing_bonus(task.user_request, tool)
+                contract_routing_bonus, contract_routing_features = _reliaskill_v1_contract_routing_bonus(
+                    task.user_request,
+                    tool,
+                    skill,
+                )
                 rerank_score += contract_routing_bonus
                 if not _contract_ablation_disabled(skill, "disable_contrastive_memory"):
                     contrastive_memory_decision = score_contrastive_memory(task.user_request, tool, skill)

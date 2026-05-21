@@ -1670,9 +1670,10 @@ def _complete_grounded_schema_optionals(
 
 
 def _reliaskill_v1_boundary_reason(tool: ToolIR, skill: GeneratedSkill, request: str) -> str | None:
-    explicit_tool_forbidden = request_forbids_tool(request, tool)
-    if explicit_tool_forbidden:
-        return explicit_tool_forbidden
+    if not _contract_ablation_disabled(skill, "disable_explicit_boundary_certificate"):
+        explicit_tool_forbidden = request_forbids_tool(request, tool)
+        if explicit_tool_forbidden:
+            return explicit_tool_forbidden
     explicit = detect_routing_abstention(request)
     if explicit:
         return explicit
@@ -1731,6 +1732,8 @@ def _redirected_contract_candidate_decision(
     request: str,
     abstention_reason: str | None,
 ) -> Any | None:
+    if _contract_ablation_disabled(skill, "disable_explicit_boundary_certificate"):
+        return None
     candidates = skill.metadata.get("contrastive_contract_candidates") if isinstance(skill.metadata, dict) else None
     if not isinstance(candidates, list):
         return None

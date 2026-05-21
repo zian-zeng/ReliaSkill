@@ -297,13 +297,22 @@ def score_learned_router(query: str, tool: ToolIR, skill: GeneratedSkill) -> Lea
         return LearnedRouterDecision(0.0, 0, False, {}, [], [], 0.0)
     weights = _effective_policy_weights(policy, flags)
     features = _feature_vector(query, tool, skill)
+    if flags.get("disable_explicit_boundary_certificate"):
+        features["explicit_tool_request"] = 0.0
     threshold_key = "pre_hard_threshold" if flags.get("disable_hard_negative_policy") else "threshold"
     threshold = _float(policy.get(threshold_key), _float(policy.get("threshold"), 0.0))
     raw_score = _dot(weights, features) - threshold
     scale = _float(policy.get("route_bonus_scale"), 5.0)
     max_bonus = max(int(policy.get("max_route_bonus") or 36), 0)
     route_bonus = int(round(max(-max_bonus, min(max_bonus, raw_score * scale))))
-    negative_boundary = _negative_boundary(query, tool, raw_score, features, policy)
+    negative_boundary = _negative_boundary(
+        query,
+        tool,
+        raw_score,
+        features,
+        policy,
+        explicit_boundary_disabled=bool(flags.get("disable_explicit_boundary_certificate")),
+    )
     positive_features, negative_features = _feature_contributions(weights, features)
     risk_score = _risk_score(raw_score, features)
     action = "abstain" if negative_boundary else "call"
@@ -536,8 +545,16 @@ def _round_weights(weights: Dict[str, Any]) -> Dict[str, float]:
     return {name: round(_float(value), 5) for name, value in sorted(weights.items()) if abs(_float(value)) > 1e-9}
 
 
-def _negative_boundary(query: str, tool: ToolIR, raw_score: float, features: Dict[str, float], policy: Dict[str, Any]) -> bool:
-    if explicit_requested_tool_score(query, tool.tool_name) > 0:
+def _negative_boundary(
+    query: str,
+    tool: ToolIR,
+    raw_score: float,
+    features: Dict[str, float],
+    policy: Dict[str, Any],
+    *,
+    explicit_boundary_disabled: bool = False,
+) -> bool:
+    if not explicit_boundary_disabled and explicit_requested_tool_score(query, tool.tool_name) > 0:
         return False
     threshold = _float(policy.get("negative_boundary_threshold"), -3.0)
     if raw_score > threshold:

@@ -113,6 +113,7 @@ def score_contrastive_memory(query: str, tool: ToolIR, skill: GeneratedSkill) ->
     policy = _policy_from_skill(skill)
     if not policy.get("enabled"):
         return ContrastiveMemoryDecision(0.0, 0, 0.0, 0.0, [], [], None, None, False)
+    flags = _contract_ablation_flags(skill)
     query_tokens = _tokens(query)
     if not query_tokens:
         return ContrastiveMemoryDecision(0.0, 0, 0.0, 0.0, [], [], None, None, False)
@@ -126,7 +127,7 @@ def score_contrastive_memory(query: str, tool: ToolIR, skill: GeneratedSkill) ->
     scale = _float(policy.get("route_bonus_scale"), 2.0)
     max_bonus = max(int(policy.get("max_route_bonus") or 24), 0)
     route_bonus = int(round(max(-max_bonus, min(max_bonus, score * scale))))
-    explicit_match = explicit_requested_tool_score(query, tool.tool_name)
+    explicit_match = 0 if flags.get("disable_explicit_boundary_certificate") else explicit_requested_tool_score(query, tool.tool_name)
     negative_boundary = (
         score <= _float(policy.get("negative_boundary_threshold"), -6.0)
         and negative_total >= positive_total + _float(policy.get("negative_boundary_margin"), 4.0)
@@ -209,6 +210,11 @@ def _prototype_score(query_tokens: set[str], prototypes: Any) -> tuple[float, st
 def _policy_from_skill(skill: GeneratedSkill) -> Dict[str, Any]:
     raw = skill.metadata.get("contrastive_memory_policy") if isinstance(skill.metadata, dict) else None
     return raw if isinstance(raw, dict) else {"enabled": False}
+
+
+def _contract_ablation_flags(skill: GeneratedSkill) -> Dict[str, Any]:
+    flags = skill.metadata.get("contract_ablation_flags") if isinstance(skill.metadata, dict) else None
+    return dict(flags) if isinstance(flags, dict) else {}
 
 
 def _tokens(text: str) -> set[str]:
