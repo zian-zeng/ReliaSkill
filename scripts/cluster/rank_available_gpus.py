@@ -325,6 +325,21 @@ def request_flags_for_partition(partition: str) -> str:
     return ""
 
 
+def is_idle_state(state: str) -> bool:
+    normalized = state.upper()
+    return "IDLE" in normalized and "MIX" not in normalized and "ALLOC" not in normalized
+
+
+def format_salloc(option: AllocationOption, args: argparse.Namespace) -> str:
+    row = option.candidate
+    flags = request_flags_for_partition(row.partition)
+    return (
+        f"salloc -p {row.partition} {flags}--nodelist={row.node} "
+        f"--gres=gpu:{row.gpu_type}:{option.requested} "
+        f"--cpus-per-task={args.cpus} --mem={args.mem_gb}G --time={args.time}"
+    )
+
+
 def collect_candidates(args: argparse.Namespace) -> List[Candidate]:
     partitions = {item.strip() for item in (args.partitions or "").split(",") if item.strip()}
     counts = default_counts(args)
@@ -413,20 +428,24 @@ def print_table(options: Iterable[AllocationOption], args: argparse.Namespace) -
             f"{row.gpu_type:<14} {row.free:>4}/{row.total:<5} {row.free_mem_gb:>6}G {row.mem_gb:>5}G {row.free_cpus:>4}/{row.cpus:<3} {row.time_limit:>10}"
         )
     best = rows[0].candidate
-    gpus = rows[0].requested
     print()
     print("== Best immediate request template ==")
-    flags = request_flags_for_partition(best.partition)
-    print(
-        f"salloc -p {best.partition} {flags}--gres=gpu:{best.gpu_type}:{gpus} "
-        f"--cpus-per-task={args.cpus} --mem={args.mem_gb}G --time={args.time}"
-    )
-    if flags:
+    print(format_salloc(rows[0], args))
+    if request_flags_for_partition(best.partition):
         print("# Account/QoS flags were inferred from common UMIACS/Nexus associations.")
     else:
         print("# No account/QoS rule is known for this partition; add -A/--qos manually or prefer a scavenger row.")
+    if not is_idle_state(best.state):
+        print("# Top row is not fully IDLE; if it queues, try the fully IDLE fallback below.")
+    idle_fallback = next((option for option in rows if is_idle_state(option.candidate.state)), None)
+    if idle_fallback and idle_fallback != rows[0]:
+        print()
+        print("== Best fully IDLE fallback template ==")
+        print(format_salloc(idle_fallback, args))
+        print("# This may be less powerful but is often more likely to allocate immediately.")
     print("# Column 'est' is a rough count-aware throughput score: per-GPU rank x requested GPUs.")
     print("# Rows are filtered by requested free CPU/memory unless --ignore-fit is used.")
+    print("# If a request still queues: squeue -j JOBID -o '%.18i %.20P %.8T %.30R %.20S'")
 
 
 def parse_args() -> argparse.Namespace:
