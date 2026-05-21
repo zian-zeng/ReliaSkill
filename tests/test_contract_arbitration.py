@@ -75,7 +75,7 @@ def test_runtime_arbitration_records_attempt_when_model_native_fails() -> None:
     assert prediction.metadata["reliaskill_v1_arbitration"]["reason"] == "model_native_prediction_failed"
 
 
-def test_runtime_prompt_arbitration_checks_generated_fallback_prompt() -> None:
+def test_runtime_adaptive_prompt_policy_uses_compact_prompt_for_low_risk_call() -> None:
     backend = _LocalHFStaticPredictor(arguments={"query": "schema contract"})
     skill = _v1_skill_with_arbitration(prompt_fallback=True)
 
@@ -92,12 +92,13 @@ def test_runtime_prompt_arbitration_checks_generated_fallback_prompt() -> None:
 
     assert prediction.should_call
     assert prediction.predicted_arguments == {"query": "schema contract"}
-    assert backend.predict_calls == 2
-    assert prediction.metadata["reliaskill_v1_prompt_arbitration"]["attempted"] is True
-    assert prediction.metadata["reliaskill_v1_prompt_arbitration"]["fallback_condition"] == "generated_skill_base"
+    assert backend.predict_calls == 1
+    prompt_policy = prediction.metadata["reliaskill_v1_adaptive_prompt_policy"]
+    assert prompt_policy["selected"] == "compact_fallback_prompt"
+    assert prompt_policy["reason"] == "low_risk_grounded_call"
 
 
-def test_runtime_prompt_arbitration_rescues_non_predecoded_model_abstention() -> None:
+def test_runtime_adaptive_prompt_policy_rescues_non_predecoded_model_abstention() -> None:
     backend = _PromptSensitiveStaticPredictor()
     skill = _v1_skill_with_arbitration(prompt_fallback=True)
 
@@ -118,11 +119,38 @@ def test_runtime_prompt_arbitration_rescues_non_predecoded_model_abstention() ->
 
     assert prediction.should_call
     assert prediction.predicted_arguments == {"query": "schema contract"}
-    assert backend.predict_calls == 2
+    assert backend.predict_calls == 1
     assert prediction.metadata["actual_predictor_backend"] == "static"
-    prompt_arbitration = prediction.metadata["reliaskill_v1_prompt_arbitration"]
-    assert prompt_arbitration["selected"] == "adaptive_prompt_fallback"
-    assert prompt_arbitration["reason"] == "fallback_prompt_repairs_current_or_has_higher_contract_score"
+    prompt_policy = prediction.metadata["reliaskill_v1_adaptive_prompt_policy"]
+    assert prompt_policy["selected"] == "compact_fallback_prompt"
+    assert prompt_policy["reason"] == "low_risk_grounded_call"
+
+
+def test_runtime_adaptive_prompt_policy_keeps_full_prompt_for_side_effect_tool() -> None:
+    backend = _LocalHFStaticPredictor(arguments={"title": "sync"})
+    skill = _v1_skill_with_arbitration(prompt_fallback=True)
+
+    prediction = safe_predict(
+        ToolIR(
+            tool_name="calendar_create_event",
+            tool_purpose="Create calendar events.",
+            arguments=[ArgumentIR(name="title", type="string", required=True)],
+            schema_complexity={"side_effect_type": "write"},
+        ),
+        skill,
+        EvalTask(
+            task_id="arb_prompt_side_effect",
+            tool_name="calendar_create_event",
+            user_request='Create a calendar event title="sync".',
+        ),
+        backend,
+    )
+
+    assert prediction.should_call
+    assert prediction.predicted_arguments == {"title": "sync"}
+    prompt_policy = prediction.metadata["reliaskill_v1_adaptive_prompt_policy"]
+    assert prompt_policy["selected"] == "full_reliaskill_prompt"
+    assert prompt_policy["reason"] == "side_effect_risk"
 
 
 def test_routing_arbitration_preserves_low_risk_native_candidate() -> None:

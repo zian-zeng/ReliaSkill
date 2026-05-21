@@ -278,6 +278,7 @@ def _build_challenger_skill(
             "contract_aware_arbitration_policy",
             "runtime_model_contract_arbitration",
             "adaptive_prompt_package_arbitration",
+            "risk_adaptive_contract_prompt_policy",
             "adaptive_routing_arbitration",
             "contract_verified_candidate_cascade",
             "contextual_grounding_contract",
@@ -309,6 +310,7 @@ def _build_challenger_skill(
         "uses_contract_aware_arbitration": True,
         "uses_runtime_model_contract_arbitration": True,
         "uses_adaptive_prompt_package_arbitration": prompt_fallback_skill is not None,
+        "uses_risk_adaptive_contract_prompt_policy": prompt_fallback_skill is not None,
         "uses_adaptive_routing_arbitration": True,
         "uses_contract_verified_candidate_cascade": True,
         "uses_dev_calibrated_contract_policy": True,
@@ -844,6 +846,7 @@ def _write_challenger_method_metadata(
     learned_router_policy: Dict[str, Any] | None = None,
     contract_policy_calibration: Dict[str, Any] | None = None,
     dev_learned_slot_grounding: Dict[str, Any] | None = None,
+    adaptive_prompt_fallback_enabled: bool = False,
 ) -> None:
     if not selection_report_path.exists():
         raise FileNotFoundError(
@@ -890,6 +893,7 @@ def _write_challenger_method_metadata(
             "unified_proof_risk_policy_score",
             "contract_aware_arbitration_policy",
             "runtime_model_contract_arbitration",
+            *(["adaptive_prompt_package_arbitration", "risk_adaptive_contract_prompt_policy"] if adaptive_prompt_fallback_enabled else []),
             "adaptive_routing_arbitration",
             "contract_verified_candidate_cascade",
             "contextual_grounding_contract",
@@ -921,6 +925,8 @@ def _write_challenger_method_metadata(
         "uses_unified_proof_risk_policy_score": True,
         "uses_contract_aware_arbitration": True,
         "uses_runtime_model_contract_arbitration": True,
+        "uses_adaptive_prompt_package_arbitration": adaptive_prompt_fallback_enabled,
+        "uses_risk_adaptive_contract_prompt_policy": adaptive_prompt_fallback_enabled,
         "uses_adaptive_routing_arbitration": True,
         "uses_contract_verified_candidate_cascade": True,
         "uses_dev_calibrated_contract_policy": True,
@@ -1151,6 +1157,10 @@ def build_shared_skill_packages(
                         learned_router_policy=package_skill.metadata.get("learned_router_policy"),
                         contract_policy_calibration=package_skill.metadata.get("contract_policy_calibration"),
                         dev_learned_slot_grounding=package_skill.metadata.get("dev_learned_slot_grounding"),
+                        adaptive_prompt_fallback_enabled=isinstance(
+                            package_skill.metadata.get("adaptive_prompt_fallback_skill"),
+                            dict,
+                        ),
                     )
                 reliability_records.append(
                     {

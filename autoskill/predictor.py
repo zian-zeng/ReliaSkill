@@ -1367,7 +1367,7 @@ def _has_direct_action_intent(request: str) -> bool:
         return False
     return bool(
         re.search(
-            r"\b(?:use|call|run|search|find|lookup|look up|read|open|show|list|get|fetch|create|add|update|delete|remove|write|save|send|calculate|compute|convert|summarize|draft|record|assign|schedule|book|transfer|sort|analyze|solve|rank|extract|generate)\b",
+            r"\b(?:use|call|run|execute|handle|process|perform|search|find|lookup|look up|read|open|show|list|get|fetch|retrieve|create|add|update|delete|remove|write|save|send|calculate|compute|convert|summarize|draft|record|assign|schedule|book|transfer|sort|analyze|solve|rank|extract|generate)\b",
             lowered,
         )
     )
@@ -2894,6 +2894,115 @@ def _contract_selection_score(prediction: EvalPrediction) -> float:
     return score
 
 
+def _adaptive_reliaskill_prompt_skill(
+    tool: ToolIR,
+    skill: GeneratedSkill,
+    task: EvalTask,
+) -> tuple[GeneratedSkill, Dict[str, Any] | None]:
+    if not _uses_reliaskill_v1_runtime(skill):
+        return skill, None
+    if os.getenv("RELIASKILL_DISABLE_ADAPTIVE_PROMPT_POLICY", "").strip().lower() in {"1", "true", "yes"}:
+        return skill, {
+            "enabled": False,
+            "selected": "full_reliaskill_prompt",
+            "reason": "disabled_by_environment",
+        }
+    fallback_skill = _adaptive_prompt_fallback_skill(skill)
+    if fallback_skill is None:
+        return skill, None
+
+    decision = _adaptive_reliaskill_prompt_policy(tool, skill, task)
+    if decision["selected"] == "compact_fallback_prompt":
+        return fallback_skill, decision
+    return skill, decision
+
+
+def _adaptive_reliaskill_prompt_policy(tool: ToolIR, skill: GeneratedSkill, task: EvalTask) -> Dict[str, Any]:
+    request = task.user_request
+    required = [arg for arg in tool.arguments if arg.required]
+    metadata: Dict[str, Any] = {
+        "enabled": True,
+        "policy": "risk_adaptive_contract_prompt_v1",
+        "selected": "full_reliaskill_prompt",
+    }
+
+    boundary_reason = _reliaskill_v1_boundary_reason(tool, skill, request)
+    if boundary_reason:
+        return {
+            **metadata,
+            "reason": "boundary_or_negative_request",
+            "boundary_reason": boundary_reason,
+        }
+    if not _has_direct_action_intent(request):
+        return {**metadata, "reason": "no_direct_action_intent"}
+    if _tool_has_high_side_effect_risk(tool):
+        return {**metadata, "reason": "side_effect_risk"}
+
+    actions: list[str] = []
+    if required:
+        grounded_arguments, issues = _grounded_required_arguments(tool, _task_grounding_text(task), skill, actions)
+        blocking = [
+            issue
+            for issue in issues
+            if issue.endswith(":missing_required") or issue.endswith(":type_mismatch") or issue.endswith(":invalid_enum")
+        ]
+        if blocking or set(grounded_arguments) != {arg.name for arg in required}:
+            return {
+                **metadata,
+                "reason": "required_arguments_not_fully_grounded",
+                "missing_required": [arg.name for arg in required if arg.name not in grounded_arguments],
+                "issues": sorted(set(issues)),
+                "grounding_actions": actions,
+            }
+    else:
+        grounded_arguments = {}
+
+    proof_state = build_contract_proof_state(
+        tool,
+        skill,
+        request,
+        arguments=grounded_arguments,
+        grounding_context=_task_grounding_context(task),
+    )
+    if proof_state.decision != "call":
+        return {
+            **metadata,
+            "reason": "contract_proof_not_low_risk_call",
+            "contract_decision": proof_state.decision,
+            "contract_proof_score": proof_state.proof_score,
+            "contract_proof_margin": proof_state.proof_margin,
+            "blocking_reasons": list(proof_state.blocking_reasons),
+        }
+
+    explicit_required = [
+        arg.name
+        for arg in required
+        if _extract_explicit_argument_value(arg, _task_grounding_text(task)) is not None
+    ]
+    return {
+        **metadata,
+        "selected": "compact_fallback_prompt",
+        "reason": "low_risk_grounded_call",
+        "explicit_required": explicit_required,
+        "grounded_required": sorted(grounded_arguments),
+        "contract_decision": proof_state.decision,
+        "contract_proof_score": proof_state.proof_score,
+        "contract_proof_margin": proof_state.proof_margin,
+        "grounding_actions": actions,
+    }
+
+
+def _tool_has_high_side_effect_risk(tool: ToolIR) -> bool:
+    side_effect = str(
+        tool.schema_complexity.get("side_effect_type")
+        or tool.schema_complexity.get("side_effect")
+        or tool.provenance.get("side_effect_type")
+        or ""
+    ).lower()
+    hint_text = " ".join([side_effect, *(tool.side_effect_hints or []), *(tool.safety_hints or [])]).lower()
+    return bool(re.search(r"\b(?:write|delete|destructive|send|email|notify|post|publish|external|network|mutation|mutating)\b", hint_text))
+
+
 def _maybe_predecode_reliaskill_v1_prediction(
     tool: ToolIR,
     skill: GeneratedSkill,
@@ -3063,7 +3172,14 @@ def _maybe_arbitrate_predecoded_reliaskill_v1_prediction(
     if not _should_arbitrate_predecoded_reliaskill_v1_prediction(skill, predecoded):
         return predecoded
     try:
-        model_native = backend.predict(tool, skill, task)
+        prompt_skill, prompt_policy = _adaptive_reliaskill_prompt_skill(tool, skill, task)
+        model_native = backend.predict(tool, prompt_skill, task)
+        if prompt_policy is not None:
+            model_native.baseline_name = skill.baseline_name
+            model_native.metadata = {
+                **dict(model_native.metadata),
+                "reliaskill_v1_adaptive_prompt_policy": prompt_policy,
+            }
     except Exception as exc:  # pragma: no cover - model-native arbitration is opportunistic.
         metadata = dict(predecoded.metadata)
         predecoder = metadata.get("reliaskill_v1_predecoder")
@@ -3080,6 +3196,8 @@ def _maybe_arbitrate_predecoded_reliaskill_v1_prediction(
             "error": f"{type(exc).__name__}: {exc}",
             "policy": contract_arbitration_policy_from_skill(skill).model_dump(),
         }
+        if "prompt_policy" in locals() and prompt_policy is not None:
+            metadata["reliaskill_v1_adaptive_prompt_policy"] = prompt_policy
         predecoded.metadata = metadata
         return predecoded
 
@@ -3222,6 +3340,9 @@ def _maybe_apply_reliaskill_v1_prompt_arbitration(
         return current_prediction, None
     if os.getenv("RELIASKILL_DISABLE_ADAPTIVE_PROMPT_ARBITRATION", "").strip().lower() in {"1", "true", "yes"}:
         return current_prediction, None
+    prompt_policy = current_prediction.metadata.get("reliaskill_v1_adaptive_prompt_policy") if isinstance(current_prediction.metadata, dict) else None
+    if isinstance(prompt_policy, dict) and prompt_policy.get("selected") == "compact_fallback_prompt":
+        return current_prediction, None
     fallback_skill = _adaptive_prompt_fallback_skill(skill)
     if fallback_skill is None:
         return current_prediction, None
@@ -3320,7 +3441,14 @@ def safe_predict(
                 "predictor_fallback_reason": None,
             }
             return predecoded
-        prediction = backend.predict(tool, skill, task)
+        prompt_skill, prompt_policy = _adaptive_reliaskill_prompt_skill(tool, skill, task)
+        prediction = backend.predict(tool, prompt_skill, task)
+        if prompt_policy is not None:
+            prediction.baseline_name = skill.baseline_name
+            prediction.metadata = {
+                **dict(prediction.metadata),
+                "reliaskill_v1_adaptive_prompt_policy": prompt_policy,
+            }
         prediction = _verify_reliaskill_v1_prediction(tool, skill, task, prediction)
         prediction = _maybe_refine_reliaskill_v1_prediction(tool, skill, task, backend, prediction)
         prediction, prompt_arbitration = _maybe_apply_reliaskill_v1_prompt_arbitration(
