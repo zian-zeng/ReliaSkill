@@ -1334,8 +1334,8 @@ def _looks_like_grounded_identifier(value: str) -> bool:
 
 def _required_argument_value_is_grounded(tool: ToolIR, arg: ArgumentIR, request: str, skill: GeneratedSkill, value: Any) -> bool:
     explicit = _extract_explicit_argument_value(arg, request)
-    if explicit is not None and _values_overlap(explicit, value):
-        return True
+    if explicit is not None:
+        return _values_overlap(explicit, value)
     grounded = _grounded_required_value(tool, arg, request, skill)
     if grounded is not None and _values_overlap(grounded, value):
         return True
@@ -1393,8 +1393,9 @@ def _can_rescue_grounded_abstention(
 
 
 def _optional_argument_is_grounded(tool: ToolIR, arg: ArgumentIR, request: str, skill: GeneratedSkill, value: Any) -> bool:
-    if _extract_explicit_argument_value(arg, request) is not None:
-        return True
+    explicit = _extract_explicit_argument_value(arg, request)
+    if explicit is not None:
+        return _values_overlap(explicit, value)
     hinted = _infer_semantic_hint_value(tool, arg.name, request, skill)
     if hinted is not None and _values_overlap(hinted, value):
         return True
@@ -3106,6 +3107,8 @@ def _maybe_arbitrate_predecoded_reliaskill_v1_prediction(
     metadata["reliaskill_v1_arbitration"] = arbitration
     if prompt_arbitration is not None:
         metadata["reliaskill_v1_prompt_arbitration"] = prompt_arbitration
+        if prompt_arbitration.get("selected") == "adaptive_prompt_fallback":
+            metadata["actual_predictor_backend"] = backend.backend_name
     selected.metadata = metadata
     return selected
 
@@ -3247,7 +3250,12 @@ def _maybe_apply_reliaskill_v1_prompt_arbitration(
     if verified_fallback.should_call and fallback_summary["contract_satisfied"]:
         fallback_score = _contract_selection_score(verified_fallback)
         current_score = _contract_selection_score(current_prediction)
-        if fallback_score >= current_score - 0.5:
+        current_needs_rescue = (
+            not current_prediction.should_call
+            or not current_summary["contract_satisfied"]
+            or current_summary["hard_blocked"]
+        )
+        if current_needs_rescue or fallback_score > current_score + 0.5:
             metadata = dict(verified_fallback.metadata)
             metadata["adaptive_prompt_fallback_condition"] = fallback_skill.baseline_name
             verified_fallback.metadata = metadata
@@ -3255,7 +3263,7 @@ def _maybe_apply_reliaskill_v1_prompt_arbitration(
                 "attempted": True,
                 "selected": "adaptive_prompt_fallback",
                 "fallback_condition": fallback_skill.baseline_name,
-                "reason": "fallback_prompt_contract_satisfying_and_not_lower_score",
+                "reason": "fallback_prompt_repairs_current_or_has_higher_contract_score",
                 "candidates": [current_summary, fallback_summary],
             }
     return current_prediction, {
@@ -3315,6 +3323,18 @@ def safe_predict(
         prediction = backend.predict(tool, skill, task)
         prediction = _verify_reliaskill_v1_prediction(tool, skill, task, prediction)
         prediction = _maybe_refine_reliaskill_v1_prediction(tool, skill, task, backend, prediction)
+        prediction, prompt_arbitration = _maybe_apply_reliaskill_v1_prompt_arbitration(
+            tool=tool,
+            skill=skill,
+            task=task,
+            backend=backend,
+            current_prediction=prediction,
+        )
+        if prompt_arbitration is not None:
+            prediction.metadata = {
+                **prediction.metadata,
+                "reliaskill_v1_prompt_arbitration": prompt_arbitration,
+            }
         prediction.metadata = {
             **prediction.metadata,
             "configured_predictor_backend": backend.backend_name,

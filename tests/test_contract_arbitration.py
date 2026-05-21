@@ -97,6 +97,34 @@ def test_runtime_prompt_arbitration_checks_generated_fallback_prompt() -> None:
     assert prediction.metadata["reliaskill_v1_prompt_arbitration"]["fallback_condition"] == "generated_skill_base"
 
 
+def test_runtime_prompt_arbitration_rescues_non_predecoded_model_abstention() -> None:
+    backend = _PromptSensitiveStaticPredictor()
+    skill = _v1_skill_with_arbitration(prompt_fallback=True)
+
+    prediction = safe_predict(
+        ToolIR(
+            tool_name="search",
+            tool_purpose="Search documents.",
+            arguments=[ArgumentIR(name="query", type="string", required=True)],
+        ),
+        skill,
+        EvalTask(
+            task_id="arb_prompt_non_predecoded",
+            tool_name="search",
+            user_request='Please retrieve matching documents; include query="schema contract".',
+        ),
+        backend,
+    )
+
+    assert prediction.should_call
+    assert prediction.predicted_arguments == {"query": "schema contract"}
+    assert backend.predict_calls == 2
+    assert prediction.metadata["actual_predictor_backend"] == "static"
+    prompt_arbitration = prediction.metadata["reliaskill_v1_prompt_arbitration"]
+    assert prompt_arbitration["selected"] == "adaptive_prompt_fallback"
+    assert prompt_arbitration["reason"] == "fallback_prompt_repairs_current_or_has_higher_contract_score"
+
+
 def test_routing_arbitration_preserves_low_risk_native_candidate() -> None:
     skill_bank = {
         "calendar_create_event": _v1_skill_with_arbitration(),
@@ -236,4 +264,24 @@ class _LocalHFStaticPredictor(PredictorBackend):
             predicted_arguments=dict(self.arguments),
             should_call=self.should_call,
             metadata={"raw_model_output": "static"},
+        )
+
+
+class _PromptSensitiveStaticPredictor(PredictorBackend):
+    backend_name = "static"
+
+    def __init__(self) -> None:
+        self.predict_calls = 0
+
+    def predict(self, tool: ToolIR, skill: GeneratedSkill, task: EvalTask) -> EvalPrediction:
+        self.predict_calls += 1
+        is_fallback = skill.baseline_name == "generated_skill_base"
+        return EvalPrediction(
+            task_id=task.task_id,
+            tool_name=tool.tool_name,
+            baseline_name=skill.baseline_name,
+            predicted_arguments={"query": "schema contract"} if is_fallback else {},
+            should_call=is_fallback,
+            abstention_reason=None if is_fallback else "model_abstained",
+            metadata={"raw_model_output": "fallback" if is_fallback else "current"},
         )

@@ -804,6 +804,34 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         self.assertTrue(prediction.should_call)
         self.assertEqual(prediction.predicted_arguments, {"query": "reliability evaluation", "country": "austria", "days": 9})
 
+    def test_v1_prefers_explicit_required_field_over_prose_grounding(self) -> None:
+        prediction = safe_predict(
+            ToolIR(
+                tool_name="calc_heat_capacity",
+                tool_purpose="Calculate heat capacity for a gas.",
+                arguments=[
+                    ArgumentIR(name="gas", type="string", required=True),
+                    ArgumentIR(name="temp", type="integer", required=True),
+                    ArgumentIR(name="volume", type="integer", required=True),
+                ],
+            ),
+            _v1_skill(),
+            EvalTask(
+                task_id="t2_explicit_required_priority",
+                tool_name="calc_heat_capacity",
+                user_request=(
+                    'Calculate the heat capacity at constant pressure of air; '
+                    'include these details where applicable: gas="gas_17", temp=18, volume=18.'
+                ),
+            ),
+            _StaticPredictor(arguments={"gas": "air", "temp": 18, "volume": 18}),
+        )
+
+        self.assertTrue(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {"gas": "gas_17", "temp": 18, "volume": 18})
+        verifier = prediction.metadata["reliaskill_v1_runtime_verifier"]
+        self.assertIn("replaced_ungrounded_required:gas", verifier["actions"])
+
     def test_v1_lifts_dotted_fields_into_required_nested_object(self) -> None:
         prediction = safe_predict(
             _transaction_search_tool(),
