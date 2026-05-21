@@ -1,0 +1,101 @@
+experiment_scale: reliaskill_v1_core_mechanism_key_replication
+description: "Key replication for ReliaSkill core mechanisms: five model families, 100 tools, strongest baselines, and ablations that isolate runtime grounding, contract routing, action gating, contract decoding, verifier refinement, and global router prior."
+seed: 42
+tools_path: data/raw_mcp/tools.jsonl
+tasks_path: data/controls/test.jsonl
+output_root: outputs/reliaskill_v1_core_mechanism_key_replication
+
+generator:
+  type: heuristic
+  ablation_mode: base_only
+
+runtime:
+  strict_backends: true
+
+models:
+  - config: configs/models/qwen2_5_1_5b_instruct_4bit.yaml
+    examples_per_second: 0.35
+  - config: configs/models/llama_3_2_3b_instruct_4bit.yaml
+    examples_per_second: 0.35
+  - config: configs/models/gemma_2_2b_it_4bit.yaml
+    examples_per_second: 0.50
+  - config: configs/models/phi_3_5_mini_instruct_4bit.yaml
+    examples_per_second: 0.35
+  - config: configs/models/qwen2_5_7b_instruct_4bit.yaml
+    examples_per_second: 0.20
+
+conditions:
+  - raw_mcp
+  - raw_docs_full
+  - generated_skill_base
+  - gated_skill
+  - skill_prompt_verbose_docs
+  - reliaskill_v1_no_contract_decoder
+  - reliaskill_v1_no_runtime_grounding
+  - reliaskill_v1_no_action_gate
+  - reliaskill_v1_no_contract_routing
+  - reliaskill_v1_no_contract_arbitration
+  - reliaskill_v1_no_candidate_verification
+  - reliaskill_v1_no_verifier_refinement
+  - reliaskill_v1_no_global_router_prior
+  - reliaskill_v1
+
+data:
+  config: configs/data/emnlp_scale.yaml
+  max_tools: 100
+  min_domains_required: 10
+
+controls:
+  config: configs/controls/emnlp_scale.yaml
+  positives_per_tool_total: 3
+  negatives_per_tool_total: 2
+
+routing:
+  config: configs/routing/distractor_inventory.yaml
+  candidate_set_sizes: [4]
+
+live_execution:
+  enabled: false
+
+shared_skill_packages:
+  root: outputs/reliaskill_v1_core_mechanism_key_replication/shared_packages
+  dev_controls_path: data/controls/dev.jsonl
+  reliability_predictor:
+    type: heuristic
+  max_repair_rounds: 2
+  deploy_threshold: 85.0
+
+skills:
+  multi_candidate_config: configs/skills/multi_candidate.yaml
+  candidate_k: 3
+  compactness_config: configs/skills/compactness_variants.yaml
+
+repair:
+  config: configs/repair/repair_strategies.yaml
+
+scheduler:
+  one_gpu: true
+  resume: true
+  group_by_model: true
+  run_all_conditions_before_unload: true
+  max_batch_size: 32
+  prompt_safety_margin_tokens: 256
+  include_routing: true
+  examples_per_second: 0.35
+  estimated_bytes_per_call: 5120
+  estimated_bytes_per_token: 1.5
+  condition_token_overheads:
+    raw_mcp: 900
+    raw_docs_full: 1600
+    generated_skill_base: 300
+    gated_skill: 475
+    skill_prompt_verbose_docs: 1200
+    reliaskill_v1_no_contract_decoder: 575
+    reliaskill_v1_no_runtime_grounding: 575
+    reliaskill_v1_no_action_gate: 575
+    reliaskill_v1_no_contract_routing: 575
+    reliaskill_v1_no_contract_arbitration: 575
+    reliaskill_v1_no_candidate_verification: 575
+    reliaskill_v1_no_verifier_refinement: 575
+    reliaskill_v1_no_global_router_prior: 575
+    reliaskill_v1: 575
