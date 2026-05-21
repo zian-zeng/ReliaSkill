@@ -6,7 +6,7 @@ Run on a Nexus/CML login node:
   python3 scripts/cluster/rank_available_gpus.py --min-gpus 4
   python3 scripts/cluster/rank_available_gpus.py --counts 8,7,6,4,3,2 --partitions scavenger,cml-scavenger
   python3 scripts/cluster/rank_available_gpus.py --request-gpus 8 --min-gpus 4
-  python3 scripts/cluster/rank_available_gpus.py --counts 8,7,6,4,3,2 --mem-gb 120 --cpus 32
+  python3 scripts/cluster/rank_available_gpus.py --counts 8,7,6,4,3,2 --min-mem-gb 120 --cpus 32
 
 The script is intentionally read-only: it only calls sinfo, scontrol, and
 optionally sacctmgr to print user associations.
@@ -65,6 +65,7 @@ class Candidate:
     alloc: int
     mem_gb: int
     free_mem_gb: int
+    usable_mem_gb: int
     cpus: int
     free_cpus: int
     time_limit: str
@@ -86,21 +87,24 @@ class AllocationOption:
     requested: int
     rank_mode: str
     partition_bonus: int = 0
+    memory_weight: int = 5000
+    memory_score_cap_gb: int = 256
 
     @property
     def score(self) -> int:
         penalty = 50_000 if self.candidate.planned else 0
+        memory_bonus = min(self.candidate.usable_mem_gb, self.memory_score_cap_gb) * self.memory_weight
         if self.rank_mode == "single-gpu":
             return (
                 self.candidate.strength * 100_000
                 + self.requested * 1_000
-                + self.candidate.free_mem_gb
+                + memory_bonus
                 + self.partition_bonus
                 - penalty
             )
         return (
             self.candidate.strength * self.requested * 100_000
-            + self.candidate.free_mem_gb
+            + memory_bonus
             + self.partition_bonus
             - penalty
         )
@@ -186,6 +190,34 @@ def parse_tres_int(tres: str, key: str) -> int:
     return 0
 
 
+def parse_mem_gb(value: str | None) -> int:
+    if not value:
+        return 0
+    match = re.match(r"(\d+(?:\.\d+)?)([KMGTP]?)", value.strip(), re.IGNORECASE)
+    if not match:
+        return 0
+    amount = float(match.group(1))
+    unit = match.group(2).upper()
+    if unit == "K":
+        amount /= 1024 * 1024
+    elif unit == "M" or unit == "":
+        amount /= 1024
+    elif unit == "T":
+        amount *= 1024
+    elif unit == "P":
+        amount *= 1024 * 1024
+    return round(amount)
+
+
+def parse_tres_mem_gb(tres: str) -> int:
+    if not tres:
+        return 0
+    for item in tres.split(","):
+        if item.startswith("mem="):
+            return parse_mem_gb(item.split("=", 1)[1])
+    return 0
+
+
 def normalize_gpu_type(value: str) -> str:
     return value.strip().lower().replace("_", "-").replace("nvidia-", "")
 
@@ -232,6 +264,11 @@ def node_candidates(
         totals = {"gpu": cfg_generic}
     mem_gb = round(parse_int(kv.get("RealMemory")) / 1024)
     free_mem_gb = round(parse_int(kv.get("FreeMem")) / 1024)
+    sched_mem_gb = parse_tres_mem_gb(cfg_tres) or mem_gb
+    allocated_mem_gb = parse_tres_mem_gb(alloc_tres)
+    sched_free_mem_gb = max(sched_mem_gb - allocated_mem_gb, 0) if sched_mem_gb else free_mem_gb
+    positive_mem_values = [value for value in (free_mem_gb, sched_free_mem_gb) if value > 0]
+    usable_mem_gb = min(positive_mem_values) if positive_mem_values else 0
     cpus = parse_int(kv.get("CPUTot") or kv.get("CPUs"))
     allocated_cpus = parse_tres_int(alloc_tres, "cpu")
     free_cpus = max(cpus - allocated_cpus, 0) if cpus else 0
@@ -254,6 +291,7 @@ def node_candidates(
                 alloc=alloc,
                 mem_gb=mem_gb,
                 free_mem_gb=free_mem_gb,
+                usable_mem_gb=usable_mem_gb,
                 cpus=cpus,
                 free_cpus=free_cpus,
                 time_limit=time_limit,
@@ -333,11 +371,21 @@ def is_idle_state(state: str) -> bool:
 def format_salloc(option: AllocationOption, args: argparse.Namespace) -> str:
     row = option.candidate
     flags = request_flags_for_partition(row.partition)
+    mem_gb = template_mem_gb(option, args)
     return (
         f"salloc -p {row.partition} {flags}--nodelist={row.node} "
         f"--gres=gpu:{row.gpu_type}:{option.requested} "
-        f"--cpus-per-task={args.cpus} --mem={args.mem_gb}G --time={args.time}"
+        f"--cpus-per-task={args.cpus} --mem={mem_gb}G --time={args.time}"
     )
+
+
+def template_mem_gb(option: AllocationOption, args: argparse.Namespace) -> int:
+    if args.template_mem_gb != "auto":
+        return parse_int(args.template_mem_gb)
+    safe_max = max(option.candidate.usable_mem_gb - args.mem_headroom_gb, args.min_mem_gb)
+    if args.max_template_mem_gb:
+        safe_max = min(safe_max, args.max_template_mem_gb)
+    return max(safe_max, 1)
 
 
 def collect_candidates(args: argparse.Namespace) -> List[Candidate]:
@@ -374,7 +422,7 @@ def expand_options(candidates: Iterable[Candidate], args: argparse.Namespace) ->
     counts = default_counts(args)
     options: List[AllocationOption] = []
     for candidate in candidates:
-        if not args.ignore_fit and candidate.free_mem_gb < args.mem_gb:
+        if not args.ignore_fit and candidate.usable_mem_gb < args.min_mem_gb:
             continue
         if not args.ignore_fit and candidate.free_cpus < args.cpus:
             continue
@@ -387,6 +435,8 @@ def expand_options(candidates: Iterable[Candidate], args: argparse.Namespace) ->
                         requested=count,
                         rank_mode=args.rank_mode,
                         partition_bonus=preferred_partition_bonus(candidate.partition, args),
+                        memory_weight=args.mem_weight,
+                        memory_score_cap_gb=args.mem_score_cap_gb,
                     )
                 )
     return sorted(options, key=lambda item: item.score, reverse=True)
@@ -415,8 +465,8 @@ def print_table(options: Iterable[AllocationOption], args: argparse.Namespace) -
         print("Try --mem-gb 40, --cpus 8, --include-planned, or omit --partitions.")
         return
     header = (
-        f"{'#':>2} {'est':>7} {'request':>7} {'node':<12} {'partition':<16} {'state':<18} "
-        f"{'gpu':<14} {'free/total':>10} {'free_mem':>8} {'mem':>7} {'free_cpu':>8} {'time':>10}"
+        f"{'#':>2} {'gpu_est':>7} {'request':>7} {'node':<12} {'partition':<16} {'state':<18} "
+        f"{'gpu':<14} {'free/total':>10} {'usable':>7} {'free_mem':>8} {'mem_req':>7} {'free_cpu':>8} {'time':>10}"
     )
     print(header)
     print("-" * len(header))
@@ -425,7 +475,8 @@ def print_table(options: Iterable[AllocationOption], args: argparse.Namespace) -
         est = row.strength * option.requested
         print(
             f"{index:>2} {est:>7} {option.requested:>7} {row.node:<12} {row.partition:<16} {row.state:<18} "
-            f"{row.gpu_type:<14} {row.free:>4}/{row.total:<5} {row.free_mem_gb:>6}G {row.mem_gb:>5}G {row.free_cpus:>4}/{row.cpus:<3} {row.time_limit:>10}"
+            f"{row.gpu_type:<14} {row.free:>4}/{row.total:<5} {row.usable_mem_gb:>5}G {row.free_mem_gb:>6}G "
+            f"{template_mem_gb(option, args):>5}G {row.free_cpus:>4}/{row.cpus:<3} {row.time_limit:>10}"
         )
     best = rows[0].candidate
     print()
@@ -443,8 +494,9 @@ def print_table(options: Iterable[AllocationOption], args: argparse.Namespace) -
         print("== Best fully IDLE fallback template ==")
         print(format_salloc(idle_fallback, args))
         print("# This may be less powerful but is often more likely to allocate immediately.")
-    print("# Column 'est' is a rough count-aware throughput score: per-GPU rank x requested GPUs.")
-    print("# Rows are filtered by requested free CPU/memory unless --ignore-fit is used.")
+    print("# gpu_est is per-GPU rank x requested GPUs; final ranking also includes a usable-memory bonus.")
+    print("# usable memory is min(OS FreeMem, Slurm unallocated memory); mem_req is auto-sized unless --template-mem-gb is set.")
+    print("# Rows are filtered by requested free CPU/min-memory unless --ignore-fit is used.")
     print("# If a request still queues: squeue -j JOBID -o '%.18i %.20P %.8T %.30R %.20S'")
 
 
@@ -474,7 +526,43 @@ def parse_args() -> argparse.Namespace:
         help="Comma-separated tie-break preference for requestable partitions.",
     )
     parser.add_argument("--cpus", type=int, default=16, help="CPU count required by the request template.")
-    parser.add_argument("--mem-gb", type=int, default=60, help="Memory in GB required by the request template.")
+    parser.add_argument(
+        "--min-mem-gb",
+        "--mem-gb",
+        dest="min_mem_gb",
+        type=int,
+        default=60,
+        help="Minimum usable memory in GB required to include a row. Alias: --mem-gb.",
+    )
+    parser.add_argument(
+        "--template-mem-gb",
+        default="auto",
+        help="Memory in GB to put in salloc templates, or auto to request the largest safe amount.",
+    )
+    parser.add_argument(
+        "--mem-headroom-gb",
+        type=int,
+        default=4,
+        help="When --template-mem-gb=auto, leave this many GB unrequested for scheduling safety.",
+    )
+    parser.add_argument(
+        "--max-template-mem-gb",
+        type=int,
+        default=0,
+        help="Optional cap for auto template memory. Default 0 means no cap.",
+    )
+    parser.add_argument(
+        "--mem-weight",
+        type=int,
+        default=5000,
+        help="Ranking bonus per usable GB, after GPU score. Increase to prefer roomier nodes.",
+    )
+    parser.add_argument(
+        "--mem-score-cap-gb",
+        type=int,
+        default=256,
+        help="Cap usable-memory contribution to ranking so memory does not swamp GPU class/count.",
+    )
     parser.add_argument("--time", default="12:00:00", help="Time limit to put in the request template.")
     parser.add_argument(
         "--ignore-fit",
@@ -503,8 +591,18 @@ def main() -> int:
         raise SystemExit("--request-gpus must be >= 1")
     if args.cpus < 1:
         raise SystemExit("--cpus must be >= 1")
-    if args.mem_gb < 1:
-        raise SystemExit("--mem-gb must be >= 1")
+    if args.min_mem_gb < 1:
+        raise SystemExit("--min-mem-gb must be >= 1")
+    if args.template_mem_gb != "auto" and parse_int(args.template_mem_gb) < 1:
+        raise SystemExit("--template-mem-gb must be 'auto' or an integer >= 1")
+    if args.mem_headroom_gb < 0:
+        raise SystemExit("--mem-headroom-gb must be >= 0")
+    if args.max_template_mem_gb < 0:
+        raise SystemExit("--max-template-mem-gb must be >= 0")
+    if args.mem_weight < 0:
+        raise SystemExit("--mem-weight must be >= 0")
+    if args.mem_score_cap_gb < 1:
+        raise SystemExit("--mem-score-cap-gb must be >= 1")
     if not args.no_assoc:
         print_associations()
     candidates = collect_candidates(args)
