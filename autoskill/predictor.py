@@ -3088,6 +3088,13 @@ def _maybe_arbitrate_predecoded_reliaskill_v1_prediction(
         contract_candidate=predecoded,
         model_candidate=verified_model,
     )
+    selected, prompt_arbitration = _maybe_apply_reliaskill_v1_prompt_arbitration(
+        tool=tool,
+        skill=skill,
+        task=task,
+        backend=backend,
+        current_prediction=selected,
+    )
     metadata = dict(selected.metadata)
     predecoder = metadata.get("reliaskill_v1_predecoder")
     if isinstance(predecoder, dict):
@@ -3097,6 +3104,8 @@ def _maybe_arbitrate_predecoded_reliaskill_v1_prediction(
             "arbitration_model_call_attempted": True,
         }
     metadata["reliaskill_v1_arbitration"] = arbitration
+    if prompt_arbitration is not None:
+        metadata["reliaskill_v1_prompt_arbitration"] = prompt_arbitration
     selected.metadata = metadata
     return selected
 
@@ -3196,6 +3205,86 @@ def _runtime_candidate_summary(name: str, prediction: EvalPrediction) -> Dict[st
         ),
         "selection_score": _contract_selection_score(prediction),
     }
+
+
+def _maybe_apply_reliaskill_v1_prompt_arbitration(
+    *,
+    tool: ToolIR,
+    skill: GeneratedSkill,
+    task: EvalTask,
+    backend: PredictorBackend,
+    current_prediction: EvalPrediction,
+) -> tuple[EvalPrediction, Dict[str, Any] | None]:
+    if _contract_ablation_disabled(skill, "disable_contract_arbitration"):
+        return current_prediction, None
+    if os.getenv("RELIASKILL_DISABLE_ADAPTIVE_PROMPT_ARBITRATION", "").strip().lower() in {"1", "true", "yes"}:
+        return current_prediction, None
+    fallback_skill = _adaptive_prompt_fallback_skill(skill)
+    if fallback_skill is None:
+        return current_prediction, None
+    try:
+        fallback_prediction = backend.predict(tool, fallback_skill, task)
+    except Exception as exc:  # pragma: no cover - opportunistic fallback arbitration.
+        return current_prediction, {
+            "attempted": True,
+            "selected": "current_runtime_candidate",
+            "fallback_condition": fallback_skill.baseline_name,
+            "reason": "fallback_prompt_prediction_failed",
+            "error": f"{type(exc).__name__}: {exc}",
+        }
+    verified_fallback = _verify_reliaskill_v1_prediction(tool, skill, task, fallback_prediction)
+    verified_fallback.baseline_name = skill.baseline_name
+    current_summary = _runtime_candidate_summary("current_runtime_candidate", current_prediction)
+    fallback_summary = _runtime_candidate_summary("adaptive_prompt_fallback", verified_fallback)
+    if fallback_summary["hard_blocked"]:
+        return current_prediction, {
+            "attempted": True,
+            "selected": "current_runtime_candidate",
+            "fallback_condition": fallback_skill.baseline_name,
+            "reason": "fallback_prompt_hard_blocked",
+            "candidates": [current_summary, fallback_summary],
+        }
+    if verified_fallback.should_call and fallback_summary["contract_satisfied"]:
+        fallback_score = _contract_selection_score(verified_fallback)
+        current_score = _contract_selection_score(current_prediction)
+        if fallback_score >= current_score - 0.5:
+            metadata = dict(verified_fallback.metadata)
+            metadata["adaptive_prompt_fallback_condition"] = fallback_skill.baseline_name
+            verified_fallback.metadata = metadata
+            return verified_fallback, {
+                "attempted": True,
+                "selected": "adaptive_prompt_fallback",
+                "fallback_condition": fallback_skill.baseline_name,
+                "reason": "fallback_prompt_contract_satisfying_and_not_lower_score",
+                "candidates": [current_summary, fallback_summary],
+            }
+    return current_prediction, {
+        "attempted": True,
+        "selected": "current_runtime_candidate",
+        "fallback_condition": fallback_skill.baseline_name,
+        "reason": "current_candidate_has_safer_or_higher_contract_score",
+        "candidates": [current_summary, fallback_summary],
+    }
+
+
+def _adaptive_prompt_fallback_skill(skill: GeneratedSkill) -> GeneratedSkill | None:
+    raw = skill.metadata.get("adaptive_prompt_fallback_skill") if isinstance(skill.metadata, dict) else None
+    if not isinstance(raw, dict):
+        return None
+    try:
+        return GeneratedSkill(
+            baseline_name=str(raw.get("baseline_name") or "generated_skill_base"),
+            skill_summary=str(raw.get("skill_summary") or ""),
+            when_to_use=[str(item) for item in raw.get("when_to_use", []) if item is not None],
+            when_not_to_use=[str(item) for item in raw.get("when_not_to_use", []) if item is not None],
+            argument_template=dict(raw.get("argument_template") or {}),
+            examples=[dict(item) for item in raw.get("examples", []) if isinstance(item, dict)],
+            semantic_hints=dict(raw.get("semantic_hints") or {}),
+            method_trace=[dict(item) for item in raw.get("method_trace", []) if isinstance(item, dict)],
+            metadata=dict(raw.get("metadata") or {}),
+        )
+    except (TypeError, ValueError):
+        return None
 
 
 def safe_predict(

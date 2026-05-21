@@ -170,6 +170,7 @@ def _build_challenger_skill(
     selection_report_path: Path,
     behavior_cases: Sequence[Any] = (),
     global_router_policy: Dict[str, Any] | None = None,
+    prompt_fallback_skill: Any | None = None,
 ) -> Any:
     challenger = clone_skill_as(source_skill, RELIASKILL_CHALLENGER)
     source_score = source_row["reliability_score"]
@@ -276,6 +277,7 @@ def _build_challenger_skill(
             "unified_proof_risk_policy_score",
             "contract_aware_arbitration_policy",
             "runtime_model_contract_arbitration",
+            "adaptive_prompt_package_arbitration",
             "adaptive_routing_arbitration",
             "contract_verified_candidate_cascade",
             "contextual_grounding_contract",
@@ -306,6 +308,7 @@ def _build_challenger_skill(
         "uses_unified_proof_risk_policy_score": True,
         "uses_contract_aware_arbitration": True,
         "uses_runtime_model_contract_arbitration": True,
+        "uses_adaptive_prompt_package_arbitration": prompt_fallback_skill is not None,
         "uses_adaptive_routing_arbitration": True,
         "uses_contract_verified_candidate_cascade": True,
         "uses_dev_calibrated_contract_policy": True,
@@ -349,6 +352,9 @@ def _build_challenger_skill(
         "selected_candidate_id": selection.get("selected_candidate_id"),
         "selection_policy": selection.get("selection_policy"),
     }
+    if prompt_fallback_skill is not None:
+        challenger.metadata["adaptive_prompt_fallback_skill"] = prompt_fallback_skill.model_dump()
+        challenger.metadata["adaptive_prompt_fallback_condition"] = prompt_fallback_skill.baseline_name
     challenger.metadata["executable_contract"] = compile_skill_contract(tool, challenger).model_dump()
     challenger.method_trace = [
         *challenger.method_trace,
@@ -1088,6 +1094,7 @@ def build_shared_skill_packages(
                         selection_report_path=selection_report_path,
                         behavior_cases=behavior_cases,
                         global_router_policy=global_router_policy,
+                        prompt_fallback_skill=base_skill,
                     )
                     package_validation = validate_skill(tool, package_skill)
                     package_behavior = run_behavior_tests(

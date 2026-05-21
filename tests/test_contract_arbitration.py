@@ -75,6 +75,28 @@ def test_runtime_arbitration_records_attempt_when_model_native_fails() -> None:
     assert prediction.metadata["reliaskill_v1_arbitration"]["reason"] == "model_native_prediction_failed"
 
 
+def test_runtime_prompt_arbitration_checks_generated_fallback_prompt() -> None:
+    backend = _LocalHFStaticPredictor(arguments={"query": "schema contract"})
+    skill = _v1_skill_with_arbitration(prompt_fallback=True)
+
+    prediction = safe_predict(
+        ToolIR(
+            tool_name="search",
+            tool_purpose="Search documents.",
+            arguments=[ArgumentIR(name="query", type="string", required=True)],
+        ),
+        skill,
+        EvalTask(task_id="arb_prompt", tool_name="search", user_request='Search query="schema contract".'),
+        backend,
+    )
+
+    assert prediction.should_call
+    assert prediction.predicted_arguments == {"query": "schema contract"}
+    assert backend.predict_calls == 2
+    assert prediction.metadata["reliaskill_v1_prompt_arbitration"]["attempted"] is True
+    assert prediction.metadata["reliaskill_v1_prompt_arbitration"]["fallback_condition"] == "generated_skill_base"
+
+
 def test_routing_arbitration_preserves_low_risk_native_candidate() -> None:
     skill_bank = {
         "calendar_create_event": _v1_skill_with_arbitration(),
@@ -149,31 +171,40 @@ def test_routing_arbitration_keeps_contract_candidate_when_native_is_blocked() -
     assert decision is None
 
 
-def _v1_skill_with_arbitration(*, runtime_threshold: float = 20.0) -> GeneratedSkill:
+def _v1_skill_with_arbitration(*, runtime_threshold: float = 20.0, prompt_fallback: bool = False) -> GeneratedSkill:
+    metadata = {
+        "contract_arbitration_policy": {
+            "name": "test_contract_aware_arbitration",
+            "enabled": True,
+            "enable_runtime_model_arbitration": True,
+            "enable_routing_arbitration": True,
+            "runtime_arbitration_margin_threshold": runtime_threshold,
+            "preserve_native_routing_margin": 10.0,
+            "preserve_native_score_advantage": 4.0,
+            "contract_override_margin": 12.0,
+            "low_risk_missing_required_max": 0,
+            "hard_block_reasons": [
+                "missing_required_arguments",
+                "action_intent_conflict",
+                "argument_contract_violation",
+            ],
+            "calibration_source": "unit_test",
+        }
+    }
+    if prompt_fallback:
+        metadata["adaptive_prompt_fallback_skill"] = GeneratedSkill(
+            baseline_name="generated_skill_base",
+            skill_summary="Fallback generated prompt.",
+            when_to_use=["Use for direct search requests."],
+            when_not_to_use=["Do not use without a query."],
+            argument_template={"query": "schema contract"},
+        ).model_dump()
     return GeneratedSkill(
         baseline_name="reliaskill_v1",
         skill_summary="Runtime-verified ReliaSkill artifact.",
         when_to_use=["Use for direct, grounded requests."],
         when_not_to_use=["Do not use when required fields are missing."],
-        metadata={
-            "contract_arbitration_policy": {
-                "name": "test_contract_aware_arbitration",
-                "enabled": True,
-                "enable_runtime_model_arbitration": True,
-                "enable_routing_arbitration": True,
-                "runtime_arbitration_margin_threshold": runtime_threshold,
-                "preserve_native_routing_margin": 10.0,
-                "preserve_native_score_advantage": 4.0,
-                "contract_override_margin": 12.0,
-                "low_risk_missing_required_max": 0,
-                "hard_block_reasons": [
-                    "missing_required_arguments",
-                    "action_intent_conflict",
-                    "argument_contract_violation",
-                ],
-                "calibration_source": "unit_test",
-            }
-        },
+        metadata=metadata,
     )
 
 
