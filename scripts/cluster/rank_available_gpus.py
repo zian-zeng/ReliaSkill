@@ -369,13 +369,17 @@ def is_idle_state(state: str) -> bool:
 
 
 def format_salloc(option: AllocationOption, args: argparse.Namespace) -> str:
+    return format_salloc_with_time(option, args, args.time)
+
+
+def format_salloc_with_time(option: AllocationOption, args: argparse.Namespace, time_limit: str) -> str:
     row = option.candidate
     flags = request_flags_for_partition(row.partition)
     mem_gb = template_mem_gb(option, args)
     return (
         f"salloc -p {row.partition} {flags}--nodelist={row.node} "
         f"--gres=gpu:{row.gpu_type}:{option.requested} "
-        f"--cpus-per-task={args.cpus} --mem={mem_gb}G --time={args.time}"
+        f"--cpus-per-task={args.cpus} --mem={mem_gb}G --time={time_limit}"
     )
 
 
@@ -497,6 +501,11 @@ def print_table(options: Iterable[AllocationOption], args: argparse.Namespace) -
     print("# gpu_est is per-GPU rank x requested GPUs; final ranking also includes a usable-memory bonus.")
     print("# usable memory is min(OS FreeMem, Slurm unallocated memory); mem_req is auto-sized unless --template-mem-gb is set.")
     print("# Rows are filtered by requested free CPU/min-memory unless --ignore-fit is used.")
+    if args.fast_time and args.fast_time != args.time:
+        print()
+        print("== Shorter backfill alternative for the same top row ==")
+        print(format_salloc_with_time(rows[0], args, args.fast_time))
+        print("# Use this only if you prefer faster queue admission and are okay resuming later.")
     print("# If a request still queues: squeue -j JOBID -o '%.18i %.20P %.8T %.30R %.20S'")
 
 
@@ -563,7 +572,12 @@ def parse_args() -> argparse.Namespace:
         default=256,
         help="Cap usable-memory contribution to ranking so memory does not swamp GPU class/count.",
     )
-    parser.add_argument("--time", default="12:00:00", help="Time limit to put in the request template.")
+    parser.add_argument("--time", default="1-00:00:00", help="Time limit to put in the main request template.")
+    parser.add_argument(
+        "--fast-time",
+        default="12:00:00",
+        help="Optional shorter backfill alternative printed for the top row. Set empty to suppress.",
+    )
     parser.add_argument(
         "--ignore-fit",
         action="store_true",
