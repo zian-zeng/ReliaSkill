@@ -3119,6 +3119,12 @@ def _should_arbitrate_predecoded_reliaskill_v1_prediction(
         return False
     if os.getenv("RELIASKILL_FORCE_CONTRACT_ARBITRATION", "").strip().lower() in {"1", "true", "yes"}:
         return True
+    if os.getenv("RELIASKILL_SKIP_HIGH_CONFIDENCE_CONTRACT_ARBITRATION", "").strip().lower() not in {
+        "1",
+        "true",
+        "yes",
+    }:
+        return True
     verifier = predecoded.metadata.get("reliaskill_v1_runtime_verifier") if isinstance(predecoded.metadata, dict) else None
     verifier = verifier if isinstance(verifier, dict) else {}
     proof_after = verifier.get("contract_proof_state_after") if isinstance(verifier.get("contract_proof_state_after"), dict) else {}

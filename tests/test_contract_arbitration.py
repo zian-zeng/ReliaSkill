@@ -28,7 +28,7 @@ def test_runtime_arbitration_preserves_valid_model_native_call() -> None:
     assert prediction.metadata["reliaskill_v1_arbitration"]["selected"] == "model_native_verified"
 
 
-def test_runtime_arbitration_skips_high_confidence_contract_call_when_threshold_low() -> None:
+def test_runtime_arbitration_checks_model_native_call_even_when_threshold_low() -> None:
     backend = _LocalHFStaticPredictor(arguments={"query": "different model output"})
     skill = _v1_skill_with_arbitration(runtime_threshold=0.0)
 
@@ -45,9 +45,9 @@ def test_runtime_arbitration_skips_high_confidence_contract_call_when_threshold_
 
     assert prediction.should_call
     assert prediction.predicted_arguments == {"query": "schema contract"}
-    assert backend.predict_calls == 0
-    assert prediction.metadata["actual_predictor_backend"] == "reliaskill_contract_predecoder"
-    assert "reliaskill_v1_arbitration" not in prediction.metadata
+    assert backend.predict_calls == 1
+    assert prediction.metadata["actual_predictor_backend"] == "local_hf"
+    assert prediction.metadata["reliaskill_v1_arbitration"]["selected"] == "model_native_verified"
 
 
 def test_runtime_arbitration_records_attempt_when_model_native_fails() -> None:
