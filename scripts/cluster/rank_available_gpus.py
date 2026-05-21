@@ -90,6 +90,25 @@ def parse_key_values(text: str) -> Dict[str, str]:
     return {match.group(1): match.group(2) for match in re.finditer(r"(\w+)=([^ \n]+)", text)}
 
 
+def collect_node_details() -> Dict[str, Dict[str, str]]:
+    """Fetch all Slurm node records in one call.
+
+    Calling `scontrol show node <name>` for every node can take minutes on a
+    large shared cluster. The one-shot `-o` format keeps each node on one line,
+    which is much faster and easier to parse.
+    """
+    text = try_text(["scontrol", "show", "nodes", "-o"])
+    if not text:
+        text = try_text(["scontrol", "show", "node", "-o"])
+    details: Dict[str, Dict[str, str]] = {}
+    for line in text.splitlines():
+        kv = parse_key_values(line)
+        node = kv.get("NodeName")
+        if node:
+            details[node] = kv
+    return details
+
+
 def parse_gres(gres: str) -> Dict[str, int]:
     totals: Dict[str, int] = {}
     if not gres or gres == "(null)":
@@ -150,9 +169,17 @@ def parse_int(value: str | None, default: int = 0) -> int:
     return int(match.group(1)) if match else default
 
 
-def node_candidates(node: str, partition: str, state: str, time_limit: str) -> List[Candidate]:
-    detail = try_text(["scontrol", "show", "node", node])
-    kv = parse_key_values(detail)
+def node_candidates(
+    node: str,
+    partition: str,
+    state: str,
+    time_limit: str,
+    details_by_node: Dict[str, Dict[str, str]],
+) -> List[Candidate]:
+    kv = details_by_node.get(node)
+    if not kv:
+        detail = try_text(["scontrol", "show", "node", node])
+        kv = parse_key_values(detail)
     gres = kv.get("Gres", "")
     cfg_tres = kv.get("CfgTRES", "")
     alloc_tres = kv.get("AllocTRES", "")
@@ -207,6 +234,7 @@ def collect_candidates(args: argparse.Namespace) -> List[Candidate]:
     partitions = {item.strip() for item in (args.partitions or "").split(",") if item.strip()}
     fmt = "%N|%P|%T|%80G|%m|%c|%l"
     rows = run_text(["sinfo", "-N", "-h", "-o", fmt]).splitlines()
+    details_by_node = collect_node_details()
     seen: set[tuple[str, str, str]] = set()
     candidates: List[Candidate] = []
     for row in rows:
@@ -217,7 +245,7 @@ def collect_candidates(args: argparse.Namespace) -> List[Candidate]:
         partition = partition.rstrip("*")
         if partitions and partition not in partitions:
             continue
-        for candidate in node_candidates(node, partition, state, time_limit):
+        for candidate in node_candidates(node, partition, state, time_limit, details_by_node):
             key = (candidate.node, candidate.partition, candidate.gpu_type)
             if key in seen:
                 continue
