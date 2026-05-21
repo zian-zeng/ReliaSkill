@@ -28,7 +28,7 @@ conditions:
   - reliaskill_v1_no_explicit_argument_fidelity
   - reliaskill_v1_compact_prompt_only
   - reliaskill_v1_full_proof_prompt_only
-  - reliaskill_v1_no_global_router_prior
+  - reliaskill_v1_with_global_router_prior
   - reliaskill_v1
 
 data:
@@ -85,5 +85,5 @@ scheduler:
     reliaskill_v1_no_explicit_argument_fidelity: 575
     reliaskill_v1_compact_prompt_only: 300
     reliaskill_v1_full_proof_prompt_only: 575
-    reliaskill_v1_no_global_router_prior: 575
+    reliaskill_v1_with_global_router_prior: 575
     reliaskill_v1: 575

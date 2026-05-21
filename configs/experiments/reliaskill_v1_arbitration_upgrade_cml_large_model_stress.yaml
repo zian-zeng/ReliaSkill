@@ -26,7 +26,7 @@ conditions:
   - generated_skill_base
   - skill_prompt_verbose_docs
   - reliaskill_v1_no_learned_router_policy
-  - reliaskill_v1_no_global_router_prior
+  - reliaskill_v1_with_global_router_prior
   - reliaskill_v1_no_hard_negative_policy
   - reliaskill_v1_no_contract_arbitration
   - reliaskill_v1
@@ -81,7 +81,7 @@ scheduler:
     generated_skill_base: 300
     skill_prompt_verbose_docs: 1200
     reliaskill_v1_no_learned_router_policy: 575
-    reliaskill_v1_no_global_router_prior: 575
+    reliaskill_v1_with_global_router_prior: 575
     reliaskill_v1_no_hard_negative_policy: 575
     reliaskill_v1_no_contract_arbitration: 575
     reliaskill_v1: 575

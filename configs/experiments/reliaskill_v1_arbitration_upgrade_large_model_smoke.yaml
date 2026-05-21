@@ -27,7 +27,7 @@ conditions:
   - reliaskill_v1_no_candidate_verification
   - reliaskill_v1_no_contrastive_memory
   - reliaskill_v1_no_learned_router_policy
-  - reliaskill_v1_no_global_router_prior
+  - reliaskill_v1_with_global_router_prior
   - reliaskill_v1_no_hard_negative_policy
   - reliaskill_v1_no_contract_arbitration
   - reliaskill_v1
@@ -85,7 +85,7 @@ scheduler:
     reliaskill_v1_no_candidate_verification: 575
     reliaskill_v1_no_contrastive_memory: 575
     reliaskill_v1_no_learned_router_policy: 575
-    reliaskill_v1_no_global_router_prior: 575
+    reliaskill_v1_with_global_router_prior: 575
     reliaskill_v1_no_hard_negative_policy: 575
     reliaskill_v1_no_contract_arbitration: 575
     reliaskill_v1: 575

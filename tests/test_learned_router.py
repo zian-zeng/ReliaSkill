@@ -134,12 +134,28 @@ def test_global_prior_and_hard_negative_policy_are_explicit_components() -> None
 
     policy = skill.metadata["learned_router_policy"]
     decision = score_learned_router("Get the weather forecast for Chicago.", calendar, skill)
+    legacy_skill = GeneratedSkill(
+        baseline_name="reliaskill_v1_with_global_router_prior",
+        skill_summary=skill.skill_summary,
+        when_to_use=list(skill.when_to_use),
+        when_not_to_use=list(skill.when_not_to_use),
+        metadata={
+            "learned_router_policy": policy,
+            "contract_ablation_flags": {"enable_global_router_prior": True},
+        },
+    )
+    legacy_decision = score_learned_router("Get the weather forecast for Chicago.", calendar, legacy_skill)
 
     assert global_policy["enabled"]
     assert policy["uses_global_pairwise_prior"]
+    assert policy["global_prior_role"] == "distillation_teacher"
+    assert policy["global_prior_training_scale"] > 0
+    assert policy["global_prior_inference_scale"] == 0.0
     assert policy["self_mined_hard_row_count"] >= 1
     assert "global_prior" in decision.components
     assert "hard_negative_delta" in decision.components
+    assert decision.components["global_prior"] == 0.0
+    assert legacy_decision.components["global_prior"] != 0.0
     assert decision.policy_action == "abstain"
 
 

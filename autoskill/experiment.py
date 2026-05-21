@@ -17,6 +17,7 @@ from autoskill.conditions import (
     RELIASKILL_CHALLENGER,
     RELIASKILL_V1,
     RELIASKILL_V1_CONTRACT_ABLATIONS,
+    RELIASKILL_V1_WITH_GLOBAL_ROUTER_PRIOR,
     build_reviewer_baseline_skills,
     condition_prompt_text,
     is_reliaskill_v1_family,
@@ -199,13 +200,20 @@ def _find_packaged_skill(package_root: Path, tool: Any, condition: str) -> Any |
 def _build_reliaskill_contract_ablation(base_skill: Any, condition: str) -> Any:
     ablation = clone_skill_as(base_skill, condition)
     ablation.baseline_name = condition
-    disabled = condition.replace("reliaskill_v1_no_", "")
-    ablation.skill_summary = f"ReliaSkill v1 ablation disabling `{disabled}`. {ablation.skill_summary}".strip()
+    if condition == RELIASKILL_V1_WITH_GLOBAL_ROUTER_PRIOR:
+        ablation_name = "global_router_prior_inference"
+        ablation.skill_summary = (
+            "ReliaSkill v1 diagnostic enabling the legacy global router prior at inference. "
+            f"{ablation.skill_summary}"
+        ).strip()
+    else:
+        ablation_name = condition.replace("reliaskill_v1_no_", "")
+        ablation.skill_summary = f"ReliaSkill v1 ablation disabling `{ablation_name}`. {ablation.skill_summary}".strip()
     ablation.metadata = {
         **ablation.metadata,
         "condition_family": "reliaskill_v1_contract_ablation",
         "source_condition": RELIASKILL_V1,
-        "contract_ablation": disabled,
+        "contract_ablation": ablation_name,
         "contract_ablation_flags": {
             "disable_contract_routing": condition == "reliaskill_v1_no_contract_routing",
             "disable_runtime_grounding": condition == "reliaskill_v1_no_runtime_grounding",
@@ -223,6 +231,7 @@ def _build_reliaskill_contract_ablation(base_skill: Any, condition: str) -> Any:
             "disable_contrastive_memory": condition == "reliaskill_v1_no_contrastive_memory",
             "disable_learned_router_policy": condition == "reliaskill_v1_no_learned_router_policy",
             "disable_global_router_prior": condition == "reliaskill_v1_no_global_router_prior",
+            "enable_global_router_prior": condition == RELIASKILL_V1_WITH_GLOBAL_ROUTER_PRIOR,
             "disable_hard_negative_policy": condition == "reliaskill_v1_no_hard_negative_policy",
             "disable_risk_adaptive_prompt_policy": condition == "reliaskill_v1_no_risk_adaptive_prompt_policy",
             "disable_prompt_cascade": condition == "reliaskill_v1_no_prompt_cascade",
@@ -240,7 +249,7 @@ def _build_reliaskill_contract_ablation(base_skill: Any, condition: str) -> Any:
             "trace_type": "reliaskill_v1_contract_ablation",
             "source_condition": RELIASKILL_V1,
             "condition": condition,
-            "disabled_component": disabled,
+            "disabled_component": ablation_name,
         },
     ]
     return ablation

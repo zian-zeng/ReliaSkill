@@ -10,6 +10,10 @@ from autoskill.ir import GeneratedSkill, ToolIR
 from autoskill.routing_boundaries import normalize_routing_text
 
 
+DEFAULT_GLOBAL_ROUTER_PRIOR_TRAINING_SCALE = 0.35
+DEFAULT_GLOBAL_ROUTER_PRIOR_INFERENCE_SCALE = 0.0
+
+
 _STOPWORDS = {
     "a",
     "about",
@@ -224,8 +228,9 @@ def learn_router_policy(
         if isinstance(global_router_policy, dict) and isinstance(global_router_policy.get("weights"), dict)
         else {}
     )
-    global_scale = 0.35 if global_weights else 0.0
-    pre_hard_weights = _combine_weights(local_weights, global_weights, global_scale=global_scale)
+    global_training_scale = DEFAULT_GLOBAL_ROUTER_PRIOR_TRAINING_SCALE if global_weights else 0.0
+    global_inference_scale = DEFAULT_GLOBAL_ROUTER_PRIOR_INFERENCE_SCALE if global_weights else 0.0
+    pre_hard_weights = _combine_weights(local_weights, global_weights, global_scale=global_training_scale)
     pre_hard_summary = _training_score_summary(pre_hard_weights, local_rows)
     pre_hard_threshold = _threshold_from_summary(pre_hard_summary)
     hard_rows = _mine_margin_violations(pre_hard_weights, local_rows, target_margin=3.0)
@@ -263,7 +268,11 @@ def learn_router_policy(
         "uses_hard_negative_self_training": bool(hard_rows),
         "local_weights": _round_weights(local_weights),
         "global_prior_weights": _round_weights(global_weights),
-        "global_prior_scale": global_scale,
+        "global_prior_training_scale": global_training_scale,
+        "global_prior_inference_scale": global_inference_scale,
+        "global_prior_legacy_inference_scale": global_training_scale,
+        "global_prior_scale": global_inference_scale,
+        "global_prior_role": "distillation_teacher",
         "pre_hard_weights": _round_weights(pre_hard_weights),
         "hard_negative_delta_weights": _round_weights(hard_negative_delta),
         "weights": _round_weights(final_weights),
@@ -310,7 +319,9 @@ def score_learned_router(query: str, tool: ToolIR, skill: GeneratedSkill) -> Lea
         risk_score=round(risk_score, 4),
         components={
             "local": round(_dot(policy.get("local_weights") or policy.get("weights") or {}, features), 4),
-            "global_prior": round(_dot(policy.get("global_prior_weights") or {}, features) * _float(policy.get("global_prior_scale"), 0.0), 4),
+            "global_prior": round(
+                _dot(policy.get("global_prior_weights") or {}, features) * _global_prior_inference_scale(policy, flags), 4
+            ),
             "hard_negative_delta": round(_dot(policy.get("hard_negative_delta_weights") or {}, features), 4),
         },
     )
@@ -453,16 +464,28 @@ def _effective_policy_weights(policy: Dict[str, Any], flags: Dict[str, Any]) -> 
     if not isinstance(local_weights, dict):
         return {name: _float(value) for name, value in (policy.get("weights") if isinstance(policy.get("weights"), dict) else {}).items()}
     weights = {name: _float(value) for name, value in local_weights.items()}
-    if not flags.get("disable_global_router_prior"):
+    global_scale = _global_prior_inference_scale(policy, flags)
+    if global_scale:
         weights = _combine_weights(
             weights,
             policy.get("global_prior_weights") if isinstance(policy.get("global_prior_weights"), dict) else {},
-            global_scale=_float(policy.get("global_prior_scale"), 0.0),
+            global_scale=global_scale,
         )
     if not flags.get("disable_hard_negative_policy"):
         for name, value in (policy.get("hard_negative_delta_weights") if isinstance(policy.get("hard_negative_delta_weights"), dict) else {}).items():
             weights[name] = weights.get(name, 0.0) + _float(value)
     return weights
+
+
+def _global_prior_inference_scale(policy: Dict[str, Any], flags: Dict[str, Any]) -> float:
+    if flags.get("disable_global_router_prior"):
+        return 0.0
+    if flags.get("enable_global_router_prior"):
+        return _float(
+            policy.get("global_prior_legacy_inference_scale"),
+            _float(policy.get("global_prior_training_scale"), _float(policy.get("global_prior_scale"), 0.0)),
+        )
+    return _float(policy.get("global_prior_inference_scale"), 0.0)
 
 
 def _contract_ablation_flags(skill: GeneratedSkill) -> Dict[str, Any]:
