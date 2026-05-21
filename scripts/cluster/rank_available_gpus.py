@@ -6,6 +6,7 @@ Run on a Nexus/CML login node:
   python3 scripts/cluster/rank_available_gpus.py --min-gpus 4
   python3 scripts/cluster/rank_available_gpus.py --counts 8,7,6,4 --partitions scavenger,cml-scavenger
   python3 scripts/cluster/rank_available_gpus.py --request-gpus 8 --min-gpus 4
+  python3 scripts/cluster/rank_available_gpus.py --counts 8,7,6,4 --mem-gb 120 --cpus 32
 
 The script is intentionally read-only: it only calls sinfo, scontrol, and
 optionally sacctmgr to print user associations.
@@ -65,6 +66,7 @@ class Candidate:
     mem_gb: int
     free_mem_gb: int
     cpus: int
+    free_cpus: int
     time_limit: str
     planned: bool
 
@@ -174,6 +176,16 @@ def parse_tres_gpus(tres: str) -> tuple[Dict[str, int], int]:
     return typed, generic
 
 
+def parse_tres_int(tres: str, key: str) -> int:
+    if not tres:
+        return 0
+    prefix = f"{key}="
+    for item in tres.split(","):
+        if item.startswith(prefix):
+            return parse_int(item.split("=", 1)[1])
+    return 0
+
+
 def normalize_gpu_type(value: str) -> str:
     return value.strip().lower().replace("_", "-").replace("nvidia-", "")
 
@@ -221,6 +233,8 @@ def node_candidates(
     mem_gb = round(parse_int(kv.get("RealMemory")) / 1024)
     free_mem_gb = round(parse_int(kv.get("FreeMem")) / 1024)
     cpus = parse_int(kv.get("CPUTot") or kv.get("CPUs"))
+    allocated_cpus = parse_tres_int(alloc_tres, "cpu")
+    free_cpus = max(cpus - allocated_cpus, 0) if cpus else 0
     rows: List[Candidate] = []
     for gpu_type, total in totals.items():
         if gpu_type in alloc_typed:
@@ -241,6 +255,7 @@ def node_candidates(
                 mem_gb=mem_gb,
                 free_mem_gb=free_mem_gb,
                 cpus=cpus,
+                free_cpus=free_cpus,
                 time_limit=time_limit,
                 planned="PLANNED" in state,
             )
@@ -344,6 +359,10 @@ def expand_options(candidates: Iterable[Candidate], args: argparse.Namespace) ->
     counts = default_counts(args)
     options: List[AllocationOption] = []
     for candidate in candidates:
+        if not args.ignore_fit and candidate.free_mem_gb < args.mem_gb:
+            continue
+        if not args.ignore_fit and candidate.free_cpus < args.cpus:
+            continue
         candidate_counts = counts or [candidate.free]
         for count in candidate_counts:
             if count <= candidate.free:
@@ -374,15 +393,15 @@ def current_user() -> str:
     return try_text(["id", "-un"]).strip() or "unknown"
 
 
-def print_table(options: Iterable[AllocationOption], top: int) -> None:
-    rows = list(options)[:top]
+def print_table(options: Iterable[AllocationOption], args: argparse.Namespace) -> None:
+    rows = list(options)[: args.top]
     if not rows:
         print("No matching free GPU candidates found.")
         print("Try --min-gpus 1, --counts 8,7,6,4, --include-planned, or omit --partitions.")
         return
     header = (
         f"{'#':>2} {'est':>7} {'request':>7} {'node':<12} {'partition':<16} {'state':<18} "
-        f"{'gpu':<14} {'free/total':>10} {'free_mem':>8} {'mem':>7} {'cpu':>5} {'time':>10}"
+        f"{'gpu':<14} {'free/total':>10} {'free_mem':>8} {'mem':>7} {'free_cpu':>8} {'time':>10}"
     )
     print(header)
     print("-" * len(header))
@@ -391,7 +410,7 @@ def print_table(options: Iterable[AllocationOption], top: int) -> None:
         est = row.strength * option.requested
         print(
             f"{index:>2} {est:>7} {option.requested:>7} {row.node:<12} {row.partition:<16} {row.state:<18} "
-            f"{row.gpu_type:<14} {row.free:>4}/{row.total:<5} {row.free_mem_gb:>6}G {row.mem_gb:>5}G {row.cpus:>5} {row.time_limit:>10}"
+            f"{row.gpu_type:<14} {row.free:>4}/{row.total:<5} {row.free_mem_gb:>6}G {row.mem_gb:>5}G {row.free_cpus:>4}/{row.cpus:<3} {row.time_limit:>10}"
         )
     best = rows[0].candidate
     gpus = rows[0].requested
@@ -400,13 +419,14 @@ def print_table(options: Iterable[AllocationOption], top: int) -> None:
     flags = request_flags_for_partition(best.partition)
     print(
         f"salloc -p {best.partition} {flags}--gres=gpu:{best.gpu_type}:{gpus} "
-        "--cpus-per-task=32 --mem=120G --time=12:00:00"
+        f"--cpus-per-task={args.cpus} --mem={args.mem_gb}G --time={args.time}"
     )
     if flags:
         print("# Account/QoS flags were inferred from common UMIACS/Nexus associations.")
     else:
         print("# No account/QoS rule is known for this partition; add -A/--qos manually or prefer a scavenger row.")
     print("# Column 'est' is a rough count-aware throughput score: per-GPU rank x requested GPUs.")
+    print("# Rows are filtered by requested free CPU/memory unless --ignore-fit is used.")
 
 
 def parse_args() -> argparse.Namespace:
@@ -434,6 +454,14 @@ def parse_args() -> argparse.Namespace:
         default="cml-scavenger,scavenger,cml-dpart,class,cml-furongh,cml,nexus",
         help="Comma-separated tie-break preference for requestable partitions.",
     )
+    parser.add_argument("--cpus", type=int, default=32, help="CPU count required by the request template.")
+    parser.add_argument("--mem-gb", type=int, default=120, help="Memory in GB required by the request template.")
+    parser.add_argument("--time", default="12:00:00", help="Time limit to put in the request template.")
+    parser.add_argument(
+        "--ignore-fit",
+        action="store_true",
+        help="Do not filter rows by currently free CPU/memory. Useful for queue planning, not immediate allocation.",
+    )
     parser.add_argument("--top", type=int, default=30, help="Number of ranked rows to print.")
     parser.add_argument(
         "--partitions",
@@ -454,11 +482,15 @@ def main() -> int:
         raise SystemExit("--min-gpus must be >= 1")
     if args.request_gpus is not None and args.request_gpus < 1:
         raise SystemExit("--request-gpus must be >= 1")
+    if args.cpus < 1:
+        raise SystemExit("--cpus must be >= 1")
+    if args.mem_gb < 1:
+        raise SystemExit("--mem-gb must be >= 1")
     if not args.no_assoc:
         print_associations()
     candidates = collect_candidates(args)
     options = expand_options(candidates, args)
-    print_table(options, top=args.top)
+    print_table(options, args)
     return 0
 
 
