@@ -1254,6 +1254,25 @@ class ReliaSkillV1RuntimeVerifierTests(unittest.TestCase):
         self.assertEqual(prediction.predicted_arguments, {})
         self.assertEqual(prediction.abstention_reason, "missing_required_information")
 
+    def test_v1_abstains_on_explicit_alternative_boundary_check_template(self) -> None:
+        prediction = safe_predict(
+            _create_event_tool(),
+            _v1_skill(),
+            EvalTask(
+                task_id="t5_boundary_check_not_target",
+                tool_name="calendar_create_event",
+                user_request=(
+                    "This is a boundary check: calendar find event should handle the request to find a standup, "
+                    "not calendar create event."
+                ),
+            ),
+            _StaticPredictor(arguments={"title": "standup"}),
+        )
+
+        self.assertFalse(prediction.should_call)
+        self.assertEqual(prediction.predicted_arguments, {})
+        self.assertEqual(prediction.abstention_reason, "explicit_target_tool_forbidden")
+
     def test_v1_abstains_on_action_intent_conflict_even_with_valid_arguments(self) -> None:
         prediction = safe_predict(
             _create_event_tool(),

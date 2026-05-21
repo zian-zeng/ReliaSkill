@@ -188,6 +188,8 @@ def load_package_method_metadata(package_dir: Path, *, condition: str) -> Dict[s
         compact["uses_explicit_argument_fidelity_selection"] = "explicit_argument_fidelity_candidate_selection" in compact.get(
             "pipeline_stages", []
         )
+    if not compact.get("uses_explicit_nonuse_boundary_certificate"):
+        compact["uses_explicit_nonuse_boundary_certificate"] = "explicit_nonuse_boundary_certificate" in compact.get("pipeline_stages", [])
     return {key: value for key, value in compact.items() if value is not None}
 
 

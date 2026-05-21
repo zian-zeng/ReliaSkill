@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, Iterable
 
-from autoskill.routing_boundaries import normalize_routing_text, tool_name_variants
+from autoskill.routing_boundaries import normalize_routing_text, request_forbids_tool, tool_name_variants
 
 
 @dataclass
@@ -185,13 +185,4 @@ def _missing_required_count(row: Dict[str, Any]) -> int:
 
 
 def _negated_tool_name_context(text: str, name: str) -> bool:
-    return any(
-        phrase in text
-        for phrase in (
-            f"{name} is a distractor",
-            f"{name} should not be called",
-            f"do not use {name}",
-            f"do not call {name}",
-            f"without using {name}",
-        )
-    )
+    return request_forbids_tool(text, name) is not None

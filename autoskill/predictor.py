@@ -21,7 +21,7 @@ from autoskill.contract_inference import build_contract_proof_state
 from autoskill.contrastive_memory import score_contrastive_memory
 from autoskill.contracts import build_contract_failure_report, compile_skill_contract, evaluate_skill_contract
 from autoskill.learned_router import score_learned_router
-from autoskill.routing_boundaries import detect_routing_abstention, normalize_routing_text, tool_name_variants
+from autoskill.routing_boundaries import detect_routing_abstention, normalize_routing_text, request_forbids_tool, tool_name_variants
 from autoskill.schema_utils import normalize_schema_node, schema_type
 
 
@@ -1670,6 +1670,9 @@ def _complete_grounded_schema_optionals(
 
 
 def _reliaskill_v1_boundary_reason(tool: ToolIR, skill: GeneratedSkill, request: str) -> str | None:
+    explicit_tool_forbidden = request_forbids_tool(request, tool)
+    if explicit_tool_forbidden:
+        return explicit_tool_forbidden
     explicit = detect_routing_abstention(request)
     if explicit:
         return explicit
@@ -1678,12 +1681,6 @@ def _reliaskill_v1_boundary_reason(tool: ToolIR, skill: GeneratedSkill, request:
     if _request_is_ambiguous_or_missing_required(request):
         return "missing_required_information"
     for tool_phrase in tool_name_variants(tool):
-        if f"do not use {tool_phrase}" in normalized or f"do not call {tool_phrase}" in normalized:
-            return "explicit_target_tool_forbidden"
-        if f"without using {tool_phrase}" in normalized:
-            return "explicit_target_tool_forbidden"
-        if f"{tool_phrase} is a distractor" in normalized or f"{tool_phrase} should not be called" in normalized:
-            return "explicit_target_tool_forbidden"
         if f"adjacent to {tool_phrase}" in normalized and "intended capability" in normalized:
             return "adjacent_or_boundary_mismatch"
         if f"close to {tool_phrase}" in normalized and "only want" in normalized:

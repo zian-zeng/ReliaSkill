@@ -8,6 +8,7 @@ from autoskill.predictor import PredictorBackend
 from autoskill.retrieval_runtime import retrieve_candidate_tools
 from autoskill.retrieval_runtime import contextualize_skill_for_task
 from autoskill.routing_boundaries import detect_routing_abstention
+from autoskill.routing_boundaries import request_forbids_tool
 from autoskill.routing_eval import (
     _skill_router_positive_text,
     _try_reliaskill_candidate_verification_cascade,
@@ -118,6 +119,52 @@ class RoutingBoundaryTests(unittest.TestCase):
         )
 
         self.assertIsNone(reason)
+
+    def test_explicit_nonuse_certificate_covers_alternative_tool_template(self):
+        reason = request_forbids_tool(
+            "Use add observations to add new observations; notes create memory is a distractor and should not be called.",
+            "notes_create_memory",
+        )
+
+        self.assertEqual(reason, "explicit_target_tool_forbidden")
+        self.assertIsNone(
+            request_forbids_tool(
+                "Use add observations to add new observations; notes create memory is a distractor and should not be called.",
+                "add_observations",
+            )
+        )
+
+    def test_explicit_nonuse_certificate_covers_boundary_check_template(self):
+        reason = request_forbids_tool(
+            "This is a boundary check: add observations should handle the request, not notes create memory.",
+            "notes_create_memory",
+        )
+
+        self.assertEqual(reason, "explicit_target_tool_forbidden")
+
+    def test_preview_and_read_write_legacy_boundaries_are_detected(self):
+        self.assertEqual(
+            detect_routing_abstention(
+                "Only preview what would change; do not create, overwrite, delete, send, execute, or mutate anything with write file."
+            ),
+            "readonly_preview_only",
+        )
+        self.assertEqual(
+            detect_routing_abstention("Read docs/control_output.txt without changing it; do not write, update, or delete using write file."),
+            "readonly_preview_only",
+        )
+        self.assertEqual(
+            detect_routing_abstention("Create or overwrite docs/control_output.txt with a short note; do not merely read using read file."),
+            "destructive_vs_readonly_mismatch",
+        )
+
+    def test_unrelated_without_using_does_not_forbid_requested_tool(self):
+        self.assertIsNone(
+            request_forbids_tool(
+                'Search query="schema contract" without using bank get account balance.',
+                "search",
+            )
+        )
 
     def test_negative_expected_alternate_tool_can_be_correct_route(self):
         task = EvalTask(

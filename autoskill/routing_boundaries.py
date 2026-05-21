@@ -28,6 +28,48 @@ def _contains_any(text: str, phrases: Iterable[str]) -> bool:
     return any(phrase in text for phrase in phrases)
 
 
+def request_forbids_tool(query: str, tool: ToolIR | str) -> str | None:
+    """Return a high-precision certificate that the request excludes this tool.
+
+    This is intentionally asymmetric with positive tool mentions: it only fires
+    when the tool name appears inside a local non-use construction, so unrelated
+    distractor phrases do not suppress the actual requested tool.
+    """
+    text = normalize_routing_text(query)
+    for name in tool_name_variants(tool):
+        if not name:
+            continue
+        if _contains_any(
+            text,
+            (
+                f"{name} is a distractor",
+                f"{name} should not be called",
+                f"{name} is not the right tool",
+                f"{name} is the wrong tool",
+                f"do not use {name}",
+                f"do not call {name}",
+                f"avoid {name}",
+                f"without using {name}",
+                f"instead of {name}",
+                f"rather than {name}",
+            ),
+        ):
+            return "explicit_target_tool_forbidden"
+        if re.search(
+            rf"\b(?:boundary\s+check|should\s+handle|correct\s+tool\s+is|route\s+to|select)\b"
+            rf".{{0,160}}\bnot\s+{re.escape(name)}\b",
+            text,
+        ):
+            return "explicit_target_tool_forbidden"
+        if re.search(
+            rf"\bnot\s+{re.escape(name)}\b"
+            rf".{{0,160}}\b(?:should\s+handle|correct\s+tool|appropriate\s+direct\s+action)\b",
+            text,
+        ):
+            return "explicit_target_tool_forbidden"
+    return None
+
+
 def detect_routing_abstention(query: str) -> str | None:
     """Return a boundary reason when a request explicitly asks for no tool call."""
     text = normalize_routing_text(query)
@@ -44,7 +86,11 @@ def detect_routing_abstention(query: str) -> str | None:
         return "ambiguous_action"
     if "i do not know" in text and (" yet" in text or "required input" in text or "required field" in text):
         return "missing_required_information"
-    if "i already know the exact path" in text and "no search or discovery is needed" in text:
+    if re.search(r"\b(?:i\s+)?(?:may|might|would)?\s*need\b.+\bbut\b.+\b(?:do\s+not\s+know|don t\s+know|not\s+sure|missing|lack)\b", text):
+        return "missing_required_information"
+    if "i already know the exact path" in text and (
+        "no search or discovery is needed" in text or "no search is needed" in text
+    ):
         return "known_path_no_search_needed"
     if "read the exact item i named directly" in text and _contains_any(
         text,
@@ -67,9 +113,45 @@ def detect_routing_abstention(query: str) -> str | None:
         ),
     ):
         return "readonly_preview_only"
+    if "only preview what would change" in text and _contains_any(
+        text,
+        (
+            "do not create",
+            "do not overwrite",
+            "do not delete",
+            "do not send",
+            "do not execute",
+            "mutate anything",
+        ),
+    ):
+        return "readonly_preview_only"
+    if "without changing it" in text and _contains_any(
+        text,
+        (
+            "do not write",
+            "do not update",
+            "do not delete",
+            "do not overwrite",
+            "do not mutate",
+        ),
+    ):
+        return "readonly_preview_only"
     if "need a change made" in text and "not a read only lookup" in text and "do not satisfy this with a read" in text:
         return "destructive_vs_readonly_mismatch"
+    if _contains_any(text, ("do not merely read", "not merely read")) and _contains_any(
+        text,
+        (
+            "create",
+            "overwrite",
+            "write",
+            "update",
+            "change",
+        ),
+    ):
+        return "destructive_vs_readonly_mismatch"
     if "this is adjacent to" in text and "but the intended capability is" in text:
+        return "adjacent_wrong_intent"
+    if "this is a boundary check" in text and " should handle " in text and " not " in text:
         return "adjacent_wrong_intent"
     if "is unrelated to" in text:
         return "out_of_domain_request"
@@ -83,16 +165,7 @@ def routing_tool_mention_adjustment(query: str, tool: ToolIR) -> int:
     for name in tool_name_variants(tool):
         if not name:
             continue
-        if _contains_any(
-            text,
-            (
-                f"{name} is a distractor",
-                f"{name} should not be called",
-                f"do not use {name}",
-                f"do not call {name}",
-                f"without using {name}",
-            ),
-        ):
+        if request_forbids_tool(text, name):
             adjustment -= 80
         if _contains_any(
             text,
